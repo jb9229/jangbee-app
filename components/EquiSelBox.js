@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import {
   StyleSheet, Text, TouchableOpacity, View,
@@ -14,7 +15,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class EquiSelBox extends React.PureComponent {
+type Props = {
+  eName: string,
+  selected: boolean,
+  onPressItem: Function,
+}
+type State = {}
+
+export default class EquiSelBox extends React.PureComponent<Props, State> {
   onEquiSel = () => {
     const { eName, onPressItem } = this.props;
 
