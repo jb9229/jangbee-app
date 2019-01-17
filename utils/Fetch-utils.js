@@ -1,7 +1,7 @@
-import CmException from "../common/CmException";
+import CmException from '../common/CmException';
 
 /**
- * HttpRequest Json Common 응답 처리
+ * HttpRequest Json 응답처리
  *
  * @param {Object} res HttpResponse
  */
@@ -12,9 +12,25 @@ export function handleJsonResponse(res) {
       return res;
     }
 
-    return res.json().then(responseJson => {
-      return responseJson;
-    });
+    return res.json().then(responseJson => responseJson);
+  }
+
+  throw new CmException(res.status, `${res.statusText}, ${res.url}`);
+}
+
+/**
+ * HttpRequest Text 응답처리
+ *
+ * @param {Object} res HttpResponse
+ */
+export function handleTextResponse(res) {
+  if (res.ok) {
+    if (res.status === 204) {
+      // NO_CONTENTS
+      return res;
+    }
+
+    return res.text().then(responseText => responseText);
   }
 
   throw new CmException(res.status, `${res.statusText}, ${res.url}`);

@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  StyleSheet, Text, TouchableHighlight, TextInput, View,
+  Button, StyleSheet, Text, ImagePicker, TextInput, View,
 } from 'react-native';
 import EquipementModal from '../../components/EquipmentModal';
-import DaumMapAddModal from '../../components/DaumMapAddModal';
+import MapAddWebModal from '../../components/MapAddWebModal';
 import { validate } from '../../utils/Validation';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -26,7 +27,7 @@ export default class FirmRegisterScreen extends React.Component {
     this.state = {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
-      cName: '',
+      fName: '',
       phoneNumber: '',
       password: '',
       comfirmPassword: '',
@@ -36,9 +37,9 @@ export default class FirmRegisterScreen extends React.Component {
       sidoAddr: '',
       sigunguAddr: '',
       dongriAddr: '',
-      gpsLongitude: '',
-      gpsLatitude: '',
-      cIntroduction: '',
+      addrLongitude: '',
+      addrLatitude: '',
+      fIntroduction: '',
       photo1: '',
       photo2: '',
       photo3: '',
@@ -47,7 +48,7 @@ export default class FirmRegisterScreen extends React.Component {
       homepage: '',
       blog: '',
       sns: '',
-      cNameValErrMessage: '',
+      fNameValErrMessage: '',
       phoneNumberValErrMessage: '',
       passwordValErrMessage: '',
       comfirmPasswordValErrMessage: '',
@@ -74,6 +75,20 @@ export default class FirmRegisterScreen extends React.Component {
     this.setState({ isVisibleMapAddModal: visible });
   };
 
+  /**
+   * 웹에서 받은 주소정보 기입 함수
+   */
+  saveAddrInfo = (addrData) => {
+    this.setState({
+      address: addrData.address,
+      sidoAddr: addrData.sidoAddr,
+      sigunguAddr: addrData.sigunguAddr,
+      addrLongitude: addrData.addrLongitude,
+      addrLatitude: addrData.addrLatitude,
+
+    });
+  }
+
   openSelEquipmentModal = () => {
     this.setEquiSelModalVisible(true);
   };
@@ -98,7 +113,7 @@ export default class FirmRegisterScreen extends React.Component {
 
     let v = validate('textMax', cName, true, 15);
     if (!v[0]) {
-      this.setState({ cNameValErrMessage: v[1] });
+      this.setState({ fNameValErrMessage: v[1] });
       return false;
     }
 
@@ -133,15 +148,19 @@ export default class FirmRegisterScreen extends React.Component {
       isVisibleEquiModal,
       isVisibleMapAddModal,
       equiListStr,
-      cName,
+      fName,
       comfirmPassword,
       phoneNumber,
       password,
-      cNameValErrMessage,
+      address,
+      addressDetail,
+      fIntroduction,
+      fNameValErrMessage,
       phoneNumberValErrMessage,
       passwordValErrMessage,
       comfirmPasswordValErrMessage,
       equiListStrValErrMessage,
+      addressValErrMessage,
     } = this.state;
 
     return (
@@ -150,13 +169,13 @@ export default class FirmRegisterScreen extends React.Component {
           <Text style={styles.itemTitle}>업체명*</Text>
           <TextInput
             style={styles.itemInput}
-            value={cName}
+            value={fName}
             placeholder="업체명을 입력해 주세요"
-            onChangeText={text => this.setState({ cName: text })}
+            onChangeText={text => this.setState({ fName: text })}
           />
         </View>
         <View>
-          <Text style={styles.errorMessage}>{cNameValErrMessage}</Text>
+          <Text style={styles.errorMessage}>{fNameValErrMessage}</Text>
         </View>
         <View style={styles.itemWrap}>
           <Text style={styles.itemTitle}>전화번호*</Text>
@@ -219,14 +238,50 @@ export default class FirmRegisterScreen extends React.Component {
           <Text style={styles.itemTitle}>업체주소(고객검색시 거리계산 기준이됨)</Text>
           <TextInput
             style={styles.itemInput}
-            value={equiListStr}
+            value={address}
             placeholder="주소를 선택 해주세요"
             onFocus={() => this.openMapAddModal()}
-            onChangeText={text => this.setState({ equiListStr: text })}
+            onChangeText={text => this.setState({ address: text })}
           />
         </View>
         <View>
-          <Text style={styles.errorMessage}>{equiListStrValErrMessage}</Text>
+          <Text style={styles.errorMessage}>{addressValErrMessage}</Text>
+        </View>
+
+        <View style={styles.itemWrap}>
+          <Text style={styles.itemTitle}>업체 상세주소</Text>
+          <TextInput
+            style={styles.itemInput}
+            value={addressDetail}
+            placeholder="상세주소를 입력해 주세요"
+            onChangeText={text => this.setState({ addressDetail: text })}
+          />
+        </View>
+
+        <View style={styles.itemWrap}>
+          <Text style={styles.itemTitle}>업체 소개</Text>
+          <TextInput
+            style={styles.itemInput}
+            multiline={true}
+            numberOfLines={5}
+            value={fIntroduction}
+            placeholder="업체 소개를 해 주세요"
+            onChangeText={text => this.setState({ fIntroduction: text })}
+          />
+        </View>
+        <View>
+          <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
+              <Text>대표사진(검색리스트 작은사진)</Text>
+          </Button>
+
+          {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
+        </View>
+        <View>
+          <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
+              <Text>작업사진1</Text>
+          </Button>
+
+          {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
         </View>
 
         <EquipementModal
@@ -235,9 +290,10 @@ export default class FirmRegisterScreen extends React.Component {
           seledEquipmentStr={equiListStr}
           completeSelEqui={this.completeSelEqui}
         />
-        <DaumMapAddModal
+        <MapAddWebModal
           isVisibleMapAddModal={isVisibleMapAddModal}
           setMapAddModalVisible={this.setMapAddModalVisible}
+          saveAddrInfo={this.saveAddrInfo}
         />
       </View>
     );

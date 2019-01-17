@@ -3,6 +3,9 @@ import {
   Modal, StyleSheet, WebView, View, Alert,
 } from 'react-native';
 
+const WEBMSG_ACTION_SAVE = 'SAVE';
+const WEBMSG_ACTION_CACEL = 'CALCEL';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -14,7 +17,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class DaumMapAddModal extends React.PureComponent {
+export default class MapAddWebModal extends React.PureComponent {
+  onMapAddrWebMSG = (mapAddrWebMSG) => {
+    const { setMapAddModalVisible, saveAddrInfo } = this.props;
+
+    const webData = JSON.parse(mapAddrWebMSG);
+
+    if (webData.action === WEBMSG_ACTION_SAVE) {
+      saveAddrInfo(webData.data);
+    } else if (webData.action === WEBMSG_ACTION_CACEL) {
+    }
+
+    setMapAddModalVisible(false);
+  };
+
   render() {
     const { isVisibleMapAddModal } = this.props;
 
@@ -32,6 +48,7 @@ export default class DaumMapAddModal extends React.PureComponent {
             <WebView
               source={{ uri: 'https://jb9229.github.io/postcode/add-map.html' }}
               style={{ marginTop: 20 }}
+              onMessage={event => this.onMapAddrWebMSG(event.nativeEvent.data)}
             />
           </View>
         </Modal>
