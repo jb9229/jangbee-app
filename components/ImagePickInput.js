@@ -1,41 +1,63 @@
 import React from 'react';
 import {
-  Button, ImagePicker, Text, View,
+  Alert, Button, Text, View,
 } from 'react-native';
+import { ImagePicker } from 'expo';
 import * as api from '../api/api';
 
 export default class ImagePickInput extends React.Component {
-  _pickImage = async (location) => {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isUploaded: false,
+    };
+  }
+
+  pickImage = async () => {
+    console.log('Start pickImage~');
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
 
+    console.log(`result.cancelled: ${result.cancelled}`);
+
     if (!result.cancelled) {
-      this.handleImagePicked(location, result.uri);
+      this.handleImagePicked(result.uri);
     }
   };
 
-  handleImagePicked = (location, imgUri) => {
+  handleImagePicked = (imgUri) => {
+    const { setImageUrl } = this.props;
+
     api
       .uploadImage(imgUri)
       .then((resImgUrl) => {
+        setImageUrl(resImgUrl);
+
         this.setState({
-          isLoadEntrPhoto: resImgUrl,
+          isUploaded: true,
         });
       })
-      .catch((error) => {});
+      .catch((error) => {
+        Alert.alert(
+          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+
+        return undefined;
+      });
   };
 
   render() {
-    const { itemIitle, imgLoaded, imgUrl } = this.props;
+    const { itemTitle, imgUrl, itemWrapStyle } = this.props;
+    const { isUploaded } = this.state;
     return (
-      <View>
-        <Button onPress={() => this._pickImage()}>
-          <Text>{itemIitle}</Text>
-        </Button>
+      <View style={itemWrapStyle}>
+        <Button title={itemTitle} onPress={() => this.pickImage()} />
 
-        {imgLoaded ? <Text>{imgUrl}</Text> : null}
+        <Text>{isUploaded ? imgUrl : null}</Text>
       </View>
     );
   }

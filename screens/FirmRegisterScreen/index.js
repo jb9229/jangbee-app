@@ -5,6 +5,7 @@ import {
 import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
 import { validate } from '../../utils/Validation';
+import ImagePickInput from '../../components/ImagePickInput';
 
 
 const styles = StyleSheet.create({
@@ -155,6 +156,7 @@ export default class FirmRegisterScreen extends React.Component {
       address,
       addressDetail,
       fIntroduction,
+      photo1,
       fNameValErrMessage,
       phoneNumberValErrMessage,
       passwordValErrMessage,
@@ -262,7 +264,7 @@ export default class FirmRegisterScreen extends React.Component {
           <Text style={styles.itemTitle}>업체 소개</Text>
           <TextInput
             style={styles.itemInput}
-            multiline={true}
+            multiline
             numberOfLines={5}
             value={fIntroduction}
             placeholder="업체 소개를 해 주세요"
@@ -270,18 +272,7 @@ export default class FirmRegisterScreen extends React.Component {
           />
         </View>
         <View>
-          <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
-              <Text>대표사진(검색리스트 작은사진)</Text>
-          </Button>
-
-          {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
-        </View>
-        <View>
-          <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
-              <Text>작업사진1</Text>
-          </Button>
-
-          {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
+          <ImagePickInput itemTitle="대표사진" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} itemWrapStyle={this.itemWrap} />
         </View>
 
         <EquipementModal

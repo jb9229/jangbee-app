@@ -93,7 +93,15 @@ export default class EquipementModal extends React.PureComponent {
   setEquiList = () => {
     api.getEquipList().then((newEquiList) => {
       this.setState({ equiList: newEquiList });
-    });
+    })
+      .catch((error) => {
+        Alert.alert(
+          '장비명 조회에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+
+        return undefined;
+      });
   };
 
   /**
