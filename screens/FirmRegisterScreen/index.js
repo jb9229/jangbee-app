@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, StyleSheet, Text, ImagePicker, TextInput, View,
+  Alert, Button, StyleSheet, Text, TextInput, View,
 } from 'react-native';
 import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
@@ -8,6 +8,7 @@ import { validate, validatePresence } from '../../utils/Validation';
 import ImagePickInput from '../../components/ImagePickInput';
 import FirmCreaTextInput from '../../components/FirmCreaTextInput';
 import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
+import * as api from '../../api/api';
 
 
 const styles = StyleSheet.create({
@@ -26,21 +27,21 @@ export default class FirmRegisterScreen extends React.Component {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       fName: '',
-      phoneNumber: '',
-      password: '',
-      comfirmPassword: '',
+      // phoneNumber: '',
+      // password: '',
+      // comfirmPassword: '',
       equiListStr: '',
       address: '',
       addressDetail: '',
       sidoAddr: '',
       sigunguAddr: '',
-      addrLongitude: '',
-      addrLatitude: '',
+      addrLongitude: undefined,
+      addrLatitude: undefined,
       fIntroduction: '',
+      thumbnail: '',
       photo1: '',
       photo2: '',
       photo3: '',
-      photo4: '',
       blog: '',
       homepage: '',
       sns: '',
@@ -50,15 +51,24 @@ export default class FirmRegisterScreen extends React.Component {
       comfirmPasswordValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      thumbnailValErrMessage: '',
+      photo1ValErrMessage: '',
     };
   }
 
   createFirm = () => {
+    const { navigation } = this.props;
     const valResult = this.isValidateSubmit();
 
     if (!valResult) { return; }
 
-    // api.
+    api.createFirm()
+      .then(() => navigation.navigate('HOME'))
+      .catch((error) => {
+        Alert.alert(
+          '장비명 조회에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`);
+      });
   }
 
   /**
@@ -100,11 +110,13 @@ export default class FirmRegisterScreen extends React.Component {
   setInitValErroMSG = () => {
     this.setState({
       fNameValErrMessage: '',
-      phoneNumberValErrMessage: '',
-      passwordValErrMessage: '',
+      // phoneNumberValErrMessage: '',
+      // passwordValErrMessage: '',
       comfirmPasswordValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      thumbnailValErrMessage: '',
+      photo1ValErrMessage: '',
     });
   }
 
@@ -127,7 +139,7 @@ export default class FirmRegisterScreen extends React.Component {
    */
   isValidateSubmit = () => {
     const {
-      fName, phoneNumber, password, comfirmPassword, equiListStr, address, photo1, photo2,
+      fName, equiListStr, address, thumbnail, photo1,
       sidoAddr, sigunguAddr, addrLongitude, addrLatitude,
     } = this.state;
 
@@ -140,22 +152,22 @@ export default class FirmRegisterScreen extends React.Component {
       return false;
     }
 
-    v = validate('cellPhone', phoneNumber, true, 15);
-    if (!v[0]) {
-      this.setState({ phoneNumberValErrMessage: v[1] });
-      return false;
-    }
+    // v = validate('cellPhone', phoneNumber, true, 15);
+    // if (!v[0]) {
+    //   this.setState({ phoneNumberValErrMessage: v[1] });
+    //   return false;
+    // }
 
-    v = validate('textMin', password, true, 6);
-    if (!v[0]) {
-      this.setState({ passwordValErrMessage: v[1] });
-      return false;
-    }
+    // v = validate('textMin', password, true, 6);
+    // if (!v[0]) {
+    //   this.setState({ passwordValErrMessage: v[1] });
+    //   return false;
+    // }
 
-    if (password !== comfirmPassword) {
-      this.setState({ comfirmPasswordValErrMessage: '비밀번호가 일치하지 않습니다' });
-      return false;
-    }
+    // if (password !== comfirmPassword) {
+    //   this.setState({ comfirmPasswordValErrMessage: '비밀번호가 일치하지 않습니다' });
+    //   return false;
+    // }
 
     v = validatePresence(equiListStr);
     if (!v[0]) {
@@ -170,28 +182,22 @@ export default class FirmRegisterScreen extends React.Component {
     }
 
     v = validatePresence(sidoAddr);
-    if (!v[0]) {
-      this.setState({ addressValErrMessage: v[1] });
-      return false;
-    }
+    if (!v[0]) { this.setState({ addressValErrMessage: `[시도] ${v[1]}` }); return false; }
 
     v = validatePresence(sigunguAddr);
-    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+    if (!v[0]) { this.setState({ addressValErrMessage: `[시군] ${v[1]}` }); return false; }
 
     v = validatePresence(addrLongitude);
-    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+    if (!v[0]) { this.setState({ addressValErrMessage: `[경도] ${v[1]}` }); return false; }
 
     v = validatePresence(addrLatitude);
-    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+    if (!v[0]) { this.setState({ addressValErrMessage: `[위도] ${v[1]}` }); return false; }
+
+    v = validatePresence(thumbnail);
+    if (!v[0]) { this.setState({ thumbnailValErrMessage: v[1] }); return false; }
 
     v = validatePresence(photo1);
-    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
-
-    v = validatePresence(photo2);
-    if (!v[0]) {
-      this.setState({ addressValErrMessage: v[1] });
-      return false;
-    }
+    if (!v[0]) { this.setState({ photo1ValErrMessage: v[1] }); return false; }
 
     return true;
   };
@@ -201,12 +207,10 @@ export default class FirmRegisterScreen extends React.Component {
       isVisibleEquiModal,
       isVisibleMapAddModal,
       fName,
-      phoneNumber,
-      password, comfirmPassword,
       equiListStr,
       address, addressDetail,
       fIntroduction,
-      photo1, photo2, photo3, photo4,
+      thumbnail, photo1, photo2, photo3,
       blog, sns, homepage,
       fNameValErrMessage,
       phoneNumberValErrMessage,
@@ -214,8 +218,8 @@ export default class FirmRegisterScreen extends React.Component {
       comfirmPasswordValErrMessage,
       equiListStrValErrMessage,
       addressValErrMessage,
+      thumbnailValErrMessage,
       photo1ValErrMessage,
-      photo2ValErrMessage,
     } = this.state;
 
     return (
@@ -223,14 +227,14 @@ export default class FirmRegisterScreen extends React.Component {
         <FirmCreaTextInput title="업체명*" value={fName} onChangeText={text => this.setState({ fName: text })} placeholder="업체명을 입력해 주세요" />
         <FirmCreaErrMSG errorMSG={fNameValErrMessage} />
 
-        <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
+        {/* <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
         <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
 
         <FirmCreaTextInput title="비밀번호*" value={password} onChangeText={text => this.setState({ password: text })} placeholder="비밀번호를 입력해 주세요" secureTextEntry />
         <FirmCreaErrMSG errorMSG={passwordValErrMessage} />
 
         <FirmCreaTextInput title="비밀번호 확인*" value={comfirmPassword} onChangeText={text => this.setState({ comfirmPassword: text })} placeholder="비밀번호를 재입력해 주세요" secureTextEntry />
-        <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} />
+        <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} /> */}
 
         <View style={styles.itemWrap}>
           <Text style={styles.itemTitle}>보유 장비*</Text>
@@ -274,15 +278,15 @@ export default class FirmRegisterScreen extends React.Component {
           />
         </View>
 
-        <ImagePickInput itemTitle="대표사진*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} itemWrapStyle={this.itemWrap} />
+        <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} setImageUrl={url => this.setState({ thumbnail: url })} itemWrapStyle={this.itemWrap} />
+        <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
+
+        <ImagePickInput itemTitle="작업사진1*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} itemWrapStyle={this.itemWrap} />
         <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
 
-        <ImagePickInput itemTitle="작업사진1*" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} itemWrapStyle={this.itemWrap} />
-        <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+        <ImagePickInput itemTitle="작업사진2" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} itemWrapStyle={this.itemWrap} />
 
-        <ImagePickInput itemTitle="작업사진2" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} itemWrapStyle={this.itemWrap} />
-
-        <ImagePickInput itemTitle="작업사진3" imgUrl={photo4} setImageUrl={url => this.setState({ photo4: url })} itemWrapStyle={this.itemWrap} />
+        <ImagePickInput itemTitle="작업사진3" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} itemWrapStyle={this.itemWrap} />
 
         <FirmCreaTextInput title="블로그" value={blog} onChangeText={text => this.setState({ blog: text })} placeholder="블로그 주소를 입력해 주세요" />
         <FirmCreaTextInput title="SNG" value={sns} onChangeText={text => this.setState({ sns: text })} placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요" />

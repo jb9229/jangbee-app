@@ -5,6 +5,17 @@ export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
 }
 
+export function createFirm(newFirm) {
+  return fetch(url.JBSERVER_FIRM, {
+    method: 'POST',
+    header: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newFirm),
+  }).then(handleJsonResponse);
+}
+
 export function uploadImage(uri) {
   const uriParts = uri.split('.');
   const fileType = uriParts[uriParts.length - 1];
