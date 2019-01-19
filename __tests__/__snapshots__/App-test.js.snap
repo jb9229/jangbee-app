@@ -126,7 +126,6 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                       <View
                         style={
                           Object {
-                            "backgroundColor": "#fff",
                             "flex": 1,
                           }
                         }
@@ -134,62 +133,622 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                         <View
                           style={
                             Object {
-                              "alignItems": "center",
-                              "backgroundColor": "#fbfbfb",
-                              "bottom": 0,
-                              "left": 0,
-                              "paddingVertical": 20,
-                              "position": "absolute",
-                              "right": 0,
-                              "shadowColor": "black",
-                              "shadowOffset": Object {
-                                "height": -3,
-                              },
-                              "shadowOpacity": 0.1,
-                              "shadowRadius": 3,
+                              "flex": 1,
+                              "flexDirection": "row",
                             }
                           }
                         >
+                          <Text>
+                            업체명*
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="업체명을 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
                           <Text
                             style={
                               Object {
-                                "color": "rgba(96,100,109, 1)",
-                                "fontSize": 17,
-                                "textAlign": "center",
+                                "color": "red",
+                              }
+                            }
+                          />
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            전화번호*
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="phone-pad"
+                            onChangeText={[Function]}
+                            placeholder="전화번호를 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            style={
+                              Object {
+                                "color": "red",
+                              }
+                            }
+                          />
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            비밀번호*
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="비밀번호를 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            style={
+                              Object {
+                                "color": "red",
+                              }
+                            }
+                          />
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            비밀번호 확인*
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="비밀번호를 재입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            style={
+                              Object {
+                                "color": "red",
+                              }
+                            }
+                          />
+                        </View>
+                        <View>
+                          <Text>
+                            보유 장비*
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            onChangeText={[Function]}
+                            onFocus={[Function]}
+                            placeholder="보유 장비를 선택해 주세요"
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            style={
+                              Object {
+                                "color": "red",
                               }
                             }
                           >
-                            This is a tab bar. You can edit it in:
+                            
                           </Text>
-                          <View
+                        </View>
+                        <View>
+                          <Text>
+                            업체주소(고객검색시 거리계산 기준이됨)
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            onChangeText={[Function]}
+                            onFocus={[Function]}
+                            placeholder="주소를 선택 해주세요"
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <Text
                             style={
-                              Array [
-                                Object {
-                                  "backgroundColor": "rgba(0,0,0,0.05)",
-                                  "borderRadius": 3,
-                                  "paddingHorizontal": 4,
-                                },
-                                Object {
-                                  "marginTop": 5,
-                                },
-                              ]
+                              Object {
+                                "color": "red",
+                              }
                             }
                           >
-                            <Text
+                            
+                          </Text>
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            업체 상세주소
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="상세주소를 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <Text>
+                            업체 소개
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            multiline={true}
+                            numberOfLines={5}
+                            onChangeText={[Function]}
+                            placeholder="업체 소개를 해 주세요"
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <View
+                            accessibilityRole="button"
+                            accessibilityStates={Array []}
+                            accessible={true}
+                            isTVSelectable={true}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "opacity": 1,
+                              }
+                            }
+                          >
+                            <View
                               style={
                                 Array [
-                                  Object {
-                                    "color": "rgba(96,100,109, 0.8)",
-                                  },
-                                  Object {
-                                    "fontFamily": "space-mono",
-                                  },
+                                  Object {},
                                 ]
                               }
                             >
-                              navigation/MainTabNavigator.js
-                            </Text>
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "#007AFF",
+                                      "fontSize": 18,
+                                      "padding": 8,
+                                      "textAlign": "center",
+                                    },
+                                  ]
+                                }
+                              >
+                                대표사진*
+                              </Text>
+                            </View>
                           </View>
+                          <Text />
+                        </View>
+                        <View>
+                          <Text
+                            style={
+                              Object {
+                                "color": "red",
+                              }
+                            }
+                          />
+                        </View>
+                        <View>
+                          <View
+                            accessibilityRole="button"
+                            accessibilityStates={Array []}
+                            accessible={true}
+                            isTVSelectable={true}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "opacity": 1,
+                              }
+                            }
+                          >
+                            <View
+                              style={
+                                Array [
+                                  Object {},
+                                ]
+                              }
+                            >
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "#007AFF",
+                                      "fontSize": 18,
+                                      "padding": 8,
+                                      "textAlign": "center",
+                                    },
+                                  ]
+                                }
+                              >
+                                작업사진1*
+                              </Text>
+                            </View>
+                          </View>
+                          <Text />
+                        </View>
+                        <View>
+                          <Text
+                            style={
+                              Object {
+                                "color": "red",
+                              }
+                            }
+                          />
+                        </View>
+                        <View>
+                          <View
+                            accessibilityRole="button"
+                            accessibilityStates={Array []}
+                            accessible={true}
+                            isTVSelectable={true}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "opacity": 1,
+                              }
+                            }
+                          >
+                            <View
+                              style={
+                                Array [
+                                  Object {},
+                                ]
+                              }
+                            >
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "#007AFF",
+                                      "fontSize": 18,
+                                      "padding": 8,
+                                      "textAlign": "center",
+                                    },
+                                  ]
+                                }
+                              >
+                                작업사진2
+                              </Text>
+                            </View>
+                          </View>
+                          <Text />
+                        </View>
+                        <View>
+                          <View
+                            accessibilityRole="button"
+                            accessibilityStates={Array []}
+                            accessible={true}
+                            isTVSelectable={true}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "opacity": 1,
+                              }
+                            }
+                          >
+                            <View
+                              style={
+                                Array [
+                                  Object {},
+                                ]
+                              }
+                            >
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "#007AFF",
+                                      "fontSize": 18,
+                                      "padding": 8,
+                                      "textAlign": "center",
+                                    },
+                                  ]
+                                }
+                              >
+                                작업사진3
+                              </Text>
+                            </View>
+                          </View>
+                          <Text />
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            블로그
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="블로그 주소를 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            SNG
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <Text>
+                            홈페이지
+                          </Text>
+                          <TextInput
+                            allowFontScaling={true}
+                            keyboardType="default"
+                            onChangeText={[Function]}
+                            placeholder="홈페이지 주소를 입력해 주세요"
+                            secureTextEntry={true}
+                            style={Object {}}
+                            underlineColorAndroid="transparent"
+                            value=""
+                          />
+                        </View>
+                        <View>
+                          <View
+                            accessibilityRole="button"
+                            accessibilityStates={Array []}
+                            accessible={true}
+                            isTVSelectable={true}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "opacity": 1,
+                              }
+                            }
+                          >
+                            <View
+                              style={
+                                Array [
+                                  Object {},
+                                ]
+                              }
+                            >
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "#007AFF",
+                                      "fontSize": 18,
+                                      "padding": 8,
+                                      "textAlign": "center",
+                                    },
+                                  ]
+                                }
+                              >
+                                저장
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                            }
+                          }
+                        >
+                          <Modal
+                            animationType="slide"
+                            hardwareAccelerated={false}
+                            onRequestClose={[Function]}
+                            transparent={true}
+                            visible={false}
+                          >
+                            <View
+                              style={
+                                Object {
+                                  "backgroundColor": "#FFF",
+                                  "flex": 1,
+                                  "padding": 20,
+                                }
+                              }
+                            >
+                              <View
+                                style={
+                                  Object {
+                                    "flex": 1,
+                                    "flexDirection": "row",
+                                  }
+                                }
+                              />
+                              <View>
+                                <View
+                                  accessible={true}
+                                  isTVSelectable={true}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={null}
+                                >
+                                  <Text
+                                    style={null}
+                                  >
+                                    선택 완료
+                                  </Text>
+                                </View>
+                              </View>
+                            </View>
+                          </Modal>
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                            }
+                          }
+                        >
+                          <Modal
+                            animationType="slide"
+                            hardwareAccelerated={false}
+                            onRequestClose={[Function]}
+                            transparent={true}
+                            visible={false}
+                          >
+                            <View
+                              style={
+                                Object {
+                                  "backgroundColor": "#FFF",
+                                  "flex": 1,
+                                  "padding": 20,
+                                }
+                              }
+                            >
+                              <View
+                                style={
+                                  Object {
+                                    "flex": 1,
+                                  }
+                                }
+                              >
+                                <RCTWebView
+                                  messagingEnabled={true}
+                                  onLoadingError={[Function]}
+                                  onLoadingFinish={[Function]}
+                                  onLoadingStart={[Function]}
+                                  onMessage={[Function]}
+                                  onShouldStartLoadWithRequest={[Function]}
+                                  scalesPageToFit={true}
+                                  source={
+                                    Object {
+                                      "uri": "https://jb9229.github.io/postcode/add-map.html",
+                                    }
+                                  }
+                                  style={
+                                    Array [
+                                      Object {
+                                        "flex": 1,
+                                      },
+                                      Object {
+                                        "backgroundColor": "#ffffff",
+                                      },
+                                      Object {
+                                        "marginTop": 20,
+                                      },
+                                    ]
+                                  }
+                                />
+                              </View>
+                            </View>
+                          </Modal>
                         </View>
                       </View>
                     </View>

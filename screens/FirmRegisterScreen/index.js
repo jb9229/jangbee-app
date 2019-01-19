@@ -4,21 +4,18 @@ import {
 } from 'react-native';
 import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
-import { validate } from '../../utils/Validation';
+import { validate, validatePresence } from '../../utils/Validation';
 import ImagePickInput from '../../components/ImagePickInput';
+import FirmCreaTextInput from '../../components/FirmCreaTextInput';
+import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  itemInput: {},
   errorMessage: {
     color: 'red',
-  },
-  itemWrap: {
-    flex: 1,
-    flexDirection: 'row',
   },
 });
 
@@ -37,7 +34,6 @@ export default class FirmRegisterScreen extends React.Component {
       addressDetail: '',
       sidoAddr: '',
       sigunguAddr: '',
-      dongriAddr: '',
       addrLongitude: '',
       addrLatitude: '',
       fIntroduction: '',
@@ -45,9 +41,8 @@ export default class FirmRegisterScreen extends React.Component {
       photo2: '',
       photo3: '',
       photo4: '',
-      photo5: '',
-      homepage: '',
       blog: '',
+      homepage: '',
       sns: '',
       fNameValErrMessage: '',
       phoneNumberValErrMessage: '',
@@ -56,6 +51,14 @@ export default class FirmRegisterScreen extends React.Component {
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
     };
+  }
+
+  createFirm = () => {
+    const valResult = this.isValidateSubmit();
+
+    if (!valResult) { return; }
+
+    // api.
   }
 
   /**
@@ -90,6 +93,21 @@ export default class FirmRegisterScreen extends React.Component {
     });
   }
 
+  /**
+   * 유효성검사 에러메세지 초기화 함수
+   * (사유: 두번째 유효성검사 실패시, 이전것이 지워져있지 않음)
+   */
+  setInitValErroMSG = () => {
+    this.setState({
+      fNameValErrMessage: '',
+      phoneNumberValErrMessage: '',
+      passwordValErrMessage: '',
+      comfirmPasswordValErrMessage: '',
+      equiListStrValErrMessage: '',
+      addressValErrMessage: '',
+    });
+  }
+
   openSelEquipmentModal = () => {
     this.setEquiSelModalVisible(true);
   };
@@ -107,12 +125,16 @@ export default class FirmRegisterScreen extends React.Component {
    *
    * @returns result 유효검사 결과
    */
-  isValidDivAccCreaSubmit = () => {
+  isValidateSubmit = () => {
     const {
-      cName, phoneNumber, password, comfirmPassword, equiListStr,
+      fName, phoneNumber, password, comfirmPassword, equiListStr, address, photo1, photo2,
+      sidoAddr, sigunguAddr, addrLongitude, addrLatitude,
     } = this.state;
 
-    let v = validate('textMax', cName, true, 15);
+    // Validation Error Massage Initialize
+    this.setInitValErroMSG();
+
+    let v = validate('textMax', fName, true, 15);
     if (!v[0]) {
       this.setState({ fNameValErrMessage: v[1] });
       return false;
@@ -135,9 +157,39 @@ export default class FirmRegisterScreen extends React.Component {
       return false;
     }
 
-    v = validate('textMax', equiListStr, true, 150);
+    v = validatePresence(equiListStr);
     if (!v[0]) {
-      this.setState({ passwordValErrMessage: v[1] });
+      this.setState({ equiListStrValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validatePresence(address);
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validatePresence(sidoAddr);
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validatePresence(sigunguAddr);
+    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+
+    v = validatePresence(addrLongitude);
+    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+
+    v = validatePresence(addrLatitude);
+    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+
+    v = validatePresence(photo1);
+    if (!v[0]) { this.setState({ addressValErrMessage: v[1] }); return false; }
+
+    v = validatePresence(photo2);
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: v[1] });
       return false;
     }
 
@@ -148,79 +200,37 @@ export default class FirmRegisterScreen extends React.Component {
     const {
       isVisibleEquiModal,
       isVisibleMapAddModal,
-      equiListStr,
       fName,
-      comfirmPassword,
       phoneNumber,
-      password,
-      address,
-      addressDetail,
+      password, comfirmPassword,
+      equiListStr,
+      address, addressDetail,
       fIntroduction,
-      photo1,
+      photo1, photo2, photo3, photo4,
+      blog, sns, homepage,
       fNameValErrMessage,
       phoneNumberValErrMessage,
       passwordValErrMessage,
       comfirmPasswordValErrMessage,
       equiListStrValErrMessage,
       addressValErrMessage,
+      photo1ValErrMessage,
+      photo2ValErrMessage,
     } = this.state;
 
     return (
       <View style={styles.container}>
-        <View style={styles.itemWrap}>
-          <Text style={styles.itemTitle}>업체명*</Text>
-          <TextInput
-            style={styles.itemInput}
-            value={fName}
-            placeholder="업체명을 입력해 주세요"
-            onChangeText={text => this.setState({ fName: text })}
-          />
-        </View>
-        <View>
-          <Text style={styles.errorMessage}>{fNameValErrMessage}</Text>
-        </View>
-        <View style={styles.itemWrap}>
-          <Text style={styles.itemTitle}>전화번호*</Text>
-          <TextInput
-            style={styles.itemInput}
-            value={phoneNumber}
-            keyboardType="phone-pad"
-            placeholder="전화번호를 입력해 주세요"
-            onChangeText={text => this.setState({ phoneNumber: text })}
-          />
-        </View>
-        <View>
-          <Text style={styles.errorMessage}>{phoneNumberValErrMessage}</Text>
-        </View>
+        <FirmCreaTextInput title="업체명*" value={fName} onChangeText={text => this.setState({ fName: text })} placeholder="업체명을 입력해 주세요" />
+        <FirmCreaErrMSG errorMSG={fNameValErrMessage} />
 
-        <View style={styles.itemWrap}>
-          <Text style={styles.itemTitle}>비밀번호*</Text>
-          <TextInput
-            style={styles.itemInput}
-            value={password}
-            secureTextEntry
-            placeholder="비밀번호를 입력해 주세요"
-            onChangeText={text => this.setState({ password: text })}
-          />
-        </View>
-        <View>
-          <Text style={styles.errorMessage}>{passwordValErrMessage}</Text>
-        </View>
+        <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
+        <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
 
-        <View style={styles.itemWrap}>
-          <Text style={styles.itemTitle}>비밀번호 확인*</Text>
-          <TextInput
-            style={styles.itemInput}
-            value={comfirmPassword}
-            keyboardType="phone-pad"
-            secureTextEntry
-            placeholder="비밀번호를 재입력해 주세요"
-            onChangeText={text => this.setState({ comfirmPassword: text })}
-          />
-        </View>
-        <View>
-          <Text style={styles.errorMessage}>{comfirmPasswordValErrMessage}</Text>
-        </View>
+        <FirmCreaTextInput title="비밀번호*" value={password} onChangeText={text => this.setState({ password: text })} placeholder="비밀번호를 입력해 주세요" secureTextEntry />
+        <FirmCreaErrMSG errorMSG={passwordValErrMessage} />
+
+        <FirmCreaTextInput title="비밀번호 확인*" value={comfirmPassword} onChangeText={text => this.setState({ comfirmPassword: text })} placeholder="비밀번호를 재입력해 주세요" secureTextEntry />
+        <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} />
 
         <View style={styles.itemWrap}>
           <Text style={styles.itemTitle}>보유 장비*</Text>
@@ -250,15 +260,7 @@ export default class FirmRegisterScreen extends React.Component {
           <Text style={styles.errorMessage}>{addressValErrMessage}</Text>
         </View>
 
-        <View style={styles.itemWrap}>
-          <Text style={styles.itemTitle}>업체 상세주소</Text>
-          <TextInput
-            style={styles.itemInput}
-            value={addressDetail}
-            placeholder="상세주소를 입력해 주세요"
-            onChangeText={text => this.setState({ addressDetail: text })}
-          />
-        </View>
+        <FirmCreaTextInput title="업체 상세주소" value={addressDetail} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
 
         <View style={styles.itemWrap}>
           <Text style={styles.itemTitle}>업체 소개</Text>
@@ -271,10 +273,24 @@ export default class FirmRegisterScreen extends React.Component {
             onChangeText={text => this.setState({ fIntroduction: text })}
           />
         </View>
-        <View>
-          <ImagePickInput itemTitle="대표사진" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} itemWrapStyle={this.itemWrap} />
-        </View>
 
+        <ImagePickInput itemTitle="대표사진*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} itemWrapStyle={this.itemWrap} />
+        <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
+
+        <ImagePickInput itemTitle="작업사진1*" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} itemWrapStyle={this.itemWrap} />
+        <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+
+        <ImagePickInput itemTitle="작업사진2" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} itemWrapStyle={this.itemWrap} />
+
+        <ImagePickInput itemTitle="작업사진3" imgUrl={photo4} setImageUrl={url => this.setState({ photo4: url })} itemWrapStyle={this.itemWrap} />
+
+        <FirmCreaTextInput title="블로그" value={blog} onChangeText={text => this.setState({ blog: text })} placeholder="블로그 주소를 입력해 주세요" />
+        <FirmCreaTextInput title="SNG" value={sns} onChangeText={text => this.setState({ sns: text })} placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요" />
+        <FirmCreaTextInput title="홈페이지" value={homepage} onChangeText={text => this.setState({ homepage: text })} placeholder="홈페이지 주소를 입력해 주세요" />
+
+        <View>
+          <Button title="저장" onPress={() => this.createFirm()} />
+        </View>
         <EquipementModal
           isVisibleEquiModal={isVisibleEquiModal}
           setEquiSelModalVisible={this.setEquiSelModalVisible}

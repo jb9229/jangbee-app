@@ -43,7 +43,7 @@ export function validatePresence(value) {
 
   if (value === '' || value == null) {
     resp[0] = false;
-    resp[1] = '필수 항목 입니다, 빈칸을 채워 주세요.';
+    resp[1] = '필수 항목 입니다, 빈칸을 채워 주세요';
   } else {
     resp[0] = true;
   }
@@ -60,7 +60,7 @@ export function validate(nameField, value, essential, compareValue) {
     if (value === '' || value == null) {
       if (essential) {
         resp[0] = false;
-        resp[1] = '필수 항목 입니다, 빈칸을 채워 주세요.';
+        resp[1] = '필수 항목 입니다, 빈칸을 채워 주세요';
 
         return resp;
       }
