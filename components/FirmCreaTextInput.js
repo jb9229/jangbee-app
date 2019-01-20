@@ -23,7 +23,7 @@ export default class FirmCreaTextInput extends React.PureComponent {
         <TextInput
           style={styles.itemInput}
           value={value}
-          secureTextEntry={secureTextEntry !== null}
+          secureTextEntry={secureTextEntry !== undefined}
           keyboardType={keyboardType === undefined ? 'default' : keyboardType}
           placeholder={placeholder}
           onChangeText={onChangeText}

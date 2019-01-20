@@ -15,7 +15,7 @@ export function handleJsonResponse(res) {
     return res.json().then(responseJson => responseJson);
   }
 
-  throw new CmException(res.status, `${res.statusText}, ${res.url}`);
+  throw new CmException(res.status, `${res.url}`);
 }
 
 /**
@@ -33,5 +33,5 @@ export function handleTextResponse(res) {
     return res.text().then(responseText => responseText);
   }
 
-  throw new CmException(res.status, `${res.statusText}, ${res.url}`);
+  throw new CmException(res.status, `${res.url}`);
 }

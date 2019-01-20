@@ -8,7 +8,7 @@ export function getEquipList() {
 export function createFirm(newFirm) {
   return fetch(url.JBSERVER_FIRM, {
     method: 'POST',
-    header: {
+    headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },

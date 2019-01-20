@@ -18,7 +18,7 @@ export default class ImagePickInput extends React.Component {
     console.log('Start pickImage~');
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
     });
 
     console.log(`result.cancelled: ${result.cancelled}`);

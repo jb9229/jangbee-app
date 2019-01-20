@@ -6,7 +6,7 @@ function setDefaultState(component) {
   component.setState({
     isVisibleEquiModal: false,
     isVisibleMapAddModal: false,
-    fName: '세종누리카고 크레인',
+    fname: '세종누리카고 크레인',
     // phoneNumber: '010-7654-7404',
     // password: 'chabum!21',
     // comfirmPassword: 'chabum!21',
@@ -27,7 +27,7 @@ function setDefaultState(component) {
     blog: '',
     homepage: '',
     sns: '',
-    fNameValErrMessage: '',
+    fnameValErrMessage: '',
     phoneNumberValErrMessage: '',
     passwordValErrMessage: '',
     comfirmPasswordValErrMessage: '',
@@ -44,19 +44,19 @@ describe('업체등록 유효성검사 함수 테스트', () => {
 
     setDefaultState(firmRegiScreen);
 
-    // Case2: fName is empty
-    firmRegiScreen.setState({ fName: '' });
+    // Case2: fname is empty
+    firmRegiScreen.setState({ fname: '' });
     valResult = firmRegiScreen.isValidateSubmit();
     expect(valResult).toEqual(false);
-    expect(firmRegiScreen.state.fNameValErrMessage).toEqual('필수 항목 입니다, 빈칸을 채워 주세요');
+    expect(firmRegiScreen.state.fnameValErrMessage).toEqual('필수 항목 입니다, 빈칸을 채워 주세요');
 
-    // Case2: fName is exceed character
-    firmRegiScreen.setState({ fName: '12345678910123456' });
+    // Case2: fname is exceed character
+    firmRegiScreen.setState({ fname: '12345678910123456' });
     valResult = firmRegiScreen.isValidateSubmit();
     expect(valResult).toEqual(false);
-    expect(firmRegiScreen.state.fNameValErrMessage).toEqual('최대문자: 15');
+    expect(firmRegiScreen.state.fnameValErrMessage).toEqual('최대문자: 15');
 
-    firmRegiScreen.setState({ fName: '세종누리카고 크레인' });
+    firmRegiScreen.setState({ fname: '세종누리카고 크레인' });
 
     // // Case2: cellPhone is empty
     // firmRegiScreen.setState({ phoneNumber: '' });
@@ -128,6 +128,15 @@ describe('업체등록 유효성검사 함수 테스트', () => {
     );
     firmRegiScreen.setState({ address: '세종시 중구 영종도' });
 
+    // Case: addressDetail is empty
+    firmRegiScreen.setState({
+      addressDetail: '12345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.addressValErrMessage).toEqual('[상세주소] 최대문자: 45');
+    firmRegiScreen.setState({ addressDetail: '505동 305호' });
+
     // Case: sidoAddr is empty
     firmRegiScreen.setState({ sidoAddr: '' });
     valResult = firmRegiScreen.isValidateSubmit();
@@ -171,6 +180,25 @@ describe('업체등록 유효성검사 함수 테스트', () => {
     expect(firmRegiScreen.state.thumbnailValErrMessage).toEqual(
       '필수 항목 입니다, 빈칸을 채워 주세요',
     );
+
+    firmRegiScreen.setState({
+      introduction:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.introductionValErrMessage).toEqual('최대문자: 1000');
+    firmRegiScreen.setState({
+      introduction: '',
+    });
+
+    firmRegiScreen.setState({
+      thumbnail:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.thumbnailValErrMessage).toEqual('최대문자: 250');
     firmRegiScreen.setState({
       thumbnail:
         'https://s3.ap-northeast-2.amazonaws.com/elasticbeanstalk-ap-northeast-2-499435767786/asset/img/jangbee_photo_%2B1547852979838.jpg',
@@ -183,10 +211,68 @@ describe('업체등록 유효성검사 함수 테스트', () => {
     expect(firmRegiScreen.state.photo1ValErrMessage).toEqual(
       '필수 항목 입니다, 빈칸을 채워 주세요',
     );
+
+    firmRegiScreen.setState({
+      photo1:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.photo1ValErrMessage).toEqual('최대문자: 250');
     firmRegiScreen.setState({
       photo1:
         'https://s3.ap-northeast-2.amazonaws.com/elasticbeanstalk-ap-northeast-2-499435767786/asset/img/jangbee_photo_%2B1547852979838.jpg',
     });
+
+    // Case: photo2 is empty
+    firmRegiScreen.setState({
+      photo2:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.photo2ValErrMessage).toEqual('최대문자: 250');
+    firmRegiScreen.setState({ photo2: '' });
+
+    // Case: photo3 is empty
+    firmRegiScreen.setState({
+      photo3:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.photo3ValErrMessage).toEqual('최대문자: 250');
+    firmRegiScreen.setState({ photo3: '' });
+
+    // Case: blog is empty
+    firmRegiScreen.setState({
+      blog:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.blogValErrMessage).toEqual('최대문자: 250');
+    firmRegiScreen.setState({ blog: '' });
+
+    // Case: homepage is empty
+    firmRegiScreen.setState({
+      homepage:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.homepageValErrMessage).toEqual('최대문자: 250');
+    firmRegiScreen.setState({ homepage: '' });
+
+    // Case: sns is empty
+    firmRegiScreen.setState({
+      sns:
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
+    });
+    valResult = firmRegiScreen.isValidateSubmit();
+    expect(valResult).toEqual(false);
+    expect(firmRegiScreen.state.snsValErrMessage).toEqual('최대문자: 250');
+    firmRegiScreen.setState({ sns: '' });
 
     // Case1: Validation Success
     let valResult = firmRegiScreen.isValidateSubmit();
