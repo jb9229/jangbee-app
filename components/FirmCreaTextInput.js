@@ -4,19 +4,33 @@ import {
 } from 'react-native';
 
 const styles = StyleSheet.create({
-  itemInput: {},
   itemWrap: {
     flex: 1,
-    flexDirection: 'row',
+    margin: 10,
+  },
+  itemTitle: {
+    fontSize: 20,
+  },
+  itemInput: {
+    borderBottomWidth: 1,
+    fontSize: 20,
+    borderStyle: 'dotted',
   },
 });
 
 export default class FirmCreaTextInput extends React.PureComponent {
   render() {
     const {
-      title, value, placeholder, onChangeText, keyboardType, secureTextEntry,
+      title,
+      value,
+      placeholder,
+      onChangeText,
+      keyboardType,
+      secureTextEntry,
+      onFocus,
+      multiline,
+      numberOfLines,
     } = this.props;
-
     return (
       <View style={styles.itemWrap}>
         <Text style={styles.itemTitle}>{title}</Text>
@@ -27,6 +41,10 @@ export default class FirmCreaTextInput extends React.PureComponent {
           keyboardType={keyboardType === undefined ? 'default' : keyboardType}
           placeholder={placeholder}
           onChangeText={onChangeText}
+          onFocus={onFocus}
+          multiline={multiline !== undefined}
+          numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
+          ellipsizeMode="tail"
         />
       </View>
     );

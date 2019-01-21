@@ -1,9 +1,30 @@
 import React from 'react';
 import {
-  Alert, Button, Text, View,
+  Alert, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
 import * as api from '../api/api';
+
+const styles = StyleSheet.create({
+  itemWrap: {
+    flex: 1,
+    margin: 10,
+  },
+  itemTitle: {
+    fontSize: 20,
+  },
+  urlInput: {
+    borderBottomWidth: 1,
+    borderStyle: 'dotted',
+  },
+  urlText: {
+    fontSize: 20,
+  },
+  placeholder: {
+    color: 'gray',
+    fontSize: 20,
+  },
+});
 
 export default class ImagePickInput extends React.Component {
   constructor(props) {
@@ -15,13 +36,10 @@ export default class ImagePickInput extends React.Component {
   }
 
   pickImage = async () => {
-    console.log('Start pickImage~');
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [1, 1],
     });
-
-    console.log(`result.cancelled: ${result.cancelled}`);
 
     if (!result.cancelled) {
       this.handleImagePicked(result.uri);
@@ -53,11 +71,17 @@ export default class ImagePickInput extends React.Component {
   render() {
     const { itemTitle, imgUrl, itemWrapStyle } = this.props;
     const { isUploaded } = this.state;
-    return (
-      <View style={itemWrapStyle}>
-        <Button title={itemTitle} onPress={() => this.pickImage()} />
 
-        <Text>{isUploaded ? imgUrl : null}</Text>
+    const urlTextStyle = imgUrl === '' ? styles.placeholder : styles.urlText;
+    return (
+      <View style={styles.itemWrap}>
+        <Text style={styles.itemTitle}>{itemTitle}</Text>
+
+        <TouchableOpacity onPress={() => this.pickImage()} style={styles.urlInput}>
+          <Text style={urlTextStyle} ellipsizeMode="tail" numberOfLines={1}>
+            {imgUrl === '' ? '사진을 선택해 주세요' : imgUrl}
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }

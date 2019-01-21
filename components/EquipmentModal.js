@@ -20,8 +20,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   equiListWrap: {
-    flex: 1,
-    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
@@ -91,9 +90,11 @@ export default class EquipementModal extends React.PureComponent {
    * @returns null
    */
   setEquiList = () => {
-    api.getEquipList().then((newEquiList) => {
-      this.setState({ equiList: newEquiList });
-    })
+    api
+      .getEquipList()
+      .then((newEquiList) => {
+        this.setState({ equiList: newEquiList });
+      })
       .catch((error) => {
         Alert.alert(
           '장비명 조회에 문제가 있습니다, 재 시도해 주세요.',
@@ -153,14 +154,16 @@ export default class EquipementModal extends React.PureComponent {
           }}
         >
           <View style={styles.equiModalWrap}>
-            <View style={styles.equiListWrap}>
-              <FlatList
-                data={equiList}
-                extraData={equiSelMap}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={this.renderEquiListItem}
-              />
-            </View>
+            <FlatList
+              columnWrapperStyle={styles.equiListWrap}
+              horizontal={false}
+              numColumns={2}
+              data={equiList}
+              extraData={equiSelMap}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={this.renderEquiListItem}
+            />
+
             <View>
               <TouchableHighlight onPress={() => this.completeSelEqui()}>
                 <Text>선택 완료</Text>

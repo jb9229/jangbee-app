@@ -1,17 +1,19 @@
 // @flow
 import React from 'react';
-import {
-  StyleSheet, Text, TouchableOpacity, View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
   equiText: {
-    padding: 7,
-    margin: 3,
-    fontSize: 21,
+    fontSize: 24,
   },
   selectedItem: {
     backgroundColor: '#fffbdd',
+  },
+  touchable: {
+    borderWidth: 1,
+    flexDirection: 'row',
+    padding: 10,
+    marginBottom: 20,
   },
 });
 
@@ -19,8 +21,8 @@ type Props = {
   eName: string,
   selected: boolean,
   onPressItem: Function,
-}
-type State = {}
+};
+type State = {};
 
 export default class EquiSelBox extends React.PureComponent<Props, State> {
   onEquiSel = () => {
@@ -35,11 +37,9 @@ export default class EquiSelBox extends React.PureComponent<Props, State> {
     const itemStyle = selected ? styles.selectedItem : null;
 
     return (
-      <View>
-        <TouchableOpacity onPress={() => this.onEquiSel()}>
-          <Text style={[styles.equiText, itemStyle]}>{eName}</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={() => this.onEquiSel()} style={[styles.touchable, itemStyle]}>
+        <Text style={[styles.equiText]}>{eName}</Text>
+      </TouchableOpacity>
     );
   }
 }
