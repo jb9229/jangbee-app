@@ -11,18 +11,23 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   itemTitle: {
+    fontFamily: 'yang-rounded',
+    color: '#4D4A4A',
     fontSize: 20,
   },
-  urlInput: {
-    borderBottomWidth: 1,
-    borderStyle: 'dotted',
-  },
+  urlInput: {},
   urlText: {
+    fontFamily: 'Hamchorong-batang',
     fontSize: 20,
+    borderBottomWidth: 1,
+    borderColor: '#7A7373',
   },
   placeholder: {
     color: 'gray',
+    fontFamily: 'Hamchorong-batang',
     fontSize: 20,
+    borderBottomWidth: 1,
+    borderColor: '#7A7373',
   },
 });
 

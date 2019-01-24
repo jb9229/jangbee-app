@@ -1,13 +1,15 @@
 // @flow
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
   equiText: {
-    fontSize: 24,
+    fontFamily: 'Hamchorong-batang',
+    fontSize: 20,
   },
   selectedItem: {
-    backgroundColor: '#fffbdd',
+    backgroundColor: colors.point,
   },
   touchable: {
     borderWidth: 1,

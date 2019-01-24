@@ -9,11 +9,15 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   itemTitle: {
+    fontFamily: 'yang-rounded',
+    color: '#4D4A4A',
     fontSize: 20,
   },
   itemInput: {
-    borderBottomWidth: 1,
+    fontFamily: 'Hamchorong-batang',
     fontSize: 20,
+    borderBottomWidth: 1,
+    borderColor: '#7A7373',
     borderStyle: 'dotted',
   },
 });
@@ -30,11 +34,13 @@ export default class FirmCreaTextInput extends React.PureComponent {
       onFocus,
       multiline,
       numberOfLines,
+      refer,
     } = this.props;
     return (
       <View style={styles.itemWrap}>
         <Text style={styles.itemTitle}>{title}</Text>
         <TextInput
+          ref={refer}
           style={styles.itemInput}
           value={value}
           secureTextEntry={secureTextEntry !== undefined}

@@ -1,17 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
+  errorWrap: {
+    marginLeft: 10,
+    marginRight: 10,
+  },
   errorMessage: {
-    color: 'red',
+    color: colors.errorText,
   },
 });
 export default class FirmCreaErrMSG extends React.PureComponent {
   render() {
-    const { erroMSG } = this.props;
+    const { errorMSG } = this.props;
     return (
-      <View>
-        <Text style={styles.errorMessage}>{erroMSG}</Text>
+      <View style={styles.errorWrap}>
+        <Text style={styles.errorMessage}>{errorMSG}</Text>
       </View>
     );
   }

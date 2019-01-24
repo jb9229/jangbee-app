@@ -7,6 +7,7 @@ import * as api from '../api/api';
 
 import { JBSERVER_EQUILIST } from '../constants/Url';
 import { handleJsonResponse } from '../utils/Fetch-utils';
+import colors from '../constants/Colors';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
@@ -21,6 +22,16 @@ const styles = StyleSheet.create({
   },
   equiListWrap: {
     justifyContent: 'space-between',
+  },
+  commWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  commText: {
+    fontFamily: 'Hoon-saemaulundong',
+    fontSize: 20,
+    color: colors.point2,
   },
 });
 
@@ -164,9 +175,12 @@ export default class EquipementModal extends React.PureComponent {
               renderItem={this.renderEquiListItem}
             />
 
-            <View>
+            <View style={styles.commWrap}>
               <TouchableHighlight onPress={() => this.completeSelEqui()}>
-                <Text>선택 완료</Text>
+                <Text style={styles.commText}>취소</Text>
+              </TouchableHighlight>
+              <TouchableHighlight onPress={() => this.completeSelEqui()}>
+                <Text style={styles.commText}>선택</Text>
               </TouchableHighlight>
             </View>
           </View>

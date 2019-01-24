@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, Button, KeyboardAvoidingView, ScrollView, StyleSheet, View,
+  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableHighlight, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
 import EquipementModal from '../../components/EquipmentModal';
@@ -10,15 +10,50 @@ import ImagePickInput from '../../components/ImagePickInput';
 import FirmCreaTextInput from '../../components/FirmCreaTextInput';
 import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
 import * as api from '../../api/api';
+import colors from '../../constants/Colors';
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
   },
   contentContainer: {
-    paddingVertical: 20
+    padding: 15,
+    paddingTop: 5,
+  },
+  formWrap: {
+    marginBottom: 10,
+    borderWidth: 4,
+    borderStyle: 'dashed',
+    borderRadius: 1,
+    borderColor: '#dfc247',
+    shadowOffset: {
+      width: 0,
+      height: 11,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+    elevation: 10,
+  },
+  regiFormCommWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  regiTH: {
+    padding: 10,
+    paddingLeft: 40,
+    paddingRight: 40,
+    backgroundColor: colors.point,
+    borderWidth: 1,
+    borderColor: colors.point2,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  regiCommText: {
+    fontFamily: 'Hoon-saemaulundong',
+    fontSize: 24,
+    color: colors.point2,
   },
   errorMessage: {
     color: 'red',
@@ -26,6 +61,10 @@ const styles = StyleSheet.create({
 });
 
 export default class FirmRegisterScreen extends React.Component {
+  static navigationOptions = {
+    title: '업체 등록',
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -101,6 +140,8 @@ export default class FirmRegisterScreen extends React.Component {
           '업체생성에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`);
       });
+
+    navigation.navigate('FirmMyInfo');
   }
 
   /**
@@ -218,6 +259,7 @@ export default class FirmRegisterScreen extends React.Component {
 
     let v = validate('textMax', fname, true, 15);
     if (!v[0]) {
+      console.log(`에러 ${v[1]}`);
       this.setState({ fnameValErrMessage: v[1] });
       return false;
     }
@@ -242,6 +284,7 @@ export default class FirmRegisterScreen extends React.Component {
     v = validatePresence(equiListStr);
     if (!v[0]) {
       this.setState({ equiListStrValErrMessage: v[1] });
+      this.fnameTextInput.focus();
       return false;
     }
 
@@ -299,6 +342,12 @@ export default class FirmRegisterScreen extends React.Component {
     return true;
   };
 
+  cancelFirm = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate('FirmMyInfo');
+  }
+
   render() {
     const {
       isVisibleEquiModal,
@@ -323,68 +372,77 @@ export default class FirmRegisterScreen extends React.Component {
     } = this.state;
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" />
-          <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
+      <View style={styles.container}>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <ScrollView contentContainerStyle={styles.contentContainer}>
+            <View style={styles.formWrap}>
+              <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" refer={(input) => { console.log(`refer Setting completed`); this.fnameTextInput = input; }}/>
+              <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
 
-          {/* <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
-          <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
+              {/* <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
+              <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
 
-          <FirmCreaTextInput title="비밀번호*" value={password} onChangeText={text => this.setState({ password: text })} placeholder="비밀번호를 입력해 주세요" secureTextEntry />
-          <FirmCreaErrMSG errorMSG={passwordValErrMessage} />
+              <FirmCreaTextInput title="비밀번호*" value={password} onChangeText={text => this.setState({ password: text })} placeholder="비밀번호를 입력해 주세요" secureTextEntry />
+              <FirmCreaErrMSG errorMSG={passwordValErrMessage} />
 
-          <FirmCreaTextInput title="비밀번호 확인*" value={comfirmPassword} onChangeText={text => this.setState({ comfirmPassword: text })} placeholder="비밀번호를 재입력해 주세요" secureTextEntry />
-          <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} /> */}
+              <FirmCreaTextInput title="비밀번호 확인*" value={comfirmPassword} onChangeText={text => this.setState({ comfirmPassword: text })} placeholder="비밀번호를 재입력해 주세요" secureTextEntry />
+              <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} /> */}
 
-          <FirmCreaTextInput title="보유 장비*" value={equiListStr} onChangeText={text => this.setState({ equiListStr: text })} onFocus={() => this.openSelEquipmentModal()} placeholder="보유 장비를 선택해 주세요" />
-          <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
+              <FirmCreaTextInput title="보유 장비*" value={equiListStr} onChangeText={text => this.setState({ equiListStr: text })} onFocus={() => this.openSelEquipmentModal()} placeholder="보유 장비를 선택해 주세요" />
+              <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
 
-          <FirmCreaTextInput title="업체주소(고객검색시 거리계산 기준이됨)*" value={address} onChangeText={text => this.setState({ address: text })} onFocus={() => this.openMapAddModal()} placeholder="주소를 검색해주세요" />
-          <FirmCreaErrMSG errorMSG={addressValErrMessage} />
+              <FirmCreaTextInput title="업체주소(고객검색시 거리계산 기준이됨)*" value={address} onChangeText={text => this.setState({ address: text })} onFocus={() => this.openMapAddModal()} placeholder="주소를 검색해주세요" />
+              <FirmCreaErrMSG errorMSG={addressValErrMessage} />
 
-          <FirmCreaTextInput title="업체 상세주소" value={addressDetail} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
+              <FirmCreaTextInput title="업체 상세주소" value={addressDetail} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
 
-          <FirmCreaTextInput title="업체 소개" value={introduction} onChangeText={text => this.setState({ introduction: text })} placeholder="업체 소개를 해 주세요" multiline numberOfLines={5} />
-          <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
+              <FirmCreaTextInput title="업체 소개" value={introduction} onChangeText={text => this.setState({ introduction: text })} placeholder="업체 소개를 해 주세요" multiline numberOfLines={5} />
+              <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
 
-          <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} setImageUrl={url => this.setState({ thumbnail: url })} />
-          <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
+              <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} setImageUrl={url => this.setState({ thumbnail: url })} />
+              <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
 
-          <ImagePickInput itemTitle="작업사진1*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} />
-          <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
+              <ImagePickInput itemTitle="작업사진1*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} />
+              <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
 
-          <ImagePickInput itemTitle="작업사진2" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} />
-          <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+              <ImagePickInput itemTitle="작업사진2" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} />
+              <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
 
-          <ImagePickInput itemTitle="작업사진3" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} />
-          <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
+              <ImagePickInput itemTitle="작업사진3" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} />
+              <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
 
-          <FirmCreaTextInput title="블로그" value={blog} onChangeText={text => this.setState({ blog: text })} placeholder="블로그 주소를 입력해 주세요" />
-          <FirmCreaErrMSG errorMSG={blogValErrMessage} />
+              <FirmCreaTextInput title="블로그" value={blog} onChangeText={text => this.setState({ blog: text })} placeholder="블로그 주소를 입력해 주세요" />
+              <FirmCreaErrMSG errorMSG={blogValErrMessage} />
 
-          <FirmCreaTextInput title="SNG" value={sns} onChangeText={text => this.setState({ sns: text })} placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요" />
-          <FirmCreaErrMSG errorMSG={snsValErrMessage} />
+              <FirmCreaTextInput title="SNG" value={sns} onChangeText={text => this.setState({ sns: text })} placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요" />
+              <FirmCreaErrMSG errorMSG={snsValErrMessage} />
 
-          <FirmCreaTextInput title="홈페이지" value={homepage} onChangeText={text => this.setState({ homepage: text })} placeholder="홈페이지 주소를 입력해 주세요" />
-          <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
+              <FirmCreaTextInput title="홈페이지" value={homepage} onChangeText={text => this.setState({ homepage: text })} placeholder="홈페이지 주소를 입력해 주세요" />
+              <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
+            </View>
 
-          <View>
-            <Button title="저장" onPress={() => this.createFirm()} />
-          </View>
-          <EquipementModal
-            isVisibleEquiModal={isVisibleEquiModal}
-            setEquiSelModalVisible={this.setEquiSelModalVisible}
-            seledEquipmentStr={equiListStr}
-            completeSelEqui={this.completeSelEqui}
-          />
-          <MapAddWebModal
-            isVisibleMapAddModal={isVisibleMapAddModal}
-            setMapAddModalVisible={this.setMapAddModalVisible}
-            saveAddrInfo={this.saveAddrInfo}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
+            <View style={styles.regiFormCommWrap}>
+              <TouchableHighlight onPress={() => this.cancelFirm()} style={styles.regiTH}>
+                <Text style={styles.regiCommText}>취소</Text>
+              </TouchableHighlight>
+              <TouchableHighlight onPress={() => this.createFirm()} style={styles.regiTH}>
+                <Text style={styles.regiCommText}>등록</Text>
+              </TouchableHighlight>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+        <EquipementModal
+          isVisibleEquiModal={isVisibleEquiModal}
+          setEquiSelModalVisible={this.setEquiSelModalVisible}
+          seledEquipmentStr={equiListStr}
+          completeSelEqui={this.completeSelEqui}
+        />
+        <MapAddWebModal
+          isVisibleMapAddModal={isVisibleMapAddModal}
+          setMapAddModalVisible={this.setMapAddModalVisible}
+          saveAddrInfo={this.saveAddrInfo}
+        />
+      </View>
     );
   }
 }
