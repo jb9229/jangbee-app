@@ -17,6 +17,7 @@ export default class App extends React.Component {
     accountType: '',
     phoneNumber: '',
     password: '',
+    isFirm: false,
   };
 
   setLoginModalVisible = (visible) => {
@@ -30,6 +31,7 @@ export default class App extends React.Component {
       phoneNumber,
       password,
       accountType,
+      isFirm,
     } = this.state;
 
     const { skipLoadingScreen } = this.props;
@@ -49,11 +51,12 @@ export default class App extends React.Component {
         <LoginModal
           isVisible={isLoginModalVisible}
           setLoginModalVisible={this.setLoginModalVisible}
-          accountType={accountType}
+          isFirm={isFirm}
           phoneNumber={phoneNumber}
           password={password}
           onChnagePN={text => this.setState({ phoneNumber: text })}
           onChnagePW={text => this.setState({ password: text })}
+          onChangeAT={(isFirm) => this.setState({ isFirm })}
         />
       );
     }

@@ -5,11 +5,13 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import FirmRegisterScreen from "../screens/FirmRegisterScreen";
+import FirmRegisterScreen from '../screens/FirmRegisterScreen';
+import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: FirmMyInfoScreen,
   FirmRegister: FirmRegisterScreen,
+  FirmUpdate: FirmUpdateScreen,
 });
 
 FirmMyInfoStack.navigationOptions = {

@@ -64,6 +64,9 @@ export function validate(nameField, value, essential, compareValue) {
 
         return resp;
       }
+
+      resp[0] = true;
+      return resp;
     }
 
     if (Object.prototype.hasOwnProperty.call(v, 'format') && !v.format.pattern.test(value)) {

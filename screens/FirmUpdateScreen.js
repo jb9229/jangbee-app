@@ -3,14 +3,14 @@ import {
   Alert, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableHighlight, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
-import EquipementModal from '../../components/EquipmentModal';
-import MapAddWebModal from '../../components/MapAddWebModal';
-import { validate, validatePresence } from '../../utils/Validation';
-import ImagePickInput from '../../components/ImagePickInput';
-import FirmCreaTextInput from '../../components/FirmCreaTextInput';
-import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
-import * as api from '../../api/api';
-import colors from '../../constants/Colors';
+import EquipementModal from '../components/EquipmentModal';
+import MapAddWebModal from '../components/MapAddWebModal';
+import { validate, validatePresence } from '../utils/Validation';
+import ImagePickInput from '../components/ImagePickInput';
+import FirmCreaTextInput from '../components/FirmCreaTextInput';
+import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
+import * as api from '../api/api';
+import colors from '../constants/Colors';
 
 
 const styles = StyleSheet.create({
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
-  regiCommText: {
+  commText: {
     fontFamily: 'Hoon-saemaulundong',
     fontSize: 24,
     color: colors.point2,
@@ -60,20 +60,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class FirmRegisterScreen extends React.Component {
+export default class FirmUpdateScreen extends React.Component {
   static navigationOptions = {
-    title: '업체정보 작성',
+    title: '업체정보 수정',
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      id: undefined,
+      accountId: undefined,
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       fname: '',
-      // phoneNumber: '',
-      // password: '',
-      // comfirmPassword: '',
       equiListStr: '',
       address: '',
       addressDetail: '',
@@ -104,12 +103,30 @@ export default class FirmRegisterScreen extends React.Component {
   }
 
   componentDidMount = () => {
+    this.setMyFirmInfo();
   }
 
-  createFirm = () => {
+  setMyFirmInfo = () => {
+    const accountId = 3;
+
+    api
+      .getFirm(accountId)
+      .then((firm) => {
+        this.setUpdateFirmData(firm);
+      })
+      .catch((error) => {
+        Alert.alert(
+          `내 업체정보 요청에 문제가 있습니다, 다시 시도해 주세요\n[${error.name}] ${
+            error.message
+          }`,
+        );
+      });
+  };
+
+  updateFirm = () => {
     const { navigation } = this.props;
     const {
-      fname, equiListStr, address, addressDetail, sidoAddr,
+      id, accountId, fname, equiListStr, address, addressDetail, sidoAddr,
       sigunguAddr, addrLongitude, addrLatitude, introduction, thumbnail,
       photo1, photo2, photo3, blog, homepage, sns,
     } = this.state;
@@ -117,7 +134,9 @@ export default class FirmRegisterScreen extends React.Component {
 
     if (!valResult) { return; }
 
-    const newFirm = {
+    const updateFirm = {
+      id,
+      accountId,
       fname,
       equiListStr,
       address,
@@ -136,15 +155,13 @@ export default class FirmRegisterScreen extends React.Component {
       sns,
     };
 
-    api.createFirm(newFirm)
-      .then(() => navigation.navigate('HOME'))
+    api.updateFirm(updateFirm)
+      .then(() => navigation.navigate('FirmMyInfo'))
       .catch((error) => {
         Alert.alert(
-          '업체등록에 문제가 있습니다, 재 시도해 주세요.',
+          '업체정보 수정에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`);
       });
-
-    navigation.navigate('FirmMyInfo');
   }
 
   /**
@@ -351,6 +368,29 @@ export default class FirmRegisterScreen extends React.Component {
     navigation.navigate('FirmMyInfo');
   }
 
+  setUpdateFirmData = (firm) => {
+    this.setState({
+      id: firm.id,
+      accountId: firm.accountId,
+      fname: firm.fname,
+      equiListStr: firm.equiListStr,
+      address: firm.address,
+      addressDetail: firm.addressDetail,
+      sidoAddr: firm.sidoAddr,
+      sigunguAddr: firm.sigunguAddr,
+      addrLongitude: firm.addrLongitude,
+      addrLatitude: firm.addrLatitude,
+      introduction: firm.introduction,
+      thumbnail: firm.thumbnail,
+      photo1: firm.photo1,
+      photo2: firm.photo2,
+      photo3: firm.photo3,
+      blog: firm.blog,
+      homepage: firm.homepage,
+      sns: firm.sns,
+    });
+  }
+
   render() {
     const {
       isVisibleEquiModal,
@@ -426,10 +466,10 @@ export default class FirmRegisterScreen extends React.Component {
 
             <View style={styles.regiFormCommWrap}>
               <TouchableHighlight onPress={() => this.cancelFirm()} style={styles.regiTH}>
-                <Text style={styles.regiCommText}>취소</Text>
+                <Text style={styles.commText}>취소</Text>
               </TouchableHighlight>
-              <TouchableHighlight onPress={() => this.createFirm()} style={styles.regiTH}>
-                <Text style={styles.regiCommText}>저장</Text>
+              <TouchableHighlight onPress={() => this.updateFirm()} style={styles.regiTH}>
+                <Text style={styles.commText}>수정</Text>
               </TouchableHighlight>
             </View>
           </ScrollView>

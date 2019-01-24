@@ -1,7 +1,16 @@
 import React from 'react';
 import {
-  Modal, Picker, StyleSheet, TouchableHighlight, Text, TextInput, View,
+  Modal,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
+import { white } from 'ansi-colors';
+import fonts from '../constants/Fonts';
+import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,6 +23,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
   },
+  accoutTypeWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  accountTypeTO: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 10,
+    elevation: 10,
+  },
+  accountTypeText: {
+    fontSize: 20,
+  },
+  selectedAccType: {
+    backgroundColor: colors.point,
+  },
   itemWrap: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -25,15 +56,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   title: {
-    width: 250,
+    width: 300,
+    fontFamily: fonts.titleMiddle,
+    fontSize: 20,
   },
   loginTI: {
-    width: 250,
-    fontSize: 20,
+    width: 300,
+    fontSize: 23,
+    fontFamily: fonts.batang,
   },
   commText: {
     fontSize: 25,
     fontWeight: 'bold',
+    fontFamily: fonts.titleTop,
   },
   accTypePicker: {
     width: 265,
@@ -52,19 +87,32 @@ export default class LoginModal extends React.PureComponent {
 
   render() {
     const {
-      isVisible, phoneNumber, password, onChangePN, onChangePW, accountType,
+      isVisible,
+      phoneNumber,
+      password,
+      isFirm,
+      onChangePN,
+      onChangePW,
+      onChangeAT,
     } = this.props;
 
     return (
       <View style={styles.container}>
         <Modal amimationType="slide" visible={isVisible} onRequestClose={() => this.closeModal()}>
           <View style={styles.modalWrap}>
-            <View style={styles.itemWrap}>
-              <Text style={styles.title}>고객구분: </Text>
-              <Picker selectedValue={accountType} style={styles.accTypePicker}>
-                <Picker.Item label="장비 고객" value="장비 고객" style={styles.accTypePickerItem} />
-                <Picker.Item label="장비 업체" value="장비 업체" />
-              </Picker>
+            <View style={styles.accoutTypeWrap}>
+              <TouchableOpacity
+                style={[styles.accountTypeTO, isFirm ? null : styles.selectedAccType]}
+                onPress={() => onChangeAT(false)}
+              >
+                <Text style={[styles.accountTypeText]}>장비고객</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.accountTypeTO, isFirm ? styles.selectedAccType : null]}
+                onPress={() => onChangeAT(true)}
+              >
+                <Text style={[styles.accountTypeText]}>장비업체 </Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.itemWrap}>
               <Text style={styles.title}>핸드폰번호: </Text>

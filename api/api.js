@@ -16,6 +16,21 @@ export function createFirm(newFirm) {
   }).then(handleJsonResponse);
 }
 
+export function getFirm(accountId) {
+  return fetch(`${url.JBSERVER_FIRM}/${accountId}`).then(handleJsonResponse);
+}
+
+export function updateFirm(updateFirm) {
+  return fetch(url.JBSERVER_FIRM, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updateFirm),
+  }).then(handleJsonResponse);
+}
+
 export function uploadImage(uri) {
   const uriParts = uri.split('.');
   const fileType = uriParts[uriParts.length - 1];
