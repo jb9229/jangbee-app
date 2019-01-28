@@ -8,6 +8,7 @@ import * as api from '../api/api';
 import { JBSERVER_EQUILIST } from '../constants/Url';
 import { handleJsonResponse } from '../utils/Fetch-utils';
 import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   commText: {
-    fontFamily: 'Hoon-saemaulundong',
+    fontFamily: fonts.buttonBig,
     fontSize: 20,
     color: colors.point2,
   },

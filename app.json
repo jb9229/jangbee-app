@@ -1,7 +1,8 @@
 {
+  "scheme": "jangbeeCall",
   "expo": {
     "name": "장비콜",
-    "slug": "Everyone will be own",
+    "slug": "Everyone_will_be_own",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": ["ios", "android"],

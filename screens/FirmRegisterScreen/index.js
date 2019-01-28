@@ -11,6 +11,7 @@ import FirmCreaTextInput from '../../components/FirmCreaTextInput';
 import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
 import * as api from '../../api/api';
 import colors from '../../constants/Colors';
+import fonsts from '../../constants/Fonts';
 
 
 const styles = StyleSheet.create({
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   regiCommText: {
-    fontFamily: 'Hoon-saemaulundong',
+    fontFamily: fonsts.buttonBig,
     fontSize: 24,
     color: colors.point2,
   },
@@ -262,7 +263,6 @@ export default class FirmRegisterScreen extends React.Component {
 
     let v = validate('textMax', fname, true, 15);
     if (!v[0]) {
-      console.log(`에러 ${v[1]}`);
       this.setState({ fnameValErrMessage: v[1] });
       return false;
     }
@@ -379,7 +379,7 @@ export default class FirmRegisterScreen extends React.Component {
         <KeyboardAvoidingView behavior="padding" enabled>
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.formWrap}>
-              <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" refer={(input) => { console.log(`refer Setting completed`); this.fnameTextInput = input; }}/>
+              <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" refer={(input) => { this.fnameTextInput = input; }}/>
               <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
 
               {/* <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />

@@ -6,68 +6,14 @@ import {
   AppLoading, Asset, Font, Icon,
 } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-import LoginModal from './components/LoginModal';
 
 const ACCOUNTTYPE_CLIENT = 1;
 const ACCOUNTTYPE_FIRM = 2;
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
-    isLoginModalVisible: true,
-    accountType: '',
-    phoneNumber: '',
-    password: '',
-    isFirm: false,
   };
-
-  setLoginModalVisible = (visible) => {
-    this.setState({ isLoginModalVisible: visible });
-  };
-
-  render() {
-    const {
-      isLoadingComplete,
-      isLoginModalVisible,
-      phoneNumber,
-      password,
-      accountType,
-      isFirm,
-    } = this.state;
-
-    const { skipLoadingScreen } = this.props;
-
-    if (!isLoadingComplete && !skipLoadingScreen) {
-      return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
-      );
-    }
-
-    if (isLoginModalVisible) {
-      return (
-        <LoginModal
-          isVisible={isLoginModalVisible}
-          setLoginModalVisible={this.setLoginModalVisible}
-          isFirm={isFirm}
-          phoneNumber={phoneNumber}
-          password={password}
-          onChnagePN={text => this.setState({ phoneNumber: text })}
-          onChnagePW={text => this.setState({ password: text })}
-          onChangeAT={(isFirm) => this.setState({ isFirm })}
-        />
-      );
-    }
-
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator accountType={ACCOUNTTYPE_FIRM} />
-      </View>
-    );
-  }
 
   _loadResourcesAsync = async () => Promise.all([
     Asset.loadAsync([
@@ -95,6 +41,28 @@ export default class App extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
+  render() {
+    const { skipLoadingScreen } = this.props;
+    const { isLoadingComplete } = this.state;
+
+    if (!isLoadingComplete && !skipLoadingScreen) {
+      return (
+        <AppLoading
+          startAsync={this._loadResourcesAsync}
+          onError={this._handleLoadingError}
+          onFinish={this._handleFinishLoading}
+        />
+      );
+    }
+
+    return (
+      <View style={styles.container}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <AppNavigator accountType={ACCOUNTTYPE_FIRM} />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

@@ -10,6 +10,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import firebase from 'firebase';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import * as api from '../api/api';
 import FirmTextItem from '../components/FirmTextItem';
@@ -70,12 +71,14 @@ export default class FirmMyInfoScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.init();
+    this.setMyFirmInfo();
   }
 
-  init = () => {
-    this.setMyFirmInfo();
-  };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.navigation.state.params.refresh === true) {
+      this.setMyFirmInfo();
+    }
+  }
 
   setMyFirmInfo = () => {
     const accountId = 3;
@@ -104,7 +107,7 @@ export default class FirmMyInfoScreen extends React.Component {
     const { navigation } = this.props;
 
     navigation.navigate('FirmUpdate');
-  }
+  };
 
   openLinkUrl = (url) => {
     if (url === null || url === '') {
@@ -112,6 +115,14 @@ export default class FirmMyInfoScreen extends React.Component {
     }
 
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
+  };
+
+  onSignOut = async () => {
+    try {
+      await firebase.auth().signOut();
+    } catch (e) {
+      Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
+    }
   };
 
   render() {
@@ -139,27 +150,30 @@ export default class FirmMyInfoScreen extends React.Component {
                 <MaterialCommunityIcons
                   name="blogger"
                   size={32}
-                  color={firm.blog !== null ? 'green' : 'gray'}
+                  color={firm.blog !== '' ? 'green' : 'gray'}
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.openLinkUrl(firm.homepage)}>
                 <MaterialCommunityIcons
                   name="home-circle"
                   size={32}
-                  color={firm.homepage !== null ? 'green' : 'gray'}
+                  color={firm.homepage !== '' ? 'green' : 'gray'}
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.openLinkUrl(firm.sns)}>
                 <AntDesign
                   name="facebook-square"
                   size={32}
-                  color={firm.sns !== null ? 'green' : 'gray'}
+                  color={firm.sns !== '' ? 'green' : 'gray'}
                 />
               </TouchableOpacity>
             </View>
             <View style={styles.topCommWrap}>
               <TouchableHighlight onPress={() => this.updateFirm()}>
                 <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
+              </TouchableHighlight>
+              <TouchableHighlight onPress={() => this.onSignOut()}>
+                <Text>로그아웃</Text>
               </TouchableHighlight>
             </View>
           </View>

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Image, StyleSheet, Text, View,
 } from 'react-native';
+import fonts from '../constants/Fonts';
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -9,15 +10,23 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   itemTitle: {
-    fontFamily: 'yang-rounded',
+    fontFamily: fonts.titleMiddle,
     color: '#4D4A4A',
     fontSize: 20,
   },
-  itemValue: {
+  responsiveImgWrap: {
     flex: 1,
-    width: 300,
-    height: 300,
-    resizeMode: 'cover',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  responsiveImage: {
+    aspectRatio: 4 / 3,
+    width: '100%',
+    height: '100%',
+    maxWidth: 800,
+    maxHeight: 600,
+    resizeMode: 'contain',
   },
 });
 
@@ -27,7 +36,11 @@ export default class FirmTextItem extends React.PureComponent {
     return (
       <View style={styles.itemWrap}>
         <Text style={styles.itemTitle}>{`${title}: `}</Text>
-        <Image style={styles.itemValue} source={{ uri: value }} />
+        {value !== null && value !== '' ? (
+          <View style={styles.responsiveImgWrap}>
+            <Image style={styles.responsiveImage} source={{ uri: value }} />
+          </View>
+        ) : null}
       </View>
     );
   }
