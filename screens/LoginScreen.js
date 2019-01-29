@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, Button, ScrollView, StyleSheet, Text, TextInput,
+  Alert, Button, TouchableHighlight, StyleSheet, TextInput, Text, View,
 } from 'react-native';
 import { Linking, WebBrowser } from 'expo';
 import firebase from 'firebase';
@@ -48,16 +48,23 @@ const styles = StyleSheet.create({
   commWrap: {
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
+    marginRight: 20,
   },
   title: {
     width: 300,
     fontFamily: fonts.titleMiddle,
     fontSize: 20,
   },
+  titleDisable: {
+    width: 300,
+    fontFamily: fonts.titleMiddle,
+    fontSize: 20,
+    color: 'gray',
+  },
   loginTI: {
     width: 300,
-    fontSize: 23,
+    fontSize: 21,
     fontFamily: fonts.batang,
   },
   commText: {
@@ -80,14 +87,14 @@ export default class LoginScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      phone: '',
+      phoneNumber: '',
       confirmationResult: undefined,
       code: '',
     };
   }
 
-  onPhoneChange = (phone) => {
-    this.setState({ phone });
+  onPhoneChange = (phoneNumber) => {
+    this.setState({ phoneNumber });
   };
 
   onCodeChange = (code) => {
@@ -122,11 +129,20 @@ export default class LoginScreen extends React.PureComponent {
 
   reset = () => {
     this.setState({
-      phone: '',
+      phoneNumber: '',
       confirmationResult: undefined,
       code: '',
     });
   };
+
+  convertNationalPN = (phoneNumber) => {
+    const koreaNationalPhoneNumber = '+82';
+
+    if (phoneNumber === '') { return undefined; }
+    const newPN = phoneNumber.substring(1); // Remove 010 -> 10
+
+    return `${koreaNationalPhoneNumber}${newPN}`;
+  }
 
   onPhoneComplete = async () => {
     let token = null;
@@ -139,7 +155,10 @@ export default class LoginScreen extends React.PureComponent {
     await WebBrowser.openBrowserAsync(captchaUrl);
     Linking.removeEventListener('url', listener);
     if (token) {
-      const { phone } = this.state;
+      const { phoneNumber } = this.state;
+
+      const nationalPNumber = this.convertNationalPN(phoneNumber);
+
       // fake firebase.auth.ApplicationVerifier
       const captchaVerifier = {
         type: 'recaptcha',
@@ -148,7 +167,7 @@ export default class LoginScreen extends React.PureComponent {
       try {
         const confirmationResult = await firebase
           .auth()
-          .signInWithPhoneNumber(phone, captchaVerifier);
+          .signInWithPhoneNumber(nationalPNumber, captchaVerifier);
         this.setState({ confirmationResult });
       } catch (e) {
         console.warn(e);
@@ -156,36 +175,49 @@ export default class LoginScreen extends React.PureComponent {
     }
   };
 
-  login = () => {};
-
-  register = () => {};
-
   render() {
-    const { confirmationResult, phone, code } = this.state;
-
+    const { confirmationResult, phoneNumber, code } = this.state;
+    let authTitleStyle = styles.title;
+    let authReadOnly = true;
     if (!confirmationResult) {
-      return (
-        <ScrollView style={{ padding: 20, marginTop: 20 }}>
-          <TextInput
-            value={phone}
-            onChangeText={this.onPhoneChange}
-            keyboardType="phone-pad"
-            placeholder="Your phone"
-          />
-          <Button onPress={this.onPhoneComplete} title="Next" />
-        </ScrollView>
-      );
+      authTitleStyle = styles.titleDisable;
+      authReadOnly = false;
     }
+
     return (
-      <ScrollView style={{ padding: 20, marginTop: 20 }}>
-        <TextInput
-          value={code}
-          onChangeText={this.onCodeChange}
-          keyboardType="numeric"
-          placeholder="Code from SMS"
-        />
-        <Button onPress={this.onSignIn} title="Sign in" />
-      </ScrollView>
+      <View style={styles.container}>
+        <View style={styles.itemWrap}>
+          <Text style={styles.title}>핸드폰번호: </Text>
+          <TextInput
+            style={styles.loginTI}
+            value={phoneNumber}
+            keyboardType="phone-pad"
+            onChangeText={(text) => { this.onPhoneChange(text); }}
+            placeholder="휴대전화 번호입력(숫자만)"
+          />
+          <Text style={authTitleStyle}>인증코드: </Text>
+          <TextInput
+            style={styles.loginTI}
+            value={code}
+            onChangeText={(text) => { this.onCodeChange(text); }}
+            keyboardType="numeric"
+            placeholder="SMS로 받은 인증코드 숫자입력"
+            editable={authReadOnly}
+          />
+        </View>
+
+        <View style={styles.commWrap}>
+          { !confirmationResult ? (
+            <TouchableHighlight onPress={() => this.onPhoneComplete()}>
+              <Text style={styles.commText}>휴대전화 번호인증</Text>
+            </TouchableHighlight>
+          ) : (
+            <TouchableHighlight onPress={() => this.onSignIn()}>
+              <Text style={styles.commText}>로그인</Text>
+            </TouchableHighlight>
+          )}
+        </View>
+      </View>
     );
   }
 }

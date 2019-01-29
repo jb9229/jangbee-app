@@ -1,5 +1,6 @@
 {
-  "scheme": "jangbeeCall",
+  "scheme": "JangbeeCall",
+  "appName": "JangbeeCall",
   "expo": {
     "name": "장비콜",
     "slug": "Everyone_will_be_own",

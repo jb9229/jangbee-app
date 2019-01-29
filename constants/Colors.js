@@ -5,6 +5,7 @@ export default {
   batang: '#7A7373',
   point: '#FDCA24',
   point2: '#00A651',
+  indicator: '#FDCA24',
   tintColor,
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,

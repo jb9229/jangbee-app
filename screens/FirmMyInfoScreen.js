@@ -23,6 +23,18 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     backgroundColor: '#fff',
   },
+  regFirmWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  regFirmNotice: {
+    marginBottom: 20,
+  },
+  regFirmText: {
+    fontSize: 24,
+    fontFamily: fonts.point2,
+  },
   topMenuWrap: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -80,9 +92,24 @@ export default class FirmMyInfoScreen extends React.Component {
     }
   }
 
-  setMyFirmInfo = () => {
-    const accountId = 3;
+  getUserId = () => {
+    const user = firebase.auth().currentUser;
 
+    if (user) {
+      return user.uid;
+    }
+
+    this.onSignOut();
+
+    return undefined;
+  };
+
+  setMyFirmInfo = () => {
+    const accountId = this.getUserId();
+
+    if (accountId === undefined) {
+      return;
+    }
     api
       .getFirm(accountId)
       .then((firm) => {
@@ -90,9 +117,7 @@ export default class FirmMyInfoScreen extends React.Component {
       })
       .catch((error) => {
         Alert.alert(
-          `내 업체정보 요청에 문제가 있습니다, 다시 시도해 주세요\n[${error.name}] ${
-            error.message
-          }`,
+          `업체정보 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
         );
       });
   };
@@ -100,7 +125,7 @@ export default class FirmMyInfoScreen extends React.Component {
   registerFirm = () => {
     const { navigation } = this.props;
 
-    navigation.navigate('FirmRegister');
+    navigation.navigate('FirmRegister', { accountId: this.getUserId() });
   };
 
   updateFirm = () => {
@@ -129,10 +154,15 @@ export default class FirmMyInfoScreen extends React.Component {
     const { firm } = this.state;
     if (firm === undefined) {
       return (
-        <View>
-          <TouchableHighlight onPress={() => this.registerFirm()}>
-            <Text>업체 등록</Text>
-          </TouchableHighlight>
+        <View style={styles.container}>
+          <View style={styles.regFirmWrap}>
+            <Text style={styles.regFirmNotice}>
+              등록된 업체정보가 없습니다, 업체정보를 등록해 주세요.
+            </Text>
+            <TouchableHighlight onPress={() => this.registerFirm()}>
+              <Text style={styles.regFirmText}>업체등록하러 가기</Text>
+            </TouchableHighlight>
+          </View>
         </View>
       );
     }

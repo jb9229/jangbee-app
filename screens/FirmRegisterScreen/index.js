@@ -105,6 +105,14 @@ export default class FirmRegisterScreen extends React.Component {
   }
 
   componentDidMount = () => {
+    this.checkAccountId();
+  }
+
+  checkAccountId = () => {
+    const { navigation } = this.props;
+    const accountId = navigation.state.params.accountId;
+
+    if (accountId === null || accountId === undefined || accountId === '') { Alert.alert('사용자정보가 없습니다, 로그아웃 후 이용해 주세요.'); }else{Alert.alert(accountId);}
   }
 
   createFirm = () => {
@@ -115,10 +123,12 @@ export default class FirmRegisterScreen extends React.Component {
       photo1, photo2, photo3, blog, homepage, sns,
     } = this.state;
     const valResult = this.isValidateSubmit();
+    const { accountId } = navigation.state.params;
 
     if (!valResult) { return; }
 
     const newFirm = {
+      accountId,
       fname,
       equiListStr,
       address,
