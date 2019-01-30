@@ -16,6 +16,7 @@ import * as api from '../api/api';
 import FirmTextItem from '../components/FirmTextItem';
 import FirmImageItem from '../components/FirmImageItem';
 import fonts from '../constants/Fonts';
+import CmException from '../common/CmException';
 
 const styles = StyleSheet.create({
   container: {
@@ -92,26 +93,27 @@ export default class FirmMyInfoScreen extends React.Component {
     }
   }
 
-  getUserId = () => {
-    const user = firebase.auth().currentUser;
-
-    if (user) {
-      return user.uid;
-    }
-
-    this.onSignOut();
-
-    return undefined;
-  };
-
   setMyFirmInfo = () => {
-    const accountId = this.getUserId();
+    const { navigation } = this.props;
+    const userid = navigation.getParam('uid', null);
 
-    if (accountId === undefined) {
-      return;
+    console.log(userid);
+    if (userid === null || userid === undefined) {
+      Alert.alert('유효하지 않은 사용자 입니다'); return;
     }
+
     api
-      .getFirm(accountId)
+      .getFirm(uid)
+      .then((res) => {
+        if (res.ok) {
+          if (res.status === 204) {
+            return undefined;
+          }
+          return res.json();
+        }
+
+        throw new CmException(res.status, `${res.url}`);
+      })
       .then((firm) => {
         this.setState({ firm });
       })
@@ -124,8 +126,9 @@ export default class FirmMyInfoScreen extends React.Component {
 
   registerFirm = () => {
     const { navigation } = this.props;
+    const { user } = navigation.getParam('userInfo');
 
-    navigation.navigate('FirmRegister', { accountId: this.getUserId() });
+    navigation.navigate('FirmRegister', { accountId: user.uid });
   };
 
   updateFirm = () => {
@@ -161,6 +164,9 @@ export default class FirmMyInfoScreen extends React.Component {
             </Text>
             <TouchableHighlight onPress={() => this.registerFirm()}>
               <Text style={styles.regFirmText}>업체등록하러 가기</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => this.onSignOut()}>
+              <Text>로그아웃</Text>
             </TouchableHighlight>
           </View>
         </View>

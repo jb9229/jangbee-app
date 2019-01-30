@@ -277,23 +277,6 @@ export default class FirmRegisterScreen extends React.Component {
       return false;
     }
 
-    // v = validate('cellPhone', phoneNumber, true, 15);
-    // if (!v[0]) {
-    //   this.setState({ phoneNumberValErrMessage: v[1] });
-    //   return false;
-    // }
-
-    // v = validate('textMin', password, true, 6);
-    // if (!v[0]) {
-    //   this.setState({ passwordValErrMessage: v[1] });
-    //   return false;
-    // }
-
-    // if (password !== comfirmPassword) {
-    //   this.setState({ comfirmPasswordValErrMessage: '비밀번호가 일치하지 않습니다' });
-    //   return false;
-    // }
-
     v = validatePresence(equiListStr);
     if (!v[0]) {
       this.setState({ equiListStrValErrMessage: v[1] });

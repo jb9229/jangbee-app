@@ -17,7 +17,8 @@ export function createFirm(newFirm) {
 }
 
 export function getFirm(accountId) {
-  return fetch(`${url.JBSERVER_FIRM}/${accountId}`).then(handleJsonResponse);
+  const param = encodeURIComponent(accountId);
+  return fetch(`${url.JBSERVER_FIRM}/${param}`);
 }
 
 export function updateFirm(updateFirm) {

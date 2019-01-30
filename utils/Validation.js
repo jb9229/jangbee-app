@@ -32,7 +32,7 @@ export const validation = {
   },
   cellPhone: {
     format: {
-      pattern: /^\d{3}-\d{3,4}-\d{4}$/,
+      pattern: /^\d{3}\d{3,4}\d{4}$/,
       message: '전화번호 형식이 아닙니다',
     },
   },

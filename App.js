@@ -7,9 +7,6 @@ import {
 } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
-const ACCOUNTTYPE_CLIENT = 1;
-const ACCOUNTTYPE_FIRM = 2;
-
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
@@ -59,7 +56,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator accountType={ACCOUNTTYPE_FIRM} />
+        <AppNavigator />
       </View>
     );
   }

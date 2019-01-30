@@ -22,7 +22,12 @@ export default class AuthLoading extends React.Component {
     firebase.auth().languageCode = 'ko';
 
     firebase.auth().onAuthStateChanged((user) => {
-      navigation.navigate(user ? 'Main' : 'Login');
+      if (user) {
+        console.log(user);
+        navigation.navigate('FirmMain');
+      } else {
+        navigation.navigate('Login');
+      }
     });
   }
 

@@ -1,11 +1,19 @@
 import React from 'react';
 import {
-  Alert, Button, TouchableHighlight, StyleSheet, TextInput, Text, View,
+  Alert,
+  TouchableOpacity,
+  TouchableHighlight,
+  StyleSheet,
+  TextInput,
+  Text,
+  View,
 } from 'react-native';
 import { Linking, WebBrowser } from 'expo';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';
+import { validate } from '../utils/Validation';
+import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +29,6 @@ const styles = StyleSheet.create({
   accoutTypeWrap: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
     marginBottom: 20,
   },
   accountTypeTO: {
@@ -83,6 +90,8 @@ const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=$
   '',
 )}`;
 
+const USER_CLIENT = 1;
+const USER_FIRM = 2;
 export default class LoginScreen extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -90,6 +99,9 @@ export default class LoginScreen extends React.PureComponent {
       phoneNumber: '',
       confirmationResult: undefined,
       code: '',
+      userType: USER_CLIENT,
+      phoneNumberValErrMessage: '',
+      codeValErrMessage: '',
     };
   }
 
@@ -101,29 +113,50 @@ export default class LoginScreen extends React.PureComponent {
     this.setState({ code });
   };
 
+  /**
+   * Firebase user DB에 사용자 추가정보 저장
+   */
+  updateUserExtraData = async (user) => {
+    const { userType } = this.state;
+
+    await firebase
+      .database()
+      .ref(`users/${user.uid}`)
+      .set({
+        userType,
+      });
+  };
+
   onSignIn = async () => {
     const { navigation } = this.props;
     const { confirmationResult, code } = this.state;
-    try {
-      await confirmationResult.confirm(code).then((result) => {
-        const user = result.user;
-        console.log(user);
-        navigation.navigate('Main');
-      }).catch((error) => {
-        Alert.alert(`로그인 요청에 문제가 있습니다, 재시도해 주세요: ${error}`);
-        this.reset();
-      });
-    } catch (e) {
-      console.warn(e);
-      this.reset();
+
+    // Validation
+    const v = validate('decimal', code, true);
+    if (!v[0]) {
+      this.setState({ codeValErrMessage: v[1] });
+      return;
     }
+
+    await confirmationResult
+      .confirm(code)
+      .then((result) => {
+        const { user } = result;
+        console.log(user);
+
+        this.updateUserExtraData(user);
+        navigation.navigate('Main', { user });
+      })
+      .catch((error) => {
+        Alert.alert(`잘못된 인증 코드입니다: ${error}`);
+      });
   };
 
   onSignOut = async () => {
     try {
       await firebase.auth().signOut();
     } catch (e) {
-      console.warn(e);
+      Alert.alert(`로그아웃 요청에 문제가 있습니다, 재시도해 주세요${e}`);
     }
   };
 
@@ -138,13 +171,34 @@ export default class LoginScreen extends React.PureComponent {
   convertNationalPN = (phoneNumber) => {
     const koreaNationalPhoneNumber = '+82';
 
-    if (phoneNumber === '') { return undefined; }
+    if (phoneNumber === '') {
+      return undefined;
+    }
     const newPN = phoneNumber.substring(1); // Remove 010 -> 10
 
     return `${koreaNationalPhoneNumber}${newPN}`;
-  }
+  };
+
+  /**
+   * Validation 에러 메세지 초기화
+   */
+  resetValErrMsg = () => {
+    this.setState({ phoneNumberValErrMessage: '', codeValErrMessage: '' });
+  };
 
   onPhoneComplete = async () => {
+    this.resetValErrMsg();
+
+    const { phoneNumber } = this.state;
+
+    // Validation
+    const v = validate('cellPhone', phoneNumber, true);
+    if (!v[0]) {
+      this.setState({ phoneNumberValErrMessage: v[1] });
+      return;
+    }
+
+    // Check Captcha
     let token = null;
     const listener = ({ url }) => {
       WebBrowser.dismissBrowser();
@@ -155,8 +209,6 @@ export default class LoginScreen extends React.PureComponent {
     await WebBrowser.openBrowserAsync(captchaUrl);
     Linking.removeEventListener('url', listener);
     if (token) {
-      const { phoneNumber } = this.state;
-
       const nationalPNumber = this.convertNationalPN(phoneNumber);
 
       // fake firebase.auth.ApplicationVerifier
@@ -170,13 +222,23 @@ export default class LoginScreen extends React.PureComponent {
           .signInWithPhoneNumber(nationalPNumber, captchaVerifier);
         this.setState({ confirmationResult });
       } catch (e) {
-        console.warn(e);
+        Alert.alert('핸드폰 인증에 요청에 문제가 있습니다, 재시도해 주세요');
       }
     }
   };
 
+  onChangeUserType = (userType) => {
+    this.setState({ userType });
+  };
+
   render() {
-    const { confirmationResult, phoneNumber, code } = this.state;
+    const {
+      confirmationResult,
+      phoneNumber,
+      code,
+      userType,
+      phoneNumberValErrMessage, codeValErrMessage,
+    } = this.state;
     let authTitleStyle = styles.title;
     let authReadOnly = true;
     if (!confirmationResult) {
@@ -186,28 +248,48 @@ export default class LoginScreen extends React.PureComponent {
 
     return (
       <View style={styles.container}>
+        <View style={styles.accoutTypeWrap}>
+          <TouchableOpacity
+            style={[styles.accountTypeTO, userType === USER_CLIENT ? styles.selectedAccType : null]}
+            onPress={() => this.onChangeUserType(USER_CLIENT)}
+          >
+            <Text style={[styles.accountTypeText]}>장비고객</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.accountTypeTO, userType === USER_FIRM ? styles.selectedAccType : null]}
+            onPress={() => this.onChangeUserType(USER_FIRM)}
+          >
+            <Text style={[styles.accountTypeText]}>장비업체 </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.itemWrap}>
           <Text style={styles.title}>핸드폰번호: </Text>
           <TextInput
             style={styles.loginTI}
             value={phoneNumber}
             keyboardType="phone-pad"
-            onChangeText={(text) => { this.onPhoneChange(text); }}
+            onChangeText={(text) => {
+              this.onPhoneChange(text);
+            }}
             placeholder="휴대전화 번호입력(숫자만)"
           />
+          <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
           <Text style={authTitleStyle}>인증코드: </Text>
           <TextInput
             style={styles.loginTI}
             value={code}
-            onChangeText={(text) => { this.onCodeChange(text); }}
+            onChangeText={(text) => {
+              this.onCodeChange(text);
+            }}
             keyboardType="numeric"
             placeholder="SMS로 받은 인증코드 숫자입력"
             editable={authReadOnly}
           />
+          <FirmCreaErrMSG errorMSG={codeValErrMessage} />
         </View>
 
         <View style={styles.commWrap}>
-          { !confirmationResult ? (
+          {!confirmationResult ? (
             <TouchableHighlight onPress={() => this.onPhoneComplete()}>
               <Text style={styles.commText}>휴대전화 번호인증</Text>
             </TouchableHighlight>
