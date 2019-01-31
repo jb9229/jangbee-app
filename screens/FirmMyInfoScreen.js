@@ -216,7 +216,7 @@ class FirmMyInfoScreen extends React.Component {
             <FirmImageItem title="작업사진3" value={firm.photo3} />
           </View>
         </ScrollView>
-        <FirmProfileModal isVisibleModal={isVisibleProfileModal} setVisibleModal={this.setVisibleProfileModal} {...this.props} />
+        <FirmProfileModal isVisibleModal={isVisibleProfileModal} setVisibleModal={this.setVisibleProfileModal} firm={firm} {...this.props} />
       </View>
     );
   }

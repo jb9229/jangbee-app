@@ -1,10 +1,17 @@
 // @flow
 import React from 'react';
 import {
-  Alert, Modal, StyleSheet, Text, View,
+  Alert,
+  FlatList,
+  TouchableHighlight,
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import firebase from 'firebase';
-import colors from '../constants/Colors';
+import { withLogin } from '../contexts/LoginProvider';
 import JBButton from './molecules/JBButton';
 
 const styles = StyleSheet.create({
@@ -16,12 +23,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
   },
-  itemWrap: {
+  titleWrap: {
+    marginTop: 20,
+    flex: 2,
+    flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  itemsWrap: {
+    flex: 3,
   },
   commWrap: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  thumbnail: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+  },
+  itemWrap: {
+    flex: 1,
+  },
+  itemTH: {
+    borderWidth: 1,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  fnameText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
@@ -31,7 +63,7 @@ type Props = {
 };
 type State = {};
 
-export default class FirmProfileModal extends React.PureComponent<Props, State> {
+class FirmProfileModal extends React.PureComponent<Props, State> {
   updateFirm = () => {
     const { navigation, setVisibleModal } = this.props;
 
@@ -48,7 +80,9 @@ export default class FirmProfileModal extends React.PureComponent<Props, State> 
   };
 
   render() {
-    const { isVisibleModal, setVisibleModal } = this.props;
+    const {
+      isVisibleModal, setVisibleModal, firm, user,
+    } = this.props;
     return (
       <View style={styles.container}>
         <Modal
@@ -60,9 +94,24 @@ export default class FirmProfileModal extends React.PureComponent<Props, State> 
           }}
         >
           <View style={styles.modalWrap}>
-            <View style={styles.itemWrap}>
-              <JBButton title="업체정보 수정" onPress={() => this.updateFirm()} />
-              <JBButton title="로그아웃" onPress={() => this.onSignOut()} />
+            <View style={styles.titleWrap}>
+              <View>
+                <Text style={styles.fnameText}>{firm.fname}</Text>
+                <Text style={styles.phoneNumberText}>{user.phoneNumber}</Text>
+              </View>
+              <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
+            </View>
+            <View style={styles.itemsWrap}>
+              <View style={styles.itemWrap}>
+                <TouchableHighlight onPress={() => this.updateFirm()} style={styles.itemTH}>
+                  <Text style={styles.itemTitle}>업체정보 수정</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={styles.itemWrap}>
+                <TouchableHighlight onPress={() => this.onSignOut()} style={styles.itemTH}>
+                  <Text style={styles.itemTitle}>로그아웃</Text>
+                </TouchableHighlight>
+              </View>
             </View>
             <View style={styles.commWrap}>
               <JBButton title="닫기" onPress={() => setVisibleModal(false)} />
@@ -73,3 +122,5 @@ export default class FirmProfileModal extends React.PureComponent<Props, State> 
     );
   }
 }
+
+export default withLogin(FirmProfileModal);
