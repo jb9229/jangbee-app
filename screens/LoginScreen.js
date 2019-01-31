@@ -11,9 +11,10 @@ import {
 import { Linking, WebBrowser } from 'expo';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
-import colors from '../constants/Colors';
 import { validate } from '../utils/Validation';
 import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
+import { withLogin } from '../contexts/LoginProvider';
+import JBButton from '../components/molecules/JBButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,27 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     justifyContent: 'center',
-  },
-  accoutTypeWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  accountTypeTO: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 5,
-    paddingBottom: 5,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderRadius: 10,
-    elevation: 10,
-  },
-  accountTypeText: {
-    fontSize: 20,
-  },
-  selectedAccType: {
-    backgroundColor: colors.point,
   },
   itemWrap: {
     alignItems: 'center',
@@ -90,16 +70,13 @@ const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=$
   '',
 )}`;
 
-const USER_CLIENT = 1;
-const USER_FIRM = 2;
-export default class LoginScreen extends React.PureComponent {
+class LoginScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       phoneNumber: '',
       confirmationResult: undefined,
       code: '',
-      userType: USER_CLIENT,
       phoneNumberValErrMessage: '',
       codeValErrMessage: '',
     };
@@ -113,22 +90,8 @@ export default class LoginScreen extends React.PureComponent {
     this.setState({ code });
   };
 
-  /**
-   * Firebase user DB에 사용자 추가정보 저장
-   */
-  updateUserExtraData = async (user) => {
-    const { userType } = this.state;
-
-    await firebase
-      .database()
-      .ref(`users/${user.uid}`)
-      .set({
-        userType,
-      });
-  };
-
-  onSignIn = async () => {
-    const { navigation } = this.props;
+  onSignIn = () => {
+    const { setUser } = this.props;
     const { confirmationResult, code } = this.state;
 
     // Validation
@@ -138,23 +101,47 @@ export default class LoginScreen extends React.PureComponent {
       return;
     }
 
-    await confirmationResult
+    confirmationResult
       .confirm(code)
       .then((result) => {
         const { user } = result;
-        console.log(user);
 
-        this.updateUserExtraData(user);
-        navigation.navigate('Main', { user });
+        setUser(user);
+        this.checkUserType(user.uid);
       })
       .catch((error) => {
         Alert.alert(`잘못된 인증 코드입니다: ${error}`);
       });
   };
 
-  onSignOut = async () => {
+  checkUserType = (uid) => {
+    const { navigation, setUserType } = this.props;
+
+    firebase
+      .database()
+      .ref(`users/${uid}/userType`)
+      .once('value', (data) => {
+        if (data === null) {
+          navigation.navigate('SignUp');
+          return;
+        }
+
+        const userType = data.val();
+
+        setUserType(userType);
+        if (userType === 1) {
+          navigation.navigate('ClientMain');
+        } else if (userType === 2) {
+          navigation.navigate('FirmMain');
+        } else {
+          Alert.alert('유효하지 않은 사용자 입니다.');
+        }
+      });
+  };
+
+  onSignOut = () => {
     try {
-      await firebase.auth().signOut();
+      firebase.auth().signOut();
     } catch (e) {
       Alert.alert(`로그아웃 요청에 문제가 있습니다, 재시도해 주세요${e}`);
     }
@@ -227,17 +214,13 @@ export default class LoginScreen extends React.PureComponent {
     }
   };
 
-  onChangeUserType = (userType) => {
-    this.setState({ userType });
-  };
-
   render() {
     const {
       confirmationResult,
       phoneNumber,
       code,
-      userType,
-      phoneNumberValErrMessage, codeValErrMessage,
+      phoneNumberValErrMessage,
+      codeValErrMessage,
     } = this.state;
     let authTitleStyle = styles.title;
     let authReadOnly = true;
@@ -248,20 +231,6 @@ export default class LoginScreen extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        <View style={styles.accoutTypeWrap}>
-          <TouchableOpacity
-            style={[styles.accountTypeTO, userType === USER_CLIENT ? styles.selectedAccType : null]}
-            onPress={() => this.onChangeUserType(USER_CLIENT)}
-          >
-            <Text style={[styles.accountTypeText]}>장비고객</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.accountTypeTO, userType === USER_FIRM ? styles.selectedAccType : null]}
-            onPress={() => this.onChangeUserType(USER_FIRM)}
-          >
-            <Text style={[styles.accountTypeText]}>장비업체 </Text>
-          </TouchableOpacity>
-        </View>
         <View style={styles.itemWrap}>
           <Text style={styles.title}>핸드폰번호: </Text>
           <TextInput
@@ -282,6 +251,7 @@ export default class LoginScreen extends React.PureComponent {
               this.onCodeChange(text);
             }}
             keyboardType="numeric"
+            secureTextEntry
             placeholder="SMS로 받은 인증코드 숫자입력"
             editable={authReadOnly}
           />
@@ -290,16 +260,14 @@ export default class LoginScreen extends React.PureComponent {
 
         <View style={styles.commWrap}>
           {!confirmationResult ? (
-            <TouchableHighlight onPress={() => this.onPhoneComplete()}>
-              <Text style={styles.commText}>휴대전화 번호인증</Text>
-            </TouchableHighlight>
+            <JBButton title="휴대전화 번호인증" onPress={() => this.onPhoneComplete()} />
           ) : (
-            <TouchableHighlight onPress={() => this.onSignIn()}>
-              <Text style={styles.commText}>로그인</Text>
-            </TouchableHighlight>
+            <JBButton title="로그인" onPress={() => this.onSignIn()} />
           )}
         </View>
       </View>
     );
   }
 }
+
+export default withLogin(LoginScreen);

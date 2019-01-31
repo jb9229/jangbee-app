@@ -157,7 +157,7 @@ export default class FirmUpdateScreen extends React.Component {
     };
 
     api.updateFirm(updateFirm)
-      .then(() => navigation.navigate('FirmMyInfo', { refresh: true }))
+      .then(() => navigation.navigate('FirmMyInfo', { refresh: 'update' }))
       .catch((error) => {
         Alert.alert(
           '업체정보 수정에 문제가 있습니다, 재 시도해 주세요.',

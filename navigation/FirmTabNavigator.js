@@ -9,7 +9,7 @@ import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 
 const FirmMyInfoStack = createStackNavigator({
-  FirmMyInfo: FirmMyInfoScreen,
+  FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
   FirmRegister: FirmRegisterScreen,
   FirmUpdate: FirmUpdateScreen,
 });

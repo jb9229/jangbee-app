@@ -4,6 +4,7 @@ export default {
   batangDark: '#4D4A4A',
   batang: '#7A7373',
   point: '#FDCA24',
+  pointDark: '#F6C31F',
   point2: '#00A651',
   indicator: '#FDCA24',
   tintColor,

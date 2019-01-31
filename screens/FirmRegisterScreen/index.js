@@ -12,6 +12,7 @@ import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
 import * as api from '../../api/api';
 import colors from '../../constants/Colors';
 import fonsts from '../../constants/Fonts';
+import { withLogin } from '../../contexts/LoginProvider';
 
 
 const styles = StyleSheet.create({
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class FirmRegisterScreen extends React.Component {
+class FirmRegisterScreen extends React.Component {
   static navigationOptions = {
     title: '업체정보 작성',
   };
@@ -105,28 +106,21 @@ export default class FirmRegisterScreen extends React.Component {
   }
 
   componentDidMount = () => {
-    this.checkAccountId();
-  }
-
-  checkAccountId = () => {
-    const { navigation } = this.props;
-    const accountId = navigation.state.params.accountId;
-
-    if (accountId === null || accountId === undefined || accountId === '') { Alert.alert('사용자정보가 없습니다, 로그아웃 후 이용해 주세요.'); }else{Alert.alert(accountId);}
   }
 
   createFirm = () => {
-    const { navigation } = this.props;
+    const { navigation, user } = this.props;
     const {
       fname, equiListStr, address, addressDetail, sidoAddr,
       sigunguAddr, addrLongitude, addrLatitude, introduction, thumbnail,
       photo1, photo2, photo3, blog, homepage, sns,
     } = this.state;
     const valResult = this.isValidateSubmit();
-    const { accountId } = navigation.state.params;
 
     if (!valResult) { return; }
 
+    if (user.uid === null || user.uid === undefined || user.uid === '') { Alert.alert('요효하지 않은 사용자 입니다, 로그아웃 후 사용해 주세요'); return; }
+    const accountId = user.uid;
     const newFirm = {
       accountId,
       fname,
@@ -155,7 +149,7 @@ export default class FirmRegisterScreen extends React.Component {
           `[${error.name}] ${error.message}`);
       });
 
-    navigation.navigate('FirmMyInfo');
+    navigation.navigate('FirmMyInfo', { refresh: 'Register' });
   }
 
   /**
@@ -442,3 +436,5 @@ export default class FirmRegisterScreen extends React.Component {
     );
   }
 }
+
+export default withLogin(FirmRegisterScreen);

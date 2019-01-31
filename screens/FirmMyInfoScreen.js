@@ -10,13 +10,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import firebase from 'firebase';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import * as api from '../api/api';
 import FirmTextItem from '../components/FirmTextItem';
 import FirmImageItem from '../components/FirmImageItem';
 import fonts from '../constants/Fonts';
 import CmException from '../common/CmException';
+import { withLogin } from '../contexts/LoginProvider';
+import FirmProfileModal from '../components/FirmProfileModal';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
   regFirmText: {
     fontSize: 24,
     fontFamily: fonts.point2,
+    textDecorationLine: 'underline',
   },
   topMenuWrap: {
     flexDirection: 'row',
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class FirmMyInfoScreen extends React.Component {
+class FirmMyInfoScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -80,30 +82,33 @@ export default class FirmMyInfoScreen extends React.Component {
     super(props);
     this.state = {
       firm: undefined,
+      isVisibleProfileModal: false,
     };
   }
 
   componentDidMount() {
     this.setMyFirmInfo();
+    this.props.navigationOptions = {header: null,}
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.navigation.state.params.refresh === true) {
+    const { params } = nextProps.navigation.state;
+
+    if (params !== undefined && params.refresh !== undefined) {
       this.setMyFirmInfo();
     }
   }
 
   setMyFirmInfo = () => {
-    const { navigation } = this.props;
-    const userid = navigation.getParam('uid', null);
+    const { user } = this.props;
 
-    console.log(userid);
-    if (userid === null || userid === undefined) {
-      Alert.alert('유효하지 않은 사용자 입니다'); return;
+    if (user.uid === null || user.uid === undefined) {
+      Alert.alert('유효하지 않은 사용자 입니다');
+      return;
     }
 
     api
-      .getFirm(uid)
+      .getFirm(user.uid)
       .then((res) => {
         if (res.ok) {
           if (res.status === 204) {
@@ -124,17 +129,17 @@ export default class FirmMyInfoScreen extends React.Component {
       });
   };
 
+  /**
+   * 프로파일 팝업창 열기 플래그 함수
+   */
+  setVisibleProfileModal = (visible) => {
+    this.setState( {isVisibleProfileModal: visible} );
+  }
+
   registerFirm = () => {
     const { navigation } = this.props;
-    const { user } = navigation.getParam('userInfo');
 
-    navigation.navigate('FirmRegister', { accountId: user.uid });
-  };
-
-  updateFirm = () => {
-    const { navigation } = this.props;
-
-    navigation.navigate('FirmUpdate');
+    navigation.navigate('FirmRegister');
   };
 
   openLinkUrl = (url) => {
@@ -145,16 +150,8 @@ export default class FirmMyInfoScreen extends React.Component {
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 
-  onSignOut = async () => {
-    try {
-      await firebase.auth().signOut();
-    } catch (e) {
-      Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
-    }
-  };
-
   render() {
-    const { firm } = this.state;
+    const { firm, isVisibleProfileModal } = this.state;
     if (firm === undefined) {
       return (
         <View style={styles.container}>
@@ -163,7 +160,7 @@ export default class FirmMyInfoScreen extends React.Component {
               등록된 업체정보가 없습니다, 업체정보를 등록해 주세요.
             </Text>
             <TouchableHighlight onPress={() => this.registerFirm()}>
-              <Text style={styles.regFirmText}>업체등록하러 가기</Text>
+              <Text style={styles.regFirmText}>업체정보 등록하러 가기</Text>
             </TouchableHighlight>
             <TouchableHighlight onPress={() => this.onSignOut()}>
               <Text>로그아웃</Text>
@@ -205,11 +202,8 @@ export default class FirmMyInfoScreen extends React.Component {
               </TouchableOpacity>
             </View>
             <View style={styles.topCommWrap}>
-              <TouchableHighlight onPress={() => this.updateFirm()}>
+              <TouchableHighlight onPress={() => this.setVisibleProfileModal(true)}>
                 <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
-              </TouchableHighlight>
-              <TouchableHighlight onPress={() => this.onSignOut()}>
-                <Text>로그아웃</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -222,7 +216,10 @@ export default class FirmMyInfoScreen extends React.Component {
             <FirmImageItem title="작업사진3" value={firm.photo3} />
           </View>
         </ScrollView>
+        <FirmProfileModal isVisibleModal={isVisibleProfileModal} setVisibleModal={this.setVisibleProfileModal} {...this.props} />
       </View>
     );
   }
 }
+
+export default withLogin(FirmMyInfoScreen);
