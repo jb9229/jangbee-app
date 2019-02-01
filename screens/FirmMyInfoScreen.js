@@ -38,12 +38,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.point2,
     textDecorationLine: 'underline',
   },
-  topMenuWrap: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
   frimTopItemWrap: {
+    padding: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

@@ -41,36 +41,15 @@ export default class ImagePickInput extends React.Component {
   }
 
   pickImage = async () => {
+    const { aspect, setImageUrl } = this.props;
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: aspect !== null ? aspect : null,
     });
 
     if (!result.cancelled) {
-      this.handleImagePicked(result.uri);
+      setImageUrl(result.uri);
     }
-  };
-
-  handleImagePicked = (imgUri) => {
-    const { setImageUrl } = this.props;
-
-    api
-      .uploadImage(imgUri)
-      .then((resImgUrl) => {
-        setImageUrl(resImgUrl);
-
-        this.setState({
-          isUploaded: true,
-        });
-      })
-      .catch((error) => {
-        Alert.alert(
-          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-
-        return undefined;
-      });
   };
 
   render() {

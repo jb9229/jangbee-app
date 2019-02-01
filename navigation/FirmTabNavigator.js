@@ -10,8 +10,8 @@ import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
-  FirmRegister: FirmRegisterScreen,
-  FirmUpdate: FirmUpdateScreen,
+  FirmRegister: { screen: FirmRegisterScreen, navigationOptions: { title: '업체정보 등록' } },
+  FirmUpdate: { screen: FirmUpdateScreen, navigationOptions: { title: '업체정보 수정' } },
 });
 
 FirmMyInfoStack.navigationOptions = {
@@ -26,7 +26,7 @@ const SettingsStack = createStackNavigator({
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: '콜이력',
+  tabBarLabel: '블렉리스트(준비중)',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),

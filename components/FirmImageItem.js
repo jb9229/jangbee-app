@@ -8,11 +8,12 @@ const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
     margin: 10,
+    marginBottom: 20,
   },
   itemTitle: {
     fontFamily: fonts.titleMiddle,
     color: '#4D4A4A',
-    fontSize: 20,
+    fontSize: 24,
   },
   responsiveImgWrap: {
     flex: 1,

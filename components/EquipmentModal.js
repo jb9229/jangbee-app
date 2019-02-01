@@ -4,9 +4,6 @@ import {
 } from 'react-native';
 import EquiSelBox from './EquiSelBox';
 import * as api from '../api/api';
-
-import { JBSERVER_EQUILIST } from '../constants/Url';
-import { handleJsonResponse } from '../utils/Fetch-utils';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 
@@ -36,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class EquipementModal extends React.PureComponent {
+export default class EquipementModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,29 +43,19 @@ export default class EquipementModal extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.init();
-  }
-
-  /**
-   * 화면로딩 설정 함수
-   * @returns null
-   */
-  init = () => {
     this.setInitSeledEqui();
 
     this.setEquiList();
-  };
+  }
 
   /**
    * 초기 선택된장비 설정 함수
    */
   setInitSeledEqui = () => {
-    const { seledEquipmentStr } = this.props;
+    const { selEquipmentStr } = this.props;
 
     const newEquiSelMap = (new Map(): Map<string, boolean>);
-
-    const seledEquiList = seledEquipmentStr.split(SELECTED_EQUIPMENT_SEVERATOR);
-
+    const seledEquiList = selEquipmentStr.split(SELECTED_EQUIPMENT_SEVERATOR);
     seledEquiList.forEach(seledEquipment => newEquiSelMap.set(seledEquipment, true));
 
     this.setState({ equiSelMap: newEquiSelMap });
@@ -140,11 +127,11 @@ export default class EquipementModal extends React.PureComponent {
 
     let seledEuipListStr = '';
     equiSelMap.forEach((key, selEquipment) => {
-      seledEuipListStr += `, ${selEquipment}`;
+      seledEuipListStr += `,${selEquipment}`;
     });
 
     if (seledEuipListStr.length > 0) {
-      seledEuipListStr = seledEuipListStr.substring(3);
+      seledEuipListStr = seledEuipListStr.substring(1);
     }
 
     completeSelEqui(seledEuipListStr);

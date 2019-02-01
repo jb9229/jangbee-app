@@ -1,8 +1,10 @@
 import React from 'react';
 import {
-  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableHighlight, Text, View,
+  Alert, ActivityIndicator,
+  KeyboardAvoidingView,
+  ScrollView, StyleSheet,
+  Text, View,
 } from 'react-native';
-import { ImagePicker } from 'expo';
 import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
 import { validate, validatePresence } from '../utils/Validation';
@@ -10,13 +12,16 @@ import ImagePickInput from '../components/ImagePickInput';
 import FirmCreaTextInput from '../components/FirmCreaTextInput';
 import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
 import * as api from '../api/api';
+import JBButton from '../components/molecules/JBButton';
+import { withLogin } from '../contexts/LoginProvider';
+import JBActIndicatorModal from '../components/JBActIndicatorModal';
 import colors from '../constants/Colors';
-import fonsts from '../constants/Fonts';
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   contentContainer: {
     padding: 15,
@@ -41,38 +46,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  regiTH: {
-    padding: 10,
-    paddingLeft: 40,
-    paddingRight: 40,
-    backgroundColor: colors.point,
-    borderWidth: 1,
-    borderColor: colors.point2,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  commText: {
-    fontFamily: fonsts.buttonBig,
-    fontSize: 24,
-    color: colors.point2,
-  },
   errorMessage: {
     color: 'red',
   },
 });
 
-export default class FirmUpdateScreen extends React.Component {
-  static navigationOptions = {
-    title: '업체정보 수정',
-  };
-
+class FirmUpdateScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoadingComplete: false,
       id: undefined,
-      accountId: undefined,
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
+      isVisibleActIndiModal: false,
       fname: '',
       equiListStr: '',
       address: '',
@@ -89,6 +76,11 @@ export default class FirmUpdateScreen extends React.Component {
       blog: '',
       homepage: '',
       sns: '',
+      isThumbnailUpdated: false,
+      isPhoto1Updated: false,
+      isPhoto2Updated: false,
+      isPhoto3Updated: false,
+      imgUploadingMessage: '이미지 업로드중...',
       fnameValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
@@ -105,17 +97,20 @@ export default class FirmUpdateScreen extends React.Component {
 
   componentDidMount = () => {
     this.setMyFirmInfo();
-  }
+  };
 
   setMyFirmInfo = () => {
-    const accountId = 3;
+    const { user } = this.props;
 
     api
-      .getFirm(accountId)
+      .getFirm(user.uid)
+      .then(res => res.json())
       .then((firm) => {
         this.setUpdateFirmData(firm);
+        this.setState({ isLoadingComplete: true });
       })
       .catch((error) => {
+        this.setState({ isLoadingComplete: true });
         Alert.alert(
           `내 업체정보 요청에 문제가 있습니다, 다시 시도해 주세요\n[${error.name}] ${
             error.message
@@ -124,20 +119,10 @@ export default class FirmUpdateScreen extends React.Component {
       });
   };
 
-  updateFirm = () => {
-    const { navigation } = this.props;
+  updateFirm = async () => {
+    const { navigation, user } = this.props;
     const {
-      id, accountId, fname, equiListStr, address, addressDetail, sidoAddr,
-      sigunguAddr, addrLongitude, addrLatitude, introduction, thumbnail,
-      photo1, photo2, photo3, blog, homepage, sns,
-    } = this.state;
-    const valResult = this.isValidateSubmit();
-
-    if (!valResult) { return; }
-
-    const updateFirm = {
       id,
-      accountId,
       fname,
       equiListStr,
       address,
@@ -147,23 +132,90 @@ export default class FirmUpdateScreen extends React.Component {
       addrLongitude,
       addrLatitude,
       introduction,
-      thumbnail,
-      photo1,
-      photo2,
-      photo3,
+      thumbnail, photo1, photo2, photo3,
+      blog,
+      homepage,
+      sns,
+      isThumbnailUpdated, isPhoto1Updated, isPhoto2Updated, isPhoto3Updated,
+    } = this.state;
+    const valResult = this.isValidateSubmit();
+
+    if (!valResult) {
+      return;
+    }
+
+    this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '대표사진 업로드중...' });
+    const uploadedThumbnailImgUrl = await this.firmImageUpload(thumbnail, isThumbnailUpdated);
+    this.setState({ imgUploadingMessage: '작업사진1 업로드중...' });
+    const uploadedPhoto1ImgUrl = await this.firmImageUpload(photo1, isPhoto1Updated);
+    this.setState({ imgUploadingMessage: '작업사진2 업로드중...' });
+    const uploadedPhoto2ImgUrl = await this.firmImageUpload(photo2, isPhoto2Updated);
+    this.setState({ imgUploadingMessage: '작업사진3 업로드중...' });
+    const uploadedPhoto3ImgUrl = await this.firmImageUpload(photo3, isPhoto3Updated);
+    this.setState({ isVisibleActIndiModal: false });
+
+    const updateFirm = {
+      id,
+      accountId: user.uid,
+      fname,
+      equiListStr,
+      address,
+      addressDetail,
+      sidoAddr,
+      sigunguAddr,
+      addrLongitude,
+      addrLatitude,
+      introduction,
+      thumbnail: uploadedThumbnailImgUrl ? uploadedThumbnailImgUrl : thumbnail,
+      photo1: uploadedPhoto1ImgUrl ? uploadedPhoto1ImgUrl: photo1,
+      photo2: uploadedPhoto2ImgUrl ? uploadedPhoto2ImgUrl: photo2,
+      photo3: uploadedPhoto3ImgUrl ? uploadedPhoto3ImgUrl: photo3,
       blog,
       homepage,
       sns,
     };
 
-    api.updateFirm(updateFirm)
+    api
+      .updateFirm(updateFirm)
       .then(() => navigation.navigate('FirmMyInfo', { refresh: 'update' }))
       .catch((error) => {
         Alert.alert(
           '업체정보 수정에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`);
+          `[${error.name}] ${error.message}`,
+        );
       });
+  };
+
+  /**
+   * 업체정보 이미지 업로드
+   */
+  firmImageUpload = async (imgUri, isUpdated) => {
+    if (!isUpdated || imgUri === null || imgUri === undefined || imgUri === '') { return null; }
+
+    const serverImgUrl = await this.uploadImage(imgUri);
+
+    if (serverImgUrl === undefined) { Alert.alert('이미지 업로드 실패'); return undefined; }
+
+    return serverImgUrl;
   }
+
+  /**
+   * 이미지 업로드 함수
+   */
+  uploadImage = async (imgUri) => {
+    let serverImgUrl;
+    await api.uploadImage(imgUri)
+      .then((resImgUrl) => { serverImgUrl = resImgUrl; })
+      .catch((error) => {
+        Alert.alert(
+          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+        serverImgUrl = undefined;
+      });
+
+    return serverImgUrl;
+  };
 
   /**
    * 장비선택창 Visible 설정 함수
@@ -193,9 +245,8 @@ export default class FirmUpdateScreen extends React.Component {
       sigunguAddr: addrData.sigunguAddr,
       addrLongitude: addrData.addrLongitude,
       addrLatitude: addrData.addrLatitude,
-
     });
-  }
+  };
 
   /**
    * 유효성검사 에러메세지 초기화 함수
@@ -217,7 +268,7 @@ export default class FirmUpdateScreen extends React.Component {
       homepageValErrMessage: '',
       snsValErrMessage: '',
     });
-  }
+  };
 
   openSelEquipmentModal = () => {
     this.setEquiSelModalVisible(true);
@@ -227,43 +278,6 @@ export default class FirmUpdateScreen extends React.Component {
     this.setMapAddModalVisible(true);
   };
 
-  completeSelEqui = (seledEuipListStr) => {
-    this.setState({ equiListStr: seledEuipListStr });
-  };
-
-  pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
-    });
-
-    if (!result.cancelled) {
-      this.handleImagePicked(result.uri);
-    }
-  };
-
-  handleImagePicked = (imgUri) => {
-    const { setImageUrl } = this.props;
-
-    api
-      .uploadImage(imgUri)
-      .then((resImgUrl) => {
-        setImageUrl(resImgUrl);
-
-        this.setState({
-          isUploaded: true,
-        });
-      })
-      .catch((error) => {
-        Alert.alert(
-          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-
-        return undefined;
-      });
-  };
-
   /**
    * 업체등록 유효성검사 함수
    *
@@ -271,8 +285,22 @@ export default class FirmUpdateScreen extends React.Component {
    */
   isValidateSubmit = () => {
     const {
-      fname, equiListStr, address, addressDetail, thumbnail, photo1, photo2, photo3,
-      sidoAddr, sigunguAddr, addrLongitude, addrLatitude, introduction, blog, homepage, sns,
+      fname,
+      equiListStr,
+      address,
+      addressDetail,
+      thumbnail,
+      photo1,
+      photo2,
+      photo3,
+      sidoAddr,
+      sigunguAddr,
+      addrLongitude,
+      addrLatitude,
+      introduction,
+      blog,
+      homepage,
+      sns,
     } = this.state;
 
     // Validation Error Massage Initialize
@@ -280,27 +308,9 @@ export default class FirmUpdateScreen extends React.Component {
 
     let v = validate('textMax', fname, true, 15);
     if (!v[0]) {
-      console.log(`에러 ${v[1]}`);
       this.setState({ fnameValErrMessage: v[1] });
       return false;
     }
-
-    // v = validate('cellPhone', phoneNumber, true, 15);
-    // if (!v[0]) {
-    //   this.setState({ phoneNumberValErrMessage: v[1] });
-    //   return false;
-    // }
-
-    // v = validate('textMin', password, true, 6);
-    // if (!v[0]) {
-    //   this.setState({ passwordValErrMessage: v[1] });
-    //   return false;
-    // }
-
-    // if (password !== comfirmPassword) {
-    //   this.setState({ comfirmPasswordValErrMessage: '비밀번호가 일치하지 않습니다' });
-    //   return false;
-    // }
 
     v = validatePresence(equiListStr);
     if (!v[0]) {
@@ -322,16 +332,28 @@ export default class FirmUpdateScreen extends React.Component {
     }
 
     v = validatePresence(sidoAddr);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[시도] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[시도] ${v[1]}` });
+      return false;
+    }
 
     v = validatePresence(sigunguAddr);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[시군] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[시군] ${v[1]}` });
+      return false;
+    }
 
     v = validatePresence(addrLongitude);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[경도] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[경도] ${v[1]}` });
+      return false;
+    }
 
     v = validatePresence(addrLatitude);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[위도] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[위도] ${v[1]}` });
+      return false;
+    }
 
     v = validate('textMax', introduction, true, 1000);
     if (!v[0]) {
@@ -340,25 +362,46 @@ export default class FirmUpdateScreen extends React.Component {
     }
 
     v = validate('textMax', thumbnail, true, 250);
-    if (!v[0]) { this.setState({ thumbnailValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ thumbnailValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', photo1, true, 250);
-    if (!v[0]) { this.setState({ photo1ValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ photo1ValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', photo2, false, 250);
-    if (!v[0]) { this.setState({ photo2ValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ photo2ValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', photo3, false, 250);
-    if (!v[0]) { this.setState({ photo3ValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ photo3ValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', blog, false, 250);
-    if (!v[0]) { this.setState({ blogValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ blogValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', homepage, false, 250);
-    if (!v[0]) { this.setState({ homepageValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ homepageValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', sns, false, 250);
-    if (!v[0]) { this.setState({ snsValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ snsValErrMessage: v[1] });
+      return false;
+    }
 
     return true;
   };
@@ -367,12 +410,11 @@ export default class FirmUpdateScreen extends React.Component {
     const { navigation } = this.props;
 
     navigation.navigate('FirmMyInfo');
-  }
+  };
 
   setUpdateFirmData = (firm) => {
     this.setState({
       id: firm.id,
-      accountId: firm.accountId,
       fname: firm.fname,
       equiListStr: firm.equiListStr,
       address: firm.address,
@@ -390,103 +432,164 @@ export default class FirmUpdateScreen extends React.Component {
       homepage: firm.homepage,
       sns: firm.sns,
     });
-  }
+  };
 
   render() {
     const {
-      isVisibleEquiModal,
-      isVisibleMapAddModal,
+      isLoadingComplete,
+      isVisibleEquiModal, isVisibleMapAddModal, isVisibleActIndiModal,
       fname,
       equiListStr,
-      address, addressDetail,
+      address,
+      addressDetail,
       introduction,
-      thumbnail, photo1, photo2, photo3,
-      blog, sns, homepage,
-      fnameValErrMessage,
-      equiListStrValErrMessage,
-      addressValErrMessage,
-      introductionValErrMessage,
-      thumbnailValErrMessage,
-      photo1ValErrMessage,
-      photo2ValErrMessage,
-      photo3ValErrMessage,
-      blogValErrMessage,
-      homepageValErrMessage,
-      snsValErrMessage,
+      thumbnail,
+      photo1,
+      photo2,
+      photo3,
+      blog,
+      sns,
+      homepage,
+      imgUploadingMessage, fnameValErrMessage, equiListStrValErrMessage,
+      addressValErrMessage, introductionValErrMessage, thumbnailValErrMessage,
+      photo1ValErrMessage, photo2ValErrMessage, photo3ValErrMessage,
+      blogValErrMessage, homepageValErrMessage, snsValErrMessage,
     } = this.state;
 
+    if (!isLoadingComplete) {
+      return (
+        <View style={styles.container}>
+          <Text>업체정보 불러오는중...</Text>
+          <ActivityIndicator size="large" color={colors.indicator} />
+        </View>
+      )
+    }
     return (
       <View style={styles.container}>
         <KeyboardAvoidingView behavior="padding" enabled>
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.formWrap}>
-              <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" refer={(input) => { this.fnameTextInput = input; }}/>
+              <FirmCreaTextInput
+                title="업체명*"
+                value={fname}
+                onChangeText={text => this.setState({ fname: text })}
+                placeholder="업체명을 입력해 주세요"
+                refer={(input) => {
+                  this.fnameTextInput = input;
+                }}
+              />
               <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
 
-              {/* <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
-              <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
-
-              <FirmCreaTextInput title="비밀번호*" value={password} onChangeText={text => this.setState({ password: text })} placeholder="비밀번호를 입력해 주세요" secureTextEntry />
-              <FirmCreaErrMSG errorMSG={passwordValErrMessage} />
-
-              <FirmCreaTextInput title="비밀번호 확인*" value={comfirmPassword} onChangeText={text => this.setState({ comfirmPassword: text })} placeholder="비밀번호를 재입력해 주세요" secureTextEntry />
-              <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} /> */}
-
-              <FirmCreaTextInput title="보유 장비*" value={equiListStr} onChangeText={text => this.setState({ equiListStr: text })} onFocus={() => this.openSelEquipmentModal()} placeholder="보유 장비를 선택해 주세요" />
+              <FirmCreaTextInput
+                title="보유 장비*"
+                value={equiListStr}
+                onChangeText={text => this.setState({ equiListStr: text })}
+                onFocus={() => this.openSelEquipmentModal()}
+                placeholder="보유 장비를 선택해 주세요"
+              />
               <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
 
-              <FirmCreaTextInput title="업체주소(고객검색시 거리계산 기준이됨)*" value={address} onChangeText={text => this.setState({ address: text })} onFocus={() => this.openMapAddModal()} placeholder="주소를 검색해주세요" />
+              <FirmCreaTextInput
+                title="업체주소(고객검색시 거리계산 기준이됨)*"
+                value={address}
+                onChangeText={text => this.setState({ address: text })}
+                onFocus={() => this.openMapAddModal()}
+                placeholder="주소를 검색해주세요"
+              />
               <FirmCreaErrMSG errorMSG={addressValErrMessage} />
 
-              <FirmCreaTextInput title="업체 상세주소" value={addressDetail} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
+              <FirmCreaTextInput
+                title="업체 상세주소"
+                value={addressDetail}
+                onChangeText={text => this.setState({ addressDetail: text })}
+                placeholder="상세주소를 입력해 주세요"
+              />
 
-              <FirmCreaTextInput title="업체 소개" value={introduction} onChangeText={text => this.setState({ introduction: text })} placeholder="업체 소개를 해 주세요" multiline numberOfLines={5} />
+              <FirmCreaTextInput
+                title="업체 소개"
+                value={introduction}
+                onChangeText={text => this.setState({ introduction: text })}
+                placeholder="업체 소개를 해 주세요"
+                multiline
+                numberOfLines={5}
+              />
               <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
 
-              <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} setImageUrl={url => this.setState({ thumbnail: url })} />
+              <ImagePickInput
+                itemTitle="대표사진*"
+                imgUrl={thumbnail}
+                aspect={[1, 1]}
+                setImageUrl={url => this.setState({ thumbnail: url, isThumbnailUpdated: true })}
+              />
               <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
 
-              <ImagePickInput itemTitle="작업사진1*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} />
+              <ImagePickInput
+                itemTitle="작업사진1*"
+                imgUrl={photo1}
+                setImageUrl={url => this.setState({ photo1: url, isPhoto1Updated: true })}
+              />
               <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
 
-              <ImagePickInput itemTitle="작업사진2" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} />
+              <ImagePickInput
+                itemTitle="작업사진2"
+                imgUrl={photo2}
+                setImageUrl={url => this.setState({ photo2: url, isPhoto2Updated: true })}
+              />
               <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
 
-              <ImagePickInput itemTitle="작업사진3" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} />
+              <ImagePickInput
+                itemTitle="작업사진3"
+                imgUrl={photo3}
+                setImageUrl={url => this.setState({ photo3: url, isPhoto3Updated: true })}
+              />
               <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
 
-              <FirmCreaTextInput title="블로그" value={blog} onChangeText={text => this.setState({ blog: text })} placeholder="블로그 주소를 입력해 주세요" />
+              <FirmCreaTextInput
+                title="블로그"
+                value={blog}
+                onChangeText={text => this.setState({ blog: text })}
+                placeholder="블로그 주소를 입력해 주세요"
+              />
               <FirmCreaErrMSG errorMSG={blogValErrMessage} />
 
-              <FirmCreaTextInput title="SNG" value={sns} onChangeText={text => this.setState({ sns: text })} placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요" />
+              <FirmCreaTextInput
+                title="SNG"
+                value={sns}
+                onChangeText={text => this.setState({ sns: text })}
+                placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
+              />
               <FirmCreaErrMSG errorMSG={snsValErrMessage} />
 
-              <FirmCreaTextInput title="홈페이지" value={homepage} onChangeText={text => this.setState({ homepage: text })} placeholder="홈페이지 주소를 입력해 주세요" />
+              <FirmCreaTextInput
+                title="홈페이지"
+                value={homepage}
+                onChangeText={text => this.setState({ homepage: text })}
+                placeholder="홈페이지 주소를 입력해 주세요"
+              />
               <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
             </View>
 
             <View style={styles.regiFormCommWrap}>
-              <TouchableHighlight onPress={() => this.cancelFirm()} style={styles.regiTH}>
-                <Text style={styles.commText}>취소</Text>
-              </TouchableHighlight>
-              <TouchableHighlight onPress={() => this.updateFirm()} style={styles.regiTH}>
-                <Text style={styles.commText}>수정</Text>
-              </TouchableHighlight>
+              <JBButton title="취소" onPress={() => this.cancelFirm()} />
+              <JBButton title="수정" onPress={() => this.updateFirm()} />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
         <EquipementModal
           isVisibleEquiModal={isVisibleEquiModal}
           setEquiSelModalVisible={this.setEquiSelModalVisible}
-          seledEquipmentStr={equiListStr}
-          completeSelEqui={this.completeSelEqui}
+          selEquipmentStr={equiListStr}
+          completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
         />
         <MapAddWebModal
           isVisibleMapAddModal={isVisibleMapAddModal}
           setMapAddModalVisible={this.setMapAddModalVisible}
           saveAddrInfo={this.saveAddrInfo}
         />
+        <JBActIndicatorModal isVisibleModal={isVisibleActIndiModal} message={imgUploadingMessage} size="large" />
       </View>
     );
   }
 }
+
+export default withLogin(FirmUpdateScreen);

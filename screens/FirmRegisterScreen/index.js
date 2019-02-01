@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableHighlight, Text, View,
+  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
 import EquipementModal from '../../components/EquipmentModal';
@@ -10,9 +10,9 @@ import ImagePickInput from '../../components/ImagePickInput';
 import FirmCreaTextInput from '../../components/FirmCreaTextInput';
 import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
 import * as api from '../../api/api';
-import colors from '../../constants/Colors';
-import fonsts from '../../constants/Fonts';
 import { withLogin } from '../../contexts/LoginProvider';
+import JBActIndicatorModal from '../../components/JBActIndicatorModal';
+import JBButton from '../../components/molecules/JBButton';
 
 
 const styles = StyleSheet.create({
@@ -25,10 +25,6 @@ const styles = StyleSheet.create({
   },
   formWrap: {
     marginBottom: 10,
-    borderWidth: 4,
-    borderStyle: 'dashed',
-    borderRadius: 1,
-    borderColor: '#dfc247',
     shadowOffset: {
       width: 0,
       height: 11,
@@ -41,21 +37,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  regiTH: {
-    padding: 10,
-    paddingLeft: 40,
-    paddingRight: 40,
-    backgroundColor: colors.point,
-    borderWidth: 1,
-    borderColor: colors.point2,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  regiCommText: {
-    fontFamily: fonsts.buttonBig,
-    fontSize: 24,
-    color: colors.point2,
   },
   errorMessage: {
     color: 'red',
@@ -72,10 +53,8 @@ class FirmRegisterScreen extends React.Component {
     this.state = {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
+      isVisibleActIndiModal: false,
       fname: '',
-      // phoneNumber: '',
-      // password: '',
-      // comfirmPassword: '',
       equiListStr: '',
       address: '',
       addressDetail: '',
@@ -91,6 +70,7 @@ class FirmRegisterScreen extends React.Component {
       blog: '',
       homepage: '',
       sns: '',
+      imgUploadingMessage: '이미지 업로드중...',
       fnameValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
@@ -108,7 +88,7 @@ class FirmRegisterScreen extends React.Component {
   componentDidMount = () => {
   }
 
-  createFirm = () => {
+  createFirm = async () => {
     const { navigation, user } = this.props;
     const {
       fname, equiListStr, address, addressDetail, sidoAddr,
@@ -121,6 +101,17 @@ class FirmRegisterScreen extends React.Component {
 
     if (user.uid === null || user.uid === undefined || user.uid === '') { Alert.alert('요효하지 않은 사용자 입니다, 로그아웃 후 사용해 주세요'); return; }
     const accountId = user.uid;
+
+    this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '대표사진 업로드중...' });
+    const uploadedThumbnailImgUrl = await this.firmImageUpload(thumbnail);
+    this.setState({ imgUploadingMessage: '작업사진1 업로드중...' });
+    const uploadedPhoto1ImgUrl = await this.firmImageUpload(photo1);
+    this.setState({ imgUploadingMessage: '작업사진2 업로드중...' });
+    const uploadedPhoto2ImgUrl = await this.firmImageUpload(photo2);
+    this.setState({ imgUploadingMessage: '작업사진3 업로드중...' });
+    const uploadedPhoto3ImgUrl = await this.firmImageUpload(photo3);
+    this.setState({ isVisibleActIndiModal: false });
+
     const newFirm = {
       accountId,
       fname,
@@ -132,10 +123,10 @@ class FirmRegisterScreen extends React.Component {
       addrLongitude,
       addrLatitude,
       introduction,
-      thumbnail,
-      photo1,
-      photo2,
-      photo3,
+      thumbnail: uploadedThumbnailImgUrl ? uploadedThumbnailImgUrl : thumbnail,
+      photo1: uploadedPhoto1ImgUrl ? uploadedPhoto1ImgUrl: photo1,
+      photo2: uploadedPhoto2ImgUrl ? uploadedPhoto2ImgUrl: photo2,
+      photo3: uploadedPhoto3ImgUrl ? uploadedPhoto3ImgUrl: photo3,
       blog,
       homepage,
       sns,
@@ -151,6 +142,37 @@ class FirmRegisterScreen extends React.Component {
 
     navigation.navigate('FirmMyInfo', { refresh: 'Register' });
   }
+
+  /**
+   * 업체정보 이미지 업로드
+   */
+  firmImageUpload = async (imgUri) => {
+    if (imgUri === null || imgUri === undefined || imgUri === '') { return null; }
+
+    const serverImgUrl = await this.uploadImage(imgUri);
+
+    if (serverImgUrl === undefined) { Alert.alert('이미지 업로드 실패'); return undefined; }
+
+    return serverImgUrl;
+  }
+
+  /**
+   * 이미지 업로드 함수
+   */
+  uploadImage = async (imgUri) => {
+    let serverImgUrl;
+    await api.uploadImage(imgUri)
+      .then((resImgUrl) => { serverImgUrl = resImgUrl; })
+      .catch((error) => {
+        Alert.alert(
+          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+        serverImgUrl = undefined;
+      });
+
+    return serverImgUrl;
+  };
 
   /**
    * 장비선택창 Visible 설정 함수
@@ -340,25 +362,19 @@ class FirmRegisterScreen extends React.Component {
 
   render() {
     const {
-      isVisibleEquiModal,
-      isVisibleMapAddModal,
+      isVisibleEquiModal, isVisibleMapAddModal, isVisibleActIndiModal,
       fname,
       equiListStr,
       address, addressDetail,
       introduction,
       thumbnail, photo1, photo2, photo3,
       blog, sns, homepage,
-      fnameValErrMessage,
-      equiListStrValErrMessage,
-      addressValErrMessage,
-      introductionValErrMessage,
-      thumbnailValErrMessage,
-      photo1ValErrMessage,
-      photo2ValErrMessage,
-      photo3ValErrMessage,
-      blogValErrMessage,
-      homepageValErrMessage,
-      snsValErrMessage,
+      imgUploadingMessage, fnameValErrMessage,
+      equiListStrValErrMessage, addressValErrMessage,
+      introductionValErrMessage, thumbnailValErrMessage,
+      photo1ValErrMessage, photo2ValErrMessage,
+      photo3ValErrMessage, blogValErrMessage,
+      homepageValErrMessage, snsValErrMessage,
     } = this.state;
 
     return (
@@ -368,15 +384,6 @@ class FirmRegisterScreen extends React.Component {
             <View style={styles.formWrap}>
               <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" refer={(input) => { this.fnameTextInput = input; }}/>
               <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
-
-              {/* <FirmCreaTextInput title="전화번호*" value={phoneNumber} onChangeText={text => this.setState({ phoneNumber: text })} keyboardType="phone-pad" placeholder="전화번호를 입력해 주세요" />
-              <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
-
-              <FirmCreaTextInput title="비밀번호*" value={password} onChangeText={text => this.setState({ password: text })} placeholder="비밀번호를 입력해 주세요" secureTextEntry />
-              <FirmCreaErrMSG errorMSG={passwordValErrMessage} />
-
-              <FirmCreaTextInput title="비밀번호 확인*" value={comfirmPassword} onChangeText={text => this.setState({ comfirmPassword: text })} placeholder="비밀번호를 재입력해 주세요" secureTextEntry />
-              <FirmCreaErrMSG errorMSG={comfirmPasswordValErrMessage} /> */}
 
               <FirmCreaTextInput title="보유 장비*" value={equiListStr} onChangeText={text => this.setState({ equiListStr: text })} onFocus={() => this.openSelEquipmentModal()} placeholder="보유 장비를 선택해 주세요" />
               <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
@@ -389,7 +396,7 @@ class FirmRegisterScreen extends React.Component {
               <FirmCreaTextInput title="업체 소개" value={introduction} onChangeText={text => this.setState({ introduction: text })} placeholder="업체 소개를 해 주세요" multiline numberOfLines={5} />
               <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
 
-              <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} setImageUrl={url => this.setState({ thumbnail: url })} />
+              <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} aspect={[1, 1]} setImageUrl={url => this.setState({ thumbnail: url })} />
               <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
 
               <ImagePickInput itemTitle="작업사진1*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} />
@@ -412,12 +419,8 @@ class FirmRegisterScreen extends React.Component {
             </View>
 
             <View style={styles.regiFormCommWrap}>
-              <TouchableHighlight onPress={() => this.cancelFirm()} style={styles.regiTH}>
-                <Text style={styles.regiCommText}>취소</Text>
-              </TouchableHighlight>
-              <TouchableHighlight onPress={() => this.createFirm()} style={styles.regiTH}>
-                <Text style={styles.regiCommText}>저장</Text>
-              </TouchableHighlight>
+              <JBButton title="취소" onPress={() => this.cancelFirm()} />
+              <JBButton title="저장" onPress={() => this.createFirm()} />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -432,6 +435,7 @@ class FirmRegisterScreen extends React.Component {
           setMapAddModalVisible={this.setMapAddModalVisible}
           saveAddrInfo={this.saveAddrInfo}
         />
+        <JBActIndicatorModal isVisibleModal={isVisibleActIndiModal} message={imgUploadingMessage} size="large" />
       </View>
     );
   }

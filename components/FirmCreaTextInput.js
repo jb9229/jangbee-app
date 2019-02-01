@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
     margin: 10,
+    marginBottom: 20,
   },
   itemTitle: {
     fontFamily: 'yang-rounded',
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
   },
   itemInput: {
     fontFamily: 'Hamchorong-batang',
-    fontSize: 20,
+    fontSize: 24,
     borderBottomWidth: 1,
     borderColor: '#7A7373',
     borderStyle: 'dotted',
