@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Alert,
+  ActivityIndicator,
   Linking,
   Image,
   ScrollView,
@@ -10,6 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import firebase from 'firebase';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import * as api from '../api/api';
 import FirmTextItem from '../components/FirmTextItem';
@@ -18,12 +20,25 @@ import fonts from '../constants/Fonts';
 import CmException from '../common/CmException';
 import { withLogin } from '../contexts/LoginProvider';
 import FirmProfileModal from '../components/FirmProfileModal';
+import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardWrap: {
+    flex: 1,
+    backgroundColor: colors.batangLight,
+    padding: 10,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: colors.cardBatang,
+    padding: 5,
+    borderRadius: 15,
   },
   regFirmWrap: {
     flex: 1,
@@ -39,7 +54,6 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   frimTopItemWrap: {
-    padding: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -49,7 +63,7 @@ const styles = StyleSheet.create({
   },
   topCommWrap: {
     flexDirection: 'row',
-    alignItems: 'center',
+    marginRight: 25,
   },
   titleWrap: {
     flexDirection: 'row',
@@ -79,12 +93,12 @@ class FirmMyInfoScreen extends React.Component {
     this.state = {
       firm: undefined,
       isVisibleProfileModal: false,
+      isLoadingComplete: false,
     };
   }
 
   componentDidMount() {
     this.setMyFirmInfo();
-    this.props.navigationOptions = {header: null,}
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,12 +130,13 @@ class FirmMyInfoScreen extends React.Component {
         throw new CmException(res.status, `${res.url}`);
       })
       .then((firm) => {
-        this.setState({ firm });
+        this.setState({ firm, isLoadingComplete: true });
       })
       .catch((error) => {
         Alert.alert(
           `업체정보 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
         );
+        this.setState({ isLoadingComplete: true });
       });
   };
 
@@ -129,8 +144,8 @@ class FirmMyInfoScreen extends React.Component {
    * 프로파일 팝업창 열기 플래그 함수
    */
   setVisibleProfileModal = (visible) => {
-    this.setState( {isVisibleProfileModal: visible} );
-  }
+    this.setState({ isVisibleProfileModal: visible });
+  };
 
   registerFirm = () => {
     const { navigation } = this.props;
@@ -138,22 +153,45 @@ class FirmMyInfoScreen extends React.Component {
     navigation.navigate('FirmRegister');
   };
 
+  /**
+   * 업체 블로그/홈페이지/SNS링크 열기
+   */
   openLinkUrl = (url) => {
     if (url === null || url === '') {
       return;
     }
 
-    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    Linking.openURL(url).catch(Alert.alert(`링크 열기에 문제가 있습니다 [${url}]`));
+  };
+
+  /**
+   * 로그아웃 함수
+   */
+  onSignOut = async () => {
+    try {
+      await firebase.auth().signOut();
+    } catch (e) {
+      Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
+    }
   };
 
   render() {
-    const { firm, isVisibleProfileModal } = this.state;
+    const { firm, isVisibleProfileModal, isLoadingComplete } = this.state;
+    if (!isLoadingComplete) {
+      return (
+        <View style={styles.container}>
+          <Text>업체정보 불러오는중...</Text>
+          <ActivityIndicator size="large" color={colors.indicator} />
+        </View>
+      );
+    }
+
     if (firm === undefined) {
       return (
         <View style={styles.container}>
           <View style={styles.regFirmWrap}>
             <Text style={styles.regFirmNotice}>
-              등록된 업체정보가 없습니다, 업체정보를 등록해 주세요.
+              고객님들 검색에 콜받을 수 있게, 업체정보를 등록해 주세요.
             </Text>
             <TouchableHighlight onPress={() => this.registerFirm()}>
               <Text style={styles.regFirmText}>업체정보 등록하러 가기</Text>
@@ -173,46 +211,59 @@ class FirmMyInfoScreen extends React.Component {
         </View>
 
         <ScrollView>
-          <View style={styles.frimTopItemWrap}>
-            <View style={styles.firmLinkWrap}>
-              <TouchableOpacity onPress={() => this.openLinkUrl(firm.blog)}>
-                <MaterialCommunityIcons
-                  name="blogger"
-                  size={32}
-                  color={firm.blog !== '' ? 'green' : 'gray'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.openLinkUrl(firm.homepage)}>
-                <MaterialCommunityIcons
-                  name="home-circle"
-                  size={32}
-                  color={firm.homepage !== '' ? 'green' : 'gray'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.openLinkUrl(firm.sns)}>
-                <AntDesign
-                  name="facebook-square"
-                  size={32}
-                  color={firm.sns !== '' ? 'green' : 'gray'}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.topCommWrap}>
-              <TouchableHighlight onPress={() => this.setVisibleProfileModal(true)}>
-                <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
-              </TouchableHighlight>
+          <View style={styles.cardWrap}>
+            <View style={styles.card}>
+              <View style={styles.frimTopItemWrap}>
+                <View style={styles.firmLinkWrap}>
+                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.blog)}>
+                    <MaterialCommunityIcons
+                      name="blogger"
+                      size={32}
+                      color={firm.blog !== '' ? 'green' : 'gray'}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.homepage)}>
+                    <MaterialCommunityIcons
+                      name="home-circle"
+                      size={32}
+                      color={firm.homepage !== '' ? 'green' : 'gray'}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.sns)}>
+                    <AntDesign
+                      name="facebook-square"
+                      size={32}
+                      color={firm.sns !== '' ? 'green' : 'gray'}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.topCommWrap}>
+                  <TouchableHighlight onPress={() => this.setVisibleProfileModal(true)}>
+                    <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
+                  </TouchableHighlight>
+                </View>
+              </View>
+              
+              <FirmTextItem title="보유장비" value={firm.equiListStr} />
+              <FirmTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} />
+              <FirmTextItem title="업체소개" value={firm.introduction} />
             </View>
           </View>
-          <View>
-            <FirmTextItem title="보유장비" value={firm.equiListStr} />
-            <FirmTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} />
-            <FirmTextItem title="업체소개" value={firm.introduction} />
-            <FirmImageItem title="작업사진1" value={firm.photo1} />
-            <FirmImageItem title="작업사진2" value={firm.photo2} />
-            <FirmImageItem title="작업사진3" value={firm.photo3} />
+          <View style={styles.cardWrap}>
+            <View style={styles.card}>
+              <FirmImageItem title="작업사진1" value={firm.photo1} />
+              <FirmImageItem title="작업사진2" value={firm.photo2} />
+              <FirmImageItem title="작업사진3" value={firm.photo3} />  
+            </View>
           </View>
         </ScrollView>
-        <FirmProfileModal isVisibleModal={isVisibleProfileModal} setVisibleModal={this.setVisibleProfileModal} firm={firm} {...this.props} />
+        <FirmProfileModal
+          isVisibleModal={isVisibleProfileModal}
+          setVisibleModal={this.setVisibleProfileModal}
+          firm={firm}
+          onSignOut={this.onSignOut}
+          {...this.props}
+        />
       </View>
     );
   }

@@ -17,7 +17,10 @@ const FirmMyInfoStack = createStackNavigator({
 FirmMyInfoStack.navigationOptions = {
   tabBarLabel: '업체정보',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-information-circle' : 'md-information-circle'}
+    />
   ),
 };
 
@@ -26,7 +29,7 @@ const SettingsStack = createStackNavigator({
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: '블렉리스트(준비중)',
+  tabBarLabel: '블랙리스트(준비중)',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),

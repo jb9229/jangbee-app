@@ -3,7 +3,8 @@ import {
   Alert, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
-import * as api from '../api/api';
+import fonts from '../constants/Fonts';
+import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -11,9 +12,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   itemTitle: {
-    fontFamily: 'yang-rounded',
-    color: '#4D4A4A',
-    fontSize: 20,
+    fontFamily: fonts.titleMiddle,
+    color: colors.title,
+    fontSize: 15,
+    marginBottom: 3,
   },
   urlInput: {},
   urlText: {

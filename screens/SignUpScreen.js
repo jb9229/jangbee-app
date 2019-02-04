@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, StyleSheet, Text, TouchableOpacity, TouchableHighlight, View,
+  Alert, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import firebase from 'firebase';
 import colors from '../constants/Colors';
@@ -164,7 +164,7 @@ class SignUpScreen extends React.Component {
           </TouchableOpacity>
         </View>
         <FirmCreaErrMSG errorMSG={errorMessage} />
-        <JBButton title="저장" onPress={() => this.onSignUp()} />
+        <JBButton title="등록하기" onPress={() => this.onSignUp()} />
       </View>
     );
   }

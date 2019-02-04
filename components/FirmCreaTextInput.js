@@ -2,6 +2,8 @@ import React from 'react';
 import {
   StyleSheet, Text, TextInput, View,
 } from 'react-native';
+import fonts from '../constants/Fonts';
+import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -10,9 +12,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   itemTitle: {
-    fontFamily: 'yang-rounded',
-    color: '#4D4A4A',
-    fontSize: 20,
+    fontFamily: fonts.titleMiddle,
+    color: colors.title,
+    fontSize: 15,
+    marginBottom: 3,
   },
   itemInput: {
     fontFamily: 'Hamchorong-batang',
@@ -35,13 +38,13 @@ export default class FirmCreaTextInput extends React.PureComponent {
       onFocus,
       multiline,
       numberOfLines,
-      refer,
+      tiRefer,
     } = this.props;
     return (
       <View style={styles.itemWrap}>
         <Text style={styles.itemTitle}>{title}</Text>
         <TextInput
-          ref={refer}
+          ref={tiRefer ? input => tiRefer(input) : null}
           style={styles.itemInput}
           value={value}
           secureTextEntry={secureTextEntry !== undefined}
@@ -52,6 +55,7 @@ export default class FirmCreaTextInput extends React.PureComponent {
           multiline={multiline !== undefined}
           numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
           ellipsizeMode="tail"
+          blurOnSubmit={false}
         />
       </View>
     );

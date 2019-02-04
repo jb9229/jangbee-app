@@ -202,7 +202,6 @@ class FirmRegisterScreen extends React.Component {
       sigunguAddr: addrData.sigunguAddr,
       addrLongitude: addrData.addrLongitude,
       addrLatitude: addrData.addrLatitude,
-
     });
   }
 
@@ -234,10 +233,6 @@ class FirmRegisterScreen extends React.Component {
 
   openMapAddModal = () => {
     this.setMapAddModalVisible(true);
-  };
-
-  completeSelEqui = (seledEuipListStr) => {
-    this.setState({ equiListStr: seledEuipListStr });
   };
 
   pickImage = async () => {
@@ -388,10 +383,10 @@ class FirmRegisterScreen extends React.Component {
               <FirmCreaTextInput title="보유 장비*" value={equiListStr} onChangeText={text => this.setState({ equiListStr: text })} onFocus={() => this.openSelEquipmentModal()} placeholder="보유 장비를 선택해 주세요" />
               <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
 
-              <FirmCreaTextInput title="업체주소(고객검색시 거리계산 기준이됨)*" value={address} onChangeText={text => this.setState({ address: text })} onFocus={() => this.openMapAddModal()} placeholder="주소를 검색해주세요" />
+              <FirmCreaTextInput title="업체주소(고객검색시 거리계산 기준이됨)*" value={address} tiRefer={(input) => { this.addrTextInput = input; }} onChangeText={text => this.setState({ address: text })} onFocus={() => this.openMapAddModal()} placeholder="주소를 검색해주세요" />
               <FirmCreaErrMSG errorMSG={addressValErrMessage} />
 
-              <FirmCreaTextInput title="업체 상세주소" value={addressDetail} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
+              <FirmCreaTextInput title="업체 상세주소" value={addressDetail} tiRefer={(input) => { this.addrDetTextInput = input; }} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
 
               <FirmCreaTextInput title="업체 소개" value={introduction} onChangeText={text => this.setState({ introduction: text })} placeholder="업체 소개를 해 주세요" multiline numberOfLines={5} />
               <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
@@ -419,21 +414,22 @@ class FirmRegisterScreen extends React.Component {
             </View>
 
             <View style={styles.regiFormCommWrap}>
-              <JBButton title="취소" onPress={() => this.cancelFirm()} />
-              <JBButton title="저장" onPress={() => this.createFirm()} />
+              <JBButton title="업체등록하기" onPress={() => this.createFirm()} />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
         <EquipementModal
           isVisibleEquiModal={isVisibleEquiModal}
           setEquiSelModalVisible={this.setEquiSelModalVisible}
-          seledEquipmentStr={equiListStr}
-          completeSelEqui={this.completeSelEqui}
+          selEquipmentStr={equiListStr}
+          completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
+          nextFocus={() => this.addrTextInput.focus()}
         />
         <MapAddWebModal
           isVisibleMapAddModal={isVisibleMapAddModal}
           setMapAddModalVisible={this.setMapAddModalVisible}
           saveAddrInfo={this.saveAddrInfo}
+          nextFocus={() => this.addrDetTextInput.focus()}
         />
         <JBActIndicatorModal isVisibleModal={isVisibleActIndiModal} message={imgUploadingMessage} size="large" />
       </View>

@@ -24,22 +24,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   contentContainer: {
-    padding: 15,
-    paddingTop: 5,
   },
-  formWrap: {
-    marginBottom: 10,
-    borderWidth: 4,
-    borderStyle: 'dashed',
-    borderRadius: 1,
-    borderColor: '#dfc247',
-    shadowOffset: {
-      width: 0,
-      height: 11,
-    },
-    shadowOpacity: 0.41,
-    shadowRadius: 9.11,
-    elevation: 10,
+  cardWrap: {
+    flex: 1,
+    backgroundColor: colors.batangLight,
+    padding: 10,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: colors.cardBatang,
+    padding: 5,
+    borderRadius: 15,
   },
   regiFormCommWrap: {
     flex: 1,
@@ -406,12 +401,6 @@ class FirmUpdateScreen extends React.Component {
     return true;
   };
 
-  cancelFirm = () => {
-    const { navigation } = this.props;
-
-    navigation.navigate('FirmMyInfo');
-  };
-
   setUpdateFirmData = (firm) => {
     this.setState({
       id: firm.id,
@@ -468,110 +457,113 @@ class FirmUpdateScreen extends React.Component {
       <View style={styles.container}>
         <KeyboardAvoidingView behavior="padding" enabled>
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            <View style={styles.formWrap}>
-              <FirmCreaTextInput
-                title="업체명*"
-                value={fname}
-                onChangeText={text => this.setState({ fname: text })}
-                placeholder="업체명을 입력해 주세요"
-                refer={(input) => {
-                  this.fnameTextInput = input;
-                }}
-              />
-              <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
+            <View style={styles.cardWrap}>
+              <View style={styles.card}>
+                <FirmCreaTextInput
+                  title="업체명*"
+                  value={fname}
+                  onChangeText={text => this.setState({ fname: text })}
+                  placeholder="업체명을 입력해 주세요"
+                  refer={(input) => {
+                    this.fnameTextInput = input;
+                  }}
+                />
+                <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
 
-              <FirmCreaTextInput
-                title="보유 장비*"
-                value={equiListStr}
-                onChangeText={text => this.setState({ equiListStr: text })}
-                onFocus={() => this.openSelEquipmentModal()}
-                placeholder="보유 장비를 선택해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
+                <FirmCreaTextInput
+                  title="보유 장비*"
+                  value={equiListStr}
+                  onChangeText={text => this.setState({ equiListStr: text })}
+                  onFocus={() => this.openSelEquipmentModal()}
+                  placeholder="보유 장비를 선택해 주세요"
+                />
+                <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
 
-              <FirmCreaTextInput
-                title="업체주소(고객검색시 거리계산 기준이됨)*"
-                value={address}
-                onChangeText={text => this.setState({ address: text })}
-                onFocus={() => this.openMapAddModal()}
-                placeholder="주소를 검색해주세요"
-              />
-              <FirmCreaErrMSG errorMSG={addressValErrMessage} />
+                <FirmCreaTextInput
+                  title="업체주소(고객검색시 거리계산 기준이됨)*"
+                  value={address}
+                  tiRefer={(input) => { this.addrTextInput = input; }}
+                  onChangeText={text => this.setState({ address: text })}
+                  onFocus={() => this.openMapAddModal()}
+                  placeholder="주소를 검색해주세요"
+                />
+                <FirmCreaErrMSG errorMSG={addressValErrMessage} />
 
-              <FirmCreaTextInput
-                title="업체 상세주소"
-                value={addressDetail}
-                onChangeText={text => this.setState({ addressDetail: text })}
-                placeholder="상세주소를 입력해 주세요"
-              />
+                <FirmCreaTextInput
+                  title="업체 상세주소"
+                  value={addressDetail}
+                  tiRefer={(input) => { this.addrDetTextInput = input; }}
+                  onChangeText={text => this.setState({ addressDetail: text })}
+                  placeholder="상세주소를 입력해 주세요"
+                />
 
-              <FirmCreaTextInput
-                title="업체 소개"
-                value={introduction}
-                onChangeText={text => this.setState({ introduction: text })}
-                placeholder="업체 소개를 해 주세요"
-                multiline
-                numberOfLines={5}
-              />
-              <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
+                <FirmCreaTextInput
+                  title="업체 소개"
+                  value={introduction}
+                  onChangeText={text => this.setState({ introduction: text })}
+                  placeholder="업체 소개를 해 주세요"
+                  multiline
+                  numberOfLines={5}
+                />
+                <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="대표사진*"
-                imgUrl={thumbnail}
-                aspect={[1, 1]}
-                setImageUrl={url => this.setState({ thumbnail: url, isThumbnailUpdated: true })}
-              />
-              <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
+                <ImagePickInput
+                  itemTitle="대표사진*"
+                  imgUrl={thumbnail}
+                  aspect={[1, 1]}
+                  setImageUrl={url => this.setState({ thumbnail: url, isThumbnailUpdated: true })}
+                />
+                <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="작업사진1*"
-                imgUrl={photo1}
-                setImageUrl={url => this.setState({ photo1: url, isPhoto1Updated: true })}
-              />
-              <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
+                <ImagePickInput
+                  itemTitle="작업사진1*"
+                  imgUrl={photo1}
+                  setImageUrl={url => this.setState({ photo1: url, isPhoto1Updated: true })}
+                />
+                <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="작업사진2"
-                imgUrl={photo2}
-                setImageUrl={url => this.setState({ photo2: url, isPhoto2Updated: true })}
-              />
-              <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+                <ImagePickInput
+                  itemTitle="작업사진2"
+                  imgUrl={photo2}
+                  setImageUrl={url => this.setState({ photo2: url, isPhoto2Updated: true })}
+                />
+                <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="작업사진3"
-                imgUrl={photo3}
-                setImageUrl={url => this.setState({ photo3: url, isPhoto3Updated: true })}
-              />
-              <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
+                <ImagePickInput
+                  itemTitle="작업사진3"
+                  imgUrl={photo3}
+                  setImageUrl={url => this.setState({ photo3: url, isPhoto3Updated: true })}
+                />
+                <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
 
-              <FirmCreaTextInput
-                title="블로그"
-                value={blog}
-                onChangeText={text => this.setState({ blog: text })}
-                placeholder="블로그 주소를 입력해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={blogValErrMessage} />
+                <FirmCreaTextInput
+                  title="블로그"
+                  value={blog}
+                  onChangeText={text => this.setState({ blog: text })}
+                  placeholder="블로그 주소를 입력해 주세요"
+                />
+                <FirmCreaErrMSG errorMSG={blogValErrMessage} />
 
-              <FirmCreaTextInput
-                title="SNG"
-                value={sns}
-                onChangeText={text => this.setState({ sns: text })}
-                placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={snsValErrMessage} />
+                <FirmCreaTextInput
+                  title="SNG"
+                  value={sns}
+                  onChangeText={text => this.setState({ sns: text })}
+                  placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
+                />
+                <FirmCreaErrMSG errorMSG={snsValErrMessage} />
 
-              <FirmCreaTextInput
-                title="홈페이지"
-                value={homepage}
-                onChangeText={text => this.setState({ homepage: text })}
-                placeholder="홈페이지 주소를 입력해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
-            </View>
+                <FirmCreaTextInput
+                  title="홈페이지"
+                  value={homepage}
+                  onChangeText={text => this.setState({ homepage: text })}
+                  placeholder="홈페이지 주소를 입력해 주세요"
+                />
+                <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
+              </View>
 
-            <View style={styles.regiFormCommWrap}>
-              <JBButton title="취소" onPress={() => this.cancelFirm()} />
-              <JBButton title="수정" onPress={() => this.updateFirm()} />
+              <View style={styles.regiFormCommWrap}>
+                <JBButton title="업체정보 수정하기" onPress={() => this.updateFirm()} />
+              </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -580,11 +572,13 @@ class FirmUpdateScreen extends React.Component {
           setEquiSelModalVisible={this.setEquiSelModalVisible}
           selEquipmentStr={equiListStr}
           completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
+          nextFocus={() => this.addrTextInput.focus()}
         />
         <MapAddWebModal
           isVisibleMapAddModal={isVisibleMapAddModal}
           setMapAddModalVisible={this.setMapAddModalVisible}
           saveAddrInfo={this.saveAddrInfo}
+          nextFocus={() => this.addrDetTextInput.focus()}
         />
         <JBActIndicatorModal isVisibleModal={isVisibleActIndiModal} message={imgUploadingMessage} size="large" />
       </View>

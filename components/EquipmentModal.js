@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  FlatList, Modal, StyleSheet, Text, TouchableHighlight, View, Alert,
+  FlatList, Modal, StyleSheet, View, Alert,
 } from 'react-native';
 import EquiSelBox from './EquiSelBox';
 import * as api from '../api/api';
+import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
-import fonts from '../constants/Fonts';
+import JBIcon from '../components/molecules/JBIcon';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
@@ -13,23 +14,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  equiModalWrap: {
+  cardWrap: {
     flex: 1,
-    backgroundColor: '#FFF',
-    padding: 20,
+    backgroundColor: colors.batangLight,
+    padding: 10,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: colors.cardBatang,
+    padding: 15,
+    paddingTop: 5,
+    borderRadius: 5,
   },
   equiListWrap: {
     justifyContent: 'space-between',
   },
   commWrap: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  commText: {
-    fontFamily: fonts.buttonBig,
-    fontSize: 20,
-    color: colors.point2,
   },
 });
 
@@ -43,9 +45,16 @@ export default class EquipementModal extends React.Component {
   }
 
   componentDidMount() {
-    this.setInitSeledEqui();
-
     this.setEquiList();
+
+    this.setInitSeledEqui();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isVisibleEquiModal } = this.props;
+    if (isVisibleEquiModal !== nextProps.isVisibleEquiModal) {
+      this.setInitSeledEqui();
+    }
   }
 
   /**
@@ -55,8 +64,12 @@ export default class EquipementModal extends React.Component {
     const { selEquipmentStr } = this.props;
 
     const newEquiSelMap = (new Map(): Map<string, boolean>);
-    const seledEquiList = selEquipmentStr.split(SELECTED_EQUIPMENT_SEVERATOR);
-    seledEquiList.forEach(seledEquipment => newEquiSelMap.set(seledEquipment, true));
+
+    // Validation
+    if (selEquipmentStr !== '') {
+      const seledEquiList = selEquipmentStr.split(SELECTED_EQUIPMENT_SEVERATOR);
+      seledEquiList.forEach(seledEquipment => newEquiSelMap.set(seledEquipment, true));
+    }
 
     this.setState({ equiSelMap: newEquiSelMap });
   };
@@ -138,6 +151,13 @@ export default class EquipementModal extends React.Component {
     setEquiSelModalVisible(false);
   };
 
+  cancel = () => {
+    const { nextFocus, setEquiSelModalVisible } = this.props;
+
+    nextFocus();
+    setEquiSelModalVisible(false);
+  };
+
   render() {
     const { isVisibleEquiModal } = this.props;
     const { equiList, equiSelMap } = this.state;
@@ -149,27 +169,25 @@ export default class EquipementModal extends React.Component {
           transparent
           visible={isVisibleEquiModal}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            console.log('equipmentmodal close');
           }}
         >
-          <View style={styles.equiModalWrap}>
-            <FlatList
-              columnWrapperStyle={styles.equiListWrap}
-              horizontal={false}
-              numColumns={2}
-              data={equiList}
-              extraData={equiSelMap}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this.renderEquiListItem}
-            />
+          <View style={styles.cardWrap}>
+            <View style={styles.card}>
+              <JBIcon name="ios-close" size={32} onPress={() => this.cancel()} />
+              <FlatList
+                columnWrapperStyle={styles.equiListWrap}
+                horizontal={false}
+                numColumns={2}
+                data={equiList}
+                extraData={equiSelMap}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={this.renderEquiListItem}
+              />
+            </View>
 
             <View style={styles.commWrap}>
-              <TouchableHighlight onPress={() => this.completeSelEqui()}>
-                <Text style={styles.commText}>취소</Text>
-              </TouchableHighlight>
-              <TouchableHighlight onPress={() => this.completeSelEqui()}>
-                <Text style={styles.commText}>선택</Text>
-              </TouchableHighlight>
+              <JBButton title="보유장비 선택완료" onPress={() => this.completeSelEqui()} />
             </View>
           </View>
         </Modal>

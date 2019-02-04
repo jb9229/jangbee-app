@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, WebView, View, Alert,
+  Modal, StyleSheet, WebView, View,
 } from 'react-native';
 
 const WEBMSG_ACTION_SAVE = 'SAVE';
@@ -19,15 +19,15 @@ const styles = StyleSheet.create({
 
 export default class MapAddWebModal extends React.PureComponent {
   onMapAddrWebMSG = (mapAddrWebMSG) => {
-    const { setMapAddModalVisible, saveAddrInfo } = this.props;
+    const { setMapAddModalVisible, saveAddrInfo, nextFocus } = this.props;
 
     const webData = JSON.parse(mapAddrWebMSG);
 
     if (webData.action === WEBMSG_ACTION_SAVE) {
       saveAddrInfo(webData.data);
-    } else if (webData.action === WEBMSG_ACTION_CACEL) {
     }
 
+    nextFocus();
     setMapAddModalVisible(false);
   };
 
@@ -41,7 +41,7 @@ export default class MapAddWebModal extends React.PureComponent {
           transparent
           visible={isVisibleMapAddModal}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            console.log('Map address modal has been closed.');
           }}
         >
           <View style={styles.mapAddModalWrap}>

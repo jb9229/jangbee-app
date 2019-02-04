@@ -1,6 +1,11 @@
 const tintColor = '#2f95dc';
 
 export default {
+  title: '#969292',
+  titleDark: '#4D4A4A',
+  titleLight: '#E3DCDC',
+  cardBatang: 'white',
+  batangLight: '#E3DCDC',
   batangDark: '#4D4A4A',
   batang: '#7A7373',
   point: '#FDCA24',

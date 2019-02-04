@@ -1,0 +1,21 @@
+import React from 'react';
+import { StyleSheet, TouchableHighlight } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+const styles = StyleSheet.create({
+  iconTH: {
+    marginBottom: 5,
+  },
+  icon: {},
+});
+
+export default class JBIcon extends React.PureComponent {
+  render() {
+    const { name, size, onPress } = this.props;
+    return (
+      <TouchableHighlight onPress={onPress} style={styles.iconTH}>
+        <Ionicons name={name} size={size} style={styles.icon} />
+      </TouchableHighlight>
+    );
+  }
+}

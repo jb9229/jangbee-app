@@ -1,18 +1,10 @@
 // @flow
 import React from 'react';
 import {
-  Alert,
-  FlatList,
-  TouchableHighlight,
-  Image,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
+  TouchableHighlight, Image, Modal, StyleSheet, Text, View,
 } from 'react-native';
-import firebase from 'firebase';
 import { withLogin } from '../contexts/LoginProvider';
-import JBButton from './molecules/JBButton';
+import JBIcon from './molecules/JBIcon';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,9 +14,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     padding: 20,
+    paddingTop: 10,
   },
   titleWrap: {
-    marginTop: 20,
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -71,17 +63,9 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
     setVisibleModal(false);
   };
 
-  onSignOut = async () => {
-    try {
-      await firebase.auth().signOut();
-    } catch (e) {
-      Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
-    }
-  };
-
   render() {
     const {
-      isVisibleModal, setVisibleModal, firm, user,
+      isVisibleModal, setVisibleModal, firm, user, onSignOut,
     } = this.props;
     return (
       <View style={styles.container}>
@@ -94,6 +78,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
           }}
         >
           <View style={styles.modalWrap}>
+            <JBIcon name="ios-close" size={32} onPress={() => setVisibleModal(false)} />
             <View style={styles.titleWrap}>
               <View>
                 <Text style={styles.fnameText}>{firm.fname}</Text>
@@ -108,13 +93,10 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
                 </TouchableHighlight>
               </View>
               <View style={styles.itemWrap}>
-                <TouchableHighlight onPress={() => this.onSignOut()} style={styles.itemTH}>
+                <TouchableHighlight onPress={() => onSignOut()} style={styles.itemTH}>
                   <Text style={styles.itemTitle}>로그아웃</Text>
                 </TouchableHighlight>
               </View>
-            </View>
-            <View style={styles.commWrap}>
-              <JBButton title="닫기" onPress={() => setVisibleModal(false)} />
             </View>
           </View>
         </Modal>
