@@ -25,14 +25,25 @@ import colors from '../constants/Colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrViewWrap: {
+    marginTop: 63,
   },
   cardWrap: {
     flex: 1,
     backgroundColor: colors.batangLight,
-    padding: 10,
+    padding: 20,
+    paddingTop: 6,
+    paddingBottom: 6,
+  },
+  pointCard: {
+    backgroundColor: colors.point2,
+  },
+  largeCard: {
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   card: {
     flex: 1,
@@ -66,20 +77,26 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   titleWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: 63,
     justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    alignItems: 'center',
+    paddingTop: 24,
+    paddingBottom: 2,
+    backgroundColor: 'rgba(83, 146, 170, 0.3)',
+    elevation: 3,
+  },
+  fnameText: {
+    fontSize: 23,
+    fontFamily: fonts.titleTop,
   },
   thumbnail: {
     width: 50,
     height: 50,
     borderRadius: 30,
-  },
-  fnameText: {
-    fontSize: 45,
-    fontFamily: fonts.titleTop,
   },
 });
 
@@ -206,34 +223,30 @@ class FirmMyInfoScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.titleWrap}>
-          <Text style={styles.fnameText}>{firm.fname}</Text>
-        </View>
-
-        <ScrollView>
-          <View style={styles.cardWrap}>
-            <View style={styles.card}>
+        <ScrollView contentContainerStyle={styles.scrViewWrap}>
+          <View style={[styles.cardWrap]}>
+            <View style={[styles.card, styles.pointCard]}>
               <View style={styles.frimTopItemWrap}>
                 <View style={styles.firmLinkWrap}>
                   <TouchableOpacity onPress={() => this.openLinkUrl(firm.blog)}>
                     <MaterialCommunityIcons
                       name="blogger"
                       size={32}
-                      color={firm.blog !== '' ? 'green' : 'gray'}
+                      color={firm.blog !== '' ? colors.pointDark : 'gray'}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => this.openLinkUrl(firm.homepage)}>
                     <MaterialCommunityIcons
                       name="home-circle"
                       size={32}
-                      color={firm.homepage !== '' ? 'green' : 'gray'}
+                      color={firm.homepage !== '' ? colors.pointDark : 'gray'}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => this.openLinkUrl(firm.sns)}>
                     <AntDesign
                       name="facebook-square"
                       size={32}
-                      color={firm.sns !== '' ? 'green' : 'gray'}
+                      color={firm.sns !== '' ? colors.pointDark : 'gray'}
                     />
                   </TouchableOpacity>
                 </View>
@@ -243,20 +256,23 @@ class FirmMyInfoScreen extends React.Component {
                   </TouchableHighlight>
                 </View>
               </View>
-              
-              <FirmTextItem title="보유장비" value={firm.equiListStr} />
-              <FirmTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} />
-              <FirmTextItem title="업체소개" value={firm.introduction} />
+
+              <FirmTextItem title="보유장비" value={firm.equiListStr} revColor />
+              <FirmTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
+              <FirmTextItem title="업체소개" value={firm.introduction} revColor />
             </View>
           </View>
-          <View style={styles.cardWrap}>
-            <View style={styles.card}>
+          <View style={[styles.cardWrap, styles.largeCard]}>
+            <View style={[styles.card]}>
               <FirmImageItem title="작업사진1" value={firm.photo1} />
               <FirmImageItem title="작업사진2" value={firm.photo2} />
-              <FirmImageItem title="작업사진3" value={firm.photo3} />  
+              <FirmImageItem title="작업사진3" value={firm.photo3} />
             </View>
           </View>
         </ScrollView>
+        <View style={styles.titleWrap}>
+          <Text style={styles.fnameText}>{firm.fname}</Text>
+        </View>
         <FirmProfileModal
           isVisibleModal={isVisibleProfileModal}
           setVisibleModal={this.setVisibleProfileModal}

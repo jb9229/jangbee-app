@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   itemInput: {
     fontFamily: 'Hamchorong-batang',
-    fontSize: 24,
+    fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#7A7373',
     borderStyle: 'dotted',

@@ -451,7 +451,7 @@ class FirmUpdateScreen extends React.Component {
           <Text>업체정보 불러오는중...</Text>
           <ActivityIndicator size="large" color={colors.indicator} />
         </View>
-      )
+      );
     }
     return (
       <View style={styles.container}>

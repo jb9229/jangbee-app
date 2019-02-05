@@ -16,17 +16,21 @@ const styles = StyleSheet.create({
   },
   itemValue: {
     fontFamily: fonts.batang,
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 
 export default class FirmTextItem extends React.PureComponent {
   render() {
-    const { title, value } = this.props;
+    const { title, value, revColor } = this.props;
+    let color = null;
+    if (revColor) {
+      color = { color: 'white' };
+    }
     return (
       <View style={styles.itemWrap}>
-        <Text style={styles.itemTitle}>{title === undefined ? '' : `${title}: `}</Text>
-        <Text style={styles.itemValue}>{value}</Text>
+        <Text style={[styles.itemTitle]}>{title === undefined ? '' : `${title}: `}</Text>
+        <Text style={[styles.itemValue, color]}>{value}</Text>
       </View>
     );
   }

@@ -10,7 +10,7 @@ export default {
   batang: '#7A7373',
   point: '#FDCA24',
   pointDark: '#F6C31F',
-  point2: '#00A651',
+  point2: '#5392aa', // RGB: 83, 146, 170
   indicator: '#FDCA24',
   tintColor,
   tabIconDefault: '#ccc',
