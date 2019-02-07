@@ -35,3 +35,15 @@ export function handleTextResponse(res) {
 
   throw new CmException(res.status, `${res.url}`);
 }
+
+/**
+ * HttpRequest 204 응답처리
+ *
+ */
+export function handleNoContentResponse(res) {
+  if (res.status === 204) {
+    return true;
+  }
+
+  throw new CmException(res.status, `${res.url}`);
+}

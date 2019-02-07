@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
     margin: 10,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   itemTitle: {
     fontFamily: fonts.titleMiddle,

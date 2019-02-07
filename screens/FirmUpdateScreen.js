@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import {
   Alert, ActivityIndicator,
@@ -46,7 +47,13 @@ const styles = StyleSheet.create({
   },
 });
 
-class FirmUpdateScreen extends React.Component {
+type Props = {
+
+}
+type State = {
+  preThumbnail: string, prePhoto1: string, prePhoto2: string, prePhoto3: string,
+}
+class FirmUpdateScreen extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,10 +78,6 @@ class FirmUpdateScreen extends React.Component {
       blog: '',
       homepage: '',
       sns: '',
-      isThumbnailUpdated: false,
-      isPhoto1Updated: false,
-      isPhoto2Updated: false,
-      isPhoto3Updated: false,
       imgUploadingMessage: '이미지 업로드중...',
       fnameValErrMessage: '',
       equiListStrValErrMessage: '',
@@ -131,7 +134,7 @@ class FirmUpdateScreen extends React.Component {
       blog,
       homepage,
       sns,
-      isThumbnailUpdated, isPhoto1Updated, isPhoto2Updated, isPhoto3Updated,
+      preThumbnail, prePhoto1, prePhoto2, prePhoto3,
     } = this.state;
     const valResult = this.isValidateSubmit();
 
@@ -140,13 +143,13 @@ class FirmUpdateScreen extends React.Component {
     }
 
     this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '대표사진 업로드중...' });
-    const uploadedThumbnailImgUrl = await this.firmImageUpload(thumbnail, isThumbnailUpdated);
+    const uploadedThumbnailImgUrl = await this.firmImageUpload(thumbnail, preThumbnail);
     this.setState({ imgUploadingMessage: '작업사진1 업로드중...' });
-    const uploadedPhoto1ImgUrl = await this.firmImageUpload(photo1, isPhoto1Updated);
+    const uploadedPhoto1ImgUrl = await this.firmImageUpload(photo1, prePhoto1);
     this.setState({ imgUploadingMessage: '작업사진2 업로드중...' });
-    const uploadedPhoto2ImgUrl = await this.firmImageUpload(photo2, isPhoto2Updated);
+    const uploadedPhoto2ImgUrl = await this.firmImageUpload(photo2, prePhoto2);
     this.setState({ imgUploadingMessage: '작업사진3 업로드중...' });
-    const uploadedPhoto3ImgUrl = await this.firmImageUpload(photo3, isPhoto3Updated);
+    const uploadedPhoto3ImgUrl = await this.firmImageUpload(photo3, prePhoto3);
     this.setState({ isVisibleActIndiModal: false });
 
     const updateFirm = {
@@ -184,14 +187,27 @@ class FirmUpdateScreen extends React.Component {
   /**
    * 업체정보 이미지 업로드
    */
-  firmImageUpload = async (imgUri, isUpdated) => {
-    if (!isUpdated || imgUri === null || imgUri === undefined || imgUri === '') { return null; }
+  firmImageUpload = async (imgUri, preImg) => {
+    // No change
+    if (imgUri === preImg) { return null; }
 
-    const serverImgUrl = await this.uploadImage(imgUri);
+    // Current Image Delete and New Image Null
+    if (preImg !== '' && preImg !== undefined) {
+      console.log(`preImg delete: ${imgUri} / ${preImg}`);
+      const result = await this.removeFirmImage(preImg);
+      if (!result) { return undefined; }
+    }
 
-    if (serverImgUrl === undefined) { Alert.alert('이미지 업로드 실패'); return undefined; }
+    // Current image null, new image upload
+    if (imgUri !== null && imgUri !== '') {
+      const serverImgUrl = await this.uploadImage(imgUri);
 
-    return serverImgUrl;
+      if (serverImgUrl === undefined) { Alert.alert('이미지 업로드 실패'); return undefined; }
+
+      return serverImgUrl;
+    }
+
+    return null;
   }
 
   /**
@@ -210,6 +226,24 @@ class FirmUpdateScreen extends React.Component {
       });
 
     return serverImgUrl;
+  };
+
+  /**
+   * 이미지 삭제 함수
+   */
+  removeFirmImage = async (imgUri) => {
+    let result;
+    await api.removeImage(imgUri)
+      .then((res) => { result = res; })
+      .catch((error) => {
+        Alert.alert(
+          '이미지 삭제에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+        result = false;
+      });
+console.log(`image delete result: ${result}`)
+    return result;
   };
 
   /**
@@ -417,6 +451,7 @@ class FirmUpdateScreen extends React.Component {
       photo1: firm.photo1,
       photo2: firm.photo2,
       photo3: firm.photo3,
+      preThumbnail: firm.thumbnail, prePhoto1: firm.photo1, prePhoto2: firm.photo2, prePhoto3: firm.photo3,
       blog: firm.blog,
       homepage: firm.homepage,
       sns: firm.sns,
@@ -438,7 +473,7 @@ class FirmUpdateScreen extends React.Component {
       photo3,
       blog,
       sns,
-      homepage,
+      homepage,prePhoto1,prePhoto2,
       imgUploadingMessage, fnameValErrMessage, equiListStrValErrMessage,
       addressValErrMessage, introductionValErrMessage, thumbnailValErrMessage,
       photo1ValErrMessage, photo2ValErrMessage, photo3ValErrMessage,
@@ -511,28 +546,28 @@ class FirmUpdateScreen extends React.Component {
                   itemTitle="대표사진*"
                   imgUrl={thumbnail}
                   aspect={[1, 1]}
-                  setImageUrl={url => this.setState({ thumbnail: url, isThumbnailUpdated: true })}
+                  setImageUrl={url => this.setState({ thumbnail: url })}
                 />
                 <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="작업사진1*"
                   imgUrl={photo1}
-                  setImageUrl={url => this.setState({ photo1: url, isPhoto1Updated: true })}
+                  setImageUrl={url => this.setState({ photo1: url })}
                 />
                 <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="작업사진2"
                   imgUrl={photo2}
-                  setImageUrl={url => this.setState({ photo2: url, isPhoto2Updated: true })}
+                  setImageUrl={url => this.setState({ photo2: url })}
                 />
                 <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="작업사진3"
                   imgUrl={photo3}
-                  setImageUrl={url => this.setState({ photo3: url, isPhoto3Updated: true })}
+                  setImageUrl={url => this.setState({ photo3: url })}
                 />
                 <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
 

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginRight: 20,
+    marginRight: 10,
   },
   commTH: {
     backgroundColor: colors.pointDark,
@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
   },
   bigCommTH: {
     backgroundColor: colors.pointDark,
-    paddingLeft: 42,
-    paddingRight: 42,
-    paddingTop: 25,
-    paddingBottom: 25,
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingTop: 20,
+    paddingBottom: 20,
     borderRadius: 3,
   },
   smallCommTH: {
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     borderRadius: 3,
   },
+  underLineTH: {
+    backgroundColor: 'transparent',
+  },
   commText: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -43,10 +46,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   bigCommText: {
-    fontSize: 28,
+    fontSize: 25,
   },
   smallCommText: {
     fontSize: 8,
+  },
+  underLineText: {
+    textDecorationLine: 'underline',
   },
 });
 
@@ -74,13 +80,21 @@ function getCommTH(size) {
   }
 }
 
-export default function JBButton({ title, onPress, size }) {
+export default function JBButton({
+  title, onPress, size, underline,
+}) {
   const sizeCommText = getCommText(size);
   const sizeCommTH = getCommTH(size);
+  let underLineTH = null;
+  let underLineText = null;
+  if (underline) {
+    underLineTH = styles.underLineTH;
+    underLineText = styles.underLineText;
+  }
   return (
     <View style={styles.commWrap}>
-      <TouchableHighlight onPress={onPress} style={[styles.commTH, sizeCommTH]}>
-        <Text style={[styles.commText, sizeCommText]}>{title}</Text>
+      <TouchableHighlight onPress={onPress} style={[styles.commTH, sizeCommTH, underLineTH]}>
+        <Text style={[styles.commText, sizeCommText, underLineText]}>{title}</Text>
       </TouchableHighlight>
     </View>
   );

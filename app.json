@@ -3,7 +3,7 @@
   "appName": "JangbeeCall",
   "expo": {
     "name": "장비 콜",
-    "slug": "Everyone_will_be_own",
+    "slug": "Everyone_will_be_own_at_JangbeeCall",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -12,9 +12,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-jangbee2.png",
+    "icon": "./assets/images/icon-jangbee3.png",
     "splash": {
-      "image": "./assets/images/splash-jangbee3.png",
+      "image": "./assets/images/splash-jangbee4.png",
       "resizeMode": "contain",
       "backgroundColor": "#4D4A4A"
     },

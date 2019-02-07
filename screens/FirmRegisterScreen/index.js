@@ -1,27 +1,23 @@
 import React from 'react';
-import {
-  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View,
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { ImagePicker } from 'expo';
-import EquipementModal from '../../components/EquipmentModal';
-import MapAddWebModal from '../../components/MapAddWebModal';
 import { validate, validatePresence } from '../../utils/Validation';
+import * as api from '../../api/api';
+import { withLogin } from '../../contexts/LoginProvider';
 import ImagePickInput from '../../components/ImagePickInput';
 import FirmCreaTextInput from '../../components/FirmCreaTextInput';
 import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
-import * as api from '../../api/api';
-import { withLogin } from '../../contexts/LoginProvider';
+import EquipementModal from '../../components/EquipmentModal';
+import MapAddWebModal from '../../components/MapAddWebModal';
 import JBActIndicatorModal from '../../components/JBActIndicatorModal';
 import JBButton from '../../components/molecules/JBButton';
 import colors from '../../constants/Colors';
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  contentContainer: {
-  },
+  contentContainer: {},
   cardWrap: {
     flex: 1,
     backgroundColor: colors.batangLight,
@@ -374,67 +370,141 @@ class FirmRegisterScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior="padding" enabled>
-          <ScrollView contentContainerStyle={styles.contentContainer}>
-            <View style={styles.cardWrap}>
-              <View style={styles.card}>
-                <FirmCreaTextInput title="업체명*" value={fname} onChangeText={text => this.setState({ fname: text })} placeholder="업체명을 입력해 주세요" refer={(input) => { this.fnameTextInput = input; }}/>
-                <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
+      <KeyboardAvoidingView behavior="padding" enabled>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <View style={styles.cardWrap}>
+            <View style={styles.card}>
+              <FirmCreaTextInput
+                title="업체명*"
+                value={fname}
+                onChangeText={text => this.setState({ fname: text })}
+                placeholder="업체명을 입력해 주세요"
+                refer={(input) => {
+                  this.fnameTextInput = input;
+                }}
+              />
+              <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
 
-                <FirmCreaTextInput title="보유 장비*" value={equiListStr} onChangeText={text => this.setState({ equiListStr: text })} onFocus={() => this.openSelEquipmentModal()} placeholder="보유 장비를 선택해 주세요" />
-                <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
+              <FirmCreaTextInput
+                title="보유 장비*"
+                value={equiListStr}
+                onChangeText={text => this.setState({ equiListStr: text })}
+                onFocus={() => this.openSelEquipmentModal()}
+                placeholder="보유 장비를 선택해 주세요"
+              />
+              <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
 
-                <FirmCreaTextInput title="업체주소(고객검색시 거리계산 기준이됨)*" value={address} tiRefer={(input) => { this.addrTextInput = input; }} onChangeText={text => this.setState({ address: text })} onFocus={() => this.openMapAddModal()} placeholder="주소를 검색해주세요" />
-                <FirmCreaErrMSG errorMSG={addressValErrMessage} />
+              <FirmCreaTextInput
+                title="업체주소(고객검색시 거리계산 기준이됨)*"
+                value={address}
+                tiRefer={(input) => {
+                  this.addrTextInput = input;
+                }}
+                onChangeText={text => this.setState({ address: text })}
+                onFocus={() => this.openMapAddModal()}
+                placeholder="주소를 검색해주세요"
+              />
+              <FirmCreaErrMSG errorMSG={addressValErrMessage} />
 
-                <FirmCreaTextInput title="업체 상세주소" value={addressDetail} tiRefer={(input) => { this.addrDetTextInput = input; }} onChangeText={text => this.setState({ addressDetail: text })} placeholder="상세주소를 입력해 주세요" />
+              <FirmCreaTextInput
+                title="업체 상세주소"
+                value={addressDetail}
+                tiRefer={(input) => {
+                  this.addrDetTextInput = input;
+                }}
+                onChangeText={text => this.setState({ addressDetail: text })}
+                placeholder="상세주소를 입력해 주세요"
+              />
 
-                <FirmCreaTextInput title="업체 소개" value={introduction} onChangeText={text => this.setState({ introduction: text })} placeholder="업체 소개를 해 주세요" multiline numberOfLines={5} />
-                <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
+              <FirmCreaTextInput
+                title="업체 소개"
+                value={introduction}
+                onChangeText={text => this.setState({ introduction: text })}
+                placeholder="업체 소개를 해 주세요"
+                multiline
+                numberOfLines={5}
+              />
+              <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
 
-                <ImagePickInput itemTitle="대표사진*" imgUrl={thumbnail} aspect={[1, 1]} setImageUrl={url => this.setState({ thumbnail: url })} />
-                <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
+              <ImagePickInput
+                itemTitle="대표사진*"
+                imgUrl={thumbnail}
+                aspect={[1, 1]}
+                setImageUrl={url => this.setState({ thumbnail: url })}
+              />
+              <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
 
-                <ImagePickInput itemTitle="작업사진1*" imgUrl={photo1} setImageUrl={url => this.setState({ photo1: url })} />
-                <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
+              <ImagePickInput
+                itemTitle="작업사진1*"
+                imgUrl={photo1}
+                setImageUrl={url => this.setState({ photo1: url })}
+              />
+              <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
 
-                <ImagePickInput itemTitle="작업사진2" imgUrl={photo2} setImageUrl={url => this.setState({ photo2: url })} />
-                <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+              <ImagePickInput
+                itemTitle="작업사진2"
+                imgUrl={photo2}
+                setImageUrl={url => this.setState({ photo2: url })}
+              />
+              <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
 
-                <ImagePickInput itemTitle="작업사진3" imgUrl={photo3} setImageUrl={url => this.setState({ photo3: url })} />
-                <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
+              <ImagePickInput
+                itemTitle="작업사진3"
+                imgUrl={photo3}
+                setImageUrl={url => this.setState({ photo3: url })}
+              />
+              <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
 
-                <FirmCreaTextInput title="블로그" value={blog} onChangeText={text => this.setState({ blog: text })} placeholder="블로그 주소를 입력해 주세요" />
-                <FirmCreaErrMSG errorMSG={blogValErrMessage} />
+              <FirmCreaTextInput
+                title="블로그"
+                value={blog}
+                onChangeText={text => this.setState({ blog: text })}
+                placeholder="블로그 주소를 입력해 주세요"
+              />
+              <FirmCreaErrMSG errorMSG={blogValErrMessage} />
 
-                <FirmCreaTextInput title="SNG" value={sns} onChangeText={text => this.setState({ sns: text })} placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요" />
-                <FirmCreaErrMSG errorMSG={snsValErrMessage} />
+              <FirmCreaTextInput
+                title="SNG"
+                value={sns}
+                onChangeText={text => this.setState({ sns: text })}
+                placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
+              />
+              <FirmCreaErrMSG errorMSG={snsValErrMessage} />
 
-                <FirmCreaTextInput title="홈페이지" value={homepage} onChangeText={text => this.setState({ homepage: text })} placeholder="홈페이지 주소를 입력해 주세요" />
-                <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
-              </View>
-
-              <View style={styles.regiFormCommWrap}>
-                <JBButton title="업체등록하기" onPress={() => this.createFirm()} />
-              </View>
+              <FirmCreaTextInput
+                title="홈페이지"
+                value={homepage}
+                onChangeText={text => this.setState({ homepage: text })}
+                placeholder="홈페이지 주소를 입력해 주세요"
+              />
+              <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-        <EquipementModal
-          isVisibleEquiModal={isVisibleEquiModal}
-          setEquiSelModalVisible={this.setEquiSelModalVisible}
-          selEquipmentStr={equiListStr}
-          completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
-          nextFocus={() => this.addrTextInput.focus()}
-        />
-        <MapAddWebModal
-          isVisibleMapAddModal={isVisibleMapAddModal}
-          setMapAddModalVisible={this.setMapAddModalVisible}
-          saveAddrInfo={this.saveAddrInfo}
-          nextFocus={() => this.addrDetTextInput.focus()}
-        />
-        <JBActIndicatorModal isVisibleModal={isVisibleActIndiModal} message={imgUploadingMessage} size="large" />
-      </View>
+
+            <View style={styles.regiFormCommWrap}>
+              <JBButton title="업체등록하기" onPress={() => this.createFirm()} />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <EquipementModal
+        isVisibleEquiModal={isVisibleEquiModal}
+        setEquiSelModalVisible={this.setEquiSelModalVisible}
+        selEquipmentStr={equiListStr}
+        completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
+        nextFocus={() => this.addrTextInput.focus()}
+      />
+      <MapAddWebModal
+        isVisibleMapAddModal={isVisibleMapAddModal}
+        setMapAddModalVisible={this.setMapAddModalVisible}
+        saveAddrInfo={this.saveAddrInfo}
+        nextFocus={() => this.addrDetTextInput.focus()}
+      />
+      <JBActIndicatorModal
+        isVisibleModal={isVisibleActIndiModal}
+        message={imgUploadingMessage}
+        size="large"
+      />
+    </View>
     );
   }
 }

@@ -21,6 +21,7 @@ import CmException from '../common/CmException';
 import { withLogin } from '../contexts/LoginProvider';
 import FirmProfileModal from '../components/FirmProfileModal';
 import colors from '../constants/Colors';
+import JBButton from '../components/molecules/JBButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,8 +29,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  regFirmWrap: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.point2,
+  },
+  regFirmNotice: {
+    fontSize: 13,
+    marginBottom: 20,
+    fontFamily: fonts.batang,
+    color: 'white',
+  },
+  regFirmText: {
+    fontSize: 24,
+    fontFamily: fonts.point2,
+    textDecorationLine: 'underline',
+  },
   scrViewWrap: {
     marginTop: 63,
+    paddingBottom: 63,
   },
   cardWrap: {
     flex: 1,
@@ -50,19 +70,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cardBatang,
     padding: 5,
     borderRadius: 15,
-  },
-  regFirmWrap: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  regFirmNotice: {
-    marginBottom: 20,
-  },
-  regFirmText: {
-    fontSize: 24,
-    fontFamily: fonts.point2,
-    textDecorationLine: 'underline',
   },
   frimTopItemWrap: {
     flexDirection: 'row',
@@ -86,12 +93,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 24,
     paddingBottom: 2,
-    backgroundColor: 'rgba(83, 146, 170, 0.3)',
+    backgroundColor: 'rgba(250, 250, 250, 0.3)',
     elevation: 3,
+    borderRadius: 5,
   },
   fnameText: {
     fontSize: 23,
     fontFamily: fonts.titleTop,
+    color: colors.point2,
   },
   thumbnail: {
     width: 50,
@@ -210,12 +219,8 @@ class FirmMyInfoScreen extends React.Component {
             <Text style={styles.regFirmNotice}>
               고객님들 검색에 콜받을 수 있게, 업체정보를 등록해 주세요.
             </Text>
-            <TouchableHighlight onPress={() => this.registerFirm()}>
-              <Text style={styles.regFirmText}>업체정보 등록하러 가기</Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => this.onSignOut()}>
-              <Text>로그아웃</Text>
-            </TouchableHighlight>
+            <JBButton title="업체정보 등록하기" onPress={() => this.registerFirm()} size="big" />
+            <JBButton title="로그아웃" onPress={() => this.onSignOut()} underline />
           </View>
         </View>
       );
@@ -258,7 +263,11 @@ class FirmMyInfoScreen extends React.Component {
               </View>
 
               <FirmTextItem title="보유장비" value={firm.equiListStr} revColor />
-              <FirmTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
+              <FirmTextItem
+                title="주소"
+                value={`${firm.address}\n${firm.addressDetail}`}
+                revColor
+              />
               <FirmTextItem title="업체소개" value={firm.introduction} revColor />
             </View>
           </View>

@@ -1,5 +1,9 @@
 import * as url from '../constants/Url';
-import { handleJsonResponse, handleTextResponse } from '../utils/Fetch-utils';
+import {
+  handleJsonResponse,
+  handleTextResponse,
+  handleNoContentResponse,
+} from '../utils/Fetch-utils';
 
 export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
@@ -55,4 +59,22 @@ export function uploadImage(uri) {
   };
 
   return fetch(url.IMAGE_STORAGE, options).then(handleTextResponse);
+}
+
+export function removeImage(imgUrl) {
+  const index = imgUrl.lastIndexOf('/');
+  let fileName = imgUrl.substr(index + 1);
+
+  fileName = decodeURIComponent(fileName);
+
+  const formData = new FormData();
+
+  formData.append('imgName', fileName);
+  const options = {
+    method: 'POST',
+    body: formData,
+    headers: {},
+  };
+
+  return fetch(`${url.IMAGE_STORAGE}/remove`, options).then(handleNoContentResponse);
 }

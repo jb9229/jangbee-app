@@ -1,15 +1,20 @@
 import React from 'react';
 import {
-  Alert, StyleSheet, TouchableOpacity, Text, View,
+  Image, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';
+import JBIcon from './molecules/JBIcon';
 
 const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
     margin: 10,
+  },
+  titleWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   itemTitle: {
     fontFamily: fonts.titleMiddle,
@@ -30,6 +35,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#7A7373',
+  },
+  imgWrap: {
+    flexDirection: 'row',
+  },
+  image: {
+    aspectRatio: 4 / 3,
+    width: '100%',
+    height: '100%',
+    maxWidth: 800,
+    maxHeight: 600,
+    resizeMode: 'contain',
   },
 });
 
@@ -54,6 +70,11 @@ export default class ImagePickInput extends React.Component {
     }
   };
 
+  removeImg = () => {
+    const { setImageUrl } = this.props;
+    setImageUrl('');
+  };
+
   render() {
     const { itemTitle, imgUrl, itemWrapStyle } = this.props;
     const { isUploaded } = this.state;
@@ -61,13 +82,24 @@ export default class ImagePickInput extends React.Component {
     const urlTextStyle = imgUrl === '' ? styles.placeholder : styles.urlText;
     return (
       <View style={styles.itemWrap}>
-        <Text style={styles.itemTitle}>{itemTitle}</Text>
+        <View style={styles.titleWrap}>
+          <Text style={styles.itemTitle}>{itemTitle}</Text>
+          {imgUrl !== '' ? (
+            <JBIcon name="ios-close" size={32} onPress={() => this.removeImg()} />
+          ) : null}
+        </View>
 
-        <TouchableOpacity onPress={() => this.pickImage()} style={styles.urlInput}>
-          <Text style={urlTextStyle} ellipsizeMode="tail" numberOfLines={1}>
-            {imgUrl === '' ? '사진을 선택해 주세요' : imgUrl}
-          </Text>
-        </TouchableOpacity>
+        {imgUrl === '' ? (
+          <TouchableOpacity onPress={() => this.pickImage()} style={styles.urlInput}>
+            <Text style={urlTextStyle} ellipsizeMode="tail" numberOfLines={1}>
+              사진을 선택해 주세요
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.imgWrap}>
+            <Image style={styles.image} source={{ uri: imgUrl }} />
+          </View>
+        )}
       </View>
     );
   }
