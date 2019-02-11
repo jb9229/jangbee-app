@@ -2,10 +2,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight } from 'react-native';
 import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const styles = StyleSheet.create({
   equiText: {
-    fontFamily: 'Hamchorong-batang',
+    fontFamily: fonts.batang,
     fontSize: 20,
   },
   selectedItem: {
@@ -40,7 +41,7 @@ export default class EquiSelBox extends React.PureComponent<Props, State> {
     const itemStyle = selected ? styles.selectedItem : null;
 
     return (
-      <TouchableHighlight onPress={this.onPress} style={[styles.touchable, itemStyle]}>
+      <TouchableHighlight onPress={() => this.onPress()} style={[styles.touchable, itemStyle]}>
         <Text style={[styles.equiText]}>{eName}</Text>
       </TouchableHighlight>
     );

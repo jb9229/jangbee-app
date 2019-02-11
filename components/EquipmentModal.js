@@ -6,7 +6,7 @@ import EquiSelBox from './EquiSelBox';
 import * as api from '../api/api';
 import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
-import JBIcon from '../components/molecules/JBIcon';
+import JBIcon from './molecules/JBIcon';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 

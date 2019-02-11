@@ -27,6 +27,9 @@ export default class App extends React.Component {
       'yang-rounded': require('./assets/fonts/Yang-roundgothic.ttf'),
       'Hamchorong-batang': require('./assets/fonts/Hamchorong-batang.ttf'),
       'Hoon-saemaulundong': require('./assets/fonts/HoonSaemaulundongR.ttf'),
+      NanumGothic: require('./assets/fonts/NanumGothic.ttf'),
+      NanumPen: require('./assets/fonts/NanumPen.ttf'),
+      SsangmundongGulimB: require('./assets/fonts/Typo_SsangmundongGulimB.ttf'),
     }),
   ]);
 

@@ -3,10 +3,12 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
+import HomeScreen from '../screens/HomeScreen';
 import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
+import LocalSearchScreen from '../screens/LocalSearchScreen';
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
@@ -14,8 +16,30 @@ const FirmMyInfoStack = createStackNavigator({
   FirmUpdate: { screen: FirmUpdateScreen, navigationOptions: { title: '업체정보 수정' } },
 });
 
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+});
+
+HomeStack.navigationOptions = {
+  tabBarLabel: '내주변찾기',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-call' : 'md-call'} />
+  ),
+};
+
+const LocalSearchStack = createStackNavigator({
+  LocalSearch: LocalSearchScreen,
+});
+
+LocalSearchStack.navigationOptions = {
+  tabBarLabel: '지역찾기',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'} />
+  ),
+};
+
 FirmMyInfoStack.navigationOptions = {
-  tabBarLabel: '업체정보',
+  tabBarLabel: '내정보',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -36,6 +60,8 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
+  HomeStack,
+  LocalSearchStack,
   FirmMyInfoStack,
   SettingsStack,
 });

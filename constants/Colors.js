@@ -1,4 +1,4 @@
-const tintColor = '#2f95dc';
+const tintColor = '#5392aa';
 
 export default {
   title: '#969292',

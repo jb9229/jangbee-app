@@ -41,17 +41,19 @@ const styles = StyleSheet.create({
   title: {
     width: 300,
     fontFamily: fonts.titleMiddle,
-    fontSize: 20,
+    fontSize: 22,
+    marginTop: 20,
   },
   titleDisable: {
     width: 300,
     fontFamily: fonts.titleMiddle,
-    fontSize: 20,
+    fontSize: 22,
     color: 'gray',
+    marginTop: 20,
   },
   loginTI: {
     width: 300,
-    fontSize: 21,
+    fontSize: 24,
     fontFamily: fonts.batang,
   },
   commText: {
@@ -252,7 +254,7 @@ class LoginScreen extends React.PureComponent {
             }}
             keyboardType="numeric"
             secureTextEntry
-            placeholder="SMS로 받은 인증코드 숫자입력"
+            placeholder="SMS 인증코드 입력"
             editable={authReadOnly}
           />
           <FirmCreaErrMSG errorMSG={codeValErrMessage} />

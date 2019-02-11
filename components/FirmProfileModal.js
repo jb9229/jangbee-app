@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
 import {
-  TouchableHighlight, Image, Modal, StyleSheet, Text, View,
+  Image, Modal, StyleSheet, Text, View,
 } from 'react-native';
 import { withLogin } from '../contexts/LoginProvider';
 import JBIcon from './molecules/JBIcon';
+import JBButton from './molecules/JBButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,25 +24,12 @@ const styles = StyleSheet.create({
   },
   itemsWrap: {
     flex: 3,
-  },
-  commWrap: {
-    flexDirection: 'row',
     justifyContent: 'space-around',
   },
   thumbnail: {
     width: 50,
     height: 50,
     borderRadius: 30,
-  },
-  itemWrap: {
-    flex: 1,
-  },
-  itemTH: {
-    borderWidth: 1,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
   },
   fnameText: {
     fontSize: 20,
@@ -87,16 +75,8 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
               <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
             </View>
             <View style={styles.itemsWrap}>
-              <View style={styles.itemWrap}>
-                <TouchableHighlight onPress={() => this.updateFirm()} style={styles.itemTH}>
-                  <Text style={styles.itemTitle}>업체정보 수정</Text>
-                </TouchableHighlight>
-              </View>
-              <View style={styles.itemWrap}>
-                <TouchableHighlight onPress={() => onSignOut()} style={styles.itemTH}>
-                  <Text style={styles.itemTitle}>로그아웃</Text>
-                </TouchableHighlight>
-              </View>
+              <JBButton title="업체정보 수정" onPress={() => this.updateFirm()} size="full" />
+              <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" />
             </View>
           </View>
         </Modal>

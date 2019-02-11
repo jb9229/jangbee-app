@@ -8,9 +8,17 @@
     />
     <title>Entering captcha</title>
   </head>
-  <body>
-    <p style="text-align: center; font-size: 1.2em;">자동가입 방지를 위한 절차 입니다<p/>
-    <button id="continue-btn" style="display:none">앱으로 돌아가기</button>
+  <body style="text-align: center;">
+    <p style="text-align: center; font-size: 1.5em; margin-top: 80px;">자동가입 방지를 위한 절차 입니다<p/>
+    <div id="captchaWrap" style="margin: 5px;">
+
+    </div>
+    <div style="width: 100%; margin: 10px; text-align:right;">
+        <span id="continue-btn" style="display:none; font-size: 1.5em; text-decoration: underline; margin: 10px;color: #5392aa;" />앱으로 돌아가기</span>
+    </div>
+    <div style="position: absolute; width: 100%; bottom: 50px;">
+        <img style="width: 150px; height:150px;" src="https://s3.ap-northeast-2.amazonaws.com/elasticbeanstalk-ap-northeast-2-499435767786/asset/img/icon-jangbee_400.png" />
+    </div>
     <script src="/__/firebase/5.3.1/firebase-app.js"></script>
     <script src="/__/firebase/5.3.1/firebase-auth.js"></script>
     <script src="/__/firebase/init.js"></script>
@@ -18,7 +26,8 @@
         function getToken(callback) {
             var container = document.createElement('div');
             container.id = 'captcha';
-            document.body.appendChild(container);
+            container.style.textAlign = 'center';
+            document.getElementById('captchaWrap').appendChild(container);
             var captcha = new firebase.auth.RecaptchaVerifier('captcha', {
                 'size': 'normal',
                 'callback': function(token) {

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontFamily: fonts.titleMiddle,
     color: '#4D4A4A',
-    fontSize: 20,
+    fontSize: 18,
   },
   itemValue: {
     fontFamily: fonts.batang,

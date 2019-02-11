@@ -1,7 +1,10 @@
 export default {
-  titleTop: 'Hoon-saemaulundong',
-  titleMiddle: 'yang-rounded',
+  titleTop: 'NanumPen',
+  titleMiddle: 'SsangmundongGulimB', // yang-rounded
   batang: 'Hamchorong-batang',
-  button: 'Hoon-saemaulundong',
-  buttonBig: 'Hoon-saemaulundong',
+  button: 'NanumGothic', // Hoon-saemaulundong
+  buttonBig: 'SsangmundongGulimB',
+  NanumGothic: 'NanumGothic',
+  NanumPen: 'NanumPen',
+  SsangmundongGulimB: 'SsangmundongGulimB',
 };
