@@ -2,11 +2,11 @@ import React from 'react';
 import {
   Image, StyleSheet, Text, View,
 } from 'react-native';
-import fonts from '../constants/Fonts';
+import fonts from '../../constants/Fonts';
 
 const styles = StyleSheet.create({
   itemWrap: {
-    flex: 1,
+    flex: 4,
     margin: 10,
     marginBottom: 15,
   },
@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class FirmImageItem extends React.PureComponent {
+export default class AdImage extends React.PureComponent {
   render() {
     const { title, value } = this.props;
     return (
       <View style={styles.itemWrap}>
-        <Text style={styles.itemTitle}>{`${title}: `}</Text>
+        <Text style={styles.itemTitle}>{title}</Text>
         {value !== null && value !== '' ? (
           <View style={styles.responsiveImgWrap}>
             <Image style={styles.responsiveImage} source={{ uri: value }} />

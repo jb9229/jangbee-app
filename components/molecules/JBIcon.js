@@ -5,16 +5,19 @@ import { Ionicons } from '@expo/vector-icons';
 const styles = StyleSheet.create({
   iconTH: {
     marginBottom: 5,
+    marginRight: 15,
   },
   icon: {},
 });
 
 export default class JBIcon extends React.PureComponent {
   render() {
-    const { name, size, onPress } = this.props;
+    const {
+      name, size, onPress, color,
+    } = this.props;
     return (
       <TouchableHighlight onPress={onPress} style={styles.iconTH}>
-        <Ionicons name={name} size={size} style={styles.icon} />
+        <Ionicons name={name} size={size} style={styles.icon} color={color} />
       </TouchableHighlight>
     );
   }

@@ -21,7 +21,7 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: '내주변찾기',
+  tabBarLabel: '장비콜',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-call' : 'md-call'} />
   ),
@@ -32,7 +32,7 @@ const LocalSearchStack = createStackNavigator({
 });
 
 LocalSearchStack.navigationOptions = {
-  tabBarLabel: '지역찾기',
+  tabBarLabel: '광고신청',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'} />
   ),

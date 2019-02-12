@@ -12,7 +12,6 @@ const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
   },
   cardWrap: {
     flex: 1,
