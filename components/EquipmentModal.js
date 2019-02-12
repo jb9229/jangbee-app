@@ -134,7 +134,7 @@ export default class EquipementModal extends React.Component {
   };
 
   completeSelEqui = () => {
-    const { setEquiSelModalVisible, completeSelEqui } = this.props;
+    const { closeModal, completeSelEqui } = this.props;
     const { equiSelMap } = this.state;
 
     let seledEuipListStr = '';
@@ -147,14 +147,14 @@ export default class EquipementModal extends React.Component {
     }
 
     completeSelEqui(seledEuipListStr);
-    setEquiSelModalVisible(false);
+    closeModal();
   };
 
   cancel = () => {
-    const { nextFocus, setEquiSelModalVisible } = this.props;
+    const { nextFocus, closeModal } = this.props;
 
     nextFocus();
-    setEquiSelModalVisible(false);
+    closeModal();
   };
 
   render() {
@@ -186,7 +186,7 @@ export default class EquipementModal extends React.Component {
             </View>
 
             <View style={styles.commWrap}>
-              <JBButton title="보유장비 선택완료" onPress={() => this.completeSelEqui()} />
+              <JBButton title="장비 선택완료" onPress={() => this.completeSelEqui()} />
             </View>
           </View>
         </Modal>

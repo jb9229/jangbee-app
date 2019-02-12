@@ -488,7 +488,7 @@ class FirmRegisterScreen extends React.Component {
       </KeyboardAvoidingView>
       <EquipementModal
         isVisibleEquiModal={isVisibleEquiModal}
-        setEquiSelModalVisible={this.setEquiSelModalVisible}
+        closeModal={() => this.setState({ isVisibleEquiModal: false })}
         selEquipmentStr={equiListStr}
         completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
         nextFocus={() => this.addrTextInput.focus()}
