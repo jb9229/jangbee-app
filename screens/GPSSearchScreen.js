@@ -6,6 +6,7 @@ import JBButton from '../components/molecules/JBButton';
 import SearCondBox from '../components/organisms/SearCondBox';
 import JangbeeAd from '../components/organisms/JangbeeAd';
 import EquipementModal from '../components/EquipmentModal';
+import LocalSelModal from '../components/LocalSelModal';
 import colors from '../constants/Colors';
 
 const styles = StyleSheet.create({
@@ -62,6 +63,7 @@ export default class GPSSearchScreen extends React.Component {
     this.state = {
       isLocalSearch: false,
       isVisibleEquiModal: false,
+      isVisibleLocalModal: false,
       equiListStr: '',
       searLocStr: '',
     };
@@ -73,9 +75,10 @@ export default class GPSSearchScreen extends React.Component {
     const {
       equiList,
       equiSelMap,
+      equiListStr,
       isLocalSearch,
       isVisibleEquiModal,
-      equiListStr,
+      isVisibleLocalModal,
       searLocStr,
     } = this.state;
     return (
@@ -86,6 +89,13 @@ export default class GPSSearchScreen extends React.Component {
           selEquipmentStr={equiListStr}
           completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
           nextFocus={() => {}}
+        />
+        <LocalSelModal
+          isVisibleEquiModal={isVisibleLocalModal}
+          closeModal={() => this.setState({ isVisibleLocalModal: false })}
+          completeSelEqui={selectedLocal => this.setState({ searLocStr: selectedLocal })}
+          nextFocus={() => {}}
+          selEquipment={equiListStr}
         />
         <JangbeeAd />
         <View style={styles.cardWrap}>
@@ -103,13 +113,16 @@ export default class GPSSearchScreen extends React.Component {
                   title="부르고자 하는 장비의 지역은 어디 입니까?"
                   searchCondition={searLocStr}
                   defaultCondtion="지역 선택"
+                  onPress={() => this.setState({ isVisibleLocalModal: true })}
                 />
               ) : null}
             </View>
             <View style={styles.commWrap}>
-              <View style={styles.gpsWrap}>
-                <Text>현 위치:</Text>
-              </View>
+              {!isLocalSearch ? (
+                <View style={styles.gpsWrap}>
+                  <Text>현 위치:</Text>
+                </View>
+              ) : null}
               <View style={styles.switchWrap}>
                 <Text style={styles.switchText}>내 주변 검색</Text>
                 <Switch

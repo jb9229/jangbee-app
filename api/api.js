@@ -36,6 +36,14 @@ export function updateFirm(updateFirm) {
   }).then(handleJsonResponse);
 }
 
+/**
+ * 업체가 존재하는 지역정보 조회
+ */
+export function getFirmLocalData(equipment) {
+  const param = encodeURIComponent(equipment);
+  return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJsonResponse);
+}
+
 export function uploadImage(uri) {
   const uriParts = uri.split('.');
   const fileType = uriParts[uriParts.length - 1];

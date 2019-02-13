@@ -80,7 +80,7 @@ export default class JangbeeAd extends React.Component {
     const { adList } = this.state;
     const slidStyles = [styles.slide1, styles.slide2, styles.slide3];
     const adViewList = adList.map((ad, index) => (
-      <View style={slidStyles[index]}>
+      <View style={slidStyles[index]} key={index}>
         <AdImage title={ad.title} value={ad.photoUrl} />
         <Text>{ad.subTitle}</Text>
         <View style={styles.telIconWrap}>
