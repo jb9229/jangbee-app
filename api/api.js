@@ -44,6 +44,14 @@ export function getFirmLocalData(equipment) {
   return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJsonResponse);
 }
 
+/**
+ * 광고 조회
+ */
+export function getAd(type) {
+  const param = encodeURIComponent(type);
+  return fetch(`${url.JBSERVER_AD}/${param}`).then(handleJsonResponse);
+}
+
 export function uploadImage(uri) {
   const uriParts = uri.split('.');
   const fileType = uriParts[uriParts.length - 1];

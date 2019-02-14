@@ -8,6 +8,7 @@ import JangbeeAd from '../components/organisms/JangbeeAd';
 import EquipementModal from '../components/EquipmentModal';
 import LocalSelModal from '../components/LocalSelModal';
 import colors from '../constants/Colors';
+import adType from '../constants/AdType';
 
 const styles = StyleSheet.create({
   container: {
@@ -81,6 +82,8 @@ export default class GPSSearchScreen extends React.Component {
       isVisibleLocalModal,
       searLocStr,
     } = this.state;
+    console.log(adType);
+    console.log(adType.main);
     return (
       <View style={styles.container}>
         <EquipementModal
@@ -97,7 +100,7 @@ export default class GPSSearchScreen extends React.Component {
           nextFocus={() => {}}
           selEquipment={equiListStr}
         />
-        <JangbeeAd />
+        <JangbeeAd adType={adType.main} />
         <View style={styles.cardWrap}>
           <View style={styles.card}>
             <View style={styles.searEquiWrap}>
