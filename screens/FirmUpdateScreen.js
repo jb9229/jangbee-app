@@ -163,6 +163,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       sigunguAddr,
       addrLongitude,
       addrLatitude,
+      location: `${addrLongitude},${addrLatitude}`,
       introduction,
       thumbnail: uploadedThumbnailImgUrl ? uploadedThumbnailImgUrl : thumbnail,
       photo1: uploadedPhoto1ImgUrl ? uploadedPhoto1ImgUrl: photo1,
@@ -242,7 +243,6 @@ class FirmUpdateScreen extends React.Component<Props, State> {
         );
         result = false;
       });
-console.log(`image delete result: ${result}`)
     return result;
   };
 

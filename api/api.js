@@ -25,6 +25,26 @@ export function getFirm(accountId) {
   return fetch(`${url.JBSERVER_FIRM}/${param}`);
 }
 
+/**
+ * 주변 장비업체 검색요청 함수
+ */
+export function getNearFirmList(page, equipment, sLongitude, sLatitude) {
+  const paramData = {
+    equipment,
+    longitude: sLongitude,
+    latitude: sLatitude,
+    page,
+    size: 2,
+  };
+
+  return fetch(`${url.JBSERVER_FIRMNEAR}?equipment=${encodeURIComponent(paramData.equipment)}
+    &longitude=${encodeURIComponent(paramData.longitude)}
+    &latitude=${encodeURIComponent(paramData.latitude)}
+    &page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(paramData.size)}`).then(
+    handleJsonResponse,
+  );
+}
+
 export function updateFirm(updateFirm) {
   return fetch(url.JBSERVER_FIRM, {
     method: 'PUT',

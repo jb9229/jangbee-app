@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Switch, StyleSheet, Text, View,
+  Alert, Switch, StyleSheet, Text, View,
 } from 'react-native';
 import JBButton from '../components/molecules/JBButton';
 import SearCondBox from '../components/organisms/SearCondBox';
@@ -9,6 +9,8 @@ import EquipementModal from '../components/EquipmentModal';
 import LocalSelModal from '../components/LocalSelModal';
 import colors from '../constants/Colors';
 import adType from '../constants/AdType';
+import * as api from '../api/api';
+import FirmSearList from '../components/organisms/FirmSearList';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,51 +64,129 @@ export default class GPSSearchScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLocalSearch: false,
       isVisibleEquiModal: false,
       isVisibleLocalModal: false,
-      equiListStr: '',
-      searLocStr: '',
+      isSearViewMode: false,
+      isLocalSearch: false,
+      searEquipment: '',
+      searLocal: '',
+      searchedFirmList: null,
+      isListLoading: undefined,
+      isLastList: false,
     };
   }
 
   componentDidMount() {}
 
+  /**
+   * 검색화면/광고화면 전환 함수
+   */
+  setSearchViewMode = (flag) => {
+    const { isSearViewMode } = this.state;
+
+    if (flag !== isSearViewMode) {
+      this.setState({ isSearViewMode: flag });
+    }
+  };
+
+  /**
+   * 주변 장비업체 검색 요청함수
+   */
+  searchNearJangbee = () => {
+    const {
+      searchedFirmList, page, searEquipment, searLongitude, searLatitude,
+    } = this.state;
+
+    this.setSearchViewMode(true);
+
+    api
+      .getNearFirmList(1, searEquipment, '126.955869', '37.546037')
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
+          isLastList: res.last,
+          isListLoading: false,
+          refreshing: false,
+        });
+      })
+      .catch((error) => {
+        Alert.alert(
+          '주변 장비 조회에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+        this.setState({ isListLoading: false });
+      });
+  };
+
+  /**
+   * 장비업체리스트 새로고침 함수
+   */
+  handleRefresh = () => {
+    this.setState(
+      {
+        page: 0,
+        refreshing: true,
+      },
+      () => {
+        this.searchNearJangbee();
+      },
+    );
+  };
+
+  /**
+   * 장비업체리스트 페이징 추가 함수
+   */
+  handleLoadMore = () => {
+    const { page } = this.state;
+
+    this.setState(
+      {
+        page: page + 1,
+      },
+      () => {
+        this.searchNearJangbee();
+      },
+    );
+  };
+
   render() {
     const {
-      equiList,
-      equiSelMap,
-      equiListStr,
+      isSearViewMode,
+      searEquipment,
       isLocalSearch,
       isVisibleEquiModal,
       isVisibleLocalModal,
-      searLocStr,
+      searLocal,
+      searchedFirmList,
+      page,
+      refreshing,
+      isLastList,
+      isListLoading,
     } = this.state;
-    console.log(adType);
-    console.log(adType.main);
     return (
       <View style={styles.container}>
         <EquipementModal
           isVisibleEquiModal={isVisibleEquiModal}
           closeModal={() => this.setState({ isVisibleEquiModal: false })}
-          selEquipmentStr={equiListStr}
-          completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
+          selEquipmentStr={searEquipment}
+          completeSelEqui={seledEuipListStr => this.setState({ searEquipment: seledEuipListStr })}
           nextFocus={() => {}}
         />
         <LocalSelModal
           isVisibleEquiModal={isVisibleLocalModal}
           closeModal={() => this.setState({ isVisibleLocalModal: false })}
-          completeSelEqui={selectedLocal => this.setState({ searLocStr: selectedLocal })}
+          completeSelEqui={selectedLocal => this.setState({ searLocal: selectedLocal })}
           nextFocus={() => {}}
-          selEquipment={equiListStr}
+          selEquipment={searEquipment}
         />
-        <JangbeeAd adType={adType.main} />
+        {!isSearViewMode ? <JangbeeAd adType={adType.main} /> : null}
         <View style={styles.cardWrap}>
           <View style={styles.card}>
             <View style={styles.searEquiWrap}>
               <SearCondBox
                 title="어떤 장비를 찾고 계신가요?"
-                searchCondition={equiListStr}
+                searchCondition={searEquipment}
                 onPress={() => this.setState({ isVisibleEquiModal: true })}
                 defaultCondtion="장비 선택"
               />
@@ -114,7 +194,7 @@ export default class GPSSearchScreen extends React.Component {
               {isLocalSearch ? (
                 <SearCondBox
                   title="부르고자 하는 장비의 지역은 어디 입니까?"
-                  searchCondition={searLocStr}
+                  searchCondition={searLocal}
                   defaultCondtion="지역 선택"
                   onPress={() => this.setState({ isVisibleLocalModal: true })}
                 />
@@ -146,6 +226,17 @@ export default class GPSSearchScreen extends React.Component {
             </View>
           </View>
         </View>
+        {isSearViewMode ? (
+          <FirmSearList
+            data={searchedFirmList}
+            page={page}
+            refreshing={refreshing}
+            last={isLastList}
+            isLoading={isListLoading}
+            handleLoadMore={this.handleLoadMore}
+            handleRefresh={this.handleRefresh}
+          />
+        ) : null}
       </View>
     );
   }
