@@ -3,7 +3,9 @@ import {
   handleJsonResponse,
   handleTextResponse,
   handleNoContentResponse,
+  handleBadReqJsonResponse,
 } from '../utils/Fetch-utils';
+import * as kakaoconfig from '../kakao-config';
 
 export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
@@ -37,12 +39,34 @@ export function getNearFirmList(page, equipment, sLongitude, sLatitude) {
     size: 2,
   };
 
-  return fetch(`${url.JBSERVER_FIRMNEAR}?equipment=${encodeURIComponent(paramData.equipment)}
-    &longitude=${encodeURIComponent(paramData.longitude)}
-    &latitude=${encodeURIComponent(paramData.latitude)}
-    &page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(paramData.size)}`).then(
-    handleJsonResponse,
-  );
+  return fetch(
+    `${url.JBSERVER_FIRMNEAR}?equipment=${encodeURIComponent(
+      paramData.equipment,
+    )}&longitude=${encodeURIComponent(paramData.longitude)}&latitude=${encodeURIComponent(
+      paramData.latitude,
+    )}&page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(paramData.size)}`,
+  ).then(handleJsonResponse);
+}
+
+/**
+ * 지역 장비업체 검색요청 함수
+ */
+export function getLocalFirmList(page, equipment, searSido, searGungo) {
+  const paramData = {
+    equipment,
+    sido: searSido,
+    gungu: searGungo,
+    page,
+    size: 2,
+  };
+
+  return fetch(
+    `${url.JBSERVER_FIRMLOCAL}?equipment=${encodeURIComponent(
+      paramData.equipment,
+    )}&sido=${encodeURIComponent(paramData.sido)}&gungu=${encodeURIComponent(
+      paramData.gungu,
+    )}&page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(paramData.size)}`,
+  ).then(handleJsonResponse);
 }
 
 export function updateFirm(updateFirm) {
@@ -113,4 +137,23 @@ export function removeImage(imgUrl) {
   };
 
   return fetch(`${url.IMAGE_STORAGE}/remove`, options).then(handleNoContentResponse);
+}
+
+export function getAddrByGpspoint(longitude, latitude) {
+  const paramData = {
+    longitude,
+    latitude,
+  };
+
+  return fetch(
+    `${url.KAKAO_GEO_API}?x=${encodeURIComponent(paramData.longitude)}&y=${encodeURIComponent(
+      paramData.latitude,
+    )}`,
+    {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `KakaoAK ${kakaoconfig.API_KEY}`,
+      },
+    },
+  ).then(handleBadReqJsonResponse);
 }

@@ -7,6 +7,8 @@ import * as api from '../api/api';
 import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
+import JangbeeAd from './organisms/JangbeeAd';
+import adType from '../constants/AdType';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
   },
   equiListWrap: {
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   commWrap: {
     flexDirection: 'row',
@@ -81,8 +84,15 @@ export default class EquipementModal extends React.Component {
    */
   onPressEquiItem = (eName) => {
     const { equiSelMap } = this.state;
+    const { singleSelectMode } = this.props;
 
-    const newEquiSelMap = new Map(equiSelMap);
+    let newEquiSelMap;
+
+    if (singleSelectMode) {
+      newEquiSelMap = new Map();
+    } else {
+      newEquiSelMap = new Map(equiSelMap);
+    }
 
     const isSelected = newEquiSelMap.get(eName);
 
@@ -158,7 +168,7 @@ export default class EquipementModal extends React.Component {
   };
 
   render() {
-    const { isVisibleEquiModal } = this.props;
+    const { isVisibleEquiModal, advertisement } = this.props;
     const { equiList, equiSelMap } = this.state;
 
     return (
@@ -173,7 +183,8 @@ export default class EquipementModal extends React.Component {
         >
           <View style={styles.cardWrap}>
             <View style={styles.card}>
-              <JBIcon name="ios-close" size={32} onPress={() => this.cancel()} />
+              <JBIcon name="close" size={23} onPress={() => this.cancel()} />
+              {advertisement ? <JangbeeAd adType={adType.main} {...this.props} /> : null }
               <FlatList
                 columnWrapperStyle={styles.equiListWrap}
                 horizontal={false}

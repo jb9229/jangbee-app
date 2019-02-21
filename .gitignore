@@ -4,5 +4,7 @@ npm-debug.*
 *.jks
 *.p12
 *.key
+*-config.js
 *.mobileprovision
 firebaseconfig.js
+kakao-config.js

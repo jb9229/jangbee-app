@@ -7,6 +7,6 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
-    return <GPSSearchScreen />;
+    return <GPSSearchScreen {...this.props} />;
   }
 }

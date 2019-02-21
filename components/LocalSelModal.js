@@ -1,14 +1,23 @@
 import React from 'react';
 import {
-  FlatList, Linking, Modal, StyleSheet, Text, View, Alert,
+  FlatList,
+  Modal,
+  StyleSheet,
+  TouchableHighlight,
+  Text,
+  View,
+  Alert,
 } from 'react-native';
 import EquiSelBox from './EquiSelBox';
 import * as api from '../api/api';
 import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAd from './organisms/JangbeeAd';
 import * as converter from '../utils/Converter';
+import adType from '../constants/AdType';
+import JBErroMessage from './organisms/JBErrorMessage';
 
 const styles = StyleSheet.create({
   container: {},
@@ -28,12 +37,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  sidoTH: {},
+  selSidoText: {
+    fontFamily: fonts.batang,
+    textDecorationLine: 'underline',
+    fontSize: 15,
+  },
+  gunguText: {
+    fontFamily: fonts.batang,
+    fontSize: 15,
+  },
   equiListWrap: {
     justifyContent: 'space-between',
   },
   commWrap: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
 });
 
@@ -47,11 +66,11 @@ export default class EquipementModal extends React.Component {
       sidoList: [],
       gugunList: [],
       gugunMap: null,
+      validationMessage: '',
     };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     const { selEquipment } = this.props;
@@ -64,14 +83,17 @@ export default class EquipementModal extends React.Component {
    * 장비가 존재하는 sido/sigungu 리스트 설정
    */
   setLocalData = (sEquipment) => {
-    api.getFirmLocalData(sEquipment)
+    api
+      .getFirmLocalData(sEquipment)
       .then((localData) => {
-        console.log(localData)
         if (localData.sidoList === null || localData.gunguData === null) {
           return;
         }
 
-        this.setState({ sidoList: localData.sidoList, gugunMap: converter.objToStrMap(localData.gunguData) });
+        this.setState({
+          sidoList: localData.sidoList,
+          gugunMap: converter.objToStrMap(localData.gunguData),
+        });
       })
       .catch((error) => {
         Alert.alert(
@@ -79,7 +101,7 @@ export default class EquipementModal extends React.Component {
           `[${error.name}] ${error.message}`,
         );
       });
-  }
+  };
 
   /**
    * 지역선택 이벤트 함수
@@ -137,6 +159,31 @@ export default class EquipementModal extends React.Component {
     />
   );
 
+  completeSelLocal = () => {
+    const { completeSelLocal, closeModal } = this.props;
+    const { sido, gugun } = this.state;
+
+    if (!this.validateSelLocal(sido, gugun)) {
+      return;
+    }
+
+    completeSelLocal(sido, gugun);
+    closeModal();
+  };
+
+  /**
+   * 지역선택 유효성검사 함수
+   */
+  validateSelLocal = (sido, gugun) => {
+    this.setState({ validationMessage: '' });
+    if (sido === '-' || gugun === '-') {
+      this.setState({ validationMessage: '검색할 지역을 선택해 주세요' });
+      return false;
+    }
+
+    return true;
+  };
+
   cancel = () => {
     const { nextFocus, closeModal } = this.props;
 
@@ -144,21 +191,10 @@ export default class EquipementModal extends React.Component {
     closeModal();
   };
 
-  /**
-   * 미등록 지역 웹 검색 링크
-   */
-  openLinkUrl = (url) => {
-    if (url === null || url === '') {
-      return;
-    }
-
-    Linking.openURL(url).catch(Alert.alert(`링크 열기에 문제가 있습니다 [${url}]`));
-  };
-
   render() {
     const { isVisibleEquiModal, selEquipment } = this.props;
     const {
-      gugun, gugunList, sidoList, sido, isSelectedSido,
+      gugun, gugunList, sidoList, sido, isSelectedSido, validationMessage,
     } = this.state;
 
     const listData = isSelectedSido ? gugunList : sidoList;
@@ -174,11 +210,16 @@ export default class EquipementModal extends React.Component {
         >
           <View style={styles.cardWrap}>
             <View style={styles.card}>
-              <JBIcon name="ios-close" size={32} onPress={() => this.cancel()} />
-              <JangbeeAd />
+              <JBIcon name="close" size={23} onPress={() => this.cancel()} />
+              <JangbeeAd adType={adType.local} {...this.props} />
               <View style={styles.selLocalWrap}>
-                <Text>{sido}</Text>
-                <Text>{gugun}</Text>
+                <TouchableHighlight
+                  onPress={() => this.setState({ gugun: '-', isSelectedSido: false })}
+                  style={[styles.sidoTH]}
+                >
+                  <Text style={styles.selSidoText}>{sido}</Text>
+                </TouchableHighlight>
+                <Text style={styles.gunguText}>{gugun}</Text>
               </View>
               <FlatList
                 columnWrapperStyle={styles.equiListWrap}
@@ -189,14 +230,10 @@ export default class EquipementModal extends React.Component {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={item => this.renderListItem(item, selectedItem)}
               />
-              <View>
-                <Text>찾고자하는 지역이 없습니까? 아직 미등록된 상태 입니다, 더욱 노력하겠습니다.</Text>
-                <JBButton title={`네이버 ${selEquipment} 검색`} size="small" onPress={() => this.openLinkUrl(`https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selEquipment} 장비`)} />
-                <JBButton title={`다음 ${selEquipment} 검색`} size="small" onPress={() => this.openLinkUrl(`https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selEquipment} 장비`)} />
-              </View>
+              <JBErroMessage errorMSG={validationMessage} />
             </View>
             <View style={styles.commWrap}>
-              <JBButton title="지역 선택완료" onPress={() => this.completeSelEqui()} />
+              <JBButton title="지역 선택완료" onPress={() => this.completeSelLocal()} />
             </View>
           </View>
         </Modal>

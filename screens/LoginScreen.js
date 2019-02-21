@@ -1,8 +1,6 @@
 import React from 'react';
 import {
   Alert,
-  TouchableOpacity,
-  TouchableHighlight,
   StyleSheet,
   TextInput,
   Text,
@@ -12,7 +10,7 @@ import { Linking, WebBrowser } from 'expo';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
 import { validate } from '../utils/Validation';
-import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
+import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
 
@@ -244,7 +242,7 @@ class LoginScreen extends React.PureComponent {
             }}
             placeholder="휴대전화 번호입력(숫자만)"
           />
-          <FirmCreaErrMSG errorMSG={phoneNumberValErrMessage} />
+          <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
           <Text style={authTitleStyle}>인증코드: </Text>
           <TextInput
             style={styles.loginTI}
@@ -257,7 +255,7 @@ class LoginScreen extends React.PureComponent {
             placeholder="SMS 인증코드 입력"
             editable={authReadOnly}
           />
-          <FirmCreaErrMSG errorMSG={codeValErrMessage} />
+          <JBErrorMessage errorMSG={codeValErrMessage} />
         </View>
 
         <View style={styles.commWrap}>

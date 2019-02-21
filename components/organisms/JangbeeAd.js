@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert,Platform, StyleSheet, Text, View,
+  Alert, StyleSheet, Text, View,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import JBIcon from '../molecules/JBIcon';
@@ -68,20 +68,31 @@ export default class JangbeeAd extends React.Component {
    * @param adTYpe 광고타입(MAIN, LOCAL, EQUIPMENT)
    */
   setAdList = (adType) => {
-    api.getAd(adType)
+    api
+      .getAd(adType)
       .then((jsonRes) => {
-        console.log(jsonRes);
         this.setState({ adList: jsonRes });
       })
       .catch((error) => {
         Alert.alert(
-          `광고리스트 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+          `광고리스트 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${
+            error.message
+          }`,
         );
         this.setState({ adList: null });
-      })
-  }
+      });
+  };
 
   telAdvertiser = (phoneNumber) => {};
+
+  /**
+   * 광고주의 업체정보 보기 함수
+   */
+  gotoFirmDetail = (accountId) => {
+    const { navigation } = this.props;
+
+    navigation.navigate('FirmDetail', { accountId });
+  };
 
   render() {
     const { adList } = this.state;
@@ -100,14 +111,14 @@ export default class JangbeeAd extends React.Component {
         <View style={styles.telIconWrap}>
           {ad.firmId ? (
             <JBIcon
-              name={Platform.OS === 'ios' ? 'ios-information-circle' : 'md-information-circle'}
+              name="information-circle"
               size={32}
               color={colors.point2}
-              onPress={() => this.telAdvertiser(ad.firmId)}
+              onPress={() => this.gotoFirmDetail(ad.firmId)}
             />
           ) : null}
           <JBIcon
-            name={Platform.OS === 'ios' ? 'ios-call' : 'md-call'}
+            name="call"
             size={32}
             color={colors.pointDark}
             onPress={() => this.telAdvertiser(ad.telNumber)}

@@ -9,6 +9,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 import LocalSearchScreen from '../screens/LocalSearchScreen';
+import FirmDetailScreen from '../screens/FirmDetailScreen';
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
@@ -18,6 +19,7 @@ const FirmMyInfoStack = createStackNavigator({
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  FirmDetail: FirmDetailScreen,
 });
 
 HomeStack.navigationOptions = {

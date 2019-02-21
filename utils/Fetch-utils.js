@@ -19,6 +19,24 @@ export function handleJsonResponse(res) {
 }
 
 /**
+ * HttpRequest Json 200/400 응답처리
+ *
+ * @param {Object} res HttpResponse
+ */
+export function handleBadReqJsonResponse(res) {
+  if (res.ok || res.status === 400) {
+    if (res.status === 204) {
+      // NO_CONTENTS
+      return res;
+    }
+
+    return res.json().then(responseJson => responseJson);
+  }
+
+  throw new CmException(res.status, `${res.url}`);
+}
+
+/**
  * HttpRequest Text 응답처리
  *
  * @param {Object} res HttpResponse

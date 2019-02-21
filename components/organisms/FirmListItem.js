@@ -6,7 +6,22 @@ import JBIcon from '../molecules/JBIcon';
 
 const styles = StyleSheet.create({
   container: {},
-  avatar: {},
+  itemWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    margin: 3,
+  },
+  centerWrap: {
+    flex: 3,
+  },
   bottomWrap: {},
 });
 
@@ -25,19 +40,33 @@ function callFirm(number) {
   );
 }
 
+function calDistance(dis) {
+  if (dis < 1000) {
+    return `${dis}m`;
+  }
+
+  let kmValue = dis / 1000;
+  kmValue = parseInt(kmValue, 10);
+  return `${kmValue}km`;
+}
+
 const firmListItem = (props) => {
-  const { item, onPressItem } = props;
+  const { item, onPressItem } = props.data;
   return (
-    <View>
-      <TouchableHighlight onPress={() => onPressItem(item.id)}>
+    <View style={styles.container}>
+      <View style={styles.itemWrap}>
         <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
-        <Text>fname</Text>
-        <Text>instroduce?</Text>
-        <View style={styles.bottomWrap}>
-          <Text>거리</Text>
+        <View style={styles.centerWrap}>
+          <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
+            <Text>{item.fname}</Text>
+          </TouchableHighlight>
+          <Text numberOfLines={1}>{item.introduction}</Text>
+          <View style={styles.bottomWrap}>
+            <Text>{calDistance(item.distance)}</Text>
+          </View>
         </View>
-      </TouchableHighlight>
-      <JBIcon name="md-call" size={32} onPress={() => callFirm(item.telNumber)} />
+        <JBIcon name="call" size={32} onPress={() => callFirm(item.phoneNumber)} />
+      </View>
     </View>
   );
 };

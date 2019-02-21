@@ -11,7 +11,7 @@ import MapAddWebModal from '../components/MapAddWebModal';
 import { validate, validatePresence } from '../utils/Validation';
 import ImagePickInput from '../components/ImagePickInput';
 import FirmCreaTextInput from '../components/FirmCreaTextInput';
-import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
+import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import * as api from '../api/api';
 import JBButton from '../components/molecules/JBButton';
 import { withLogin } from '../contexts/LoginProvider';
@@ -63,6 +63,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       isVisibleMapAddModal: false,
       isVisibleActIndiModal: false,
       fname: '',
+      phoneNumber: '',
       equiListStr: '',
       address: '',
       addressDetail: '',
@@ -99,7 +100,6 @@ class FirmUpdateScreen extends React.Component<Props, State> {
 
   setMyFirmInfo = () => {
     const { user } = this.props;
-
     api
       .getFirm(user.uid)
       .then(res => res.json())
@@ -121,7 +121,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     const { navigation, user } = this.props;
     const {
       id,
-      fname,
+      fname, phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -156,6 +156,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       id,
       accountId: user.uid,
       fname,
+      phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -284,7 +285,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
   setInitValErroMSG = () => {
     this.setState({
       fnameValErrMessage: '',
-      // phoneNumberValErrMessage: '',
+      phoneNumberValErrMessage: '',
       // passwordValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
@@ -314,7 +315,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    */
   isValidateSubmit = () => {
     const {
-      fname,
+      fname, phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -338,6 +339,12 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     let v = validate('textMax', fname, true, 15);
     if (!v[0]) {
       this.setState({ fnameValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', phoneNumber, true);
+    if (!v[0]) {
+      this.setState({ phoneNumberValErrMessage: v[1] });
       return false;
     }
 
@@ -439,6 +446,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     this.setState({
       id: firm.id,
       fname: firm.fname,
+      phoneNumber: firm.phoneNumber,
       equiListStr: firm.equiListStr,
       address: firm.address,
       addressDetail: firm.addressDetail,
@@ -462,7 +470,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     const {
       isLoadingComplete,
       isVisibleEquiModal, isVisibleMapAddModal, isVisibleActIndiModal,
-      fname,
+      fname, phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -473,11 +481,11 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       photo3,
       blog,
       sns,
-      homepage,prePhoto1,prePhoto2,
+      homepage,
       imgUploadingMessage, fnameValErrMessage, equiListStrValErrMessage,
       addressValErrMessage, introductionValErrMessage, thumbnailValErrMessage,
       photo1ValErrMessage, photo2ValErrMessage, photo3ValErrMessage,
-      blogValErrMessage, homepageValErrMessage, snsValErrMessage,
+      blogValErrMessage, homepageValErrMessage, snsValErrMessage, phoneNumberValErrMessage,
     } = this.state;
 
     if (!isLoadingComplete) {
@@ -503,7 +511,18 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                     this.fnameTextInput = input;
                   }}
                 />
-                <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
+                <JBErrorMessage errorMSG={fnameValErrMessage} />
+                
+                <FirmCreaTextInput
+                  title="전화번호*"
+                  value={phoneNumber}
+                  onChangeText={text => this.setState({ phoneNumber: text })}
+                  placeholder="전화번호를 입력해 주세요"
+                  refer={(input) => {
+                    this.telTextInput = input;
+                  }}
+                />
+                <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
                 <FirmCreaTextInput
                   title="보유 장비*"
@@ -512,7 +531,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   onFocus={() => this.openSelEquipmentModal()}
                   placeholder="보유 장비를 선택해 주세요"
                 />
-                <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
+                <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
                 <FirmCreaTextInput
                   title="업체주소(고객검색시 거리계산 기준이됨)*"
@@ -522,7 +541,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   onFocus={() => this.openMapAddModal()}
                   placeholder="주소를 검색해주세요"
                 />
-                <FirmCreaErrMSG errorMSG={addressValErrMessage} />
+                <JBErrorMessage errorMSG={addressValErrMessage} />
 
                 <FirmCreaTextInput
                   title="업체 상세주소"
@@ -540,7 +559,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   multiline
                   numberOfLines={5}
                 />
-                <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
+                <JBErrorMessage errorMSG={introductionValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="대표사진*"
@@ -548,28 +567,28 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   aspect={[1, 1]}
                   setImageUrl={url => this.setState({ thumbnail: url })}
                 />
-                <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
+                <JBErrorMessage errorMSG={thumbnailValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="작업사진1*"
                   imgUrl={photo1}
                   setImageUrl={url => this.setState({ photo1: url })}
                 />
-                <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
+                <JBErrorMessage errorMSG={photo1ValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="작업사진2"
                   imgUrl={photo2}
                   setImageUrl={url => this.setState({ photo2: url })}
                 />
-                <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+                <JBErrorMessage errorMSG={photo2ValErrMessage} />
 
                 <ImagePickInput
                   itemTitle="작업사진3"
                   imgUrl={photo3}
                   setImageUrl={url => this.setState({ photo3: url })}
                 />
-                <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
+                <JBErrorMessage errorMSG={photo3ValErrMessage} />
 
                 <FirmCreaTextInput
                   title="블로그"
@@ -577,7 +596,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   onChangeText={text => this.setState({ blog: text })}
                   placeholder="블로그 주소를 입력해 주세요"
                 />
-                <FirmCreaErrMSG errorMSG={blogValErrMessage} />
+                <JBErrorMessage errorMSG={blogValErrMessage} />
 
                 <FirmCreaTextInput
                   title="SNG"
@@ -585,7 +604,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   onChangeText={text => this.setState({ sns: text })}
                   placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
                 />
-                <FirmCreaErrMSG errorMSG={snsValErrMessage} />
+                <JBErrorMessage errorMSG={snsValErrMessage} />
 
                 <FirmCreaTextInput
                   title="홈페이지"
@@ -593,7 +612,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   onChangeText={text => this.setState({ homepage: text })}
                   placeholder="홈페이지 주소를 입력해 주세요"
                 />
-                <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
+                <JBErrorMessage errorMSG={homepageValErrMessage} />
               </View>
 
               <View style={styles.regiFormCommWrap}>

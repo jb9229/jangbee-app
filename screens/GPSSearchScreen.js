@@ -1,16 +1,19 @@
 import React from 'react';
-import {
-  Alert, Switch, StyleSheet, Text, View,
-} from 'react-native';
+import { Alert, Switch, StyleSheet, Text, View } from 'react-native';
 import JBButton from '../components/molecules/JBButton';
 import SearCondBox from '../components/organisms/SearCondBox';
 import JangbeeAd from '../components/organisms/JangbeeAd';
 import EquipementModal from '../components/EquipmentModal';
 import LocalSelModal from '../components/LocalSelModal';
 import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 import adType from '../constants/AdType';
 import * as api from '../api/api';
 import FirmSearList from '../components/organisms/FirmSearList';
+import { Constants, Location, Permissions } from 'expo';
+import JBIcon from '../components/molecules/JBIcon';
+import { validatePresence } from '../utils/Validation';
+import FirmCreaErrMSG from '../components/organisms/JBErrorMessage';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,17 +36,20 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   searEquiWrap: {
-    flex: 1,
     alignItems: 'center',
   },
   commWrap: {
-    flex: 1,
     justifyContent: 'flex-end',
     marginBottom: 5,
   },
   gpsWrap: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  currLocText: {
+    color: colors.point2,
+    fontFamily: fonts.batang,
+    fontSize: 12,
   },
   switchWrap: {
     flexDirection: 'row',
@@ -53,6 +59,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     alignItems: 'flex-end',
     justifyContent: 'center',
+  },
+  searViewWrap: {
+    minHeight: 250,
   },
 });
 
@@ -68,15 +77,76 @@ export default class GPSSearchScreen extends React.Component {
       isVisibleLocalModal: false,
       isSearViewMode: false,
       isLocalSearch: false,
+      currLocation: '수신된 위치 정보가 없습니다',
       searEquipment: '',
-      searLocal: '',
+      searSido: '',
+      searGungu: '',
       searchedFirmList: null,
+      page: 1,
       isListLoading: undefined,
       isLastList: false,
+      validationMessage: '',
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setLocationInfo();
+  }
+
+  /**
+   * 내주변/지역 검색 모드변경 함수
+   */
+  changeSearMode = (isLocalMode) => {
+    this.setState({
+      isLocalSearch: isLocalMode, page: 1, isListLoading: undefined, searSido: '', searGungu: '',
+    });
+  }
+
+  /**
+   * GPS정보수신 함수
+   */
+  getLocation = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      Alert.alert('위치정보 접근이 허용되지 않았습니다.');
+      return undefined;
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+
+    this.setState({
+      searLongitude: location.coords.longitude,
+      searLatitude: location.coords.latitude,
+    });
+
+    return location;
+  };
+
+  /**
+   * GPS 좌표을 활용한 주소설정
+   */
+  setLocAddress = (logitude, latitude) => {
+    api.getAddrByGpspoint(logitude, latitude)
+      .then((addrInfo) => {
+        if (addrInfo) {
+          if (addrInfo.code === -2) {
+            this.setState({
+              currLocation: addrInfo.msg,
+            });
+          } else {
+            this.setState({
+              currLocation: `현 위치 수신됨: ${addrInfo.document.road_address.address_name}`,
+            });
+          }
+        }
+      })
+      .catch((error) => {
+        Alert.alert(
+          '현 위치 수신에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+      });
+  }
 
   /**
    * 검색화면/광고화면 전환 함수
@@ -93,18 +163,19 @@ export default class GPSSearchScreen extends React.Component {
    * 주변 장비업체 검색 요청함수
    */
   searchNearJangbee = () => {
-    const {
-      searchedFirmList, page, searEquipment, searLongitude, searLatitude,
-    } = this.state;
+    const { searchedFirmList, page, searEquipment, searLongitude, searLatitude } = this.state;
+
+    if (!this.validateSearNearFirm()) {
+      return;
+    }
 
     this.setSearchViewMode(true);
 
     api
-      .getNearFirmList(1, searEquipment, '126.955869', '37.546037')
+      .getNearFirmList(page, searEquipment, searLongitude, searLatitude)
       .then((res) => {
-        console.log(res);
         this.setState({
-          searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
+          searchedFirmList: page === 1 ? res.content : [...searchedFirmList, ...res.content],
           isLastList: res.last,
           isListLoading: false,
           refreshing: false,
@@ -117,6 +188,83 @@ export default class GPSSearchScreen extends React.Component {
         );
         this.setState({ isListLoading: false });
       });
+  };
+
+  /**
+   * 지역 장비업체 검색 함수
+   */
+  searchLocJangbee = () => {
+    const { page, searchedFirmList, searEquipment, searSido, searGungu } = this.state;
+
+    if (!this.validateSearLocFirm()) {
+      return;
+    }
+
+    this.setSearchViewMode(true);
+
+    api
+      .getLocalFirmList(page, searEquipment, searSido, searGungu)
+      .then((res) => {
+        this.setState({
+          searchedFirmList: page === 1 ? res.content : [...searchedFirmList, ...res.content],
+          isLastList: res.last,
+          isListLoading: false,
+          refreshing: false,
+        });
+      })
+      .catch((error) => {
+        Alert.alert(
+          '주변 장비 조회에 문제가 있습니다, 재 시도해 주세요.',
+          `[${error.name}] ${error.message}`,
+        );
+        this.setState({ isListLoading: false });
+      });
+  };
+
+  /**
+   * 지역장비 검색 유효성 검사 함수
+   */
+  validateSearNearFirm = () => {
+    const { searEquipment } = this.state;
+
+    this.setState({ validationMessage: '' });
+
+    const v = validatePresence(searEquipment);
+    if (!v[0]) {
+      this.setState({ validationMessage: '검색할 장비명을 선택해 주세요.' });
+      return false;
+    }
+
+    return true;
+  };
+
+  /**
+   * 지역장비 검색 유효성 검사 함수
+   */
+  validateSearLocFirm = () => {
+    const { searEquipment, searSido, searGungu } = this.state;
+
+    this.setState({ validationMessage: '' });
+
+    let v = validatePresence(searEquipment);
+    if (!v[0]) {
+      this.setState({ validationMessage: '검색할 장비명을 선택해 주세요.' });
+      return false;
+    }
+
+    v = validatePresence(searSido);
+    if (!v[0]) {
+      this.setState({ validationMessage: '검색할 지역(시도) 선택해 주세요.' });
+      return false;
+    }
+
+    v = validatePresence(searGungu);
+    if (!v[0]) {
+      this.setState({ validationMessage: '검색할 지역(군구) 선택해 주세요.' });
+      return false;
+    }
+
+    return true;
   };
 
   /**
@@ -150,6 +298,30 @@ export default class GPSSearchScreen extends React.Component {
     );
   };
 
+  /**
+   * 사용자 위치설정 함수
+   */
+  setLocationInfo = async () => {
+    const location = await this.getLocation();
+
+    if (location) {
+      this.setLocAddress(location.coords.longitude, location.coords.latitude);
+    }
+  }
+
+  /**
+   * 검색지역 설정 팝업창열기 함수
+   */
+  openSelLocModal = () => {
+    const { searEquipment } = this.state;
+
+    if (searEquipment === '') {
+      Alert.alert('검색할 장비 먼저 선택해 주세요.');
+      return;
+    }
+    this.setState({ isVisibleLocalModal: true })
+  }
+
   render() {
     const {
       isSearViewMode,
@@ -157,12 +329,15 @@ export default class GPSSearchScreen extends React.Component {
       isLocalSearch,
       isVisibleEquiModal,
       isVisibleLocalModal,
-      searLocal,
+      currLocation,
+      searSido,
+      searGungu,
       searchedFirmList,
       page,
       refreshing,
       isLastList,
       isListLoading,
+      validationMessage,
     } = this.state;
     return (
       <View style={styles.container}>
@@ -172,15 +347,17 @@ export default class GPSSearchScreen extends React.Component {
           selEquipmentStr={searEquipment}
           completeSelEqui={seledEuipListStr => this.setState({ searEquipment: seledEuipListStr })}
           nextFocus={() => {}}
+          singleSelectMode
+          advertisement
         />
         <LocalSelModal
           isVisibleEquiModal={isVisibleLocalModal}
           closeModal={() => this.setState({ isVisibleLocalModal: false })}
-          completeSelEqui={selectedLocal => this.setState({ searLocal: selectedLocal })}
+          completeSelLocal={(sido, gungu) => this.setState({ searSido: sido, searGungu: gungu })}
           nextFocus={() => {}}
           selEquipment={searEquipment}
         />
-        {!isSearViewMode ? <JangbeeAd adType={adType.main} /> : null}
+        {!isSearViewMode ? <JangbeeAd adType={adType.main} {...this.props} /> : null}
         <View style={styles.cardWrap}>
           <View style={styles.card}>
             <View style={styles.searEquiWrap}>
@@ -194,26 +371,28 @@ export default class GPSSearchScreen extends React.Component {
               {isLocalSearch ? (
                 <SearCondBox
                   title="부르고자 하는 장비의 지역은 어디 입니까?"
-                  searchCondition={searLocal}
+                  searchCondition={`${searSido}${searGungu}`}
                   defaultCondtion="지역 선택"
-                  onPress={() => this.setState({ isVisibleLocalModal: true })}
+                  onPress={() => this.openSelLocModal()}
                 />
               ) : null}
             </View>
             <View style={styles.commWrap}>
               {!isLocalSearch ? (
                 <View style={styles.gpsWrap}>
-                  <Text>현 위치:</Text>
+                  <Text style={styles.currLocText}>{currLocation}</Text>
+                  <JBIcon name="refresh" size={24} color={colors.point2} onPress={() => this.setLocationInfo()} />
                 </View>
               ) : null}
               <View style={styles.switchWrap}>
                 <Text style={styles.switchText}>내 주변 검색</Text>
                 <Switch
                   value={isLocalSearch}
-                  onValueChange={newValue => this.setState({ isLocalSearch: newValue })}
+                  onValueChange={newValue => this.changeSearMode(newValue)}
                 />
                 <Text style={styles.switchText}>지역 검색</Text>
               </View>
+              <FirmCreaErrMSG errorMSG={validationMessage} />
               {isLocalSearch ? (
                 <JBButton title="지역 검색" onPress={() => this.searchLocJangbee()} size="full" />
               ) : (
@@ -227,15 +406,26 @@ export default class GPSSearchScreen extends React.Component {
           </View>
         </View>
         {isSearViewMode ? (
-          <FirmSearList
-            data={searchedFirmList}
-            page={page}
-            refreshing={refreshing}
-            last={isLastList}
-            isLoading={isListLoading}
-            handleLoadMore={this.handleLoadMore}
-            handleRefresh={this.handleRefresh}
-          />
+          <View style={styles.searViewWrap}>
+            <JBIcon
+              name="close"
+              size={23}
+              onPress={() => this.setState({ isSearViewMode: false })}
+            />
+            <FirmSearList
+              data={searchedFirmList}
+              page={page}
+              refreshing={refreshing}
+              last={isLastList}
+              isLoading={isListLoading}
+              handleLoadMore={this.handleLoadMore}
+              handleRefresh={this.handleRefresh}
+              selEquipment={searEquipment}
+              selSido={searSido}
+              selGungu={searGungu}
+              {...this.props}
+            />
+          </View>
         ) : null}
       </View>
     );

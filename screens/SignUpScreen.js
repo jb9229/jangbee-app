@@ -5,7 +5,7 @@ import {
 import firebase from 'firebase';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
-import FirmCreaErrMSG from '../components/FirmCreaErrMSG';
+import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
 
@@ -163,7 +163,7 @@ class SignUpScreen extends React.Component {
             <Text style={[styles.accountTypeText]}>장비업체 </Text>
           </TouchableOpacity>
         </View>
-        <FirmCreaErrMSG errorMSG={errorMessage} />
+        <JBErrorMessage errorMSG={errorMessage} />
         <JBButton title="등록하기" onPress={() => this.onSignUp()} />
       </View>
     );

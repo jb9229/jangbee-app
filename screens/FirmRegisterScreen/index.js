@@ -6,7 +6,7 @@ import * as api from '../../api/api';
 import { withLogin } from '../../contexts/LoginProvider';
 import ImagePickInput from '../../components/ImagePickInput';
 import FirmCreaTextInput from '../../components/FirmCreaTextInput';
-import FirmCreaErrMSG from '../../components/FirmCreaErrMSG';
+import JBErrorMessage from '../../components/organisms/JBErrorMessage';
 import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
 import JBActIndicatorModal from '../../components/JBActIndicatorModal';
@@ -51,6 +51,7 @@ class FirmRegisterScreen extends React.Component {
       isVisibleMapAddModal: false,
       isVisibleActIndiModal: false,
       fname: '',
+      phoneNumber: '',
       equiListStr: '',
       address: '',
       addressDetail: '',
@@ -68,6 +69,7 @@ class FirmRegisterScreen extends React.Component {
       sns: '',
       imgUploadingMessage: '이미지 업로드중...',
       fnameValErrMessage: '',
+      phoneNumberValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
       introductionValErrMessage: '',
@@ -82,12 +84,17 @@ class FirmRegisterScreen extends React.Component {
   }
 
   componentDidMount = () => {
+    const { user } = this.props;
+
+    const localPhoneNumber = user.phoneNumber.replace('+82', '0');
+
+    this.setState({phoneNumber: localPhoneNumber});
   }
 
   createFirm = async () => {
     const { navigation, user } = this.props;
     const {
-      fname, equiListStr, address, addressDetail, sidoAddr,
+      fname, phoneNumber, equiListStr, address, addressDetail, sidoAddr,
       sigunguAddr, addrLongitude, addrLatitude, introduction, thumbnail,
       photo1, photo2, photo3, blog, homepage, sns,
     } = this.state;
@@ -111,6 +118,7 @@ class FirmRegisterScreen extends React.Component {
     const newFirm = {
       accountId,
       fname,
+      phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -208,7 +216,7 @@ class FirmRegisterScreen extends React.Component {
   setInitValErroMSG = () => {
     this.setState({
       fnameValErrMessage: '',
-      // phoneNumberValErrMessage: '',
+      phoneNumberValErrMessage: '',
       // passwordValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
@@ -271,7 +279,7 @@ class FirmRegisterScreen extends React.Component {
    */
   isValidateSubmit = () => {
     const {
-      fname, equiListStr, address, addressDetail, thumbnail, photo1, photo2, photo3,
+      fname, phoneNumber, equiListStr, address, addressDetail, thumbnail, photo1, photo2, photo3,
       sidoAddr, sigunguAddr, addrLongitude, addrLatitude, introduction, blog, homepage, sns,
     } = this.state;
 
@@ -281,6 +289,12 @@ class FirmRegisterScreen extends React.Component {
     let v = validate('textMax', fname, true, 15);
     if (!v[0]) {
       this.setState({ fnameValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', phoneNumber, true);
+    if (!v[0]) {
+      this.setState({ phoneNumberValErrMessage: v[1] });
       return false;
     }
 
@@ -354,13 +368,13 @@ class FirmRegisterScreen extends React.Component {
   render() {
     const {
       isVisibleEquiModal, isVisibleMapAddModal, isVisibleActIndiModal,
-      fname,
+      fname, phoneNumber,
       equiListStr,
       address, addressDetail,
       introduction,
       thumbnail, photo1, photo2, photo3,
       blog, sns, homepage,
-      imgUploadingMessage, fnameValErrMessage,
+      imgUploadingMessage, fnameValErrMessage, phoneNumberValErrMessage,
       equiListStrValErrMessage, addressValErrMessage,
       introductionValErrMessage, thumbnailValErrMessage,
       photo1ValErrMessage, photo2ValErrMessage,
@@ -370,141 +384,152 @@ class FirmRegisterScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-      <KeyboardAvoidingView behavior="padding" enabled>
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          <View style={styles.cardWrap}>
-            <View style={styles.card}>
-              <FirmCreaTextInput
-                title="업체명*"
-                value={fname}
-                onChangeText={text => this.setState({ fname: text })}
-                placeholder="업체명을 입력해 주세요"
-                refer={(input) => {
-                  this.fnameTextInput = input;
-                }}
-              />
-              <FirmCreaErrMSG errorMSG={fnameValErrMessage} />
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <ScrollView contentContainerStyle={styles.contentContainer}>
+            <View style={styles.cardWrap}>
+              <View style={styles.card}>
+                <FirmCreaTextInput
+                  title="업체명*"
+                  value={fname}
+                  onChangeText={text => this.setState({ fname: text })}
+                  placeholder="업체명을 입력해 주세요"
+                  refer={(input) => {
+                    this.fnameTextInput = input;
+                  }}
+                />
+                <JBErrorMessage errorMSG={fnameValErrMessage} />
 
-              <FirmCreaTextInput
-                title="보유 장비*"
-                value={equiListStr}
-                onChangeText={text => this.setState({ equiListStr: text })}
-                onFocus={() => this.openSelEquipmentModal()}
-                placeholder="보유 장비를 선택해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={equiListStrValErrMessage} />
+                <FirmCreaTextInput
+                  title="전화번호*"
+                  value={phoneNumber}
+                  onChangeText={text => this.setState({ phoneNumber: text })}
+                  placeholder="전화번호를 입력해 주세요"
+                  refer={(input) => {
+                    this.telTextInput = input;
+                  }}
+                />
+                <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
-              <FirmCreaTextInput
-                title="업체주소(고객검색시 거리계산 기준이됨)*"
-                value={address}
-                tiRefer={(input) => {
-                  this.addrTextInput = input;
-                }}
-                onChangeText={text => this.setState({ address: text })}
-                onFocus={() => this.openMapAddModal()}
-                placeholder="주소를 검색해주세요"
-              />
-              <FirmCreaErrMSG errorMSG={addressValErrMessage} />
+                <FirmCreaTextInput
+                  title="보유 장비*"
+                  value={equiListStr}
+                  onChangeText={text => this.setState({ equiListStr: text })}
+                  onFocus={() => this.openSelEquipmentModal()}
+                  placeholder="보유 장비를 선택해 주세요"
+                />
+                <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
-              <FirmCreaTextInput
-                title="업체 상세주소"
-                value={addressDetail}
-                tiRefer={(input) => {
-                  this.addrDetTextInput = input;
-                }}
-                onChangeText={text => this.setState({ addressDetail: text })}
-                placeholder="상세주소를 입력해 주세요"
-              />
+                <FirmCreaTextInput
+                  title="업체주소(고객검색시 거리계산 기준이됨)*"
+                  value={address}
+                  tiRefer={(input) => {
+                    this.addrTextInput = input;
+                  }}
+                  onChangeText={text => this.setState({ address: text })}
+                  onFocus={() => this.openMapAddModal()}
+                  placeholder="주소를 검색해주세요"
+                />
+                <JBErrorMessage errorMSG={addressValErrMessage} />
 
-              <FirmCreaTextInput
-                title="업체 소개"
-                value={introduction}
-                onChangeText={text => this.setState({ introduction: text })}
-                placeholder="업체 소개를 해 주세요"
-                multiline
-                numberOfLines={5}
-              />
-              <FirmCreaErrMSG errorMSG={introductionValErrMessage} />
+                <FirmCreaTextInput
+                  title="업체 상세주소"
+                  value={addressDetail}
+                  tiRefer={(input) => {
+                    this.addrDetTextInput = input;
+                  }}
+                  onChangeText={text => this.setState({ addressDetail: text })}
+                  placeholder="상세주소를 입력해 주세요"
+                />
 
-              <ImagePickInput
-                itemTitle="대표사진*"
-                imgUrl={thumbnail}
-                aspect={[1, 1]}
-                setImageUrl={url => this.setState({ thumbnail: url })}
-              />
-              <FirmCreaErrMSG errorMSG={thumbnailValErrMessage} />
+                <FirmCreaTextInput
+                  title="업체 소개"
+                  value={introduction}
+                  onChangeText={text => this.setState({ introduction: text })}
+                  placeholder="업체 소개를 해 주세요"
+                  multiline
+                  numberOfLines={5}
+                />
+                <JBErrorMessage errorMSG={introductionValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="작업사진1*"
-                imgUrl={photo1}
-                setImageUrl={url => this.setState({ photo1: url })}
-              />
-              <FirmCreaErrMSG errorMSG={photo1ValErrMessage} />
+                <ImagePickInput
+                  itemTitle="대표사진*"
+                  imgUrl={thumbnail}
+                  aspect={[1, 1]}
+                  setImageUrl={url => this.setState({ thumbnail: url })}
+                />
+                <JBErrorMessage errorMSG={thumbnailValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="작업사진2"
-                imgUrl={photo2}
-                setImageUrl={url => this.setState({ photo2: url })}
-              />
-              <FirmCreaErrMSG errorMSG={photo2ValErrMessage} />
+                <ImagePickInput
+                  itemTitle="작업사진1*"
+                  imgUrl={photo1}
+                  setImageUrl={url => this.setState({ photo1: url })}
+                />
+                <JBErrorMessage errorMSG={photo1ValErrMessage} />
 
-              <ImagePickInput
-                itemTitle="작업사진3"
-                imgUrl={photo3}
-                setImageUrl={url => this.setState({ photo3: url })}
-              />
-              <FirmCreaErrMSG errorMSG={photo3ValErrMessage} />
+                <ImagePickInput
+                  itemTitle="작업사진2"
+                  imgUrl={photo2}
+                  setImageUrl={url => this.setState({ photo2: url })}
+                />
+                <JBErrorMessage errorMSG={photo2ValErrMessage} />
 
-              <FirmCreaTextInput
-                title="블로그"
-                value={blog}
-                onChangeText={text => this.setState({ blog: text })}
-                placeholder="블로그 주소를 입력해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={blogValErrMessage} />
+                <ImagePickInput
+                  itemTitle="작업사진3"
+                  imgUrl={photo3}
+                  setImageUrl={url => this.setState({ photo3: url })}
+                />
+                <JBErrorMessage errorMSG={photo3ValErrMessage} />
 
-              <FirmCreaTextInput
-                title="SNG"
-                value={sns}
-                onChangeText={text => this.setState({ sns: text })}
-                placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={snsValErrMessage} />
+                <FirmCreaTextInput
+                  title="블로그"
+                  value={blog}
+                  onChangeText={text => this.setState({ blog: text })}
+                  placeholder="블로그 주소를 입력해 주세요"
+                />
+                <JBErrorMessage errorMSG={blogValErrMessage} />
 
-              <FirmCreaTextInput
-                title="홈페이지"
-                value={homepage}
-                onChangeText={text => this.setState({ homepage: text })}
-                placeholder="홈페이지 주소를 입력해 주세요"
-              />
-              <FirmCreaErrMSG errorMSG={homepageValErrMessage} />
+                <FirmCreaTextInput
+                  title="SNG"
+                  value={sns}
+                  onChangeText={text => this.setState({ sns: text })}
+                  placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
+                />
+                <JBErrorMessage errorMSG={snsValErrMessage} />
+
+                <FirmCreaTextInput
+                  title="홈페이지"
+                  value={homepage}
+                  onChangeText={text => this.setState({ homepage: text })}
+                  placeholder="홈페이지 주소를 입력해 주세요"
+                />
+                <JBErrorMessage errorMSG={homepageValErrMessage} />
+              </View>
+
+              <View style={styles.regiFormCommWrap}>
+                <JBButton title="업체등록하기" onPress={() => this.createFirm()} />
+              </View>
             </View>
-
-            <View style={styles.regiFormCommWrap}>
-              <JBButton title="업체등록하기" onPress={() => this.createFirm()} />
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-      <EquipementModal
-        isVisibleEquiModal={isVisibleEquiModal}
-        closeModal={() => this.setState({ isVisibleEquiModal: false })}
-        selEquipmentStr={equiListStr}
-        completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
-        nextFocus={() => this.addrTextInput.focus()}
-      />
-      <MapAddWebModal
-        isVisibleMapAddModal={isVisibleMapAddModal}
-        setMapAddModalVisible={this.setMapAddModalVisible}
-        saveAddrInfo={this.saveAddrInfo}
-        nextFocus={() => this.addrDetTextInput.focus()}
-      />
-      <JBActIndicatorModal
-        isVisibleModal={isVisibleActIndiModal}
-        message={imgUploadingMessage}
-        size="large"
-      />
-    </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+        <EquipementModal
+          isVisibleEquiModal={isVisibleEquiModal}
+          closeModal={() => this.setState({ isVisibleEquiModal: false })}
+          selEquipmentStr={equiListStr}
+          completeSelEqui={seledEuipListStr => this.setState({ equiListStr: seledEuipListStr })}
+          nextFocus={() => this.addrTextInput.focus()}
+        />
+        <MapAddWebModal
+          isVisibleMapAddModal={isVisibleMapAddModal}
+          setMapAddModalVisible={this.setMapAddModalVisible}
+          saveAddrInfo={this.saveAddrInfo}
+          nextFocus={() => this.addrDetTextInput.focus()}
+        />
+        <JBActIndicatorModal
+          isVisibleModal={isVisibleActIndiModal}
+          message={imgUploadingMessage}
+          size="large"
+        />
+      </View>
     );
   }
 }
