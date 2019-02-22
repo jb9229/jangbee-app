@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     flex: 4,
     margin: 10,
     marginBottom: 15,
+    alignItems: 'center',
   },
   itemTitle: {
     fontFamily: fonts.titleMiddle,
@@ -18,8 +19,6 @@ const styles = StyleSheet.create({
   responsiveImgWrap: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   responsiveImage: {
     aspectRatio: 4 / 3,

@@ -1,8 +1,18 @@
 import React from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import FirmListItem from './FirmListItem';
 import ListFooter from '../molecules/ListFooter';
+import colors from '../../constants/Colors';
 
+const styles = StyleSheet.create({
+  separator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: colors.point,
+    marginLeft: 3,
+    marginRight: 3,
+  },
+});
 export default class FirmSearList extends React.Component {
   constructor(props) {
     super(props);
@@ -27,27 +37,26 @@ export default class FirmSearList extends React.Component {
     return <FirmListItem data={props} />;
   };
 
-  renderSeparator = () => (
-    <View
-      style={{
-        height: 1,
-        width: '100%',
-        backgroundColor: '#CED0CE',
-        marginLeft: '14%',
-      }}
-    />
-  );
+  renderSeparator = () => <View style={styles.separator} />;
 
   render() {
     const {
-      data, refreshing, last, loading, selEquipment, selSido, selGungu
+      data, refreshing, last, loading, selEquipment, selSido, selGungu,
     } = this.props;
     return (
       <View>
         <FlatList
           data={data}
           renderItem={this.renderListItem}
-          ListFooterComponent={<ListFooter hasMore={!last} isLoading={loading} selEquipment={selEquipment} selSido={selSido} selGungu={selGungu} />}
+          ListFooterComponent={(
+            <ListFooter
+              hasMore={!last}
+              isLoading={loading}
+              selEquipment={selEquipment}
+              selSido={selSido}
+              selGungu={selGungu}
+            />
+)}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={this.renderSeparator}
           onRefresh={this.handleRefresh}

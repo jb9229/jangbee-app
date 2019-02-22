@@ -44,7 +44,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.point2,
     textDecorationLine: 'underline',
   },
-  scrViewWrap: {},
+  scrViewWrap: {
+    marginTop: 36,
+    paddingBottom: 36,
+  },
   cardWrap: {
     flex: 1,
     backgroundColor: colors.batangLight,
@@ -82,11 +85,11 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: '100%',
-    height: 63,
+    height: 23,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 24,
-    paddingBottom: 2,
+    paddingBottom: 13,
     backgroundColor: 'rgba(250, 250, 250, 0.3)',
     elevation: 3,
     borderRadius: 5,
@@ -100,6 +103,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 30,
+  },
+  callButWrap: {
+    backgroundColor: colors.batangLight,
   },
 });
 
@@ -216,9 +222,6 @@ export default class FirmMyInfoScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrViewWrap}>
-          <View style={styles.titleWrap}>
-            <Text style={styles.fnameText}>{firm.fname}</Text>
-          </View>
           <View style={[styles.cardWrap]}>
             <View style={[styles.card, styles.pointCard]}>
               <View style={styles.frimTopItemWrap}>
@@ -267,8 +270,16 @@ export default class FirmMyInfoScreen extends React.Component {
             </View>
           </View>
         </ScrollView>
-        <View>
-          <JBButton title="전화걸기" onPress={() => this.openLinkUrl(`tel:${firm.phoneNumber}`)} />
+        <View style={styles.titleWrap}>
+          <Text style={styles.fnameText}>{firm.fname}</Text>
+        </View>
+
+        <View style={styles.callButWrap}>
+          <JBButton
+            title="전화걸기"
+            onPress={() => this.openLinkUrl(`tel:${firm.phoneNumber}`)}
+            size="full"
+          />
         </View>
       </View>
     );

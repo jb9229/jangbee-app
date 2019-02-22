@@ -7,8 +7,9 @@ import fonts from '../../constants/Fonts';
 
 const styles = StyleSheet.create({
   commWrap: {
-    marginTop: 10,
-    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    marginTop: 5,
+    marginBottom: 5,
   },
   commTH: {
     backgroundColor: colors.pointDark,

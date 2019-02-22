@@ -18,10 +18,10 @@ import FirmCreaErrMSG from '../components/organisms/JBErrorMessage';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.batangLight,
   },
   cardWrap: {
     flex: 1,
-    backgroundColor: colors.batangLight,
     padding: 10,
     paddingTop: 6,
     paddingBottom: 6,
@@ -60,8 +60,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
-  searViewWrap: {
-    minHeight: 250,
+  firmListNearWrap: {
+    minHeight: 320,
+    backgroundColor: 'rgba(83, 146, 170, 0.3)',
+    borderRadius: 5,
+  },
+  firmListLocWrap: {
+    minHeight: 280,
+    backgroundColor: 'rgba(83, 146, 170, 0.3)',
+    borderRadius: 5,
   },
 });
 
@@ -225,13 +232,25 @@ export default class GPSSearchScreen extends React.Component {
    * 지역장비 검색 유효성 검사 함수
    */
   validateSearNearFirm = () => {
-    const { searEquipment } = this.state;
+    const { searEquipment, searLongitude, searLatitude } = this.state;
 
     this.setState({ validationMessage: '' });
 
-    const v = validatePresence(searEquipment);
+    let v = validatePresence(searEquipment);
     if (!v[0]) {
-      this.setState({ validationMessage: '검색할 장비명을 선택해 주세요.' });
+      this.setState({ validationMessage: '검색할 장비명을 선택해 주세요' });
+      return false;
+    }
+
+    v = validatePresence(searLongitude);
+    if (!v[0]) {
+      this.setState({ validationMessage: '위치정보가 아직 수신되지 않았습니다' });
+      return false;
+    }
+
+    v = validatePresence(searLatitude);
+    if (!v[0]) {
+      this.setState({ validationMessage: '위치정보가 아직 수신되지 않았습니다' });
       return false;
     }
 
@@ -248,19 +267,19 @@ export default class GPSSearchScreen extends React.Component {
 
     let v = validatePresence(searEquipment);
     if (!v[0]) {
-      this.setState({ validationMessage: '검색할 장비명을 선택해 주세요.' });
+      this.setState({ validationMessage: '검색할 장비명을 선택해 주세요' });
       return false;
     }
 
     v = validatePresence(searSido);
     if (!v[0]) {
-      this.setState({ validationMessage: '검색할 지역(시도) 선택해 주세요.' });
+      this.setState({ validationMessage: '검색할 지역(시도) 선택해 주세요' });
       return false;
     }
 
     v = validatePresence(searGungu);
     if (!v[0]) {
-      this.setState({ validationMessage: '검색할 지역(군구) 선택해 주세요.' });
+      this.setState({ validationMessage: '검색할 지역(군구) 선택해 주세요' });
       return false;
     }
 
@@ -339,6 +358,8 @@ export default class GPSSearchScreen extends React.Component {
       isListLoading,
       validationMessage,
     } = this.state;
+
+    const firmListWrapStyle = isLocalSearch ? styles.firmListLocWrap : styles.firmListNearWrap;
     return (
       <View style={styles.container}>
         <EquipementModal
@@ -406,7 +427,7 @@ export default class GPSSearchScreen extends React.Component {
           </View>
         </View>
         {isSearViewMode ? (
-          <View style={styles.searViewWrap}>
+          <View style={firmListWrapStyle}>
             <JBIcon
               name="close"
               size={23}

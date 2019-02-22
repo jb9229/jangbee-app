@@ -3,6 +3,8 @@ import {
   Alert, Linking, Image, StyleSheet, TouchableHighlight, Text, View,
 } from 'react-native';
 import JBIcon from '../molecules/JBIcon';
+import colors from '../../constants/Colors';
+import fonts from '../../constants/Fonts';
 
 const styles = StyleSheet.create({
   container: {},
@@ -10,8 +12,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 3,
-    paddingRight: 3,
+    padding: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   avatar: {
     width: 50,
@@ -22,7 +25,27 @@ const styles = StyleSheet.create({
   centerWrap: {
     flex: 3,
   },
-  bottomWrap: {},
+  fnameText: {
+    fontSize: 16,
+    fontFamily: fonts.titleMiddle,
+  },
+  intrText: {
+    fontSize: 14,
+    fontFamily: fonts.batang,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  bottomText: {
+    fontSize: 14,
+  },
+  bottomWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  callIconWrap: {
+    justifyContent: 'center',
+  },
 });
 
 /**
@@ -58,14 +81,24 @@ const firmListItem = (props) => {
         <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
         <View style={styles.centerWrap}>
           <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
-            <Text>{item.fname}</Text>
+            <Text style={styles.fnameText}>{item.fname}</Text>
           </TouchableHighlight>
-          <Text numberOfLines={1}>{item.introduction}</Text>
+          <Text style={styles.intrText} numberOfLines={1}>
+            {item.introduction}
+          </Text>
           <View style={styles.bottomWrap}>
-            <Text>{calDistance(item.distance)}</Text>
+            <Text style={styles.bottomText}>{item.equiListStr}</Text>
+            <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
           </View>
         </View>
-        <JBIcon name="call" size={32} onPress={() => callFirm(item.phoneNumber)} />
+        <View style={styles.callIconWrap}>
+          <JBIcon
+            name="call"
+            size={42}
+            color={colors.pointDark}
+            onPress={() => callFirm(item.phoneNumber)}
+          />
+        </View>
       </View>
     </View>
   );

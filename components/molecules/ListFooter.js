@@ -6,6 +6,7 @@ import JBButton from './JBButton';
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -13,7 +14,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   webLinkWrap: {
-    alignItems: 'center',
+    flex: 1,
+  },
+  webLinkButWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   title: {
     opacity: 0.7,
@@ -52,22 +58,24 @@ export default class ListFooter extends React.PureComponent {
         </View>
         <View style={styles.webLinkWrap}>
           <Text>업체가 없습니까? 업체 등록전까지, 웹검색을 이용해 보세요.</Text>
-          <JBButton
-            title={`네이버 ${selEquipment} 검색`}
-            size="small"
-            onPress={() => this.openLinkUrl(
-              `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selEquipment}+${selSido}+${selGungu}`,
-            )
-            }
-          />
-          <JBButton
-            title={`다음 ${selEquipment} 검색`}
-            size="small"
-            onPress={() => this.openLinkUrl(
-              `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selEquipment}+${selSido}+${selGungu}`,
-            )
-            }
-          />
+          <View style={styles.webLinkButWrap}>
+            <JBButton
+              title={`네이버 ${selEquipment} 검색`}
+              size="small"
+              onPress={() => this.openLinkUrl(
+                `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selEquipment}+${selSido}+${selGungu}`,
+              )
+              }
+            />
+            <JBButton
+              title={`다음 ${selEquipment} 검색`}
+              size="small"
+              onPress={() => this.openLinkUrl(
+                `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selEquipment}+${selSido}+${selGungu}`,
+              )
+              }
+            />
+          </View>
         </View>
       </View>
     );
