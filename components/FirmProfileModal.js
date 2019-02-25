@@ -66,7 +66,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
           }}
         >
           <View style={styles.modalWrap}>
-            <JBIcon name="ios-close" size={32} onPress={() => setVisibleModal(false)} />
+            <JBIcon name="close" size={32} onPress={() => setVisibleModal(false)} />
             <View style={styles.titleWrap}>
               <View>
                 <Text style={styles.fnameText}>{firm.fname}</Text>

@@ -62,6 +62,7 @@ export default class ListFooter extends React.PureComponent {
             <JBButton
               title={`네이버 ${selEquipment} 검색`}
               size="small"
+              underline
               onPress={() => this.openLinkUrl(
                 `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selEquipment}+${selSido}+${selGungu}`,
               )
@@ -70,6 +71,7 @@ export default class ListFooter extends React.PureComponent {
             <JBButton
               title={`다음 ${selEquipment} 검색`}
               size="small"
+              underline
               onPress={() => this.openLinkUrl(
                 `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selEquipment}+${selSido}+${selGungu}`,
               )

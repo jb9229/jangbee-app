@@ -7,6 +7,14 @@ import {
 } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import { LoginProvider } from './contexts/LoginProvider';
+import colors from './constants/Colors';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
 
 export default class App extends React.Component {
   state = {
@@ -60,17 +68,14 @@ export default class App extends React.Component {
     return (
       <LoginProvider>
         <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          {Platform.OS === 'ios' ? (
+            <StatusBar barStyle="default" />
+          ) : (
+            <StatusBar backgroundColor={colors.batangDark} currentHeight={32} barStyle="default" />
+          )}
           <AppNavigator />
         </View>
       </LoginProvider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

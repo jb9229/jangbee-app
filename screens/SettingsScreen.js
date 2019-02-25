@@ -6,6 +6,9 @@ import JBButton from '../components/molecules/JBButton';
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: '블랙리스트 고객',
+    headerStyle: {
+      marginTop: -28,
+    },
   };
 
   render() {

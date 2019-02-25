@@ -13,8 +13,14 @@ import FirmDetailScreen from '../screens/FirmDetailScreen';
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
-  FirmRegister: { screen: FirmRegisterScreen, navigationOptions: { title: '업체정보 등록' } },
-  FirmUpdate: { screen: FirmUpdateScreen, navigationOptions: { title: '업체정보 수정' } },
+  FirmRegister: {
+    screen: FirmRegisterScreen,
+    navigationOptions: { title: '업체정보 등록', headerStyle: { marginTop: -28 } },
+  },
+  FirmUpdate: {
+    screen: FirmUpdateScreen,
+    navigationOptions: { title: '업체정보 수정', headerStyle: { marginTop: -28 } },
+  },
 });
 
 const HomeStack = createStackNavigator({

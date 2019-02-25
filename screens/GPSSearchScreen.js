@@ -62,12 +62,12 @@ const styles = StyleSheet.create({
   },
   firmListNearWrap: {
     minHeight: 320,
-    backgroundColor: 'rgba(83, 146, 170, 0.3)',
+    backgroundColor: colors.point2Light,
     borderRadius: 5,
   },
   firmListLocWrap: {
-    minHeight: 280,
-    backgroundColor: 'rgba(83, 146, 170, 0.3)',
+    minHeight: 250,
+    backgroundColor: colors.point2Light,
     borderRadius: 5,
   },
 });
@@ -104,9 +104,15 @@ export default class GPSSearchScreen extends React.Component {
    * 내주변/지역 검색 모드변경 함수
    */
   changeSearMode = (isLocalMode) => {
+    const { isSearViewMode } = this.state;
+
     this.setState({
       isLocalSearch: isLocalMode, page: 1, isListLoading: undefined, searSido: '', searGungu: '',
     });
+
+    if (isSearViewMode) {
+      this.setSearchViewMode(false);
+    }
   }
 
   /**

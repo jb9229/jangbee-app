@@ -95,7 +95,7 @@ const firmListItem = (props) => {
           <JBIcon
             name="call"
             size={42}
-            color={colors.pointDark}
+            color={colors.point}
             onPress={() => callFirm(item.phoneNumber)}
           />
         </View>

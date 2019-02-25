@@ -11,6 +11,7 @@ export default {
   point: '#FDCA24',
   pointDark: '#F6C31F',
   point2: '#5392aa', // RGB: 83, 146, 170
+  point2Light: '#eff8fc', // rgb(239, 248, 252)
   iconDefault: '#5392aa',
   indicator: '#FDCA24',
   tintColor,

@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     width: '100%',
-    backgroundColor: colors.point,
+    backgroundColor: colors.pointDark,
     marginLeft: 3,
     marginRight: 3,
   },

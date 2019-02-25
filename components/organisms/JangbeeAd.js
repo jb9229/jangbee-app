@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    marginBottom: 10,
+    marginRight: 10,
   },
   text: {
     color: '#fff',
@@ -98,7 +100,11 @@ export default class JangbeeAd extends React.Component {
     const { adList } = this.state;
 
     if (adList === undefined) {
-      return <JBActIndicator title="광고 불러오는중..." size="large" />;
+      return (
+        <View style={styles.container}>
+          <JBActIndicator title="광고 불러오는중..." size="large" />
+        </View>
+      );
     }
     if (adList === null) {
       return <BugReport title="광고 요청에 실패 했습니다" />;
@@ -112,15 +118,15 @@ export default class JangbeeAd extends React.Component {
           {ad.firmId ? (
             <JBIcon
               name="information-circle"
-              size={32}
+              size={40}
               color={colors.point2}
               onPress={() => this.gotoFirmDetail(ad.firmId)}
             />
           ) : null}
           <JBIcon
             name="call"
-            size={32}
-            color={colors.pointDark}
+            size={40}
+            color={colors.point}
             onPress={() => this.telAdvertiser(ad.telNumber)}
           />
         </View>

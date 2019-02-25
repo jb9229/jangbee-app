@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   scrViewWrap: {
-    marginTop: 36,
-    paddingBottom: 36,
+    marginTop: 39,
+    paddingBottom: 39,
   },
   cardWrap: {
     flex: 1,
@@ -85,17 +85,16 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: '100%',
-    height: 23,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 24,
-    paddingBottom: 13,
+    paddingTop: 5,
+    paddingBottom: 5,
     backgroundColor: 'rgba(250, 250, 250, 0.3)',
     elevation: 3,
     borderRadius: 5,
   },
   fnameText: {
-    fontSize: 23,
+    fontSize: 30,
     fontFamily: fonts.titleTop,
     color: colors.point2,
   },
@@ -112,6 +111,9 @@ const styles = StyleSheet.create({
 export default class FirmMyInfoScreen extends React.Component {
   static navigationOptions = () => ({
     title: '장비 업체정보',
+    headerStyle: {
+      marginTop: -28,
+    },
   });
 
   constructor(props) {
