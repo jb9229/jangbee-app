@@ -91,9 +91,25 @@ export function getFirmLocalData(equipment) {
 /**
  * 광고 조회
  */
-export function getAd(type) {
-  const param = encodeURIComponent(type);
-  return fetch(`${url.JBSERVER_AD}/${param}`).then(handleJsonResponse);
+export function getAd(type, equiTarget, sidoTarget, gugunTarget) {
+  const paramType = encodeURIComponent(type);
+
+  let paramUrl = `?adType=${paramType}`;
+  if (equiTarget !== undefined && equiTarget !== '') {
+    paramUrl += `&equiTarget=${encodeURIComponent(sidoTarget)}`;
+  }
+
+  if (sidoTarget !== undefined && sidoTarget !== '') {
+    paramUrl += `&sidoTarget=${encodeURIComponent(sidoTarget)}`;
+  }
+
+  if (gugunTarget !== undefined && gugunTarget !== '') {
+    paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
+  }
+
+  console.log(`${url.JBSERVER_AD}${paramUrl}`);
+
+  return fetch(`${url.JBSERVER_AD}${paramUrl}`).then(handleJsonResponse);
 }
 
 export function uploadImage(uri) {

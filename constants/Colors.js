@@ -9,9 +9,11 @@ export default {
   batangDark: '#4D4A4A',
   batang: '#7A7373',
   point: '#FDCA24',
+  pointLight: '#fef3cd',
   pointDark: '#F6C31F',
   point2: '#5392aa', // RGB: 83, 146, 170
   point2Light: '#eff8fc', // rgb(239, 248, 252)
+  point2Dark: '#2a4955',
   iconDefault: '#5392aa',
   indicator: '#FDCA24',
   tintColor,

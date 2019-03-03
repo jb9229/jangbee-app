@@ -184,7 +184,7 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              {advertisement ? <JangbeeAd adType={adType.main} {...this.props} /> : null }
+              {advertisement ? <JangbeeAd adType={adType.equipment} {...this.props} /> : null }
               <FlatList
                 columnWrapperStyle={styles.equiListWrap}
                 horizontal={false}

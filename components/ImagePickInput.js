@@ -85,7 +85,7 @@ export default class ImagePickInput extends React.Component {
         <View style={styles.titleWrap}>
           <Text style={styles.itemTitle}>{itemTitle}</Text>
           {imgUrl !== '' ? (
-            <JBIcon name="ios-close" size={32} onPress={() => this.removeImg()} />
+            <JBIcon name="close" size={32} onPress={() => this.removeImg()} />
           ) : null}
         </View>
 

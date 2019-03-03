@@ -10,6 +10,8 @@ import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 import LocalSearchScreen from '../screens/LocalSearchScreen';
 import FirmDetailScreen from '../screens/FirmDetailScreen';
+import OpenBankAuthWebView from '../components/organisms/auth/OpenBankAuthWebView';
+
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
@@ -37,12 +39,13 @@ HomeStack.navigationOptions = {
 
 const LocalSearchStack = createStackNavigator({
   LocalSearch: LocalSearchScreen,
+  OpenBankAuth: OpenBankAuthWebView,
 });
 
 LocalSearchStack.navigationOptions = {
   tabBarLabel: '광고신청',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-radio' : 'md-radio'} />
   ),
 };
 

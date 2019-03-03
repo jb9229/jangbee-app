@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   fnameText: {
     fontSize: 16,
     fontFamily: fonts.titleMiddle,
+    textDecorationLine: 'underline',
   },
   intrText: {
     fontSize: 14,
@@ -37,6 +38,11 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     fontSize: 14,
+    backgroundColor: colors.point2Light,
+    fontWeight: 'bold',
+    padding: 1,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
   bottomWrap: {
     flex: 1,

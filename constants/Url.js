@@ -1,5 +1,6 @@
-// const SERVER_URL = 'http://192.168.1.45/api/v1/';
-const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+const SERVER_URL = 'http://192.168.0.15/api/v1/';
+// const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
 module.exports = {
   IMAGE_STORAGE: `${SERVER_URL}common/image`,
@@ -9,4 +10,6 @@ module.exports = {
   JBSERVER_AD: `${SERVER_URL}ad`,
   JBSERVER_FIRMNEAR: `${SERVER_URL}firm/near`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
+  OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,
+  OPENBANK_REAUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize_account2`,
 };
