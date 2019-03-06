@@ -7,14 +7,13 @@ import * as api from '../api/api';
 import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
-import JangbeeAd from './organisms/JangbeeAd';
+import JangbeeAdList from './JangbeeAdList';
 import adType from '../constants/AdType';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   cardWrap: {
     flex: 1,
     backgroundColor: colors.batangLight,
@@ -43,6 +42,7 @@ export default class EquipementModal extends React.Component {
     this.state = {
       equiList: [],
       equiSelMap: (new Map(): Map<string, boolean>),
+      singSeltdEquipment: '',
     };
   }
 
@@ -90,6 +90,7 @@ export default class EquipementModal extends React.Component {
 
     if (singleSelectMode) {
       newEquiSelMap = new Map();
+      this.setState({ singSeltdEquipment: eName });
     } else {
       newEquiSelMap = new Map(equiSelMap);
     }
@@ -169,7 +170,7 @@ export default class EquipementModal extends React.Component {
 
   render() {
     const { isVisibleEquiModal, advertisement } = this.props;
-    const { equiList, equiSelMap } = this.state;
+    const { equiList, equiSelMap, singSeltdEquipment } = this.state;
 
     return (
       <View style={styles.container}>
@@ -184,7 +185,13 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              {advertisement ? <JangbeeAd adType={adType.equipment} {...this.props} /> : null }
+              {advertisement ? (
+                <JangbeeAdList
+                  adType={adType.equipment}
+                  euqiTarget={singSeltdEquipment}
+                  {...this.props}
+                />
+              ) : null}
               <FlatList
                 columnWrapperStyle={styles.equiListWrap}
                 horizontal={false}

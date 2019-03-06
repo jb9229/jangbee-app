@@ -2,17 +2,8 @@ import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import FirmListItem from './FirmListItem';
 import ListFooter from '../molecules/ListFooter';
-import colors from '../../constants/Colors';
+import ListSeparator from '../molecules/ListSeparator';
 
-const styles = StyleSheet.create({
-  separator: {
-    height: 1,
-    width: '100%',
-    backgroundColor: colors.pointDark,
-    marginLeft: 3,
-    marginRight: 3,
-  },
-});
 export default class FirmSearList extends React.Component {
   constructor(props) {
     super(props);
@@ -37,8 +28,6 @@ export default class FirmSearList extends React.Component {
     return <FirmListItem data={props} />;
   };
 
-  renderSeparator = () => <View style={styles.separator} />;
-
   render() {
     const {
       data, refreshing, last, loading, selEquipment, selSido, selGungu,
@@ -58,7 +47,7 @@ export default class FirmSearList extends React.Component {
             />
 )}
           keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={this.renderSeparator}
+          ItemSeparatorComponent={ListSeparator}
           onRefresh={this.handleRefresh}
           refreshing={refreshing}
           onEndReached={this.handleLoadMore}

@@ -8,10 +8,10 @@ import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
-import LocalSearchScreen from '../screens/LocalSearchScreen';
+import AdScreen from '../screens/AdScreen';
+import AdCreateScreen from '../screens/AdCreateScreen';
 import FirmDetailScreen from '../screens/FirmDetailScreen';
-import OpenBankAuthWebView from '../components/organisms/auth/OpenBankAuthWebView';
-
+import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
@@ -37,12 +37,16 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LocalSearchStack = createStackNavigator({
-  LocalSearch: LocalSearchScreen,
-  OpenBankAuth: OpenBankAuthWebView,
+const AdStack = createStackNavigator({
+  Ad: { screen: AdScreen, navigationOptions: { header: null } },
+  AdCreate: {
+    screen: AdCreateScreen,
+    navigationOptions: { title: '내장비 홍보하기', headerStyle: { marginTop: -28 } },
+  },
+  OpenBankAuth: { screen: OpenBankAuthWebView, navigationOptions: { header: null } },
 });
 
-LocalSearchStack.navigationOptions = {
+AdStack.navigationOptions = {
   tabBarLabel: '광고신청',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-radio' : 'md-radio'} />
@@ -72,7 +76,7 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LocalSearchStack,
+  AdStack,
   FirmMyInfoStack,
   SettingsStack,
 });

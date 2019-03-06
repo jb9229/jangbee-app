@@ -3,9 +3,10 @@ import {
   Alert, ActivityIndicator, Button, Text, View, WebView,
 } from 'react-native';
 
-import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from '../../../constants/Url';
-import * as api from '../../../api/api';
-import { getOpenBankAuthInfo } from '../../../utils/OpenBankAuthTokenUtils';
+import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from '../constants/Url';
+import * as api from '../api/api';
+import * as obconfig from '../openbank-config';
+import { saveOpenBankAuthInfo } from '../auth/OBAuthTokenManager';
 
 const TYPE_REAUTH = 'REAUTH';
 const ADD_ACCOUNT = 'ADD_ACCOUNT';
@@ -61,7 +62,7 @@ export default class OpenBankAuthWebView extends React.Component {
     this.setState({ noticeMSG: '곧(10초) 창이 닫힙니다~' });
 
     setTimeout(() => {
-      navigation.navigate('Home', { action: 'RELOAD' });
+      navigation.navigate('AdCreate', { action: 'RELOAD' });
     }, 5000);
   };
 
@@ -71,7 +72,7 @@ export default class OpenBankAuthWebView extends React.Component {
    */
   receiveWebViewMSG = async (webViewMSG) => {
     const { navigation } = this.props;
-    const { type, userId, defDivAccDescription } = navigation.state.params;
+    const { type, userId } = navigation.state.params;
 
     const webData = JSON.parse(webViewMSG);
     let postData = null;
@@ -79,9 +80,9 @@ export default class OpenBankAuthWebView extends React.Component {
     // 오픈뱅크정보 요청
     if (webData.type === 'ASK_BANKAPIINFO') {
       const apiData = {
-        client_id: 'l7xx4ff929f59df4407d8212fd86f7388046',
-        client_secret: 'f3fc3a0536b846ca86e8470b8cd35fea',
-        redirect_uri: 'https://jb9229.github.io/openBankApiCallback/index.html',
+        client_id: obconfig.client_id,
+        client_secret: obconfig.client_secret,
+        redirect_uri: obconfig.redirect_uri,
       };
 
       postData = JSON.stringify(apiData);
@@ -89,11 +90,13 @@ export default class OpenBankAuthWebView extends React.Component {
 
     // 웹뷰 종료 요청
     if (webData.type === 'ASK_WEBVIEWCLOSE') {
-      navigation.navigate('Links');
+      navigation.navigate('AdCreate', { action: 'RELOAD' });
     }
 
     // 인증토큰 저장 요청
     if (webData.type === 'ASK_SAVETOKEN') {
+      console.log('=============== ASK_SAVETOKEN ===============');
+      console.log(webData);
       const tokenData = {
         access_token: webData.data.access_token,
         token_type: webData.data.token_type,
@@ -103,31 +106,16 @@ export default class OpenBankAuthWebView extends React.Component {
         user_seq_no: webData.data.user_seq_no,
       };
 
-      await getOpenBankAuthInfo(JSON.stringify(tokenData));
+      const tokenDataStr = JSON.stringify(tokenData);
+      const saveResult = await saveOpenBankAuthInfo(tokenDataStr);
 
+      if (!saveResult) {
+        Alert.alert('계좌연결정보 저장에 실패 했습니다', tokenDataStr);
+
+        return;
+      }
       if (type === ADD_ACCOUNT) {
-        // fintech_use_num 알아내기
-        const accountListInfo = api.getAccountList(tokenData.user_seq_no);
-
-        if (accountListInfo === undefined) {
-          return;
-        }
-
-        const oriAccList = api.getOriAccList(userId);
-
-        const openBankAccInfo = this.getOpenbankAccInfo(oriAccList, accountListInfo);
-        // 원통장 추가 요청
-
-        const newOriAccount = api.createOriAcc(
-          userId,
-          openBankAccInfo.account_alias,
-          openBankAccInfo.fintech_use_num,
-          defDivAccDescription,
-        );
-
-        if (newOriAccount === undefined) {
-          // TODO Exception proccess
-        }
+        // TODO user에 자동이체 정보 서버에등록,
       }
 
       this.closeWebView();
@@ -151,12 +139,12 @@ export default class OpenBankAuthWebView extends React.Component {
     }
 
     const paramData = {
-      client_id: 'l7xx4ff929f59df4407d8212fd86f7388046',
+      client_id: obconfig.client_id,
       response_type: 'code',
       lang: '',
       edit_option: '',
-      scope: 'login inquiry',
-      redirect_uri: 'https://jb9229.github.io/openBankApiCallback/index.html',
+      scope: 'login inquiry transfer',
+      redirect_uri: obconfig.redirect_uri,
       client_info: 'test+whatever+you+want',
       auth_type: 0,
       bg_color: '#FAFAFA',

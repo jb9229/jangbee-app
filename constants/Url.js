@@ -8,8 +8,13 @@ module.exports = {
   JBSERVER_FIRM: `${SERVER_URL}firm`,
   JBSERVER_FIRMLOCAL: `${SERVER_URL}firm/local`,
   JBSERVER_AD: `${SERVER_URL}ad`,
+  JBSERVER_ADLIST: `${SERVER_URL}ads`,
   JBSERVER_FIRMNEAR: `${SERVER_URL}firm/near`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
   OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,
   OPENBANK_REAUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize_account2`,
+  OPENBANK_TOKEN: `${OPENBANK_URL}/oauth/2.0/token`,
+  OPENBANK_ACCOUNTLIST: `${OPENBANK_URL}/v1.0/account/list`,
+  OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
+  OPENBANK_USERINFO: `${OPENBANK_URL}/v1.0/user/me`,
 };

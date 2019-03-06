@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Switch, StyleSheet, Text, View } from 'react-native';
 import JBButton from '../components/molecules/JBButton';
 import SearCondBox from '../components/organisms/SearCondBox';
-import JangbeeAd from '../components/organisms/JangbeeAd';
+import JangbeeAdList from '../components/JangbeeAdList';
 import EquipementModal from '../components/EquipmentModal';
 import LocalSelModal from '../components/LocalSelModal';
 import colors from '../constants/Colors';
@@ -390,81 +390,80 @@ export default class GPSSearchScreen extends React.Component {
           nextFocus={() => {}}
           selEquipment={searEquipment}
         />
-        <View style={styles.adWrap}>
-          <JangbeeAd adType={adType.main} euqiTarket={adEuqiTarket} {...this.props} />
-        </View>
-        {!isSearViewMode
-          ? (
-            <View style={styles.cardWrap}>
-              <View style={styles.card}>
-                <View style={styles.searEquiWrap}>
-                  <SearCondBox
-                    title="어떤 장비를 찾고 계신가요?"
-                    searchCondition={searEquipment}
-                    onPress={() => this.setState({ isVisibleEquiModal: true })}
-                    defaultCondtion="장비 선택"
-                  />
+        {!isSearViewMode ? (
+          <View style={styles.adWrap}>
+            <JangbeeAdList adType={adType.main} {...this.props} />
+          </View>
+        ) : null}
+        <View style={styles.cardWrap}>
+          <View style={styles.card}>
+            <View style={styles.searEquiWrap}>
+              <SearCondBox
+                title="어떤 장비를 찾고 계신가요?"
+                searchCondition={searEquipment}
+                onPress={() => this.setState({ isVisibleEquiModal: true })}
+                defaultCondtion="장비 선택"
+              />
 
-                  {isLocalSearch ? (
-                    <SearCondBox
-                      title="부르고자 하는 장비의 지역은 어디 입니까?"
-                      searchCondition={`${searSido}${searGungu}`}
-                      defaultCondtion="지역 선택"
-                      onPress={() => this.openSelLocModal()}
-                    />
-                  ) : null}
+              {isLocalSearch ? (
+                <SearCondBox
+                  title="부르고자 하는 장비의 지역은 어디 입니까?"
+                  searchCondition={`${searSido}${searGungu}`}
+                  defaultCondtion="지역 선택"
+                  onPress={() => this.openSelLocModal()}
+                />
+              ) : null}
+            </View>
+            <View style={styles.commWrap}>
+              {!isLocalSearch ? (
+                <View style={styles.gpsWrap}>
+                  <Text style={styles.currLocText}>{currLocation}</Text>
+                  <JBIcon name="refresh" size={24} color={colors.point2} onPress={() => this.setLocationInfo()} />
                 </View>
-                <View style={styles.commWrap}>
-                  {!isLocalSearch ? (
-                    <View style={styles.gpsWrap}>
-                      <Text style={styles.currLocText}>{currLocation}</Text>
-                      <JBIcon name="refresh" size={24} color={colors.point2} onPress={() => this.setLocationInfo()} />
-                    </View>
-                  ) : null}
-                  <View style={styles.switchWrap}>
-                    <Text style={styles.switchText}>내 주변 검색</Text>
-                    <Switch
-                      value={isLocalSearch}
-                      onValueChange={newValue => this.changeSearMode(newValue)}
-                    />
-                    <Text style={styles.switchText}>지역 검색</Text>
-                  </View>
-                  <FirmCreaErrMSG errorMSG={validationMessage} />
-                  {isLocalSearch ? (
-                    <JBButton title="지역 검색" onPress={() => this.searchLocJangbee()} size="full" />
-                  ) : (
-                    <JBButton
-                      title="내 주변 검색"
-                      onPress={() => this.searchNearJangbee()}
-                      size="full"
-                    />
-                  )}
-                </View>
+              ) : null}
+              <View style={styles.switchWrap}>
+                <Text style={styles.switchText}>내 주변 검색</Text>
+                <Switch
+                  value={isLocalSearch}
+                  onValueChange={newValue => this.changeSearMode(newValue)}
+                />
+                <Text style={styles.switchText}>지역 검색</Text>
               </View>
+              <FirmCreaErrMSG errorMSG={validationMessage} />
+              {isLocalSearch ? (
+                <JBButton title="지역 검색" onPress={() => this.searchLocJangbee()} size="full" />
+              ) : (
+                <JBButton
+                  title="내 주변 검색"
+                  onPress={() => this.searchNearJangbee()}
+                  size="full"
+                />
+              )}
             </View>
-          ) : (
-            <View style={styles.firmListWrap}>
-              <JBIcon
-                name="close"
-                size={23}
-                onPress={() => this.setState({ isSearViewMode: false })}
-              />
-              <FirmSearList
-                data={searchedFirmList}
-                page={page}
-                refreshing={refreshing}
-                last={isLastList}
-                isLoading={isListLoading}
-                handleLoadMore={this.handleLoadMore}
-                handleRefresh={this.handleRefresh}
-                selEquipment={searEquipment}
-                selSido={searSido}
-                selGungu={searGungu}
-                {...this.props}
-              />
-            </View>
-          )
-        }
+          </View>
+        </View>
+        {isSearViewMode ? (
+          <View style={styles.firmListWrap}>
+            <JBIcon
+              name="close"
+              size={23}
+              onPress={() => this.setState({ isSearViewMode: false })}
+            />
+            <FirmSearList
+              data={searchedFirmList}
+              page={page}
+              refreshing={refreshing}
+              last={isLastList}
+              isLoading={isListLoading}
+              handleLoadMore={this.handleLoadMore}
+              handleRefresh={this.handleRefresh}
+              selEquipment={searEquipment}
+              selSido={searSido}
+              selGungu={searGungu}
+              {...this.props}
+            />
+          </View>
+        ) : null}
       </View>
     );
   }

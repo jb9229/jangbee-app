@@ -4,8 +4,10 @@ import {
   handleTextResponse,
   handleNoContentResponse,
   handleBadReqJsonResponse,
+  handleOpenBankJsonResponse,
 } from '../utils/Fetch-utils';
 import * as kakaoconfig from '../kakao-config';
+import * as obconfig from '../openbank-config';
 
 export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
@@ -96,7 +98,7 @@ export function getAd(type, equiTarget, sidoTarget, gugunTarget) {
 
   let paramUrl = `?adType=${paramType}`;
   if (equiTarget !== undefined && equiTarget !== '') {
-    paramUrl += `&equiTarget=${encodeURIComponent(sidoTarget)}`;
+    paramUrl += `&equiTarget=${encodeURIComponent(equiTarget)}`;
   }
 
   if (sidoTarget !== undefined && sidoTarget !== '') {
@@ -107,9 +109,18 @@ export function getAd(type, equiTarget, sidoTarget, gugunTarget) {
     paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
   }
 
-  console.log(`${url.JBSERVER_AD}${paramUrl}`);
-
   return fetch(`${url.JBSERVER_AD}${paramUrl}`).then(handleJsonResponse);
+}
+
+/**
+ * 내광고 조회
+ */
+export function getJBAdList(accountId) {
+  const paramAccountId = encodeURIComponent(accountId);
+
+  const paramUrl = `?accountId=${paramAccountId}`;
+
+  return fetch(`${url.JBSERVER_ADLIST}${paramUrl}`).then(handleJsonResponse);
 }
 
 export function uploadImage(uri) {
@@ -172,4 +183,86 @@ export function getAddrByGpspoint(longitude, latitude) {
       },
     },
   ).then(handleBadReqJsonResponse);
+}
+
+/** ******************** Open Bank Api List ************************** */
+
+/**
+ * 토큰작성 함수
+ * @param {Object} openBankAuthInfo 토큰정보
+ */
+function getAccessToken(openBankAuthInfo) {
+  const headerAuth = `${openBankAuthInfo.token_type} ${openBankAuthInfo.access_token}`;
+
+  return headerAuth;
+}
+
+/**
+ * 등록된 계좌목록 조회 함수
+ * @param {Object} accessTokenInfo 접근 토큰
+ * @param {string} userSeqNo 사용자일련번호
+ * @param {string} isInclCancAccount 해지계좌포함여부 (Y:해지계좌포함, N:해지계좌불포함)
+ * @param {string} sort 정렬순서 (D:Descending, A:Ascending)
+ */
+export function getOBAccList(accessTokenInfo, userSeqNo, isInclCancAccount, sort) {
+  return fetch(
+    `${url.OPENBANK_ACCOUNTLIST}?user_seq_no=${encodeURIComponent(
+      userSeqNo,
+    )}&include_cancel_yn=${encodeURIComponent(isInclCancAccount)}&sort_order=${encodeURIComponent(
+      sort,
+    )}`,
+    {
+      headers: {
+        Authorization: getAccessToken(accessTokenInfo),
+      },
+    },
+  ).then(handleOpenBankJsonResponse);
+}
+
+/**
+ * 오픈뱅크 토큰재인증 함수
+ *
+ * @param {*} refreshToken refresh 토큰
+ */
+export function refreshOpenBankAuthToken(refreshToken) {
+  const paramData = {
+    client_id: obconfig.client_id,
+    client_secret: obconfig.secret,
+    refresh_token: refreshToken,
+    scope: 'login inquiry transfer',
+    grant_type: 'refresh_token',
+  };
+
+  return fetch(
+    `${url.OPENBANK_TOKEN}?
+    client_id=${encodeURIComponent(paramData.client_id)}
+    &client_secret=${encodeURIComponent(paramData.client_secret)}
+    &refresh_token=${encodeURIComponent(paramData.refresh_token)}
+    &scope=${encodeURIComponent(paramData.scope)}
+    &grant_type=${encodeURIComponent(paramData.grant_type)}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+    },
+  ).then(handleOpenBankJsonResponse);
+}
+
+export function transferWithdraw(accessTokenInfo, fintechUseNum, tranAmt) {
+  const postData = {
+    dps_print_content: '큰누나이체 테스트',
+    fintech_use_num: fintechUseNum,
+    tran_amt: tranAmt,
+    tran_dtime: '20190307064455',
+  };
+
+  return fetch(url.OPENBANK_WITHDRAW, {
+    method: 'POST',
+    headers: {
+      Authorization: getAccessToken(accessTokenInfo),
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(postData),
+  }).then(handleOpenBankJsonResponse);
 }

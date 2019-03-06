@@ -1,4 +1,5 @@
 import CmException from '../common/CmException';
+import * as obconfig from '../openbank-config';
 
 /**
  * HttpRequest Json 응답처리
@@ -61,6 +62,33 @@ export function handleTextResponse(res) {
 export function handleNoContentResponse(res) {
   if (res.status === 204) {
     return true;
+  }
+
+  throw new CmException(res.status, `${res.url}`);
+}
+
+/** ***************** Open bank API Handle ******************************** */
+
+/**
+ * 오픈뱅크 JSON 응답처리 함수
+ * @param {Object} res : Json 응답결과
+ */
+export function handleOpenBankJsonResponse(res) {
+  if (res.ok) {
+    if (res.status === 204) {
+      // NO_CONTENTS
+      return res;
+    }
+
+    return res.json().then((responseJson) => {
+      const rspCode = responseJson.rsp_code;
+
+      if (rspCode === obconfig.API_RESPONSECODE_OK) {
+        return responseJson;
+      }
+
+      throw new CmException(rspCode, `[${responseJson.rsp_message}] ${res.url}`);
+    });
   }
 
   throw new CmException(res.status, `${res.url}`);

@@ -44,8 +44,6 @@ export async function reAuthToken(currentDateTime, openBankAuthInfo) {
 export async function getOpenBankAuthInfo() {
   try {
     const openBankAuthInfoStr = await AsyncStorage.getItem(PKey.PKEY_OPENBANKAUTHTOKEN);
-    console.log('=== AsyncStorage openBankAuthInfoStr ===');
-    console.log(openBankAuthInfoStr);
 
     if (openBankAuthInfoStr != null && openBankAuthInfoStr !== '') {
       const openBankAuthInfo = JSON.parse(openBankAuthInfoStr);
@@ -53,7 +51,7 @@ export async function getOpenBankAuthInfo() {
       const acessTokenExpireTime = openBankAuthInfo.expires_in;
       const currentDateTime = new Date().getMilliseconds();
 
-      console.log(`openBankAuthInfo Time: ${currentDateTime} / ${acessTokenExpireTime}`);
+      // Console.log(`openBankAuthInfo Time: ${currentDateTime} / ${acessTokenExpireTime}`);
 
       if (currentDateTime > acessTokenExpireTime) {
         const newOpenBankAuthInfo = reAuthToken(currentDateTime, openBankAuthInfo);
@@ -64,7 +62,7 @@ export async function getOpenBankAuthInfo() {
       return openBankAuthInfo;
     }
   } catch (error) {
-    Alert.alert('getInquiryToken', error.message);
+    Alert.alert('예상치 못한 오류입니다', `[오픈뱅크 토큰정보 요청] ${error.message}`);
   }
 
   return undefined;

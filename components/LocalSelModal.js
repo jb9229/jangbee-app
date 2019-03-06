@@ -14,7 +14,7 @@ import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import JBIcon from './molecules/JBIcon';
-import JangbeeAd from './organisms/JangbeeAd';
+import JangbeeAdList from './JangbeeAdList';
 import * as converter from '../utils/Converter';
 import adType from '../constants/AdType';
 import JBErroMessage from './organisms/JBErrorMessage';
@@ -211,7 +211,7 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              <JangbeeAd adType={adType.local} {...this.props} />
+              <JangbeeAdList adType={adType.local} {...this.props} />
               <View style={styles.selLocalWrap}>
                 <TouchableHighlight
                   onPress={() => this.setState({ gugun: '-', isSelectedSido: false })}
