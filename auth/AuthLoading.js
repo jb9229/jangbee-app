@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
 });
 
 class AuthLoading extends React.Component {
+
   componentDidMount() {
     this.initFirebase();
     this.checkLogin();

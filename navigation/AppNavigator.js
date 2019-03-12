@@ -1,5 +1,6 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { Alert, createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { Permissions, Notifications } from 'expo';
 
 import MainTabNavigator from './MainTabNavigator';
 import FirmTabNavigator from './FirmTabNavigator';
@@ -28,5 +29,35 @@ const appContainer = createAppContainer(
   ),
 );
 
+class RootNavigator extends React.Component {
+  componentDidMount() {
+    this.getiOSNotificationPermission();
+    // this._notificationSubscription = this._listenForNotifications();
+  }
+
+  componentWillUnmount() {
+    this._notificationSubscription && this._notificationSubscription.remove();
+  }
+
+  render() {
+    return <appContainer />;
+  }
+
+  // android permissions are given on install
+  async getiOSNotificationPermission() {
+    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (status !== 'granted') {
+      return;
+    }
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+  }
+
+  _handleNotification = ({ origin, data, remote }) => {
+    console.log(remote);
+    const type = remote ? 'Push' : 'Local';
+    const info = `${type} notification ${origin} with data: ${JSON.stringify(data)}`;
+    setTimeout(() => Alert.alert('Notification!', info), 500);
+  };
+}
+
 export default appContainer;
-// }

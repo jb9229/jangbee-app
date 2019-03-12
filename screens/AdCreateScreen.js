@@ -1,7 +1,10 @@
 import React from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert, FlatList, StyleSheet, Text, View,
+} from 'react-native';
 import styled from 'styled-components/native';
 import JBButton from '../components/molecules/JBButton';
+import ImagePickInput from '../components/molecules/ImagePickInput';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import * as api from '../api/api';
 import { getOpenBankAuthInfo } from '../auth/OBAuthTokenManager';
@@ -9,9 +12,8 @@ import ListSeparator from '../components/molecules/ListSeparator';
 import colors from '../constants/Colors';
 
 const TouchableHighlight = styled.TouchableHighlight`
-  ${props =>
-    props.selected &&
-    `
+  ${props => props.selected
+    && `
     background-color: ${colors.point};
   `};
 `;
@@ -152,7 +154,15 @@ export default class AdCreateScreen extends React.Component {
   };
 
   render() {
-    const { isAccEmpty, accList, accListSelcted, payErrMessage } = this.state;
+    const {
+      isAccEmpty,
+      accList,
+      accListSelcted,
+      adTitle,
+      adSubTitle,
+      adPhoto,
+      payErrMessage,
+    } = this.state;
     return (
       <View>
         <Text># 홍보방법 선택</Text>
@@ -174,9 +184,30 @@ export default class AdCreateScreen extends React.Component {
         </View>
         <Text># 홍보정보 입력(광고 만들기)</Text>
         <View>
-          <Text>광고 Title</Text>
-          <Text>광고 SubTitle</Text>
-          <Text>광고 사진</Text>
+          <JBButton
+            title="광고 타이틀"
+            value={adTitle}
+            onChangeText={text => this.setState({ adTitle: text })}
+            placeholder="광고상단 문구를 입력하세요(최대 10자)"
+          />
+          <JBButton
+            title="광고 슬로건"
+            value={adTitle}
+            onChangeText={text => this.setState({ adTitle: text })}
+            placeholder="광고하단 문구를 입력하세요(최대 20자)"
+          />
+          <JBButton
+            title="광고 슬로건"
+            value={adSubTitle}
+            onChangeText={text => this.setState({ adTitle: text })}
+            placeholder="광고하단 문구를 입력하세요(최대 20자)"
+          />
+          <ImagePickInput
+            itemTitle="광고배경 사진"
+            imgUrl={adPhoto}
+            aspect={[4, 3]}
+            setImageUrl={url => this.setState({ adPhoto: url })}
+          />
           <Text>홍보 장비 선택</Text>
           <Text>홍보 지역 선택</Text>
         </View>

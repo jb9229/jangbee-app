@@ -9,8 +9,8 @@ import {
 import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
 import { validate, validatePresence } from '../utils/Validation';
-import ImagePickInput from '../components/ImagePickInput';
-import FirmCreaTextInput from '../components/FirmCreaTextInput';
+import ImagePickInput from '../components/molecules/ImagePickInput';
+import JBTextInput from '../components/molecules/JBTextInput';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import * as api from '../api/api';
 import JBButton from '../components/molecules/JBButton';
@@ -195,7 +195,6 @@ class FirmUpdateScreen extends React.Component<Props, State> {
 
     // Current Image Delete and New Image Null
     if (preImg !== '' && preImg !== undefined) {
-      console.log(`preImg delete: ${imgUri} / ${preImg}`);
       const result = await this.removeFirmImage(preImg);
       if (!result) { return undefined; }
     }
@@ -502,7 +501,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.cardWrap}>
               <View style={styles.card}>
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체명*"
                   value={fname}
                   onChangeText={text => this.setState({ fname: text })}
@@ -513,7 +512,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={fnameValErrMessage} />
                 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="전화번호*"
                   value={phoneNumber}
                   onChangeText={text => this.setState({ phoneNumber: text })}
@@ -524,7 +523,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="보유 장비*"
                   value={equiListStr}
                   onChangeText={text => this.setState({ equiListStr: text })}
@@ -533,7 +532,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체주소(고객검색시 거리계산 기준이됨)*"
                   value={address}
                   tiRefer={(input) => { this.addrTextInput = input; }}
@@ -543,7 +542,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={addressValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체 상세주소"
                   value={addressDetail}
                   tiRefer={(input) => { this.addrDetTextInput = input; }}
@@ -551,7 +550,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   placeholder="상세주소를 입력해 주세요"
                 />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체 소개"
                   value={introduction}
                   onChangeText={text => this.setState({ introduction: text })}
@@ -590,7 +589,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={photo3ValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="블로그"
                   value={blog}
                   onChangeText={text => this.setState({ blog: text })}
@@ -598,7 +597,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={blogValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="SNG"
                   value={sns}
                   onChangeText={text => this.setState({ sns: text })}
@@ -606,7 +605,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 />
                 <JBErrorMessage errorMSG={snsValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="홈페이지"
                   value={homepage}
                   onChangeText={text => this.setState({ homepage: text })}

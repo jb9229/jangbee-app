@@ -2,8 +2,8 @@ import React from 'react';
 import {
   StyleSheet, Text, TextInput, View,
 } from 'react-native';
-import fonts from '../constants/Fonts';
-import colors from '../constants/Colors';
+import fonts from '../../constants/Fonts';
+import colors from '../../constants/Colors';
 
 const styles = StyleSheet.create({
   itemWrap: {

@@ -71,14 +71,14 @@ export function getLocalFirmList(page, equipment, searSido, searGungo) {
   ).then(handleJsonResponse);
 }
 
-export function updateFirm(updateFirm) {
+export function updateFirm(newFirmData) {
   return fetch(url.JBSERVER_FIRM, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updateFirm),
+    body: JSON.stringify(newFirmData),
   }).then(handleJsonResponse);
 }
 

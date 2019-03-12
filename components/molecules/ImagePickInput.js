@@ -3,9 +3,9 @@ import {
   Image, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
-import fonts from '../constants/Fonts';
-import colors from '../constants/Colors';
-import JBIcon from './molecules/JBIcon';
+import fonts from '../../constants/Fonts';
+import colors from '../../constants/Colors';
+import JBIcon from './JBIcon';
 
 const styles = StyleSheet.create({
   itemWrap: {

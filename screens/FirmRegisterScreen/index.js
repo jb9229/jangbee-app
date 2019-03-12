@@ -4,8 +4,8 @@ import { ImagePicker } from 'expo';
 import { validate, validatePresence } from '../../utils/Validation';
 import * as api from '../../api/api';
 import { withLogin } from '../../contexts/LoginProvider';
-import ImagePickInput from '../../components/ImagePickInput';
-import FirmCreaTextInput from '../../components/FirmCreaTextInput';
+import ImagePickInput from '../../components/molecules/ImagePickInput';
+import JBTextInput from '../../components/molecules/JBTextInput';
 import JBErrorMessage from '../../components/organisms/JBErrorMessage';
 import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
@@ -388,7 +388,7 @@ class FirmRegisterScreen extends React.Component {
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.cardWrap}>
               <View style={styles.card}>
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체명*"
                   value={fname}
                   onChangeText={text => this.setState({ fname: text })}
@@ -399,7 +399,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={fnameValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="전화번호*"
                   value={phoneNumber}
                   onChangeText={text => this.setState({ phoneNumber: text })}
@@ -410,7 +410,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="보유 장비*"
                   value={equiListStr}
                   onChangeText={text => this.setState({ equiListStr: text })}
@@ -419,7 +419,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체주소(고객검색시 거리계산 기준이됨)*"
                   value={address}
                   tiRefer={(input) => {
@@ -431,7 +431,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={addressValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체 상세주소"
                   value={addressDetail}
                   tiRefer={(input) => {
@@ -441,7 +441,7 @@ class FirmRegisterScreen extends React.Component {
                   placeholder="상세주소를 입력해 주세요"
                 />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="업체 소개"
                   value={introduction}
                   onChangeText={text => this.setState({ introduction: text })}
@@ -480,7 +480,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={photo3ValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="블로그"
                   value={blog}
                   onChangeText={text => this.setState({ blog: text })}
@@ -488,7 +488,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={blogValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="SNG"
                   value={sns}
                   onChangeText={text => this.setState({ sns: text })}
@@ -496,7 +496,7 @@ class FirmRegisterScreen extends React.Component {
                 />
                 <JBErrorMessage errorMSG={snsValErrMessage} />
 
-                <FirmCreaTextInput
+                <JBTextInput
                   title="홈페이지"
                   value={homepage}
                   onChangeText={text => this.setState({ homepage: text })}
