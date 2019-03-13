@@ -1,14 +1,11 @@
 import React from 'react';
 import {
-  Alert,
-  StyleSheet,
-  TextInput,
-  Text,
-  View,
+  Alert, StyleSheet, TextInput, Text, View,
 } from 'react-native';
 import { Linking, WebBrowser } from 'expo';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
+import { getUserType } from '../utils/FirebaseUtils';
 import { validate } from '../utils/Validation';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
@@ -90,8 +87,8 @@ class LoginScreen extends React.PureComponent {
     this.setState({ code });
   };
 
-  onSignIn = () => {
-    const { setUser } = this.props;
+  onSignIn = async () => {
+    const { navigation, setUser, setUserType } = this.props;
     const { confirmationResult, code } = this.state;
 
     // Validation
@@ -101,41 +98,21 @@ class LoginScreen extends React.PureComponent {
       return;
     }
 
-    confirmationResult
+    await confirmationResult
       .confirm(code)
-      .then((result) => {
+      .then(result => async function logining() {
         const { user } = result;
 
-        setUser(user);
-        this.checkUserType(user.uid);
+        const userType = await getUserType(user.uid);
+
+        if (userType === undefined) {
+          navigation.navigate('SignUp');
+        } else {
+          navigation.navigate('AuthLoading');
+        }
       })
       .catch((error) => {
         Alert.alert(`잘못된 인증 코드입니다: ${error}`);
-      });
-  };
-
-  checkUserType = (uid) => {
-    const { navigation, setUserType } = this.props;
-
-    firebase
-      .database()
-      .ref(`users/${uid}/userType`)
-      .once('value', (data) => {
-        if (data.val() === null) {
-          navigation.navigate('SignUp');
-          return;
-        }
-
-        const userType = data.val();
-
-        setUserType(userType);
-        if (userType === 1) {
-          navigation.navigate('ClientMain');
-        } else if (userType === 2) {
-          navigation.navigate('FirmMain');
-        } else {
-          Alert.alert('유효하지 않은 사용자 입니다.');
-        }
       });
   };
 

@@ -91,12 +91,12 @@ class SignUpScreen extends React.Component {
    * Firebase user DB에 사용자 추가정보 저장
    */
   onSignUp = async () => {
+    const { navigation, user } = this.props;
     const { userType } = this.state;
     if (userType === undefined) {
       this.setState({ errorMessage: '사용자님의 업무를 선택해 주세요.' });
       return;
     }
-    const { user } = this.props;
 
     await firebase
       .database()
@@ -105,32 +105,7 @@ class SignUpScreen extends React.Component {
         userType,
       });
 
-    this.completeSignUp(user.uid);
-  };
-
-  completeSignUp = (uid) => {
-    const { navigation, setUserType } = this.props;
-
-    firebase
-      .database()
-      .ref(`users/${uid}/userType`)
-      .once('value', (data) => {
-        if (data.val() === null) {
-          navigation.navigate('SignUp');
-          return;
-        }
-
-        const userType = data.val();
-
-        setUserType(userType);
-        if (userType === 1) {
-          navigation.navigate('ClientMain');
-        } else if (userType === 2) {
-          navigation.navigate('FirmMain');
-        } else {
-          Alert.alert('유효하지 않은 사용자 입니다.');
-        }
-      });
+    navigation.navigate('AuthLoading');
   };
 
   onChangeUserType = (userType) => {
