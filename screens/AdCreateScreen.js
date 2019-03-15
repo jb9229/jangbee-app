@@ -1,15 +1,26 @@
 import React from 'react';
 import {
-  Alert, FlatList, StyleSheet, Text, View,
+  Alert,
+  FlatList,
+  KeyboardAvoidingView,
+  StyleSheet,
+  ScrollView,
+  Picker,
+  Text,
+  View,
 } from 'react-native';
 import styled from 'styled-components/native';
+import JBTextInput from '../components/molecules/JBTextInput';
 import JBButton from '../components/molecules/JBButton';
 import ImagePickInput from '../components/molecules/ImagePickInput';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import * as api from '../api/api';
+import EquipementModal from '../components/EquipmentModal';
+import MapAddWebModal from '../components/MapAddWebModal';
 import { getOpenBankAuthInfo } from '../auth/OBAuthTokenManager';
 import ListSeparator from '../components/molecules/ListSeparator';
 import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const TouchableHighlight = styled.TouchableHighlight`
   ${props => props.selected
@@ -18,6 +29,22 @@ const TouchableHighlight = styled.TouchableHighlight`
   `};
 `;
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  formWrap: {},
+  adTypeFormWrap: {
+    flex: 1,
+    margin: 10,
+    marginBottom: 3,
+  },
+  adTypeTitle: {
+    fontFamily: fonts.titleMiddle,
+    color: colors.title,
+    fontSize: 15,
+    marginBottom: 3,
+  },
+  adTypePicker: {},
   bookedAdTypeText: {
     textDecorationLine: 'line-through',
   },
@@ -33,16 +60,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors.point,
     color: 'white',
   },
+  botCommWrap: {
+    alignItems: 'center',
+  },
 });
 export default class AdCreateScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isAccEmpty: undefined,
+      isVisibleEquiModal: false,
+      isVisibleMapAddModal: false,
       accList: [],
       bookedAdTypeList: [1, 2],
       payErrMessage: '',
       accListSelcted: [],
+      adPhoto: '',
+      adEquipment: '',
+      adSido: '',
+      adGungu: '',
     };
   }
 
@@ -117,10 +153,10 @@ export default class AdCreateScreen extends React.Component {
   renderAdTypeList = (type, typeDescription) => {
     const { bookedAdTypeList } = this.state;
     if (bookedAdTypeList.includes(type)) {
-      return <Text style={styles.bookedAdTypeText}>{typeDescription}</Text>;
+      return <Picker.Item label={typeDescription} value={`${type[0]},${type[1]}`} color="gray" />;
     }
 
-    return <Text style={styles.AdTypeText}>{typeDescription}</Text>;
+    return <Picker.Item label={typeDescription} value={`${type[0]},${type[1]}`} />;
   };
 
   onAccListItemPress = (idStr) => {
@@ -156,86 +192,114 @@ export default class AdCreateScreen extends React.Component {
   render() {
     const {
       isAccEmpty,
+      isVisibleEquiModal,
+      isVisibleMapAddModal,
       accList,
       accListSelcted,
+      adType,
       adTitle,
       adSubTitle,
       adPhoto,
+      adEquipment,
+      adSido,
+      adGungu,
       payErrMessage,
     } = this.state;
     return (
-      <View>
-        <Text># 홍보방법 선택</Text>
-        <View>
-          {/* <Picker
-          selectedValue={this.state.language}
-          style={{height: 50, width: 100}}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({language: itemValue})
-          }>
-          <Picker.Item label="Java" value="java" />
-          <Picker.Item label="JavaScript" value="js" />
-        </Picker> */}
-          {this.renderAdTypeList([0, 1], 'Main1(7만원, t:1)')}
-          {this.renderAdTypeList([0, 2], 'Main2(6만원, t:1)')}
-          {this.renderAdTypeList([0, 3], 'Main3(5만원, t:1)')}
-          <Text style={styles.AdTypeText}>장비선택팝업창1(3만원)</Text>
-          <Text style={styles.AdTypeText}>지역선택팝업창1(2만원)</Text>
-        </View>
-        <Text># 홍보정보 입력(광고 만들기)</Text>
-        <View>
-          <JBButton
-            title="광고 타이틀"
-            value={adTitle}
-            onChangeText={text => this.setState({ adTitle: text })}
-            placeholder="광고상단 문구를 입력하세요(최대 10자)"
-          />
-          <JBButton
-            title="광고 슬로건"
-            value={adTitle}
-            onChangeText={text => this.setState({ adTitle: text })}
-            placeholder="광고하단 문구를 입력하세요(최대 20자)"
-          />
-          <JBButton
-            title="광고 슬로건"
-            value={adSubTitle}
-            onChangeText={text => this.setState({ adTitle: text })}
-            placeholder="광고하단 문구를 입력하세요(최대 20자)"
-          />
-          <ImagePickInput
-            itemTitle="광고배경 사진"
-            imgUrl={adPhoto}
-            aspect={[4, 3]}
-            setImageUrl={url => this.setState({ adPhoto: url })}
-          />
-          <Text>홍보 장비 선택</Text>
-          <Text>홍보 지역 선택</Text>
-        </View>
-        <View>
-          <Text># 결제할 계좌를 선택해 주세요</Text>
-          {isAccEmpty !== undefined && !isAccEmpty ? (
-            <FlatList
-              data={accList}
-              extraData={accListSelcted}
-              renderItem={this.renderAccListItem}
-              keyExtractor={(item, index) => index.toString()}
-              ItemSeparatorComponent={ListSeparator}
+      <View style={styles.container}>
+        <KeyboardAvoidingView>
+          <ScrollView contentContainerStyle={styles.formWrap}>
+            <EquipementModal
+              isVisibleEquiModal={isVisibleEquiModal}
+              closeModal={() => this.setState({ isVisibleEquiModal: false })}
+              selEquipmentStr={adEquipment}
+              completeSelEqui={seledEuipListStr => this.setState({ adEquipment: seledEuipListStr })}
+              nextFocus={() => {}}
+              singleSelectMode
             />
-          ) : (
-            <View>
-              <Text>등록된 광고가 없습니다, 장비 홍보를해 주세요.</Text>
+            <MapAddWebModal
+              isVisibleMapAddModal={isVisibleMapAddModal}
+              setMapAddModalVisible={(visible) => {
+                this.setState({ isVisibleMapAddModal: visible });
+              }}
+              saveAddrInfo={(addrData) => {
+                this.setState({ adSido: addrData.sidoAddr, adGungu: addrData.sigunguAddr });
+              }}
+              nextFocus={() => {}}
+            />
+            <View style={styles.adTypeFormWrap}>
+              <Text style={styles.adTypeTitle}>광고타입</Text>
+              <Picker
+                selectedValue={adType}
+                style={styles.adTypePicker}
+                onValueChange={itemValue => this.setState({ adType: itemValue })}
+              >
+                {this.renderAdTypeList([0, 1], '메인광고 첫번째(월 7만원, t:1)')}
+                {this.renderAdTypeList([0, 2], '메인광고 두번째(월 6만원, t:1)')}
+                {this.renderAdTypeList([0, 3], '메인광고 세번째(월 3만원, t:1)')}
+                <Picker.Item label="장비선택팝업창1(월 2만원)" value={9} />
+                <Picker.Item label="지역선택팝업창1(월 1만원)" value={10} />
+              </Picker>
             </View>
-          )}
-          <JBButton title="계좌등록/재인증" onPress={this.addOBAccount} size="small" />
-        </View>
-        <JBErrorMessage errorMSG={payErrMessage} />
-        {isAccEmpty !== undefined && !isAccEmpty ? (
-          <JBButton title="결제하기" onPress={this.adPayment} size="full" />
-        ) : (
-          <View>
-            <Text>먼저, 자동이체 계좌등록또는 재인증해 주세요.</Text>
-          </View>
-        )}
+            <JBTextInput
+              title="광고 타이틀"
+              value={adTitle}
+              onChangeText={text => this.setState({ adTitle: text })}
+              placeholder="광고상단 문구를 입력하세요(최대 10자)"
+            />
+            <JBTextInput
+              title="광고 슬로건"
+              value={adSubTitle}
+              onChangeText={text => this.setState({ adSubTitle: text })}
+              placeholder="광고하단 문구를 입력하세요(최대 20자)"
+            />
+            <ImagePickInput
+              itemTitle="광고배경 사진"
+              imgUrl={adPhoto}
+              aspect={[4, 3]}
+              setImageUrl={url => this.setState({ adPhoto: url })}
+            />
+            {(adType === 9 || adType === 10) && (
+              <JBTextInput
+                title="타켓 광고(장비)"
+                value={adEquipment}
+                onChangeText={text => this.setState({ adEquipment: text })}
+                onFocus={() => this.setState({ isVisibleEquiModal: true })}
+                placeholder="장비고객이 특정 장비를 선택 했을 경우 광고가 뜸"
+              />
+            )}
+            {adType === 10 && (
+              <JBTextInput
+                title="타켓 광고(지역)"
+                value={`${adSido}${adGungu}`}
+                onFocus={() => this.setState({ isVisibleMapAddModal: true })}
+                placeholder="타켓광고 지역을 선택해 주세요"
+              />
+            )}
+            <View>
+              {isAccEmpty !== undefined && !isAccEmpty && (
+                <FlatList
+                  data={accList}
+                  extraData={accListSelcted}
+                  renderItem={this.renderAccListItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  ItemSeparatorComponent={ListSeparator}
+                />
+              )}
+              <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
+            </View>
+            <View style={styles.botCommWrap}>
+              <JBErrorMessage errorMSG={payErrMessage} />
+              {isAccEmpty !== undefined && !isAccEmpty ? (
+                <JBButton title="결제하기" onPress={this.adPayment} size="full" />
+              ) : (
+                <View>
+                  <Text>먼저, 자동이체 계좌를 등록해 주세요.</Text>
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     );
   }

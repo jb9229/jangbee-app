@@ -220,7 +220,7 @@ class FirmMyInfoScreen extends React.Component {
               고객님들 검색에 콜받을 수 있게, 업체정보를 등록해 주세요.
             </Text>
             <JBButton title="업체정보 등록하기" onPress={() => this.registerFirm()} size="big" />
-            <JBButton title="로그아웃" onPress={() => this.onSignOut()} underline />
+            <JBButton title="로그아웃" onPress={() => this.onSignOut()} underline size="full" />
           </View>
         </View>
       );

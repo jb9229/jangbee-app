@@ -5,7 +5,7 @@ import {
 import { Linking, WebBrowser } from 'expo';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
-import { getUserType } from '../utils/FirebaseUtils';
+import { getUserInfo } from '../utils/FirebaseUtils';
 import { validate } from '../utils/Validation';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
@@ -103,7 +103,9 @@ class LoginScreen extends React.PureComponent {
       .then(result => async function logining() {
         const { user } = result;
 
-        const userType = await getUserType(user.uid);
+        const userInfo = await getUserInfo(user.uid);
+
+        const { userType } = userInfo;
 
         if (userType === undefined) {
           navigation.navigate('SignUp');

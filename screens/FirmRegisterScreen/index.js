@@ -384,7 +384,7 @@ class FirmRegisterScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior="padding" enabled>
+        <KeyboardAvoidingView>
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.cardWrap}>
               <View style={styles.card}>

@@ -4,9 +4,10 @@ import {
 } from 'react-native';
 import { Notifications } from 'expo';
 import firebase from 'firebase';
+import moment from 'moment';
 import firebaseconfig from '../firebaseconfig';
 import colors from '../constants/Colors';
-import { getUserType } from '../utils/FirebaseUtils';
+import { getUserInfo } from '../utils/FirebaseUtils';
 import { withLogin } from '../contexts/LoginProvider';
 
 const styles = StyleSheet.create({
@@ -21,6 +22,8 @@ class AuthLoading extends React.Component {
   componentDidMount() {
     this.initFirebase();
     this.checkLogin();
+
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
   }
 
   initFirebase = () => {
@@ -30,19 +33,28 @@ class AuthLoading extends React.Component {
   };
 
   checkLogin = () => {
-    const { navigation, setUser, setUserType } = this.props;
+    const {
+      navigation, setUser, setUserType, setOBInfo,
+    } = this.props;
 
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        getUserType(user.uid).then((data) => {
-          const userType = data.val();
+        getUserInfo(user.uid).then((data) => {
+          const userInfo = data.val();
 
+          const {
+            userType, obAccessToken, obRefreshToken, obAccTokenExpDate, obAccTokenDiscDate, obUserSeqNo,
+          } = userInfo;
           if (userType === undefined) {
             navigation.navigate('SignUp');
           } else {
             setUser(user);
             setUserType(userType);
-            this._notificationSubscription = Notifications.addListener(this._handleNotification);
+            setOBInfo(obAccessToken, obRefreshToken, obAccTokenExpDate, obAccTokenDiscDate, obUserSeqNo);
+
+            this.checkOBAccDiscDate(obAccTokenDiscDate);
+
+            // Go to Screeen By User Type
             if (userType === 1) {
               navigation.navigate('ClientMain');
             } else if (userType === 2) {
@@ -58,9 +70,17 @@ class AuthLoading extends React.Component {
     });
   };
 
+  checkOBAccDiscDate = (discardDate) => {
+    if (discardDate === undefined) { return; }
+    const beforeTwentyDay = moment().add(-20, 'day');
+
+    const compareResult = moment(discardDate).isAfter(beforeTwentyDay);
+    if (compareResult) {
+      this.comfirmReOpenBankAuth();
+    }
+  }
+
   _handleNotification = (notification) => {
-    const { navigation } = this.props;
-    // Alert.alert('리시브 Notification', notification.origin);
 
     const localnotificationId = notification.notificationId;
     Notifications.dismissNotificationAsync(localnotificationId);
@@ -68,21 +88,28 @@ class AuthLoading extends React.Component {
     if (navigation !== undefined && notification.data !== undefined) {
       // TODO Notice 확인 시, Notice 알람 제거
       if (notification.data.notice === 'NOTI_ARRIVE_ACCTOKEN_DISCARDDATE') {
-        Alert.alert(
-          '이체통장 재인증 요청',
-          '보안을 위해 일년에 한번씩 이체통장에 대한 재인증이 필요합니다.',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => navigation.navigate('FirmMain'),
-              style: 'cancel',
-            },
-            { text: 'OK', onPress: () => navigation.navigate('AdCreate') },
-          ],
-        );
+        this.comfirmReOpenBankAuth();
       }
     }
   };
+
+  comfirmReOpenBankAuth = () => {
+    const { navigation, user } = this.props;
+
+    Alert.alert(
+      '이체통장 재인증 요청',
+      '보안을 위해 일년에 한번씩 이체통장에 대한 재인증이 필요합니다.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => navigation.navigate('FirmMain'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => navigation.navigate('OpenBankAuth', { type: 'REAUTH' }) },
+      ],
+      {cancelable: false},
+    );
+  }
 
   render() {
     return (

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class FirmCreaTextInput extends React.PureComponent {
+export default class JBTextInput extends React.PureComponent {
   render() {
     const {
       title,

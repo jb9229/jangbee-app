@@ -31,7 +31,6 @@ class AdScreen extends React.Component {
 
   componentDidMount() {
     const { user } = this.props;
-
     this.setAdList(user.uid);
   }
 
@@ -85,7 +84,11 @@ class AdScreen extends React.Component {
         )}
 
         <View>
-          <JBButton title="내장비 홍보하기(광고신청)" onPress={() => navigation.navigate('AdCreate')} size="full" />
+          <JBButton
+            title="내장비 홍보하기"
+            onPress={() => navigation.navigate('AdCreate')}
+            size="full"
+          />
         </View>
       </View>
     );

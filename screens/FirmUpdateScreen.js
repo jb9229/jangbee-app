@@ -497,7 +497,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     }
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior="padding" enabled>
+        <KeyboardAvoidingView>
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.cardWrap}>
               <View style={styles.card}>
@@ -511,7 +511,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   }}
                 />
                 <JBErrorMessage errorMSG={fnameValErrMessage} />
-                
+
                 <JBTextInput
                   title="전화번호*"
                   value={phoneNumber}

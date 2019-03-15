@@ -103,6 +103,10 @@ class SignUpScreen extends React.Component {
       .ref(`users/${user.uid}`)
       .set({
         userType,
+      }, (error) => {
+        if (error) {
+          Alert.alert('저장 실패', '사용자타입 FB DB에 저장에 문제가 있습니다, 다시 시도해 주세요.')
+        }
       });
 
     navigation.navigate('AuthLoading');

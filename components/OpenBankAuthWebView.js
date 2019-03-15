@@ -1,25 +1,37 @@
 import React from 'react';
 import {
-  Alert, ActivityIndicator, Button, Text, View, WebView,
+  Alert, ActivityIndicator, Text, View, WebView,
 } from 'react-native';
-
+import moment from 'moment';
 import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from '../constants/Url';
-import * as api from '../api/api';
 import * as obconfig from '../openbank-config';
-import { saveOpenBankAuthInfo } from '../auth/OBAuthTokenManager';
+import { updateReAuthInfo } from '../utils/FirebaseUtils';
+import { withLogin } from '../contexts/LoginProvider';
 
 const TYPE_REAUTH = 'REAUTH';
 const ADD_ACCOUNT = 'ADD_ACCOUNT';
 
-export default class OpenBankAuthWebView extends React.Component {
+class OpenBankAuthWebView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isWebViewLoadingComplete: false,
-      noticeMSG:
-        '오픈뱅크 사용 권한이 만료 되었습니다(재인증 기간 만료 또는 1년 정기적 재인증), 재인증 해 주세요',
+      noticeMSG: '',
     };
+  }
+
+  componentDidMount() {
+    // Test Code I have to know 'HOC Jest Testing'
+    // const tokenData = {
+    //   access_token: 'test',
+    //   token_type: 'tokenData.',
+    //   expires_in: 'tokenData.',
+    //   refresh_token: 'tokenData.',
+    //   scope: 'tokenData.scope',
+    //   user_seq_no: 'tokenData.user_seq_no',
+    // };
+    // this.saveOpenBankTokenInfo(tokenData);
   }
 
   /**
@@ -58,12 +70,19 @@ export default class OpenBankAuthWebView extends React.Component {
    */
   closeWebView = () => {
     const { navigation } = this.props;
+    const { type } = navigation.state.params;
 
     this.setState({ noticeMSG: '곧(10초) 창이 닫힙니다~' });
 
-    setTimeout(() => {
-      navigation.navigate('AdCreate', { action: 'RELOAD' });
-    }, 5000);
+    if (type === ADD_ACCOUNT) {
+      setTimeout(() => {
+        navigation.navigate('AdCreate', { action: 'RELOAD' });
+      }, 5000);
+    } else if (type === TYPE_REAUTH) {
+      setTimeout(() => {
+        navigation.navigate('Ad');
+      }, 5000);
+    }
   };
 
   /**
@@ -72,7 +91,7 @@ export default class OpenBankAuthWebView extends React.Component {
    */
   receiveWebViewMSG = async (webViewMSG) => {
     const { navigation } = this.props;
-    const { type, userId } = navigation.state.params;
+    const { type } = navigation.state.params;
 
     const webData = JSON.parse(webViewMSG);
     let postData = null;
@@ -95,28 +114,11 @@ export default class OpenBankAuthWebView extends React.Component {
 
     // 인증토큰 저장 요청
     if (webData.type === 'ASK_SAVETOKEN') {
-      console.log('=============== ASK_SAVETOKEN ===============');
-      console.log(webData);
-      const tokenData = {
-        access_token: webData.data.access_token,
-        token_type: webData.data.token_type,
-        expires_in: webData.data.expires_in,
-        refresh_token: webData.data.refresh_token,
-        scope: webData.data.scope,
-        user_seq_no: webData.data.user_seq_no,
-      };
-
-      const tokenDataStr = JSON.stringify(tokenData);
-      const saveResult = await saveOpenBankAuthInfo(tokenDataStr);
-
-      if (!saveResult) {
-        Alert.alert('계좌연결정보 저장에 실패 했습니다', tokenDataStr);
-
-        return;
-      }
       if (type === ADD_ACCOUNT) {
         // TODO user에 자동이체 정보 서버에등록,
       }
+
+      this.saveOpenBankTokenInfo(webData.data);
 
       this.closeWebView();
     }
@@ -124,6 +126,38 @@ export default class OpenBankAuthWebView extends React.Component {
     if (postData != null) {
       this.webView.postMessage(postData);
     }
+  };
+
+  saveOpenBankTokenInfo = async (tokenData) => {
+    const { navigation, user } = this.props;
+
+    const expireDate = moment()
+      .add(90, 'day')
+      .format('YYYY-MM-DD');
+    const discDate = moment()
+      .add(1, 'year')
+      .format('YYYY-MM-DD');
+    const tokenInfo = {
+      obAccessToken: tokenData.access_token,
+      obRefreshToken: tokenData.refresh_token,
+      obAccTokenExpDate: expireDate,
+      obAccTokenDiscDate: discDate,
+      obUserSeqNo: tokenData.user_seq_no,
+    };
+
+    await updateReAuthInfo(
+      user.uid,
+      tokenInfo.obAccessToken,
+      tokenInfo.obRefreshToken,
+      tokenInfo.obAccTokenExpDate,
+      tokenInfo.obAccTokenDiscDate,
+      tokenInfo.obUserSeqNo,
+      (error) => {
+        Alert.alert('저장 실패', `${error} 오픈뱅크재인증 정보 FB Database 저장에 실패 했습니다`);
+      },
+    ).then(result => result);
+
+    return true;
   };
 
   render() {
@@ -181,11 +215,9 @@ export default class OpenBankAuthWebView extends React.Component {
           justifyContent: 'center',
         }}
       >
-        {type === TYPE_REAUTH ? (
-          <View>
-            <Text>{noticeMSG}</Text>
-          </View>
-        ) : null}
+        <View>
+          <Text>{noticeMSG}</Text>
+        </View>
         <WebView
           ref={(view) => {
             this.webView = view;
@@ -206,9 +238,9 @@ export default class OpenBankAuthWebView extends React.Component {
         />
 
         {!isWebViewLoadingComplete && <ActivityIndicator size="large" color="#0000ff" />}
-
-        <Button onPress={() => this.closeWebView()} title="Close Modal" />
       </View>
     );
   }
 }
+
+export default withLogin(OpenBankAuthWebView);

@@ -9,6 +9,11 @@ class LoginProvider extends React.Component {
   state = {
     user: undefined,
     type: undefined,
+    obAccessToken: undefined,
+    obRefreshToken: undefined,
+    obAccTokenExpDate: undefined,
+    obAccTokenDiscDate: undefined,
+    obUserSeqNo: undefined,
   };
 
   actions = {
@@ -18,6 +23,21 @@ class LoginProvider extends React.Component {
     },
     setUserType: (loginUserType) => {
       this.setState({ type: loginUserType });
+    },
+    setOBInfo: (
+      obAccessToken,
+      obRefreshToken,
+      obAccTokenExpDate,
+      obAccTokenDiscDate,
+      obUserSeqNo,
+    ) => {
+      this.setState({
+        obAccessToken,
+        obRefreshToken,
+        obAccTokenExpDate,
+        obAccTokenDiscDate,
+        obUserSeqNo,
+      });
     },
   };
 
@@ -38,6 +58,7 @@ function withLogin(WrappedComponent) {
             user={state.user}
             setUser={actions.setUser}
             setUserType={actions.setUserType}
+            setOBInfo={actions.setOBInfo}
             {...props}
           />
         )}
