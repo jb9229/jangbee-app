@@ -90,39 +90,6 @@ export function getFirmLocalData(equipment) {
   return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJsonResponse);
 }
 
-/**
- * 광고 조회
- */
-export function getAd(type, equiTarget, sidoTarget, gugunTarget) {
-  const paramType = encodeURIComponent(type);
-
-  let paramUrl = `?adType=${paramType}`;
-  if (equiTarget !== undefined && equiTarget !== '') {
-    paramUrl += `&equiTarget=${encodeURIComponent(equiTarget)}`;
-  }
-
-  if (sidoTarget !== undefined && sidoTarget !== '') {
-    paramUrl += `&sidoTarget=${encodeURIComponent(sidoTarget)}`;
-  }
-
-  if (gugunTarget !== undefined && gugunTarget !== '') {
-    paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
-  }
-
-  return fetch(`${url.JBSERVER_AD}${paramUrl}`).then(handleJsonResponse);
-}
-
-/**
- * 내광고 조회
- */
-export function getJBAdList(accountId) {
-  const paramAccountId = encodeURIComponent(accountId);
-
-  const paramUrl = `?accountId=${paramAccountId}`;
-
-  return fetch(`${url.JBSERVER_ADLIST}${paramUrl}`).then(handleJsonResponse);
-}
-
 export function uploadImage(uri) {
   const uriParts = uri.split('.');
   const fileType = uriParts[uriParts.length - 1];
@@ -185,14 +152,52 @@ export function getAddrByGpspoint(longitude, latitude) {
   ).then(handleBadReqJsonResponse);
 }
 
+/** ******************** Jangbee Sever Ad  Api List ************************** */
+/**
+ * 광고 조회
+ */
+export function getAd(type, equiTarget, sidoTarget, gugunTarget) {
+  const paramType = encodeURIComponent(type);
+
+  let paramUrl = `?adLocation=${paramType}`;
+  if (equiTarget !== undefined && equiTarget !== '') {
+    paramUrl += `&equiTarget=${encodeURIComponent(equiTarget)}`;
+  }
+
+  if (sidoTarget !== undefined && sidoTarget !== '') {
+    paramUrl += `&sidoTarget=${encodeURIComponent(sidoTarget)}`;
+  }
+
+  if (gugunTarget !== undefined && gugunTarget !== '') {
+    paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
+  }
+
+  return fetch(`${url.JBSERVER_AD}${paramUrl}`).then(handleJsonResponse);
+}
+
+/**
+ * 내광고 조회
+ */
+export function getJBAdList(accountId) {
+  const paramAccountId = encodeURIComponent(accountId);
+
+  const paramUrl = `?accountId=${paramAccountId}`;
+
+  return fetch(`${url.JBSERVER_ADLIST}${paramUrl}`).then(handleJsonResponse);
+}
+
+export function getBookedAdType() {
+  return fetch(`${url.JBSERVER_ADBOOKED}`).then(handleJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**
  * 토큰작성 함수
  * @param {Object} openBankAuthInfo 토큰정보
  */
-function getAccessToken(openBankAuthInfo) {
-  const headerAuth = `${openBankAuthInfo.token_type} ${openBankAuthInfo.access_token}`;
+function getAccessToken(accessToken) {
+  const headerAuth = `Bearer ${accessToken}`;
 
   return headerAuth;
 }

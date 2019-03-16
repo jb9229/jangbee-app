@@ -77,9 +77,8 @@ export default class JangbeeAdList extends React.Component {
       })
       .catch((error) => {
         Alert.alert(
-          `광고리스트 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${
-            error.message
-          }`,
+          '광고리스트 요청에 문제가 있습니다',
+          `다시 시도해 주세요 -> [${error.name}] ${error.message}`,
         );
         this.setState({ adList: null });
       });

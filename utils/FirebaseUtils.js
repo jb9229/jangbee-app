@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import { Alert } from 'react-native';
-import CmException from '../common/CmException';
 
 export function getUserInfo(uid) {
   return firebase
