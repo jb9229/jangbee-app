@@ -1,4 +1,5 @@
 import CmException from '../common/CmException';
+import JBServerException from '../common/JBServerException';
 import * as obconfig from '../openbank-config';
 
 /**
@@ -10,13 +11,31 @@ export function handleJsonResponse(res) {
   if (res.ok) {
     if (res.status === 204) {
       // NO_CONTENTS
-      return res;
+      return null;
     }
 
-    return res.json().then(responseJson => responseJson);
+    return res.json();
   }
 
   throw new CmException(res.status, `${res.url}`);
+}
+
+/**
+ * HttpRequest Json 응답처리
+ *
+ * @param {Object} res HttpResponse
+ */
+export function handleJBServerJsonResponse(res) {
+  if (res.ok) {
+    if (res.status === 204) {
+      // NO_CONTENTS
+      return null;
+    }
+
+    return res.json();
+  }
+
+  throw res;
 }
 
 /**

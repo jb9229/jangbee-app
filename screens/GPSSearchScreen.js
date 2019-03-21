@@ -7,7 +7,7 @@ import EquipementModal from '../components/EquipmentModal';
 import LocalSelModal from '../components/LocalSelModal';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
-import adType from '../constants/AdType';
+import adLocation from '../constants/AdLocation';
 import * as api from '../api/api';
 import FirmSearList from '../components/organisms/FirmSearList';
 import { Constants, Location, Permissions } from 'expo';
@@ -392,7 +392,7 @@ export default class GPSSearchScreen extends React.Component {
         />
         {!isSearViewMode ? (
           <View style={styles.adWrap}>
-            <JangbeeAdList adType={adType.main} {...this.props} />
+            <JangbeeAdList adLocation={adLocation.main} {...this.props} />
           </View>
         ) : null}
         <View style={styles.cardWrap}>

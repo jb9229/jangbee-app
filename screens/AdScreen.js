@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, Button, FlatList, StyleSheet, TextInput, Text, View,
+  Alert, FlatList, StyleSheet, Text, View,
 } from 'react-native';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
@@ -30,13 +30,21 @@ class AdScreen extends React.Component {
   }
 
   componentDidMount() {
-    const { user } = this.props;
-    this.setAdList(user.uid);
+    this.setAdList();
   }
 
-  setAdList = (accountId) => {
+  componentWillReceiveProps(nextProps) {
+    const { params } = nextProps.navigation.state;
+
+    if (params !== undefined && params.refresh !== undefined) {
+      this.setAdList();
+    }
+  }
+
+  setAdList = () => {
+    const { user } = this.props;
     api
-      .getJBAdList(accountId)
+      .getJBAdList(user.uid)
       .then((listData) => {
         if (listData.length > 0) {
           this.setState({ isAdEmpty: false, isLoadingAdList: false, adList: listData });

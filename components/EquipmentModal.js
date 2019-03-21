@@ -8,7 +8,7 @@ import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
-import adType from '../constants/AdType';
+import adLocation from '../constants/AdLocation';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
@@ -187,7 +187,7 @@ export default class EquipementModal extends React.Component {
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
               {advertisement ? (
                 <JangbeeAdList
-                  adType={adType.equipment}
+                  adLocation={adLocation.equipment}
                   euqiTarget={singSeltdEquipment}
                   {...this.props}
                 />

@@ -5,6 +5,17 @@ export const validation = {
       message: '숫자(정수)만 입력해 주세요',
     },
   },
+  decimalMin: {
+    format: {
+      pattern: /^\d*$/,
+      message: '숫자(정수)만 입력해 주세요',
+    },
+    length: {
+      minimum: {
+        message: '최소값:',
+      },
+    },
+  },
   decimalMax: {
     format: {
       pattern: /^\d*$/,

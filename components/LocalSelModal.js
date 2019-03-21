@@ -16,7 +16,7 @@ import fonts from '../constants/Fonts';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
 import * as converter from '../utils/Converter';
-import adType from '../constants/AdType';
+import adLocation from '../constants/AdLocation';
 import JBErroMessage from './organisms/JBErrorMessage';
 
 const styles = StyleSheet.create({
@@ -211,7 +211,7 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              <JangbeeAdList adType={adType.local} {...this.props} />
+              <JangbeeAdList adLocation={adLocation.local} {...this.props} />
               <View style={styles.selLocalWrap}>
                 <TouchableHighlight
                   onPress={() => this.setState({ gugun: '-', isSelectedSido: false })}

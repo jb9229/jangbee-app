@@ -1,6 +1,7 @@
 import * as url from '../constants/Url';
 import {
   handleJsonResponse,
+  handleJBServerJsonResponse,
   handleTextResponse,
   handleNoContentResponse,
   handleBadReqJsonResponse,
@@ -8,6 +9,7 @@ import {
 } from '../utils/Fetch-utils';
 import * as kakaoconfig from '../kakao-config';
 import * as obconfig from '../openbank-config';
+import CmException from '../common/CmException';
 
 export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
@@ -153,22 +155,38 @@ export function getAddrByGpspoint(longitude, latitude) {
 }
 
 /** ******************** Jangbee Sever Ad  Api List ************************** */
+
+export function createAd(newAd) {
+  return fetch(url.JBSERVER_AD, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(newAd),
+  }).then(handleJBServerJsonResponse);
+}
+
 /**
  * 광고 조회
  */
-export function getAd(type, equiTarget, sidoTarget, gugunTarget) {
-  const paramType = encodeURIComponent(type);
+export function getAd(location, equiTarget, sidoTarget, gugunTarget) {
+  let paramUrl = `?adLocation=${location}`;
 
-  let paramUrl = `?adLocation=${paramType}`;
-  if (equiTarget !== undefined && equiTarget !== '') {
+  if (equiTarget === undefined) {
+    paramUrl += '&equiTarget=';
+  } else {
     paramUrl += `&equiTarget=${encodeURIComponent(equiTarget)}`;
   }
 
-  if (sidoTarget !== undefined && sidoTarget !== '') {
+  if (sidoTarget === undefined) {
+    paramUrl += '&sidoTarget=';
+  } else {
     paramUrl += `&sidoTarget=${encodeURIComponent(sidoTarget)}`;
   }
 
-  if (gugunTarget !== undefined && gugunTarget !== '') {
+  if (gugunTarget === undefined) {
+    paramUrl += '&gugunTarget=';
+  } else {
     paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
   }
 
@@ -188,6 +206,34 @@ export function getJBAdList(accountId) {
 
 export function getBookedAdType() {
   return fetch(`${url.JBSERVER_ADBOOKED}`).then(handleJsonResponse);
+}
+
+/**
+ * 장비 타켓광고 중복확인 함수
+ *
+ * @param {string} equipment 타켓광고의 장비
+ */
+export function existEuipTarketAd(equipment) {
+  const paramEquipment = encodeURIComponent(equipment);
+  return fetch(`${url.JBSERVER_ADTARGET_EQUIPMENT}?equipment=${paramEquipment}`).then(
+    handleJsonResponse,
+  );
+}
+
+/**
+ * 지역 타켓광고 중복확인 함수
+ *
+ * @param {string} equipment 타켓광고의 장비
+ */
+export function existLocalTarketAd(equipment, sido, gungu) {
+  const paramEquipment = encodeURIComponent(equipment);
+  const paramSido = encodeURIComponent(sido);
+  const paramGungu = encodeURIComponent(gungu);
+  return fetch(
+    `${
+      url.JBSERVER_ADTARGET_LOCAL
+    }?equipment=${paramEquipment}&sido=${paramSido}&gungu=${paramGungu}`,
+  ).then(handleJsonResponse);
 }
 
 /** ******************** Open Bank Api List ************************** */
@@ -252,22 +298,4 @@ export function refreshOpenBankAuthToken(refreshToken) {
       },
     },
   ).then(handleOpenBankJsonResponse);
-}
-
-export function transferWithdraw(accessTokenInfo, fintechUseNum, tranAmt) {
-  const postData = {
-    dps_print_content: '큰누나이체 테스트',
-    fintech_use_num: fintechUseNum,
-    tran_amt: tranAmt,
-    tran_dtime: '20190307064455',
-  };
-
-  return fetch(url.OPENBANK_WITHDRAW, {
-    method: 'POST',
-    headers: {
-      Authorization: getAccessToken(accessTokenInfo),
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: JSON.stringify(postData),
-  }).then(handleOpenBankJsonResponse);
 }

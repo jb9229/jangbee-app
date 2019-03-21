@@ -44,15 +44,15 @@ export default class JangbeeAdList extends React.Component {
 
   componentDidMount() {
     const {
-      adType, euqiTarget, sidoTarget, gugunTarget,
+      adLocation, euqiTarget, sidoTarget, gugunTarget,
     } = this.props;
 
-    this.setAdList(adType, euqiTarget, sidoTarget, gugunTarget);
+    this.setAdList(adLocation, euqiTarget, sidoTarget, gugunTarget);
   }
 
   componentWillReceiveProps(nextProps) {
     const {
-      adType, euqiTarget, sidoTarget, gugunTarget,
+      adLocation, euqiTarget, sidoTarget, gugunTarget,
     } = this.props;
 
     if (
@@ -60,18 +60,18 @@ export default class JangbeeAdList extends React.Component {
       || nextProps.sidoTarget !== sidoTarget
       || nextProps.gugunTarget !== gugunTarget
     ) {
-      this.setAdList(adType, nextProps.euqiTarget, nextProps.sidoTarget, nextProps.gugunTarget);
+      this.setAdList(adLocation, nextProps.euqiTarget, nextProps.sidoTarget, nextProps.gugunTarget);
     }
   }
 
   /**
    * 광고 리스트 설정
-   * @param adType 광고타입(MAIN, LOCAL, EQUIPMENT)
+   * @param adLocation 광고위치(MAIN, LOCAL, EQUIPMENT)
    * @param euqiTarket 타켓 광고할 선택장비
    */
-  setAdList = (adType, euqiTarget, sidoTarget, gugunTarget) => {
+  setAdList = (adLocation, euqiTarget, sidoTarget, gugunTarget) => {
     api
-      .getAd(adType, euqiTarget, sidoTarget, gugunTarget)
+      .getAd(adLocation, euqiTarget, sidoTarget, gugunTarget)
       .then((jsonRes) => {
         this.setState({ adList: jsonRes });
       })
