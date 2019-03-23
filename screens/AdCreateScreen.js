@@ -491,11 +491,11 @@ class AdCreateScreen extends React.Component {
                 onValueChange={itemValue => this.onPickAdType(itemValue)}
               >
                 <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
-                {this.renderAdTypeList(1, '메인광고 첫번째(월 7만원)')}
-                {this.renderAdTypeList(2, '메인광고 두번째(월 6만원)')}
-                {this.renderAdTypeList(3, '메인광고 세번째(월 3만원)')}
-                <Picker.Item label="장비선택팝업창 광고(월 2만원)" value={ADTYPE_EQUIPMENT_FIRST} />
-                <Picker.Item label="지역선택팝업창 광고(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
+                {this.renderAdTypeList(1, '메인광고_첫번째(월 7만원)')}
+                {this.renderAdTypeList(2, '메인광고_두번째(월 6만원)')}
+                {this.renderAdTypeList(3, '메인광고_세번째(월 3만원)')}
+                <Picker.Item label="장비 타켓광고_첫번째(월 2만원)" value={ADTYPE_EQUIPMENT_FIRST} />
+                <Picker.Item label="지역 타켓광고_첫번째(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
               </Picker>
             </View>
             <JBTextInput
