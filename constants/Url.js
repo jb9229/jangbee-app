@@ -1,5 +1,5 @@
-// const SERVER_URL = 'http://192.168.1.205/api/v1/';
-const SERVER_URL = 'http://192.168.43.213/api/v1/';
+const SERVER_URL = 'http://192.168.1.205/api/v1/';
+// const SERVER_URL = 'http://192.168.43.213/api/v1/';
 // const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
@@ -9,6 +9,7 @@ module.exports = {
   JBSERVER_FIRM: `${SERVER_URL}firm`,
   JBSERVER_FIRMLOCAL: `${SERVER_URL}firm/local`,
   JBSERVER_AD: `${SERVER_URL}ad`,
+  JBSERVER_AD_UPDATE_FINTECHUSENUM: `${SERVER_URL}ad/fintechusenum`,
   JBSERVER_ADBOOKED: `${SERVER_URL}ad/booked`,
   JBSERVER_ADLIST: `${SERVER_URL}ads`,
   JBSERVER_ADTARGET_EQUIPMENT: `${SERVER_URL}ad/target/equipment`,

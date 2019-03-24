@@ -9,6 +9,10 @@ const SMALL_SIZE = 'small';
 const Container = styled.View`
   flex-direction: row;
   margin: 5px 5px;
+  ${props => props.align === 'right'
+    && `
+    justify-content: flex-end;
+  `}
 `;
 
 const TouchableHighlight = styled.TouchableHighlight`
@@ -73,10 +77,10 @@ const Text = styled.Text`
 `;
 
 export default function JBButton({
-  title, onPress, size, underline, color,
+  title, onPress, size, underline, color, align,
 }) {
   return (
-    <Container>
+    <Container align={align}>
       <TouchableHighlight
         size={size}
         color={color}

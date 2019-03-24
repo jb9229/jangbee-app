@@ -250,6 +250,27 @@ export function updateAd(newAd) {
   }).then(handleJBServerJsonResponse);
 }
 
+export function updateFinUseNumAd(selFinUseNum, accountId) {
+  return fetch(url.JBSERVER_AD_UPDATE_FINTECHUSENUM, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify({ newFintechUseNum: selFinUseNum, accountId }),
+  }).then(handleJBServerJsonResponse);
+}
+
+/**
+ * 광고종료 API 함수
+ * @param {long} id 종료한 광고 아이디
+ */
+export function terminateAd(id) {
+  return fetch(`${url.JBSERVER_AD}?id=${id}`, {
+    method: 'DELETE',
+    headers: {},
+  }).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**

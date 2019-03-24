@@ -10,6 +10,8 @@ import Card from '../components/molecules/CardUI';
 import JBButton from '../components/molecules/JBButton';
 import { getAdtypeStr } from '../constants/AdTypeStr';
 import AdUpdateModal from '../components/AdUpdateModal';
+import AdFinAccUpdateModal from '../components/AdFinAccUpdateModal';
+import { notifyError } from '../common/ErrorNotice';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,6 +49,7 @@ class AdScreen extends React.Component {
       isLoadingAdList: true,
       isAdEmpty: true,
       isVisibleAdUpdateModal: false,
+      isVisibleFinAccUpdateModal: false,
       adList: null,
     };
   }
@@ -93,6 +96,38 @@ class AdScreen extends React.Component {
     this.setState({upAdId: item.id, upAdTitle: item.title, upAdSubTitle: item.subTitle, upAdPhotoUrl: item.photoUrl, upAdTelNumber: item.telNumber});
   };
 
+  /**
+   * 광고종료 재 확인 팝업
+   */
+  confirmTerminateAd = (item) => {
+    Alert.alert(
+      '광고 종료',
+      `[${getAdtypeStr(item.adType)}] 정말 광고를 종료 하시겠습니까?`,
+      [
+        { text: '네', onPress: () => this.terminateAd(item.id) },
+        {
+          text: '아니요',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false },
+    );
+  }
+
+  /**
+   * 광고종료 요청 함수
+   */
+  terminateAd = (id) => {
+    if (!id || id < 1) { Alert.alert('유효성검사 에러', `[${id}]종료 광고아이디를 찾지 못했습니다, 다시 시도해 주세요`); return false; }
+
+    api.terminateAd(id)
+      .then(() => this.setAdList())
+      .catch(error => notifyError('광고업데이트에 문제가 있습니다', error.message));
+
+    return true;
+  }
+
   renderAdListItem = ({ item }) => (
     <Card>
       <View style={styles.adListItemWrap}>
@@ -113,7 +148,7 @@ class AdScreen extends React.Component {
           </View>
           <View style={styles.adListRightWrap}>
             <JBButton title="수정" onPress={() => this.updateAd(item)} size="small" underline />
-            <JBButton title="해지" onPress={() => this.terminateAd()} size="small" underline />
+            <JBButton title="해지" onPress={() => this.confirmTerminateAd(item)} size="small" underline />
           </View>
         </View>
       </View>
@@ -121,9 +156,9 @@ class AdScreen extends React.Component {
   );
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, user } = this.props;
     const {
-      isLoadingAdList, isAdEmpty, adList, isVisibleAdUpdateModal,
+      isLoadingAdList, isAdEmpty, adList, isVisibleAdUpdateModal, isVisibleFinAccUpdateModal,
       upAdId, upAdTitle, upAdSubTitle, upAdPhotoUrl, upAdTelNumber,
     } = this.state;
 
@@ -143,13 +178,26 @@ class AdScreen extends React.Component {
           upAdPhotoUrl={upAdPhotoUrl}
           upAdTelNumber={upAdTelNumber}
         />
+        <AdFinAccUpdateModal
+          isVisibleModal={isVisibleFinAccUpdateModal}
+          closeModal={() => this.setState({ isVisibleFinAccUpdateModal: false })}
+          completeUpdate={(newFintechUseNum) => { Alert.alert('결제통장 바꾸기 성공', `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`) this.setState({ isVisibleFinAccUpdateModal: false }); }}
+          accountId={user.uid}
+        />
         {!isAdEmpty ? (
-          <FlatList
-            data={adList}
-            renderItem={this.renderAdListItem}
-            keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={this.renderSeparator}
-          />
+          <View>
+            <JBButton
+              title="결제통장 바꾸기"
+              onPress={() => this.setState({isVisibleFinAccUpdateModal: true})}
+              size="small"
+            />
+            <FlatList
+              data={adList}
+              renderItem={this.renderAdListItem}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={this.renderSeparator}
+            />
+          </View>
         ) : (
           <View>
             <Text>등록된 광고가 없습니다, 장비 홍보를해 주세요.</Text>
