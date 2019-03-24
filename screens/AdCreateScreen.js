@@ -320,7 +320,7 @@ class AdCreateScreen extends React.Component {
       return false;
     }
 
-    v = validate('textMax', adTitle, true, 10);
+    v = validate('textMax', adTitle, true, 15);
     if (!v[0]) {
       this.setState({ adTitleValErrMessage: v[1] });
       return false;

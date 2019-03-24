@@ -136,6 +136,7 @@ class AdScreen extends React.Component {
         <AdUpdateModal
           isVisibleModal={isVisibleAdUpdateModal}
           closeModal={() => this.setState({ isVisibleAdUpdateModal: false })}
+          completeUpdate={() => { this.setAdList(); this.setState({ isVisibleAdUpdateModal: false }); }}
           upAdId={upAdId}
           upAdTitle={upAdTitle}
           upAdSubTitle={upAdSubTitle}

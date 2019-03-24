@@ -236,6 +236,20 @@ export function existLocalTarketAd(equipment, sido, gungu) {
   ).then(handleJsonResponse);
 }
 
+/**
+ * 광고 업데이트
+ * @param {Object} newAd 업데이트할 광고
+ */
+export function updateAd(newAd) {
+  return fetch(url.JBSERVER_AD, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(newAd),
+  }).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**

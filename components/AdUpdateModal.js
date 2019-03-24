@@ -1,10 +1,15 @@
 import React from 'react';
-import { KeyboardAvoidingView, ScrollView, Modal, StyleSheet, View } from 'react-native';
+import {
+  Alert, KeyboardAvoidingView, ScrollView, Modal, StyleSheet, View,
+} from 'react-native';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
 import ImagePickInput from './molecules/ImagePickInput';
 import JBErrorMessage from './organisms/JBErrorMessage';
+import * as api from '../api/api';
+import { notifyError } from '../common/ErrorNotice';
+import { validate } from '../utils/Validation';
 
 const styles = StyleSheet.create({
   container: {
@@ -68,10 +73,81 @@ export default class AdUpdateModal extends React.Component {
    * 모달 액션 완료 함수
    */
   completeAction = () => {
-    const { closeModal } = this.props;
+    const { completeUpdate } = this.props;
 
-    closeModal();
+    const updateData = this.validateUpdateForm();
+    if (updateData) {
+      api
+        .updateAd(updateData)
+        .then(() => {
+          completeUpdate();
+        })
+        .catch(error => notifyError('광고업데이트에 문제가 있습니다', error.message));
+    }
   };
+
+  setInitValErroMSG = () => {
+    this.setState({
+      forMonthsValErrMessage: '',
+      adTitleValErrMessage: '',
+      adSubTitleValErrMessage: '',
+      adPhotoUrlValErrMessage: '',
+      adTelNumberValErrMessage: '',
+    });
+  }
+
+  /**
+   * 광고 업데이트 유효성검사 함수
+   */
+  validateUpdateForm = () => {
+    const { adId, adTitle, adSubTitle, forMonths, adPhotoUrl, adTelNumber } = this.state;
+
+    // Validation Error Massage Initialize
+    this.setInitValErroMSG();
+
+    if (adId === undefined || adId === '') { Alert.alert('유효성검사 에러', `[${adId}]업데이트 아이디를 찾지 못했습니다, 다시 시도해 주세요`); return false; }
+
+    let v = validate('textMax', adTitle, true, 15);
+    if (!v[0]) {
+      this.setState({ adTitleValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', adSubTitle, true, 20);
+    if (!v[0]) {
+      this.setState({ adSubTitleValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', adPhotoUrl, false, 250);
+    if (!v[0]) {
+      this.setState({ adPhotoUrlValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', adTelNumber, false);
+    if (!v[0]) {
+      this.setState({ adTelNumberValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('decimalMin', forMonths, true, 0);
+    if (!v[0]) {
+      this.setState({ forMonthsValErrMessage: v[1] });
+      return false;
+    }
+
+    const updateData = {
+      id: adId,
+      title: adTitle,
+      subTitle: adSubTitle,
+      forMonths,
+      photoUrl: adPhotoUrl,
+      telNumber: adTelNumber,
+    };
+
+    return updateData;
+  }
 
   render() {
     const { isVisibleModal, closeModal } = this.props;
@@ -85,6 +161,7 @@ export default class AdUpdateModal extends React.Component {
       adTitleValErrMessage,
       adSubTitleValErrMessage,
       adPhotoUrlValErrMessage,
+      adTelNumberValErrMessage,
     } = this.state;
 
     return (
@@ -128,6 +205,7 @@ export default class AdUpdateModal extends React.Component {
                   onChangeText={text => this.setState({ adTelNumber: text })}
                   placeholder="휴대전화 번호입력(숫자만)"
                 />
+                <JBErrorMessage errorMSG={adTelNumberValErrMessage} />
                 <JBTextInput
                   title="계약기간(월) 연장"
                   value={forMonths}
