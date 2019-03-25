@@ -181,7 +181,7 @@ class AdScreen extends React.Component {
         <AdFinAccUpdateModal
           isVisibleModal={isVisibleFinAccUpdateModal}
           closeModal={() => this.setState({ isVisibleFinAccUpdateModal: false })}
-          completeUpdate={(newFintechUseNum) => { Alert.alert('결제통장 바꾸기 성공', `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`) this.setState({ isVisibleFinAccUpdateModal: false }); }}
+          completeUpdate={(newFintechUseNum) => { Alert.alert('결제통장 바꾸기 성공', `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`); this.setState({ isVisibleFinAccUpdateModal: false }); }}
           accountId={user.uid}
         />
         {!isAdEmpty ? (

@@ -155,6 +155,8 @@ export default class GPSSearchScreen extends React.Component {
           } else {
             this.setState({
               currLocation: `현 위치 수신됨: ${addrInfo.document.road_address.address_name}`,
+              searSido: addrInfo.document.road_address.region_1depth_name,
+              searGungu: addrInfo.document.road_address.region_2depth_name,
             });
           }
         }
@@ -390,58 +392,21 @@ export default class GPSSearchScreen extends React.Component {
           nextFocus={() => {}}
           selEquipment={searEquipment}
         />
-        {!isSearViewMode ? (
+        {isSearViewMode ? (
+          <View style={styles.adWrap}>
+            <JangbeeAdList
+              adLocation={adLocation.local}
+              euqiTarget={searEquipment}
+              sidoTarget={searSido}
+              gugunTarget={searGungu}
+              {...this.props}
+            />
+          </View>
+        ) : (
           <View style={styles.adWrap}>
             <JangbeeAdList adLocation={adLocation.main} {...this.props} />
           </View>
-        ) : null}
-        <View style={styles.cardWrap}>
-          <View style={styles.card}>
-            <View style={styles.searEquiWrap}>
-              <SearCondBox
-                title="어떤 장비를 찾고 계신가요?"
-                searchCondition={searEquipment}
-                onPress={() => this.setState({ isVisibleEquiModal: true })}
-                defaultCondtion="장비 선택"
-              />
-
-              {isLocalSearch ? (
-                <SearCondBox
-                  title="부르고자 하는 장비의 지역은 어디 입니까?"
-                  searchCondition={`${searSido}${searGungu}`}
-                  defaultCondtion="지역 선택"
-                  onPress={() => this.openSelLocModal()}
-                />
-              ) : null}
-            </View>
-            <View style={styles.commWrap}>
-              {!isLocalSearch ? (
-                <View style={styles.gpsWrap}>
-                  <Text style={styles.currLocText}>{currLocation}</Text>
-                  <JBIcon name="refresh" size={24} color={colors.point2} onPress={() => this.setLocationInfo()} />
-                </View>
-              ) : null}
-              <View style={styles.switchWrap}>
-                <Text style={styles.switchText}>내 주변 검색</Text>
-                <Switch
-                  value={isLocalSearch}
-                  onValueChange={newValue => this.changeSearMode(newValue)}
-                />
-                <Text style={styles.switchText}>지역 검색</Text>
-              </View>
-              <FirmCreaErrMSG errorMSG={validationMessage} />
-              {isLocalSearch ? (
-                <JBButton title="지역 검색" onPress={() => this.searchLocJangbee()} size="full" />
-              ) : (
-                <JBButton
-                  title="내 주변 검색"
-                  onPress={() => this.searchNearJangbee()}
-                  size="full"
-                />
-              )}
-            </View>
-          </View>
-        </View>
+        )}
         {isSearViewMode ? (
           <View style={styles.firmListWrap}>
             <JBIcon
@@ -463,7 +428,55 @@ export default class GPSSearchScreen extends React.Component {
               {...this.props}
             />
           </View>
-        ) : null}
+        ) : (
+          <View style={styles.cardWrap}>
+            <View style={styles.card}>
+              <View style={styles.searEquiWrap}>
+                <SearCondBox
+                  title="어떤 장비를 찾고 계신가요?"
+                  searchCondition={searEquipment}
+                  onPress={() => this.setState({ isVisibleEquiModal: true })}
+                  defaultCondtion="장비 선택"
+                />
+
+                {isLocalSearch ? (
+                  <SearCondBox
+                    title="부르고자 하는 장비의 지역은 어디 입니까?"
+                    searchCondition={`${searSido}${searGungu}`}
+                    defaultCondtion="지역 선택"
+                    onPress={() => this.openSelLocModal()}
+                  />
+                ) : null}
+              </View>
+              <View style={styles.commWrap}>
+                {!isLocalSearch ? (
+                  <View style={styles.gpsWrap}>
+                    <Text style={styles.currLocText}>{currLocation}</Text>
+                    <JBIcon name="refresh" size={24} color={colors.point2} onPress={() => this.setLocationInfo()} />
+                  </View>
+                ) : null}
+                <View style={styles.switchWrap}>
+                  <Text style={styles.switchText}>내 주변 검색</Text>
+                  <Switch
+                    value={isLocalSearch}
+                    onValueChange={newValue => this.changeSearMode(newValue)}
+                  />
+                  <Text style={styles.switchText}>지역 검색</Text>
+                </View>
+                <FirmCreaErrMSG errorMSG={validationMessage} />
+                {isLocalSearch ? (
+                  <JBButton title="지역 검색" onPress={() => this.searchLocJangbee()} size="full" />
+                ) : (
+                  <JBButton
+                    title="내 주변 검색"
+                    onPress={() => this.searchNearJangbee()}
+                    size="full"
+                  />
+                )}
+              </View>
+            </View>
+          </View>
+        )}
       </View>
     );
   }

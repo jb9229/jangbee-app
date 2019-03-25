@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { AdMobBanner } from 'expo';
 import Swiper from 'react-native-swiper';
 import colors from '../constants/Colors';
 import JBActIndicator from './organisms/JBActIndicator';
@@ -9,6 +10,11 @@ import JangbeeAd from './organisms/JangbeeAd';
 
 const styles = StyleSheet.create({
   container: {
+    height: 200,
+  },
+  adMobContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 200,
   },
   wrapper: {
@@ -44,10 +50,12 @@ export default class JangbeeAdList extends React.Component {
 
   componentDidMount() {
     const {
-      adLocation, euqiTarget, sidoTarget, gugunTarget,
+      adLocation, euqiTarget, sidoTarget, gugunTarget, admob,
     } = this.props;
 
-    this.setAdList(adLocation, euqiTarget, sidoTarget, gugunTarget);
+    if (admob === undefined) {
+      this.setAdList(adLocation, euqiTarget, sidoTarget, gugunTarget);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -84,9 +92,28 @@ export default class JangbeeAdList extends React.Component {
       });
   };
 
+  /**
+   * Admob 광고 요청 실패 팝업
+   */
+  renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
+
   render() {
+    const { admob } = this.props;
     const { adList } = this.state;
     const slidStyles = [styles.slide1, styles.slide2, styles.slide3];
+
+    if (admob !== undefined) {
+      return (
+        <View style={styles.adMobContainer}>
+          <AdMobBanner
+            bannerSize="largeBanner"
+            adUnitID="ca-app-pub-9415708670922576/6931111723" // Test ID, Replace with your-admob-unit-id
+            testDeviceID="EMULATOR"
+            onDidFailToReceiveAdWithError={this.renderAdmobError}
+          />
+        </View>
+      );
+    }
 
     if (adList === undefined) {
       return (
@@ -95,8 +122,22 @@ export default class JangbeeAdList extends React.Component {
         </View>
       );
     }
+
     if (adList === null) {
       return <BugReport title="광고 요청에 실패 했습니다" />;
+    }
+
+    if (adList.length === 0) {
+      return (
+        <View style={styles.adMobContainer}>
+          <AdMobBanner
+            bannerSize="largeBanner"
+            adUnitID="ca-app-pub-9415708670922576/6931111723" // Test ID, Replace with your-admob-unit-id
+            testDeviceID="EMULATOR"
+            onDidFailToReceiveAdWithError={this.renderAdmobError}
+          />
+        </View>
+      );
     }
 
     const adViewList = adList.map((ad, index) => (
@@ -104,6 +145,7 @@ export default class JangbeeAdList extends React.Component {
         <JangbeeAd ad={ad} />
       </View>
     ));
+
     return (
       <View style={styles.container}>
         <Swiper

@@ -187,8 +187,7 @@ export default class EquipementModal extends React.Component {
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
               {advertisement ? (
                 <JangbeeAdList
-                  adLocation={adLocation.equipment}
-                  euqiTarget={singSeltdEquipment}
+                  admob
                   {...this.props}
                 />
               ) : null}

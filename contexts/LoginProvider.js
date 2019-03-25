@@ -6,40 +6,43 @@ const Context = React.createContext();
 const { Provider, Consumer: LoginConsumer } = Context;
 
 class LoginProvider extends React.Component {
-  state = {
-    user: undefined,
-    type: undefined,
-    obAccessToken: undefined,
-    obRefreshToken: undefined,
-    obAccTokenExpDate: undefined,
-    obAccTokenDiscDate: undefined,
-    obUserSeqNo: undefined,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: undefined,
+      type: undefined,
+      obAccessToken: undefined,
+      obRefreshToken: undefined,
+      obAccTokenExpDate: undefined,
+      obAccTokenDiscDate: undefined,
+      obUserSeqNo: undefined,
+    };
 
-  actions = {
-    setUser: (loginUser) => {
-      this.setState({ user: loginUser });
-      registerForPushNotificationsAsync(loginUser.uid);
-    },
-    setUserType: (loginUserType) => {
-      this.setState({ type: loginUserType });
-    },
-    setOBInfo: (
-      obAccessToken,
-      obRefreshToken,
-      obAccTokenExpDate,
-      obAccTokenDiscDate,
-      obUserSeqNo,
-    ) => {
-      this.setState({
+    this.actions = {
+      setUser: (loginUser) => {
+        this.setState({ user: loginUser });
+        registerForPushNotificationsAsync(loginUser.uid);
+      },
+      setUserType: (loginUserType) => {
+        this.setState({ type: loginUserType });
+      },
+      setOBInfo: (
         obAccessToken,
         obRefreshToken,
         obAccTokenExpDate,
         obAccTokenDiscDate,
         obUserSeqNo,
-      });
-    },
-  };
+      ) => {
+        this.setState({
+          obAccessToken,
+          obRefreshToken,
+          obAccTokenExpDate,
+          obAccTokenDiscDate,
+          obUserSeqNo,
+        });
+      },
+    };
+  }
 
   render() {
     const { children } = this.props;

@@ -1,6 +1,6 @@
-const SERVER_URL = 'http://192.168.1.205/api/v1/';
+// const SERVER_URL = 'http://192.168.1.205/api/v1/';
 // const SERVER_URL = 'http://192.168.43.213/api/v1/';
-// const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
 module.exports = {
@@ -22,3 +22,6 @@ module.exports = {
   OPENBANK_ACCOUNTLIST: `${OPENBANK_URL}/v1.0/account/list`,
   OPENBANK_USERINFO: `${OPENBANK_URL}/v1.0/user/me`,
 };
+
+// 수신이 원활하지 않습니다.
+// 장비 광고 먼저 등록하는 업체가 선점(서두르세요, 나중에 등록하고 싶어도 못함, 자리 한정)

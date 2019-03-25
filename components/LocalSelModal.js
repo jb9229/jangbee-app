@@ -211,7 +211,7 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              <JangbeeAdList adLocation={adLocation.local} {...this.props} />
+              <JangbeeAdList admob {...this.props} />
               <View style={styles.selLocalWrap}>
                 <TouchableHighlight
                   onPress={() => this.setState({ gugun: '-', isSelectedSido: false })}
