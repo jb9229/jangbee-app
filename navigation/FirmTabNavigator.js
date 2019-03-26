@@ -5,7 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ClientEvaluScreen from '../screens/ClientEvaluScreen';
 import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 import AdScreen from '../screens/AdScreen';
@@ -63,12 +63,15 @@ FirmMyInfoStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const ClientEvaluStack = createStackNavigator({
+  ClientEvalu: {
+    screen: ClientEvaluScreen,
+    navigationOptions: { title: '업체정보 수정', headerStyle: { marginTop: -28 } },
+  },
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: '블랙리스트(준비중)',
+ClientEvaluStack.navigationOptions = {
+  tabBarLabel: '블랙리스트(베타)',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
@@ -77,6 +80,6 @@ SettingsStack.navigationOptions = {
 export default createBottomTabNavigator({
   HomeStack,
   AdStack,
+  ClientEvaluStack,
   FirmMyInfoStack,
-  SettingsStack,
 });

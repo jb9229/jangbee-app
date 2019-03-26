@@ -93,21 +93,14 @@ export function handleNoContentResponse(res) {
  * @param {Object} res : Json 응답결과
  */
 export function handleOpenBankJsonResponse(res) {
+  console.log(res);
   if (res.ok) {
     if (res.status === 204) {
       // NO_CONTENTS
       return res;
     }
 
-    return res.json().then((responseJson) => {
-      const rspCode = responseJson.rsp_code;
-
-      if (rspCode === obconfig.API_RESPONSECODE_OK) {
-        return responseJson;
-      }
-
-      throw new CmException(rspCode, `[${responseJson.rsp_message}] ${res.url}`);
-    });
+    return res.json();
   }
 
   throw new CmException(res.status, `${res.url}`);

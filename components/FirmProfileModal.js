@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  Image, Modal, StyleSheet, Text, View,
+  Image, Linking, Modal, StyleSheet, Text, View,
 } from 'react-native';
 import { withLogin } from '../contexts/LoginProvider';
 import JBIcon from './molecules/JBIcon';
@@ -76,6 +76,10 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
             </View>
             <View style={styles.itemsWrap}>
               <JBButton title="업체정보 수정" onPress={() => this.updateFirm()} size="full" />
+              <JBButton
+                title="메일로 의견보내기"
+                onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
+              />
               <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" />
             </View>
           </View>

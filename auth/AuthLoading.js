@@ -43,14 +43,25 @@ class AuthLoading extends React.Component {
           const userInfo = data.val();
 
           const {
-            userType, obAccessToken, obRefreshToken, obAccTokenExpDate, obAccTokenDiscDate, obUserSeqNo,
+            userType,
+            obAccessToken,
+            obRefreshToken,
+            obAccTokenExpDate,
+            obAccTokenDiscDate,
+            obUserSeqNo,
           } = userInfo;
           if (userType === undefined) {
             navigation.navigate('SignUp');
           } else {
             setUser(user);
             setUserType(userType);
-            setOBInfo(obAccessToken, obRefreshToken, obAccTokenExpDate, obAccTokenDiscDate, obUserSeqNo);
+            setOBInfo(
+              obAccessToken,
+              obRefreshToken,
+              obAccTokenExpDate,
+              obAccTokenDiscDate,
+              obUserSeqNo,
+            );
 
             this.checkOBAccDiscDate(obAccTokenDiscDate);
 
@@ -71,17 +82,20 @@ class AuthLoading extends React.Component {
   };
 
   checkOBAccDiscDate = (discardDate) => {
-    if (discardDate === undefined) { return; }
-    const beforeTwentyDay = moment().add(-20, 'day');
+    if (discardDate === undefined) {
+      return;
+    }
+    const beforeTwentyDay = moment()
+      .add(-20, 'days')
+      .format('YYYY-MM-DD');
 
-    const compareResult = moment(discardDate).isAfter(beforeTwentyDay);
+    const compareResult = moment(beforeTwentyDay).isAfter(discardDate);
     if (compareResult) {
       this.comfirmReOpenBankAuth();
     }
-  }
+  };
 
   _handleNotification = (notification) => {
-
     const localnotificationId = notification.notificationId;
     Notifications.dismissNotificationAsync(localnotificationId);
 
@@ -107,9 +121,9 @@ class AuthLoading extends React.Component {
         },
         { text: 'OK', onPress: () => navigation.navigate('OpenBankAuth', { type: 'REAUTH' }) },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
-  }
+  };
 
   render() {
     return (

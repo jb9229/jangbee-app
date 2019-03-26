@@ -271,6 +271,27 @@ export function terminateAd(id) {
   }).then(handleJBServerJsonResponse);
 }
 
+/** ******************** Client Evaluation Api List ************************** */
+
+/**
+ * 블랙리스트 추가 API 요청 함수
+ *
+ * @param {object} newEvaluation 신규 블랙리스트
+ */
+export function createClientEvaluation(newEvaluation) {
+  return fetch(url.JBSERVER_CLIENT_EVALU, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(newEvaluation),
+  }).then(handleJBServerJsonResponse);
+}
+
+export function getClientEvaluList() {
+  return fetch(url.JBSERVER_CLIENT_EVALU_ALL).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**

@@ -17,6 +17,7 @@ import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
 import ListSeparator from '../components/molecules/ListSeparator';
+import OBAccount from '../components/molecules/OBAccount';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import { notifyError } from '../common/ErrorNotice';
@@ -53,12 +54,6 @@ const styles = StyleSheet.create({
   },
   AdTypeText: {},
   accListItemTH: {},
-  accListItemWrap: {
-    padding: 10,
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 5,
-  },
   accItemSelTH: {
     backgroundColor: colors.point,
     color: 'white',
@@ -558,7 +553,7 @@ class AdCreateScreen extends React.Component {
                 <FlatList
                   data={accList}
                   extraData={selFinUseNum}
-                  renderItem={this.renderAccListItem}
+                  renderItem={item => OBAccount(item.item, selFinUseNum, this.onAccListItemPress)}
                   keyExtractor={(item, index) => index.toString()}
                   ItemSeparatorComponent={ListSeparator}
                 />

@@ -517,6 +517,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   value={phoneNumber}
                   onChangeText={text => this.setState({ phoneNumber: text })}
                   placeholder="전화번호를 입력해 주세요"
+                  keyboardType="phone-pad"
                   refer={(input) => {
                     this.telTextInput = input;
                   }}

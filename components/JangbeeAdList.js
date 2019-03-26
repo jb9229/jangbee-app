@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   adMobContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 200,
+    height: 120,
   },
   wrapper: {
     flex: 1,
@@ -24,19 +24,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.point2Dark,
+    backgroundColor: 'white',
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.point2Dark,
+    backgroundColor: 'white',
   },
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.point2Dark,
+    backgroundColor: 'white',
   },
 });
 
