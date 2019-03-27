@@ -13,7 +13,7 @@ import {
 import firebase from 'firebase';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import * as api from '../api/api';
-import FirmTextItem from '../components/FirmTextItem';
+import JBTextItem from '../components/molecules/JBTextItem';
 import FirmImageItem from '../components/FirmImageItem';
 import fonts from '../constants/Fonts';
 import CmException from '../common/CmException';
@@ -255,13 +255,13 @@ export default class FirmMyInfoScreen extends React.Component {
                 </View>
               </View>
 
-              <FirmTextItem title="보유장비" value={firm.equiListStr} revColor />
-              <FirmTextItem
+              <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
+              <JBTextItem
                 title="주소"
                 value={`${firm.address}\n${firm.addressDetail}`}
                 revColor
               />
-              <FirmTextItem title="업체소개" value={firm.introduction} revColor />
+              <JBTextItem title="업체소개" value={firm.introduction} revColor />
             </View>
           </View>
           <View style={[styles.cardWrap, styles.largeCard]}>

@@ -292,6 +292,12 @@ export function getClientEvaluList() {
   return fetch(url.JBSERVER_CLIENT_EVALU_ALL).then(handleJBServerJsonResponse);
 }
 
+export function existClinetEvaluTelnumber(telNumber) {
+  return fetch(`${url.JBSERVER_CLIENT_EVALU_TELEXIST}?telNumber=${telNumber}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**

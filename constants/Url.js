@@ -1,5 +1,5 @@
-// const SERVER_URL = 'http://192.168.1.206/api/v1/';
-const SERVER_URL = 'http://192.168.43.213/api/v1/';
+const SERVER_URL = 'http://192.168.1.108/api/v1/';
+// const SERVER_URL = 'http://192.168.43.213/api/v1/';
 // const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
@@ -17,6 +17,7 @@ module.exports = {
   JBSERVER_ADTARGET_LOCAL: `${SERVER_URL}ad/target/local`,
   JBSERVER_CLIENT_EVALU: `${SERVER_URL}client/evaluation`,
   JBSERVER_CLIENT_EVALU_ALL: `${SERVER_URL}client/evaluations`,
+  JBSERVER_CLIENT_EVALU_TELEXIST: `${SERVER_URL}client/evaluation/exist/telnumber`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
   OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,
   OPENBANK_REAUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize_account2`,

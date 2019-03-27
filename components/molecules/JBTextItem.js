@@ -1,7 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import fonts from '../constants/Fonts';
+import styled from 'styled-components/native';
+import fonts from '../../constants/Fonts';
 
+const Contents = styled.Text`
+  font-family: ${fonts.batang};
+  font-size: 14px;
+  ${props => props.underline !== undefined
+    && `
+    text-decoration-line: underline;
+  `}
+`;
 const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
@@ -14,15 +23,13 @@ const styles = StyleSheet.create({
     color: '#4D4A4A',
     fontSize: 18,
   },
-  itemValue: {
-    fontFamily: fonts.batang,
-    fontSize: 18,
-  },
 });
 
 export default class FirmTextItem extends React.PureComponent {
   render() {
-    const { title, value, revColor } = this.props;
+    const {
+      title, value, revColor, underline,
+    } = this.props;
     let color = null;
     if (revColor) {
       color = { color: 'white' };
@@ -30,7 +37,9 @@ export default class FirmTextItem extends React.PureComponent {
     return (
       <View style={styles.itemWrap}>
         <Text style={[styles.itemTitle]}>{title === undefined ? '' : `${title}: `}</Text>
-        <Text style={[styles.itemValue, color]}>{value}</Text>
+        <Contents style={[styles.itemValue, color]} underline={underline}>
+          {value}
+        </Contents>
       </View>
     );
   }

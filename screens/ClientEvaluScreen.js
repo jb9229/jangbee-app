@@ -2,6 +2,7 @@ import React from 'react';
 import {
   FlatList, StyleSheet, Text, View,
 } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ListSeparator from '../components/molecules/ListSeparator';
@@ -33,6 +34,7 @@ class ClientEvaluScreen extends React.Component {
       isVisibleCreateModal: false,
       isCliEvaluLoadComplete: undefined,
     };
+    this.arrayholder = [];
   }
 
   componentDidMount() {
@@ -48,6 +50,7 @@ class ClientEvaluScreen extends React.Component {
       .then((resBody) => {
         if (resBody) {
           this.setState({ cliEvaluList: resBody, isCliEvaluLoadComplete: true });
+          this.arrayholder = resBody;
           return;
         }
         this.setState({ isCliEvaluLoadComplete: false });
@@ -56,9 +59,46 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 리스트 아이템 렌더링 함수
+   * 블랙리스트 필터링 함수
    */
-  renderCliEvaluItem = ({ item }) => (<CliEvaluItem item={item} />)
+  searchFilterCliEvalu = (text) => {
+    const newData = this.arrayholder.filter((item) => {
+      const textData = text;
+
+      return item.telNumber.indexOf(textData) > -1 || item.cliName.indexOf(textData) > -1;
+    });
+
+    this.setState({ search: text, cliEvaluList: newData });
+  };
+
+  /**
+   * 블랙리스트 아이템 UI 렌더링 함수
+   */
+renderCliEvaluItem = ({ item }) => {
+  const { user } = this.props;
+
+  return (
+    <CliEvaluItem item={item} accountId={user.uid} />
+  );
+};
+
+  /**
+   * 블랙리스트 헤더 UI 렌더링 함수
+   */
+  renderCliEvaluHeader = () => {
+    const { search } = this.state;
+
+    return (
+      <SearchBar
+        value={search}
+        placeholder="전화번호 또는 이름 입력..."
+        lightTheme
+        round
+        onChangeText={text => this.searchFilterCliEvalu(text)}
+        autoCorrect={false}
+      />
+    );
+  };
 
   render() {
     const { cliEvaluList, isVisibleCreateModal, isCliEvaluLoadComplete } = this.state;
@@ -66,43 +106,40 @@ class ClientEvaluScreen extends React.Component {
 
     return (
       <View style={styles.Container}>
+        <ClientEvaluCreateModal
+          accountId={user.uid}
+          isVisibleModal={isVisibleCreateModal}
+          closeModal={() => this.setState({ isVisibleCreateModal: false })}
+          completeAction={() => this.setClinetEvaluList()}
+          size="full"
+        />
         <Text>
-          블랙시스트 고객의 전화가 왔을 때, 하기 평가내용의 알림을 받을 수 있게 기능을 발전해 갈
+          블랙리스트 고객의 전화가 왔을 때, 하기 평가내용의 알림을 받을 수 있게 기능을 발전해 갈
           것입니다.
         </Text>
-        <View>
-          <ClientEvaluCreateModal
-            accountId={user.uid}
-            isVisibleModal={isVisibleCreateModal}
-            closeModal={() => this.setState({ isVisibleCreateModal: false })}
-            completeAction={() => this.setClinetEvaluList()}
-            size="full"
-          />
-          <JBButton
-            title="블랙리스트 추가"
-            onPress={() => this.setState({ isVisibleCreateModal: true })}
-          />
+        <JBButton
+          title="블랙리스트 추가"
+          onPress={() => this.setState({ isVisibleCreateModal: true })}
+          size="small"
+          align="right"
+        />
 
-          {isCliEvaluLoadComplete === true && (
-            <FlatList
-              data={cliEvaluList}
-              renderItem={this.renderCliEvaluItem}
-              keyExtractor={(item, index) => index.toString()}
-              ItemSeparatorComponent={ListSeparator}
-            />
-          )}
-          {isCliEvaluLoadComplete === false && (
-            <View>
-              <Text>
-                블랙리스트 요청에 실패했거나 등록된 블랙 리스트가 없습니다, 다시 시도해 주세요.
-              </Text>
-            </View>
-          )}
-          <View style={styles.evaluListWrap}>
-            <Text>맞아요/틀려요</Text>
-            <Text>내 작성건 수정/삭제</Text>
+        {isCliEvaluLoadComplete === true && (
+          <FlatList
+            data={cliEvaluList}
+            renderItem={this.renderCliEvaluItem}
+            keyExtractor={(item, index) => index.toString()}
+            ListHeaderComponent={this.renderCliEvaluHeader}
+            ItemSeparatorComponent={ListSeparator}
+          />
+        )}
+        {isCliEvaluLoadComplete === false && (
+          <View>
+            <Text>
+              블랙리스트 요청에 실패했거나 등록된 블랙 리스트가 없습니다, 다시 시도해 주세요.
+            </Text>
           </View>
-        </View>
+        )}
       </View>
     );
   }

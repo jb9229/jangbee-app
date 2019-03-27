@@ -66,7 +66,7 @@ FirmMyInfoStack.navigationOptions = {
 const ClientEvaluStack = createStackNavigator({
   ClientEvalu: {
     screen: ClientEvaluScreen,
-    navigationOptions: { title: '업체정보 수정', headerStyle: { marginTop: -28 } },
+    navigationOptions: { header: null },
   },
 });
 

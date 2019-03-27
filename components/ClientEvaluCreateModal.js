@@ -34,6 +34,7 @@ export default class ClientEvaluCreateModal extends React.Component {
       cliName: '',
       reason: '',
       telNumber: '',
+      isDuplTelNChecked: undefined,
       cliNameValErrMessage: '',
       telNumberValErrMessage: '',
       reasonValErrMessage: '',
@@ -43,10 +44,10 @@ export default class ClientEvaluCreateModal extends React.Component {
   /**
    * 모달 액션 완료 함수
    */
-  completeAction = () => {
+  completeAction = async () => {
     const { completeAction, closeModal } = this.props;
 
-    const newEvaluation = this.validateCreateForm();
+    const newEvaluation = await this.validateCreateForm();
 
     if (!newEvaluation) {
       return;
@@ -74,7 +75,7 @@ export default class ClientEvaluCreateModal extends React.Component {
   /**
    * 블랙리스트 추가 유효성 검사 함수
    */
-  validateCreateForm = () => {
+  validateCreateForm = async () => {
     const { cliName, telNumber, reason } = this.state;
     const { accountId } = this.props;
 
@@ -104,14 +105,38 @@ export default class ClientEvaluCreateModal extends React.Component {
       return false;
     }
 
-    const newEvaluData = {
-      accountId,
-      cliName,
-      telNumber,
-      reason,
-    };
+    const telDuplResult = await api
+      .existClinetEvaluTelnumber(telNumber)
+      .then((resBody) => {
+        if (resBody) {
+          Alert.alert(
+            '전화번호가 이미 존재함',
+            '등록하려는 블랙리스트 전화번호가 존재 합니다, 블랙리스트에서 검색 후 확인 해 주세요',
+          );
+          return false;
+        }
+        return true;
+      })
+      .catch((error) => {
+        notifyError(
+          '블랙리스트 전화번호 중복체크 문제',
+          `중복체크에 실패 했습니다, 다시 시도해 주세요, ${error.message}`,
+        );
+        return false;
+      });
 
-    return newEvaluData;
+    if (telDuplResult) {
+      const newEvaluData = {
+        accountId,
+        cliName,
+        telNumber,
+        reason,
+      };
+
+      return newEvaluData;
+    }
+
+    return false;
   };
 
   render() {
