@@ -298,6 +298,32 @@ export function existClinetEvaluTelnumber(telNumber) {
   );
 }
 
+/**
+ * 블랙리스트 내용 업데이트
+ *
+ * @param {object} updateEvaluation 업데이트할 블랙리스트 내용(cliName, reason)
+ */
+export function updateClientEvaluation(updateEvaluation) {
+  return fetch(url.JBSERVER_CLIENT_EVALU, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(updateEvaluation),
+  }).then(handleJBServerJsonResponse);
+}
+
+/**
+ * 블랙리스트 삭제
+ * @param {long} id 삭제할 블랙리스트 아이디
+ */
+export function deleteCliEvalu(id) {
+  return fetch(`${url.JBSERVER_CLIENT_EVALU}?id=${id}`, {
+    method: 'DELETE',
+    headers: {},
+  }).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**

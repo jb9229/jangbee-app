@@ -5,6 +5,7 @@ import {
 import { SearchBar } from 'react-native-elements';
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
+import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
 import ListSeparator from '../components/molecules/ListSeparator';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
@@ -32,6 +33,7 @@ class ClientEvaluScreen extends React.Component {
     super(props);
     this.state = {
       isVisibleCreateModal: false,
+      isVisibleUpdateModal: false,
       isCliEvaluLoadComplete: undefined,
     };
     this.arrayholder = [];
@@ -40,6 +42,16 @@ class ClientEvaluScreen extends React.Component {
   componentDidMount() {
     this.setClinetEvaluList();
   }
+
+  deleteCliEvalu = (id) => {
+    api
+      .deleteCliEvalu(id)
+      .then(() => this.setClinetEvaluList())
+      .catch(error => notifyError(
+        '블랙리스트 삭제 문제',
+        `블랙리스트 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`,
+      ));
+  };
 
   /**
    * 블랙리스트 요청 함수
@@ -72,15 +84,32 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
+   * 블랙리스트 업데이트 함수
+   */
+  openUpdateCliEvaluForm = (item) => {
+    this.setState({
+      updateId: item.id,
+      updateCliName: item.cliName,
+      updateReason: item.reason,
+      isVisibleUpdateModal: true,
+    });
+  };
+
+  /**
    * 블랙리스트 아이템 UI 렌더링 함수
    */
-renderCliEvaluItem = ({ item }) => {
-  const { user } = this.props;
+  renderCliEvaluItem = ({ item }) => {
+    const { user } = this.props;
 
-  return (
-    <CliEvaluItem item={item} accountId={user.uid} />
-  );
-};
+    return (
+      <CliEvaluItem
+        item={item}
+        accountId={user.uid}
+        updateCliEvalu={this.openUpdateCliEvaluForm}
+        deleteCliEvalu={this.deleteCliEvalu}
+      />
+    );
+  };
 
   /**
    * 블랙리스트 헤더 UI 렌더링 함수
@@ -101,7 +130,15 @@ renderCliEvaluItem = ({ item }) => {
   };
 
   render() {
-    const { cliEvaluList, isVisibleCreateModal, isCliEvaluLoadComplete } = this.state;
+    const {
+      updateId,
+      updateCliName,
+      updateReason,
+      cliEvaluList,
+      isVisibleCreateModal,
+      isVisibleUpdateModal,
+      isCliEvaluLoadComplete,
+    } = this.state;
     const { user } = this.props;
 
     return (
@@ -112,6 +149,14 @@ renderCliEvaluItem = ({ item }) => {
           closeModal={() => this.setState({ isVisibleCreateModal: false })}
           completeAction={() => this.setClinetEvaluList()}
           size="full"
+        />
+        <ClientEvaluUpdateModal
+          id={updateId}
+          cliName={updateCliName}
+          reason={updateReason}
+          isVisibleModal={isVisibleUpdateModal}
+          closeModal={() => this.setState({ isVisibleUpdateModal: false })}
+          completeAction={() => this.setClinetEvaluList()}
         />
         <Text>
           블랙리스트 고객의 전화가 왔을 때, 하기 평가내용의 알림을 받을 수 있게 기능을 발전해 갈

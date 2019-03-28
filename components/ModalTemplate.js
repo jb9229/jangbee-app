@@ -1,8 +1,11 @@
 import React from 'react';
-import { Modal, Text } from 'react-native';
+import { Modal } from 'react-native';
 import styled from 'styled-components/native';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
+import JBTextInput from './molecules/JBTextInput';
+import JBErrorMessage from './organisms/JBErrorMessage';
+import { validate } from '../utils/Validation';
 
 const Container = styled.View`
   flex: 1;
@@ -35,8 +38,27 @@ export default class ModalTemplate extends React.Component {
   completeAction = () => {
     const { closeModal } = this.props;
 
+    const newData = this.validateForm();
+
     closeModal();
   };
+
+  /**
+   * 유효성 검사 함수
+   */
+  validateForm = () => {
+    // Validation Error Massage Initialize
+    this.setState({
+      ?ValErrMessage: '',
+    });
+    
+    let v = validate('textMax', ?, true, 45);
+    if (!v[0]) {
+      this.setState({ ?ValErrMessage: v[1] });
+      return false;
+    }
+
+  }
 
   render() {
     const { isVisibleModal, closeModal } = this.props;
@@ -54,7 +76,13 @@ export default class ModalTemplate extends React.Component {
         <Container>
           <ContentsView>
             <JBIcon name="close" size={23} onPress={() => closeModal()} />
-            <Text>모달 떴다</Text>
+            <JBTextInput
+              title=""
+              value={?}
+              onChangeText={text => this.setState({ ?: text })}
+              placeholder="기입해 주세요"
+            />
+            <JBErrorMessage errorMSG={?ValErrMessage} />
 
             <JBButton title="완료" onPress={() => this.completeAction()} />
           </ContentsView>

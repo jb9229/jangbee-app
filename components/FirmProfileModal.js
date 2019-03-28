@@ -79,6 +79,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
               <JBButton
                 title="메일로 의견보내기"
                 onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
+                size="full"
               />
               <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" />
             </View>
