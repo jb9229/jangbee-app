@@ -6,6 +6,7 @@ import { SearchBar } from 'react-native-elements';
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
+import ClientEvaluLikeModal from '../components/ClientEvaluLikeModal';
 import ListSeparator from '../components/molecules/ListSeparator';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
@@ -34,7 +35,9 @@ class ClientEvaluScreen extends React.Component {
     this.state = {
       isVisibleCreateModal: false,
       isVisibleUpdateModal: false,
+      isVisibleEvaluLikeModal: false,
       isCliEvaluLoadComplete: undefined,
+      evaluLikeList: [],
     };
     this.arrayholder = [];
   }
@@ -54,11 +57,76 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
+   * 공감/비공감 API 요청 함수
+   *
+   * @param {object} newEvaluLike 공감/비공감 추가할 데이터
+   */
+  createClientEvaluLike = (newEvaluLike) => {
+    api
+      .createClientEvaluLike(newEvaluLike)
+      .then((resBody) => {
+        this.setCliEvaluLikeList(newEvaluLike.evaluId);
+      })
+      .catch(error => notifyError(
+        '공감/비공감 요청 문제',
+        `요청에 문제가 있습니다, 다시 시도해 주세요${error.message}`,
+      ));
+  };
+
+  /**
+   * 블랙리스트 평가 팝업 오픈
+   *
+   */
+  openCliEvaluLikeModal = (item) => {
+    this.setState({ evaluLikeSelected: item, isVisibleEvaluLikeModal: true });
+
+    this.setCliEvaluLikeList(item.id);
+  }
+
+  /**
+   * 블랙리스트 평가 데이터 설정 함수
+   */
+  setCliEvaluLikeList = (evaluId) => {
+    api
+      .getClientEvaluLikeList(evaluId)
+      .then((resBody) => {
+        this.setState({ evaluLikeList: resBody });
+      })
+      .catch(error => notifyError(
+        '블랙리스트 공감 조회 문제',
+        `공감 조회에 문제가 있습니다, 다시 시도해 주세요(${error.message})`,
+      ));
+  };
+
+  /**
+   * 공감/비공감 삭제 함수
+   *
+   * @param {string} accountId 공감/비공감 삭제할 계정 아이디
+   */
+  cancelClientEvaluLike = (evaluation, like) => {
+    const { user } = this.props;
+    api
+      .deleteCliEvaluLike(evaluation.id, user.uid, like)
+      .then(() => this.setCliEvaluLikeList(evaluation.id))
+      .catch(error => notifyError(
+        '공감/비공감 취소 문제',
+        `블랙리스트 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`,
+      ));
+  }
+
+  closeEvaluLikeModal = () => {
+    this.setClinetEvaluList();
+    this.setState({ isVisibleEvaluLikeModal: false });
+  }
+
+  /**
    * 블랙리스트 요청 함수
    */
   setClinetEvaluList = () => {
+    const { user } = this.props;
+
     api
-      .getClientEvaluList()
+      .getClientEvaluList(user.uid)
       .then((resBody) => {
         if (resBody) {
           this.setState({ cliEvaluList: resBody, isCliEvaluLoadComplete: true });
@@ -67,7 +135,7 @@ class ClientEvaluScreen extends React.Component {
         }
         this.setState({ isCliEvaluLoadComplete: false });
       })
-      .catch(ex => notifyError('블랙리스트 추가 실패', ex.message));
+      .catch(ex => notifyError('블랙리스트 요청 문제', `블랙리스트 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`));
   };
 
   /**
@@ -107,6 +175,7 @@ class ClientEvaluScreen extends React.Component {
         accountId={user.uid}
         updateCliEvalu={this.openUpdateCliEvaluForm}
         deleteCliEvalu={this.deleteCliEvalu}
+        openCliEvaluLikeModal={this.openCliEvaluLikeModal}
       />
     );
   };
@@ -135,8 +204,11 @@ class ClientEvaluScreen extends React.Component {
       updateCliName,
       updateReason,
       cliEvaluList,
+      evaluLikeList,
+      evaluLikeSelected,
       isVisibleCreateModal,
       isVisibleUpdateModal,
+      isVisibleEvaluLikeModal,
       isCliEvaluLoadComplete,
     } = this.state;
     const { user } = this.props;
@@ -144,8 +216,8 @@ class ClientEvaluScreen extends React.Component {
     return (
       <View style={styles.Container}>
         <ClientEvaluCreateModal
-          accountId={user.uid}
           isVisibleModal={isVisibleCreateModal}
+          accountId={user.uid}
           closeModal={() => this.setState({ isVisibleCreateModal: false })}
           completeAction={() => this.setClinetEvaluList()}
           size="full"
@@ -157,6 +229,15 @@ class ClientEvaluScreen extends React.Component {
           isVisibleModal={isVisibleUpdateModal}
           closeModal={() => this.setState({ isVisibleUpdateModal: false })}
           completeAction={() => this.setClinetEvaluList()}
+        />
+        <ClientEvaluLikeModal
+          isVisibleModal={isVisibleEvaluLikeModal}
+          accountId={user.uid}
+          evaluation={evaluLikeSelected}
+          evaluLikeList={evaluLikeList}
+          createClientEvaluLike={this.createClientEvaluLike}
+          cancelClientEvaluLike={this.cancelClientEvaluLike}
+          closeModal={() => this.closeEvaluLikeModal()}
         />
         <Text>
           블랙리스트 고객의 전화가 왔을 때, 하기 평가내용의 알림을 받을 수 있게 기능을 발전해 갈

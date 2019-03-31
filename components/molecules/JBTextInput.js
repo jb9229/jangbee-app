@@ -42,7 +42,7 @@ export default class JBTextInput extends React.PureComponent {
     } = this.props;
     return (
       <View style={styles.itemWrap}>
-        <Text style={styles.itemTitle}>{title}</Text>
+        {title ? <Text style={styles.itemTitle}>{title}</Text> : null}
         <TextInput
           ref={tiRefer ? input => tiRefer(input) : null}
           style={styles.itemInput}

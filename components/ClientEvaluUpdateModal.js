@@ -126,7 +126,8 @@ export default class ClientEvaluUpdateModal extends React.Component {
               title=""
               value={reason}
               onChangeText={text => this.setState({ reason: text })}
-              placeholder="사유를 기입해 주세요"
+              placeholder="사유를 기입해 주세요(최대 1000자)"
+              numberOfLines={3}
             />
             <JBErrorMessage errorMSG={reasonValErrMessage} />
 

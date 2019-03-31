@@ -33,7 +33,7 @@ const TouchableHighlight = styled.TouchableHighlight`
   `};
   ${props => props.size === BIG_SIZE
     && `
-    padding: 30px 20px;
+    padding: 15px 30px;
     border-radius: 3;
   `};
   ${props => props.size === SMALL_SIZE

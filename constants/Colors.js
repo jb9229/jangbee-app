@@ -16,6 +16,7 @@ export default {
   point2Dark: '#2a4955',
   iconDefault: '#5392aa',
   indicator: '#FDCA24',
+  textInputBorder: '#7A7373',
   tintColor,
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,

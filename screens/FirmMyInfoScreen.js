@@ -220,7 +220,7 @@ class FirmMyInfoScreen extends React.Component {
               고객님들 검색에 콜받을 수 있게, 업체정보를 등록해 주세요.
             </Text>
             <JBButton title="업체정보 등록하기" onPress={() => this.registerFirm()} size="big" />
-            <JBButton title="로그아웃" onPress={() => this.onSignOut()} underline size="full" />
+            <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" />
           </View>
         </View>
       );
@@ -263,11 +263,7 @@ class FirmMyInfoScreen extends React.Component {
               </View>
 
               <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
-              <JBTextItem
-                title="주소"
-                value={`${firm.address}\n${firm.addressDetail}`}
-                revColor
-              />
+              <JBTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
               <JBTextItem title="업체소개" value={firm.introduction} revColor />
             </View>
           </View>

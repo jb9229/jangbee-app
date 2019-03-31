@@ -28,7 +28,7 @@ export function createFirm(newFirm) {
 
 export function getFirm(accountId) {
   const param = encodeURIComponent(accountId);
-  return fetch(`${url.JBSERVER_FIRM}/${param}`);
+  return fetch(`${url.JBSERVER_FIRM}?accountId=${param}`);
 }
 
 /**
@@ -288,8 +288,11 @@ export function createClientEvaluation(newEvaluation) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getClientEvaluList() {
-  return fetch(url.JBSERVER_CLIENT_EVALU_ALL).then(handleJBServerJsonResponse);
+export function getClientEvaluList(accountId) {
+  const param = encodeURIComponent(accountId);
+  return fetch(`${url.JBSERVER_CLIENT_EVALU_ALL}?accountId=${param}`).then(
+    handleJBServerJsonResponse,
+  );
 }
 
 export function existClinetEvaluTelnumber(telNumber) {
@@ -322,6 +325,41 @@ export function deleteCliEvalu(id) {
     method: 'DELETE',
     headers: {},
   }).then(handleJBServerJsonResponse);
+}
+
+/**
+ * 공감/비공감 추가 API 요청 함수
+ * @param {object} newEvaluLike 신규 공감
+ */
+export function createClientEvaluLike(newEvaluLike) {
+  return fetch(url.JBSERVER_CLIENT_EVALULIKE, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(newEvaluLike),
+  }).then(handleJBServerJsonResponse);
+}
+
+export function getClientEvaluLikeList(id) {
+  return fetch(`${url.JBSERVER_CLIENT_EVALULIKE}?evaluId=${id}`).then(handleJBServerJsonResponse);
+}
+
+export function existEvaluLike(accountId) {
+  return fetch(`${url.JBSERVER_CLIENT_EVALULIKE_EXIST}?accountId=${accountId}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
+export function deleteCliEvaluLike(evaluId, accountId, like) {
+  const param = encodeURIComponent(accountId);
+  return fetch(
+    `${url.JBSERVER_CLIENT_EVALULIKE}?evaluId=${evaluId}&accountId=${param}&like=${like}`,
+    {
+      method: 'DELETE',
+      headers: {},
+    },
+  ).then(handleJBServerJsonResponse);
 }
 
 /** ******************** Open Bank Api List ************************** */

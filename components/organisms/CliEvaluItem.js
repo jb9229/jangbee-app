@@ -41,7 +41,7 @@ export default function CliEvaluItem({
   accountId,
   updateCliEvalu,
   deleteCliEvalu,
-  likeCliEvalu,
+  openCliEvaluLikeModal,
 }) {
   return (
     <View style={styles.Container}>
@@ -54,14 +54,8 @@ export default function CliEvaluItem({
           {accountId !== item.accountId && (
             <View style={styles.likeWrap}>
               <JBButton
-                title={`공감: ${item.likeCount}`}
-                onPress={() => likeCliEvalu(item, true)}
-                size="small"
-                underline
-              />
-              <JBButton
-                title={`비공감: ${item.unlikeCount}`}
-                onPress={() => likeCliEvalu(item, false)}
+                title={`공감: ${item.likeCount}, 비공감: ${item.unlikeCount}`}
+                onPress={() => openCliEvaluLikeModal(item)}
                 size="small"
                 underline
               />
