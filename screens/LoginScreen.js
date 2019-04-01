@@ -10,6 +10,7 @@ import { validate } from '../utils/Validation';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
+import { notifyError } from '../common/ErrorNotice';
 
 const styles = StyleSheet.create({
   container: {
@@ -88,7 +89,7 @@ class LoginScreen extends React.PureComponent {
   };
 
   onSignIn = async () => {
-    const { navigation, setUser, setUserType } = this.props;
+    const { navigation } = this.props;
     const { confirmationResult, code } = this.state;
 
     // Validation
@@ -98,20 +99,25 @@ class LoginScreen extends React.PureComponent {
       return;
     }
 
-    await confirmationResult
+    confirmationResult
       .confirm(code)
-      .then(result => async function logining() {
+      .then((result) => {
         const { user } = result;
 
-        const userInfo = await getUserInfo(user.uid);
+        getUserInfo(user.uid)
+          .then((userInfo) => {
+            const { userType } = userInfo;
 
-        const { userType } = userInfo;
-
-        if (userType === undefined) {
-          navigation.navigate('SignUp');
-        } else {
-          navigation.navigate('AuthLoading');
-        }
+            if (userType === undefined) {
+              navigation.navigate('SignUp', { user });
+            } else {
+              navigation.navigate('AuthLoading');
+            }
+          })
+          .catch(error => notifyError(
+            'FB 사용자 정보 요청 실패',
+            `사용자 정보 요청에 문제가 있습니다, 다시 시도해 주세요(${error.message})`,
+          ));
       })
       .catch((error) => {
         Alert.alert(`잘못된 인증 코드입니다: ${error}`);
@@ -182,6 +188,7 @@ class LoginScreen extends React.PureComponent {
         type: 'recaptcha',
         verify: () => Promise.resolve(token),
       };
+
       try {
         const confirmationResult = await firebase
           .auth()

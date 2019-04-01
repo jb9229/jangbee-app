@@ -16,7 +16,6 @@ import fonts from '../constants/Fonts';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
 import * as converter from '../utils/Converter';
-import adLocation from '../constants/AdLocation';
 import JBErroMessage from './organisms/JBErrorMessage';
 
 const styles = StyleSheet.create({

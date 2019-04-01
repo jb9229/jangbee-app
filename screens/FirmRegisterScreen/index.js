@@ -137,14 +137,13 @@ class FirmRegisterScreen extends React.Component {
     };
 
     api.createFirm(newFirm)
-      .then(() => navigation.navigate('HOME'))
+      .then(() => navigation.navigate('FirmMyInfo', { refresh: 'Register' }))
       .catch((error) => {
         Alert.alert(
           '업체등록에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`);
+          `[${error.name}] ${error.message}`,
+        );
       });
-
-    navigation.navigate('FirmMyInfo', { refresh: 'Register' });
   }
 
   /**

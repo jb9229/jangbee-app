@@ -50,8 +50,9 @@ class AuthLoading extends React.Component {
             obAccTokenDiscDate,
             obUserSeqNo,
           } = userInfo;
+
           if (userType === undefined) {
-            navigation.navigate('SignUp');
+            navigation.navigate('SignUp', { user });
           } else {
             setUser(user);
             setUserType(userType);

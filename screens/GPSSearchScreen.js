@@ -89,7 +89,7 @@ export default class GPSSearchScreen extends React.Component {
       searSido: '',
       searGungu: '',
       searchedFirmList: null,
-      page: 1,
+      page: 0,
       isListLoading: undefined,
       isLastList: false,
       validationMessage: '',
@@ -107,7 +107,7 @@ export default class GPSSearchScreen extends React.Component {
     const { isSearViewMode } = this.state;
 
     this.setState({
-      isLocalSearch: isLocalMode, page: 1, isListLoading: undefined, searSido: '', searGungu: '',
+      isLocalSearch: isLocalMode, page: 0, isListLoading: undefined, searSido: '', searGungu: '',
     });
 
     if (isSearViewMode) {
@@ -196,7 +196,7 @@ export default class GPSSearchScreen extends React.Component {
       .getNearFirmList(page, searEquipment, searLongitude, searLatitude)
       .then((res) => {
         this.setState({
-          searchedFirmList: page === 1 ? res.content : [...searchedFirmList, ...res.content],
+          searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
           isLastList: res.last,
           isListLoading: false,
           refreshing: false,
@@ -227,7 +227,7 @@ export default class GPSSearchScreen extends React.Component {
       .getLocalFirmList(page, searEquipment, searSido, searGungu)
       .then((res) => {
         this.setState({
-          searchedFirmList: page === 1 ? res.content : [...searchedFirmList, ...res.content],
+          searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
           isLastList: res.last,
           isListLoading: false,
           refreshing: false,

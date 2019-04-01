@@ -45,9 +45,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     elevation: 10,
+    alignItems: 'center',
   },
   accountTypeText: {
     fontSize: 20,
+    fontFamily: fonts.batang,
+  },
+  accountTypeSubText: {
+    fontSize: 15,
     fontFamily: fonts.batang,
   },
   selectedAccType: {
@@ -90,26 +95,42 @@ class SignUpScreen extends React.Component {
   /**
    * Firebase user DB에 사용자 추가정보 저장
    */
-  onSignUp = async () => {
-    const { navigation, user } = this.props;
+  onSignUp = () => {
+    const { navigation, setUser, setUserType } = this.props;
     const { userType } = this.state;
     if (userType === undefined) {
       this.setState({ errorMessage: '사용자님의 업무를 선택해 주세요.' });
       return;
     }
 
-    await firebase
+    firebase
       .database()
-      .ref(`users/${user.uid}`)
-      .set({
-        userType,
-      }, (error) => {
-        if (error) {
-          Alert.alert('저장 실패', '사용자타입 FB DB에 저장에 문제가 있습니다, 다시 시도해 주세요.')
+      .ref(`users/${navigation.state.params.user.uid}`)
+      .set(
+        {
+          userType,
+        },
+        (error) => {
+          if (error) {
+            Alert.alert(
+              '저장 실패',
+              '사용자타입 FB DB에 저장에 문제가 있습니다, 다시 시도해 주세요.',
+            );
+          }
+        },
+      )
+      .then(() => {
+        setUser(navigation.state.params.user);
+        setUserType(userType);
+
+        if (userType === 1) {
+          navigation.navigate('ClientMain');
+        } else if (userType === 2) {
+          navigation.navigate('FirmMain');
+        } else {
+          Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
         }
       });
-
-    navigation.navigate('AuthLoading');
   };
 
   onChangeUserType = (userType) => {
@@ -126,7 +147,7 @@ class SignUpScreen extends React.Component {
           <Text style={styles.thanksRegiText}>모두가 윈윈하는 커뮤니티장을 만들어 갑니다.</Text>
         </View>
         <View style={styles.titleWrap}>
-          <Text style={styles.titleText}>어떤 업무를 보고 계십니까?</Text>
+          <Text style={styles.titleText}>어떤 서비스를 이용하시겠습니까?</Text>
         </View>
         <View style={styles.accoutTypeWrap}>
           <TouchableOpacity
@@ -134,16 +155,18 @@ class SignUpScreen extends React.Component {
             onPress={() => this.onChangeUserType(USER_CLIENT)}
           >
             <Text style={[styles.accountTypeText]}>장비고객</Text>
+            <Text style={[styles.accountTypeSubText]}>(장비 호출)</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.accountTypeTO, userType === USER_FIRM ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_FIRM)}
           >
             <Text style={[styles.accountTypeText]}>장비업체 </Text>
+            <Text style={[styles.accountTypeSubText]}>(내장비 등록)</Text>
           </TouchableOpacity>
         </View>
         <JBErrorMessage errorMSG={errorMessage} />
-        <JBButton title="등록하기" onPress={() => this.onSignUp()} />
+        <JBButton title="등록하기" onPress={() => this.onSignUp()} align="center" />
       </View>
     );
   }

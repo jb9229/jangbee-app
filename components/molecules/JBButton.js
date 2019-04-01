@@ -13,6 +13,10 @@ const Container = styled.View`
     && `
     justify-content: flex-end;
   `}
+  ${props => props.align === 'center'
+    && `
+    justify-content: center;
+  `}
 `;
 
 const TouchableHighlight = styled.TouchableHighlight`

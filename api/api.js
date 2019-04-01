@@ -23,7 +23,7 @@ export function createFirm(newFirm) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(newFirm),
-  }).then(handleJsonResponse);
+  }).then(handleJBServerJsonResponse);
 }
 
 export function getFirm(accountId) {

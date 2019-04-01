@@ -70,6 +70,8 @@ function callFirm(number) {
 }
 
 function calDistance(dis) {
+  if (!dis) { return ''; }
+
   if (dis < 1000) {
     return `${dis}m`;
   }
