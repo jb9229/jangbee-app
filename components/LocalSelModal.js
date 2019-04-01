@@ -60,6 +60,7 @@ export default class EquipementModal extends React.Component {
     super(props);
     this.state = {
       isSelectedSido: false,
+      isFetching: false,
       sido: '-',
       gugun: '-',
       sidoList: [],
@@ -73,34 +74,12 @@ export default class EquipementModal extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { selEquipment } = this.props;
+
+    console.log(selEquipment);
     if (selEquipment !== nextProps.selEquipment) {
       this.setLocalData(nextProps.selEquipment);
     }
   }
-
-  /**
-   * 장비가 존재하는 sido/sigungu 리스트 설정
-   */
-  setLocalData = (sEquipment) => {
-    api
-      .getFirmLocalData(sEquipment)
-      .then((localData) => {
-        if (localData.sidoList === null || localData.gunguData === null) {
-          return;
-        }
-
-        this.setState({
-          sidoList: localData.sidoList,
-          gugunMap: converter.objToStrMap(localData.gunguData),
-        });
-      })
-      .catch((error) => {
-        Alert.alert(
-          `[${sEquipment}] 보유 지역 검색에 문제가 있습니다, 재 시도해 주세요`,
-          `[${error.name}] ${error.message}`,
-        );
-      });
-  };
 
   /**
    * 지역선택 이벤트 함수
@@ -121,6 +100,41 @@ export default class EquipementModal extends React.Component {
         gugunList: gugunMap.get(selLocal),
       });
     }
+  };
+
+  /**
+   * 지역리스트 Refresh 함수
+   */
+  onRefresh = () => {
+    const { selEquipment } = this.props;
+
+    this.setState({ isFetching: true }, () => this.setLocalData(selEquipment));
+  }
+
+  /**
+   * 장비가 존재하는 sido/sigungu 리스트 설정
+   */
+  setLocalData = (sEquipment) => {
+    api
+      .getFirmLocalData(sEquipment)
+      .then((localData) => {
+        if (localData.sidoList === null || localData.gunguData === null) {
+          return;
+        }
+
+        this.setState({
+          sidoList: localData.sidoList,
+          gugunMap: converter.objToStrMap(localData.gunguData),
+          isFetching: false,
+        });
+      })
+      .catch((error) => {
+        Alert.alert(
+          `[${sEquipment}] 보유 지역 검색에 문제가 있습니다, 재 시도해 주세요`,
+          `[${error.name}] ${error.message}`,
+        );
+        this.setState({ isFetching: false });
+      });
   };
 
   /**
@@ -193,7 +207,7 @@ export default class EquipementModal extends React.Component {
   render() {
     const { isVisibleEquiModal, selEquipment } = this.props;
     const {
-      gugun, gugunList, sidoList, sido, isSelectedSido, validationMessage,
+      isFetching, isSelectedSido, gugun, gugunList, sidoList, sido, validationMessage,
     } = this.state;
 
     const listData = isSelectedSido ? gugunList : sidoList;
@@ -226,6 +240,8 @@ export default class EquipementModal extends React.Component {
                 numColumns={2}
                 data={listData}
                 extraData={extraData}
+                onRefresh={this.onRefresh}
+                refreshing={isFetching}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={item => this.renderListItem(item, selectedItem)}
               />

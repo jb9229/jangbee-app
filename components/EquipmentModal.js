@@ -43,6 +43,7 @@ export default class EquipementModal extends React.Component {
       equiList: [],
       equiSelMap: (new Map(): Map<string, boolean>),
       singSeltdEquipment: '',
+      isFetching: false,
     };
   }
 
@@ -107,6 +108,13 @@ export default class EquipementModal extends React.Component {
   };
 
   /**
+   * 장비리스트 리프레쉬 함수
+   */
+  onRefresh = () => {
+    this.setState({ isFetching: true }, () => { this.setEquiList(); });
+  }
+
+  /**
    * 장비리스트 설정 함수
    *
    * @returns null
@@ -115,7 +123,7 @@ export default class EquipementModal extends React.Component {
     api
       .getEquipList()
       .then((newEquiList) => {
-        this.setState({ equiList: newEquiList });
+        this.setState({ equiList: newEquiList, isFetching: false });
       })
       .catch((error) => {
         Alert.alert(
@@ -123,6 +131,7 @@ export default class EquipementModal extends React.Component {
           `[${error.name}] ${error.message}`,
         );
 
+        this.setState({ isFetching: false });
         return undefined;
       });
   };
@@ -170,7 +179,7 @@ export default class EquipementModal extends React.Component {
 
   render() {
     const { isVisibleEquiModal, advertisement } = this.props;
-    const { equiList, equiSelMap, singSeltdEquipment } = this.state;
+    const { equiList, equiSelMap, singSeltdEquipment, isFetching } = this.state;
 
     return (
       <View style={styles.container}>
@@ -197,6 +206,8 @@ export default class EquipementModal extends React.Component {
                 numColumns={2}
                 data={equiList}
                 extraData={equiSelMap}
+                onRefresh={this.onRefresh}
+                refreshing={isFetching}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={this.renderEquiListItem}
               />
