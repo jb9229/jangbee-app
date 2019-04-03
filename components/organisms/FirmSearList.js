@@ -30,7 +30,15 @@ export default class FirmSearList extends React.Component {
 
   render() {
     const {
-      data, refreshing, last, loading, selEquipment, selSido, selGungu,
+      data,
+      refreshing,
+      last,
+      loading,
+      selEquipment,
+      selSido,
+      selGungu,
+      handleRefresh,
+      handleLoadMore,
     } = this.props;
     return (
       <View>
@@ -48,9 +56,9 @@ export default class FirmSearList extends React.Component {
 )}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={ListSeparator}
-          onRefresh={this.handleRefresh}
+          onRefresh={handleRefresh}
           refreshing={refreshing}
-          onEndReached={this.handleLoadMore}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={10}
         />
       </View>

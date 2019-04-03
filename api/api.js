@@ -28,7 +28,7 @@ export function createFirm(newFirm) {
 
 export function getFirm(accountId) {
   const param = encodeURIComponent(accountId);
-  return fetch(`${url.JBSERVER_FIRM}?accountId=${param}`);
+  return fetch(`${url.JBSERVER_FIRM}?accountId=${param}`).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -40,7 +40,7 @@ export function getNearFirmList(page, equipment, sLongitude, sLatitude) {
     longitude: sLongitude,
     latitude: sLatitude,
     page,
-    size: 2,
+    size: 10,
   };
 
   return fetch(
@@ -61,7 +61,7 @@ export function getLocalFirmList(page, equipment, searSido, searGungo) {
     sido: searSido,
     gungu: searGungo,
     page,
-    size: 2,
+    size: 10,
   };
 
   return fetch(

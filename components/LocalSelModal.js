@@ -75,7 +75,6 @@ export default class EquipementModal extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { selEquipment } = this.props;
 
-    console.log(selEquipment);
     if (selEquipment !== nextProps.selEquipment) {
       this.setLocalData(nextProps.selEquipment);
     }

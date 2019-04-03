@@ -1,5 +1,4 @@
 import React from 'react';
-import registerForPushNotificationsAsync from '../common/registerForPushNotificationsAsync';
 
 const Context = React.createContext();
 
@@ -21,7 +20,6 @@ class LoginProvider extends React.Component {
     this.actions = {
       setUser: (loginUser) => {
         this.setState({ user: loginUser });
-        registerForPushNotificationsAsync(loginUser.uid);
       },
       setUserType: (loginUserType) => {
         this.setState({ type: loginUserType });

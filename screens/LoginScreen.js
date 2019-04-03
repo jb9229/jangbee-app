@@ -11,6 +11,7 @@ import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
 import { notifyError } from '../common/ErrorNotice';
+import registerForPushNotificationsAsync from '../common/registerForPushNotificationsAsync';
 
 const styles = StyleSheet.create({
   container: {
@@ -104,8 +105,10 @@ class LoginScreen extends React.PureComponent {
       .then((result) => {
         const { user } = result;
 
+        registerForPushNotificationsAsync(user.uid);
         getUserInfo(user.uid)
-          .then((userInfo) => {
+          .then((data) => {
+            const userInfo = data.val();
             const { userType } = userInfo;
 
             if (userType === undefined) {

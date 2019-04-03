@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
  * 오픈뱅크 계좌UI 렌더링 함수
  */
 export default function renderAccListItem(item, selFinUseNum, onPress) {
-  console.log(item);
   return (
     <View>
       <TouchableHighlight

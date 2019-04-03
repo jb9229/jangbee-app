@@ -5,9 +5,11 @@ import {
 import {
   AppLoading, Asset, Font, Icon,
 } from 'expo';
+import firebase from 'firebase';
 import AppNavigator from './navigation/AppNavigator';
 import { LoginProvider } from './contexts/LoginProvider';
 import colors from './constants/Colors';
+import firebaseconfig from './firebaseconfig';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,7 +50,14 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
+    this.initFirebase();
     this.setState({ isLoadingComplete: true });
+  };
+
+  initFirebase = () => {
+    firebase.initializeApp(firebaseconfig);
+
+    firebase.auth().languageCode = 'ko';
   };
 
   render() {

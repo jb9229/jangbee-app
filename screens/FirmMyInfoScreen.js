@@ -17,7 +17,6 @@ import * as api from '../api/api';
 import JBTextItem from '../components/molecules/JBTextItem';
 import FirmImageItem from '../components/FirmImageItem';
 import fonts from '../constants/Fonts';
-import CmException from '../common/CmException';
 import { withLogin } from '../contexts/LoginProvider';
 import FirmProfileModal from '../components/FirmProfileModal';
 import colors from '../constants/Colors';
@@ -145,22 +144,13 @@ class FirmMyInfoScreen extends React.Component {
 
     api
       .getFirm(user.uid)
-      .then((res) => {
-        if (res.ok) {
-          if (res.status === 204) {
-            return undefined;
-          }
-          return res.json();
-        }
-
-        throw new CmException(res.status, `${res.url}`);
-      })
       .then((firm) => {
         this.setState({ firm, isLoadingComplete: true });
       })
       .catch((error) => {
         Alert.alert(
-          `업체정보 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+          '업체정보 요청 문제발생',
+          `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
         );
         this.setState({ isLoadingComplete: true });
       });
@@ -263,6 +253,7 @@ class FirmMyInfoScreen extends React.Component {
               </View>
 
               <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
+              <JBTextItem title="전화번호" value={firm.phoneNumber} revColor row />
               <JBTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
               <JBTextItem title="업체소개" value={firm.introduction} revColor />
             </View>

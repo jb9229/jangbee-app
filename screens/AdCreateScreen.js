@@ -108,6 +108,7 @@ class AdCreateScreen extends React.Component {
   componentDidMount() {
     this.setAvailableAdType();
     this.setOpenBankAccountList();
+    this.setFirmInfo();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -201,6 +202,31 @@ class AdCreateScreen extends React.Component {
     });
   }
 
+  /**
+   * 초기값 설정을 위한 업체정보 요청 함수
+   */
+  setFirmInfo = () => {
+    const { user } = this.props;
+
+    api
+      .getFirm(user.uid)
+      .then((firm) => {
+        this.setDefaultFirmValue(firm);
+      })
+      .catch((error) => {
+        Alert.alert(
+          `업체정보 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+        );
+      });
+  }
+
+  /**
+   * 업체정보를 광고 초기정보에 설정하는 함수
+   */
+  setDefaultFirmValue = (firm) => {
+    this.setState({ adTelNumber: firm.phoneNumber, adEquipment: firm.equiListStr, adSido: firm.sidoAddr, adGungu: firm.sigunguAddr });
+  }
+
   onAccListItemPress = (idStr) => {
     const newAccListSelcted = [];
 
@@ -229,6 +255,18 @@ class AdCreateScreen extends React.Component {
     const { adType, adTitle, adSubTitle, forMonths, adPhotoUrl, adEquipment, adTelNumber, adSido, adGungu, selFinUseNum } = this.state;
     const { navigation, user } = this.props;
 
+    let adEquipmentTypeData = adEquipment;
+    let adSidoTypeData = adSido;
+    let adGunguTypeData = adGungu;
+    if (adType !== ADTYPE_EQUIPMENT_FIRST && adType !== ADTYPE_LOCAL_FIRST) {
+      adEquipmentTypeData = '';
+    }
+
+    if (adType !== ADTYPE_LOCAL_FIRST) {
+      adSidoTypeData = '';
+      adGunguTypeData = '';
+    }
+
     const newAd = {
       adType,
       accountId: user.uid,
@@ -238,9 +276,9 @@ class AdCreateScreen extends React.Component {
       photoUrl: adPhotoUrl,
       telNumber: adTelNumber,
       fintechUseNum: selFinUseNum,
-      equiTarget: adEquipment,
-      sidoTarget: adSido,
-      gugunTarget: adGungu,
+      equiTarget: adEquipmentTypeData,
+      sidoTarget: adSidoTypeData,
+      gugunTarget: adGunguTypeData,
       price: this.getAdPrice(adType),
     };
 
@@ -271,7 +309,7 @@ class AdCreateScreen extends React.Component {
           if (dupliResult === null) {
             this.requestCreaAd();
           } else {
-            notifyError('장비 타켓광고 생성 실패', `죄송합니다, 해당 ${adSido} ${adGungu}는 [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`);
+            notifyError('장비 타켓광고 중복검사 실패', `죄송합니다, 해당 ${adSido} ${adGungu}는 [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`);
           }
         })
         .catch((error) => {
@@ -287,7 +325,7 @@ class AdCreateScreen extends React.Component {
           if (dupliResult === null) {
             this.requestCreaAd();
           } else {
-            notifyError('지역 타켓광고 생성 실패', `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`);
+            notifyError('지역 타켓광고 중복 확인 실패', `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`);
           }
         })
         .catch((error) => {

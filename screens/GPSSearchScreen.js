@@ -83,13 +83,13 @@ export default class GPSSearchScreen extends React.Component {
       isVisibleLocalModal: false,
       isSearViewMode: false,
       isLocalSearch: false,
-      adEuqiTarket: '',
       currLocation: '수신된 위치 정보가 없습니다',
       searEquipment: '',
       searSido: '',
       searGungu: '',
       searchedFirmList: null,
       page: 0,
+      refreshing: false,
       isListLoading: undefined,
       isLastList: false,
       validationMessage: '',
@@ -304,13 +304,19 @@ export default class GPSSearchScreen extends React.Component {
    * 장비업체리스트 새로고침 함수
    */
   handleRefresh = () => {
+    const { isLocalSearch } = this.state;
+
     this.setState(
       {
         page: 0,
         refreshing: true,
       },
       () => {
-        this.searchNearJangbee();
+        if (isLocalSearch) {
+          this.searchLocJangbee();
+        } else {
+          this.searchNearJangbee();
+        }
       },
     );
   };
@@ -319,7 +325,9 @@ export default class GPSSearchScreen extends React.Component {
    * 장비업체리스트 페이징 추가 함수
    */
   handleLoadMore = () => {
-    const { page } = this.state;
+    const { page, isLastList } = this.state;
+
+    if (isLastList) { return; }
 
     this.setState(
       {
@@ -358,11 +366,10 @@ export default class GPSSearchScreen extends React.Component {
   render() {
     const {
       isSearViewMode,
-      searEquipment,
       isLocalSearch,
       isVisibleEquiModal,
       isVisibleLocalModal,
-      adEuqiTarket,
+      searEquipment,
       currLocation,
       searSido,
       searGungu,
@@ -412,7 +419,7 @@ export default class GPSSearchScreen extends React.Component {
             <JBIcon
               name="close"
               size={23}
-              onPress={() => this.setState({ isSearViewMode: false })}
+              onPress={() => this.setState({ searchedFirmList: [], page: 0, isSearViewMode: false })}
             />
             <FirmSearList
               data={searchedFirmList}

@@ -93,7 +93,6 @@ export function handleNoContentResponse(res) {
  * @param {Object} res : Json 응답결과
  */
 export function handleOpenBankJsonResponse(res) {
-  console.log(res);
   if (res.ok) {
     if (res.status === 204) {
       // NO_CONTENTS

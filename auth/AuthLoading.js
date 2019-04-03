@@ -5,7 +5,6 @@ import {
 import { Notifications } from 'expo';
 import firebase from 'firebase';
 import moment from 'moment';
-import firebaseconfig from '../firebaseconfig';
 import colors from '../constants/Colors';
 import { getUserInfo } from '../utils/FirebaseUtils';
 import { withLogin } from '../contexts/LoginProvider';
@@ -20,17 +19,10 @@ const styles = StyleSheet.create({
 
 class AuthLoading extends React.Component {
   componentDidMount() {
-    this.initFirebase();
     this.checkLogin();
 
     this._notificationSubscription = Notifications.addListener(this._handleNotification);
   }
-
-  initFirebase = () => {
-    firebase.initializeApp(firebaseconfig);
-
-    firebase.auth().languageCode = 'ko';
-  };
 
   checkLogin = () => {
     const {

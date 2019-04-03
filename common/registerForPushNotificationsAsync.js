@@ -3,6 +3,7 @@ import firebase from 'firebase';
 
 export default async function registerForPushNotificationsAsync(uid) {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+
   let finalStatus = existingStatus;
 
   // only ask if permissions have not already been determined, because
@@ -22,7 +23,7 @@ export default async function registerForPushNotificationsAsync(uid) {
   // Get the token that uniquely identifies this device
   const token = await Notifications.getExpoPushTokenAsync();
 
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
+  // Save Expo Push Token at DB(I know token )
   await firebase
     .database()
     .ref(`users/${uid}`)

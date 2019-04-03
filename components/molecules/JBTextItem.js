@@ -11,8 +11,6 @@ const Container = styled.View`
   ${props => props.row
     && `
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
   `}
 `;
 
