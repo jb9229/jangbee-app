@@ -14,6 +14,7 @@ import { Constants, Location, Permissions } from 'expo';
 import JBIcon from '../components/molecules/JBIcon';
 import { validatePresence } from '../utils/Validation';
 import FirmCreaErrMSG from '../components/organisms/JBErrorMessage';
+import JBActIndicator from '../components/organisms/JBActIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,6 +80,7 @@ export default class GPSSearchScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isComponentMountComplete: false,
       isVisibleEquiModal: false,
       isVisibleLocalModal: false,
       isSearViewMode: false,
@@ -98,6 +100,7 @@ export default class GPSSearchScreen extends React.Component {
 
   componentDidMount() {
     this.setLocationInfo();
+    this.setState({ isComponentMountComplete: true });
   }
 
   /**
@@ -365,6 +368,7 @@ export default class GPSSearchScreen extends React.Component {
 
   render() {
     const {
+      isComponentMountComplete,
       isSearViewMode,
       isLocalSearch,
       isVisibleEquiModal,
@@ -380,6 +384,10 @@ export default class GPSSearchScreen extends React.Component {
       isListLoading,
       validationMessage,
     } = this.state;
+
+    if (!isComponentMountComplete) {
+      return <JBActIndicator title="위치정보 불러오는중..." size={35} />;
+    }
 
     return (
       <View style={styles.container}>

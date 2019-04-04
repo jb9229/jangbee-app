@@ -20,7 +20,8 @@ const Container = styled.View`
 `;
 
 const TouchableHighlight = styled.TouchableHighlight`
-  background-color: ${props => (props.color ? props.color : colors.pointDark)};
+  background-color: ${props => (props.color ? props.color : 'white')};
+  border-color: ${props => (props.color ? 'white' : colors.pointDark)};
   ${props => props.size === undefined
     && `
     padding: 12px 20px;
@@ -30,7 +31,6 @@ const TouchableHighlight = styled.TouchableHighlight`
     && `
     width: 100%;
     align-items: center;
-    background-color: ${colors.point2};
     padding: 10px 0;
     border-radius: 3;
     elevation: 4;
@@ -54,7 +54,7 @@ const TouchableHighlight = styled.TouchableHighlight`
 const Text = styled.Text`
   font-family: ${fonts.button};
   font-weight: bold;
-  color: white;
+  color: ${props => (props.color ? 'white' : colors.pointDark)};
   ${props => props.size === undefined
     && `
       font-size: 20px;

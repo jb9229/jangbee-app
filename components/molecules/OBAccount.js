@@ -1,14 +1,54 @@
 import React from 'react';
-import {
-  StyleSheet, TouchableHighlight, Text, View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import styled from 'styled-components/native';
+import colors from '../../constants/Colors';
+import fonts from '../../constants/Fonts';
+
+const TouchableHighlight = styled.TouchableHighlight`
+  ${props => props.selected
+    && `
+    background-color: ${colors.point};
+  `};
+`;
 
 const styles = StyleSheet.create({
+  container: {
+    marginLeft: 25,
+    marginRight: 25,
+  },
   accListItemWrap: {
-    padding: 10,
-    flexDirection: 'row',
+    padding: 5,
     borderWidth: 1,
     borderRadius: 5,
+  },
+  topWrap: {
+    padding: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  middleWrap: {
+    alignItems: 'center',
+  },
+  bottomWrap: {
+    flexDirection: 'row',
+  },
+  aliasText: {
+    fontFamily: fonts.batang,
+    fontSize: 20,
+  },
+  bankNameText: {
+    fontFamily: fonts.titleMiddle,
+    fontSize: 10,
+    backgroundColor: colors.point2,
+    padding: 5,
+  },
+  holderText: {
+    fontFamily: fonts.titleMiddle,
+    fontSize: 10,
+    backgroundColor: colors.point2,
+    padding: 5,
   },
 });
 /**
@@ -16,16 +56,20 @@ const styles = StyleSheet.create({
  */
 export default function renderAccListItem(item, selFinUseNum, onPress) {
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableHighlight
         onPress={() => onPress(item.fintech_use_num)}
         selected={selFinUseNum.includes(item.fintech_use_num)}
       >
         <View style={[styles.accListItemWrap]}>
-          <Text>{item.account_alias}</Text>
-          <Text>{item.bank_name}</Text>
-          <Text>{item.account_holder_name}</Text>
-          <Text>{item.fintech_use_num}</Text>
+          <View style={styles.topWrap}>
+            <Text style={styles.bankNameText}>{item.bank_name}</Text>
+            <Text style={styles.holderText}>{item.account_holder_name}</Text>
+          </View>
+          <View style={styles.middleWrap}>
+            <Text style={styles.aliasText}>{item.account_alias}</Text>
+          </View>
+          <View style={styles.bottomWrap} />
         </View>
       </TouchableHighlight>
     </View>

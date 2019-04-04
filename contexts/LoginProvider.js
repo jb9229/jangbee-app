@@ -1,4 +1,5 @@
 import React from 'react';
+import { getUserInfo } from '../utils/FirebaseUtils';
 
 const Context = React.createContext();
 
@@ -9,12 +10,14 @@ class LoginProvider extends React.Component {
     super(props);
     this.state = {
       user: undefined,
-      type: undefined,
-      obAccessToken: undefined,
-      obRefreshToken: undefined,
-      obAccTokenExpDate: undefined,
-      obAccTokenDiscDate: undefined,
-      obUserSeqNo: undefined,
+      userProfile: {
+        type: undefined,
+        obAccessToken: undefined,
+        obRefreshToken: undefined,
+        obAccTokenExpDate: undefined,
+        obAccTokenDiscDate: undefined,
+        obUserSeqNo: undefined,
+      },
     };
 
     this.actions = {
@@ -22,7 +25,10 @@ class LoginProvider extends React.Component {
         this.setState({ user: loginUser });
       },
       setUserType: (loginUserType) => {
-        this.setState({ type: loginUserType });
+        this.setState({
+          ...this.state,
+          userProfile: { ...this.state.userProfile, type: loginUserType },
+        });
       },
       setOBInfo: (
         obAccessToken,
@@ -32,11 +38,32 @@ class LoginProvider extends React.Component {
         obUserSeqNo,
       ) => {
         this.setState({
-          obAccessToken,
-          obRefreshToken,
-          obAccTokenExpDate,
-          obAccTokenDiscDate,
-          obUserSeqNo,
+          ...this.state,
+          userProfile: {
+            ...this.state.userProfile,
+            obAccessToken,
+            obRefreshToken,
+            obAccTokenExpDate,
+            obAccTokenDiscDate,
+            obUserSeqNo,
+          },
+        });
+      },
+      refreshUserOBInfo: () => {
+        const { user } = this.state;
+        getUserInfo(user.uid).then((data) => {
+          const refreshUserInfo = data.val();
+          this.setState({
+            ...this.state,
+            userProfile: {
+              ...this.state.userProfile,
+              obAccessToken: refreshUserInfo.obAccessToken,
+              obRefreshToken: refreshUserInfo.obRefreshToken,
+              obAccTokenExpDate: refreshUserInfo.obAccTokenExpDate,
+              obAccTokenDiscDate: refreshUserInfo.obAccTokenDiscDate,
+              obUserSeqNo: refreshUserInfo.obUserSeqNo,
+            },
+          });
         });
       },
     };
@@ -57,9 +84,11 @@ function withLogin(WrappedComponent) {
         {({ state, actions }) => (
           <WrappedComponent
             user={state.user}
+            userProfile={state.userProfile}
             setUser={actions.setUser}
             setUserType={actions.setUserType}
             setOBInfo={actions.setOBInfo}
+            refreshUserOBInfo={actions.refreshUserOBInfo}
             {...props}
           />
         )}

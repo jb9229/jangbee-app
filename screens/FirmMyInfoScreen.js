@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Alert,
-  ActivityIndicator,
   Linking,
   Image,
   ScrollView,
@@ -21,6 +20,7 @@ import { withLogin } from '../contexts/LoginProvider';
 import FirmProfileModal from '../components/FirmProfileModal';
 import colors from '../constants/Colors';
 import JBButton from '../components/molecules/JBButton';
+import JBActIndicator from '../components/organisms/JBActIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -194,12 +194,7 @@ class FirmMyInfoScreen extends React.Component {
   render() {
     const { firm, isVisibleProfileModal, isLoadingComplete } = this.state;
     if (!isLoadingComplete) {
-      return (
-        <View style={styles.container}>
-          <Text>업체정보 불러오는중...</Text>
-          <ActivityIndicator size="large" color={colors.indicator} />
-        </View>
-      );
+      return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
     }
 
     if (firm === undefined) {

@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
 import {
-  Alert, ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   ScrollView, StyleSheet,
-  Text, View,
+  View,
 } from 'react-native';
 import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
@@ -12,6 +12,7 @@ import { validate, validatePresence } from '../utils/Validation';
 import ImagePickInput from '../components/molecules/ImagePickInput';
 import JBTextInput from '../components/molecules/JBTextInput';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
+import JBActIndicator from '../components/organisms/JBActIndicator';
 import * as api from '../api/api';
 import JBButton from '../components/molecules/JBButton';
 import { withLogin } from '../contexts/LoginProvider';
@@ -488,12 +489,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     } = this.state;
 
     if (!isLoadingComplete) {
-      return (
-        <View style={styles.container}>
-          <Text>업체정보 불러오는중...</Text>
-          <ActivityIndicator size="large" color={colors.indicator} />
-        </View>
-      );
+      return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
     }
     return (
       <View style={styles.container}>

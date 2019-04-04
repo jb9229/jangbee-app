@@ -163,7 +163,9 @@ class OpenBankAuthWebView extends React.Component {
       (error) => {
         Alert.alert('저장 실패', `${error} 오픈뱅크재인증 정보 FB Database 저장에 실패 했습니다`);
       },
-    ).then(result => result);
+    );
+
+    user.refreshUserOBInfo();
 
     return true;
   };

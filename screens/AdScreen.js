@@ -160,7 +160,7 @@ class AdScreen extends React.Component {
             </View>
             <View style={styles.adListDateWrap}>
               <Text>{item.startDate}</Text>
-              <Text>~</Text>
+              <Text> ~ </Text>
               <Text>{item.endDate}</Text>
             </View>
           </View>
@@ -247,7 +247,6 @@ class AdScreen extends React.Component {
           <JBButton
             title="내장비 홍보하기"
             onPress={() => navigation.navigate('AdCreate')}
-            color={colors.point2}
             size={isAdEmpty ? 'full' : undefined}
           />
         </View>

@@ -9,7 +9,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import styled from 'styled-components/native';
 import JBTextInput from '../components/molecules/JBTextInput';
 import JBButton from '../components/molecules/JBButton';
 import ImagePickInput from '../components/molecules/ImagePickInput';
@@ -26,12 +25,6 @@ import { validate, validatePresence } from '../utils/Validation';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 
-const TouchableHighlight = styled.TouchableHighlight`
-  ${props => props.selected
-    && `
-    background-color: ${colors.point};
-  `};
-`;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -155,34 +148,37 @@ class AdCreateScreen extends React.Component {
   /**
    * 광고 결재할 계좌리스트 설정함수
    */
-  setOpenBankAccountList = async () => {
+  setOpenBankAccountList = () => {
     const { user } = this.props;
 
-    const fUserInfo = await firebaseDB.getUserInfo(user.uid);
-
-    const { obAccessToken, obUserSeqNo } = fUserInfo;
-    if (obAccessToken === undefined || obUserSeqNo === undefined) {
-      this.setState({ isAccEmpty: true });
-      return;
-    }
-
-    api
-      .getOBAccList(obAccessToken, obUserSeqNo, 'N', 'A')
-      .then((userInfo) => {
-        if (userInfo.res_cnt !== '0') {
-          this.setState({ accList: userInfo.res_list, isAccEmpty: false });
+    firebaseDB
+      .getUserInfo(user.uid)
+      .then((data) => {
+        const userInfo = data.val();
+        const { obAccessToken, obUserSeqNo } = userInfo;
+        if (obAccessToken === undefined || obUserSeqNo === undefined) {
+          this.setState({ isAccEmpty: true });
           return;
         }
 
-        this.setState({ isAccEmpty: true });
-      })
-      .catch((error) => {
-        Alert.alert(
-          '네트워크 문제가 있습니다, 다시 시도해 주세요.',
-          `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`,
-        );
+        api
+          .getOBAccList(obAccessToken, obUserSeqNo, 'N', 'A')
+          .then((accInfo) => {
+            if (accInfo.res_cnt !== '0') {
+              this.setState({ accList: accInfo.res_list, isAccEmpty: false });
+              return;
+            }
 
-        this.setState({ isAccEmpty: true });
+            this.setState({ isAccEmpty: true });
+          })
+          .catch((error) => {
+            Alert.alert(
+              '네트워크 문제가 있습니다, 다시 시도해 주세요.',
+              `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`,
+            );
+
+            this.setState({ isAccEmpty: true });
+          });
       });
   };
 
@@ -253,7 +249,7 @@ class AdCreateScreen extends React.Component {
    */
   requestCreaAd = async () => {
     const { adType, adTitle, adSubTitle, forMonths, adPhotoUrl, adEquipment, adTelNumber, adSido, adGungu, selFinUseNum } = this.state;
-    const { navigation, user } = this.props;
+    const { navigation, user, userProfile } = this.props;
 
     let adEquipmentTypeData = adEquipment;
     let adSidoTypeData = adSido;
@@ -275,11 +271,12 @@ class AdCreateScreen extends React.Component {
       forMonths,
       photoUrl: adPhotoUrl,
       telNumber: adTelNumber,
-      fintechUseNum: selFinUseNum,
+      fintechUseNum: selFinUseNum[0],
       equiTarget: adEquipmentTypeData,
       sidoTarget: adSidoTypeData,
       gugunTarget: adGunguTypeData,
       price: this.getAdPrice(adType),
+      obAccessToken: userProfile.obAccessToken,
     };
 
     api
@@ -298,6 +295,7 @@ class AdCreateScreen extends React.Component {
    */
   validateCreaAd = () => {
     const { adType, adEquipment, adSido, adGungu } = this.state;
+
     // Check Validation Create Ad Form Item
     if (!this.valiCreAdForm()) { return; }
 
@@ -315,10 +313,7 @@ class AdCreateScreen extends React.Component {
         .catch((error) => {
           notifyError('장비 타켓광고 중복검사 문제', error.message);
         });
-    }
-
-    // Local Target Ad Validation
-    if (adType === ADTYPE_LOCAL_FIRST && this.validateLocTarAdForm()) {
+    } else if (adType === ADTYPE_LOCAL_FIRST && this.validateLocTarAdForm()) { // Local Target Ad Validation
       api
         .existLocalTarketAd(adEquipment, adSido, adGungu)
         .then((dupliResult) => {
@@ -331,6 +326,8 @@ class AdCreateScreen extends React.Component {
         .catch((error) => {
           notifyError('지역 타켓광고 중복검사 문제', error.message);
         });
+    } else {
+      this.requestCreaAd();
     }
   };
 
@@ -339,7 +336,7 @@ class AdCreateScreen extends React.Component {
    */
   valiCreAdForm = () => {
     const { adType, adTitle, adSubTitle, forMonths, adPhotoUrl, adTelNumber, selFinUseNum } = this.state;
-    const { user } = this.props;
+    const { user, userProfile } = this.props;
 
     // Validation Error Massage Initialize
     this.setInitValErroMSG();
@@ -377,9 +374,13 @@ class AdCreateScreen extends React.Component {
       return false;
     }
 
-    v = validatePresence(selFinUseNum);
-    if (!v[0]) {
-      this.setState({ selFinUseNumValErrMessage: v[1] });
+    if (selFinUseNum.length === 0) {
+      this.setState({ selFinUseNumValErrMessage: '광고비 이체계좌를 선택해 주세요' });
+      return false;
+    }
+
+    if (!userProfile.obAccessToken) {
+      this.setState({ selFinUseNumValErrMessage: '광고비 이체계좌의 인증토큰을 찾을 수 없습니다' });
       return false;
     }
 
@@ -440,34 +441,6 @@ class AdCreateScreen extends React.Component {
     return <Picker.Item label={typeDescription} value={type} />;
   };
 
-  /**
-   * 오픈뱅크 계좌UI 렌더링 함수
-   */
-  renderAccListItem = ({ item }) => {
-    const { selFinUseNum } = this.state;
-
-    return (
-      <View>
-        <TouchableHighlight
-          onPress={() => this.onAccListItemPress(item.fintech_use_num)}
-          selected={selFinUseNum.includes(item.fintech_use_num)}
-        >
-          <View style={[styles.accListItemWrap]}>
-            <Text>{item.account_alias}</Text>
-            <Text>{item.bank_name}</Text>
-            <Text>{item.account_holder_name}</Text>
-            <Text>{item.fintech_use_num}</Text>
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
-  };
-
-  testAdPayment = () => {
-    this.setState({selFinUseNum: 'TEST'});
-    this.validateCreaAd();
-  }
-
   render() {
     const {
       isAccEmpty,
@@ -525,7 +498,7 @@ class AdCreateScreen extends React.Component {
               >
                 <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
                 {this.renderAdTypeList(1, '메인광고_첫번째(월 7만원)')}
-                {this.renderAdTypeList(2, '메인광고_두번째(월 6만원)')}
+                {this.renderAdTypeList(2, '메인광고_두번째(월 5만원)')}
                 {this.renderAdTypeList(3, '메인광고_세번째(월 3만원)')}
                 <Picker.Item label="장비 타켓광고_첫번째(월 2만원)" value={ADTYPE_EQUIPMENT_FIRST} />
                 <Picker.Item label="지역 타켓광고_첫번째(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
@@ -608,7 +581,6 @@ class AdCreateScreen extends React.Component {
                   <Text>먼저, 자동이체 계좌를 등록해 주세요.</Text>
                 </View>
               )}
-              <JBButton title="테스트용결제(추후삭제)" onPress={this.testAdPayment} size="full" />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

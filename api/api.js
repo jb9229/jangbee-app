@@ -9,7 +9,6 @@ import {
 } from '../utils/Fetch-utils';
 import * as kakaoconfig from '../kakao-config';
 import * as obconfig from '../openbank-config';
-import CmException from '../common/CmException';
 
 export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);

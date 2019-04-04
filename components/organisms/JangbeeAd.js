@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ImageBackground, StyleSheet, Text, View,
+  Alert, ImageBackground, Linking, StyleSheet, Text, View,
 } from 'react-native';
 import JBIcon from '../molecules/JBIcon';
 import AdImage from './AdImage';
@@ -61,7 +61,16 @@ const styles = StyleSheet.create({
   },
 });
 
-function telAdvertiser(phoneNumber) {}
+function telAdvertiser(phoneNumber) {
+  if (!phoneNumber) {
+    Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`);
+    return;
+  }
+
+  Linking.openURL(`tel:${phoneNumber}`).catch(
+    Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`),
+  );
+}
 
 /**
  * 광고주의 업체정보 보기 함수

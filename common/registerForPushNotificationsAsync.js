@@ -23,11 +23,16 @@ export default async function registerForPushNotificationsAsync(uid) {
   // Get the token that uniquely identifies this device
   const token = await Notifications.getExpoPushTokenAsync();
 
-  // Save Expo Push Token at DB(I know token )
+  // Save Expo Push Token at DB
   await firebase
     .database()
     .ref(`users/${uid}`)
     .update({
       expoPushToken: token,
     });
+
+  /**
+   * ide Expo Team jwhscholten Sep '17
+   * With a Expo, the Expo push token never changes for as long as an app is installed. If the user uninstalls and reinstalls an app they will get a new Expo push token. On Android, if they clear the app’s data they will get a new Expo push token.
+   */
 }
