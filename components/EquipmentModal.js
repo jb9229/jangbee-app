@@ -111,8 +111,10 @@ export default class EquipementModal extends React.Component {
    * 장비리스트 리프레쉬 함수
    */
   onRefresh = () => {
-    this.setState({ isFetching: true }, () => { this.setEquiList(); });
-  }
+    this.setState({ isFetching: true }, () => {
+      this.setEquiList();
+    });
+  };
 
   /**
    * 장비리스트 설정 함수
@@ -179,7 +181,9 @@ export default class EquipementModal extends React.Component {
 
   render() {
     const { isVisibleEquiModal, advertisement } = this.props;
-    const { equiList, equiSelMap, singSeltdEquipment, isFetching } = this.state;
+    const {
+      equiList, equiSelMap, singSeltdEquipment, isFetching,
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -194,12 +198,7 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              {advertisement ? (
-                <JangbeeAdList
-                  admob
-                  {...this.props}
-                />
-              ) : null}
+              {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
               <FlatList
                 columnWrapperStyle={styles.equiListWrap}
                 horizontal={false}
@@ -214,7 +213,12 @@ export default class EquipementModal extends React.Component {
             </View>
 
             <View style={styles.commWrap}>
-              <JBButton title="장비 선택완료" onPress={() => this.completeSelEqui()} />
+              <JBButton
+                title="장비선택 완료"
+                onPress={() => this.completeSelEqui()}
+                size="full"
+                Secondary
+              />
             </View>
           </View>
         </Modal>

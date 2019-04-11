@@ -1,12 +1,6 @@
 import React from 'react';
 import {
-  FlatList,
-  Modal,
-  StyleSheet,
-  TouchableHighlight,
-  Text,
-  View,
-  Alert,
+  FlatList, Modal, StyleSheet, TouchableHighlight, Text, View, Alert,
 } from 'react-native';
 import EquiSelBox from './EquiSelBox';
 import * as api from '../api/api';
@@ -108,7 +102,7 @@ export default class EquipementModal extends React.Component {
     const { selEquipment } = this.props;
 
     this.setState({ isFetching: true }, () => this.setLocalData(selEquipment));
-  }
+  };
 
   /**
    * 장비가 존재하는 sido/sigungu 리스트 설정
@@ -206,7 +200,13 @@ export default class EquipementModal extends React.Component {
   render() {
     const { isVisibleEquiModal, selEquipment } = this.props;
     const {
-      isFetching, isSelectedSido, gugun, gugunList, sidoList, sido, validationMessage,
+      isFetching,
+      isSelectedSido,
+      gugun,
+      gugunList,
+      sidoList,
+      sido,
+      validationMessage,
     } = this.state;
 
     const listData = isSelectedSido ? gugunList : sidoList;
@@ -247,7 +247,12 @@ export default class EquipementModal extends React.Component {
               <JBErroMessage errorMSG={validationMessage} />
             </View>
             <View style={styles.commWrap}>
-              <JBButton title="지역 선택완료" onPress={() => this.completeSelLocal()} />
+              <JBButton
+                title="지역 선택완료"
+                onPress={() => this.completeSelLocal()}
+                size="full"
+                Secondary
+              />
             </View>
           </View>
         </Modal>

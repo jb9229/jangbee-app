@@ -230,6 +230,7 @@ class LoginScreen extends React.PureComponent {
               this.onPhoneChange(text);
             }}
             placeholder="휴대전화 번호입력(숫자만)"
+            editable={!authReadOnly}
           />
           <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
           <Text style={authTitleStyle}>인증코드: </Text>
@@ -243,6 +244,7 @@ class LoginScreen extends React.PureComponent {
             secureTextEntry
             placeholder="SMS 인증코드 입력"
             editable={authReadOnly}
+            onSubmitEditing={() => this.onSignIn()}
           />
           <JBErrorMessage errorMSG={codeValErrMessage} />
         </View>
@@ -251,7 +253,7 @@ class LoginScreen extends React.PureComponent {
           {!confirmationResult ? (
             <JBButton title="전화번호 인증하기" onPress={() => this.onPhoneComplete()} />
           ) : (
-            <JBButton title="로그인하기" onPress={() => this.onSignIn()} />
+            <JBButton title="로그인하기" onPress={() => this.onSignIn()} Secondary />
           )}
         </View>
       </View>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import {
+  Alert, StyleSheet, Text, View,
+} from 'react-native';
 import { AdMobBanner } from 'expo';
 import Swiper from 'react-native-swiper';
-import colors from '../constants/Colors';
 import JBActIndicator from './organisms/JBActIndicator';
 import BugReport from './organisms/BugReport';
 import * as api from '../api/api';
@@ -53,22 +54,18 @@ export default class JangbeeAdList extends React.Component {
       adLocation, euqiTarget, sidoTarget, gugunTarget, admob,
     } = this.props;
 
-    if (admob === undefined) {
+    if (!admob) {
       this.setAdList(adLocation, euqiTarget, sidoTarget, gugunTarget);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const {
-      adLocation, euqiTarget, sidoTarget, gugunTarget,
+      admob, adLocation, euqiTarget, sidoTarget, gugunTarget,
     } = this.props;
 
-    if (
-      nextProps.euqiTarget !== euqiTarget
-      || nextProps.sidoTarget !== sidoTarget
-      || nextProps.gugunTarget !== gugunTarget
-    ) {
-      this.setAdList(adLocation, nextProps.euqiTarget, nextProps.sidoTarget, nextProps.gugunTarget);
+    if (!admob && nextProps.adLocation !== adLocation) {
+      this.setAdList(nextProps.adLocation, euqiTarget, sidoTarget, gugunTarget);
     }
   }
 
@@ -81,7 +78,11 @@ export default class JangbeeAdList extends React.Component {
     api
       .getAd(adLocation, euqiTarget, sidoTarget, gugunTarget)
       .then((jsonRes) => {
-        this.setState({ adList: jsonRes });
+        if (jsonRes != null && jsonRes.length === 0) {
+          this.setState({ isEmptyAdlist: true });
+          return;
+        }
+        this.setState({ isEmptyAdlist: false, adList: jsonRes });
       })
       .catch((error) => {
         Alert.alert(
@@ -99,10 +100,13 @@ export default class JangbeeAdList extends React.Component {
 
   render() {
     const { admob } = this.props;
-    const { adList } = this.state;
+    const { adList, isEmptyAdlist } = this.state;
     const slidStyles = [styles.slide1, styles.slide2, styles.slide3];
 
-    if (admob !== undefined) {
+    // console.log(
+    //   `adLocation: ${this.props.adLocation}, isEmptyAdlist: ${isEmptyAdlist}, render: ${admob}`,
+    // );
+    if (admob || isEmptyAdlist) {
       return (
         <View style={styles.adMobContainer}>
           <AdMobBanner
@@ -125,19 +129,6 @@ export default class JangbeeAdList extends React.Component {
 
     if (adList === null) {
       return <BugReport title="광고 요청에 실패 했습니다" />;
-    }
-
-    if (adList.length === 0) {
-      return (
-        <View style={styles.adMobContainer}>
-          <AdMobBanner
-            bannerSize="largeBanner"
-            adUnitID="ca-app-pub-9415708670922576/6931111723" // Test ID, Replace with your-admob-unit-id
-            testDeviceID="EMULATOR"
-            onDidFailToReceiveAdWithError={this.renderAdmobError}
-          />
-        </View>
-      );
     }
 
     const adViewList = adList.map((ad, index) => (

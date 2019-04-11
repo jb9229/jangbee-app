@@ -21,6 +21,7 @@ import FirmProfileModal from '../components/FirmProfileModal';
 import colors from '../constants/Colors';
 import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
+import JBIcon from '../components/molecules/JBIcon';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,9 +37,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.point2,
   },
+  regFirmWordingWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
   regFirmNotice: {
     fontSize: 13,
-    marginBottom: 20,
     fontFamily: fonts.batang,
     color: 'white',
   },
@@ -84,11 +89,14 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   titleWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 10,
+    paddingRight: 10,
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
-    justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 4,
     paddingBottom: 4,
@@ -197,16 +205,19 @@ class FirmMyInfoScreen extends React.Component {
       return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
     }
 
-    if (firm === undefined) {
+    if (!firm) {
       return (
-        <View style={styles.container}>
-          <View style={styles.regFirmWrap}>
+        <View style={styles.regFirmWrap}>
+          <View style={styles.regFirmWordingWrap}>
+            <Text style={styles.regFirmNotice}>+</Text>
+            <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
+            <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
             <Text style={styles.regFirmNotice}>
-              고객님들 검색에 콜받을 수 있게, 업체정보를 등록해 주세요.
+              등록안하는 사람만 손해 입니다, 업체등록을 서두르세요.
             </Text>
-            <JBButton title="업체정보 등록하기" onPress={() => this.registerFirm()} size="big" />
-            <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" />
           </View>
+          <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" />
+          <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" color="white" />
         </View>
       );
     }
@@ -263,6 +274,7 @@ class FirmMyInfoScreen extends React.Component {
         </ScrollView>
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
+          <JBIcon name="menu" size={30} onPress={() => this.setVisibleProfileModal(true)} />
         </View>
         <FirmProfileModal
           isVisibleModal={isVisibleProfileModal}

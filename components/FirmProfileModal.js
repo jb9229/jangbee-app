@@ -75,13 +75,19 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
               <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
             </View>
             <View style={styles.itemsWrap}>
-              <JBButton title="업체정보 수정" onPress={() => this.updateFirm()} size="full" />
               <JBButton
-                title="메일로 의견보내기"
+                title="업체정보 수정"
+                onPress={() => this.updateFirm()}
+                size="full"
+                Primary
+              />
+              <JBButton
+                title="장비콜 메일 문의하기"
                 onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
                 size="full"
+                Primary
               />
-              <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" />
+              <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" Primary />
             </View>
           </View>
         </Modal>

@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    marginBottom: 10,
-    marginRight: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
   },
   text: {
     color: '#fff',

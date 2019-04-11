@@ -39,6 +39,7 @@ function setDefaultState(component) {
 }
 
 describe('업체등록 유효성검사 함수 테스트', () => {
+  jest.mock('../../../contexts/LoginProvider');
   it('isValidateSubmit()', async () => {
     const firmRegiScreen = renderer.create(<FirmRegisterScreen />).getInstance();
 

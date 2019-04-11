@@ -247,11 +247,7 @@ export default class FirmMyInfoScreen extends React.Component {
               </View>
 
               <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
-              <JBTextItem
-                title="주소"
-                value={`${firm.address}\n${firm.addressDetail}`}
-                revColor
-              />
+              <JBTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
               <JBTextItem title="업체소개" value={firm.introduction} revColor />
             </View>
           </View>
@@ -272,6 +268,7 @@ export default class FirmMyInfoScreen extends React.Component {
             title="전화걸기"
             onPress={() => this.openLinkUrl(`tel:${firm.phoneNumber}`)}
             size="full"
+            Primary
           />
         </View>
       </View>

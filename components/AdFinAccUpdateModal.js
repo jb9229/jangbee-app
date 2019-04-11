@@ -142,7 +142,12 @@ export default class AdFinAccUpdateModal extends React.Component {
             )}
             <View style={styles.commWrap}>
               {isLoadingComplete === true && (
-                <JBButton title="변경계좌 선택" onPress={() => this.completeAction()} size="full" />
+                <JBButton
+                  title="변경계좌 선택"
+                  onPress={() => this.completeAction()}
+                  size="full"
+                  Primary
+                />
               )}
               {isLoadingComplete === false && (
                 <View>

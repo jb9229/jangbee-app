@@ -54,6 +54,10 @@ const styles = StyleSheet.create({
   botCommWrap: {
     alignItems: 'center',
   },
+  warningText: {
+    fontFamily: fonts.batang,
+    color: colors.point,
+  },
 });
 
 const ADTYPE_MAIN_FIRST = 1;
@@ -137,13 +141,23 @@ class AdCreateScreen extends React.Component {
    * 광고비 요청함수
    */
   getAdPrice = (adType) => {
-    if (adType === ADTYPE_MAIN_FIRST) { return 70000; }
-    if (adType === ADTYPE_MAIN_SECONDE) { return 50000; }
-    if (adType === ADTYPE_MAIN_THIRD) { return 30000; }
-    if (adType === ADTYPE_EQUIPMENT_FIRST) { return 20000; }
-    if (adType === ADTYPE_LOCAL_FIRST) { return 10000; }
+    if (adType === ADTYPE_MAIN_FIRST) {
+      return 70000;
+    }
+    if (adType === ADTYPE_MAIN_SECONDE) {
+      return 50000;
+    }
+    if (adType === ADTYPE_MAIN_THIRD) {
+      return 30000;
+    }
+    if (adType === ADTYPE_EQUIPMENT_FIRST) {
+      return 20000;
+    }
+    if (adType === ADTYPE_LOCAL_FIRST) {
+      return 10000;
+    }
     return 0;
-  }
+  };
 
   /**
    * 광고 결재할 계좌리스트 설정함수
@@ -151,35 +165,45 @@ class AdCreateScreen extends React.Component {
   setOpenBankAccountList = () => {
     const { user } = this.props;
 
-    firebaseDB
-      .getUserInfo(user.uid)
-      .then((data) => {
-        const userInfo = data.val();
-        const { obAccessToken, obUserSeqNo } = userInfo;
-        if (obAccessToken === undefined || obUserSeqNo === undefined) {
-          this.setState({ isAccEmpty: true });
-          return;
-        }
+    firebaseDB.getUserInfo(user.uid).then((data) => {
+      const userInfo = data.val();
+      const { obAccessToken, obUserSeqNo } = userInfo;
+      if (obAccessToken === undefined || obUserSeqNo === undefined) {
+        this.setState({ isAccEmpty: true });
+        return;
+      }
 
-        api
-          .getOBAccList(obAccessToken, obUserSeqNo, 'N', 'A')
-          .then((accInfo) => {
-            if (accInfo.res_cnt !== '0') {
-              this.setState({ accList: accInfo.res_list, isAccEmpty: false });
-              return;
-            }
-
-            this.setState({ isAccEmpty: true });
-          })
-          .catch((error) => {
+      api
+        .getOBAccList(obAccessToken, obUserSeqNo, 'N', 'A')
+        .then((accInfo) => {
+          if (accInfo.rsp_code && accInfo.rsp_code !== 'A0000') {
             Alert.alert(
-              '네트워크 문제가 있습니다, 다시 시도해 주세요.',
-              `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`,
+              '계좌리스트 요청 문제',
+              `계좌리스트를 불러오는데 문제가 있습니다(${accInfo.rsp_code}, ${
+                accInfo.rsp_message
+              }), 메일로 문의 또는 다시 결제계좌를 추가해 주세요.`,
             );
 
             this.setState({ isAccEmpty: true });
-          });
-      });
+            return;
+          }
+
+          if (accInfo.res_cnt !== '0') {
+            this.setState({ accList: accInfo.res_list, isAccEmpty: false });
+            return;
+          }
+
+          this.setState({ isAccEmpty: true });
+        })
+        .catch((error) => {
+          Alert.alert(
+            '네트워크 문제가 있습니다, 다시 시도해 주세요.',
+            `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`,
+          );
+
+          this.setState({ isAccEmpty: true });
+        });
+    });
   };
 
   /**
@@ -196,7 +220,7 @@ class AdCreateScreen extends React.Component {
       adEquipmentValErrMessage: '',
       adLocalValErrMessage: '',
     });
-  }
+  };
 
   /**
    * 초기값 설정을 위한 업체정보 요청 함수
@@ -214,14 +238,19 @@ class AdCreateScreen extends React.Component {
           `업체정보 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
         );
       });
-  }
+  };
 
   /**
    * 업체정보를 광고 초기정보에 설정하는 함수
    */
   setDefaultFirmValue = (firm) => {
-    this.setState({ adTelNumber: firm.phoneNumber, adEquipment: firm.equiListStr, adSido: firm.sidoAddr, adGungu: firm.sigunguAddr });
-  }
+    this.setState({
+      adTelNumber: firm.phoneNumber,
+      adEquipment: firm.equiListStr,
+      adSido: firm.sidoAddr,
+      adGungu: firm.sigunguAddr,
+    });
+  };
 
   onAccListItemPress = (idStr) => {
     const newAccListSelcted = [];
@@ -248,7 +277,18 @@ class AdCreateScreen extends React.Component {
    * 광고생성 요청함수
    */
   requestCreaAd = async () => {
-    const { adType, adTitle, adSubTitle, forMonths, adPhotoUrl, adEquipment, adTelNumber, adSido, adGungu, selFinUseNum } = this.state;
+    const {
+      adType,
+      adTitle,
+      adSubTitle,
+      forMonths,
+      adPhotoUrl,
+      adEquipment,
+      adTelNumber,
+      adSido,
+      adGungu,
+      selFinUseNum,
+    } = this.state;
     const { navigation, user, userProfile } = this.props;
 
     let adEquipmentTypeData = adEquipment;
@@ -283,10 +323,9 @@ class AdCreateScreen extends React.Component {
       .createAd(newAd)
       .then(() => navigation.navigate('Ad', { refresh: true }))
       .catch((errorResponse) => {
-        errorResponse.json()
-          .then((errorMessage) => {
-            Alert.alert('광고생성 실패', errorMessage.message);
-          });
+        errorResponse.json().then((errorMessage) => {
+          Alert.alert('광고생성 실패', errorMessage.message);
+        });
       });
   };
 
@@ -294,10 +333,14 @@ class AdCreateScreen extends React.Component {
    * 광고생성 유효성검사 함수
    */
   validateCreaAd = () => {
-    const { adType, adEquipment, adSido, adGungu } = this.state;
+    const {
+      adType, adEquipment, adSido, adGungu,
+    } = this.state;
 
     // Check Validation Create Ad Form Item
-    if (!this.valiCreAdForm()) { return; }
+    if (!this.valiCreAdForm()) {
+      return;
+    }
 
     // Equipment Target Ad Validation
     if (adType === ADTYPE_EQUIPMENT_FIRST && this.validateEquipTarAdForm()) {
@@ -307,20 +350,29 @@ class AdCreateScreen extends React.Component {
           if (dupliResult === null) {
             this.requestCreaAd();
           } else {
-            notifyError('장비 타켓광고 중복검사 실패', `죄송합니다, 해당 ${adSido} ${adGungu}는 [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`);
+            notifyError(
+              '장비 타켓광고 중복검사 실패',
+              `죄송합니다, 해당 ${adSido} ${adGungu}는 [${
+                dupliResult.endDate
+              }]까지 계약된 광고가 존재 합니다.`,
+            );
           }
         })
         .catch((error) => {
           notifyError('장비 타켓광고 중복검사 문제', error.message);
         });
-    } else if (adType === ADTYPE_LOCAL_FIRST && this.validateLocTarAdForm()) { // Local Target Ad Validation
+    } else if (adType === ADTYPE_LOCAL_FIRST && this.validateLocTarAdForm()) {
+      // Local Target Ad Validation
       api
         .existLocalTarketAd(adEquipment, adSido, adGungu)
         .then((dupliResult) => {
           if (dupliResult === null) {
             this.requestCreaAd();
           } else {
-            notifyError('지역 타켓광고 중복 확인 실패', `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`);
+            notifyError(
+              '지역 타켓광고 중복 확인 실패',
+              `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`,
+            );
           }
         })
         .catch((error) => {
@@ -335,14 +387,28 @@ class AdCreateScreen extends React.Component {
    * 광고생성 폼 유효성검사 함수
    */
   valiCreAdForm = () => {
-    const { adType, adTitle, adSubTitle, forMonths, adPhotoUrl, adTelNumber, selFinUseNum } = this.state;
+    const {
+      adType,
+      adTitle,
+      adSubTitle,
+      forMonths,
+      adPhotoUrl,
+      adTelNumber,
+      selFinUseNum,
+    } = this.state;
     const { user, userProfile } = this.props;
 
     // Validation Error Massage Initialize
     this.setInitValErroMSG();
 
-    if (adType === undefined) { Alert.alert('유효성검사 에러', '광고타입을 선택해 주세요.'); return false; }
-    if (user === undefined || user === null || user.uid === undefined || user.uid === null) { Alert.alert('유효성검사 에러', '사용자정보를 찾지 못했습니다, 재로그인해 주세요'); return false; }
+    if (adType === undefined) {
+      Alert.alert('유효성검사 에러', '광고타입을 선택해 주세요.');
+      return false;
+    }
+    if (user === undefined || user === null || user.uid === undefined || user.uid === null) {
+      Alert.alert('유효성검사 에러', '사용자정보를 찾지 못했습니다, 재로그인해 주세요');
+      return false;
+    }
 
     let v = validate('decimalMin', forMonths, true, 1);
     if (!v[0]) {
@@ -385,7 +451,7 @@ class AdCreateScreen extends React.Component {
     }
 
     return true;
-  }
+  };
 
   /**
    * 장비 타켓 광고 Validation 체크
@@ -400,7 +466,7 @@ class AdCreateScreen extends React.Component {
     }
 
     return true;
-  }
+  };
 
   /**
    * 지역 타켓 광고 Validation 체크
@@ -427,7 +493,7 @@ class AdCreateScreen extends React.Component {
     }
 
     return true;
-  }
+  };
 
   /**
    * 광고타입 렌더링 함수
@@ -500,7 +566,10 @@ class AdCreateScreen extends React.Component {
                 {this.renderAdTypeList(1, '메인광고_첫번째(월 7만원)')}
                 {this.renderAdTypeList(2, '메인광고_두번째(월 5만원)')}
                 {this.renderAdTypeList(3, '메인광고_세번째(월 3만원)')}
-                <Picker.Item label="장비 타켓광고_첫번째(월 2만원)" value={ADTYPE_EQUIPMENT_FIRST} />
+                <Picker.Item
+                  label="장비 타켓광고_첫번째(월 2만원)"
+                  value={ADTYPE_EQUIPMENT_FIRST}
+                />
                 <Picker.Item label="지역 타켓광고_첫번째(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
               </Picker>
             </View>
@@ -574,12 +643,12 @@ class AdCreateScreen extends React.Component {
             </View>
             <View style={styles.botCommWrap}>
               <JBErrorMessage errorMSG={payErrMessage} />
-              {isAccEmpty !== undefined && !isAccEmpty ? (
-                <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" />
-              ) : (
+              {isAccEmpty === undefined || isAccEmpty ? (
                 <View>
-                  <Text>먼저, 자동이체 계좌를 등록해 주세요.</Text>
+                  <Text style={styles.warningText}>먼저, 자동이체 계좌를 등록해 주세요.</Text>
                 </View>
+              ) : (
+                <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" Primary />
               )}
             </View>
           </ScrollView>

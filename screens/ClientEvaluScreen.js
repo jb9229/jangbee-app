@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  FlatList, StyleSheet, Text, View,
+  FlatList, Picker, StyleSheet, Text, View,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import moment from 'moment';
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
@@ -12,6 +13,8 @@ import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
 import CliEvaluItem from '../components/organisms/CliEvaluItem';
+import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const styles = StyleSheet.create({
   Container: {
@@ -19,6 +22,44 @@ const styles = StyleSheet.create({
   },
   evaluListWrap: {
     flex: 1,
+  },
+  searchHeaderWrap: {
+    marginBottom: 10,
+    backgroundColor: colors.batangDark,
+    elevation: 14,
+    borderRadius: 10,
+    margin: 5,
+  },
+  searchHeaderTopWrap: {
+    paddingLeft: 5,
+    paddingRight: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  searchPicker: {
+    width: 140,
+    color: colors.point,
+  },
+  containerSearchBar: {
+    backgroundColor: colors.batangDark,
+    borderTopColor: colors.batangDark,
+    borderBottomColor: colors.batangDark,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  inputSearchBar: {
+    fontSize: 16,
+    paddingLeft: 3,
+  },
+  searchNoticeWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchNoticeText: {
+    color: colors.pointDark,
+    fontFamily: fonts.batang,
+    justifyContent: 'center',
+    fontSize: 13,
   },
 });
 
@@ -38,13 +79,24 @@ class ClientEvaluScreen extends React.Component {
       isVisibleEvaluLikeModal: false,
       isCliEvaluLoadComplete: undefined,
       evaluLikeList: [],
+      searchNotice: '',
+      searchWord: '',
+      searchArea: 'TEL',
+      searchPlaceholder: '전화번호 입력(- 없이)',
     };
-    this.arrayholder = [];
   }
 
   componentDidMount() {
     this.setClinetEvaluList();
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   const { params } = nextProps.navigation.state;
+
+  //   if (params !== undefined && params.refresh === true) {
+  //     this.setClinetEvaluList();
+  //   }
+  // }
 
   deleteCliEvalu = (id) => {
     api
@@ -64,7 +116,7 @@ class ClientEvaluScreen extends React.Component {
   createClientEvaluLike = (newEvaluLike) => {
     api
       .createClientEvaluLike(newEvaluLike)
-      .then((resBody) => {
+      .then(() => {
         this.setCliEvaluLikeList(newEvaluLike.evaluId);
       })
       .catch(error => notifyError(
@@ -77,11 +129,15 @@ class ClientEvaluScreen extends React.Component {
    * 블랙리스트 평가 팝업 오픈
    *
    */
-  openCliEvaluLikeModal = (item) => {
-    this.setState({ evaluLikeSelected: item, isVisibleEvaluLikeModal: true });
+  openCliEvaluLikeModal = (item, isMine) => {
+    this.setState({
+      evaluLikeSelected: item,
+      isMineEvaluation: isMine,
+      isVisibleEvaluLikeModal: true,
+    });
 
     this.setCliEvaluLikeList(item.id);
-  }
+  };
 
   /**
    * 블랙리스트 평가 데이터 설정 함수
@@ -110,14 +166,16 @@ class ClientEvaluScreen extends React.Component {
       .then(() => this.setCliEvaluLikeList(evaluation.id))
       .catch(error => notifyError(
         '공감/비공감 취소 문제',
-        `블랙리스트 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`,
+        `블랙리스트 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${
+          error.messages
+        })`,
       ));
-  }
+  };
 
   closeEvaluLikeModal = () => {
     this.setClinetEvaluList();
     this.setState({ isVisibleEvaluLikeModal: false });
-  }
+  };
 
   /**
    * 블랙리스트 요청 함수
@@ -129,26 +187,88 @@ class ClientEvaluScreen extends React.Component {
       .getClientEvaluList(user.uid)
       .then((resBody) => {
         if (resBody) {
-          this.setState({ cliEvaluList: resBody, isCliEvaluLoadComplete: true });
-          this.arrayholder = resBody;
+          let notice;
+          if (resBody.length === 0) {
+            notice = '블랙리스트를 조회 또는 추가해 주세요.';
+          } else {
+            const beforeTwoMonth = moment()
+              .add(-2, 'month')
+              .format('MM/DD');
+            const now = moment().format('MM/DD');
+            notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
+          }
+          this.setState({
+            cliEvaluList: resBody,
+            searchNotice: notice,
+            isCliEvaluLoadComplete: true,
+          });
           return;
         }
+
         this.setState({ isCliEvaluLoadComplete: false });
       })
-      .catch(ex => notifyError('블랙리스트 요청 문제', `블랙리스트 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`));
+      .catch((ex) => {
+        notifyError(
+          '최근 블랙리스트 요청 문제',
+          `최근 블랙리스트 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
+        );
+
+        this.setState({ isCliEvaluLoadComplete: false });
+      });
   };
 
   /**
    * 블랙리스트 필터링 함수
    */
-  searchFilterCliEvalu = (text) => {
-    const newData = this.arrayholder.filter((item) => {
-      const textData = text;
+  searchFilterCliEvalu = () => {
+    const { searchArea, searchWord } = this.state;
 
-      return item.telNumber.indexOf(textData) > -1 || item.cliName.indexOf(textData) > -1;
-    });
+    if (!searchWord) {
+      this.setClinetEvaluList();
+      return;
+    }
 
-    this.setState({ search: text, cliEvaluList: newData });
+    let paramStr;
+
+    if (searchArea === 'CLI_NAME') {
+      paramStr = `cliName=${searchWord}`;
+    }
+
+    if (searchArea === 'FIRM_NAME') {
+      paramStr = `firmName=${searchWord}`;
+    }
+
+    if (searchArea === 'TEL') {
+      paramStr = `telNumber=${searchWord}`;
+    }
+
+    if (searchArea === 'FIRM_NUMBER') {
+      paramStr = `firmNumber=${searchWord}`;
+    }
+
+    api
+      .searchClientEvaluList(paramStr)
+      .then((resBody) => {
+        if (resBody) {
+          let notice = '';
+          if (resBody.length === 0) {
+            notice = `[${searchWord}]는 현재 블랙리스트에 조회되지 않습니다.`;
+          }
+          this.setState({
+            cliEvaluList: resBody,
+            searchNotice: notice,
+            isCliEvaluLoadComplete: true,
+          });
+        }
+      })
+      .catch((ex) => {
+        notifyError(
+          '블랙리스트 요청 문제',
+          `블랙리스트 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
+        );
+
+        this.setState({ isCliEvaluLoadComplete: false });
+      });
   };
 
   /**
@@ -158,9 +278,28 @@ class ClientEvaluScreen extends React.Component {
     this.setState({
       updateId: item.id,
       updateCliName: item.cliName,
+      updateFirmName: item.firmName,
+      updateTelNumber2: item.telNumber2,
+      updateTelNumber3: item.telNumber3,
+      updateFirmNumber: item.firmNumber,
       updateReason: item.reason,
       isVisibleUpdateModal: true,
     });
+  };
+
+  onSearchAreaChange = (itemValue) => {
+    if (itemValue === 'TEL') {
+      this.setState({ searchArea: itemValue, searchPlaceholder: '전화번호 입력(- 없이)' });
+    }
+    if (itemValue === 'FIRM_NUMBER') {
+      this.setState({ searchArea: itemValue, searchPlaceholder: '사업자번호 입력(- 포함)' });
+    }
+    if (itemValue === 'FIRM_NAME') {
+      this.setState({ searchArea: itemValue, searchPlaceholder: '업체명 입력' });
+    }
+    if (itemValue === 'CLI_NAME') {
+      this.setState({ searchArea: itemValue, searchPlaceholder: '고객명 입력' });
+    }
   };
 
   /**
@@ -180,32 +319,23 @@ class ClientEvaluScreen extends React.Component {
     );
   };
 
-  /**
-   * 블랙리스트 헤더 UI 렌더링 함수
-   */
-  renderCliEvaluHeader = () => {
-    const { search } = this.state;
-
-    return (
-      <SearchBar
-        value={search}
-        placeholder="전화번호 또는 이름 입력..."
-        lightTheme
-        round
-        onChangeText={text => this.searchFilterCliEvalu(text)}
-        autoCorrect={false}
-      />
-    );
-  };
-
   render() {
     const {
+      searchWord,
+      searchArea,
+      searchNotice,
+      searchPlaceholder,
       updateId,
       updateCliName,
+      updateFirmName,
+      updateTelNumber2,
+      updateTelNumber3,
+      updateFirmNumber,
       updateReason,
       cliEvaluList,
       evaluLikeList,
       evaluLikeSelected,
+      isMineEvaluation,
       isVisibleCreateModal,
       isVisibleUpdateModal,
       isVisibleEvaluLikeModal,
@@ -225,6 +355,10 @@ class ClientEvaluScreen extends React.Component {
         <ClientEvaluUpdateModal
           id={updateId}
           cliName={updateCliName}
+          firmName={updateFirmName}
+          telNumber2={updateTelNumber2}
+          telNumber3={updateTelNumber3}
+          firmNumber={updateFirmNumber}
           reason={updateReason}
           isVisibleModal={isVisibleUpdateModal}
           closeModal={() => this.setState({ isVisibleUpdateModal: false })}
@@ -238,17 +372,45 @@ class ClientEvaluScreen extends React.Component {
           createClientEvaluLike={this.createClientEvaluLike}
           cancelClientEvaluLike={this.cancelClientEvaluLike}
           closeModal={() => this.closeEvaluLikeModal()}
+          isMine={isMineEvaluation}
         />
-        <Text>
-          블랙리스트 고객의 전화가 왔을 때, 하기 평가내용의 알림을 받을 수 있게 기능을 발전해 갈
-          것입니다.
-        </Text>
-        <JBButton
-          title="블랙리스트 추가"
-          onPress={() => this.setState({ isVisibleCreateModal: true })}
-          size="small"
-          align="right"
-        />
+        <View style={styles.searchHeaderWrap}>
+          <View style={styles.searchHeaderTopWrap}>
+            <Picker
+              selectedValue={searchArea}
+              style={styles.searchPicker}
+              onValueChange={this.onSearchAreaChange}
+            >
+              <Picker.Item label="전화번호" value="TEL" />
+              <Picker.Item label="사업자번호" value="FIRM_NUMBER" />
+              <Picker.Item label="업체명" value="FIRM_NAME" />
+              <Picker.Item label="고객명" value="CLI_NAME" />
+            </Picker>
+            <JBButton
+              title="블랙리스트 추가"
+              onPress={() => this.setState({ isVisibleCreateModal: true })}
+              size="small"
+              align="right"
+              bgColor={colors.batangDark}
+              color={colors.pointDark}
+            />
+          </View>
+          <SearchBar
+            value={searchWord}
+            placeholder={searchPlaceholder}
+            containerStyle={styles.containerSearchBar}
+            inputStyle={styles.inputSearchBar}
+            lightTheme
+            round
+            onChangeText={text => this.setState({ searchWord: text })}
+            searchIcon={{ onPress: () => this.searchFilterCliEvalu() }}
+            onSubmitEditing={() => this.searchFilterCliEvalu()}
+            autoCorrect={false}
+          />
+          <View style={styles.searchNoticeWrap}>
+            <Text style={styles.searchNoticeText}>{searchNotice}</Text>
+          </View>
+        </View>
 
         {isCliEvaluLoadComplete === true && (
           <FlatList

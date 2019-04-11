@@ -1,5 +1,7 @@
 import React from 'react';
-import { Alert, FlatList, Modal, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert, FlatList, Modal, StyleSheet, TextInput,
+} from 'react-native';
 import { ListItem } from 'react-native-elements';
 import styled from 'styled-components';
 import * as api from '../api/api';
@@ -11,7 +13,6 @@ import JBErrorMessage from './organisms/JBErrorMessage';
 import { notifyError } from '../common/ErrorNotice';
 import colors from '../constants/Colors';
 import { validate } from '../utils/Validation';
-
 
 const Container = styled.View`
   flex: 1;
@@ -85,7 +86,7 @@ export default class ClientEvaluLikeModal extends React.Component {
     }
 
     api
-      .existEvaluLike(accountId)
+      .existEvaluLike(accountId, evaluation.id)
       .then((resBody) => {
         if (resBody) {
           Alert.alert('중복 문제', '이미 공감/비공감을 하셨습니다.');
@@ -112,14 +113,10 @@ export default class ClientEvaluLikeModal extends React.Component {
   cancelEvaluLike = (like) => {
     const { evaluation, cancelClientEvaluLike } = this.props;
 
-    Alert.alert(
-      '공감/비공감 취소 확인',
-      '정말 취소 하시겠습니까?',
-      [
-        { text: '예', onPress: () => cancelClientEvaluLike(evaluation, like) },
-        { text: '아니요', onPress: () => {} }
-      ],
-    );
+    Alert.alert('공감/비공감 취소 확인', '정말 취소 하시겠습니까?', [
+      { text: '예', onPress: () => cancelClientEvaluLike(evaluation, like) },
+      { text: '아니요', onPress: () => {} },
+    ]);
   };
 
   checkMyOpinion = (evaluLikeList) => {
@@ -131,7 +128,7 @@ export default class ClientEvaluLikeModal extends React.Component {
         this.setState({ evaluatedLike: evalu.evaluLike, reason: evalu.reason });
       }
     });
-  }
+  };
 
   /**
    * 유효성 검사 함수
@@ -148,7 +145,9 @@ export default class ClientEvaluLikeModal extends React.Component {
   renderCliEvaluHeader = () => {
     const { evaluation } = this.props;
 
-    return (<JBTextItem title="블랙리스트" value={`${evaluation.cliName}(${evaluation.telNumber})`} row />);
+    return (
+      <JBTextItem title="블랙리스트" value={`${evaluation.cliName}(${evaluation.telNumber})`} row />
+    );
   };
 
   /**
@@ -162,15 +161,29 @@ export default class ClientEvaluLikeModal extends React.Component {
     }
 
     if (item.evaluLike) {
-      return <ListItem subtitle={item.reason} leftAvatar={{ source: require('../assets/images/like-32.png') }} />;
+      return (
+        <ListItem
+          subtitle={item.reason}
+          leftAvatar={{ source: require('../assets/images/like-32.png') }}
+        />
+      );
     }
 
-    return <ListItem subtitle={item.reason} leftAvatar={{ source: require('../assets/images/unlike-32.png') }} />;
+    return (
+      <ListItem
+        subtitle={item.reason}
+        leftAvatar={{ source: require('../assets/images/unlike-32.png') }}
+      />
+    );
   };
 
   render() {
-    const { isVisibleModal, evaluLikeList, closeModal } = this.props;
-    const { validateErrMessage, evaluatedLike, evaluatedUnlike, reason } = this.state;
+    const {
+      isVisibleModal, evaluLikeList, closeModal, isMine,
+    } = this.props;
+    const {
+      validateErrMessage, evaluatedLike, evaluatedUnlike, reason,
+    } = this.state;
 
     return (
       <Modal
@@ -194,29 +207,43 @@ export default class ClientEvaluLikeModal extends React.Component {
             />
 
             <JBErrorMessage errorMSG={validateErrMessage} />
-            <CommandView>
-              <TextInput
-                value={reason}
-                style={styles.resonTI}
-                onChangeText={text => this.setState({ reason: text })}
-                placeholder="공감/비공감 사유를 입력하세요"
-              />
-              {evaluatedLike === undefined && (
-                <JBButton title="공감" onPress={() => this.evaluateClinet(true)} size="small" />
-              )}
+            {!isMine && (
+              <CommandView>
+                <TextInput
+                  value={reason}
+                  style={styles.resonTI}
+                  onChangeText={text => this.setState({ reason: text })}
+                  placeholder="공감/비공감 사유를 입력하세요"
+                />
+                {evaluatedLike === undefined && (
+                  <JBButton title="공감" onPress={() => this.evaluateClinet(true)} size="small" />
+                )}
 
-              {evaluatedLike === undefined && (
-                <JBButton title="비공감" onPress={() => this.evaluateClinet(false)} size="small" />
-              )}
+                {evaluatedLike === undefined && (
+                  <JBButton
+                    title="비공감"
+                    onPress={() => this.evaluateClinet(false)}
+                    size="small"
+                  />
+                )}
 
-              {evaluatedLike === true && (
-                <JBButton title="공감 취소" onPress={() => this.cancelEvaluLike(true)} size="small" />
-              )}
+                {evaluatedLike === true && (
+                  <JBButton
+                    title="공감 취소"
+                    onPress={() => this.cancelEvaluLike(true)}
+                    size="small"
+                  />
+                )}
 
-              {evaluatedLike === false && (
-                <JBButton title="비공감 취소" onPress={() => this.cancelEvaluLike(false)} size="small" />
-              )}
-            </CommandView>
+                {evaluatedLike === false && (
+                  <JBButton
+                    title="비공감 취소"
+                    onPress={() => this.cancelEvaluLike(false)}
+                    size="small"
+                  />
+                )}
+              </CommandView>
+            )}
           </ContentsView>
         </Container>
       </Modal>

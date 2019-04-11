@@ -20,8 +20,9 @@ const Container = styled.View`
 `;
 
 const TouchableHighlight = styled.TouchableHighlight`
+  border-color: ${props => (props.borderColor ? props.borderColor : colors.pointDark)};
   background-color: ${props => (props.color ? props.color : 'white')};
-  border-color: ${props => (props.color ? 'white' : colors.pointDark)};
+  border-width: 1px;
   ${props => props.size === undefined
     && `
     padding: 12px 20px;
@@ -34,6 +35,7 @@ const TouchableHighlight = styled.TouchableHighlight`
     padding: 10px 0;
     border-radius: 3;
     elevation: 4;
+    border-width: 0;
   `};
   ${props => props.size === BIG_SIZE
     && `
@@ -48,13 +50,14 @@ const TouchableHighlight = styled.TouchableHighlight`
   ${props => props.underline
     && `
     background-color: transparent;
+    border-width: 0;
   `};
 `;
 
 const Text = styled.Text`
   font-family: ${fonts.button};
   font-weight: bold;
-  color: ${props => (props.color ? 'white' : colors.pointDark)};
+  color: ${props => (props.color ? props.color : colors.pointDark)};
   ${props => props.size === undefined
     && `
       font-size: 20px;
@@ -73,23 +76,54 @@ const Text = styled.Text`
     `};
   ${props => props.underline
     && `
-      color: ${colors.point2};
+      color: ${props.color ? props.color : props.point2};
       text-decoration-line: underline;
     `};
 `;
 
 export default function JBButton({
-  title, onPress, size, underline, color, align,
+  title,
+  onPress,
+  size,
+  underline,
+  color,
+  bgColor,
+  align,
+  Secondary,
+  Primary,
 }) {
+  let colorTheme = color;
+  let bgColorTheme = bgColor;
+
+  if (Secondary) {
+    if (underline) {
+      colorTheme = colors.pointDark;
+    } else {
+      colorTheme = 'white';
+    }
+
+    bgColorTheme = colors.pointDark;
+  }
+
+  if (Primary) {
+    if (underline) {
+      colorTheme = colors.point2;
+    } else {
+      colorTheme = 'white';
+    }
+
+    bgColorTheme = colors.point2;
+  }
   return (
     <Container align={align}>
       <TouchableHighlight
         size={size}
-        color={color}
+        color={bgColorTheme}
+        borderColor={colorTheme}
         onPress={onPress}
         underline={underline ? true : null}
       >
-        <Text size={size} underline={underline ? true : null}>
+        <Text size={size} color={colorTheme} underline={underline ? true : null}>
           {title}
         </Text>
       </TouchableHighlight>

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Alert, Modal } from 'react-native';
+import {
+  Alert, KeyboardAvoidingView, Modal, ScrollView,
+} from 'react-native';
 import styled from 'styled-components/native';
 import * as api from '../api/api';
 import JBIcon from './molecules/JBIcon';
@@ -32,11 +34,19 @@ export default class ClientEvaluCreateModal extends React.Component {
     super(props);
     this.state = {
       cliName: '',
-      reason: '',
+      firmName: '',
       telNumber: '',
+      telNumber2: '',
+      telNumber3: '',
+      firmNumber: '',
+      reason: '',
       isDuplTelNChecked: undefined,
       cliNameValErrMessage: '',
+      firmNameValErrMessage: '',
       telNumberValErrMessage: '',
+      telNumber2ValErrMessage: '',
+      telNumber3ValErrMessage: '',
+      firmNumberValErrMessage: '',
       reasonValErrMessage: '',
     };
   }
@@ -68,6 +78,11 @@ export default class ClientEvaluCreateModal extends React.Component {
   setInitValErroMSG = () => {
     this.setState({
       cliNameValErrMessage: '',
+      firmNameValErrMessage: '',
+      firmNumberValErrMessage: '',
+      telNumberValErrMessage: '',
+      telNumber2ValErrMessage: '',
+      telNumber3ValErrMessage: '',
       reasonValErrMessage: '',
     });
   };
@@ -76,7 +91,9 @@ export default class ClientEvaluCreateModal extends React.Component {
    * 블랙리스트 추가 유효성 검사 함수
    */
   validateCreateForm = async () => {
-    const { cliName, telNumber, reason } = this.state;
+    const {
+      cliName, firmName, telNumber, telNumber2, telNumber3, firmNumber, reason,
+    } = this.state;
     const { accountId } = this.props;
 
     // Validation Error Massage Initialize
@@ -87,15 +104,38 @@ export default class ClientEvaluCreateModal extends React.Component {
       return false;
     }
 
-    let v = validate('textMax', cliName, true, 45);
+    let v = validate('textMax', cliName, true, 8);
     if (!v[0]) {
       this.setState({ cliNameValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', firmName, false, 12);
+    if (!v[0]) {
+      this.setState({ firmNameValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', telNumber, true);
     if (!v[0]) {
       this.setState({ telNumberValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', telNumber2, false);
+    if (!v[0]) {
+      this.setState({ telNumber2ValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', telNumber3, false);
+    if (!v[0]) {
+      this.setState({ telNumber3ValErrMessage: v[1] });
+      return false;
+    }
+
+    if (firmNumber !== '' && firmNumber.length !== 12) {
+      this.setState({ firmNumberValErrMessage: '사업자번호가 유효하지 않습니다.' });
       return false;
     }
 
@@ -129,7 +169,11 @@ export default class ClientEvaluCreateModal extends React.Component {
       const newEvaluData = {
         accountId,
         cliName,
+        firmName,
         telNumber,
+        telNumber2,
+        telNumber3,
+        firmNumber,
         reason,
       };
 
@@ -143,10 +187,18 @@ export default class ClientEvaluCreateModal extends React.Component {
     const { isVisibleModal, closeModal, size } = this.props;
     const {
       cliName,
+      firmName,
       telNumber,
+      telNumber2,
+      telNumber3,
+      firmNumber,
       reason,
       cliNameValErrMessage,
+      firmNameValErrMessage,
       telNumberValErrMessage,
+      telNumber2ValErrMessage,
+      telNumber3ValErrMessage,
+      firmNumberValErrMessage,
       reasonValErrMessage,
     } = this.state;
 
@@ -160,40 +212,79 @@ export default class ClientEvaluCreateModal extends React.Component {
         }}
       >
         <Container size={size}>
-          <ContentsView size={size}>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
-            <JBTextInput
-              title="고객/기관 명"
-              value={cliName}
-              onChangeText={text => this.setState({ cliName: text })}
-              placeholder="블랙리스트 명을 기입해 주세요"
-            />
-            <JBErrorMessage errorMSG={cliNameValErrMessage} />
+          <KeyboardAvoidingView>
+            <ScrollView>
+              <ContentsView size={size}>
+                <JBIcon name="close" size={23} onPress={() => closeModal()} />
+                <JBTextInput
+                  title="고객명*"
+                  value={cliName}
+                  onChangeText={text => this.setState({ cliName: text })}
+                  placeholder="고객명을 기입해 주세요"
+                />
+                <JBErrorMessage errorMSG={cliNameValErrMessage} />
 
-            <JBTextInput
-              title="전화번호(숫자만)"
-              value={telNumber}
-              onChangeText={text => this.setState({ telNumber: text })}
-              placeholder="블랙리스트 전화번호를 기입해 주세요"
-              keyboardType="phone-pad"
-            />
-            <JBErrorMessage errorMSG={telNumberValErrMessage} />
+                <JBTextInput
+                  title="업체명"
+                  value={firmName}
+                  onChangeText={text => this.setState({ firmName: text })}
+                  placeholder="업체명을 기입해 주세요"
+                />
+                <JBErrorMessage errorMSG={firmNameValErrMessage} />
 
-            <JBTextInput
-              title="사유"
-              value={reason}
-              onChangeText={text => this.setState({ reason: text })}
-              placeholder="블랙리스트 사유를 기입해 주세요"
-              numberOfLines={5}
-            />
-            <JBErrorMessage errorMSG={reasonValErrMessage} />
+                <JBTextInput
+                  title="전화번호(숫자만)*"
+                  value={telNumber}
+                  onChangeText={text => this.setState({ telNumber: text })}
+                  placeholder="블랙리스트 전화번호를 기입해 주세요"
+                  keyboardType="phone-pad"
+                />
+                <JBErrorMessage errorMSG={telNumberValErrMessage} />
 
-            <JBButton
-              title="블랙리스트 추가하기"
-              onPress={() => this.completeAction()}
-              size="full"
-            />
-          </ContentsView>
+                <JBTextInput
+                  title="전화번호2(숫자만)"
+                  value={telNumber2}
+                  onChangeText={text => this.setState({ telNumber2: text })}
+                  placeholder="추가 전화번호를 기입해 주세요"
+                  keyboardType="phone-pad"
+                />
+                <JBErrorMessage errorMSG={telNumber2ValErrMessage} />
+
+                <JBTextInput
+                  title="전화번호3(숫자만)"
+                  value={telNumber3}
+                  onChangeText={text => this.setState({ telNumber3: text })}
+                  placeholder="추가 전화번호를 기입해 주세요"
+                  keyboardType="phone-pad"
+                />
+                <JBErrorMessage errorMSG={telNumber3ValErrMessage} />
+
+                <JBTextInput
+                  title="사업자번호"
+                  value={firmNumber}
+                  onChangeText={text => this.setState({ firmNumber: text })}
+                  placeholder="사업자번호를 기입해 주세요"
+                />
+                <JBErrorMessage errorMSG={firmNumberValErrMessage} />
+
+                <JBTextInput
+                  title="사유"
+                  value={reason}
+                  onChangeText={text => this.setState({ reason: text })}
+                  placeholder="블랙리스트 사유를 기입해 주세요"
+                  numberOfLines={5}
+                />
+                <JBErrorMessage errorMSG={reasonValErrMessage} />
+
+                <JBButton
+                  title="블랙리스트 추가하기"
+                  onPress={() => this.completeAction()}
+                  size="full"
+                  Secondary
+                />
+              </ContentsView>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </Container>
       </Modal>
     );

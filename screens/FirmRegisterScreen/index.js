@@ -1,5 +1,7 @@
 import React from 'react';
-import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View,
+} from 'react-native';
 import { ImagePicker } from 'expo';
 import { validate, validatePresence } from '../../utils/Validation';
 import * as api from '../../api/api';
@@ -88,21 +90,40 @@ class FirmRegisterScreen extends React.Component {
 
     const localPhoneNumber = user.phoneNumber.replace('+82', '0');
 
-    this.setState({phoneNumber: localPhoneNumber});
-  }
+    this.setState({ phoneNumber: localPhoneNumber });
+  };
 
   createFirm = async () => {
     const { navigation, user } = this.props;
     const {
-      fname, phoneNumber, equiListStr, address, addressDetail, sidoAddr,
-      sigunguAddr, addrLongitude, addrLatitude, introduction, thumbnail,
-      photo1, photo2, photo3, blog, homepage, sns,
+      fname,
+      phoneNumber,
+      equiListStr,
+      address,
+      addressDetail,
+      sidoAddr,
+      sigunguAddr,
+      addrLongitude,
+      addrLatitude,
+      introduction,
+      thumbnail,
+      photo1,
+      photo2,
+      photo3,
+      blog,
+      homepage,
+      sns,
     } = this.state;
     const valResult = this.isValidateSubmit();
 
-    if (!valResult) { return; }
+    if (!valResult) {
+      return;
+    }
 
-    if (user.uid === null || user.uid === undefined || user.uid === '') { Alert.alert('요효하지 않은 사용자 입니다, 로그아웃 후 사용해 주세요'); return; }
+    if (user.uid === null || user.uid === undefined || user.uid === '') {
+      Alert.alert('요효하지 않은 사용자 입니다, 로그아웃 후 사용해 주세요');
+      return;
+    }
     const accountId = user.uid;
 
     this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '대표사진 업로드중...' });
@@ -127,16 +148,17 @@ class FirmRegisterScreen extends React.Component {
       addrLongitude,
       addrLatitude,
       introduction,
-      thumbnail: uploadedThumbnailImgUrl ? uploadedThumbnailImgUrl : thumbnail,
-      photo1: uploadedPhoto1ImgUrl ? uploadedPhoto1ImgUrl: photo1,
-      photo2: uploadedPhoto2ImgUrl ? uploadedPhoto2ImgUrl: photo2,
-      photo3: uploadedPhoto3ImgUrl ? uploadedPhoto3ImgUrl: photo3,
+      thumbnail: uploadedThumbnailImgUrl || thumbnail,
+      photo1: uploadedPhoto1ImgUrl || photo1,
+      photo2: uploadedPhoto2ImgUrl || photo2,
+      photo3: uploadedPhoto3ImgUrl || photo3,
       blog,
       homepage,
       sns,
     };
 
-    api.createFirm(newFirm)
+    api
+      .createFirm(newFirm)
       .then(() => navigation.navigate('FirmMyInfo', { refresh: 'Register' }))
       .catch((error) => {
         Alert.alert(
@@ -144,28 +166,36 @@ class FirmRegisterScreen extends React.Component {
           `[${error.name}] ${error.message}`,
         );
       });
-  }
+  };
 
   /**
    * 업체정보 이미지 업로드
    */
   firmImageUpload = async (imgUri) => {
-    if (imgUri === null || imgUri === undefined || imgUri === '') { return null; }
+    if (imgUri === null || imgUri === undefined || imgUri === '') {
+      return null;
+    }
 
     const serverImgUrl = await this.uploadImage(imgUri);
 
-    if (serverImgUrl === undefined) { Alert.alert('이미지 업로드 실패'); return undefined; }
+    if (serverImgUrl === undefined) {
+      Alert.alert('이미지 업로드 실패');
+      return undefined;
+    }
 
     return serverImgUrl;
-  }
+  };
 
   /**
    * 이미지 업로드 함수
    */
   uploadImage = async (imgUri) => {
     let serverImgUrl;
-    await api.uploadImage(imgUri)
-      .then((resImgUrl) => { serverImgUrl = resImgUrl; })
+    await api
+      .uploadImage(imgUri)
+      .then((resImgUrl) => {
+        serverImgUrl = resImgUrl;
+      })
       .catch((error) => {
         Alert.alert(
           '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
@@ -206,7 +236,7 @@ class FirmRegisterScreen extends React.Component {
       addrLongitude: addrData.addrLongitude,
       addrLatitude: addrData.addrLatitude,
     });
-  }
+  };
 
   /**
    * 유효성검사 에러메세지 초기화 함수
@@ -228,7 +258,7 @@ class FirmRegisterScreen extends React.Component {
       homepageValErrMessage: '',
       snsValErrMessage: '',
     });
-  }
+  };
 
   openSelEquipmentModal = () => {
     this.setEquiSelModalVisible(true);
@@ -278,8 +308,23 @@ class FirmRegisterScreen extends React.Component {
    */
   isValidateSubmit = () => {
     const {
-      fname, phoneNumber, equiListStr, address, addressDetail, thumbnail, photo1, photo2, photo3,
-      sidoAddr, sigunguAddr, addrLongitude, addrLatitude, introduction, blog, homepage, sns,
+      fname,
+      phoneNumber,
+      equiListStr,
+      address,
+      addressDetail,
+      thumbnail,
+      photo1,
+      photo2,
+      photo3,
+      sidoAddr,
+      sigunguAddr,
+      addrLongitude,
+      addrLatitude,
+      introduction,
+      blog,
+      homepage,
+      sns,
     } = this.state;
 
     // Validation Error Massage Initialize
@@ -317,16 +362,28 @@ class FirmRegisterScreen extends React.Component {
     }
 
     v = validatePresence(sidoAddr);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[시도] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[시도] ${v[1]}` });
+      return false;
+    }
 
     v = validatePresence(sigunguAddr);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[시군] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[시군] ${v[1]}` });
+      return false;
+    }
 
     v = validatePresence(addrLongitude);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[경도] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[경도] ${v[1]}` });
+      return false;
+    }
 
     v = validatePresence(addrLatitude);
-    if (!v[0]) { this.setState({ addressValErrMessage: `[위도] ${v[1]}` }); return false; }
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: `[위도] ${v[1]}` });
+      return false;
+    }
 
     v = validate('textMax', introduction, true, 1000);
     if (!v[0]) {
@@ -335,25 +392,46 @@ class FirmRegisterScreen extends React.Component {
     }
 
     v = validate('textMax', thumbnail, true, 250);
-    if (!v[0]) { this.setState({ thumbnailValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ thumbnailValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', photo1, true, 250);
-    if (!v[0]) { this.setState({ photo1ValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ photo1ValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', photo2, false, 250);
-    if (!v[0]) { this.setState({ photo2ValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ photo2ValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', photo3, false, 250);
-    if (!v[0]) { this.setState({ photo3ValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ photo3ValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', blog, false, 250);
-    if (!v[0]) { this.setState({ blogValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ blogValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', homepage, false, 250);
-    if (!v[0]) { this.setState({ homepageValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ homepageValErrMessage: v[1] });
+      return false;
+    }
 
     v = validate('textMax', sns, false, 250);
-    if (!v[0]) { this.setState({ snsValErrMessage: v[1] }); return false; }
+    if (!v[0]) {
+      this.setState({ snsValErrMessage: v[1] });
+      return false;
+    }
 
     return true;
   };
@@ -362,23 +440,39 @@ class FirmRegisterScreen extends React.Component {
     const { navigation } = this.props;
 
     navigation.navigate('FirmMyInfo');
-  }
+  };
 
   render() {
     const {
-      isVisibleEquiModal, isVisibleMapAddModal, isVisibleActIndiModal,
-      fname, phoneNumber,
+      isVisibleEquiModal,
+      isVisibleMapAddModal,
+      isVisibleActIndiModal,
+      fname,
+      phoneNumber,
       equiListStr,
-      address, addressDetail,
+      address,
+      addressDetail,
       introduction,
-      thumbnail, photo1, photo2, photo3,
-      blog, sns, homepage,
-      imgUploadingMessage, fnameValErrMessage, phoneNumberValErrMessage,
-      equiListStrValErrMessage, addressValErrMessage,
-      introductionValErrMessage, thumbnailValErrMessage,
-      photo1ValErrMessage, photo2ValErrMessage,
-      photo3ValErrMessage, blogValErrMessage,
-      homepageValErrMessage, snsValErrMessage,
+      thumbnail,
+      photo1,
+      photo2,
+      photo3,
+      blog,
+      sns,
+      homepage,
+      imgUploadingMessage,
+      fnameValErrMessage,
+      phoneNumberValErrMessage,
+      equiListStrValErrMessage,
+      addressValErrMessage,
+      introductionValErrMessage,
+      thumbnailValErrMessage,
+      photo1ValErrMessage,
+      photo2ValErrMessage,
+      photo3ValErrMessage,
+      blogValErrMessage,
+      homepageValErrMessage,
+      snsValErrMessage,
     } = this.state;
 
     return (
@@ -506,7 +600,12 @@ class FirmRegisterScreen extends React.Component {
               </View>
 
               <View style={styles.regiFormCommWrap}>
-                <JBButton title="업체등록하기" onPress={() => this.createFirm()} />
+                <JBButton
+                  title="업체등록하기"
+                  onPress={() => this.createFirm()}
+                  size="full"
+                  Primary
+                />
               </View>
             </View>
           </ScrollView>

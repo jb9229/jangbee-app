@@ -13,27 +13,55 @@ import AdUpdateModal from '../components/AdUpdateModal';
 import AdFinAccUpdateModal from '../components/AdFinAccUpdateModal';
 import { notifyError } from '../common/ErrorNotice';
 import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  adEmptyViewWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyWordWrap: {
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   commWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderTopColor: colors.pointDark,
+    borderTopWidth: 1,
+  },
+  emptyText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: fonts.batang,
+    color: colors.batang,
+  },
+  adListItemWrap: {
+    margin: 10,
+    paddingBottom: 3,
+    borderBottomColor: colors.point2,
+    borderBottomWidth: 1,
+  },
+  adItemTopWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  adListItemWrap: {
-    flex: 1,
+  adItemTopLeftWrap: {
+    flexDirection: 'row',
   },
-  adListCommWrap: {
-    flex: 1,
+  adItemTopRightWrap: {
     flexDirection: 'row',
   },
   adListLeftWrap: {
     flex: 3,
   },
-  adListRightWrap: {
-    flex: 1,
+  adItemMidleWrap: {
+    flexDirection: 'row',
   },
   adListDateWrap: {
     flexDirection: 'row',
@@ -146,36 +174,47 @@ class AdScreen extends React.Component {
     return true;
   };
 
-  renderAdListItem = ({ item }) => (
-    <Card>
-      <View style={styles.adListItemWrap}>
-        <JangbeeAd ad={item} />
-        <View style={styles.adListCommWrap}>
-          <View style={styles.adListLeftWrap}>
+  renderAdListItem = ({ item, index }) => (
+    <View style={styles.adListItemWrap}>
+      <JangbeeAd ad={item} />
+      <View style={styles.adListCommWrap}>
+        <View style={styles.adItemTopWrap}>
+          <View style={styles.adItemTopLeftWrap}>
+            <Text>{index + 1}</Text>
+            <Text>. </Text>
             <Text>{getAdtypeStr(item.adType)}</Text>
-            <Text>{item.equiTarget}</Text>
-            <View style={styles.adListTargetLocalWrap}>
-              <Text>{item.sidoTarget}</Text>
-              <Text>{item.gugunTarget}</Text>
-            </View>
-            <View style={styles.adListDateWrap}>
-              <Text>{item.startDate}</Text>
-              <Text> ~ </Text>
-              <Text>{item.endDate}</Text>
-            </View>
           </View>
-          <View style={styles.adListRightWrap}>
-            <JBButton title="수정" onPress={() => this.updateAd(item)} size="small" underline />
+          <View style={styles.adItemTopLeftWrap}>
             <JBButton
               title="해지"
               onPress={() => this.confirmTerminateAd(item)}
               size="small"
               underline
+              color={colors.point2Dark}
+            />
+            <JBButton
+              title="수정"
+              onPress={() => this.updateAd(item)}
+              size="small"
+              underline
+              color={colors.point2Dark}
             />
           </View>
         </View>
+        <View style={styles.adItemMidleWrap}>
+          <Text>{item.equiTarget}</Text>
+          <View style={styles.adListTargetLocalWrap}>
+            <Text>{item.sidoTarget}</Text>
+            <Text>{item.gugunTarget}</Text>
+          </View>
+          <View style={styles.adListDateWrap}>
+            <Text>{item.startDate}</Text>
+            <Text> ~ </Text>
+            <Text>{item.endDate}</Text>
+          </View>
+        </View>
       </View>
-    </Card>
+    </View>
   );
 
   render() {
@@ -195,6 +234,23 @@ class AdScreen extends React.Component {
 
     if (isLoadingAdList) {
       return <JBActIndicator title="내광고 로딩중.." size={35} />;
+    }
+
+    if (isAdEmpty) {
+      return (
+        <View style={styles.adEmptyViewWrap}>
+          <View style={styles.emptyWordWrap}>
+            <Text style={styles.emptyText}>+</Text>
+            <Text style={styles.emptyText}>등록된 광고가 없습니다.</Text>
+            <Text style={styles.emptyText}>
+              언제든 광고문구수정 가능, 저렴한 가격(월 1만원부터)
+            </Text>
+            <Text style={styles.emptyText}>한정된 광고자리, 나중엔 하고싶어도 못합니다.</Text>
+            <Text style={styles.emptyText}>전봇대 스티커 붙이는 것보다 훨~씬 효과적 입니다.</Text>
+          </View>
+          <JBButton title="내장비 홍보하기" onPress={() => navigation.navigate('AdCreate')} />
+        </View>
+      );
     }
 
     return (
@@ -225,29 +281,32 @@ class AdScreen extends React.Component {
           accountId={user.uid}
           {...this.props}
         />
-        {!isAdEmpty ? (
-          <FlatList
-            data={adList}
-            renderItem={this.renderAdListItem}
-            keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={this.renderSeparator}
-          />
-        ) : (
-          <View>
-            <Text>등록된 광고가 없습니다, 장비 홍보를해 주세요.</Text>
-          </View>
-        )}
+        <FlatList
+          data={adList}
+          renderItem={this.renderAdListItem}
+          keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={this.renderSeparator}
+        />
         <View style={styles.commWrap}>
-          {!isAdEmpty && (
-            <JBButton
-              title="결제통장 바꾸기"
-              onPress={() => this.setState({ isVisibleFinAccUpdateModal: true })}
-            />
-          )}
+          <JBButton
+            title="결제통장 바꾸기"
+            onPress={() => this.setState({ isVisibleFinAccUpdateModal: true })}
+            size="small"
+            underline
+            Secondary
+          />
+          <View
+            style={{
+              borderLeftColor: colors.pointDark,
+              borderLeftWidth: 1,
+            }}
+          />
           <JBButton
             title="내장비 홍보하기"
             onPress={() => navigation.navigate('AdCreate')}
-            size={isAdEmpty ? 'full' : undefined}
+            size={isAdEmpty ? 'full' : 'small'}
+            Secondary
+            underline
           />
         </View>
       </View>

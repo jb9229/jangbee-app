@@ -294,6 +294,10 @@ export function getClientEvaluList(accountId) {
   );
 }
 
+export function searchClientEvaluList(paramStr) {
+  return fetch(`${url.JBSERVER_CLIENT_EVALU}?${paramStr}`).then(handleJBServerJsonResponse);
+}
+
 export function existClinetEvaluTelnumber(telNumber) {
   return fetch(`${url.JBSERVER_CLIENT_EVALU_TELEXIST}?telNumber=${telNumber}`).then(
     handleJBServerJsonResponse,
@@ -344,10 +348,10 @@ export function getClientEvaluLikeList(id) {
   return fetch(`${url.JBSERVER_CLIENT_EVALULIKE}?evaluId=${id}`).then(handleJBServerJsonResponse);
 }
 
-export function existEvaluLike(accountId) {
-  return fetch(`${url.JBSERVER_CLIENT_EVALULIKE_EXIST}?accountId=${accountId}`).then(
-    handleJBServerJsonResponse,
-  );
+export function existEvaluLike(accountId, evaluId) {
+  return fetch(
+    `${url.JBSERVER_CLIENT_EVALULIKE_EXIST}?accountId=${accountId}&evaluId=${evaluId}`,
+  ).then(handleJBServerJsonResponse);
 }
 
 export function deleteCliEvaluLike(evaluId, accountId, like) {

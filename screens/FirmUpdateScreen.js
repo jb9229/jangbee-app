@@ -1,10 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  ScrollView, StyleSheet,
-  View,
+  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View,
 } from 'react-native';
 import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
@@ -25,8 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  contentContainer: {
-  },
+  contentContainer: {},
   cardWrap: {
     flex: 1,
     backgroundColor: colors.batangLight,
@@ -48,12 +44,13 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
-
-}
+type Props = {};
 type State = {
-  preThumbnail: string, prePhoto1: string, prePhoto2: string, prePhoto3: string,
-}
+  preThumbnail: string,
+  prePhoto1: string,
+  prePhoto2: string,
+  prePhoto3: string,
+};
 class FirmUpdateScreen extends React.Component<Props, State> {
   constructor(props) {
     super(props);
@@ -103,7 +100,6 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     const { user } = this.props;
     api
       .getFirm(user.uid)
-      .then(res => res.json())
       .then((firm) => {
         this.setUpdateFirmData(firm);
         this.setState({ isLoadingComplete: true });
@@ -122,7 +118,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     const { navigation, user } = this.props;
     const {
       id,
-      fname, phoneNumber,
+      fname,
+      phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -131,11 +128,17 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       addrLongitude,
       addrLatitude,
       introduction,
-      thumbnail, photo1, photo2, photo3,
+      thumbnail,
+      photo1,
+      photo2,
+      photo3,
       blog,
       homepage,
       sns,
-      preThumbnail, prePhoto1, prePhoto2, prePhoto3,
+      preThumbnail,
+      prePhoto1,
+      prePhoto2,
+      prePhoto3,
     } = this.state;
     const valResult = this.isValidateSubmit();
 
@@ -167,10 +170,10 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       addrLatitude,
       location: `${addrLongitude},${addrLatitude}`,
       introduction,
-      thumbnail: uploadedThumbnailImgUrl ? uploadedThumbnailImgUrl : thumbnail,
-      photo1: uploadedPhoto1ImgUrl ? uploadedPhoto1ImgUrl: photo1,
-      photo2: uploadedPhoto2ImgUrl ? uploadedPhoto2ImgUrl: photo2,
-      photo3: uploadedPhoto3ImgUrl ? uploadedPhoto3ImgUrl: photo3,
+      thumbnail: uploadedThumbnailImgUrl || thumbnail,
+      photo1: uploadedPhoto1ImgUrl || photo1,
+      photo2: uploadedPhoto2ImgUrl || photo2,
+      photo3: uploadedPhoto3ImgUrl || photo3,
       blog,
       homepage,
       sns,
@@ -192,33 +195,43 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    */
   firmImageUpload = async (imgUri, preImg) => {
     // No change
-    if (imgUri === preImg) { return null; }
+    if (imgUri === preImg) {
+      return null;
+    }
 
     // Current Image Delete and New Image Null
     if (preImg !== '' && preImg !== undefined) {
       const result = await this.removeFirmImage(preImg);
-      if (!result) { return undefined; }
+      if (!result) {
+        return undefined;
+      }
     }
 
     // Current image null, new image upload
     if (imgUri !== null && imgUri !== '') {
       const serverImgUrl = await this.uploadImage(imgUri);
 
-      if (serverImgUrl === undefined) { Alert.alert('이미지 업로드 실패'); return undefined; }
+      if (serverImgUrl === undefined) {
+        Alert.alert('이미지 업로드 실패');
+        return undefined;
+      }
 
       return serverImgUrl;
     }
 
     return null;
-  }
+  };
 
   /**
    * 이미지 업로드 함수
    */
   uploadImage = async (imgUri) => {
     let serverImgUrl;
-    await api.uploadImage(imgUri)
-      .then((resImgUrl) => { serverImgUrl = resImgUrl; })
+    await api
+      .uploadImage(imgUri)
+      .then((resImgUrl) => {
+        serverImgUrl = resImgUrl;
+      })
       .catch((error) => {
         Alert.alert(
           '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
@@ -235,8 +248,11 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    */
   removeFirmImage = async (imgUri) => {
     let result;
-    await api.removeImage(imgUri)
-      .then((res) => { result = res; })
+    await api
+      .removeImage(imgUri)
+      .then((res) => {
+        result = res;
+      })
       .catch((error) => {
         Alert.alert(
           '이미지 삭제에 문제가 있습니다, 재 시도해 주세요.',
@@ -315,7 +331,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    */
   isValidateSubmit = () => {
     const {
-      fname, phoneNumber,
+      fname,
+      phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -459,7 +476,10 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       photo1: firm.photo1,
       photo2: firm.photo2,
       photo3: firm.photo3,
-      preThumbnail: firm.thumbnail, prePhoto1: firm.photo1, prePhoto2: firm.photo2, prePhoto3: firm.photo3,
+      preThumbnail: firm.thumbnail,
+      prePhoto1: firm.photo1,
+      prePhoto2: firm.photo2,
+      prePhoto3: firm.photo3,
       blog: firm.blog,
       homepage: firm.homepage,
       sns: firm.sns,
@@ -469,8 +489,11 @@ class FirmUpdateScreen extends React.Component<Props, State> {
   render() {
     const {
       isLoadingComplete,
-      isVisibleEquiModal, isVisibleMapAddModal, isVisibleActIndiModal,
-      fname, phoneNumber,
+      isVisibleEquiModal,
+      isVisibleMapAddModal,
+      isVisibleActIndiModal,
+      fname,
+      phoneNumber,
       equiListStr,
       address,
       addressDetail,
@@ -482,10 +505,19 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       blog,
       sns,
       homepage,
-      imgUploadingMessage, fnameValErrMessage, equiListStrValErrMessage,
-      addressValErrMessage, introductionValErrMessage, thumbnailValErrMessage,
-      photo1ValErrMessage, photo2ValErrMessage, photo3ValErrMessage,
-      blogValErrMessage, homepageValErrMessage, snsValErrMessage, phoneNumberValErrMessage,
+      imgUploadingMessage,
+      fnameValErrMessage,
+      equiListStrValErrMessage,
+      addressValErrMessage,
+      introductionValErrMessage,
+      thumbnailValErrMessage,
+      photo1ValErrMessage,
+      photo2ValErrMessage,
+      photo3ValErrMessage,
+      blogValErrMessage,
+      homepageValErrMessage,
+      snsValErrMessage,
+      phoneNumberValErrMessage,
     } = this.state;
 
     if (!isLoadingComplete) {
@@ -532,7 +564,9 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 <JBTextInput
                   title="업체주소(고객검색시 거리계산 기준이됨)*"
                   value={address}
-                  tiRefer={(input) => { this.addrTextInput = input; }}
+                  tiRefer={(input) => {
+                    this.addrTextInput = input;
+                  }}
                   onChangeText={text => this.setState({ address: text })}
                   onFocus={() => this.openMapAddModal()}
                   placeholder="주소를 검색해주세요"
@@ -542,7 +576,9 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 <JBTextInput
                   title="업체 상세주소"
                   value={addressDetail}
-                  tiRefer={(input) => { this.addrDetTextInput = input; }}
+                  tiRefer={(input) => {
+                    this.addrDetTextInput = input;
+                  }}
                   onChangeText={text => this.setState({ addressDetail: text })}
                   placeholder="상세주소를 입력해 주세요"
                 />
@@ -612,7 +648,12 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               </View>
 
               <View style={styles.regiFormCommWrap}>
-                <JBButton title="업체정보 수정하기" onPress={() => this.updateFirm()} />
+                <JBButton
+                  title="업체정보 수정하기"
+                  onPress={() => this.updateFirm()}
+                  size="full"
+                  Primary
+                />
               </View>
             </View>
           </ScrollView>
@@ -630,7 +671,11 @@ class FirmUpdateScreen extends React.Component<Props, State> {
           saveAddrInfo={this.saveAddrInfo}
           nextFocus={() => this.addrDetTextInput.focus()}
         />
-        <JBActIndicatorModal isVisibleModal={isVisibleActIndiModal} message={imgUploadingMessage} size="large" />
+        <JBActIndicatorModal
+          isVisibleModal={isVisibleActIndiModal}
+          message={imgUploadingMessage}
+          size="large"
+        />
       </View>
     );
   }

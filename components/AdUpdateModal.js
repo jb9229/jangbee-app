@@ -94,18 +94,26 @@ export default class AdUpdateModal extends React.Component {
       adPhotoUrlValErrMessage: '',
       adTelNumberValErrMessage: '',
     });
-  }
+  };
 
   /**
    * 광고 업데이트 유효성검사 함수
    */
   validateUpdateForm = () => {
-    const { adId, adTitle, adSubTitle, forMonths, adPhotoUrl, adTelNumber } = this.state;
+    const {
+      adId, adTitle, adSubTitle, forMonths, adPhotoUrl, adTelNumber,
+    } = this.state;
 
     // Validation Error Massage Initialize
     this.setInitValErroMSG();
 
-    if (adId === undefined || adId === '') { Alert.alert('유효성검사 에러', `[${adId}]업데이트 아이디를 찾지 못했습니다, 다시 시도해 주세요`); return false; }
+    if (adId === undefined || adId === '') {
+      Alert.alert(
+        '유효성검사 에러',
+        `[${adId}]업데이트 아이디를 찾지 못했습니다, 다시 시도해 주세요`,
+      );
+      return false;
+    }
 
     let v = validate('textMax', adTitle, true, 15);
     if (!v[0]) {
@@ -147,7 +155,7 @@ export default class AdUpdateModal extends React.Component {
     };
 
     return updateData;
-  }
+  };
 
   render() {
     const { isVisibleModal, closeModal } = this.props;
@@ -215,7 +223,12 @@ export default class AdUpdateModal extends React.Component {
                 />
                 <JBErrorMessage errorMSG={forMonthsValErrMessage} />
 
-                <JBButton title="광고 수정" onPress={() => this.completeAction()} />
+                <JBButton
+                  title="광고 수정"
+                  onPress={() => this.completeAction()}
+                  align="right"
+                  Primary
+                />
               </ScrollView>
             </KeyboardAvoidingView>
           </View>

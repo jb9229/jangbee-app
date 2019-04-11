@@ -34,6 +34,10 @@ class AuthLoading extends React.Component {
         getUserInfo(user.uid).then((data) => {
           const userInfo = data.val();
 
+          if (userInfo === null) {
+            navigation.navigate('SignUp', { user });
+          }
+
           const {
             userType,
             obAccessToken,

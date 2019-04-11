@@ -71,7 +71,7 @@ const ClientEvaluStack = createStackNavigator({
 });
 
 ClientEvaluStack.navigationOptions = {
-  tabBarLabel: '블랙리스트(베타)',
+  tabBarLabel: '블랙리스트',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),

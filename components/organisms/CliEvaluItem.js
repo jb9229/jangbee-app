@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import JBTextItem from '../molecules/JBTextItem';
 import JBButton from '../molecules/JBButton';
+import { convertHyphen, formatTelnumber } from '../../utils/StringUtils';
 
 const styles = StyleSheet.create({
   Container: {
@@ -12,9 +13,11 @@ const styles = StyleSheet.create({
   topWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 2,
+    paddingRight: 2,
   },
   likeWrap: {
-    width: 200,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -46,32 +49,49 @@ export default function CliEvaluItem({
   return (
     <View style={styles.Container}>
       <View style={styles.topWrap}>
-        <JBTextItem value={`${item.cliName}(${item.telNumber})`} underline />
+        <JBTextItem
+          value={`${item.cliName}(${convertHyphen(item.firmName)}, ${convertHyphen(
+            item.firmNumber,
+          )})`}
+          underline
+          small
+        />
         <View style={styles.likeWrap}>
-          {accountId === item.accountId && (
-            <Text>{`공감: ${item.likeCount}, 비공감: ${item.unlikeCount}`}</Text>
-          )}
-          {accountId !== item.accountId && (
-            <View style={styles.likeWrap}>
-              <JBButton
-                title={`공감: ${item.likeCount}, 비공감: ${item.unlikeCount}`}
-                onPress={() => openCliEvaluLikeModal(item)}
-                size="small"
-                underline
-              />
-            </View>
-          )}
+          <View style={styles.likeWrap}>
+            <JBButton
+              title={`공감: ${item.likeCount}, 비공감: ${item.unlikeCount}`}
+              onPress={() => openCliEvaluLikeModal(item, accountId === item.accountId)}
+              size="small"
+              underline
+              Primary
+            />
+          </View>
         </View>
       </View>
-      <JBTextItem title="사유" value={item.reason} />
+      <JBTextItem
+        title="전화번호"
+        value={`${formatTelnumber(item.telNumber)}, ${formatTelnumber(
+          item.telNumber2,
+        )}, ${formatTelnumber(item.telNumber3)}`}
+        small
+        row
+      />
+      <JBTextItem title="사유" value={item.reason} small />
       {accountId === item.accountId && (
         <View style={styles.commWrap}>
-          <JBButton title="수정" onPress={() => updateCliEvalu(item)} size="small" underline />
+          <JBButton
+            title="수정"
+            onPress={() => updateCliEvalu(item)}
+            size="small"
+            underline
+            Primary
+          />
           <JBButton
             title="삭제"
             onPress={() => confirmDeleteCE(item, deleteCliEvalu)}
             size="small"
             underline
+            Primary
           />
         </View>
       )}

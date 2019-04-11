@@ -1,12 +1,39 @@
 // @flow
 import React from 'react';
-import {
-  StyleSheet, Text, TouchableHighlight, View,
-} from 'react-native';
+import styled from 'styled-components/native';
+import { StyleSheet, View } from 'react-native';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
+const TouchableHighlight = styled.TouchableHighlight`
+  background-color: ${props => (props.isSelected ? colors.pointDark : 'white')};
+  border-color: ${props => (props.isSelected ? 'white' : colors.pointDark)};
+  border-width: 1px;
+  border-radius: 5;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 25px;
+  ${props => props.isSelected
+    && `
+    border-radius: 15;
+    border-color: ${colors.batangDark};
+  `};
+`;
+
+const Text = styled.Text`
+  color: ${props => (props.isSelected ? 'white' : colors.pointDark)};
+  font-family: ${fonts.button};
+  font-size: 20;
+  ${props => props.isSelected
+    && `
+    font-weight: bold;
+  `};
+`;
+
 const styles = StyleSheet.create({
+  container: {
+    margin: 20,
+  },
   titleText: {
     fontFamily: fonts.titleMiddle,
     fontSize: 15,
@@ -15,18 +42,10 @@ const styles = StyleSheet.create({
   equiText: {
     fontFamily: fonts.batang,
     fontSize: 20,
+    color: colors.batang,
   },
   selectedItem: {
     backgroundColor: colors.point,
-  },
-  touchable: {
-    borderWidth: 1,
-    borderRadius: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 8,
-    marginBottom: 20,
   },
 });
 
@@ -43,14 +62,14 @@ export default class SearCondBox extends React.PureComponent<Props, State> {
       title, searchCondition, onPress, defaultCondtion,
     } = this.props;
 
-    const itemStyle = searchCondition === '' ? null : styles.selectedItem;
-    const conditionStr = searchCondition === '' ? defaultCondtion : searchCondition;
+    const isSelected = searchCondition !== '';
+    const searchConditionStr = searchCondition === '' ? defaultCondtion : `[ ${searchCondition} ]`;
 
     return (
-      <View>
-        <Text style={[styles.titleText]}>{title}</Text>
-        <TouchableHighlight onPress={() => onPress()} style={[styles.touchable, itemStyle]}>
-          <Text style={[styles.equiText]}>{conditionStr}</Text>
+      <View style={styles.container}>
+        {title ? <Text style={[styles.titleText]}>{title}</Text> : null}
+        <TouchableHighlight isSelected={isSelected} onPress={() => onPress()}>
+          <Text isSelected={isSelected}>{searchConditionStr}</Text>
         </TouchableHighlight>
       </View>
     );
