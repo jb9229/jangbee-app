@@ -1,14 +1,13 @@
 import React from 'react';
 import {
-  FlatList, Modal, StyleSheet, View, Alert,
+  FlatList, Modal, StyleSheet, View,
 } from 'react-native';
 import EquiSelBox from './EquiSelBox';
-import * as api from '../api/api';
 import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
-import adLocation from '../constants/AdLocation';
+import DepthSelectText from './molecules/DepthSelectText';
 
 const SELECTED_EQUIPMENT_SEVERATOR = ',';
 
@@ -26,6 +25,10 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     borderRadius: 5,
   },
+  depthWrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   equiListWrap: {
     justifyContent: 'space-between',
     marginTop: 10,
@@ -40,16 +43,28 @@ export default class EquipementModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      equiList: [],
+      equiList: [
+        '크레인',
+        '굴착기',
+        '스카이',
+        '사다리차',
+        '지게차',
+        '하이랜더',
+        '고소작업렌탈',
+        '펌프카',
+        '도로포장장비',
+        '로우더',
+        '항타천공오가',
+        '불도저',
+        '진동로라/발전기',
+        '덤프임대',
+      ],
       equiSelMap: (new Map(): Map<string, boolean>),
-      singSeltdEquipment: '',
-      isFetching: false,
+      equiSelected: '',
     };
   }
 
   componentDidMount() {
-    this.setEquiList();
-
     this.setInitSeledEqui();
   }
 
@@ -91,7 +106,7 @@ export default class EquipementModal extends React.Component {
 
     if (singleSelectMode) {
       newEquiSelMap = new Map();
-      this.setState({ singSeltdEquipment: eName });
+      this.setState({ equiSelected: eName });
     } else {
       newEquiSelMap = new Map(equiSelMap);
     }
@@ -105,37 +120,6 @@ export default class EquipementModal extends React.Component {
     }
 
     this.setState({ equiSelMap: newEquiSelMap });
-  };
-
-  /**
-   * 장비리스트 리프레쉬 함수
-   */
-  onRefresh = () => {
-    this.setState({ isFetching: true }, () => {
-      this.setEquiList();
-    });
-  };
-
-  /**
-   * 장비리스트 설정 함수
-   *
-   * @returns null
-   */
-  setEquiList = () => {
-    api
-      .getEquipList()
-      .then((newEquiList) => {
-        this.setState({ equiList: newEquiList, isFetching: false });
-      })
-      .catch((error) => {
-        Alert.alert(
-          '장비명 조회에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-
-        this.setState({ isFetching: false });
-        return undefined;
-      });
   };
 
   /**
@@ -175,15 +159,15 @@ export default class EquipementModal extends React.Component {
   cancel = () => {
     const { nextFocus, closeModal } = this.props;
 
-    nextFocus();
+    if (nextFocus) {
+      nextFocus();
+    }
     closeModal();
   };
 
   render() {
-    const { isVisibleEquiModal, advertisement } = this.props;
-    const {
-      equiList, equiSelMap, singSeltdEquipment, isFetching,
-    } = this.state;
+    const { isVisibleEquiModal, advertisement, depth } = this.props;
+    const { equiList, equiSelMap, equiSelected } = this.state;
 
     return (
       <View style={styles.container}>
@@ -199,14 +183,18 @@ export default class EquipementModal extends React.Component {
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
               {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
+              {depth && (
+                <View style={styles.depthWrap}>
+                  <DepthSelectText value={equiSelected} onPress={() => {}} />
+                  <DepthSelectText value={equiSelected} onPress={() => {}} />
+                </View>
+              )}
               <FlatList
                 columnWrapperStyle={styles.equiListWrap}
                 horizontal={false}
                 numColumns={2}
                 data={equiList}
                 extraData={equiSelMap}
-                onRefresh={this.onRefresh}
-                refreshing={isFetching}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={this.renderEquiListItem}
               />
