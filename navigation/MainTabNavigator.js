@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
+import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -24,11 +25,25 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
+const WorkRegisterStack = createStackNavigator({
+  WorkRegister: WorkRegisterScreen,
+});
+
+WorkRegisterStack.navigationOptions = {
+  tabBarLabel: '일감등록',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-information-circle' : 'md-information-circle'}
+    />
+  ),
+};
+
+const ClientInfosStack = createStackNavigator({
   Links: FirmMyInfoScreen,
 });
 
-LinksStack.navigationOptions = {
+ClientInfosStack.navigationOptions = {
   tabBarLabel: '내정보',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -40,5 +55,6 @@ LinksStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  ClientInfosStack,
+  WorkRegisterStack,
 });

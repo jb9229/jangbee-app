@@ -226,16 +226,28 @@ class AdCreateScreen extends React.Component {
    * 초기값 설정을 위한 업체정보 요청 함수
    */
   setFirmInfo = () => {
-    const { user } = this.props;
+    const { user, navigation } = this.props;
 
     api
       .getFirm(user.uid)
       .then((firm) => {
-        this.setDefaultFirmValue(firm);
+        if (firm) {
+          this.setDefaultFirmValue(firm);
+        } else {
+          Alert.alert(
+            '업체 정보가 없습니다.',
+            '업체 등록하기를 먼저 진행해 주세요.',
+            [{ text: '업체정보 등록하기', onPress: () => navigation.navigate('FirmMyInfo') }],
+            { cancelable: false },
+          );
+        }
       })
       .catch((error) => {
         Alert.alert(
-          `업체정보 요청에 문제가 있습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+          '업체정보 요청에 문제가 있습니다',
+          `업체정보 등록을 먼저 해주세요, 또는 다시 시도해 주세요 -> [${error.name}] ${
+            error.message
+          }`,
         );
       });
   };

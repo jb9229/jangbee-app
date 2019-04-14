@@ -216,8 +216,8 @@ class FirmMyInfoScreen extends React.Component {
               등록안하는 사람만 손해 입니다, 업체등록을 서두르세요.
             </Text>
           </View>
-          <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" />
-          <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" color="white" />
+          <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" Primary />
+          <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" Primary />
         </View>
       );
     }
