@@ -4,7 +4,7 @@ export default {
   title: '#969292',
   titleDark: '#4D4A4A',
   titleLight: '#E3DCDC',
-  cardBatang: 'white',
+  cardBatang: '#E3DCDC',
   batangLight: '#E3DCDC',
   batangDark: '#4D4A4A',
   batang: '#7A7373',

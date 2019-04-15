@@ -5,9 +5,6 @@ import colors from '../../constants/Colors';
 const styles = StyleSheet.create({
   cardWrap: {
     flex: 1,
-    padding: 10,
-    paddingTop: 0,
-    borderWidth: 1,
     backgroundColor: colors.cardBatang,
   },
   card: {
@@ -15,8 +12,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     padding: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
     borderRadius: 15,
     margin: 10,
   },

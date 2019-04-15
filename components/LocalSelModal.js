@@ -2,7 +2,7 @@ import React from 'react';
 import {
   FlatList, Modal, StyleSheet, TouchableHighlight, Text, View, Alert,
 } from 'react-native';
-import EquiSelBox from './EquiSelBox';
+import EquiSelBox from './molecules/EquiSelBox';
 import * as api from '../api/api';
 import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';

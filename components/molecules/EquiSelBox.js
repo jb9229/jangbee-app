@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight } from 'react-native';
-import colors from '../constants/Colors';
-import fonts from '../constants/Fonts';
+import colors from '../../constants/Colors';
+import fonts from '../../constants/Fonts';
 
 const styles = StyleSheet.create({
   equiText: {
@@ -17,12 +17,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: 'row',
     padding: 10,
-    marginBottom: 20,
+    backgroundColor: colors.point2Light,
   },
 });
 
 type Props = {
   eName: string,
+  eSetionName: string,
   selected: boolean,
   onPressItem: Function,
 };
@@ -30,9 +31,10 @@ type State = {};
 
 export default class EquiSelBox extends React.PureComponent<Props, State> {
   onPress = () => {
-    const { eName, onPressItem } = this.props;
+    const { eSetionName, eName, onPressItem } = this.props;
 
-    onPressItem(eName);
+    const equipmentName = `${eSetionName}(${eName})`;
+    onPressItem(equipmentName);
   };
 
   render() {

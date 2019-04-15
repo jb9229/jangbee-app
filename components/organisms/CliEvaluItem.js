@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Alert, StyleSheet, Text, View,
-} from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import JBTextItem from '../molecules/JBTextItem';
 import JBButton from '../molecules/JBButton';
 import { convertHyphen, formatTelnumber } from '../../utils/StringUtils';
