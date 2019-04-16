@@ -130,14 +130,8 @@ export default class EquipementModal extends React.Component {
     const { equiSelMap } = this.state;
     const { singleSelectMode } = this.props;
 
-    let newEquiSelMap;
-
-    if (singleSelectMode) {
-      newEquiSelMap = new Map();
-      this.setState({ equiSelected: eName });
-    } else {
-      newEquiSelMap = new Map(equiSelMap);
-    }
+    const newEquiSelMap = new Map();
+    this.setState({ equiSelected: eName });
 
     const isSelected = newEquiSelMap.get(eName);
 

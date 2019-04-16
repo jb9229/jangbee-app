@@ -365,6 +365,24 @@ export function deleteCliEvaluLike(evaluId, accountId, like) {
   ).then(handleJBServerJsonResponse);
 }
 
+/** ******************** Work Api List ************************** */
+
+export function createWork(newWork) {
+  return fetch(url.JBSERVER_WORK, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(newWork),
+  }).then(handleJBServerJsonResponse);
+}
+export function getFirmWorkingList(equipment, accountId) {
+  const param1 = encodeURIComponent(equipment);
+  const param2 = encodeURIComponent(accountId);
+  return fetch(`${url.JBSERVER_WORK_FIRM_WORKING}?equipment=${param1}&accountId=${param2}`).then(
+    handleJBServerJsonResponse,
+  );
+}
 /** ******************** Open Bank Api List ************************** */
 
 /**

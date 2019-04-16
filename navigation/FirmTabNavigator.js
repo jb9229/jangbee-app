@@ -12,6 +12,16 @@ import AdScreen from '../screens/AdScreen';
 import AdCreateScreen from '../screens/AdCreateScreen';
 import FirmDetailScreen from '../screens/FirmDetailScreen';
 import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
+import FirmWorkListScreen from '../screens/FirmWorkListScreen';
+
+const FirmWorkStack = createStackNavigator({
+  FirmWorkList: { screen: FirmWorkListScreen, navigationOptions: { header: null } },
+});
+
+FirmWorkStack.navigationOptions = {
+  tabBarLabel: '일감',
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="work" type="MaterialIcons" />,
+};
 
 const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
@@ -79,6 +89,7 @@ ClientEvaluStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
+  FirmWorkStack,
   AdStack,
   ClientEvaluStack,
   FirmMyInfoStack,

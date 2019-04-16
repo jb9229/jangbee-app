@@ -96,10 +96,12 @@ class AuthLoading extends React.Component {
     const localnotificationId = notification.notificationId;
     Notifications.dismissNotificationAsync(localnotificationId);
 
-    if (navigation !== undefined && notification.data !== undefined) {
+    if (notification !== undefined && notification.data !== undefined) {
       // TODO Notice 확인 시, Notice 알람 제거
       if (notification.data.notice === 'NOTI_ARRIVE_ACCTOKEN_DISCARDDATE') {
         this.comfirmReOpenBankAuth();
+      } else if (notification.data.notice === 'NOTI_WORK_REGISTER') {
+        this.comfirmViewRegisterWork(notification);
       }
     }
   };
@@ -117,6 +119,24 @@ class AuthLoading extends React.Component {
           style: 'cancel',
         },
         { text: 'OK', onPress: () => navigation.navigate('OpenBankAuth', { type: 'REAUTH' }) },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  comfirmViewRegisterWork = (notification) => {
+    const { navigation, user } = this.props;
+
+    Alert.alert(
+      notification.title,
+      notification.body,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => navigation.navigate('WorkList') },
       ],
       { cancelable: false },
     );
