@@ -102,6 +102,8 @@ class AuthLoading extends React.Component {
         this.comfirmReOpenBankAuth();
       } else if (notification.data.notice === 'NOTI_WORK_REGISTER') {
         this.comfirmViewRegisterWork(notification);
+      } else if (notification.data.notice === 'NOTI_WORK_ADD_REGISTER') {
+        this.comfirmViewAddRegisterWork(notification);
       }
     }
   };
@@ -128,15 +130,34 @@ class AuthLoading extends React.Component {
     const { navigation, user } = this.props;
 
     Alert.alert(
-      notification.title,
-      notification.body,
+      notification.data.title,
+      notification.data.body,
       [
         {
-          text: 'Cancel',
+          text: '취소',
           onPress: () => {},
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => navigation.navigate('WorkList') },
+        { text: '일감 지원하러가기', onPress: () => navigation.navigate('FirmWorkList') },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  comfirmViewAddRegisterWork = (notification) => {
+    console.log(notification);
+    const { navigation, user } = this.props;
+
+    Alert.alert(
+      notification.data.title,
+      notification.data.body,
+      [
+        {
+          text: '취소',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        { text: '지원자 확인하기', onPress: () => navigation.navigate('WorkList') },
       ],
       { cancelable: false },
     );

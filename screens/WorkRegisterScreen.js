@@ -114,6 +114,7 @@ export default class WorkRegisterScreen extends React.Component {
    * 일감 데이터 유효성검사 함수
    */
   validateWorkForm = () => {
+    const { user } = this.props;
     const {
       equipment,
       address,
@@ -171,6 +172,7 @@ export default class WorkRegisterScreen extends React.Component {
     }
 
     const newWork = {
+      accountId: user.uid,
       equipment,
       address,
       addressDetail,

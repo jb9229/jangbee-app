@@ -376,10 +376,30 @@ export function createWork(newWork) {
     body: JSON.stringify(newWork),
   }).then(handleJBServerJsonResponse);
 }
-export function getFirmWorkingList(equipment, accountId) {
+export function getOpenFirmWorkList(equipment, accountId) {
   const param1 = encodeURIComponent(equipment);
   const param2 = encodeURIComponent(accountId);
-  return fetch(`${url.JBSERVER_WORK_FIRM_WORKING}?equipment=${param1}&accountId=${param2}`).then(
+  return fetch(`${url.JBSERVER_WORK_FIRM_OPENWORK}?equipment=${param1}&accountId=${param2}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
+export function getMatchedFirmWorkList(equipment, accountId) {
+  const param1 = encodeURIComponent(equipment);
+  const param2 = encodeURIComponent(accountId);
+  return fetch(
+    `${url.JBSERVER_WORK_FIRM_MATCHEDWORK}?equipment=${param1}&accountId=${param2}`,
+  ).then(handleJBServerJsonResponse);
+}
+
+export function applyWork(applyData) {
+  return fetch(url.JBSERVER_WORK_FIRM_APPLY, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(applyData),
+  }).then(
     handleJBServerJsonResponse,
   );
 }
