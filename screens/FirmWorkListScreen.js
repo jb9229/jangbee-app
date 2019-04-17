@@ -6,7 +6,7 @@ import { SceneMap, TabView } from 'react-native-tab-view';
 import * as api from '../api/api';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import { withLogin } from '../contexts/LoginProvider';
-import FirmWorkingList from '../components/organisms/FirmWorkingList';
+import FirmWorkingList from '../components/FirmWorkingList';
 import JBEmptyView from '../components/organisms/JBEmptyView';
 import { notifyError } from '../common/ErrorNotice';
 import { getMyEquipment } from '../utils/AsyncStorageUtils';
@@ -26,6 +26,7 @@ class FirmWorkListScreen extends React.Component {
     super(props);
     this.state = {
       isListEmpty: undefined,
+      woringListRefreshing: false,
       index: 0,
       routes: [{ key: 'first', title: '진행중인 일감' }, { key: 'second', title: '매칭된 일감' }],
       workList: [],
@@ -66,20 +67,18 @@ class FirmWorkListScreen extends React.Component {
       .getFirmWorkingList(equipment, user.uid)
       .then((resBody) => {
         if (resBody && resBody.length > 0) {
-          this.setState({ workList: resBody, isListEmpty: false });
+          this.setState({ workList: resBody, isListEmpty: false, woringListRefreshing: false });
 
           return;
         }
 
-        this.setState({ isListEmpty: true });
+        this.setState({ isListEmpty: true, woringListRefreshing: false });
       })
       .catch(error => notifyError(error.name, error.message));
   };
 
   render() {
-    const {
-      isListEmpty, tabViewIndex, routes, workList,
-    } = this.state;
+    const { isListEmpty, woringListRefreshing, workList } = this.state;
 
     if (isListEmpty === undefined) {
       return <JBActIndicator title="정보 불러오는중.." size={35} />;
@@ -95,7 +94,14 @@ class FirmWorkListScreen extends React.Component {
       );
     }
 
-    const FirstRoute = () => <FirmWorkingList list={workList} />;
+    const FirstRoute = () => (
+      <FirmWorkingList
+        list={workList}
+        handleRefresh={() => this.setState({ woringListRefreshing: true }, () => this.setListData())
+        }
+        refreshing={woringListRefreshing}
+      />
+    );
 
     return (
       <View style={styles.Container}>

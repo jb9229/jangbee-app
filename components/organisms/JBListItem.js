@@ -6,7 +6,7 @@ const Text = Styled.Text``;
 export default function JBListItem(item) {
   return (
     <Container>
-      <Text>{item.startDate}</Text>
+      <Text>{item}</Text>
     </Container>
   );
 }
