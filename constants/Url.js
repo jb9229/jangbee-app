@@ -1,5 +1,5 @@
-const SERVER_URL = 'http://10.65.23.166/api/v1/';
-// const SERVER_URL = 'http://192.168.1.109/api/v1/';
+// const SERVER_URL = 'http://10.65.23.166/api/v1/';
+const SERVER_URL = 'http://192.168.1.169/api/v1/';
 // const SERVER_URL = 'http://192.168.43.213/api/v1/';
 // const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';

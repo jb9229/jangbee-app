@@ -1,16 +1,18 @@
 import React from 'react';
 import {
-  Image, StyleSheet, Text, View,
+  Image, StyleSheet, Text, TouchableHighlight, View,
 } from 'react-native';
 import Styled from 'styled-components';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
+import JBButton from '../molecules/JBButton';
 
-const Container = Styled.TouchableHighlight`
+const Container = Styled.View`
   flex-direction: row;
   justify-content: space-between;
-  padding: 5 10;
-  ${props => props.selected && `
+  padding: 5px 10px;
+  ${props => props.selected
+    && `
     background-color: ${colors.point}
   `}
 `;
@@ -28,6 +30,7 @@ const styles = StyleSheet.create({
   fnameText: {
     fontSize: 16,
     fontFamily: fonts.titleMiddle,
+    textDecorationLine: 'underline',
   },
   intrText: {
     fontSize: 14,
@@ -67,25 +70,26 @@ function calDistance(dis) {
   return `${kmValue}km`;
 }
 
-const appliFirmListItem = (props) => {
-  const { item, onPressItem, selected } = props.data;
-  return (
-    <Container selected={selected} onPress={() => onPressItem(item.accountId)}>
-      <View>
-        <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
-        <View style={styles.centerWrap}>
+const appliFirmListItem = ({
+  item, selected, onPressItem, selectFirm,
+}) => (
+  <TouchableHighlight onPress={() => selectFirm(item.accountId)}>
+    <Container selected={selected}>
+      <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
+      <View style={styles.centerWrap}>
+        <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
           <Text style={styles.fnameText}>{item.fname}</Text>
-          <Text style={styles.intrText} numberOfLines={1}>
-            {item.introduction}
-          </Text>
-          <View style={styles.bottomWrap}>
-            <Text style={styles.bottomText}>{item.equiListStr}</Text>
-            <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
-          </View>
+        </TouchableHighlight>
+        <Text style={styles.intrText} numberOfLines={1}>
+          {item.introduction}
+        </Text>
+        <View style={styles.bottomWrap}>
+          <Text style={styles.bottomText}>{item.equiListStr}</Text>
+          {item.distance && <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>}
         </View>
       </View>
     </Container>
-  );
-};
+  </TouchableHighlight>
+);
 
 export default appliFirmListItem;

@@ -7,6 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
 import WorkListScreen from '../screens/WorkListScreen';
 import WorkRegisterScreen from '../screens/WorkRegisterScreen';
+import AppliFirmList from '../components/AppliFirmList';
+import AppliFirmDetail from '../components/AppliFirmDetail';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -31,6 +33,14 @@ const WorkListStack = createStackNavigator({
   WorkRegister: {
     screen: WorkRegisterScreen,
     navigationOptions: { title: '일감 등록하기', headerStyle: { marginTop: -28 } },
+  },
+  AppliFirmList: {
+    screen: AppliFirmList,
+    navigationOptions: { title: '지원업체 리스트', headerStyle: { marginTop: -28 } },
+  },
+  AppliFirmDetail: {
+    screen: AppliFirmDetail,
+    navigationOption: { title: '지원업체 상세보기', headerStyle: { marginTop: -28 } },
   },
 });
 

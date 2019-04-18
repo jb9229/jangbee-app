@@ -7,7 +7,6 @@ import ClientOpenWorkList from '../components/ClientOpenWorkList';
 import ClientMatchedWorkList from '../components/ClientMatchedWorkList';
 import JBButton from '../components/molecules/JBButton';
 import { notifyError } from '../common/ErrorNotice';
-import FirmApplicantListModal from '../components/FirmApplicantListModal';
 
 const styles = StyleSheet.create({
   Container: {
@@ -19,17 +18,14 @@ class ClientWorkListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisibleFirmAppliModal: false,
       isOpenWorkListEmpty: undefined,
       isMatchedWorkListEmpty: undefined,
-      appliFirmListRefreshing: false,
       openWorkListRefreshing: false,
       matchedWorkListRefreshing: false,
       index: 0,
       routes: [{ key: 'first', title: '모집중인 일감' }, { key: 'second', title: '시작된 일감' }],
       openWorkList: [],
       matchedList: undefined,
-      applicantFirmList: [],
     };
   }
 
@@ -49,23 +45,6 @@ class ClientWorkListScreen extends React.Component {
     }
 
     this.setState({ index });
-  };
-
-  /**
-   * 업체선정 설정함수
-   */
-  setAppliFirmList = () => {
-    const { openWorkId } = this.state;
-    api
-      .getAppliFirmList(openWorkId)
-      .then((resBody) => {
-        if (resBody) {
-          this.setState({ applicantFirmList: resBody, appliFirmListRefreshing: false });
-        }
-
-        this.setState({ appliFirmListRefreshing: false });
-      })
-      .catch(error => notifyError(error.name, error.message));
   };
 
   /**
@@ -119,15 +98,12 @@ class ClientWorkListScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const {
-      isVisibleFirmAppliModal,
       isOpenWorkListEmpty,
-      appliFirmListRefreshing,
       matchedWorkList,
       isMatchedWorkListEmpty,
       openWorkList,
       openWorkListRefreshing,
       matchedWorkListRefreshing,
-      applicantFirmList,
     } = this.state;
 
     const renderOpenWorkList = () => (
@@ -137,8 +113,7 @@ class ClientWorkListScreen extends React.Component {
         }
         refreshing={openWorkListRefreshing}
         isListEmpty={isOpenWorkListEmpty}
-        selectFirm={workId => this.setState({ openWorkId: workId, isVisibleFirmAppliModal: true }, () => this.setAppliFirmList())
-        }
+        selectFirm={workId => navigation.navigate('AppliFirmList', { workId })}
         registerWork={() => navigation.navigate('WorkRegister')}
       />
     );
@@ -155,14 +130,6 @@ class ClientWorkListScreen extends React.Component {
 
     return (
       <View style={styles.Container}>
-        <FirmApplicantListModal
-          isVisibleModal={isVisibleFirmAppliModal}
-          firmList={applicantFirmList}
-          refreshing={appliFirmListRefreshing}
-          handleRefresh={() => this.setState({ appliFirmListRefreshing: true }, () => this.setAppliFirmList())
-          }
-          closeModal={() => this.setState({ isVisibleFirmAppliModal: false })}
-        />
         {!isOpenWorkListEmpty && <JBButton title="일감등록하기" />}
         <TabView
           navigationState={this.state}
