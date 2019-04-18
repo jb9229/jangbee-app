@@ -2,17 +2,17 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
+import ClientMatchedWorkItem from './organisms/ClientMatchedWorkItem';
 import ListSeparator from './molecules/ListSeparator';
-import FirmMatchedWorkItem from './organisms/FirmMatchedWorkItem';
 
 /**
  * 리스트 아이템 렌더링 함수
  */
 function renderItem({ item }) {
-  return <FirmMatchedWorkItem item={item} />;
+  return <ClientMatchedWorkItem item={item} />;
 }
 
-export default function FirmMatchedWorkList({
+export default function ClientMatchedWorkList({
   isListEmpty, list, handleRefresh, refreshing,
 }) {
   if (isListEmpty === undefined) {

@@ -7,9 +7,7 @@ import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
 const styles = StyleSheet.create({
-  container: {},
   itemWrap: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 5,
@@ -70,7 +68,9 @@ function callFirm(number) {
 }
 
 function calDistance(dis) {
-  if (!dis) { return ''; }
+  if (!dis) {
+    return '';
+  }
 
   if (dis < 1000) {
     return `${dis}m`;
@@ -84,29 +84,27 @@ function calDistance(dis) {
 const firmListItem = (props) => {
   const { item, onPressItem } = props.data;
   return (
-    <View style={styles.container}>
-      <View style={styles.itemWrap}>
-        <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
-        <View style={styles.centerWrap}>
-          <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
-            <Text style={styles.fnameText}>{item.fname}</Text>
-          </TouchableHighlight>
-          <Text style={styles.intrText} numberOfLines={1}>
-            {item.introduction}
-          </Text>
-          <View style={styles.bottomWrap}>
-            <Text style={styles.bottomText}>{item.equiListStr}</Text>
-            <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
-          </View>
+    <View style={styles.itemWrap}>
+      <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
+      <View style={styles.centerWrap}>
+        <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
+          <Text style={styles.fnameText}>{item.fname}</Text>
+        </TouchableHighlight>
+        <Text style={styles.intrText} numberOfLines={1}>
+          {item.introduction}
+        </Text>
+        <View style={styles.bottomWrap}>
+          <Text style={styles.bottomText}>{item.equiListStr}</Text>
+          <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
         </View>
-        <View style={styles.callIconWrap}>
-          <JBIcon
-            name="call"
-            size={42}
-            color={colors.point}
-            onPress={() => callFirm(item.phoneNumber)}
-          />
-        </View>
+      </View>
+      <View style={styles.callIconWrap}>
+        <JBIcon
+          name="call"
+          size={42}
+          color={colors.point}
+          onPress={() => callFirm(item.phoneNumber)}
+        />
       </View>
     </View>
   );

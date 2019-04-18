@@ -376,20 +376,39 @@ export function createWork(newWork) {
     body: JSON.stringify(newWork),
   }).then(handleJBServerJsonResponse);
 }
-export function getOpenFirmWorkList(equipment, accountId) {
+
+export function getFirmOpenWorkList(equipment, accountId) {
   const param1 = encodeURIComponent(equipment);
   const param2 = encodeURIComponent(accountId);
-  return fetch(`${url.JBSERVER_WORK_FIRM_OPENWORK}?equipment=${param1}&accountId=${param2}`).then(
+  return fetch(`${url.JBSERVER_WORK_FIRM_OPEN}?equipment=${param1}&accountId=${param2}`).then(
     handleJBServerJsonResponse,
   );
 }
 
-export function getMatchedFirmWorkList(equipment, accountId) {
+export function getClientOpenWorkList(accountId) {
+  const param = encodeURIComponent(accountId);
+  return fetch(`${url.JBSERVER_WORK_CLIENT_OPEN}?accountId=${param}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
+export function getFirmMatchedWorkList(equipment, accountId) {
   const param1 = encodeURIComponent(equipment);
   const param2 = encodeURIComponent(accountId);
-  return fetch(
-    `${url.JBSERVER_WORK_FIRM_MATCHEDWORK}?equipment=${param1}&accountId=${param2}`,
-  ).then(handleJBServerJsonResponse);
+  return fetch(`${url.JBSERVER_WORK_FIRM_MATCHED}?equipment=${param1}&accountId=${param2}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
+export function getClientMatchedWorkList(accountId) {
+  const param = encodeURIComponent(accountId);
+  return fetch(`${url.JBSERVER_WORK_CLIENT_MATCHED}?accountId=${param}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
+export function getAppliFirmList(workId) {
+  return fetch(`${url.JBSERVER_WORK_APPLICANTS}?workId=${workId}`).then(handleJBServerJsonResponse);
 }
 
 export function applyWork(applyData) {
@@ -399,9 +418,7 @@ export function applyWork(applyData) {
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: JSON.stringify(applyData),
-  }).then(
-    handleJBServerJsonResponse,
-  );
+  }).then(handleJBServerJsonResponse);
 }
 /** ******************** Open Bank Api List ************************** */
 

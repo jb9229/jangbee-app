@@ -26,6 +26,7 @@ class FirmWorkListScreen extends React.Component {
       isOpenWorkListEmpty: undefined,
       isMatchedWorkListEmpty: undefined,
       openWorkListRefreshing: false,
+      matchedWorkListRefreshing: false,
       myEquipment: undefined,
       index: 0,
       routes: [{ key: 'first', title: '진행중인 일감' }, { key: 'second', title: '매칭된 일감' }],
@@ -104,7 +105,7 @@ class FirmWorkListScreen extends React.Component {
     const { myEquipment } = this.state;
 
     api
-      .getMatchedFirmWorkList(myEquipment, user.uid)
+      .getFirmMatchedWorkList(myEquipment, user.uid)
       .then((resBody) => {
         if (resBody && resBody.length > 0) {
           this.setState({
@@ -129,7 +130,7 @@ class FirmWorkListScreen extends React.Component {
     const { myEquipment } = this.state;
 
     api
-      .getOpenFirmWorkList(myEquipment, user.uid)
+      .getFirmOpenWorkList(myEquipment, user.uid)
       .then((resBody) => {
         if (resBody && resBody.length > 0) {
           this.setState({
@@ -155,6 +156,7 @@ class FirmWorkListScreen extends React.Component {
       openWorkListRefreshing,
       matchedWorkListRefreshing,
     } = this.state;
+
     const renderOpenWorkList = () => (
       <FirmOpenWorkList
         list={openWorkList}
