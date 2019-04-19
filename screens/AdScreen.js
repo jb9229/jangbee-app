@@ -6,11 +6,10 @@ import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JangbeeAd from '../components/organisms/JangbeeAd';
-import Card from '../components/molecules/CardUI';
 import JBButton from '../components/molecules/JBButton';
 import { getAdtypeStr } from '../constants/AdTypeStr';
 import AdUpdateModal from '../components/AdUpdateModal';
-import AdFinAccUpdateModal from '../components/AdFinAccUpdateModal';
+import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
 import { notifyError } from '../common/ErrorNotice';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
@@ -98,6 +97,26 @@ class AdScreen extends React.Component {
       this.setAdList();
     }
   }
+
+  /**
+   * 결제통장 변경 함수
+   */
+  changeAdPayAccount = (newFintechUseNum) => {
+    api
+      .updateFinUseNumAd(selFinUseNum, accountId)
+      .then((updateResult) => {
+        if (updateResult) {
+          Alert.alert('결제통장 바꾸기 성공', `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`);
+          this.setState({ isVisibleFinAccUpdateModal: false });
+        } else {
+          Alert.alert(
+            '광고 업데이트에 문제가 있습니다',
+            'FintechUseNum 업데이트 요청 실패, 재시도해 주세요',
+          );
+        }
+      })
+      .catch(error => notifyError('광고업데이트에 문제가 있습니다', error.message));
+  };
 
   setAdList = () => {
     const { user } = this.props;
@@ -268,16 +287,10 @@ class AdScreen extends React.Component {
           upAdPhotoUrl={upAdPhotoUrl}
           upAdTelNumber={upAdTelNumber}
         />
-        <AdFinAccUpdateModal
+        <OpenBankAccSelectModal
           isVisibleModal={isVisibleFinAccUpdateModal}
           closeModal={() => this.setState({ isVisibleFinAccUpdateModal: false })}
-          completeUpdate={(newFintechUseNum) => {
-            Alert.alert(
-              '결제통장 바꾸기 성공',
-              `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`,
-            );
-            this.setState({ isVisibleFinAccUpdateModal: false });
-          }}
+          completeSelect={this.changeAdPayAccount}
           accountId={user.uid}
           {...this.props}
         />

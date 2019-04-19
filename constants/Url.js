@@ -1,5 +1,5 @@
 // const SERVER_URL = 'http://10.65.23.166/api/v1/';
-const SERVER_URL = 'http://192.168.1.169/api/v1/';
+const SERVER_URL = 'http://192.168.1.105/api/v1/';
 // const SERVER_URL = 'http://192.168.43.213/api/v1/';
 // const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
@@ -27,6 +27,8 @@ module.exports = {
   JBSERVER_WORK_CLIENT_OPEN: `${SERVER_URL}works/client/open`,
   JBSERVER_WORK_CLIENT_MATCHED: `${SERVER_URL}works/client/matched`,
   JBSERVER_WORK_FIRM_APPLY: `${SERVER_URL}works/firm/apply`,
+  JBSERVER_WORK_FIRM_ACCEPT: `${SERVER_URL}works/firm/accept`,
+  JBSERVER_WORK_CLIENT_SELECT: `${SERVER_URL}works/client/select`,
   JBSERVER_WORK_APPLICANTS: `${SERVER_URL}works/applicants`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
   OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,
@@ -34,6 +36,8 @@ module.exports = {
   OPENBANK_TOKEN: `${OPENBANK_URL}/oauth/2.0/token`,
   OPENBANK_ACCOUNTLIST: `${OPENBANK_URL}/v1.0/account/list`,
   OPENBANK_USERINFO: `${OPENBANK_URL}/v1.0/user/me`,
+  OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
+  OPENBANK_DEPOSIT: `${OPENBANK_URL}/v1.0/transfer/deposit`,
 };
 
 // 수신이 원활하지 않습니다.

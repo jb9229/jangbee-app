@@ -134,7 +134,10 @@ class AdCreateScreen extends React.Component {
   addOBAccount = () => {
     const { navigation } = this.props;
 
-    navigation.navigate('OpenBankAuth', { type: 'ADD_ACCOUNT' });
+    navigation.navigate('OpenBankAuth', {
+      type: 'ADD_ACCOUNT',
+      completeAction: navigation.navigate('AdCreate', { action: 'RELOAD' }),
+    });
   };
 
   /**

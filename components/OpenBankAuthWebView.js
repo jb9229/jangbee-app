@@ -70,19 +70,13 @@ class OpenBankAuthWebView extends React.Component {
    */
   closeWebView = () => {
     const { navigation } = this.props;
-    const { type } = navigation.state.params;
+    const { type, completeAction } = navigation.state.params;
 
     this.setState({ noticeMSG: '곧(10초) 창이 닫힙니다~' });
 
-    if (type === ADD_ACCOUNT) {
-      setTimeout(() => {
-        navigation.navigate('AdCreate', { action: 'RELOAD' });
-      }, 5000);
-    } else if (type === TYPE_REAUTH) {
-      setTimeout(() => {
-        navigation.navigate('Ad');
-      }, 5000);
-    }
+    setTimeout(() => {
+      completeAction();
+    }, 5000);
   };
 
   /**

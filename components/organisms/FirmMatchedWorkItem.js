@@ -12,7 +12,6 @@ const WorkingText = Styled.Text``;
 export default class FirmMatchedWorkItem extends React.PureComponent {
   render() {
     const { item } = this.props;
-
     return (
       <Container>
         <JBTextItem title="장비" value={item.equipment} small row />

@@ -55,7 +55,7 @@ WorkListStack.navigationOptions = {
 };
 
 const ClientInfosStack = createStackNavigator({
-  Links: FirmMyInfoScreen,
+  Links: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
 });
 
 ClientInfosStack.navigationOptions = {

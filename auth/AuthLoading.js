@@ -93,41 +93,25 @@ class AuthLoading extends React.Component {
   };
 
   _handleNotification = (notification) => {
+    const { navigation } = this.props;
+
     const localnotificationId = notification.notificationId;
     Notifications.dismissNotificationAsync(localnotificationId);
 
     if (notification !== undefined && notification.data !== undefined) {
       // TODO Notice 확인 시, Notice 알람 제거
       if (notification.data.notice === 'NOTI_ARRIVE_ACCTOKEN_DISCARDDATE') {
-        this.comfirmReOpenBankAuth();
+        this.noticeCommonNavigation(notification, '통장 재인증하기', () => navigation.navigate('OpenBankAuth', { type: 'REAUTH' }));
       } else if (notification.data.notice === 'NOTI_WORK_REGISTER') {
-        this.comfirmViewRegisterWork(notification);
+        this.noticeCommonNavigation(notification, '일감 지원하기', () => navigation.navigate('FirmWorkList'));
       } else if (notification.data.notice === 'NOTI_WORK_ADD_REGISTER') {
-        this.comfirmViewAddRegisterWork(notification);
+        this.noticeCommonNavigation(notification, '지원자 확인하기', () => navigation.navigate('WorkList'));
       }
     }
   };
 
-  comfirmReOpenBankAuth = () => {
-    const { navigation, user } = this.props;
-
-    Alert.alert(
-      '이체통장 재인증 요청',
-      '보안을 위해 일년에 한번씩 이체통장에 대한 재인증이 필요합니다.',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => navigation.navigate('FirmMain'),
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: () => navigation.navigate('OpenBankAuth', { type: 'REAUTH' }) },
-      ],
-      { cancelable: false },
-    );
-  };
-
-  comfirmViewRegisterWork = (notification) => {
-    const { navigation, user } = this.props;
+  noticeCommonNavigation = (notification, actionName, action) => {
+    const { user } = this.props;
 
     Alert.alert(
       notification.data.title,
@@ -138,26 +122,7 @@ class AuthLoading extends React.Component {
           onPress: () => {},
           style: 'cancel',
         },
-        { text: '일감 지원하러가기', onPress: () => navigation.navigate('FirmWorkList') },
-      ],
-      { cancelable: false },
-    );
-  };
-
-  comfirmViewAddRegisterWork = (notification) => {
-    console.log(notification);
-    const { navigation, user } = this.props;
-
-    Alert.alert(
-      notification.data.title,
-      notification.data.body,
-      [
-        {
-          text: '취소',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        { text: '지원자 확인하기', onPress: () => navigation.navigate('WorkList') },
+        { text: actionName, onPress: () => action() },
       ],
       { cancelable: false },
     );

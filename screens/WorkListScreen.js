@@ -23,7 +23,7 @@ class ClientWorkListScreen extends React.Component {
       openWorkListRefreshing: false,
       matchedWorkListRefreshing: false,
       index: 0,
-      routes: [{ key: 'first', title: '모집중인 일감' }, { key: 'second', title: '시작된 일감' }],
+      routes: [{ key: 'first', title: '모집중인 일감' }, { key: 'second', title: '모집된 일감' }],
       openWorkList: [],
       matchedList: undefined,
     };
@@ -32,6 +32,14 @@ class ClientWorkListScreen extends React.Component {
   componentDidMount() {
     // TODO did mount 후에는 setsate 안하게
     this.setOpenWorkListData();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { params } = nextProps.navigation.state;
+
+    if (params && params.refresh) {
+      this.setOpenWorkListData();
+    }
   }
 
   /**

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList } from 'react-native';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
 import ListSeparator from './molecules/ListSeparator';
@@ -9,13 +9,24 @@ export default class FirmWorkingList extends React.PureComponent {
   /**
    * 리스트 아이템 렌더링 함수
    */
-  renderItem = ({ item }, applyWork, acceptWork) => (
-    <FirmOpenWorkItem item={item} acceptWork={acceptWork} applyWork={applyWork} />
+  renderItem = ({ item }, applyWork, acceptWork, abandonWork) => (
+    <FirmOpenWorkItem
+      item={item}
+      acceptWork={acceptWork}
+      applyWork={applyWork}
+      abandonWork={abandonWork}
+    />
   );
 
   render() {
     const {
-      list, isListEmpty, handleRefresh, refreshing, applyWork, acceptWork,
+      list,
+      isListEmpty,
+      handleRefresh,
+      refreshing,
+      applyWork,
+      acceptWork,
+      abandonWork,
     } = this.props;
 
     if (isListEmpty === undefined) {
@@ -33,17 +44,14 @@ export default class FirmWorkingList extends React.PureComponent {
     }
 
     return (
-      <View>
-        <Text>{isListEmpty}</Text>
-        <FlatList
-          data={list}
-          renderItem={item => this.renderItem(item, applyWork, acceptWork)}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={ListSeparator}
-          onRefresh={handleRefresh}
-          refreshing={refreshing}
-        />
-      </View>
+      <FlatList
+        data={list}
+        renderItem={item => this.renderItem(item, applyWork, acceptWork, abandonWork)}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent={ListSeparator}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
+      />
     );
   }
 }

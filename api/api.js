@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as url from '../constants/Url';
 import {
   handleJsonResponse,
@@ -420,6 +421,27 @@ export function applyWork(applyData) {
     body: JSON.stringify(applyData),
   }).then(handleJBServerJsonResponse);
 }
+
+export function selectAppliFirm(selectData) {
+  return fetch(url.JBSERVER_WORK_CLIENT_SELECT, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(selectData),
+  }).then(handleJBServerJsonResponse);
+}
+
+export function acceptWork(acceptData) {
+  return fetch(url.JBSERVER_WORK_FIRM_ACCEPT, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(acceptData),
+  }).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**
@@ -482,4 +504,47 @@ export function refreshOpenBankAuthToken(refreshToken) {
       },
     },
   ).then(handleOpenBankJsonResponse);
+}
+
+export function transferWithdraw(accessTokenInfo, fintechUseNum, tranAmt, comment) {
+  const postData = {
+    dps_print_content: comment || '장비콜 출금',
+    fintech_use_num: fintechUseNum,
+    tran_amt: tranAmt,
+    tran_dtime: moment().format('YYYYMMDDHHmmss'),
+  };
+  
+  return fetch(url.OPENBANK_WITHDRAW, {
+    method: 'POST',
+    headers: {
+      Authorization: getAccessToken(accessTokenInfo),
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(postData),
+  }).then(handleOpenBankJsonResponse);
+}
+
+export function transferDeposit(accessTokenInfo, fintechUseNum, tranAmt, wdComment, comment) {
+  const postData = {
+    wd_pass_phrase: obconfig.WD_PASS_PHRASE,
+    wd_print_content: wdComment,
+    name_check_option: 'on',
+    req_cnt: '1',
+    req_list: {
+      tran_no: 1,
+      fintech_use_num: fintechUseNum,
+      print_content: comment || '장비콜 환불',
+      tran_amt: tranAmt,
+    },
+    tran_dtime: moment().format('YYYYMMDDHHmmss'),
+  };
+
+  return fetch(url.OPENBANK_DEPOSIT, {
+    method: 'POST',
+    headers: {
+      Authorization: getAccessToken(accessTokenInfo),
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(postData),
+  }).then(handleOpenBankJsonResponse);
 }

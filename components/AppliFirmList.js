@@ -72,7 +72,19 @@ export default class AppliFirmList extends React.Component {
    * 모달 액션 완료 함수
    */
   requestDispatchFirm = () => {
-    const accountId = this.validateForm();
+    const { navigation } = this.props;
+    const selectedData = this.validateForm();
+
+    if (selectedData) {
+      api
+        .selectAppliFirm(selectedData)
+        .then((result) => {
+          if (result) {
+            navigation.navigate('WorkList', { refresh: true });
+          }
+        })
+        .catch(error => notifyError(error.name, error.message));
+    }
   };
 
   /**
@@ -80,6 +92,7 @@ export default class AppliFirmList extends React.Component {
    */
   validateForm = () => {
     const { selectedFirmAccId } = this.state;
+    const { workId } = this.props.navigation.state.params;
 
     // Validation Error Massage Initialize
     this.setState({
@@ -91,7 +104,12 @@ export default class AppliFirmList extends React.Component {
       return false;
     }
 
-    return selectedFirmAccId;
+    const selectedData = {
+      accountId: selectedFirmAccId,
+      workId,
+    };
+
+    return selectedData;
   };
 
   /**

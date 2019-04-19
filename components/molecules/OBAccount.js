@@ -59,7 +59,7 @@ export default function renderAccListItem(item, selFinUseNum, onPress) {
     <View style={styles.container}>
       <TouchableHighlight
         onPress={() => onPress(item.fintech_use_num)}
-        selected={selFinUseNum.includes(item.fintech_use_num)}
+        selected={selFinUseNum === item.fintech_use_num}
       >
         <View style={[styles.accListItemWrap]}>
           <View style={styles.topWrap}>

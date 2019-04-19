@@ -35,7 +35,7 @@ export default class ClientOpenWorkItem extends React.PureComponent {
           />
         )}
         {item.workState === 'SELECTED' && (
-          <WorkingText>업체수락 대기중(수락후 전화가 전화가 옵니다)</WorkingText>
+          <WorkingText>업체확인 대기중..(확인 후 전화가 옵니다)</WorkingText>
         )}
       </Container>
     );

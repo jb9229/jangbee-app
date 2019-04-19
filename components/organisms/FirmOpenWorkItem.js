@@ -14,7 +14,9 @@ const ApplyingText = Styled.Text``;
 
 export default class FirmOpenWorkItem extends React.PureComponent {
   render() {
-    const { item, applyWork, acceptWork } = this.props;
+    const {
+      item, applyWork, acceptWork, abandonWork,
+    } = this.props;
 
     return (
       <Container>
@@ -33,8 +35,8 @@ export default class FirmOpenWorkItem extends React.PureComponent {
         {item.workState === 'OPEN' && item.applied && <ApplyingText>지원중..</ApplyingText>}
         {item.workState === 'SELECTED' && (
           <CommWrap>
-            <JBButton title="포기하기" small />
-            <JBButton title="수락하기" onPress={acceptWork} small />
+            <JBButton title="포기하기" onPress={() => abandonWork(item.id)} small />
+            <JBButton title="수락하기" onPress={() => acceptWork(item.id)} small />
           </CommWrap>
         )}
       </Container>

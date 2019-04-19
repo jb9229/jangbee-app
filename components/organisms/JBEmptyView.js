@@ -13,12 +13,14 @@ const Text = Styled.Text`
   font-family: ${fonts.batang};
   color: ${colors.batang};
 `;
-export default function JBEmptyView({ title, subTitle, refresh }) {
+export default function JBEmptyView({
+  title, subTitle, refresh, actionName,
+}) {
   return (
     <Container>
       <Text>{title}</Text>
       {subTitle && <Text>{subTitle}</Text>}
-      <JBButton title="새로고침" onPress={() => refresh()} />
+      <JBButton title={actionName || '새로고침'} onPress={() => refresh()} />
     </Container>
   );
 }

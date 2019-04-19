@@ -5,10 +5,13 @@ import {
 import { SceneMap, TabView } from 'react-native-tab-view';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
+import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
 import FirmOpenWorkList from '../components/FirmOpenWorkList';
 import FirmMatchedWorkList from '../components/FirmMatchedWorkList';
 import { notifyError } from '../common/ErrorNotice';
 import { getMyEquipment } from '../utils/AsyncStorageUtils';
+
+const dispatchFee = '3000';
 
 const styles = StyleSheet.create({
   Container: {
@@ -25,6 +28,7 @@ class FirmWorkListScreen extends React.Component {
     this.state = {
       isOpenWorkListEmpty: undefined,
       isMatchedWorkListEmpty: undefined,
+      isVisibleAccSelModal: false,
       openWorkListRefreshing: false,
       matchedWorkListRefreshing: false,
       myEquipment: undefined,
@@ -62,7 +66,35 @@ class FirmWorkListScreen extends React.Component {
   /**
    * 일감 매칭요청 수락하기 함수
    */
-  acceptWork = () => {};
+  acceptWork = (fintechUseNum) => {
+    const { user } = this.props;
+    const { acceptWorkId } = this.state;
+
+    const applyData = {
+      workId: acceptWorkId,
+      accountId: user.uid,
+    };
+
+    api
+      .acceptWork(applyData)
+      .then((resBody) => {
+        if (resBody) {
+          this.setOpenWorkListData();
+          this.setMatchedWorkListData();
+          this.setState({ isVisibleAccSelModal: false });
+          return;
+        }
+        Alert.alert(
+          '배차하기 문제',
+          '배차되지 않았습니다, 통장잔고 및 통장 1년인증 상태, 배차요청 3시간이 지났는지 리스트 리프레쉬 후 확인해 주세요',
+        );
+        this.cancelDispatchFee(fintechUseNum);
+        this.setOpenWorkListData();
+      })
+      .catch((error) => {
+        notifyError(error.name, error.message);
+      });
+  };
 
   /**
    * 일감지원하기 요청 함수
@@ -88,13 +120,54 @@ class FirmWorkListScreen extends React.Component {
   };
 
   changeTabView = (index) => {
-    const { matchedList } = this.state;
+    const { matchedWorkList } = this.state;
 
-    if (index === 1 && matchedList === undefined) {
+    if (index === 1 && matchedWorkList === undefined) {
       this.setMatchedWorkListData();
     }
 
     this.setState({ index });
+  };
+
+  cancelDispatchFee = (fintechUseNum) => {
+    const { userProfile } = this.props;
+    const { acceptWorkId } = this.state;
+
+    // 배차 실패로 환불
+    api
+      .transferDeposit(
+        userProfile.obAccessToken,
+        fintechUseNum,
+        dispatchFee,
+        `장비콜일감 배차비 환불(${acceptWorkId})`,
+        `장비콜일감 배차비 환불(${acceptWorkId})`,
+      )
+      .then((res) => {
+        if (res && res.rsp_code && res.rsp_code === 'A0000') {
+          Alert.alert('배차비 환불됨', '배차비를 정상 환불 했습니다.');
+          return;
+        }
+        Alert.alert(
+          '배차비 환불 문제',
+          `네트워크 환경 확인 후 다시 시도해 주세요(${res.rsp_code}, ${res.rsp_message})`,
+          [
+            { text: '환불 다시 시도하기', onPress: () => this.cancelDispatchFee(fintechUseNum) },
+            { text: '취소', onPress: () => {} },
+          ],
+          { cancelable: false },
+        );
+      })
+      .catch((error) => {
+        notifyError(
+          '배차비 환불 문제',
+          `네트워크 환경 확인 후 다시 시도해 주세요(${error.name}, ${error.message})`,
+          [
+            { text: '환불 다시 시도하기', onPress: () => this.cancelDispatchFee(fintechUseNum) },
+            { text: '취소', onPress: () => {} },
+          ],
+          { cancelable: false },
+        );
+      });
   };
 
   /**
@@ -109,7 +182,7 @@ class FirmWorkListScreen extends React.Component {
       .then((resBody) => {
         if (resBody && resBody.length > 0) {
           this.setState({
-            matchedList: resBody,
+            matchedWorkList: resBody,
             isMatchedWorkListEmpty: false,
             matchedWorkListRefreshing: false,
           });
@@ -147,15 +220,49 @@ class FirmWorkListScreen extends React.Component {
       .catch(error => notifyError(error.name, error.message));
   };
 
+  /**
+   * 일감 매칭요청 수락하기 함수
+   */
+  withdrawDispatchFee = (fintechUseNum) => {
+    const { userProfile } = this.props;
+    const { acceptWorkId } = this.state;
+
+    // 지원비 이체
+    api
+      .transferWithdraw(userProfile.obAccessToken, fintechUseNum, dispatchFee, '장비콜 배차비 출금')
+      .then((res) => {
+        if (res && res.rsp_code && res.rsp_code === 'A0000') {
+          this.acceptWork(fintechUseNum);
+          return;
+        }
+        notifyError(
+          '배차비 출금 문제',
+          `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${res.rsp_code}, ${
+            res.rsp_message
+          })`,
+        );
+      })
+      .catch((error) => {
+        notifyError(
+          '배차비 출금 문제',
+          `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${error.name}, ${
+            error.message
+          })`,
+        );
+      });
+  };
+
   render() {
     const {
       isOpenWorkListEmpty,
       isMatchedWorkListEmpty,
+      isVisibleAccSelModal,
       openWorkList,
       matchedWorkList,
       openWorkListRefreshing,
       matchedWorkListRefreshing,
     } = this.state;
+    const { user } = this.props;
 
     const renderOpenWorkList = () => (
       <FirmOpenWorkList
@@ -165,21 +272,32 @@ class FirmWorkListScreen extends React.Component {
         refreshing={openWorkListRefreshing}
         isListEmpty={isOpenWorkListEmpty}
         applyWork={this.applyWork}
-        acceptWork={this.acceptWork}
+        acceptWork={workId => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId })}
+        abandonWork={this.abandonWork}
       />
     );
 
     const renderMatchedWorkList = () => (
-      <FirmMatchedWorkList
-        list={matchedWorkList}
-        handleRefresh={() => this.setState({ matchedWorkListRefreshing: true }, () => this.setMatchedWorkListData())
-        }
-        refreshing={matchedWorkListRefreshing}
-        isListEmpty={isMatchedWorkListEmpty}
-      />
+      <View style={styles.scene}>
+        <FirmMatchedWorkList
+          list={matchedWorkList}
+          handleRefresh={() => this.setState({ matchedWorkListRefreshing: true }, () => this.setMatchedWorkListData())
+          }
+          refreshing={matchedWorkListRefreshing}
+          isListEmpty={isMatchedWorkListEmpty}
+        />
+      </View>
     );
     return (
       <View style={styles.Container}>
+        <OpenBankAccSelectModal
+          isVisibleModal={isVisibleAccSelModal}
+          closeModal={() => this.setState({ isVisibleAccSelModal: false })}
+          completeSelect={this.withdrawDispatchFee}
+          accountId={user.uid}
+          actionName="결제통장 선택"
+          {...this.props}
+        />
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
