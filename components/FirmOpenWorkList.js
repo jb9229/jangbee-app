@@ -1,32 +1,48 @@
 import React from 'react';
 import { FlatList } from 'react-native';
+import Styled from 'styled-components/native';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
 import ListSeparator from './molecules/ListSeparator';
-import FirmOpenWorkItem from './organisms/FirmOpenWorkItem';
+import WorkItem from './organisms/WorkItem';
+import JBButton from './molecules/JBButton';
+import WorkCommWrap from './molecules/WorkCommWrapUI';
+import WorkCommText from './molecules/WorkCommTextUI';
+
+const CommWrap = Styled.View`
+  flexDirection: row;
+`;
 
 export default class FirmWorkingList extends React.PureComponent {
   /**
    * 리스트 아이템 렌더링 함수
    */
-  renderItem = ({ item }, applyWork, acceptWork, abandonWork) => (
-    <FirmOpenWorkItem
-      item={item}
-      acceptWork={acceptWork}
-      applyWork={applyWork}
-      abandonWork={abandonWork}
-    />
+  renderItem = ({ item }) => (
+    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} />
   );
+
+  renderCommand = (item) => {
+    const { applyWork, abandonWork, acceptWork } = this.props;
+
+    return (
+      <WorkCommWrap>
+        {item.workState === 'OPEN' && !item.applied && (
+          <JBButton title="지원하기" onPress={() => applyWork(item.id)} size="small" />
+        )}
+        {item.workState === 'OPEN' && item.applied && <WorkCommText text="지원중.." />}
+        {item.workState === 'SELECTED' && (
+          <CommWrap>
+            <JBButton title="포기하기" onPress={() => abandonWork(item.id)} size="small" />
+            <JBButton title="수락하기" onPress={() => acceptWork(item.id)} size="small" />
+          </CommWrap>
+        )}
+      </WorkCommWrap>
+    );
+  };
 
   render() {
     const {
-      list,
-      isListEmpty,
-      handleRefresh,
-      refreshing,
-      applyWork,
-      acceptWork,
-      abandonWork,
+      list, isListEmpty, handleRefresh, refreshing,
     } = this.props;
 
     if (isListEmpty === undefined) {
@@ -46,7 +62,7 @@ export default class FirmWorkingList extends React.PureComponent {
     return (
       <FlatList
         data={list}
-        renderItem={item => this.renderItem(item, applyWork, acceptWork, abandonWork)}
+        renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={ListSeparator}
         onRefresh={handleRefresh}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, View } from 'react-native';
-import { SceneMap, TabView } from 'react-native-tab-view';
+import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import ClientEstimateFirmModal from '../components/ClientEstimateFirmModal';
@@ -8,10 +8,22 @@ import ClientOpenWorkList from '../components/ClientOpenWorkList';
 import ClientMatchedWorkList from '../components/ClientMatchedWorkList';
 import JBButton from '../components/molecules/JBButton';
 import { notifyError } from '../common/ErrorNotice';
+import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+  },
+  tabBarIndicator: {
+    backgroundColor: colors.point,
+  },
+  tabBar: {
+    backgroundColor: colors.point2,
+  },
+  tabBarLabel: {
+    fontFamily: fonts.titleMiddle,
+    fontWeight: 'bold',
   },
 });
 
@@ -164,6 +176,14 @@ class ClientWorkListScreen extends React.Component {
           })}
           onIndexChange={this.changeTabView}
           initialLayout={{ width: Dimensions.get('window').width }}
+          renderTabBar={props => (
+            <TabBar
+              {...props}
+              indicatorStyle={styles.tabBarIndicator}
+              style={styles.tabBar}
+              labelStyle={styles.tabBarLabel}
+            />
+          )}
         />
 
         <JBButton

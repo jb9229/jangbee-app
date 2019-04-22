@@ -1,28 +1,34 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import Styled from 'styled-components/native';
 import colors from '../../constants/Colors';
 
-const styles = StyleSheet.create({
-  cardWrap: {
-    flex: 1,
-    backgroundColor: colors.cardBatang,
-  },
-  card: {
-    flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-    padding: 5,
-    borderRadius: 15,
-    margin: 10,
-  },
-});
+const Container = Styled.View`
+  flex: 1;
+  background-color: ${colors.cardBatang};
+`;
 
-export default class Card extends React.Component {
+const Card = Styled.View`
+  flex: 1;
+  justify-content: space-between;
+  background-color: white;
+  padding: 5px;
+  border-radius: 15;
+  margin: 10px;
+  
+  ${props => props.Finished
+    && `
+    background-color: ${colors.batang};
+  `}
+`;
+
+export default class CardUI extends React.PureComponent {
   render() {
+    const { Finished } = this.props;
+
     return (
-      <View style={styles.cardWrap} ref={c => (this._root = c)} {...this.props}>
-        <View style={styles.card}>{this.props.children}</View>
-      </View>
+      <Container ref={c => (this._root = c)} {...this.props}>
+        <Card Finished={Finished}>{this.props.children}</Card>
+      </Container>
     );
   }
 }

@@ -3,20 +3,35 @@ import { FlatList } from 'react-native';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
 import ListSeparator from './molecules/ListSeparator';
-import FirmMatchedWorkItem from './organisms/FirmMatchedWorkItem';
+import WorkItem from './organisms/WorkItem';
+import WorkCommWrap from './molecules/WorkCommWrapUI';
+import WorkCommText from './molecules/WorkCommTextUI';
 
 export default class FirmMatchedWorkList extends React.PureComponent {
   /**
    * 리스트 아이템 렌더링 함수
    */
-  renderItem = ({ item }) => <FirmMatchedWorkItem item={item} />;
+  renderItem = ({ item }) => (
+    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} />
+  );
+
+  renderCommand = (item) => {
+    const { applyWork, abandonWork, acceptWork } = this.props;
+
+    return (
+      <WorkCommWrap>
+        {item.workState === 'MATCHED' && <WorkCommText text="매칭됨" />}
+        {item.workState === 'WORKING' && <WorkCommText text="시작됨" />}
+        {item.workState === 'CLOSED' && <WorkCommText text="종료됨" />}
+      </WorkCommWrap>
+    );
+  };
 
   render() {
     const {
       isListEmpty, list, handleRefresh, refreshing,
     } = this.props;
 
-    console.log(isListEmpty);
     if (isListEmpty === undefined) {
       return <JBActIndicator title="정보 불러오는중.." size={35} />;
     }
