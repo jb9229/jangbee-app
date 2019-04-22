@@ -64,6 +64,27 @@ class FirmWorkListScreen extends React.Component {
   };
 
   /**
+   * 매칭된일감 포기 요청함수
+   */
+  abandonWork = (workId) => {
+    const { user } = this.props;
+
+    const abandonData = {
+      workId,
+      matchedAccId: user.uid,
+    };
+
+    api
+      .abandonWork(abandonData)
+      .then((result) => {
+        if (result) {
+          this.setOpenWorkListData();
+        }
+      })
+      .catch(error => notifyError(error.name, error.message));
+  };
+
+  /**
    * 일감 매칭요청 수락하기 함수
    */
   acceptWork = (fintechUseNum) => {
@@ -171,6 +192,21 @@ class FirmWorkListScreen extends React.Component {
   };
 
   /**
+   * 매칭된 일감 포기 확인 함수
+   */
+  confirmAbandonWork = (workId) => {
+    Alert.alert(
+      '매칭된 일감 포기',
+      '정말 포기 하시겠습니까?',
+      [
+        { text: '예', onPress: () => this.abandonWork(workId) },
+        { text: '아니요', onPress: () => {} },
+      ],
+      { cancelabel: false },
+    );
+  };
+
+  /**
    * 매칭된 일감리스트 설정함수
    */
   setMatchedWorkListData = () => {
@@ -273,7 +309,7 @@ class FirmWorkListScreen extends React.Component {
         isListEmpty={isOpenWorkListEmpty}
         applyWork={this.applyWork}
         acceptWork={workId => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId })}
-        abandonWork={this.abandonWork}
+        abandonWork={this.confirmAbandonWork}
       />
     );
 

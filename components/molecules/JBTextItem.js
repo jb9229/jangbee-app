@@ -39,6 +39,10 @@ const Contents = styled.Text`
     && `
     text-decoration-line: underline;
   `}
+  ${props => !props.row
+    && `
+    margin-left: 5;
+  `}
 `;
 
 export default class JBTextItem extends React.PureComponent {

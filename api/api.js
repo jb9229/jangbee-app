@@ -366,6 +366,18 @@ export function deleteCliEvaluLike(evaluId, accountId, like) {
   ).then(handleJBServerJsonResponse);
 }
 
+/** ******************** Firm Evaluation Api List ************************** */
+
+export function createFirmEvalu(evaluData) {
+  return fetch(url.JBSERVER_FIRM_EVALU, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(evaluData),
+  }).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Work Api List ************************** */
 
 export function createWork(newWork) {
@@ -442,6 +454,16 @@ export function acceptWork(acceptData) {
   }).then(handleJBServerJsonResponse);
 }
 
+export function abandonWork(abandonData) {
+  return fetch(url.JBSERVER_WORK_FIRM_ABANDON, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(abandonData),
+  }).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**
@@ -513,7 +535,7 @@ export function transferWithdraw(accessTokenInfo, fintechUseNum, tranAmt, commen
     tran_amt: tranAmt,
     tran_dtime: moment().format('YYYYMMDDHHmmss'),
   };
-  
+
   return fetch(url.OPENBANK_WITHDRAW, {
     method: 'POST',
     headers: {

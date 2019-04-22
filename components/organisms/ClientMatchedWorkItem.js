@@ -7,6 +7,13 @@ import JBButton from '../molecules/JBButton';
 const Container = Styled.View`
   flex: 1;
 `;
+
+const StateWrap = Styled.View`
+  flex: 1;
+  align-items: flex-end;
+  margin: 3px 10px;
+`;
+
 const CommWrap = Styled.View`
   flexDirection: row;
 `;
@@ -14,7 +21,7 @@ const WorkingText = Styled.Text``;
 
 export default class ClientMatchedWorkItem extends React.PureComponent {
   render() {
-    const { item } = this.props;
+    const { item, estimateFirm, openMatchedFirmInfo } = this.props;
 
     return (
       <Container>
@@ -27,12 +34,23 @@ export default class ClientMatchedWorkItem extends React.PureComponent {
         />
         <JBTextItem title="현장주소" value={`${item.address}`} small />
         <JBTextItem title="요청내용" value={`${item.detailRequest}`} small />
-        {item.workState === 'WORKING' && <WorkingText>시작됨</WorkingText>}
-        {item.workState === 'CLOSE' && !item.firmEstimated && (
-          <CommWrap>
-            <JBButton title="업체평가하기" small />
-          </CommWrap>
-        )}
+        <StateWrap>
+          {item.workState === 'MATCHED' && (
+            <JBButton
+              title="매칭된 업체정보 보기"
+              onPress={() => openMatchedFirmInfo(item.matchedAccId)}
+              size="small"
+              underline
+            />
+          )}
+          {item.workState === 'WORKING' && <WorkingText>시작됨</WorkingText>}
+          {item.workState === 'CLOSED' && !item.firmEstimated && (
+            <CommWrap>
+              <JBButton title="업체평가하기" onPress={() => estimateFirm(item.id)} size="small" />
+            </CommWrap>
+          )}
+          {item.workState === 'CLOSED' && item.firmEstimated && <WorkingText>일 종료</WorkingText>}
+        </StateWrap>
       </Container>
     );
   }

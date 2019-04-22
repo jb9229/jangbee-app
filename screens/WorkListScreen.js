@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, View } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
+import ClientEstimateFirmModal from '../components/ClientEstimateFirmModal';
 import ClientOpenWorkList from '../components/ClientOpenWorkList';
 import ClientMatchedWorkList from '../components/ClientMatchedWorkList';
 import JBButton from '../components/molecules/JBButton';
@@ -18,6 +19,7 @@ class ClientWorkListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isVisibleEstimateModal: false,
       isOpenWorkListEmpty: undefined,
       isMatchedWorkListEmpty: undefined,
       openWorkListRefreshing: false,
@@ -25,7 +27,7 @@ class ClientWorkListScreen extends React.Component {
       index: 0,
       routes: [{ key: 'first', title: '모집중인 일감' }, { key: 'second', title: '모집된 일감' }],
       openWorkList: [],
-      matchedList: undefined,
+      matchedWorkList: undefined,
     };
   }
 
@@ -46,14 +48,19 @@ class ClientWorkListScreen extends React.Component {
    * Tab View 변경함수
    */
   changeTabView = (index) => {
-    const { matchedList } = this.state;
+    const { matchedWorkList } = this.state;
 
-    if (index === 1 && matchedList === undefined) {
+    if (index === 1 && matchedWorkList === undefined) {
       this.setMatchedWorkListData();
     }
 
     this.setState({ index });
   };
+
+  /**
+   * 업체평가 요청 함수
+   */
+  estimateFirm = () => {};
 
   /**
    * 리스트 데이터 설정함수
@@ -90,7 +97,7 @@ class ClientWorkListScreen extends React.Component {
       .then((resBody) => {
         if (resBody && resBody.length > 0) {
           this.setState({
-            matchedList: resBody,
+            matchedWorkList: resBody,
             isMatchedWorkListEmpty: false,
             matchedWorkListRefreshing: false,
           });
@@ -106,7 +113,9 @@ class ClientWorkListScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const {
+      isVisibleEstimateModal,
       isOpenWorkListEmpty,
+      estiWorkId,
       matchedWorkList,
       isMatchedWorkListEmpty,
       openWorkList,
@@ -133,12 +142,20 @@ class ClientWorkListScreen extends React.Component {
         }
         refreshing={matchedWorkListRefreshing}
         isListEmpty={isMatchedWorkListEmpty}
+        estimateFirm={workId => this.setState({ isVisibleEstimateModal: true, estiWorkId: workId })}
+        openMatchedFirmInfo={matchedAccId => navigation.navigate('AppliFirmDetail', { accountId: matchedAccId, showPhoneNumber: true })
+        }
       />
     );
 
     return (
       <View style={styles.Container}>
-        {!isOpenWorkListEmpty && <JBButton title="일감등록하기" />}
+        <ClientEstimateFirmModal
+          isVisibleModal={isVisibleEstimateModal}
+          closeModal={() => this.setState({ isVisibleEstimateModal: false })}
+          completeAction={() => this.setMatchedWorkListData()}
+          workId={estiWorkId}
+        />
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
@@ -147,6 +164,13 @@ class ClientWorkListScreen extends React.Component {
           })}
           onIndexChange={this.changeTabView}
           initialLayout={{ width: Dimensions.get('window').width }}
+        />
+
+        <JBButton
+          title="일감 등록하기"
+          onPress={() => navigation.navigate('WorkRegister')}
+          size="full"
+          Primary
         />
       </View>
     );

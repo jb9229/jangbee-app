@@ -295,7 +295,12 @@ export default class WorkRegisterScreen extends React.Component {
               />
               <JBErrorMessage errorMSG={detailRequestValErrMessage} />
             </CardUI>
-            <JBButton title="일감등록하기" onPress={() => this.createWork()} size="full" Primary />
+            <JBButton
+              title="일감 등록완료"
+              onPress={() => this.createWork()}
+              size="full"
+              Secondary
+            />
           </ScrollView>
         </KeyboardAvoidingView>
       </View>

@@ -1,5 +1,5 @@
-// const SERVER_URL = 'http://10.65.23.166/api/v1/';
-const SERVER_URL = 'http://192.168.1.105/api/v1/';
+// const SERVER_URL = 'http://10.65.27.174/api/v1/';
+const SERVER_URL = 'http://192.168.1.119/api/v1/';
 // const SERVER_URL = 'http://192.168.43.213/api/v1/';
 // const SERVER_URL = 'http://jangbee.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
@@ -21,6 +21,7 @@ module.exports = {
   JBSERVER_CLIENT_EVALULIKE: `${SERVER_URL}client/evaluation/like`,
   JBSERVER_CLIENT_EVALULIKE_EXIST: `${SERVER_URL}client/evaluation/like/exist`,
   JBSERVER_CLIENT_EVALU_TELEXIST: `${SERVER_URL}client/evaluation/exist/telnumber`,
+  JBSERVER_FIRM_EVALU: `${SERVER_URL}firm/evaluation`,
   JBSERVER_WORK: `${SERVER_URL}work/`,
   JBSERVER_WORK_FIRM_OPEN: `${SERVER_URL}works/firm/open`,
   JBSERVER_WORK_FIRM_MATCHED: `${SERVER_URL}works/firm/matched`,
@@ -28,6 +29,7 @@ module.exports = {
   JBSERVER_WORK_CLIENT_MATCHED: `${SERVER_URL}works/client/matched`,
   JBSERVER_WORK_FIRM_APPLY: `${SERVER_URL}works/firm/apply`,
   JBSERVER_WORK_FIRM_ACCEPT: `${SERVER_URL}works/firm/accept`,
+  JBSERVER_WORK_FIRM_ABANDON: `${SERVER_URL}works/firm/abandon`,
   JBSERVER_WORK_CLIENT_SELECT: `${SERVER_URL}works/client/select`,
   JBSERVER_WORK_APPLICANTS: `${SERVER_URL}works/applicants`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',

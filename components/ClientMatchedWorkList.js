@@ -8,12 +8,23 @@ import ListSeparator from './molecules/ListSeparator';
 /**
  * 리스트 아이템 렌더링 함수
  */
-function renderItem({ item }) {
-  return <ClientMatchedWorkItem item={item} />;
+function renderItem({ item }, estimateFirm, openMatchedFirmInfo) {
+  return (
+    <ClientMatchedWorkItem
+      item={item}
+      estimateFirm={estimateFirm}
+      openMatchedFirmInfo={openMatchedFirmInfo}
+    />
+  );
 }
 
 export default function ClientMatchedWorkList({
-  isListEmpty, list, handleRefresh, refreshing,
+  isListEmpty,
+  list,
+  handleRefresh,
+  refreshing,
+  estimateFirm,
+  openMatchedFirmInfo,
 }) {
   if (isListEmpty === undefined) {
     return <JBActIndicator title="정보 불러오는중.." size={35} />;
@@ -32,7 +43,7 @@ export default function ClientMatchedWorkList({
     <View>
       <FlatList
         data={list}
-        renderItem={renderItem}
+        renderItem={item => renderItem(item, estimateFirm, openMatchedFirmInfo)}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={ListSeparator}
         onRefresh={handleRefresh}

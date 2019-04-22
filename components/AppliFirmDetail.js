@@ -188,6 +188,8 @@ export default class AppliFirmDetail extends React.Component {
 
   render() {
     const { firm, isVisibleProfileModal, isLoadingComplete } = this.state;
+    const { showPhoneNumber } = this.props.navigation.state.params;
+
     if (!isLoadingComplete) {
       return (
         <View style={styles.container}>
@@ -245,7 +247,10 @@ export default class AppliFirmDetail extends React.Component {
                 </View>
               </View>
 
-              <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
+              <JBTextItem title="보유장비" value={firm.equiListStr} revColor row />
+              {showPhoneNumber && (
+                <JBTextItem title="전화번호" value={firm.phoneNumber} revColor row />
+              )}
               <JBTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
               <JBTextItem title="업체소개" value={firm.introduction} revColor />
             </View>

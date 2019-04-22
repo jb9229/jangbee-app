@@ -46,12 +46,7 @@ const WorkListStack = createStackNavigator({
 
 WorkListStack.navigationOptions = {
   tabBarLabel: '일감등록',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-information-circle' : 'md-information-circle'}
-    />
-  ),
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="work" type="MaterialIcons" />,
 };
 
 const ClientInfosStack = createStackNavigator({
