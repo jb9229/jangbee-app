@@ -6,13 +6,19 @@ import ListSeparator from './molecules/ListSeparator';
 import WorkItem from './organisms/WorkItem';
 import WorkCommWrap from './molecules/WorkCommWrapUI';
 import WorkCommText from './molecules/WorkCommTextUI';
+import JBButton from './molecules/JBButton';
+import callLink from '../common/CallLink';
 
 export default class FirmMatchedWorkList extends React.PureComponent {
   /**
    * 리스트 아이템 렌더링 함수
    */
   renderItem = ({ item }) => (
-    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} />
+    <WorkItem
+      item={item}
+      renderCommand={() => this.renderCommand(item)}
+      phoneNumber={item.phoneNumber}
+    />
   );
 
   renderCommand = (item) => {
@@ -20,8 +26,13 @@ export default class FirmMatchedWorkList extends React.PureComponent {
 
     return (
       <WorkCommWrap>
-        {item.workState === 'MATCHED' && <WorkCommText text="매칭됨" />}
-        {item.workState === 'WORKING' && <WorkCommText text="시작됨" />}
+        {(item.workState === 'MATCHED' || item.workState === 'WORKING') && (
+          <JBButton
+            title={item.workState === 'WORKING' ? '전화걸기(배차 시작됨)' : '전화걸기'}
+            onPress={() => callLink(item.phoneNumber)}
+            size="small"
+          />
+        )}
         {item.workState === 'CLOSED' && <WorkCommText text="종료됨" />}
       </WorkCommWrap>
     );

@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import * as api from '../api/api';
+import { withLogin } from '../contexts/LoginProvider';
 import { notifyError } from '../common/ErrorNotice';
 import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
@@ -39,13 +40,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class WorkRegisterScreen extends React.Component {
+class WorkRegisterScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       equipment: '',
+      phoneNumber: '',
     };
   }
 
@@ -117,6 +119,7 @@ export default class WorkRegisterScreen extends React.Component {
     const { user } = this.props;
     const {
       equipment,
+      phoneNumber,
       address,
       addressDetail,
       startDate,
@@ -129,6 +132,7 @@ export default class WorkRegisterScreen extends React.Component {
     // Validation Error Massage Initialize
     this.setState({
       equipmentValErrMessage: '',
+      phoneNumberValErrMessage: '',
       addressValErrMessage: '',
       addressDetailValErrMessage: '',
       dateValErrMessage: '',
@@ -138,6 +142,12 @@ export default class WorkRegisterScreen extends React.Component {
     let v = validate('textMax', equipment, true, 25);
     if (!v[0]) {
       this.setState({ equipmentValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', phoneNumber, true);
+    if (!v[0]) {
+      this.setState({ phoneNumberValErrMessage: v[1] });
       return false;
     }
 
@@ -174,6 +184,7 @@ export default class WorkRegisterScreen extends React.Component {
     const newWork = {
       accountId: user.uid,
       equipment,
+      phoneNumber,
       address,
       addressDetail,
       startDate,
@@ -196,11 +207,13 @@ export default class WorkRegisterScreen extends React.Component {
       startDate,
       period,
       detailRequest,
+      phoneNumber,
       equipmentValErrMessage,
       addressValErrMessage,
       addressDetailValErrMessage,
       dateValErrMessage,
       detailRequestValErrMessage,
+      phoneNumberValErrMessage,
     } = this.state;
 
     const dayPickItems = new Array(30)
@@ -237,6 +250,18 @@ export default class WorkRegisterScreen extends React.Component {
                 }}
               />
               <JBErrorMessage errorMSG={equipmentValErrMessage} />
+
+              <JBTextInput
+                title="전화번호*"
+                value={phoneNumber}
+                onChangeText={text => this.setState({ phoneNumber: text })}
+                placeholder="전화번호를 입력해 주세요"
+                keyboardType="phone-pad"
+                refer={(input) => {
+                  this.telTextInput = input;
+                }}
+              />
+              <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
               <JBTextInput
                 title="현장주소(*)"
@@ -307,3 +332,5 @@ export default class WorkRegisterScreen extends React.Component {
     );
   }
 }
+
+export default withLogin(WorkRegisterScreen);

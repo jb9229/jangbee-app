@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  Alert, Linking, Image, StyleSheet, TouchableHighlight, Text, View,
+  Image, StyleSheet, TouchableHighlight, Text, View,
 } from 'react-native';
 import JBIcon from '../molecules/JBIcon';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
+import callLink from '../../common/CallLink';
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -52,21 +53,6 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * 업체 전화연결 함수
- */
-function callFirm(number) {
-  if (number === null || number === '') {
-    return;
-  }
-
-  const telStr = `tel:${number}`;
-
-  Linking.openURL(telStr).catch(
-    Alert.alert(`전화앱 열기에 문제가 있습니다, 다시 시도해 주세요 [${telStr}]`),
-  );
-}
-
 function calDistance(dis) {
   if (!dis) {
     return '';
@@ -103,7 +89,7 @@ const firmListItem = (props) => {
           name="call"
           size={42}
           color={colors.point}
-          onPress={() => callFirm(item.phoneNumber)}
+          onPress={() => callLink(item.phoneNumber)}
         />
       </View>
     </View>

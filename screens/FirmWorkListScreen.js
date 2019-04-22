@@ -329,7 +329,13 @@ class FirmWorkListScreen extends React.Component {
         <OpenBankAccSelectModal
           isVisibleModal={isVisibleAccSelModal}
           closeModal={() => this.setState({ isVisibleAccSelModal: false })}
-          completeSelect={this.withdrawDispatchFee}
+          completeSelect={() => Alert.alert(
+            '배차수락 후 전화연결 하기',
+            '배차 수락후 매칭된 일감 -> 전화하기 버튼을 눌러 고객님과 통화를 통해 비용 및 세부사항를 꼭 협의해 주세요!!',
+            [{ text: '확인', onPress: () => this.withdrawDispatchFee() }],
+            { calcellable: false },
+          )
+          }
           accountId={user.uid}
           actionName="결제통장 선택"
           {...this.props}

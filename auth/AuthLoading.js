@@ -107,7 +107,7 @@ class AuthLoading extends React.Component {
       } else if (notification.data.notice === 'NOTI_WORK_ADD_REGISTER') {
         this.noticeCommonNavigation(notification, '지원자 확인하기', () => navigation.navigate('WorkList'));
       } else if (notification.data.notice === 'NOTI_WORK_SELECTED') {
-        this.noticeCommonNavigation(notification, '배차 수학하기', () => navigation.navigate('FirmWorkList'));
+        this.noticeCommonNavigation(notification, '배차 수락하러가기', () => navigation.navigate('FirmWorkList'));
       } else if (notification.data.notice === 'NOTI_WORK_ABANDON') {
         this.noticeCommonNavigation(notification, '배차 다시 요청하기', () => navigation.navigate('WorkList'));
       } else if (notification.data.notice === 'NOTI_WORK_CLOSED') {

@@ -150,7 +150,12 @@ export default class AppliFirmList extends React.Component {
           />
           <JBErrorMessage errorMSG={submitErrMessage} />
 
-          <JBButton title="배차 요청하기" onPress={() => this.requestDispatchFirm()} />
+          <JBButton
+            title="배차 요청하기"
+            onPress={() => this.requestDispatchFirm()}
+            size="full"
+            Secondary
+          />
         </ContentsView>
       </Container>
     );
