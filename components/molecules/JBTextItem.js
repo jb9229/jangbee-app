@@ -48,7 +48,7 @@ const Contents = styled.Text`
 export default class JBTextItem extends React.PureComponent {
   render() {
     const {
-      title, value, revColor, underline, row, small,
+      title, value, revColor, underline, row, small, secondeValue,
     } = this.props;
     let color = null;
     if (revColor) {
@@ -58,6 +58,7 @@ export default class JBTextItem extends React.PureComponent {
       <Container row={row} small={small}>
         <Title small={small}>{title === undefined ? '' : `${title}: `}</Title>
         <Contents underline={underline}>{value}</Contents>
+        {secondeValue && <Contents underline={underline}>{secondeValue}</Contents>}
       </Container>
     );
   }

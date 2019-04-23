@@ -390,6 +390,16 @@ export function createWork(newWork) {
   }).then(handleJBServerJsonResponse);
 }
 
+export function updateWork(updateWork) {
+  return fetch(url.JBSERVER_WORK, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(updateWork),
+  }).then(handleJBServerJsonResponse);
+}
+
 export function getFirmOpenWorkList(equipment, accountId) {
   const param1 = encodeURIComponent(equipment);
   const param2 = encodeURIComponent(accountId);
@@ -461,6 +471,16 @@ export function abandonWork(abandonData) {
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: JSON.stringify(abandonData),
+  }).then(handleJBServerJsonResponse);
+}
+
+export function cancelSelFirm(workId) {
+  const formData = new FormData();
+  formData.append('workId', workId);
+
+  return fetch(url.JBSERVER_WORK_CLIENT_CANCELSEL, {
+    method: 'PUT',
+    body: formData,
   }).then(handleJBServerJsonResponse);
 }
 

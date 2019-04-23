@@ -65,7 +65,7 @@ class WorkRegisterScreen extends React.Component {
       .createWork(newWork)
       .then((resBody) => {
         if (resBody) {
-          navigation.navigate('WorkList');
+          navigation.navigate('WorkList', { refresh: true });
           return;
         }
 
@@ -77,25 +77,23 @@ class WorkRegisterScreen extends React.Component {
       .catch(error => notifyError(error.name, error.message));
   };
 
-  openStartWorkDatePicker = async (isStart) => {
+  openStartWorkDatePicker = async () => {
     try {
+      const now = new Date();
       const {
         action, year, month, day,
       } = await DatePickerAndroid.open({
-        date: new Date(),
+        date: now,
+        minDate: now.getTime(),
       });
 
-      if (isStart) {
-        this.setState({ startDate: `${year}-${month}-${day}` });
-      } else {
-        this.setState({ endDate: `${year}-${month}-${day}` });
-      }
+      this.setState({ startDate: `${year}-${month}-${day}` });
 
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
       }
     } catch ({ code, message }) {
-      console.warn('Cannot open date picker', message);
+      notifyError('Cannot open date picker', message);
     }
   };
 
@@ -292,7 +290,7 @@ class WorkRegisterScreen extends React.Component {
                     this.startDateTextInput = input;
                   }}
                   onChangeText={text => this.setState({ startDate: text })}
-                  onFocus={() => this.openStartWorkDatePicker(true)}
+                  onFocus={() => this.openStartWorkDatePicker()}
                   placeholder="시작일 선택"
                 />
                 <View>

@@ -32,6 +32,12 @@ export default class ModalTemplate extends React.Component {
     this.state = {};
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.editItem) {
+      this.setState({phoneNumber: editItem.phoneNumber})
+    }
+  }
+
   /**
    * 모달 액션 완료 함수
    */
@@ -47,6 +53,8 @@ export default class ModalTemplate extends React.Component {
    * 유효성 검사 함수
    */
   validateForm = () => {
+    const {} = this.state;
+  
     // Validation Error Massage Initialize
     this.setState({
       ?ValErrMessage: '',

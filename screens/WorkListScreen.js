@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View } from 'react-native';
+import {
+  Alert, StyleSheet, Dimensions, View,
+} from 'react-native';
 import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import ClientEstimateFirmModal from '../components/ClientEstimateFirmModal';
+import WorkUpdateModal from '../components/WorkUpdateModal';
 import ClientOpenWorkList from '../components/ClientOpenWorkList';
 import ClientMatchedWorkList from '../components/ClientMatchedWorkList';
 import JBButton from '../components/molecules/JBButton';
@@ -14,6 +17,7 @@ import fonts from '../constants/Fonts';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+    backgroundColor: colors.batangLight,
   },
   tabBarIndicator: {
     backgroundColor: colors.point,
@@ -32,6 +36,7 @@ class ClientWorkListScreen extends React.Component {
     super(props);
     this.state = {
       isVisibleEstimateModal: false,
+      isVisibleEditWorkModal: false,
       isOpenWorkListEmpty: undefined,
       isMatchedWorkListEmpty: undefined,
       openWorkListRefreshing: false,
@@ -67,6 +72,34 @@ class ClientWorkListScreen extends React.Component {
     }
 
     this.setState({ index });
+  };
+
+  /**
+   * 2시간 지난후 지원자선택 취소 확인함수
+   */
+  confirmCancelSelFirm = (workId) => {
+    Alert.alert('지원자 선택 취소', '해당 업체가 응답이 없습니다, 새로운 지원자를 선택해 주제요', [
+      { text: '취소', onPress: () => {} },
+      { text: '지원자 선택 취소', onPress: () => this.calcelSelFirm(workId) },
+    ]);
+  };
+
+  /**
+   * 2시간 지난후 지원자선택 취소 함수
+   */
+  calcelSelFirm = (workId) => {
+    api
+      .cancelSelFirm(workId)
+      .then((resBody) => {
+        if (resBody) {
+          this.setOpenWorkListData();
+          return;
+        }
+
+        notifyError('지원자 선택취소 문제발생', '지원자 선택 취소를 다시 시도해 주세요');
+        this.setOpenWorkListData();
+      })
+      .catch(error => notifyError(error.name, error.message));
   };
 
   /**
@@ -122,10 +155,29 @@ class ClientWorkListScreen extends React.Component {
       .catch(error => notifyError(error.name, error.message));
   };
 
+  /**
+   * 일감내용 수정 요청함수
+   */
+  updateWork = (updateData) => {
+    api
+      .updateWork(updateData)
+      .then((resBody) => {
+        if (resBody) {
+          this.setOpenWorkListData();
+          return;
+        }
+
+        notifyError('일감수정 문제 발생', '일감 수정을 다시 시도해 주세요');
+        this.setOpenWorkListData();
+      })
+      .catch(error => notifyError(error.name, error.message));
+  };
+
   render() {
     const { navigation } = this.props;
     const {
       isVisibleEstimateModal,
+      isVisibleEditWorkModal,
       isOpenWorkListEmpty,
       estiWorkId,
       matchedWorkList,
@@ -133,6 +185,7 @@ class ClientWorkListScreen extends React.Component {
       openWorkList,
       openWorkListRefreshing,
       matchedWorkListRefreshing,
+      editWork,
     } = this.state;
 
     const renderOpenWorkList = () => (
@@ -143,7 +196,9 @@ class ClientWorkListScreen extends React.Component {
         refreshing={openWorkListRefreshing}
         isListEmpty={isOpenWorkListEmpty}
         selectFirm={workId => navigation.navigate('AppliFirmList', { workId })}
+        cancelSelFirm={this.confirmCancelSelFirm}
         registerWork={() => navigation.navigate('WorkRegister')}
+        editWork={work => this.setState({ editWork: work, isVisibleEditWorkModal: true })}
       />
     );
 
@@ -167,6 +222,12 @@ class ClientWorkListScreen extends React.Component {
           closeModal={() => this.setState({ isVisibleEstimateModal: false })}
           completeAction={() => this.setMatchedWorkListData()}
           workId={estiWorkId}
+        />
+        <WorkUpdateModal
+          editWork={editWork}
+          completeAction={this.updateWork}
+          isVisibleModal={isVisibleEditWorkModal}
+          closeModal={() => this.setState({ isVisibleEditWorkModal: false })}
         />
         <TabView
           navigationState={this.state}

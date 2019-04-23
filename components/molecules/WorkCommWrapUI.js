@@ -5,6 +5,12 @@ import colors from '../../constants/Colors';
 const Container = Styled.View`
   flex: 1;
   align-items: flex-end;
+  ${props => props.row
+    && `
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  `}
   margin: 3px 10px;
   padding: 3px 0px;
   border-top-width: 1;
@@ -13,8 +19,9 @@ const Container = Styled.View`
 
 export default class WorkCommWrapUI extends React.PureComponent {
   render() {
+    const { row } = this.props;
     return (
-      <Container ref={c => (this._root = c)} {...this.props}>
+      <Container ref={c => (this._root = c)} {...this.props} row={row}>
         {this.props.children}
       </Container>
     );

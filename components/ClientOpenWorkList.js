@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
+import moment from 'moment';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
 import ListSeparator from './molecules/ListSeparator';
@@ -13,14 +14,27 @@ export default class ClientOpenWorkList extends React.PureComponent {
    * 리스트 아이템 렌더링 함수
    */
   renderItem = ({ item }) => (
-    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} />
+    <WorkItem
+      item={item}
+      renderCommand={() => this.renderCommand(item)}
+      phoneNumber={item.phoneNumber}
+    />
   );
 
   renderCommand = (item) => {
-    const { selectFirm } = this.props;
+    const { selectFirm, cancelSelFirm, editWork } = this.props;
+
+    let afterThreeHour = '2시간';
+    if (item.workState === 'SELECTED' && !item.overAcceptTime) {
+      afterThreeHour = moment(item.selectNoticeTime)
+        .add(2, 'hours')
+        .format('MM/DD HH:mm');
+    }
 
     return (
-      <WorkCommWrap>
+      <WorkCommWrap row>
+        <JBButton title="편집" onPress={() => editWork(item)} size="small" underline Primary />
+
         {item.workState === 'OPEN' && item.applicantCount === 0 && (
           <WorkCommText text="지원자 모집중..." />
         )}
@@ -31,8 +45,15 @@ export default class ClientOpenWorkList extends React.PureComponent {
             size="small"
           />
         )}
-        {item.workState === 'SELECTED' && (
-          <WorkCommText text="업체확인 대기중(확인 후 전화가 옵니다)" />
+        {item.workState === 'SELECTED' && item.overAcceptTime && (
+          <JBButton
+            title="지원자선택 취소하기"
+            onPress={() => cancelSelFirm(item.id)}
+            size="small"
+          />
+        )}
+        {item.workState === 'SELECTED' && !item.overAcceptTime && (
+          <WorkCommText text={`업체확인 대기중..(${afterThreeHour}까지)`} />
         )}
       </WorkCommWrap>
     );
@@ -50,23 +71,22 @@ export default class ClientOpenWorkList extends React.PureComponent {
     if (isListEmpty) {
       return (
         <JBEmptyView
-          title="검색하고, 전화할 필요 없습니다."
-          subTitle="간단히 일감 등록하고, 업무 가능한 업체를 선택 하기만 하면 됩니다."
+          title="일감을 올리면, 배차 가능한 업체로부터"
+          subTitle="전화를 받을 수 있습니다."
+          actionName="일감 등록하기"
           refresh={registerWork}
         />
       );
     }
     return (
-      <View>
-        <FlatList
-          data={list}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={ListSeparator}
-          onRefresh={handleRefresh}
-          refreshing={refreshing}
-        />
-      </View>
+      <FlatList
+        data={list}
+        renderItem={this.renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent={ListSeparator}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
+      />
     );
   }
 }
