@@ -2,13 +2,19 @@ import React from 'react';
 import {
   StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
+import Styled from 'styled-components';
+import colors from '../../constants/Colors';
+
+const Container = Styled.View`
+  margin-bottom: 10px;
+`;
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#F5FCFF',
+    backgroundColor: colors.point2Light,
     padding: 16,
-    borderBottomWidth: 1,
     borderRadius: 10,
+    elevation: 3,
   },
   headerText: {
     fontSize: 16,
@@ -18,8 +24,8 @@ const styles = StyleSheet.create({
     height: 0.5,
     backgroundColor: '#808080',
     width: '95%',
-    marginLeft: 16,
-    marginRight: 16,
+    marginLeft: 8,
+    marginRight: 8,
   },
   text: {
     fontSize: 16,
@@ -27,10 +33,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   content: {
-    marginLeft: 10,
-    marginRight: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    marginLeft: 8,
+    marginRight: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
     backgroundColor: '#fff',
   },
 });
@@ -66,10 +72,10 @@ export default class ExpandableItem extends React.Component {
   }
 
   render() {
-    const { onClickFunction, item } = this.props;
+    const { onClickFunction, item, completeSel } = this.props;
     const { layoutHeight } = this.state;
     return (
-      <View>
+      <Container>
         {/* Header of the Expandable List Item */}
         <TouchableOpacity activeOpacity={0.8} onPress={onClickFunction} style={styles.header}>
           <Text style={styles.headerText}>{item.category_name}</Text>
@@ -85,14 +91,14 @@ export default class ExpandableItem extends React.Component {
             <TouchableOpacity
               key={key}
               style={styles.content}
-              onPress={() => this.setState({ sigungu: local.val })}
+              onPress={() => completeSel(item.category_name, local.val)}
             >
               <Text style={styles.text}>{local.val}</Text>
               <View style={styles.separator} />
             </TouchableOpacity>
           ))}
         </View>
-      </View>
+      </Container>
     );
   }
 }

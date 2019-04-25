@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View,
 } from 'react-native';
-import { ImagePicker } from 'expo';
 import { validate, validatePresence } from '../../utils/Validation';
 import * as api from '../../api/api';
 import { withLogin } from '../../contexts/LoginProvider';
@@ -14,6 +13,7 @@ import MapAddWebModal from '../../components/MapAddWebModal';
 import JBActIndicatorModal from '../../components/JBActIndicatorModal';
 import JBButton from '../../components/molecules/JBButton';
 import colors from '../../constants/Colors';
+import * as imageManager from '../../common/ImageManager';
 
 const styles = StyleSheet.create({
   container: {
@@ -127,13 +127,13 @@ class FirmRegisterScreen extends React.Component {
     const accountId = user.uid;
 
     this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '대표사진 업로드중...' });
-    const uploadedThumbnailImgUrl = await this.firmImageUpload(thumbnail);
+    const uploadedThumbnailImgUrl = await imageManager.uploadImage(thumbnail);
     this.setState({ imgUploadingMessage: '작업사진1 업로드중...' });
-    const uploadedPhoto1ImgUrl = await this.firmImageUpload(photo1);
+    const uploadedPhoto1ImgUrl = await imageManager.uploadImage(photo1);
     this.setState({ imgUploadingMessage: '작업사진2 업로드중...' });
-    const uploadedPhoto2ImgUrl = await this.firmImageUpload(photo2);
+    const uploadedPhoto2ImgUrl = await imageManager.uploadImage(photo2);
     this.setState({ imgUploadingMessage: '작업사진3 업로드중...' });
-    const uploadedPhoto3ImgUrl = await this.firmImageUpload(photo3);
+    const uploadedPhoto3ImgUrl = await imageManager.uploadImage(photo3);
     this.setState({ isVisibleActIndiModal: false });
 
     const newFirm = {
@@ -148,10 +148,10 @@ class FirmRegisterScreen extends React.Component {
       addrLongitude,
       addrLatitude,
       introduction,
-      thumbnail: uploadedThumbnailImgUrl || thumbnail,
-      photo1: uploadedPhoto1ImgUrl || photo1,
-      photo2: uploadedPhoto2ImgUrl || photo2,
-      photo3: uploadedPhoto3ImgUrl || photo3,
+      thumbnail: uploadedThumbnailImgUrl,
+      photo1: uploadedPhoto1ImgUrl,
+      photo2: uploadedPhoto2ImgUrl,
+      photo3: uploadedPhoto3ImgUrl,
       blog,
       homepage,
       sns,
@@ -166,45 +166,6 @@ class FirmRegisterScreen extends React.Component {
           `[${error.name}] ${error.message}`,
         );
       });
-  };
-
-  /**
-   * 업체정보 이미지 업로드
-   */
-  firmImageUpload = async (imgUri) => {
-    if (imgUri === null || imgUri === undefined || imgUri === '') {
-      return null;
-    }
-
-    const serverImgUrl = await this.uploadImage(imgUri);
-
-    if (serverImgUrl === undefined) {
-      Alert.alert('이미지 업로드 실패');
-      return undefined;
-    }
-
-    return serverImgUrl;
-  };
-
-  /**
-   * 이미지 업로드 함수
-   */
-  uploadImage = async (imgUri) => {
-    let serverImgUrl;
-    await api
-      .uploadImage(imgUri)
-      .then((resImgUrl) => {
-        serverImgUrl = resImgUrl;
-      })
-      .catch((error) => {
-        Alert.alert(
-          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-        serverImgUrl = undefined;
-      });
-
-    return serverImgUrl;
   };
 
   /**
@@ -266,39 +227,6 @@ class FirmRegisterScreen extends React.Component {
 
   openMapAddModal = () => {
     this.setMapAddModalVisible(true);
-  };
-
-  pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
-    });
-
-    if (!result.cancelled) {
-      this.handleImagePicked(result.uri);
-    }
-  };
-
-  handleImagePicked = (imgUri) => {
-    const { setImageUrl } = this.props;
-
-    api
-      .uploadImage(imgUri)
-      .then((resImgUrl) => {
-        setImageUrl(resImgUrl);
-
-        this.setState({
-          isUploaded: true,
-        });
-      })
-      .catch((error) => {
-        Alert.alert(
-          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-
-        return undefined;
-      });
   };
 
   /**

@@ -10,6 +10,8 @@ import JBErrorMessage from './organisms/JBErrorMessage';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
 import { validate } from '../utils/Validation';
+import * as imageManager from '../common/ImageManager';
+import JBActIndicatorModal from './JBActIndicatorModal';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,11 +35,13 @@ export default class AdUpdateModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isVisibleActIndiModal: false,
       adTitle: '',
       adSubTitle: '',
       adPhotoUrl: '',
       adTelNumber: '',
       forMonths: 0,
+      imgUploadingMessage: '',
     };
   }
 
@@ -66,24 +70,39 @@ export default class AdUpdateModal extends React.Component {
       adSubTitle: upAdSubTitle,
       adPhotoUrl: upAdPhotoUrl,
       adTelNumber: upAdTelNumber,
+      preAdImageUrl: upAdPhotoUrl,
     });
   };
 
   /**
    * 모달 액션 완료 함수
    */
-  completeAction = () => {
+  completeAction = async () => {
     const { completeUpdate } = this.props;
+    const { preAdImageUrl } = this.state;
 
     const updateData = this.validateUpdateForm();
-    if (updateData) {
-      api
-        .updateAd(updateData)
-        .then(() => {
-          completeUpdate();
-        })
-        .catch(error => notifyError('광고업데이트에 문제가 있습니다', error.message));
+
+    if (!updateData) {
+      return;
     }
+
+    // Ad Image Upload
+    let serverAdImgUrl = null;
+    if (updateData.photoUrl) {
+      this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '광고사진 업로드중...' });
+      serverAdImgUrl = await this.imageUpdate(updateData.photoUrl, preAdImageUrl);
+      this.setState({ isVisibleActIndiModal: false });
+    }
+
+    updateData.photoUrl = serverAdImgUrl;
+
+    api
+      .updateAd(updateData)
+      .then(() => {
+        completeUpdate();
+      })
+      .catch(error => notifyError('광고업데이트에 문제가 있습니다', error.message));
   };
 
   setInitValErroMSG = () => {
@@ -94,6 +113,30 @@ export default class AdUpdateModal extends React.Component {
       adPhotoUrlValErrMessage: '',
       adTelNumberValErrMessage: '',
     });
+  };
+
+  /**
+   * 업체정보 이미지 업데이트 함수
+   */
+  imageUpdate = async (imgUri, preImg) => {
+    // No change
+    if (imgUri === preImg) {
+      return null;
+    }
+
+    // Current Image Delete and New Image Null
+    if (preImg) {
+      await imageManager.removeImage(preImg);
+    }
+
+    // Current image null, new image upload
+    if (imgUri) {
+      const serverImgUrl = await imageManager.uploadImage(imgUri);
+
+      return serverImgUrl;
+    }
+
+    return null;
   };
 
   /**
@@ -160,6 +203,7 @@ export default class AdUpdateModal extends React.Component {
   render() {
     const { isVisibleModal, closeModal } = this.props;
     const {
+      isVisibleActIndiModal,
       adTitle,
       adSubTitle,
       adPhotoUrl,
@@ -170,6 +214,7 @@ export default class AdUpdateModal extends React.Component {
       adSubTitleValErrMessage,
       adPhotoUrlValErrMessage,
       adTelNumberValErrMessage,
+      imgUploadingMessage,
     } = this.state;
 
     return (
@@ -231,6 +276,11 @@ export default class AdUpdateModal extends React.Component {
                 />
               </ScrollView>
             </KeyboardAvoidingView>
+            <JBActIndicatorModal
+              isVisibleModal={isVisibleActIndiModal}
+              message={imgUploadingMessage}
+              size="large"
+            />
           </View>
         </View>
       </Modal>

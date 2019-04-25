@@ -1,15 +1,17 @@
 import React from 'react';
 import {
-  SectionList, Modal, StyleSheet, View,
+  ScrollView,
+  Modal,
+  StyleSheet,
+  View,
+  UIManager,
+  Platform,
+  LayoutAnimation,
 } from 'react-native';
-import EquiSelBox from './molecules/EquiSelBox';
-import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
-import EquiSelListHeader from './molecules/EquiSelListHeader';
-
-const SELECTED_EQUIPMENT_SEVERATOR = ',';
+import ExpandableItem from './organisms/ExpandableItem';
 
 const styles = StyleSheet.create({
   container: {},
@@ -29,156 +31,34 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
-  commWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
 });
 
 export default class EquipementModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      equiList: [
-        { title: '카고크레인', data: ['5ton', '10ton'] },
-        { title: '거미크레인', data: ['2ton', '3ton'] },
-        { title: '굴착기(타이어)', data: ['02W', '06W', '08W'] },
-        { title: '굴착기(트랙)', data: ['02LC', '04LC', '06LC'] },
-        {
-          title: '스카이(일반)',
-          data: [
-            '1ton',
-            '1.2ton',
-            '2ton',
-            '2.5ton',
-            '3.5ton(단축)',
-            '3.5ton(장축)',
-            '5ton(단축)',
-            '5ton(장축)',
-          ],
-        },
-        { title: '스카이(굴절)', data: ['28m', '45m'] },
-        { title: '스카이(대형)', data: ['58m', '60m', '75m'] },
-        {
-          title: '지게차',
-          data: [
-            '2ton',
-            '2.5ton',
-            '3ton',
-            '4.5ton',
-            '5ton',
-            '6ton',
-            '7ton',
-            '8ton',
-            '11.5ton',
-            '15ton',
-            '18ton',
-            '25ton',
-          ],
-        },
-        { title: '사다리차', data: ['사다리차'] },
-        { title: '하이랜더', data: ['하이랜더'] },
-        { title: '고소작업렌탈', data: ['고소작업렌탈'] },
-        { title: '펌프카', data: ['펌프카'] },
-        { title: '도로포장장비', data: ['도로포장장비'] },
-        { title: '로우더', data: ['로우더'] },
-        { title: '항타천공오가', data: ['항타천공오가'] },
-        { title: '불도저', data: ['불도저'] },
-        { title: '진동로라/발전기', data: ['진동로라/발전기'] },
-        { title: '덤프임대', data: ['덤프임대'] },
-      ],
-      equiSelMap: (new Map(): Map<string, boolean>),
-      equiSelected: '',
+      listDataSource: EQUIPMENT_CONTENT,
     };
-  }
-
-  componentDidMount() {
-    this.setInitSeledEqui();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { isVisibleEquiModal } = this.props;
-    if (isVisibleEquiModal !== nextProps.isVisibleEquiModal) {
-      this.setInitSeledEqui();
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
 
-  /**
-   * 초기 선택된장비 설정 함수
-   */
-  setInitSeledEqui = () => {
-    const { selEquipmentStr } = this.props;
-
-    const newEquiSelMap = (new Map(): Map<string, boolean>);
-
-    // Validation
-    if (selEquipmentStr !== '') {
-      const seledEquiList = selEquipmentStr.split(SELECTED_EQUIPMENT_SEVERATOR);
-      seledEquiList.forEach(seledEquipment => newEquiSelMap.set(seledEquipment, true));
-    }
-
-    this.setState({ equiSelMap: newEquiSelMap });
+  updateLayout = (index) => {
+    const { listDataSource } = this.state;
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    const array = [...listDataSource];
+    array[index].isExpanded = !array[index].isExpanded;
+    this.setState(() => ({
+      listDataSource: array,
+    }));
   };
 
-  /**
-   * 장비선택 이벤트 함수
-   *
-   * @param {string} eName 장비명
-   * @returns null
-   */
-  onPressEquiItem = (eName) => {
-    const { equiSelMap } = this.state;
-    const { singleSelectMode } = this.props;
-
-    const newEquiSelMap = new Map();
-    this.setState({ equiSelected: eName });
-
-    const isSelected = newEquiSelMap.get(eName);
-
-    if (isSelected === undefined) {
-      newEquiSelMap.set(eName, true);
-    } else {
-      newEquiSelMap.delete(eName);
-    }
-
-    this.setState({ equiSelMap: newEquiSelMap });
-  };
-
-  renderEuipListHeader = ({ section: { title } }) => <EquiSelListHeader title={title} />;
-
-  /**
-   * 장비리스트의 아이템 렌더 함수
-   *
-   * @param {Object} itemOjb 리스트의 아이템 객체
-   */
-  renderEquiListItem = ({ item, index, section }) => {
-    const { equiSelMap } = this.state;
-
-    const equipmentName = `${section.title}(${item})`;
-    return (
-      <EquiSelBox
-        eSetionName={section.title}
-        eName={item}
-        onPressItem={this.onPressEquiItem}
-        selected={equiSelMap.get(equipmentName) !== undefined}
-      />
-    );
-  };
-
-  completeSelEqui = () => {
+  completeSelEqui = (category, type) => {
     const { closeModal, completeSelEqui } = this.props;
-    const { equiSelMap } = this.state;
 
-    let seledEuipListStr = '';
-    equiSelMap.forEach((key, selEquipment) => {
-      seledEuipListStr += `,${selEquipment}`;
-    });
-
-    if (seledEuipListStr.length > 0) {
-      seledEuipListStr = seledEuipListStr.substring(1);
-    }
-
-    completeSelEqui(seledEuipListStr);
+    const equipment = `${category}(${type})`;
+    completeSelEqui(equipment);
     closeModal();
   };
 
@@ -192,8 +72,8 @@ export default class EquipementModal extends React.Component {
   };
 
   render() {
-    const { isVisibleEquiModal, advertisement } = this.props;
-    const { equiList, equiSelMap, equiSelected } = this.state;
+    const { isVisibleEquiModal, advertisement, closeModal } = this.props;
+    const { listDataSource } = this.state;
 
     return (
       <View style={styles.container}>
@@ -201,31 +81,22 @@ export default class EquipementModal extends React.Component {
           animationType="slide"
           transparent
           visible={isVisibleEquiModal}
-          onRequestClose={() => {
-            console.log('equipmentmodal close');
-          }}
+          onRequestClose={() => closeModal()}
         >
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
               {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
-              <SectionList
-                columnWrapperStyle={styles.equiListWrap}
-                sections={equiList}
-                extraData={equiSelMap}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={this.renderEquiListItem}
-                renderSectionHeader={this.renderEuipListHeader}
-              />
-            </View>
-
-            <View style={styles.commWrap}>
-              <JBButton
-                title="장비선택 완료"
-                onPress={() => this.completeSelEqui()}
-                size="full"
-                Secondary
-              />
+              <ScrollView>
+                {listDataSource.map((item, key) => (
+                  <ExpandableItem
+                    key={item.category_name}
+                    onClickFunction={() => this.updateLayout(key)}
+                    item={item}
+                    completeSel={this.completeSelEqui}
+                  />
+                ))}
+              </ScrollView>
             </View>
           </View>
         </Modal>
@@ -233,3 +104,116 @@ export default class EquipementModal extends React.Component {
     );
   }
 }
+
+const EQUIPMENT_CONTENT = [
+  {
+    isExpanded: false,
+    category_name: '카고크레인',
+    subcategory: [{ id: 1, val: '5ton' }, { id: 2, val: '10ton' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '거미크레인',
+    subcategory: [{ id: 10, val: '2ton' }, { id: 11, val: '3ton' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '굴착기-타이어',
+    subcategory: [{ id: 20, val: '02W' }, { id: 21, val: '06W' }, { id: 22, val: '08W' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '굴착기-트랙',
+    subcategory: [{ id: 30, val: '02LC' }, { id: 31, val: '04LC' }, { id: 32, val: '06LC' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '스카이-일반',
+    subcategory: [
+      { id: 40, val: '1ton' },
+      { id: 41, val: '1.2ton' },
+      { id: 42, val: '2ton' },
+      { id: 43, val: '2.5ton' },
+      { id: 44, val: '3.5ton' },
+      { id: 45, val: '5ton' },
+    ],
+  },
+  {
+    isExpanded: false,
+    category_name: '스카이-굴절',
+    subcategory: [{ id: 50, val: '28m' }, { id: 51, val: '45m' }, { id: 52, val: '06LC' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '스카이-대형',
+    subcategory: [{ id: 60, val: '58m' }, { id: 61, val: '60m' }, { id: 62, val: '75m' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '지게차',
+    subcategory: [
+      { id: 70, val: '2ton' },
+      { id: 71, val: '2.5ton' },
+      { id: 72, val: '3ton' },
+      { id: 73, val: '4.5ton' },
+      { id: 74, val: '5ton' },
+      { id: 75, val: '6ton' },
+      { id: 76, val: '7ton' },
+      { id: 77, val: '8ton' },
+      { id: 78, val: '11.5ton' },
+      { id: 79, val: '15ton' },
+      { id: 80, val: '18ton' },
+      { id: 81, val: '25ton' },
+    ],
+  },
+  {
+    isExpanded: false,
+    category_name: '사다리차',
+    subcategory: [{ id: 60, val: '사다리차' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '하이랜더',
+    subcategory: [{ id: 60, val: '하이랜더' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '고소작업렌탈',
+    subcategory: [{ id: 60, val: '고소작업렌탈' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '펌프카',
+    subcategory: [{ id: 60, val: '펌프카' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '도로포장장비',
+    subcategory: [{ id: 60, val: '도로포장장비' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '로우더',
+    subcategory: [{ id: 60, val: '로우더' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '항타천공오가',
+    subcategory: [{ id: 60, val: '항타천공오가' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '불도저',
+    subcategory: [{ id: 60, val: '불도저' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '진동로라/발전기',
+    subcategory: [{ id: 60, val: '진동로라/발전기' }],
+  },
+  {
+    isExpanded: false,
+    category_name: '덤프임대',
+    subcategory: [{ id: 60, val: '덤프임대' }],
+  },
+];

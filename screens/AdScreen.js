@@ -195,7 +195,7 @@ class AdScreen extends React.Component {
 
   renderAdListItem = ({ item, index }) => (
     <View style={styles.adListItemWrap}>
-      <JangbeeAd ad={item} />
+      <JangbeeAd ad={item} navigation={this.props.navigation} />
       <View style={styles.adListCommWrap}>
         <View style={styles.adItemTopWrap}>
           <View style={styles.adItemTopLeftWrap}>

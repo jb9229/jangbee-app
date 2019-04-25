@@ -268,7 +268,7 @@ export default class ClientEvaluCreateModal extends React.Component {
                 <JBErrorMessage errorMSG={firmNumberValErrMessage} />
 
                 <JBTextInput
-                  title="사유"
+                  title="사유*"
                   value={reason}
                   onChangeText={text => this.setState({ reason: text })}
                   placeholder="블랙리스트 사유를 기입해 주세요"

@@ -72,16 +72,7 @@ function telAdvertiser(phoneNumber) {
   );
 }
 
-/**
- * 광고주의 업체정보 보기 함수
- */
-function gotoFirmDetail(accountId) {
-  const { navigation } = this.props;
-
-  navigation.navigate('FirmDetail', { accountId });
-}
-
-const JangbeeAd = ({ ad }) => (
+const JangbeeAd = ({ ad, navigation }) => (
   <View style={styles.container}>
     {ad.photoUrl === null || ad.photoUrl === '' ? (
       <View style={styles.bgAdWrap}>
@@ -90,12 +81,12 @@ const JangbeeAd = ({ ad }) => (
           <Text style={styles.subTitleText}>{ad.subTitle}</Text>
         </View>
         <View style={styles.telIconWrap}>
-          {ad.firmId ? (
+          {ad.accountId ? (
             <JBIcon
               name="information-circle"
               size={40}
               color={colors.point2}
-              onPress={() => gotoFirmDetail(ad.firmId)}
+              onPress={() => navigation.navigate('FirmDetail', { accountId: ad.accountId })}
             />
           ) : null}
           <JBIcon
@@ -117,12 +108,12 @@ const JangbeeAd = ({ ad }) => (
               <Text style={styles.subTitleText}>{ad.subTitle}</Text>
             </View>
             <View style={styles.telIconWrap}>
-              {ad.firmId ? (
+              {ad.accountId ? (
                 <JBIcon
                   name="information-circle"
                   size={40}
                   color={colors.point2}
-                  onPress={() => gotoFirmDetail(ad.firmId)}
+                  onPress={() => navigation.navigate('FirmDetail', { accountId: ad.accountId })}
                 />
               ) : null}
               <JBIcon

@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  Alert, Switch, StyleSheet, Text, View,
+  Alert, BackHandler, Switch, StyleSheet, Text, View,
 } from 'react-native';
-import { Constants, Location, Permissions } from 'expo';
+import { Location, Permissions } from 'expo';
 import JBButton from '../components/molecules/JBButton';
 import SearCondBox from '../components/organisms/SearCondBox';
 import JangbeeAdList from '../components/JangbeeAdList';
@@ -114,6 +114,11 @@ export default class GPSSearchScreen extends React.Component {
   componentDidMount() {
     this.setLocationInfo();
     this.setState({ isComponentMountComplete: true });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
   /**
@@ -159,6 +164,19 @@ export default class GPSSearchScreen extends React.Component {
     // });
 
     return location;
+  };
+
+  handleBackPress = () => {
+    const { isSearchViewMode } = this.state;
+    if (!isSearchViewMode) {
+      this.setState({ isSearchViewMode: true });
+    } else {
+      Alert.alert('장비콜 종료', '정말 종료 하시겠습니까?', [
+        { text: '아니요', onPress: () => {}, style: 'cancel' },
+        { text: '종료', onPress: () => BackHandler.exitApp() },
+      ]);
+    }
+    return true;
   };
 
   /**

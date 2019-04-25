@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
+import ClientMyInfoScreen from '../screens/ClientMyInfoScreen';
 import WorkListScreen from '../screens/WorkListScreen';
 import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 import AppliFirmList from '../components/AppliFirmList';
@@ -43,7 +43,10 @@ WorkListStack.navigationOptions = {
 };
 
 const ClientInfosStack = createStackNavigator({
-  Links: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
+  Links: {
+    screen: ClientMyInfoScreen,
+    navigationOptions: { title: '내등록 정보', headerStyle: { marginTop: -28 } },
+  },
 });
 
 ClientInfosStack.navigationOptions = {

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Alert, StyleSheet, Text, View,
-} from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { AdMobBanner } from 'expo';
 import Swiper from 'react-native-swiper';
 import JBActIndicator from './organisms/JBActIndicator';
@@ -99,7 +97,7 @@ export default class JangbeeAdList extends React.Component {
   renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
 
   render() {
-    const { admob } = this.props;
+    const { admob, navigation } = this.props;
     const { adList, isEmptyAdlist } = this.state;
     const slidStyles = [styles.slide1, styles.slide2, styles.slide3];
 
@@ -133,7 +131,7 @@ export default class JangbeeAdList extends React.Component {
 
     const adViewList = adList.map((ad, index) => (
       <View style={slidStyles[index]} key={index}>
-        <JangbeeAd ad={ad} />
+        <JangbeeAd ad={ad} navigation={navigation} />
       </View>
     ));
 

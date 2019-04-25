@@ -24,6 +24,8 @@ import * as firebaseDB from '../utils/FirebaseUtils';
 import { validate, validatePresence } from '../utils/Validation';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
+import JBActIndicatorModal from '../components/JBActIndicatorModal';
+import * as imageManager from '../common/ImageManager';
 
 const styles = StyleSheet.create({
   container: {
@@ -80,6 +82,7 @@ class AdCreateScreen extends React.Component {
       isAccEmpty: undefined,
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
+      isVisibleActIndiModal: false,
       accList: [],
       bookedAdTypeList: [1, 2],
       payErrMessage: '',
@@ -99,6 +102,7 @@ class AdCreateScreen extends React.Component {
       selFinUseNumValErrMessage: '',
       adEquipmentValErrMessage: '',
       adLocalValErrMessage: '',
+      imgUploadingMessage: '',
     };
   }
 
@@ -318,13 +322,21 @@ class AdCreateScreen extends React.Component {
       adGunguTypeData = '';
     }
 
+    // Ad Image Upload
+    let serverAdImgUrl = null;
+    if (adPhotoUrl) {
+      this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '광고사진 업로드중...' });
+      serverAdImgUrl = await imageManager.uploadImage(adPhotoUrl);
+      this.setState({ isVisibleActIndiModal: false });
+    }
+
     const newAd = {
       adType,
       accountId: user.uid,
       title: adTitle,
       subTitle: adSubTitle,
       forMonths,
-      photoUrl: adPhotoUrl,
+      photoUrl: serverAdImgUrl,
       telNumber: adTelNumber,
       fintechUseNum: selFinUseNum[0],
       equiTarget: adEquipmentTypeData,
@@ -527,6 +539,7 @@ class AdCreateScreen extends React.Component {
       isAccEmpty,
       isVisibleEquiModal,
       isVisibleMapAddModal,
+      isVisibleActIndiModal,
       accList,
       selFinUseNum,
       adType,
@@ -547,6 +560,7 @@ class AdCreateScreen extends React.Component {
       selFinUseNumValErrMessage,
       adEquipmentValErrMessage,
       adLocalValErrMessage,
+      imgUploadingMessage,
     } = this.state;
     return (
       <View style={styles.container}>
@@ -668,6 +682,11 @@ class AdCreateScreen extends React.Component {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
+        <JBActIndicatorModal
+          isVisibleModal={isVisibleActIndiModal}
+          message={imgUploadingMessage}
+          size="large"
+        />
       </View>
     );
   }

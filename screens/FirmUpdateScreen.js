@@ -15,6 +15,7 @@ import JBButton from '../components/molecules/JBButton';
 import { withLogin } from '../contexts/LoginProvider';
 import JBActIndicatorModal from '../components/JBActIndicatorModal';
 import colors from '../constants/Colors';
+import * as imageManager from '../common/ImageManager';
 
 const styles = StyleSheet.create({
   container: {
@@ -191,7 +192,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
   };
 
   /**
-   * 업체정보 이미지 업로드
+   * 업체정보 이미지 업데이트 함수
    */
   firmImageUpload = async (imgUri, preImg) => {
     // No change
@@ -200,67 +201,18 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     }
 
     // Current Image Delete and New Image Null
-    if (preImg !== '' && preImg !== undefined) {
-      const result = await this.removeFirmImage(preImg);
-      if (!result) {
-        return undefined;
-      }
+    if (preImg) {
+      await imageManager.removeImage(preImg);
     }
 
     // Current image null, new image upload
-    if (imgUri !== null && imgUri !== '') {
-      const serverImgUrl = await this.uploadImage(imgUri);
-
-      if (serverImgUrl === undefined) {
-        Alert.alert('이미지 업로드 실패');
-        return undefined;
-      }
+    if (imgUri) {
+      const serverImgUrl = await imageManager.uploadImage(imgUri);
 
       return serverImgUrl;
     }
 
     return null;
-  };
-
-  /**
-   * 이미지 업로드 함수
-   */
-  uploadImage = async (imgUri) => {
-    let serverImgUrl;
-    await api
-      .uploadImage(imgUri)
-      .then((resImgUrl) => {
-        serverImgUrl = resImgUrl;
-      })
-      .catch((error) => {
-        Alert.alert(
-          '이미지 업로드에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-        serverImgUrl = undefined;
-      });
-
-    return serverImgUrl;
-  };
-
-  /**
-   * 이미지 삭제 함수
-   */
-  removeFirmImage = async (imgUri) => {
-    let result;
-    await api
-      .removeImage(imgUri)
-      .then((res) => {
-        result = res;
-      })
-      .catch((error) => {
-        Alert.alert(
-          '이미지 삭제에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-        result = false;
-      });
-    return result;
   };
 
   /**

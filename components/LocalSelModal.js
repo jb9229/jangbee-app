@@ -8,7 +8,6 @@ import {
   UIManager,
   Platform,
 } from 'react-native';
-import JBButton from './molecules/JBButton';
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
@@ -33,18 +32,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 20,
   },
-  commWrap: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
 });
 
 export default class EquipementModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sido: '-',
-      gugun: '-',
       validationMessage: '',
       listDataSource: ADD_CONTENT,
     };
@@ -53,9 +46,8 @@ export default class EquipementModal extends React.Component {
     }
   }
 
-  completeSelLocal = () => {
+  completeSelLocal = (sido, gugun) => {
     const { completeSelLocal, closeModal } = this.props;
-    const { sido, gugun } = this.state;
 
     if (!this.validateSelLocal(sido, gugun)) {
       return;
@@ -70,6 +62,7 @@ export default class EquipementModal extends React.Component {
    */
   validateSelLocal = (sido, gugun) => {
     this.setState({ validationMessage: '' });
+
     if (sido === '-' || gugun === '-') {
       this.setState({ validationMessage: '검색할 지역을 선택해 주세요' });
       return false;
@@ -96,7 +89,7 @@ export default class EquipementModal extends React.Component {
   };
 
   render() {
-    const { isVisibleEquiModal, selEquipment } = this.props;
+    const { isVisibleEquiModal, selEquipment, closeModal } = this.props;
     const { listDataSource, validationMessage } = this.state;
 
     return (
@@ -105,30 +98,23 @@ export default class EquipementModal extends React.Component {
           animationType="slide"
           transparent
           visible={isVisibleEquiModal}
-          onRequestClose={() => {}}
+          onRequestClose={() => closeModal()}
         >
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
               <JangbeeAdList admob {...this.props} />
+              <JBErroMessage errorMSG={validationMessage} />
               <ScrollView>
                 {listDataSource.map((item, key) => (
                   <ExpandableItem
                     key={item.category_name}
-                    onClickFunction={this.updateLayout.bind(this, key)}
+                    onClickFunction={() => this.updateLayout(key)}
                     item={item}
+                    completeSel={this.completeSelLocal}
                   />
                 ))}
               </ScrollView>
-              <JBErroMessage errorMSG={validationMessage} />
-            </View>
-            <View style={styles.commWrap}>
-              <JBButton
-                title="지역 선택완료"
-                onPress={() => this.completeSelLocal()}
-                size="full"
-                Secondary
-              />
             </View>
           </View>
         </Modal>

@@ -5,6 +5,6 @@ export default {
   button: 'NanumGothic', // Hoon-saemaulundong
   buttonBig: 'SsangmundongGulimB',
   NanumGothic: 'NanumGothic',
-  NanumPen: 'NanumPen',
+  NanumPen: 'NanumPen', // 손글씨
   SsangmundongGulimB: 'SsangmundongGulimB',
 };
