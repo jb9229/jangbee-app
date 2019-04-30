@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Alert, Linking, Text, View,
-} from 'react-native';
+import { Alert, Linking } from 'react-native';
 import firebase from 'firebase';
 import Styled from 'styled-components';
 import { withLogin } from '../contexts/LoginProvider';
@@ -12,7 +10,6 @@ import Card from '../components/molecules/CardUI';
 const Container = Styled.View`
   flex: 1;
 `;
-const PhoneText = Styled.Text``;
 
 class ClientMyInfoScreen extends React.PureComponent {
   /**
@@ -34,12 +31,11 @@ class ClientMyInfoScreen extends React.PureComponent {
         <Card>
           <JBTextItem title="전화번호" value={user.phoneNumber} align="center" row />
         </Card>
-        <PhoneText>{}</PhoneText>
         <JBButton
           title="장비콜 메일 문의하기"
           onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
           size="full"
-          Primary
+          Secondary
         />
         <JBButton
           title="로그아웃"

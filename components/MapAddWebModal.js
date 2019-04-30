@@ -19,13 +19,19 @@ const styles = StyleSheet.create({
 
 export default class MapAddWebModal extends React.PureComponent {
   onMapAddrWebMSG = (mapAddrWebMSG) => {
-    const { setMapAddModalVisible, saveAddrInfo, nextFocus } = this.props;
+    const { saveAddrInfo } = this.props;
 
     const webData = JSON.parse(mapAddrWebMSG);
 
     if (webData.action === WEBMSG_ACTION_SAVE) {
       saveAddrInfo(webData.data);
     }
+
+    this.closeModal();
+  };
+
+  closeModal = () => {
+    const { setMapAddModalVisible, nextFocus } = this.props;
 
     nextFocus();
     setMapAddModalVisible(false);
@@ -40,9 +46,7 @@ export default class MapAddWebModal extends React.PureComponent {
           animationType="slide"
           transparent
           visible={isVisibleMapAddModal}
-          onRequestClose={() => {
-            console.log('Map address modal has been closed.');
-          }}
+          onRequestClose={() => this.closeModal}
         >
           <View style={styles.mapAddModalWrap}>
             <WebView

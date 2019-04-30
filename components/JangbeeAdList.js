@@ -40,6 +40,8 @@ const styles = StyleSheet.create({
 });
 
 export default class JangbeeAdList extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,6 +50,8 @@ export default class JangbeeAdList extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
+
     const {
       adLocation, euqiTarget, sidoTarget, gugunTarget, admob,
     } = this.props;
@@ -67,6 +71,10 @@ export default class JangbeeAdList extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   /**
    * 광고 리스트 설정
    * @param adLocation 광고위치(MAIN, LOCAL, EQUIPMENT)
@@ -76,6 +84,10 @@ export default class JangbeeAdList extends React.Component {
     api
       .getAd(adLocation, euqiTarget, sidoTarget, gugunTarget)
       .then((jsonRes) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         if (jsonRes != null && jsonRes.length === 0) {
           this.setState({ isEmptyAdlist: true });
           return;
@@ -83,6 +95,10 @@ export default class JangbeeAdList extends React.Component {
         this.setState({ isEmptyAdlist: false, adList: jsonRes });
       })
       .catch((error) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         Alert.alert(
           '광고리스트 요청에 문제가 있습니다',
           `다시 시도해 주세요 -> [${error.name}] ${error.message}`,

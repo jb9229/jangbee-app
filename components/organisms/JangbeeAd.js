@@ -10,7 +10,7 @@ import fonts from '../../constants/Fonts';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.point2Dark,
+    backgroundColor: colors.batangDark,
     width: '100%',
   },
   bgAdWrap: {
@@ -120,7 +120,7 @@ const JangbeeAd = ({ ad, navigation }) => (
               <JBIcon
                 name="call"
                 size={40}
-                color={colors.point}
+                color={colors.pointDark}
                 onPress={() => telAdvertiser(ad.telNumber)}
               />
             </View>

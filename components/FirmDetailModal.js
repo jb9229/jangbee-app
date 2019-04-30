@@ -112,7 +112,6 @@ export default class FirmMyInfoScreen extends React.Component {
   }
 
   init = (props) => {
-    console.log(props);
     const { isVisibleModal, accountId } = props;
 
     if (isVisibleModal && accountId) {
@@ -131,7 +130,6 @@ export default class FirmMyInfoScreen extends React.Component {
     api
       .getFirm(accountId)
       .then((firm) => {
-        console.log(firm);
         if (firm) {
           this.setState({ firm, isLoadingComplete: true });
         }

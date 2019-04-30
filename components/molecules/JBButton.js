@@ -21,8 +21,12 @@ const Container = styled.View`
 
 const TouchableHighlight = styled.TouchableHighlight`
   border-color: ${props => (props.borderColor ? props.borderColor : colors.pointDark)};
-  background-color: ${props => (props.color ? props.color : 'white')};
+
   border-width: 1px;
+  ${props => props.color
+    && `
+    background-color: ${props.color};
+  `};
   ${props => props.size === undefined
     && `
     padding: 12px 20px;
