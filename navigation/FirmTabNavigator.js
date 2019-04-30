@@ -10,7 +10,6 @@ import FirmRegisterScreen from '../screens/FirmRegisterScreen';
 import FirmUpdateScreen from '../screens/FirmUpdateScreen';
 import AdScreen from '../screens/AdScreen';
 import AdCreateScreen from '../screens/AdCreateScreen';
-import FirmDetailScreen from '../screens/FirmDetailScreen';
 import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import FirmWorkListScreen from '../screens/FirmWorkListScreen';
 import colors from '../constants/Colors';
@@ -38,7 +37,6 @@ const FirmMyInfoStack = createStackNavigator({
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  FirmDetail: FirmDetailScreen,
 });
 
 HomeStack.navigationOptions = {

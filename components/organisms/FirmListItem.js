@@ -89,7 +89,7 @@ function calDistance(dis) {
 }
 
 const firmListItem = (props) => {
-  const { item, onPressItem } = props.data;
+  const { item, onPressItem } = props;
 
   return (
     <View style={styles.itemWrap}>

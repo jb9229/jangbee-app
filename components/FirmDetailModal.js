@@ -1,21 +1,22 @@
 import React from 'react';
 import {
-  Alert, ActivityIndicator, ScrollView, StyleSheet, Text, View,
+  Alert, Modal, ScrollView, StyleSheet, Text, View,
 } from 'react-native';
-import firebase from 'firebase';
 import * as api from '../api/api';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';
-import JBButton from '../components/molecules/JBButton';
-import FirmInfoItem from '../components/organisms/FirmInfoItem';
+import JBButton from './molecules/JBButton';
+import FirmInfoItem from './organisms/FirmInfoItem';
 import { notifyError } from '../common/ErrorNotice';
 import callLink from '../common/CallLink';
+import JBIcon from './molecules/JBIcon';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.batangLight,
   },
   regFirmWrap: {
     flex: 1,
@@ -39,26 +40,6 @@ const styles = StyleSheet.create({
     marginTop: 39,
     paddingBottom: 39,
   },
-  cardWrap: {
-    flex: 1,
-    backgroundColor: colors.batangLight,
-    padding: 20,
-    paddingTop: 6,
-    paddingBottom: 6,
-  },
-  pointCard: {
-    backgroundColor: colors.point2,
-  },
-  largeCard: {
-    paddingLeft: 8,
-    paddingRight: 8,
-  },
-  card: {
-    flex: 1,
-    backgroundColor: colors.cardBatang,
-    padding: 5,
-    borderRadius: 15,
-  },
   frimTopItemWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -75,14 +56,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.point2,
   },
   titleWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
-    justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 5,
     paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     backgroundColor: 'rgba(250, 250, 250, 0.3)',
     elevation: 3,
     borderRadius: 5,
@@ -90,7 +74,7 @@ const styles = StyleSheet.create({
   fnameText: {
     fontSize: 30,
     fontFamily: fonts.titleTop,
-    color: colors.point2,
+    color: colors.point2Dark,
   },
   thumbnail: {
     width: 50,
@@ -120,34 +104,37 @@ export default class FirmMyInfoScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.init();
+    this.init(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { refresh } = nextProps.navigation.state.params;
-
-    if (refresh !== undefined) {
-      this.setMyFirmInfo();
-    }
+    this.init(nextProps);
   }
 
-  init = () => {
-    this.setMyFirmInfo();
-    this.setFirmEvaluList();
+  init = (props) => {
+    console.log(props);
+    const { isVisibleModal, accountId } = props;
+
+    if (isVisibleModal && accountId) {
+      this.setMyFirmInfo(accountId);
+      this.setFirmEvaluList(accountId);
+    }
   };
 
-  setMyFirmInfo = () => {
-    const { accountId } = this.props.navigation.state.params;
-
-    if (accountId === null || accountId === undefined) {
+  setMyFirmInfo = (accountId) => {
+    if (!accountId) {
       Alert.alert(`[${accountId}] 유효하지 않은 사용자 입니다`);
       return;
     }
 
+    this.setState({ isLoadingComplete: false });
     api
       .getFirm(accountId)
       .then((firm) => {
-        this.setState({ firm, isLoadingComplete: true });
+        console.log(firm);
+        if (firm) {
+          this.setState({ firm, isLoadingComplete: true });
+        }
       })
       .catch((error) => {
         Alert.alert(
@@ -161,10 +148,8 @@ export default class FirmMyInfoScreen extends React.Component {
   /**
    * 업체 평가 리스트 설정함수
    */
-  setFirmEvaluList = () => {
-    const { accountId } = this.props.navigation.state.params;
-
-    if (accountId === null || accountId === undefined) {
+  setFirmEvaluList = (accountId) => {
+    if (!accountId) {
       Alert.alert(`[${accountId}] 유효하지 않은 사용자 입니다`);
       return;
     }
@@ -184,64 +169,57 @@ export default class FirmMyInfoScreen extends React.Component {
       });
   };
 
-  registerFirm = () => {
-    const { navigation } = this.props;
-
-    navigation.navigate('FirmRegister');
-  };
-
-  /**
-   * 로그아웃 함수
-   */
-  onSignOut = async () => {
-    try {
-      await firebase.auth().signOut();
-    } catch (e) {
-      Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
-    }
-  };
-
   render() {
+    const { isVisibleModal, closeModal } = this.props;
     const { firm, isLoadingComplete, evaluList } = this.state;
-    if (!isLoadingComplete) {
-      return (
-        <View style={styles.container}>
-          <Text>업체정보 불러오는중...</Text>
-          <ActivityIndicator size="large" color={colors.indicator} />
-        </View>
-      );
+
+    if (!isVisibleModal) {
+      return <View />;
     }
 
     if (firm === undefined) {
       return (
-        <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
           <View style={styles.regFirmWrap}>
             <Text style={styles.regFirmNotice}>업체상세 정보 요청에 문제가 있습니다,</Text>
             <Text style={styles.regFirmNotice}>다시 시도해 주세요.</Text>
             <JBButton title="새로고침" onPress={() => this.init()} />
           </View>
-        </View>
+        </Modal>
       );
     }
 
     return (
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrViewWrap}>
-          <FirmInfoItem firm={firm} evaluList={evaluList} />
-        </ScrollView>
-        <View style={styles.titleWrap}>
-          <Text style={styles.fnameText}>{firm.fname}</Text>
-        </View>
+      <Modal
+        animationType="slide"
+        transparent
+        visible={isVisibleModal}
+        onRequestClose={() => closeModal()}
+      >
+        <View style={styles.container}>
+          <ScrollView contentContainerStyle={styles.scrViewWrap}>
+            <FirmInfoItem firm={firm} evaluList={evaluList} />
+          </ScrollView>
+          <View style={styles.titleWrap}>
+            <JBIcon name="close" size={23} onPress={() => this.cancel()} />
+            <Text style={styles.fnameText}>{firm.fname}</Text>
+          </View>
 
-        <View style={styles.callButWrap}>
-          <JBButton
-            title="전화걸기"
-            onPress={() => callLink(firm.phoneNumber, true)}
-            size="full"
-            Primary
-          />
+          <View style={styles.callButWrap}>
+            <JBButton
+              title="전화걸기"
+              onPress={() => callLink(firm.phoneNumber, true)}
+              size="full"
+              Primary
+            />
+          </View>
         </View>
-      </View>
+      </Modal>
     );
   }
 }

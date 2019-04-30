@@ -1,14 +1,17 @@
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import FirmListItem from './FirmListItem';
 import ListFooter from '../molecules/ListFooter';
 import ListSeparator from '../molecules/ListSeparator';
+import FirmDetailModal from '../FirmDetailModal';
 
 export default class FirmSearList extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      isVisibleDetailModal: false,
+    };
   }
 
   componentDidMount() {}
@@ -18,15 +21,13 @@ export default class FirmSearList extends React.Component {
    *
    * @param {Object} itemOjb 리스트의 아이템 객체
    */
-  renderListItem = (itemObj) => {
-    const { navigation } = this.props;
-
-    const props = {
-      item: itemObj.item,
-      onPressItem: id => navigation.navigate('FirmDetail', { accountId: id }),
-    };
-    return <FirmListItem data={props} />;
-  };
+  renderListItem = ({ item }) => (
+    <FirmListItem
+      item={item}
+      onPressItem={accountId => this.setState({ detailFirmId: accountId, isVisibleDetailModal: true })
+      }
+    />
+  );
 
   render() {
     const {
@@ -40,8 +41,15 @@ export default class FirmSearList extends React.Component {
       handleRefresh,
       handleLoadMore,
     } = this.props;
+
+    const { detailFirmId, isVisibleDetailModal } = this.state;
     return (
       <View>
+        <FirmDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          accountId={detailFirmId}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+        />
         <FlatList
           data={data}
           renderItem={this.renderListItem}

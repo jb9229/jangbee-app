@@ -77,9 +77,7 @@ export default class ModalTemplate extends React.Component {
         animationType="slide"
         transparent
         visible={isVisibleModal}
-        onRequestClose={() => {
-          console.log('modal close');
-        }}
+        onRequestClose={() => closeModal()}
       >
         <Container>
           <ContentsView>
