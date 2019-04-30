@@ -61,9 +61,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
           animationType="slide"
           transparent
           visible={isVisibleModal}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}
+          onRequestClose={() => setVisibleModal(false)}
         >
           <View style={styles.modalWrap}>
             <JBIcon name="close" size={32} onPress={() => setVisibleModal(false)} />

@@ -33,13 +33,10 @@ export default class App extends React.Component {
       ...Icon.Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free
       // to remove this if you are not using it in your app
-      'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-      'yang-rounded': require('./assets/fonts/Yang-roundgothic.ttf'),
-      'Hamchorong-batang': require('./assets/fonts/Hamchorong-batang.ttf'),
-      'Hoon-saemaulundong': require('./assets/fonts/HoonSaemaulundongR.ttf'),
-      NanumGothic: require('./assets/fonts/NanumGothic.ttf'),
-      NanumPen: require('./assets/fonts/NanumPen.ttf'),
       SsangmundongGulimB: require('./assets/fonts/Typo_SsangmundongGulimB.ttf'),
+      NanumGothic: require('./assets/fonts/NanumGothic.ttf'),
+      'Hamchorong-batang': require('./assets/fonts/Hamchorong-batang.ttf'),
+      NanumPen: require('./assets/fonts/NanumPen.ttf'),
     }),
   ]);
 

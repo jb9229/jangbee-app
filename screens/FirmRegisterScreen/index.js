@@ -14,6 +14,7 @@ import JBActIndicatorModal from '../../components/JBActIndicatorModal';
 import JBButton from '../../components/molecules/JBButton';
 import colors from '../../constants/Colors';
 import * as imageManager from '../../common/ImageManager';
+import Card from '../../components/molecules/CardUI';
 
 const styles = StyleSheet.create({
   container: {
@@ -407,134 +408,132 @@ class FirmRegisterScreen extends React.Component {
       <View style={styles.container}>
         <KeyboardAvoidingView>
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            <View style={styles.cardWrap}>
-              <View style={styles.card}>
-                <JBTextInput
-                  title="업체명*"
-                  value={fname}
-                  onChangeText={text => this.setState({ fname: text })}
-                  placeholder="업체명을 입력해 주세요"
-                  refer={(input) => {
-                    this.fnameTextInput = input;
-                  }}
-                />
-                <JBErrorMessage errorMSG={fnameValErrMessage} />
+            <Card>
+              <JBTextInput
+                title="업체명*"
+                value={fname}
+                onChangeText={text => this.setState({ fname: text })}
+                placeholder="업체명을 입력해 주세요"
+                refer={(input) => {
+                  this.fnameTextInput = input;
+                }}
+              />
+              <JBErrorMessage errorMSG={fnameValErrMessage} />
 
-                <JBTextInput
-                  title="전화번호*"
-                  value={phoneNumber}
-                  onChangeText={text => this.setState({ phoneNumber: text })}
-                  placeholder="전화번호를 입력해 주세요"
-                  keyboardType="phone-pad"
-                  refer={(input) => {
-                    this.telTextInput = input;
-                  }}
-                />
-                <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
+              <JBTextInput
+                title="전화번호*"
+                value={phoneNumber}
+                onChangeText={text => this.setState({ phoneNumber: text })}
+                placeholder="전화번호를 입력해 주세요"
+                keyboardType="phone-pad"
+                refer={(input) => {
+                  this.telTextInput = input;
+                }}
+              />
+              <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
-                <JBTextInput
-                  title="보유 장비*"
-                  value={equiListStr}
-                  onChangeText={text => this.setState({ equiListStr: text })}
-                  onFocus={() => this.openSelEquipmentModal()}
-                  placeholder="보유 장비를 선택해 주세요"
-                />
-                <JBErrorMessage errorMSG={equiListStrValErrMessage} />
+              <JBTextInput
+                title="보유 장비*"
+                value={equiListStr}
+                onChangeText={text => this.setState({ equiListStr: text })}
+                onFocus={() => this.openSelEquipmentModal()}
+                placeholder="보유 장비를 선택해 주세요"
+              />
+              <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
-                <JBTextInput
-                  title="업체주소(고객검색시 거리계산 기준이됨)*"
-                  value={address}
-                  tiRefer={(input) => {
-                    this.addrTextInput = input;
-                  }}
-                  onChangeText={text => this.setState({ address: text })}
-                  onFocus={() => this.openMapAddModal()}
-                  placeholder="주소를 검색해주세요"
-                />
-                <JBErrorMessage errorMSG={addressValErrMessage} />
+              <JBTextInput
+                title="업체주소(고객검색시 거리계산 기준이됨)*"
+                value={address}
+                tiRefer={(input) => {
+                  this.addrTextInput = input;
+                }}
+                onChangeText={text => this.setState({ address: text })}
+                onFocus={() => this.openMapAddModal()}
+                placeholder="주소를 검색해주세요"
+              />
+              <JBErrorMessage errorMSG={addressValErrMessage} />
 
-                <JBTextInput
-                  title="업체 상세주소"
-                  value={addressDetail}
-                  tiRefer={(input) => {
-                    this.addrDetTextInput = input;
-                  }}
-                  onChangeText={text => this.setState({ addressDetail: text })}
-                  placeholder="상세주소를 입력해 주세요"
-                />
+              <JBTextInput
+                title="업체 상세주소"
+                value={addressDetail}
+                tiRefer={(input) => {
+                  this.addrDetTextInput = input;
+                }}
+                onChangeText={text => this.setState({ addressDetail: text })}
+                placeholder="상세주소를 입력해 주세요"
+              />
 
-                <JBTextInput
-                  title="업체 소개"
-                  value={introduction}
-                  onChangeText={text => this.setState({ introduction: text })}
-                  placeholder="업체 소개를 해 주세요"
-                  multiline
-                  numberOfLines={5}
-                />
-                <JBErrorMessage errorMSG={introductionValErrMessage} />
+              <JBTextInput
+                title="업체 소개"
+                value={introduction}
+                onChangeText={text => this.setState({ introduction: text })}
+                placeholder="업체 소개를 해 주세요"
+                multiline
+                numberOfLines={5}
+              />
+              <JBErrorMessage errorMSG={introductionValErrMessage} />
 
-                <ImagePickInput
-                  itemTitle="대표사진*"
-                  imgUrl={thumbnail}
-                  aspect={[1, 1]}
-                  setImageUrl={url => this.setState({ thumbnail: url })}
-                />
-                <JBErrorMessage errorMSG={thumbnailValErrMessage} />
+              <ImagePickInput
+                itemTitle="대표사진*"
+                imgUrl={thumbnail}
+                aspect={[1, 1]}
+                setImageUrl={url => this.setState({ thumbnail: url })}
+              />
+              <JBErrorMessage errorMSG={thumbnailValErrMessage} />
 
-                <ImagePickInput
-                  itemTitle="작업사진1*"
-                  imgUrl={photo1}
-                  setImageUrl={url => this.setState({ photo1: url })}
-                />
-                <JBErrorMessage errorMSG={photo1ValErrMessage} />
+              <ImagePickInput
+                itemTitle="작업사진1*"
+                imgUrl={photo1}
+                setImageUrl={url => this.setState({ photo1: url })}
+              />
+              <JBErrorMessage errorMSG={photo1ValErrMessage} />
 
-                <ImagePickInput
-                  itemTitle="작업사진2"
-                  imgUrl={photo2}
-                  setImageUrl={url => this.setState({ photo2: url })}
-                />
-                <JBErrorMessage errorMSG={photo2ValErrMessage} />
+              <ImagePickInput
+                itemTitle="작업사진2"
+                imgUrl={photo2}
+                setImageUrl={url => this.setState({ photo2: url })}
+              />
+              <JBErrorMessage errorMSG={photo2ValErrMessage} />
 
-                <ImagePickInput
-                  itemTitle="작업사진3"
-                  imgUrl={photo3}
-                  setImageUrl={url => this.setState({ photo3: url })}
-                />
-                <JBErrorMessage errorMSG={photo3ValErrMessage} />
+              <ImagePickInput
+                itemTitle="작업사진3"
+                imgUrl={photo3}
+                setImageUrl={url => this.setState({ photo3: url })}
+              />
+              <JBErrorMessage errorMSG={photo3ValErrMessage} />
 
-                <JBTextInput
-                  title="블로그"
-                  value={blog}
-                  onChangeText={text => this.setState({ blog: text })}
-                  placeholder="블로그 주소를 입력해 주세요"
-                />
-                <JBErrorMessage errorMSG={blogValErrMessage} />
+              <JBTextInput
+                title="블로그"
+                value={blog}
+                onChangeText={text => this.setState({ blog: text })}
+                placeholder="블로그 주소를 입력해 주세요"
+              />
+              <JBErrorMessage errorMSG={blogValErrMessage} />
 
-                <JBTextInput
-                  title="SNG"
-                  value={sns}
-                  onChangeText={text => this.setState({ sns: text })}
-                  placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
-                />
-                <JBErrorMessage errorMSG={snsValErrMessage} />
+              <JBTextInput
+                title="SNG"
+                value={sns}
+                onChangeText={text => this.setState({ sns: text })}
+                placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
+              />
+              <JBErrorMessage errorMSG={snsValErrMessage} />
 
-                <JBTextInput
-                  title="홈페이지"
-                  value={homepage}
-                  onChangeText={text => this.setState({ homepage: text })}
-                  placeholder="홈페이지 주소를 입력해 주세요"
-                />
-                <JBErrorMessage errorMSG={homepageValErrMessage} />
-              </View>
+              <JBTextInput
+                title="홈페이지"
+                value={homepage}
+                onChangeText={text => this.setState({ homepage: text })}
+                placeholder="홈페이지 주소를 입력해 주세요"
+              />
+              <JBErrorMessage errorMSG={homepageValErrMessage} />
+            </Card>
 
-              <View style={styles.regiFormCommWrap}>
-                <JBButton
-                  title="업체등록하기"
-                  onPress={() => this.createFirm()}
-                  size="full"
-                  Primary
-                />
-              </View>
+            <View style={styles.regiFormCommWrap}>
+              <JBButton
+                title="업체등록하기"
+                onPress={() => this.createFirm()}
+                size="full"
+                Primary
+              />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

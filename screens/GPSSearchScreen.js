@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  Alert, BackHandler, Switch, StyleSheet, Text, View,
+  Alert, BackHandler, Switch, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { Location, Permissions } from 'expo';
+import Styled from 'styled-components/native';
 import JBButton from '../components/molecules/JBButton';
 import SearCondBox from '../components/organisms/SearCondBox';
 import JangbeeAdList from '../components/JangbeeAdList';
@@ -21,7 +22,7 @@ import JBActIndicator from '../components/organisms/JBActIndicator';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.batangLight,
   },
   adWrap: {
     paddingBottom: 10,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.batangLight,
+    backgroundColor: colors.pointBatang,
     padding: 5,
     paddingLeft: 8,
     paddingRight: 8,
@@ -70,11 +71,13 @@ const styles = StyleSheet.create({
   switchWrap: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    marginTop: 10,
+    marginBottom: 30,
   },
-  switchText: {
-    fontSize: 15,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
+  searchModeSwitch: {
+    transform: [{ scaleX: 1.8 }, { scaleY: 1.5 }],
+    marginLeft: 40,
+    marginRight: 30,
   },
   firmListWrap: {
     flex: 1,
@@ -84,6 +87,22 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
 });
+
+const SwitchText = Styled.Text`
+  font-family: ${fonts.titleTop};
+  font-size: 26;
+  align-items: flex-end;
+  justify-content: center;
+  color: ${colors.point2};
+  ${props => props.select
+    && `
+    color: ${colors.batang};
+  `}
+`;
+
+const SwitchTO = Styled.TouchableOpacity`
+    
+`;
 
 export default class GPSSearchScreen extends React.Component {
   static navigationOptions = {
@@ -469,6 +488,21 @@ export default class GPSSearchScreen extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <View style={styles.searEquiWrap}>
+                <View style={styles.switchWrap}>
+                  <SwitchTO onPress={() => this.changeSearMode(false)}>
+                    <SwitchText select={isLocalSearch}>주변 검색</SwitchText>
+                  </SwitchTO>
+                  <Switch
+                    value={isLocalSearch}
+                    onValueChange={newValue => this.changeSearMode(newValue)}
+                    thumbColor={colors.point2}
+                    style={styles.searchModeSwitch}
+                    trackColor={{ false: colors.batang, true: colors.batang }}
+                  />
+                  <SwitchTO onPress={() => this.changeSearMode(true)}>
+                    <SwitchText select={!isLocalSearch}>지역 검색</SwitchText>
+                  </SwitchTO>
+                </View>
                 <SearCondBox
                   searchCondition={searEquipment}
                   onPress={() => this.setState({ isVisibleEquiModal: true })}
@@ -502,19 +536,10 @@ export default class GPSSearchScreen extends React.Component {
                     />
                   </View>
                 ) : null}
-                <View style={styles.switchWrap}>
-                  <Text style={styles.switchText}>내 주변 검색</Text>
-                  <Switch
-                    value={isLocalSearch}
-                    onValueChange={newValue => this.changeSearMode(newValue)}
-                    thumbColor={colors.point2}
-                  />
-                  <Text style={styles.switchText}>지역 검색</Text>
-                </View>
                 <FirmCreaErrMSG errorMSG={validationMessage} />
                 {isLocalSearch ? (
                   <JBButton
-                    title="지역 검색"
+                    title="지역 검색하기"
                     onPress={() => this.searchLocJangbee()}
                     size="full"
                     bgColor={colors.point2}
@@ -522,7 +547,7 @@ export default class GPSSearchScreen extends React.Component {
                   />
                 ) : (
                   <JBButton
-                    title="내 주변 검색"
+                    title="주변 검색하기"
                     onPress={() => this.searchNearJangbee()}
                     size="full"
                     bgColor={colors.point2}

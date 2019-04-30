@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Image, StyleSheet, TouchableHighlight, Text, View,
 } from 'react-native';
+import { Rating } from 'react-native-elements';
 import JBIcon from '../molecules/JBIcon';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
@@ -15,11 +16,25 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
   },
+  leftWrap: {
+    alignItems: 'center',
+  },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 30,
     margin: 3,
+  },
+  ratingWrap: {
+    alignItems: 'center',
+    marginTop: 3,
+  },
+  rating: {},
+  ratingText: {
+    fontSize: 12,
+  },
+  noneRatingText: {
+    fontFamily: fonts.title,
   },
   centerWrap: {
     flex: 3,
@@ -47,9 +62,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: 5,
+    paddingRight: 5,
   },
-  callIconWrap: {
-    justifyContent: 'center',
+  topWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
 
@@ -69,13 +90,36 @@ function calDistance(dis) {
 
 const firmListItem = (props) => {
   const { item, onPressItem } = props.data;
+
   return (
     <View style={styles.itemWrap}>
-      <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
+      <View style={styles.leftWrap}>
+        <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
+        {item.rating ? (
+          <View style={styles.ratingWrap}>
+            <Rating imageSize={10} readonly startingValue={item.rating} style={styles.rating} />
+            <Text style={styles.ratingText}>
+(
+              {item.ratingCnt}
+)
+            </Text>
+          </View>
+        ) : (
+          <Text style={styles.noneRatingText}>후기없음</Text>
+        )}
+      </View>
       <View style={styles.centerWrap}>
-        <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
-          <Text style={styles.fnameText}>{item.fname}</Text>
-        </TouchableHighlight>
+        <View style={styles.topWrap}>
+          <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
+            <Text style={styles.fnameText}>{item.fname}</Text>
+          </TouchableHighlight>
+          <JBIcon
+            name="call"
+            size={32}
+            color={colors.point}
+            onPress={() => callLink(item.phoneNumber)}
+          />
+        </View>
         <Text style={styles.intrText} numberOfLines={1}>
           {item.introduction}
         </Text>
@@ -83,14 +127,6 @@ const firmListItem = (props) => {
           <Text style={styles.bottomText}>{item.equiListStr}</Text>
           <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
         </View>
-      </View>
-      <View style={styles.callIconWrap}>
-        <JBIcon
-          name="call"
-          size={42}
-          color={colors.point}
-          onPress={() => callLink(item.phoneNumber)}
-        />
       </View>
     </View>
   );

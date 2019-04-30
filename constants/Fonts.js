@@ -1,5 +1,6 @@
 export default {
   titleTop: 'NanumPen',
+  title: 'NanumGothic',
   titleMiddle: 'SsangmundongGulimB', // yang-rounded
   batang: 'Hamchorong-batang',
   button: 'NanumGothic', // Hoon-saemaulundong

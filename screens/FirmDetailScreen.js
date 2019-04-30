@@ -1,24 +1,15 @@
 import React from 'react';
 import {
-  Alert,
-  ActivityIndicator,
-  Linking,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
+  Alert, ActivityIndicator, ScrollView, StyleSheet, Text, View,
 } from 'react-native';
 import firebase from 'firebase';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import * as api from '../api/api';
-import JBTextItem from '../components/molecules/JBTextItem';
-import FirmImageItem from '../components/FirmImageItem';
 import fonts from '../constants/Fonts';
-import CmException from '../common/CmException';
 import colors from '../constants/Colors';
 import JBButton from '../components/molecules/JBButton';
+import FirmInfoItem from '../components/organisms/FirmInfoItem';
+import { notifyError } from '../common/ErrorNotice';
+import callLink from '../common/CallLink';
 
 const styles = StyleSheet.create({
   container: {
@@ -77,8 +68,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   topCommWrap: {
-    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 25,
+  },
+  rating: {
+    backgroundColor: colors.point2,
   },
   titleWrap: {
     position: 'absolute',
@@ -119,14 +113,14 @@ export default class FirmMyInfoScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firm: undefined,
-      isVisibleProfileModal: false,
       isLoadingComplete: false,
+      firm: undefined,
+      evaluList: [],
     };
   }
 
   componentDidMount() {
-    this.setMyFirmInfo();
+    this.init();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -136,6 +130,11 @@ export default class FirmMyInfoScreen extends React.Component {
       this.setMyFirmInfo();
     }
   }
+
+  init = () => {
+    this.setMyFirmInfo();
+    this.setFirmEvaluList();
+  };
 
   setMyFirmInfo = () => {
     const { accountId } = this.props.navigation.state.params;
@@ -159,21 +158,36 @@ export default class FirmMyInfoScreen extends React.Component {
       });
   };
 
+  /**
+   * 업체 평가 리스트 설정함수
+   */
+  setFirmEvaluList = () => {
+    const { accountId } = this.props.navigation.state.params;
+
+    if (accountId === null || accountId === undefined) {
+      Alert.alert(`[${accountId}] 유효하지 않은 사용자 입니다`);
+      return;
+    }
+
+    api
+      .getFirmEvalu(accountId)
+      .then((evaluList) => {
+        if (evaluList) {
+          this.setState({ evaluList });
+        }
+      })
+      .catch((error) => {
+        notifyError(
+          '업체후기 요청 문제발생',
+          `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+        );
+      });
+  };
+
   registerFirm = () => {
     const { navigation } = this.props;
 
     navigation.navigate('FirmRegister');
-  };
-
-  /**
-   * 업체 블로그/홈페이지/SNS링크 열기
-   */
-  openLinkUrl = (url) => {
-    if (url === null || url === '') {
-      return;
-    }
-
-    Linking.openURL(url).catch(Alert.alert(`링크 열기에 문제가 있습니다 [${url}]`));
   };
 
   /**
@@ -188,7 +202,7 @@ export default class FirmMyInfoScreen extends React.Component {
   };
 
   render() {
-    const { firm, isVisibleProfileModal, isLoadingComplete } = this.state;
+    const { firm, isLoadingComplete, evaluList } = this.state;
     if (!isLoadingComplete) {
       return (
         <View style={styles.container}>
@@ -202,11 +216,9 @@ export default class FirmMyInfoScreen extends React.Component {
       return (
         <View style={styles.container}>
           <View style={styles.regFirmWrap}>
-            <Text style={styles.regFirmNotice}>
-              고객님들 검색에 콜받을 수 있게, 업체정보를 등록해 주세요.
-            </Text>
-            <JBButton title="업체정보 등록하기" onPress={() => this.registerFirm()} size="big" />
-            <JBButton title="로그아웃" onPress={() => this.onSignOut()} underline />
+            <Text style={styles.regFirmNotice}>업체상세 정보 요청에 문제가 있습니다,</Text>
+            <Text style={styles.regFirmNotice}>다시 시도해 주세요.</Text>
+            <JBButton title="새로고침" onPress={() => this.init()} />
           </View>
         </View>
       );
@@ -215,49 +227,7 @@ export default class FirmMyInfoScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrViewWrap}>
-          <View style={[styles.cardWrap]}>
-            <View style={[styles.card, styles.pointCard]}>
-              <View style={styles.frimTopItemWrap}>
-                <View style={styles.firmLinkWrap}>
-                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.blog)}>
-                    <MaterialCommunityIcons
-                      name="blogger"
-                      size={32}
-                      color={firm.blog !== '' ? colors.pointDark : 'gray'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.homepage)}>
-                    <MaterialCommunityIcons
-                      name="home-circle"
-                      size={32}
-                      color={firm.homepage !== '' ? colors.pointDark : 'gray'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.sns)}>
-                    <AntDesign
-                      name="facebook-square"
-                      size={32}
-                      color={firm.sns !== '' ? colors.pointDark : 'gray'}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.topCommWrap}>
-                  <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
-                </View>
-              </View>
-
-              <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
-              <JBTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
-              <JBTextItem title="업체소개" value={firm.introduction} revColor />
-            </View>
-          </View>
-          <View style={[styles.cardWrap, styles.largeCard]}>
-            <View style={[styles.card]}>
-              <FirmImageItem title="작업사진1" value={firm.photo1} />
-              <FirmImageItem title="작업사진2" value={firm.photo2} />
-              <FirmImageItem title="작업사진3" value={firm.photo3} />
-            </View>
-          </View>
+          <FirmInfoItem firm={firm} evaluList={evaluList} />
         </ScrollView>
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
@@ -266,7 +236,7 @@ export default class FirmMyInfoScreen extends React.Component {
         <View style={styles.callButWrap}>
           <JBButton
             title="전화걸기"
-            onPress={() => this.openLinkUrl(`tel:${firm.phoneNumber}`)}
+            onPress={() => callLink(firm.phoneNumber, true)}
             size="full"
             Primary
           />

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Alert, Dimensions, StyleSheet, View,
 } from 'react-native';
-import { SceneMap, TabView } from 'react-native-tab-view';
+import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
@@ -10,6 +10,8 @@ import FirmOpenWorkList from '../components/FirmOpenWorkList';
 import FirmMatchedWorkList from '../components/FirmMatchedWorkList';
 import { notifyError } from '../common/ErrorNotice';
 import { getMyEquipment } from '../utils/AsyncStorageUtils';
+import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
 
 const dispatchFee = '3000';
 
@@ -19,6 +21,16 @@ const styles = StyleSheet.create({
   },
   scene: {
     flex: 1,
+  },
+  tabBarIndicator: {
+    backgroundColor: colors.point,
+  },
+  tabBar: {
+    backgroundColor: colors.point2Dark,
+  },
+  tabBarLabel: {
+    fontFamily: fonts.titleMiddle,
+    fontWeight: 'bold',
   },
 });
 
@@ -348,6 +360,14 @@ class FirmWorkListScreen extends React.Component {
           })}
           onIndexChange={this.changeTabView}
           initialLayout={{ width: Dimensions.get('window').width }}
+          renderTabBar={props => (
+            <TabBar
+              {...props}
+              indicatorStyle={styles.tabBarIndicator}
+              style={styles.tabBar}
+              labelStyle={styles.tabBarLabel}
+            />
+          )}
         />
       </View>
     );

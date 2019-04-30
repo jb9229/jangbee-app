@@ -43,6 +43,13 @@ const Contents = styled.Text`
     && `
     margin-left: 5;
   `}
+  ${props => props.noneTitle
+    && `
+    font-family: ${fonts.title};
+    margin-left: 0;
+    font-size: 14px;
+    font-weight: 400;
+  `}
 `;
 
 export default class JBTextItem extends React.PureComponent {
@@ -57,7 +64,9 @@ export default class JBTextItem extends React.PureComponent {
     return (
       <Container row={row} small={small}>
         <Title small={small}>{title === undefined ? '' : `${title}: `}</Title>
-        <Contents underline={underline}>{value}</Contents>
+        <Contents underline={underline} noneTitle={title === undefined}>
+          {value}
+        </Contents>
         {secondeValue && <Contents underline={underline}>{secondeValue}</Contents>}
       </Container>
     );

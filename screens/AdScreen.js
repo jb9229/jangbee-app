@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   commWrap: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    borderTopColor: colors.pointDark,
+    borderTopColor: colors.point2,
     borderTopWidth: 1,
   },
   emptyText: {
@@ -300,28 +300,36 @@ class AdScreen extends React.Component {
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={this.renderSeparator}
         />
-        <View style={styles.commWrap}>
-          <JBButton
-            title="결제통장 바꾸기"
-            onPress={() => this.setState({ isVisibleFinAccUpdateModal: true })}
-            size="small"
-            underline
-            Secondary
-          />
-          <View
-            style={{
-              borderLeftColor: colors.pointDark,
-              borderLeftWidth: 1,
-            }}
-          />
+        {isAdEmpty ? (
           <JBButton
             title="내장비 홍보하기"
             onPress={() => navigation.navigate('AdCreate')}
-            size={isAdEmpty ? 'full' : 'small'}
-            Secondary
+            size="full"
+            Primary
             underline
           />
-        </View>
+        ) : (
+          <View style={styles.commWrap}>
+            <JBButton
+              title="결제통장 바꾸기"
+              onPress={() => this.setState({ isVisibleFinAccUpdateModal: true })}
+              underline
+              Primary
+            />
+            <View
+              style={{
+                borderLeftColor: colors.point2,
+                borderLeftWidth: 1,
+              }}
+            />
+            <JBButton
+              title="내장비 홍보하기"
+              onPress={() => navigation.navigate('AdCreate')}
+              Primary
+              underline
+            />
+          </View>
+        )}
       </View>
     );
   }

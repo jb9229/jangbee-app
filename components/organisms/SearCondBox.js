@@ -7,7 +7,7 @@ import fonts from '../../constants/Fonts';
 
 const TouchableHighlight = styled.TouchableHighlight`
   background-color: ${props => (props.isSelected ? colors.batangDark : 'white')};
-  border-color: ${props => (props.isSelected ? 'white' : colors.pointDark)};
+  border-color: ${props => (props.isSelected ? 'white' : colors.point)};
   border-width: 1px;
   border-radius: 5;
   align-items: center;
@@ -21,7 +21,7 @@ const TouchableHighlight = styled.TouchableHighlight`
 `;
 
 const Text = styled.Text`
-  color: ${props => (props.isSelected ? colors.pointDark : colors.pointDark)};
+  color: ${props => (props.isSelected ? colors.point : colors.pointLight)};
   font-family: ${fonts.button};
   font-size: 20;
   ${props => props.isSelected

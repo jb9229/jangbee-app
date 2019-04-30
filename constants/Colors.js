@@ -5,15 +5,21 @@ export default {
   titleDark: '#4D4A4A',
   titleLight: '#E3DCDC',
   cardBatang: '#E3DCDC',
+
   batangLight: '#E3DCDC',
-  batangDark: '#4D4A4A',
+  batangDark: '#3E3936',
   batang: '#7A7373',
-  point: '#FDCA24',
-  pointLight: '#fef3cd',
-  pointDark: '#F6C31F',
-  point2: '#5392aa', // RGB: 83, 146, 170
-  point2Light: '#eff8fc', // rgb(239, 248, 252)
-  point2Dark: '#2a4955',
+
+  pointDark: '#F7AE43',
+  point: '#F9C06B',
+  pointLight: '#FBC689', //
+  pointBatang: '#FDEFDB', //
+
+  point2Dark: '#6299D2', // 64,142,228
+  point2: '#82b6ed', // RGB: 130, 182, 237
+  point2Light: '#D3E5F9', // rgb(239, 248, 252)
+  point2Batang: '#ECF5FF', //
+
   iconDefault: '#5392aa',
   indicator: '#FDCA24',
   textInputBorder: '#7A7373',

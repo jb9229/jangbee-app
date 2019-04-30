@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.point2Dark,
+    width: '100%',
   },
   bgAdWrap: {
     flex: 1,
@@ -48,11 +49,11 @@ const styles = StyleSheet.create({
   telIconWrap: {
     flex: 1,
     flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'flex-end',
     paddingBottom: 10,
-    paddingRight: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   text: {
     color: '#fff',

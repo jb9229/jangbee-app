@@ -13,6 +13,7 @@ import AdCreateScreen from '../screens/AdCreateScreen';
 import FirmDetailScreen from '../screens/FirmDetailScreen';
 import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import FirmWorkListScreen from '../screens/FirmWorkListScreen';
+import colors from '../constants/Colors';
 
 const FirmWorkStack = createStackNavigator({
   FirmWorkList: { screen: FirmWorkListScreen, navigationOptions: { header: null } },
@@ -48,7 +49,18 @@ HomeStack.navigationOptions = {
 };
 
 const AdStack = createStackNavigator({
-  Ad: { screen: AdScreen, navigationOptions: { header: null } },
+  Ad: {
+    screen: AdScreen,
+    navigationOptions: {
+      title: '내광고 리스트',
+      headerStyle: {
+        backgroundColor: colors.point2,
+        elevation: 10,
+        marginTop: -28,
+      },
+      headerTintColor: '#fff',
+    },
+  },
   AdCreate: {
     screen: AdCreateScreen,
     navigationOptions: { title: '내장비 홍보하기', headerStyle: { marginTop: -28 } },

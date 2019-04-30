@@ -19,15 +19,22 @@ const Card = Styled.View`
     && `
     background-color: ${colors.batang};
   `}
+
+  ${props => props.Primary
+    && `
+    background-color: ${colors.point2Batang};
+  `}
 `;
 
 export default class CardUI extends React.PureComponent {
   render() {
-    const { Finished } = this.props;
+    const { Finished, Primary } = this.props;
 
     return (
       <Container ref={c => (this._root = c)} {...this.props}>
-        <Card Finished={Finished}>{this.props.children}</Card>
+        <Card Finished={Finished} Primary={Primary}>
+          {this.props.children}
+        </Card>
       </Container>
     );
   }

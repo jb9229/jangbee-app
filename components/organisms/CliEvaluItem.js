@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: 2,
     paddingRight: 2,
   },
   likeWrap: {
@@ -48,10 +47,9 @@ export default function CliEvaluItem({
     <View style={styles.Container}>
       <View style={styles.topWrap}>
         <JBTextItem
-          value={`${item.cliName}(${convertHyphen(item.firmName)}, ${convertHyphen(
+          value={`${item.cliName} (${convertHyphen(item.firmName)}, ${convertHyphen(
             item.firmNumber,
           )})`}
-          underline
           small
         />
         <View style={styles.likeWrap}>

@@ -12,10 +12,10 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-jangbeecall-480.png",
+    "icon": "./assets/images/icon-365.png",
     "splash": {
-      "image": "./assets/images/splash-jangbee4.png",
-      "resizeMode": "contain",
+      "image": "./assets/images/splash-20190429.png",
+      "resizeMode": "cover",
       "backgroundColor": "#4D4A4A"
     },
     "updates": {

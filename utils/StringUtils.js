@@ -19,3 +19,19 @@ export function formatTelnumber(number) {
 
   return '-';
 }
+
+export function formatHideTelnumber(number) {
+  if (number) {
+    if (number.length === 10) {
+      return `***­-***-${number.substring(6, 10)}`;
+    }
+
+    if (number.length === 11) {
+      return `***­-****-${number.substring(7, 11)}`;
+    }
+
+    return number;
+  }
+
+  return '-';
+}

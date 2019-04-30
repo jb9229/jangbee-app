@@ -99,7 +99,7 @@ export default class OpenBankAccSelectModal extends React.Component {
 
   render() {
     const {
-      isVisibleModal, actionName, navigation, closeModal, reauthAfterAction,
+      isVisibleModal, navigation, closeModal, reauthAfterAction,
     } = this.props;
     const { isEmptyList, accList, selFinUseNum } = this.state;
 
@@ -140,9 +140,7 @@ export default class OpenBankAccSelectModal extends React.Component {
         animationType="slide"
         transparent
         visible={isVisibleModal}
-        onRequestClose={() => {
-          console.log('modal close');
-        }}
+        onRequestClose={() => closeModal()}
       >
         <View style={styles.bgWrap}>
           <View style={styles.contentsWrap}>
@@ -155,7 +153,7 @@ export default class OpenBankAccSelectModal extends React.Component {
               ItemSeparatorComponent={ListSeparator}
             />
             <JBButton
-              title={actionName}
+              title="결제통장 바꾸기"
               onPress={() => this.completeAction()}
               size="full"
               Primary

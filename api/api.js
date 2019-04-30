@@ -378,6 +378,12 @@ export function createFirmEvalu(evaluData) {
   }).then(handleJBServerJsonResponse);
 }
 
+export function getFirmEvalu(accountId) {
+  return fetch(`${url.JBSERVER_FIRM_EVALU}?accountId=${accountId}`).then(
+    handleJBServerJsonResponse,
+  );
+}
+
 /** ******************** Work Api List ************************** */
 
 export function createWork(newWork) {

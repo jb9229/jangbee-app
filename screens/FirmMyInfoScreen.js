@@ -1,20 +1,10 @@
 import React from 'react';
 import {
-  Alert,
-  Linking,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  Text,
-  View,
+  Alert, Linking, Image, ScrollView, StyleSheet, Text, View,
 } from 'react-native';
 import firebase from 'firebase';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import * as api from '../api/api';
-import JBTextItem from '../components/molecules/JBTextItem';
-import FirmImageItem from '../components/FirmImageItem';
+import { notifyError } from '../common/ErrorNotice';
 import fonts from '../constants/Fonts';
 import { withLogin } from '../contexts/LoginProvider';
 import FirmProfileModal from '../components/FirmProfileModal';
@@ -22,6 +12,7 @@ import colors from '../constants/Colors';
 import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JBIcon from '../components/molecules/JBIcon';
+import FirmInfoItem from '../components/organisms/FirmInfoItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -127,11 +118,13 @@ class FirmMyInfoScreen extends React.Component {
       firm: undefined,
       isVisibleProfileModal: false,
       isLoadingComplete: false,
+      evaluList: [],
     };
   }
 
   componentDidMount() {
     this.setMyFirmInfo();
+    this.setFirmEvaluList();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -156,11 +149,38 @@ class FirmMyInfoScreen extends React.Component {
         this.setState({ firm, isLoadingComplete: true });
       })
       .catch((error) => {
-        Alert.alert(
+        notifyError(
           '업체정보 요청 문제발생',
           `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+          this.setMyFirmInfo,
         );
         this.setState({ isLoadingComplete: true });
+      });
+  };
+
+  /**
+   * 업체 평가 리스트 설정함수
+   */
+  setFirmEvaluList = () => {
+    const { user } = this.props;
+
+    if (!user.uid) {
+      Alert.alert(`[${user.uid}] 유효하지 않은 사용자 입니다`);
+      return;
+    }
+
+    api
+      .getFirmEvalu(user.uid)
+      .then((evaluList) => {
+        if (evaluList) {
+          this.setState({ evaluList });
+        }
+      })
+      .catch((error) => {
+        notifyError(
+          '업체후기 요청 문제발생',
+          `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+        );
       });
   };
 
@@ -200,7 +220,9 @@ class FirmMyInfoScreen extends React.Component {
   };
 
   render() {
-    const { firm, isVisibleProfileModal, isLoadingComplete } = this.state;
+    const {
+      firm, isVisibleProfileModal, isLoadingComplete, evaluList,
+    } = this.state;
     if (!isLoadingComplete) {
       return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
     }
@@ -225,52 +247,7 @@ class FirmMyInfoScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrViewWrap}>
-          <View style={[styles.cardWrap]}>
-            <View style={[styles.card, styles.pointCard]}>
-              <View style={styles.frimTopItemWrap}>
-                <View style={styles.firmLinkWrap}>
-                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.blog)}>
-                    <MaterialCommunityIcons
-                      name="blogger"
-                      size={32}
-                      color={firm.blog !== '' ? colors.pointDark : 'gray'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.homepage)}>
-                    <MaterialCommunityIcons
-                      name="home-circle"
-                      size={32}
-                      color={firm.homepage !== '' ? colors.pointDark : 'gray'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.openLinkUrl(firm.sns)}>
-                    <AntDesign
-                      name="facebook-square"
-                      size={32}
-                      color={firm.sns !== '' ? colors.pointDark : 'gray'}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.topCommWrap}>
-                  <TouchableHighlight onPress={() => this.setVisibleProfileModal(true)}>
-                    <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
-                  </TouchableHighlight>
-                </View>
-              </View>
-
-              <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
-              <JBTextItem title="전화번호" value={firm.phoneNumber} revColor row />
-              <JBTextItem title="주소" value={`${firm.address}\n${firm.addressDetail}`} revColor />
-              <JBTextItem title="업체소개" value={firm.introduction} revColor />
-            </View>
-          </View>
-          <View style={[styles.cardWrap, styles.largeCard]}>
-            <View style={[styles.card]}>
-              <FirmImageItem title="작업사진1" value={firm.photo1} />
-              <FirmImageItem title="작업사진2" value={firm.photo2} />
-              <FirmImageItem title="작업사진3" value={firm.photo3} />
-            </View>
-          </View>
+          <FirmInfoItem firm={firm} evaluList={evaluList} />
         </ScrollView>
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
