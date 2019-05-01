@@ -111,7 +111,7 @@ class LoginScreen extends React.PureComponent {
             const userInfo = data.val();
             const { userType } = userInfo;
 
-            if (userType === undefined) {
+            if (!userType) {
               navigation.navigate('SignUp', { user });
             } else {
               navigation.navigate('AuthLoading');
@@ -253,7 +253,7 @@ class LoginScreen extends React.PureComponent {
           {!confirmationResult ? (
             <JBButton title="전화번호 인증하기" onPress={() => this.onPhoneComplete()} />
           ) : (
-            <JBButton title="로그인하기" onPress={() => this.onSignIn()} Secondary />
+            <JBButton title="로그인하기" onPress={() => this.onSignIn()} Primary />
           )}
         </View>
       </View>

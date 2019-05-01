@@ -204,7 +204,7 @@ export default class FirmMyInfoScreen extends React.Component {
             <FirmInfoItem firm={firm} evaluList={evaluList} />
           </ScrollView>
           <View style={styles.titleWrap}>
-            <JBIcon name="close" size={23} onPress={() => this.cancel()} />
+            <JBIcon name="close" size={23} onPress={() => closeModal()} />
             <Text style={styles.fnameText}>{firm.fname}</Text>
           </View>
 

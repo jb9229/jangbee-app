@@ -144,7 +144,7 @@ class SignUpScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.thanksWrap}>
           <Text style={styles.thanksRegiText}>장비콜 가입을 축하 합니다,</Text>
-          <Text style={styles.thanksRegiText}>모두가 윈윈하는 커뮤니티장을 만들어 갑니다.</Text>
+          <Text style={styles.thanksRegiText}>건설 장비의 커뮤니티장을 만들어 갑니다.</Text>
         </View>
         <View style={styles.titleWrap}>
           <Text style={styles.titleText}>어떤 서비스를 이용하시겠습니까?</Text>
@@ -154,19 +154,19 @@ class SignUpScreen extends React.Component {
             style={[styles.accountTypeTO, userType === USER_CLIENT ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_CLIENT)}
           >
-            <Text style={[styles.accountTypeText]}>장비고객</Text>
-            <Text style={[styles.accountTypeSubText]}>(장비 호출)</Text>
+            <Text style={[styles.accountTypeText]}>장비 호출</Text>
+            <Text style={[styles.accountTypeSubText]}>(장비사용 고객)</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.accountTypeTO, userType === USER_FIRM ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_FIRM)}
           >
-            <Text style={[styles.accountTypeText]}>장비업체 </Text>
-            <Text style={[styles.accountTypeSubText]}>(내장비 등록)</Text>
+            <Text style={[styles.accountTypeText]}>내 장비등록 </Text>
+            <Text style={[styles.accountTypeSubText]}>(장비업체)</Text>
           </TouchableOpacity>
         </View>
         <JBErrorMessage errorMSG={errorMessage} />
-        <JBButton title="등록하기" onPress={() => this.onSignUp()} align="center" />
+        <JBButton title="등록하기" onPress={() => this.onSignUp()} align="center" Secondary />
       </View>
     );
   }

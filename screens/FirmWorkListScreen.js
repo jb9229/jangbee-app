@@ -18,6 +18,7 @@ const dispatchFee = '3000';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+    backgroundColor: colors.batangLight,
   },
   scene: {
     flex: 1,

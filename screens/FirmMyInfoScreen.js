@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   regFirmNotice: {
-    fontSize: 13,
+    fontSize: 16,
     fontFamily: fonts.batang,
     color: 'white',
   },
@@ -234,9 +234,6 @@ class FirmMyInfoScreen extends React.Component {
             <Text style={styles.regFirmNotice}>+</Text>
             <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
             <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
-            <Text style={styles.regFirmNotice}>
-              등록안하는 사람만 손해 입니다, 업체등록을 서두르세요.
-            </Text>
           </View>
           <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" Primary />
           <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" Primary />

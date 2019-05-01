@@ -45,7 +45,7 @@ WorkListStack.navigationOptions = {
 const ClientInfosStack = createStackNavigator({
   Links: {
     screen: ClientMyInfoScreen,
-    navigationOptions: { title: '내등록 정보', headerStyle: { marginTop: -28 } },
+    navigationOptions: { title: '사용자 정보', headerStyle: { marginTop: -28 } },
   },
 });
 

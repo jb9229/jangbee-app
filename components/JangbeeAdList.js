@@ -6,6 +6,7 @@ import JBActIndicator from './organisms/JBActIndicator';
 import BugReport from './organisms/BugReport';
 import * as api from '../api/api';
 import JangbeeAd from './organisms/JangbeeAd';
+import FirmDetailModal from './FirmDetailModal';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,6 +47,7 @@ export default class JangbeeAdList extends React.Component {
     super(props);
     this.state = {
       adList: undefined,
+      isVisibleDetailModal: false,
     };
   }
 
@@ -114,7 +116,9 @@ export default class JangbeeAdList extends React.Component {
 
   render() {
     const { admob, navigation } = this.props;
-    const { adList, isEmptyAdlist } = this.state;
+    const {
+      adList, isEmptyAdlist, isVisibleDetailModal, detailFirmId,
+    } = this.state;
     const slidStyles = [styles.slide1, styles.slide2, styles.slide3];
 
     // console.log(
@@ -147,12 +151,22 @@ export default class JangbeeAdList extends React.Component {
 
     const adViewList = adList.map((ad, index) => (
       <View style={slidStyles[index]} key={index}>
-        <JangbeeAd ad={ad} navigation={navigation} />
+        <JangbeeAd
+          ad={ad}
+          navigation={navigation}
+          openFirmDetail={accountId => this.setState({ detailFirmId: accountId, isVisibleDetailModal: true })
+          }
+        />
       </View>
     ));
 
     return (
       <View style={styles.container}>
+        <FirmDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          accountId={detailFirmId}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+        />
         <Swiper
           style={styles.wrapper}
           autoplay

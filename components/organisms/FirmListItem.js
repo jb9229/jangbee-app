@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
   noneRatingText: {
     fontFamily: fonts.title,
+    fontSize: 12,
   },
   centerWrap: {
     flex: 3,
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   intrText: {
     fontSize: 14,
     fontFamily: fonts.batang,
-    paddingTop: 5,
+    paddingLeft: 5,
     paddingBottom: 5,
   },
   bottomText: {
@@ -124,7 +125,7 @@ const firmListItem = (props) => {
           {item.introduction}
         </Text>
         <View style={styles.bottomWrap}>
-          <Text style={styles.bottomText}>{item.equiListStr}</Text>
+          <Text style={styles.bottomText}>{`${item.equiListStr}(${item.modelYear}년식)`}</Text>
           <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
         </View>
       </View>

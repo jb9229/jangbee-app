@@ -40,4 +40,16 @@ export async function getMyEquipment(accountId) {
   return myEquipment;
 }
 
+export function updateMyEquipment(accountId) {
+  api
+    .getFirm(accountId)
+    .then((firm) => {
+      if (firm) {
+        store(STOREKEY_FAV_EQUIPMENT, firm.equiListStr);
+      }
+      return undefined;
+    })
+    .catch(() => undefined);
+}
+
 export function test() {}

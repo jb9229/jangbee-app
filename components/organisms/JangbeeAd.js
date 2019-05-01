@@ -73,7 +73,7 @@ function telAdvertiser(phoneNumber) {
   );
 }
 
-const JangbeeAd = ({ ad, navigation }) => (
+const JangbeeAd = ({ ad, navigation, openFirmDetail }) => (
   <View style={styles.container}>
     {ad.photoUrl === null || ad.photoUrl === '' ? (
       <View style={styles.bgAdWrap}>
@@ -87,7 +87,7 @@ const JangbeeAd = ({ ad, navigation }) => (
               name="information-circle"
               size={40}
               color={colors.point2}
-              onPress={() => navigation.navigate('FirmDetail', { accountId: ad.accountId })}
+              onPress={() => openFirmDetail(ad.accountId)}
             />
           ) : null}
           <JBIcon
@@ -114,7 +114,7 @@ const JangbeeAd = ({ ad, navigation }) => (
                   name="information-circle"
                   size={40}
                   color={colors.point2}
-                  onPress={() => navigation.navigate('FirmDetail', { accountId: ad.accountId })}
+                  onPress={() => openFirmDetail(ad.accountId)}
                 />
               ) : null}
               <JBIcon

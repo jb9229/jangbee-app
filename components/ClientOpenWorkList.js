@@ -3,7 +3,6 @@ import { FlatList } from 'react-native';
 import moment from 'moment';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
-import ListSeparator from './molecules/ListSeparator';
 import WorkItem from './organisms/WorkItem';
 import JBButton from './molecules/JBButton';
 import WorkCommWrap from './molecules/WorkCommWrapUI';
@@ -83,7 +82,6 @@ export default class ClientOpenWorkList extends React.PureComponent {
         data={list}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={ListSeparator}
         onRefresh={handleRefresh}
         refreshing={refreshing}
       />

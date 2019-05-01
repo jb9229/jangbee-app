@@ -83,7 +83,6 @@ class OpenBankAuthWebView extends React.Component {
    * Webview url 상태변경 이벤트처리 함수(사용자 인증에러 처리, 프로바이더 페이지가 호출되기 전에 에러 처리)
    */
   handleNavigationStateChange = (navState) => {
-    console.log(navState);
     // Callback url로 redirect가 되는 것이 아니라 json으로 리턴된다. 그때의 상태를 잡아 에러 처리
   };
 

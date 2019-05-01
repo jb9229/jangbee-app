@@ -47,7 +47,7 @@ class AuthLoading extends React.Component {
             obUserSeqNo,
           } = userInfo;
 
-          if (userType === undefined) {
+          if (!userType) {
             navigation.navigate('SignUp', { user });
           } else {
             setUser(user);

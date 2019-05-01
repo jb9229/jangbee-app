@@ -63,7 +63,6 @@ export default class ClientMatchedWorkList extends React.PureComponent {
           data={list}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={ListSeparator}
           onRefresh={handleRefresh}
           refreshing={refreshing}
         />

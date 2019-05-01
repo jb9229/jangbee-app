@@ -39,14 +39,11 @@ export default class EquipementModal extends React.Component {
     this.state = {
       listDataSource: EQUIPMENT_CONTENT,
     };
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
   }
 
   updateLayout = (index) => {
     const { listDataSource } = this.state;
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
     const array = [...listDataSource];
     array[index].isExpanded = !array[index].isExpanded;
     this.setState(() => ({
@@ -57,7 +54,7 @@ export default class EquipementModal extends React.Component {
   completeSelEqui = (category, type) => {
     const { closeModal, completeSelEqui } = this.props;
 
-    const equipment = `${category}(${type})`;
+    const equipment = `${type} ${category}`;
     completeSelEqui(equipment);
     closeModal();
   };
@@ -141,7 +138,7 @@ const EQUIPMENT_CONTENT = [
   {
     isExpanded: false,
     category_name: '스카이-굴절',
-    subcategory: [{ id: 50, val: '28m' }, { id: 51, val: '45m' }, { id: 52, val: '06LC' }],
+    subcategory: [{ id: 50, val: '28m' }, { id: 51, val: '45m' }],
   },
   {
     isExpanded: false,

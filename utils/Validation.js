@@ -52,7 +52,7 @@ export const validation = {
 export function validatePresence(value) {
   const resp = [null, null];
 
-  if (value === '' || value == null) {
+  if (!value) {
     resp[0] = false;
     resp[1] = '필수 항목 입니다, 빈칸을 채워 주세요';
   } else {
@@ -68,7 +68,7 @@ export function validate(nameField, value, essential, compareValue) {
   if (Object.prototype.hasOwnProperty.call(validation, nameField)) {
     const v = validation[nameField];
 
-    if (value === '' || value == null) {
+    if (!value) {
       if (essential) {
         resp[0] = false;
         resp[1] = '필수 항목 입니다, 빈칸을 채워 주세요';

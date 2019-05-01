@@ -111,7 +111,11 @@ export default function FirmInfoItem({ firm, evaluList }) {
                 />
               </TouchableOpacity>
             </View>
-            <JBTextItem title="보유장비" value={firm.equiListStr} revColor />
+            <JBTextItem
+              title="보유장비"
+              value={`${firm.equiListStr}(${firm.modelYear}년식)`}
+              revColor
+            />
           </View>
           <View style={styles.topCommWrap}>
             <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />

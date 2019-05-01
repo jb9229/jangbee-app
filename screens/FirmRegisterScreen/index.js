@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, KeyboardAvoidingView, ScrollView, StyleSheet, View,
+  Alert, KeyboardAvoidingView, Picker, ScrollView, StyleSheet, View,
 } from 'react-native';
 import { validate, validatePresence } from '../../utils/Validation';
 import * as api from '../../api/api';
@@ -12,25 +12,18 @@ import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
 import JBActIndicatorModal from '../../components/JBActIndicatorModal';
 import JBButton from '../../components/molecules/JBButton';
-import colors from '../../constants/Colors';
 import * as imageManager from '../../common/ImageManager';
 import Card from '../../components/molecules/CardUI';
+import JBPicker from '../../components/molecules/JBPicker';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   contentContainer: {},
-  cardWrap: {
-    flex: 1,
-    backgroundColor: colors.batangLight,
-    padding: 10,
-  },
-  card: {
-    flex: 1,
-    backgroundColor: colors.cardBatang,
-    padding: 5,
-    borderRadius: 15,
+  equiWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   regiFormCommWrap: {
     flex: 1,
@@ -56,6 +49,7 @@ class FirmRegisterScreen extends React.Component {
       fname: '',
       phoneNumber: '',
       equiListStr: '',
+      modelYear: '',
       address: '',
       addressDetail: '',
       sidoAddr: '',
@@ -100,6 +94,7 @@ class FirmRegisterScreen extends React.Component {
       fname,
       phoneNumber,
       equiListStr,
+      modelYear,
       address,
       addressDetail,
       sidoAddr,
@@ -142,6 +137,7 @@ class FirmRegisterScreen extends React.Component {
       fname,
       phoneNumber,
       equiListStr,
+      modelYear,
       address,
       addressDetail,
       sidoAddr,
@@ -240,6 +236,7 @@ class FirmRegisterScreen extends React.Component {
       fname,
       phoneNumber,
       equiListStr,
+      modelYear,
       address,
       addressDetail,
       thumbnail,
@@ -275,6 +272,12 @@ class FirmRegisterScreen extends React.Component {
     if (!v[0]) {
       this.setState({ equiListStrValErrMessage: v[1] });
       this.fnameTextInput.focus();
+      return false;
+    }
+
+    v = validatePresence(modelYear);
+    if (!v[0]) {
+      this.setState({ equiListStrValErrMessage: v[1] });
       return false;
     }
 
@@ -365,12 +368,6 @@ class FirmRegisterScreen extends React.Component {
     return true;
   };
 
-  cancelFirm = () => {
-    const { navigation } = this.props;
-
-    navigation.navigate('FirmMyInfo');
-  };
-
   render() {
     const {
       isVisibleEquiModal,
@@ -379,6 +376,7 @@ class FirmRegisterScreen extends React.Component {
       fname,
       phoneNumber,
       equiListStr,
+      modelYear,
       address,
       addressDetail,
       introduction,
@@ -403,6 +401,13 @@ class FirmRegisterScreen extends React.Component {
       homepageValErrMessage,
       snsValErrMessage,
     } = this.state;
+
+    const thisYear = new Date().getFullYear();
+
+    const pickerItems = Array.from(Array(30).keys()).map((_, i) => {
+      const year = thisYear - i;
+      return <Picker.Item label={`${year}`} value={year} key={i} />;
+    });
 
     return (
       <View style={styles.container}>
@@ -432,13 +437,23 @@ class FirmRegisterScreen extends React.Component {
               />
               <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
-              <JBTextInput
-                title="보유 장비*"
-                value={equiListStr}
-                onChangeText={text => this.setState({ equiListStr: text })}
-                onFocus={() => this.openSelEquipmentModal()}
-                placeholder="보유 장비를 선택해 주세요"
-              />
+              <View style={styles.equiWrap}>
+                <JBTextInput
+                  title="보유 장비*"
+                  value={equiListStr}
+                  onChangeText={text => this.setState({ equiListStr: text })}
+                  onFocus={() => this.openSelEquipmentModal()}
+                  placeholder="보유 장비를 선택해 주세요"
+                />
+
+                <JBPicker
+                  title="년식*"
+                  items={pickerItems}
+                  selectedValue={modelYear}
+                  style={styles.adTypePicker}
+                  onValueChange={itemValue => this.setState({ modelYear: itemValue })}
+                />
+              </View>
               <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
               <JBTextInput

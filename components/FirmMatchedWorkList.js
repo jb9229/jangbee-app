@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
-import ListSeparator from './molecules/ListSeparator';
 import WorkItem from './organisms/WorkItem';
 import WorkCommWrap from './molecules/WorkCommWrapUI';
 import WorkCommText from './molecules/WorkCommTextUI';
@@ -62,7 +61,6 @@ export default class FirmMatchedWorkList extends React.PureComponent {
         data={list}
         renderItem={item => this.renderItem(item)}
         keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={ListSeparator}
         onRefresh={handleRefresh}
         refreshing={refreshing}
       />

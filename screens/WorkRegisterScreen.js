@@ -28,6 +28,13 @@ const styles = StyleSheet.create({
   modalWrap: {
     height: 0,
   },
+  workDateWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  periodWrap: {
+    width: 105,
+  },
   periodPicker: {
     width: 100,
     height: 50,
@@ -87,7 +94,7 @@ class WorkRegisterScreen extends React.Component {
         minDate: now.getTime(),
       });
 
-      this.setState({ startDate: `${year}-${month}-${day}` });
+      this.setState({ startDate: `${year}-${month + 1}-${day}` });
 
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
@@ -282,7 +289,7 @@ class WorkRegisterScreen extends React.Component {
                 placeholder="상세주소를 입력해 주세요"
               />
               <JBErrorMessage errorMSG={addressDetailValErrMessage} />
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={styles.workDateWrap}>
                 <JBTextInput
                   title="작업시작일"
                   value={startDate}
@@ -291,9 +298,9 @@ class WorkRegisterScreen extends React.Component {
                   }}
                   onChangeText={text => this.setState({ startDate: text })}
                   onFocus={() => this.openStartWorkDatePicker()}
-                  placeholder="시작일 선택"
+                  placeholder="시작일을 선택 하세요"
                 />
-                <View>
+                <View style={styles.periodWrap}>
                   <Text style={styles.periodTitle}>기간</Text>
                   <Picker
                     selectedValue={period}

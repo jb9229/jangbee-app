@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   itemInput: {
-    fontFamily: 'Hamchorong-batang',
-    fontSize: 20,
+    fontFamily: fonts.batang,
+    fontSize: 18,
     borderBottomWidth: 1,
     borderColor: '#7A7373',
     borderStyle: 'dotted',

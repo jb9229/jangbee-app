@@ -57,10 +57,10 @@ export default class ListFooter extends React.PureComponent {
           <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.webLinkWrap}>
-          <Text>업체가 없습니까? 업체 등록전까지, 웹검색을 이용해 보세요.</Text>
+          <Text>혹시 찾는 업체가 없습니까? 웹검색을 이용해 보세요.</Text>
           <View style={styles.webLinkButWrap}>
             <JBButton
-              title={`네이버 ${selEquipment} 검색`}
+              title="네이버 검색"
               size="small"
               underline
               onPress={() => this.openLinkUrl(
@@ -69,7 +69,7 @@ export default class ListFooter extends React.PureComponent {
               }
             />
             <JBButton
-              title={`다음 ${selEquipment} 검색`}
+              title="다음 검색"
               size="small"
               underline
               onPress={() => this.openLinkUrl(

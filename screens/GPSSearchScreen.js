@@ -105,9 +105,15 @@ const SwitchTO = Styled.TouchableOpacity`
 `;
 
 export default class GPSSearchScreen extends React.Component {
+  _didFocusSubscription;
+
+  _willBlurSubscription;
+
   static navigationOptions = {
     header: null,
   };
+
+  _isMounted = false;
 
   constructor(props) {
     super(props);
@@ -128,16 +134,23 @@ export default class GPSSearchScreen extends React.Component {
       isLastList: false,
       validationMessage: '',
     };
+
+    this._didFocusSubscription = props.navigation.addListener('didFocus', payload => BackHandler.addEventListener('hardwareBackPress', this.handleBackPress));
   }
 
   componentDidMount() {
+    const { navigation } = this.props;
+
+    this._isMounted = true;
+
     this.setLocationInfo();
     this.setState({ isComponentMountComplete: true });
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+
+    this._willBlurSubscription = navigation.addListener('willBlur', payload => BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress));
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+    this._isMounted = false;
   }
 
   /**
@@ -205,6 +218,10 @@ export default class GPSSearchScreen extends React.Component {
     api
       .getAddrByGpspoint(logitude, latitude)
       .then((addrInfo) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         if (addrInfo) {
           if (addrInfo.code === -2) {
             this.setState({
@@ -220,6 +237,10 @@ export default class GPSSearchScreen extends React.Component {
         }
       })
       .catch((error) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         Alert.alert(
           '현 위치 수신에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`,
@@ -255,6 +276,10 @@ export default class GPSSearchScreen extends React.Component {
     api
       .getNearFirmList(page, searEquipment, searLongitude, searLatitude)
       .then((res) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         this.setState({
           searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
           isLastList: res.last,
@@ -263,6 +288,10 @@ export default class GPSSearchScreen extends React.Component {
         });
       })
       .catch((error) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         Alert.alert(
           '주변 장비 조회에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`,
@@ -288,6 +317,10 @@ export default class GPSSearchScreen extends React.Component {
     api
       .getLocalFirmList(page, searEquipment, searSido, searGungu)
       .then((res) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         this.setState({
           searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
           isLastList: res.last,
@@ -296,6 +329,10 @@ export default class GPSSearchScreen extends React.Component {
         });
       })
       .catch((error) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         Alert.alert(
           '주변 장비 조회에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`,

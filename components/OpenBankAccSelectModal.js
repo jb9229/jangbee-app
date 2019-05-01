@@ -109,29 +109,43 @@ export default class OpenBankAccSelectModal extends React.Component {
 
     if (isEmptyList === null) {
       return (
-        <JBEmptyView
-          title="통장리스트 호출에 문제가 있습니다,"
-          subTitle="네트워크 환경 확인하여 재시도 후, 문제가 지속되면 관리자에게 문의(내정보 -> 메일문의)해주세요."
-          actionName="재시도하기"
-          refresh={() => this.setOpenBankAccountList()}
-        />
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
+          <JBEmptyView
+            title="통장리스트 호출에 문제가 있습니다,"
+            subTitle="네트워크 환경 확인하여 재시도 후, 문제가 지속되면 관리자에게 문의(내정보 -> 메일문의)해주세요."
+            actionName="재시도하기"
+            refresh={() => this.setOpenBankAccountList()}
+          />
+        </Modal>
       );
     }
 
     if (isEmptyList) {
       return (
-        <JBEmptyView
-          title="통장리스트가 비어 있습니다."
-          subTitle="결제계좌 등록 또는 재인증후 다시 진행해 주세요."
-          actionName="통장 등록하기"
-          refresh={() => {
-            closeModal();
-            navigation.navigate('OpenBankAuth', {
-              type: 'REAUTH',
-              completeAction: reauthAfterAction,
-            });
-          }}
-        />
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
+          <JBEmptyView
+            title="통장리스트가 비어 있습니다."
+            subTitle="결제계좌 등록 또는 재인증후 다시 진행해 주세요."
+            actionName="통장 등록하기"
+            refresh={() => {
+              closeModal();
+              navigation.navigate('OpenBankAuth', {
+                type: 'REAUTH',
+                completeAction: reauthAfterAction,
+              });
+            }}
+          />
+        </Modal>
       );
     }
 

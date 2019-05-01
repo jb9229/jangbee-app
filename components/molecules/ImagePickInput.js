@@ -79,17 +79,15 @@ export default class ImagePickInput extends React.Component {
     const { itemTitle, imgUrl, itemWrapStyle } = this.props;
     const { isUploaded } = this.state;
 
-    const urlTextStyle = imgUrl === '' ? styles.placeholder : styles.urlText;
+    const urlTextStyle = imgUrl ? styles.urlText : styles.placeholder;
     return (
       <View style={styles.itemWrap}>
         <View style={styles.titleWrap}>
           <Text style={styles.itemTitle}>{itemTitle}</Text>
-          {imgUrl !== '' ? (
-            <JBIcon name="close" size={32} onPress={() => this.removeImg()} />
-          ) : null}
+          {imgUrl ? <JBIcon name="close" size={32} onPress={() => this.removeImg()} /> : null}
         </View>
 
-        {imgUrl === '' ? (
+        {!imgUrl ? (
           <TouchableOpacity onPress={() => this.pickImage()} style={styles.urlInput}>
             <Text style={urlTextStyle} ellipsizeMode="tail" numberOfLines={1}>
               사진을 선택해 주세요
