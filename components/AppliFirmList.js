@@ -7,6 +7,7 @@ import JBErrorMessage from './organisms/JBErrorMessage';
 import AppliFirmItem from './organisms/AppliFirmItem';
 import ListSeparator from './molecules/ListSeparator';
 import { notifyError } from '../common/ErrorNotice';
+import FirmDetailModal from './FirmDetailModal';
 
 const Container = styled.View`
   flex: 1;
@@ -33,6 +34,7 @@ export default class AppliFirmList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isVisibleDetailModal: false,
       selectedFirmAccId: undefined,
       refreshing: false,
       firmList: [],
@@ -124,7 +126,7 @@ export default class AppliFirmList extends React.Component {
     return (
       <AppliFirmItem
         item={item}
-        onPressItem={id => navigation.navigate('AppliFirmDetail', { accountId: id })}
+        onPressItem={id => this.setState({ isVisibleDetailModal: true, selectedFirmAccId: id })}
         selectFirm={accountId => this.setState({ selectedFirmAccId: accountId })}
         selected={item.accountId === selectedFirmAccId}
       />
@@ -133,11 +135,21 @@ export default class AppliFirmList extends React.Component {
 
   render() {
     const {
-      refreshing, selectedFirmAccId, firmList, submitErrMessage,
+      isVisibleDetailModal,
+      refreshing,
+      selectedFirmAccId,
+      firmList,
+      submitErrMessage,
     } = this.state;
 
     return (
       <Container>
+        <FirmDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          accountId={selectedFirmAccId}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+          hideCallButton
+        />
         <ContentsView>
           <FlatList
             data={firmList}

@@ -26,16 +26,16 @@ class AuthLoading extends React.Component {
 
   checkLogin = () => {
     const {
-      navigation, setUser, setUserType, setOBInfo,
+      setUser, setUserType, setOBInfo, completeAuth, changeAuthPath,
     } = this.props;
 
-    firebase.auth().onAuthStateChanged(async (user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         getUserInfo(user.uid).then((data) => {
           const userInfo = data.val();
 
-          if (userInfo === null) {
-            navigation.navigate('SignUp', { user });
+          if (!userInfo) {
+            changeAuthPath(2, user);
           }
 
           const {
@@ -48,7 +48,7 @@ class AuthLoading extends React.Component {
           } = userInfo;
 
           if (!userType) {
-            navigation.navigate('SignUp', { user });
+            changeAuthPath(2, user);
           } else {
             setUser(user);
             setUserType(userType);
@@ -64,16 +64,17 @@ class AuthLoading extends React.Component {
 
             // Go to Screeen By User Type
             if (userType === 1) {
-              navigation.navigate('ClientMain');
+              completeAuth(true);
             } else if (userType === 2) {
-              navigation.navigate('FirmMain');
+              completeAuth(false);
             } else {
               Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
+              completeAuth(true);
             }
           }
         });
       } else {
-        navigation.navigate('Login');
+        changeAuthPath(3);
       }
     });
   };

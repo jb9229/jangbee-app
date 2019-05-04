@@ -13,6 +13,7 @@ import JBButton from '../components/molecules/JBButton';
 import { notifyError } from '../common/ErrorNotice';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
+import FirmDetailModal from '../components/FirmDetailModal';
 
 const styles = StyleSheet.create({
   Container: {
@@ -37,6 +38,7 @@ class ClientWorkListScreen extends React.Component {
     this.state = {
       isVisibleEstimateModal: false,
       isVisibleEditWorkModal: false,
+      isVisibleDetailModal: false,
       isOpenWorkListEmpty: undefined,
       isMatchedWorkListEmpty: undefined,
       openWorkListRefreshing: false,
@@ -178,8 +180,10 @@ class ClientWorkListScreen extends React.Component {
     const {
       isVisibleEstimateModal,
       isVisibleEditWorkModal,
+      isVisibleDetailModal,
       isOpenWorkListEmpty,
       estiWorkId,
+      matchedfirmAccId,
       matchedWorkList,
       isMatchedWorkListEmpty,
       openWorkList,
@@ -210,7 +214,7 @@ class ClientWorkListScreen extends React.Component {
         refreshing={matchedWorkListRefreshing}
         isListEmpty={isMatchedWorkListEmpty}
         estimateFirm={workId => this.setState({ isVisibleEstimateModal: true, estiWorkId: workId })}
-        openMatchedFirmInfo={matchedAccId => navigation.navigate('AppliFirmDetail', { accountId: matchedAccId, showPhoneNumber: true })
+        openMatchedFirmInfo={matchedAccId => this.setState({ matchedfirmAccId: matchedAccId, isVisibleDetailModal: true })
         }
       />
     );
@@ -228,6 +232,11 @@ class ClientWorkListScreen extends React.Component {
           completeAction={this.updateWork}
           isVisibleModal={isVisibleEditWorkModal}
           closeModal={() => this.setState({ isVisibleEditWorkModal: false })}
+        />
+        <FirmDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          accountId={matchedfirmAccId}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
         />
         <TabView
           navigationState={this.state}

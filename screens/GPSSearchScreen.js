@@ -151,6 +151,8 @@ export default class GPSSearchScreen extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    this._didFocusSubscription && this._didFocusSubscription.remove();
+    this._willBlurSubscription && this._willBlurSubscription.remove();
   }
 
   /**
@@ -227,12 +229,22 @@ export default class GPSSearchScreen extends React.Component {
             this.setState({
               currLocation: addrInfo.msg,
             });
-          } else {
+          } else if (addrInfo.documents[0]) {
+            const address = addrInfo.documents[0]; // region_type: H(행정동, documents[1]) or B(법정동, documents[0])
+            const addressName = address.address_name;
+            const sido = address.region_1depth_name;
+            let gungu = address.region_2depth_name;
+            if (!gungu) {
+              gungu = address.region_3depth_name;
+            }
+
             this.setState({
-              currLocation: `현 위치 수신됨: ${addrInfo.document.road_address.address_name}`,
-              searSido: addrInfo.document.road_address.region_1depth_name,
-              searGungu: addrInfo.document.road_address.region_2depth_name,
+              currLocation: `현 위치 수신됨: ${addressName}`,
+              searSido: sido,
+              searGungu: gungu,
             });
+          } else {
+            Alert.alert('유효하지 않은 좌표주소 입니다', `응답 내용: ${addrInfo}`);
           }
         }
       })
@@ -506,7 +518,7 @@ export default class GPSSearchScreen extends React.Component {
           advertisement
         />
         <LocalSelModal
-          isVisibleEquiModal={isVisibleLocalModal}
+          isVisibleModal={isVisibleLocalModal}
           closeModal={() => this.setState({ isVisibleLocalModal: false })}
           completeSelLocal={(sido, gungu) => this.setState({ searSido: sido, searGungu: gungu })}
           nextFocus={() => {}}

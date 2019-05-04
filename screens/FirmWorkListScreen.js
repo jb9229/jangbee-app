@@ -204,6 +204,33 @@ class FirmWorkListScreen extends React.Component {
       });
   };
 
+  confirmApplyWork = (workId) => {
+    Alert.alert(
+      '해당 날짜와 장소에 배차 가능하십니까?',
+      '지원 후, 장비사용 고객의 선택을 기다려 주세요(매칭이된다면, 5천원의 결제 후 배차 할 수 있습니다)',
+      [
+        { text: '취소', onPress: () => {} },
+        { text: '지원하기', onPress: () => this.applyWork(workId) },
+      ],
+    );
+  };
+
+  confirmAcceptWork = (workId) => {
+    Alert.alert(
+      '매칭비 5천원 자동이체 후, 매칭이 완료 됩니다.',
+      '매칭후, 매칭된 일감 화면에서(오른쪽 상단 메뉴) 꼭! [전화]를 걸어 금액 및 최종 확인을 통화해 해주세요.',
+      [
+        { text: '취소', onPress: () => {} },
+        { text: '포기하기', onPress: () => this.abandonWork(workId) },
+        {
+          text: '결제하기',
+          onPress: () => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId }),
+        },
+      ],
+      { cancelabel: false },
+    );
+  };
+
   /**
    * 매칭된 일감 포기 확인 함수
    */
@@ -320,8 +347,8 @@ class FirmWorkListScreen extends React.Component {
         }
         refreshing={openWorkListRefreshing}
         isListEmpty={isOpenWorkListEmpty}
-        applyWork={this.applyWork}
-        acceptWork={workId => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId })}
+        applyWork={this.confirmApplyWork}
+        acceptWork={this.confirmAcceptWork}
         abandonWork={this.confirmAbandonWork}
       />
     );

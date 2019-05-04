@@ -84,7 +84,7 @@ const appliFirmListItem = ({
           {item.introduction}
         </Text>
         <View style={styles.bottomWrap}>
-          <Text style={styles.bottomText}>{item.equiListStr}</Text>
+          <Text style={styles.bottomText}>{`${item.equiListStr}(${item.modelYear}년식)`}</Text>
           {item.distance && <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>}
         </View>
       </View>

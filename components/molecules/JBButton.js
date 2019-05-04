@@ -1,4 +1,5 @@
 import React from 'react';
+import { InteractionManager } from 'react-native';
 import styled from 'styled-components/native';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
@@ -118,13 +119,18 @@ export default function JBButton({
 
     bgColorTheme = colors.point2;
   }
+
+  let loading = false;
+
   return (
     <Container align={align}>
       <TouchableHighlight
         size={size}
         color={bgColorTheme}
         borderColor={colorTheme}
-        onPress={onPress}
+        onPress={() => {
+          loading = preventDoubleTap(onPress, loading);
+        }}
         underline={underline ? true : null}
       >
         <Text size={size} color={colorTheme} underline={underline ? true : null}>
@@ -133,4 +139,15 @@ export default function JBButton({
       </TouchableHighlight>
     </Container>
   );
+}
+
+function preventDoubleTap(onPress, loading) {
+  if (loading === false) {
+    loading = true;
+    onPress();
+
+    InteractionManager.runAfterInteractions(() => {
+      loading = false;
+    });
+  }
 }

@@ -133,18 +133,23 @@ export default class OpenBankAccSelectModal extends React.Component {
           visible={isVisibleModal}
           onRequestClose={() => closeModal()}
         >
-          <JBEmptyView
-            title="통장리스트가 비어 있습니다."
-            subTitle="결제계좌 등록 또는 재인증후 다시 진행해 주세요."
-            actionName="통장 등록하기"
-            refresh={() => {
-              closeModal();
-              navigation.navigate('OpenBankAuth', {
-                type: 'REAUTH',
-                completeAction: reauthAfterAction,
-              });
-            }}
-          />
+          <View style={styles.bgWrap}>
+            <View style={styles.contentsWrap}>
+              <JBIcon name="close" size={23} onPress={() => closeModal()} />
+              <JBEmptyView
+                title="통장리스트가 비어 있습니다."
+                subTitle="결제계좌 등록 또는 재인증후 다시 진행해 주세요."
+                actionName="통장 등록하기"
+                refresh={() => {
+                  closeModal();
+                  navigation.navigate('OpenBankAuth', {
+                    type: 'REAUTH',
+                    completeAction: reauthAfterAction,
+                  });
+                }}
+              />
+            </View>
+          </View>
         </Modal>
       );
     }

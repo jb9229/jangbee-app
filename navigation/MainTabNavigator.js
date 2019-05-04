@@ -8,20 +8,19 @@ import ClientMyInfoScreen from '../screens/ClientMyInfoScreen';
 import WorkListScreen from '../screens/WorkListScreen';
 import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 import AppliFirmList from '../components/AppliFirmList';
-import AppliFirmDetail from '../components/AppliFirmDetail';
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+const ClientHomeStack = createStackNavigator({
+  ClientHome: HomeScreen,
 });
 
-HomeStack.navigationOptions = {
+ClientHomeStack.navigationOptions = {
   tabBarLabel: '장비콜',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-call' : 'md-call'} />
   ),
 };
 
-const WorkListStack = createStackNavigator({
+const FirmWorkListStack = createStackNavigator({
   WorkList: { screen: WorkListScreen, navigationOptions: { header: null } },
   WorkRegister: {
     screen: WorkRegisterScreen,
@@ -31,25 +30,21 @@ const WorkListStack = createStackNavigator({
     screen: AppliFirmList,
     navigationOptions: { title: '지원업체 리스트', headerStyle: { marginTop: -28 } },
   },
-  AppliFirmDetail: {
-    screen: AppliFirmDetail,
-    navigationOption: { title: '지원업체 상세보기', headerStyle: { marginTop: -28 } },
-  },
 });
 
-WorkListStack.navigationOptions = {
+FirmWorkListStack.navigationOptions = {
   tabBarLabel: '일감등록',
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="work" type="MaterialIcons" />,
 };
 
-const ClientInfosStack = createStackNavigator({
-  Links: {
+const ClientInfoStack = createStackNavigator({
+  ClientInfo: {
     screen: ClientMyInfoScreen,
     navigationOptions: { title: '사용자 정보', headerStyle: { marginTop: -28 } },
   },
 });
 
-ClientInfosStack.navigationOptions = {
+ClientInfoStack.navigationOptions = {
   tabBarLabel: '내정보',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -60,7 +55,7 @@ ClientInfosStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  HomeStack,
-  WorkListStack,
-  ClientInfosStack,
+  ClientHomeStack,
+  FirmWorkListStack,
+  ClientInfoStack,
 });

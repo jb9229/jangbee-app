@@ -31,8 +31,13 @@ export default class FirmWorkingList extends React.PureComponent {
         {item.workState === 'OPEN' && item.applied && <WorkCommText text="지원중.." />}
         {item.workState === 'SELECTED' && (
           <CommWrap>
-            <JBButton title="포기하기" onPress={() => abandonWork(item.id)} size="small" />
-            <JBButton title="수락하기" onPress={() => acceptWork(item.id)} size="small" />
+            <JBButton
+              title="포기하기"
+              onPress={() => abandonWork(item.id)}
+              size="small"
+              Secondary
+            />
+            <JBButton title="수락하기" onPress={() => acceptWork(item.id)} size="small" Primary />
           </CommWrap>
         )}
       </WorkCommWrap>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, BackHandler, Modal } from 'react-native';
+import { Alert, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
@@ -32,9 +32,7 @@ export default class WorkUpdateModal extends React.Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.editWork) {
@@ -44,10 +42,6 @@ export default class WorkUpdateModal extends React.Component {
         detailRequest: nextProps.editWork.detailRequest,
       });
     }
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
   handleBackPress = () => {
@@ -127,9 +121,7 @@ export default class WorkUpdateModal extends React.Component {
         animationType="slide"
         transparent
         visible={isVisibleModal}
-        onRequestClose={() => {
-          console.log('modal close');
-        }}
+        onRequestClose={() => closeModal()}
       >
         <Container>
           <ContentsView>

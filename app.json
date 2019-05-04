@@ -12,9 +12,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-365.png",
+    "icon": "./assets/images/icon-512.png",
     "splash": {
-      "image": "./assets/images/splash-20190429.png",
+      "image": "./assets/images/splash-20190502.png",
       "resizeMode": "cover",
       "backgroundColor": "#4D4A4A"
     },

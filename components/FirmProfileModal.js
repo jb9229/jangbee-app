@@ -85,7 +85,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
                 size="full"
                 Primary
               />
-              <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" Primary />
+              <JBButton title="로그아웃" onPress={() => onSignOut()} size="full" Secondary />
             </View>
           </View>
         </Modal>

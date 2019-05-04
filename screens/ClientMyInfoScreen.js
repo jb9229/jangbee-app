@@ -29,6 +29,14 @@ class ClientMyInfoScreen extends React.PureComponent {
     return (
       <Container>
         <Card>
+          <JBButton
+            title="로그아웃"
+            onPress={() => this.onSignOut()}
+            size="small"
+            underline
+            align="right"
+            Secondary
+          />
           <JBTextItem title="전화번호" value={user.phoneNumber} align="center" row />
         </Card>
         <JBButton
@@ -36,13 +44,6 @@ class ClientMyInfoScreen extends React.PureComponent {
           onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
           size="full"
           Secondary
-        />
-        <JBButton
-          title="로그아웃"
-          onPress={() => this.onSignOut()}
-          size="small"
-          underline
-          align="center"
         />
       </Container>
     );

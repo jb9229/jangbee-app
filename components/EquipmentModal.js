@@ -39,10 +39,28 @@ export default class EquipementModal extends React.Component {
     this.state = {
       listDataSource: EQUIPMENT_CONTENT,
     };
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isVisibleEquiModal } = nextProps;
+    const { listDataSource } = this.state;
+
+    if (isVisibleEquiModal) {
+      listDataSource.forEach((data) => {
+        const localData = data;
+        localData.isExpanded = false;
+      });
+    }
   }
 
   updateLayout = (index) => {
     const { listDataSource } = this.state;
+
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
     const array = [...listDataSource];
     array[index].isExpanded = !array[index].isExpanded;

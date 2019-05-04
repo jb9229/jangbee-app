@@ -90,7 +90,7 @@ class LoginScreen extends React.PureComponent {
   };
 
   onSignIn = async () => {
-    const { navigation } = this.props;
+    const { changeAuthPath } = this.props;
     const { confirmationResult, code } = this.state;
 
     // Validation
@@ -112,9 +112,9 @@ class LoginScreen extends React.PureComponent {
             const { userType } = userInfo;
 
             if (!userType) {
-              navigation.navigate('SignUp', { user });
+              changeAuthPath(2, user);
             } else {
-              navigation.navigate('AuthLoading');
+              changeAuthPath(1);
             }
           })
           .catch(error => notifyError(

@@ -10,6 +10,7 @@ import FirmInfoItem from './organisms/FirmInfoItem';
 import { notifyError } from '../common/ErrorNotice';
 import callLink from '../common/CallLink';
 import JBIcon from './molecules/JBIcon';
+import JBActIndicator from './organisms/JBActIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -168,11 +169,20 @@ export default class FirmMyInfoScreen extends React.Component {
   };
 
   render() {
-    const { isVisibleModal, closeModal } = this.props;
+    const { isVisibleModal, closeModal, hideCallButton } = this.props;
     const { firm, isLoadingComplete, evaluList } = this.state;
 
-    if (!isVisibleModal) {
-      return <View />;
+    if (!isLoadingComplete) {
+      return (
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
+          <JBActIndicator size={32} />
+        </Modal>
+      );
     }
 
     if (firm === undefined) {
@@ -208,14 +218,16 @@ export default class FirmMyInfoScreen extends React.Component {
             <Text style={styles.fnameText}>{firm.fname}</Text>
           </View>
 
-          <View style={styles.callButWrap}>
-            <JBButton
-              title="전화걸기"
-              onPress={() => callLink(firm.phoneNumber, true)}
-              size="full"
-              Primary
-            />
-          </View>
+          {!hideCallButton && (
+            <View style={styles.callButWrap}>
+              <JBButton
+                title="전화걸기"
+                onPress={() => callLink(firm.phoneNumber, true)}
+                size="full"
+                Primary
+              />
+            </View>
+          )}
         </View>
       </Modal>
     );

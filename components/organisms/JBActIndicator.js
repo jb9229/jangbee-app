@@ -24,7 +24,7 @@ export default class JBActIndicator extends React.PureComponent {
     const { title, size } = this.props;
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>{title}</Text>
+        <Text style={styles.message}>{title || '정보 불러오는중..'}</Text>
         <ActivityIndicator size={size} color={colors.indicator} />
       </View>
     );

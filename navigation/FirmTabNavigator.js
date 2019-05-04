@@ -36,7 +36,7 @@ const FirmMyInfoStack = createStackNavigator({
 });
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  FirmHome: HomeScreen,
 });
 
 HomeStack.navigationOptions = {
