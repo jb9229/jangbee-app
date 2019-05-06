@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.batangDark,
     width: '100%',
+    height: 200,
   },
   bgAdWrap: {
     flex: 1,
@@ -32,14 +33,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.titleMiddle,
   },
   bottomWrap: {
-    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 5,
+    height: 50,
+    marginBottom: 3,
   },
   subTitleWrap: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   subTitleText: {
     color: 'white',
@@ -47,13 +48,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.batang,
   },
   telIconWrap: {
-    flex: 1,
+    position: 'absolute',
+    top: 8,
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingBottom: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   text: {
     color: '#fff',
@@ -78,24 +79,26 @@ const JangbeeAd = ({ ad, openFirmDetail }) => (
     {ad.photoUrl === null || ad.photoUrl === '' ? (
       <View style={styles.bgAdWrap}>
         <AdImage title={ad.title} value={ad.photoUrl} />
-        <View style={styles.subTitleWrap}>
-          <Text style={styles.subTitleText}>{ad.subTitle}</Text>
-        </View>
-        <View style={styles.telIconWrap}>
-          {ad.accountId ? (
+        <View style={styles.bottomWrap}>
+          <View style={styles.subTitleWrap}>
+            <Text style={styles.subTitleText}>{ad.subTitle}</Text>
+          </View>
+          <View style={styles.telIconWrap}>
+            {ad.accountId ? (
+              <JBIcon
+                name="information-circle"
+                size={40}
+                color={colors.point2}
+                onPress={() => openFirmDetail(ad.accountId)}
+              />
+            ) : null}
             <JBIcon
-              name="information-circle"
+              name="call"
               size={40}
-              color={colors.point2}
-              onPress={() => openFirmDetail(ad.accountId)}
+              color={colors.point}
+              onPress={() => telAdvertiser(ad.telNumber)}
             />
-          ) : null}
-          <JBIcon
-            name="call"
-            size={40}
-            color={colors.point}
-            onPress={() => telAdvertiser(ad.telNumber)}
-          />
+          </View>
         </View>
       </View>
     ) : (
@@ -112,7 +115,7 @@ const JangbeeAd = ({ ad, openFirmDetail }) => (
               {ad.accountId ? (
                 <JBIcon
                   name="information-circle"
-                  size={40}
+                  size={38}
                   color={colors.point2}
                   onPress={() => openFirmDetail(ad.accountId)}
                 />
