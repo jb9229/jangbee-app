@@ -3,6 +3,7 @@ import { Alert, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { AirbnbRating } from 'react-native-elements';
 import * as api from '../api/api';
+import fonts from '../constants/Fonts';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
@@ -12,8 +13,6 @@ import { notifyError } from '../common/ErrorNotice';
 
 const Container = styled.View`
   flex: 1;
-  align-items: center;
-  justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
   ${props => props.size === 'full'
     && `
@@ -22,11 +21,43 @@ const Container = styled.View`
 `;
 
 const ContentsView = styled.View`
+  flex: 1;
   background-color: white;
   padding: 20px;
   ${props => props.size === 'full'
     && `
   `}
+`;
+
+const TopWrap = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 25px;
+`;
+
+const TitleWrap = styled.View`
+  flex: 1;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  font-family: ${fonts.titleTop};
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const RatingWrap = styled.View`
+  margin-bottom: 20px;
+  align-items: center;
+`;
+
+const RatingText = styled.Text`
+  font-family: ${fonts.title};
+  font-size: 14px;
+`;
+
+const CommentWrap = styled.View`
+  height: 200px;
 `;
 
 export default class ClientEstimateFirmModal extends React.Component {
@@ -103,43 +134,45 @@ export default class ClientEstimateFirmModal extends React.Component {
         animationType="slide"
         transparent
         visible={isVisibleModal}
-        onRequestClose={() => {
-          console.log('modal close');
-        }}
+        onRequestClose={() => closeModal()}
       >
         <Container>
           <ContentsView>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
-            <AirbnbRating
-              count={10}
-              reviews={[
-                'Terrible',
-                'Bad',
-                'Um..',
-                'OK',
-                'Good',
-                'Very Good',
-                'Wow',
-                'Amazing',
-                'Unbelievable',
-                'Jesus',
-              ]}
-              defaultRating={0}
-              onFinishRating={rating => this.setState({ rating })}
-              size={19}
-            />
+            <TopWrap>
+              <JBIcon name="close" size={33} onPress={() => closeModal()} />
+              <TitleWrap>
+                <Title>작업은 어떠셨나요?</Title>
+              </TitleWrap>
+            </TopWrap>
+            <RatingWrap>
+              <RatingText>별점주기</RatingText>
+              <AirbnbRating
+                count={5}
+                reviews={[
+                  '형편없었어요',
+                  '부족합니다.',
+                  '그저그랬어요',
+                  '만족하지만, 좀 아쉬운 점이 있네요',
+                  '훌륭합니다, 만족해요',
+                ]}
+                defaultRating={0}
+                onFinishRating={rating => this.setState({ rating })}
+                size={35}
+              />
+            </RatingWrap>
 
-            <JBTextInput
-              title="장비사용 후기"
-              value={comment}
-              onChangeText={text => this.setState({ comment: text })}
-              placeholder="기입해 주세요"
-              multiline
-              numberOfLines={5}
-            />
-            <JBErrorMessage errorMSG={commentValErrMessage} />
-
-            <JBButton title="평가완료" onPress={() => this.completeAction()} />
+            <CommentWrap>
+              <JBTextInput
+                title="장비사용 후기:"
+                value={comment}
+                onChangeText={text => this.setState({ comment: text })}
+                placeholder="기입해 주세요"
+                multiline
+                numberOfLines={5}
+              />
+              <JBErrorMessage errorMSG={commentValErrMessage} />
+            </CommentWrap>
+            <JBButton title="평가완료" onPress={() => this.completeAction()} size="full" Primary />
           </ContentsView>
         </Container>
       </Modal>

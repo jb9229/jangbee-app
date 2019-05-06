@@ -115,7 +115,7 @@ export default class JangbeeAdList extends React.Component {
   renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
 
   render() {
-    const { admob, navigation } = this.props;
+    const { admob} = this.props;
     const {
       adList, isEmptyAdlist, isVisibleDetailModal, detailFirmId,
     } = this.state;
@@ -153,7 +153,6 @@ export default class JangbeeAdList extends React.Component {
       <View style={slidStyles[index]} key={index}>
         <JangbeeAd
           ad={ad}
-          navigation={navigation}
           openFirmDetail={accountId => this.setState({ detailFirmId: accountId, isVisibleDetailModal: true })
           }
         />

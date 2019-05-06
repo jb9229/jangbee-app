@@ -40,37 +40,35 @@ export default class AdUpdateModal extends React.Component {
       adSubTitle: '',
       adPhotoUrl: '',
       adTelNumber: '',
-      forMonths: 0,
+      forMonths: '0',
       imgUploadingMessage: '',
     };
   }
 
   componentDidMount = () => {
-    const {
-      upAdId, upAdTitle, upAdSubTitle, upAdPhotoUrl, upAdTelNumber,
-    } = this.props;
+    const { updateAd } = this.props;
 
-    this.initStateValue(upAdId, upAdTitle, upAdSubTitle, upAdPhotoUrl, upAdTelNumber);
+    if (updateAd) {
+      this.initStateValue(updateAd);
+    }
   };
 
   componentWillReceiveProps(nextProps) {
-    const {
-      upAdId, upAdTitle, upAdSubTitle, upAdPhotoUrl, upAdTelNumber,
-    } = nextProps;
+    const { updateAd } = nextProps;
 
-    if (upAdId !== undefined && upAdTitle !== undefined) {
-      this.initStateValue(upAdId, upAdTitle, upAdSubTitle, upAdPhotoUrl, upAdTelNumber);
+    if (updateAd) {
+      this.initStateValue(updateAd);
     }
   }
 
-  initStateValue = (upAdId, upAdTitle, upAdSubTitle, upAdPhotoUrl, upAdTelNumber) => {
+  initStateValue = (updateAd) => {
     this.setState({
-      adId: upAdId,
-      adTitle: upAdTitle,
-      adSubTitle: upAdSubTitle,
-      adPhotoUrl: upAdPhotoUrl,
-      adTelNumber: upAdTelNumber,
-      preAdImageUrl: upAdPhotoUrl,
+      adId: updateAd.id,
+      adTitle: updateAd.title,
+      adSubTitle: updateAd.subTitle,
+      adPhotoUrl: updateAd.photoUrl,
+      adTelNumber: updateAd.telNumber,
+      preAdImageUrl: updateAd.photoUrl,
     });
   };
 
@@ -222,9 +220,7 @@ export default class AdUpdateModal extends React.Component {
         animationType="slide"
         transparent
         visible={isVisibleModal}
-        onRequestClose={() => {
-          console.log('modal close');
-        }}
+        onRequestClose={() => closeModal()}
       >
         <View style={styles.bgWrap}>
           <View style={styles.contentsWrap}>
@@ -248,7 +244,6 @@ export default class AdUpdateModal extends React.Component {
                 <ImagePickInput
                   itemTitle="광고배경 사진"
                   imgUrl={adPhotoUrl}
-                  aspect={[4, 3]}
                   setImageUrl={url => this.setState({ adPhotoUrl: url })}
                 />
                 <JBErrorMessage errorMSG={adPhotoUrlValErrMessage} />

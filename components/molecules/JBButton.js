@@ -1,6 +1,7 @@
 import React from 'react';
 import { InteractionManager } from 'react-native';
 import styled from 'styled-components/native';
+import { render } from 'react-native-testing-library';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
@@ -86,68 +87,71 @@ const Text = styled.Text`
     `};
 `;
 
-export default function JBButton({
-  title,
-  onPress,
-  size,
-  underline,
-  color,
-  bgColor,
-  align,
-  Secondary,
-  Primary,
-}) {
-  let colorTheme = color;
-  let bgColorTheme = bgColor;
-
-  if (Secondary) {
-    if (underline) {
-      colorTheme = colors.pointDark;
-    } else {
-      colorTheme = 'white';
-    }
-
-    bgColorTheme = colors.pointDark;
+export default class JBButton extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pressing: false,
+    };
   }
 
-  if (Primary) {
-    if (underline) {
-      colorTheme = colors.point2;
-    } else {
-      colorTheme = 'white';
+  preventDoubleTap = () => {
+    const { onPress } = this.props;
+    const { pressing } = this.state;
+
+    if (pressing === false) {
+      this.setState({ pressing: true });
+
+      onPress();
+
+      InteractionManager.runAfterInteractions(() => {
+        this.setState({ pressing: false });
+      });
+    }
+  };
+
+  render() {
+    const {
+      title, size, underline, color, bgColor, align, Secondary, Primary,
+    } = this.props;
+
+    let colorTheme = color;
+    let bgColorTheme = bgColor;
+
+    if (Secondary) {
+      if (underline) {
+        colorTheme = colors.pointDark;
+      } else {
+        colorTheme = 'white';
+      }
+
+      bgColorTheme = colors.pointDark;
     }
 
-    bgColorTheme = colors.point2;
-  }
+    if (Primary) {
+      if (underline) {
+        colorTheme = colors.point2;
+      } else {
+        colorTheme = 'white';
+      }
 
-  let loading = false;
+      bgColorTheme = colors.point2;
+    }
 
-  return (
-    <Container align={align}>
-      <TouchableHighlight
-        size={size}
-        color={bgColorTheme}
-        borderColor={colorTheme}
-        onPress={() => {
-          loading = preventDoubleTap(onPress, loading);
-        }}
-        underline={underline ? true : null}
-      >
-        <Text size={size} color={colorTheme} underline={underline ? true : null}>
-          {title}
-        </Text>
-      </TouchableHighlight>
-    </Container>
-  );
-}
-
-function preventDoubleTap(onPress, loading) {
-  if (loading === false) {
-    loading = true;
-    onPress();
-
-    InteractionManager.runAfterInteractions(() => {
-      loading = false;
-    });
+    return (
+      <Container align={align}>
+        <TouchableHighlight
+          size={size}
+          color={bgColorTheme}
+          borderColor={colorTheme}
+          onPress={this.preventDoubleTap}
+          underline={underline ? true : null}
+        >
+          <Text size={size} color={colorTheme} underline={underline ? true : null}>
+            {title}
+          </Text>
+        </TouchableHighlight>
+      </Container>
+    );
   }
 }

@@ -73,7 +73,7 @@ function telAdvertiser(phoneNumber) {
   );
 }
 
-const JangbeeAd = ({ ad, navigation, openFirmDetail }) => (
+const JangbeeAd = ({ ad, openFirmDetail }) => (
   <View style={styles.container}>
     {ad.photoUrl === null || ad.photoUrl === '' ? (
       <View style={styles.bgAdWrap}>

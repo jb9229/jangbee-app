@@ -13,6 +13,7 @@ import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
 import { notifyError } from '../common/ErrorNotice';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
+import FirmDetailModal from '../components/FirmDetailModal';
 
 const styles = StyleSheet.create({
   container: {
@@ -68,6 +69,10 @@ const styles = StyleSheet.create({
   adListTargetLocalWrap: {
     flexDirection: 'row',
   },
+  buttonTopLine: {
+    borderLeftColor: colors.point2,
+    borderLeftWidth: 1,
+  },
 });
 
 class AdScreen extends React.Component {
@@ -78,10 +83,11 @@ class AdScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadingAdList: true,
-      isAdEmpty: true,
       isVisibleAdUpdateModal: false,
       isVisibleFinAccUpdateModal: false,
+      isVisibleDetailModal: false,
+      isLoadingAdList: true,
+      isAdEmpty: true,
       adList: null,
     };
   }
@@ -93,7 +99,7 @@ class AdScreen extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { params } = nextProps.navigation.state;
 
-    if (params !== undefined && params.refresh !== undefined) {
+    if (params && params.refresh) {
       this.setAdList();
     }
   }
@@ -102,8 +108,10 @@ class AdScreen extends React.Component {
    * 결제통장 변경 함수
    */
   changeAdPayAccount = (newFintechUseNum) => {
+    const { user } = this.props;
+
     api
-      .updateFinUseNumAd(selFinUseNum, accountId)
+      .updateFinUseNumAd(newFintechUseNum, user.uid)
       .then((updateResult) => {
         if (updateResult) {
           Alert.alert('결제통장 바꾸기 성공', `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`);
@@ -143,14 +151,9 @@ class AdScreen extends React.Component {
    * 광고업데이트 요청 함수
    */
   updateAd = (item) => {
-    this.setState({ isVisibleAdUpdateModal: true });
-
     this.setState({
-      upAdId: item.id,
-      upAdTitle: item.title,
-      upAdSubTitle: item.subTitle,
-      upAdPhotoUrl: item.photoUrl,
-      upAdTelNumber: item.telNumber,
+      updateAd: item,
+      isVisibleAdUpdateModal: true,
     });
   };
 
@@ -158,19 +161,14 @@ class AdScreen extends React.Component {
    * 광고종료 재 확인 팝업
    */
   confirmTerminateAd = (item) => {
-    Alert.alert(
-      '광고 종료',
-      `[${getAdtypeStr(item.adType)}] 정말 광고를 종료 하시겠습니까?`,
-      [
-        { text: '네', onPress: () => this.terminateAd(item.id) },
-        {
-          text: '아니요',
-          onPress: () => {},
-          style: 'cancel',
-        },
-      ],
-      { cancelable: false },
-    );
+    Alert.alert('광고 종료', `[${getAdtypeStr(item.adType)}] 정말 광고를 종료 하시겠습니까?`, [
+      { text: '네', onPress: () => this.terminateAd(item.id) },
+      {
+        text: '아니요',
+        onPress: () => {},
+        style: 'cancel',
+      },
+    ]);
   };
 
   /**
@@ -195,7 +193,11 @@ class AdScreen extends React.Component {
 
   renderAdListItem = ({ item, index }) => (
     <View style={styles.adListItemWrap}>
-      <JangbeeAd ad={item} navigation={this.props.navigation} />
+      <JangbeeAd
+        ad={item}
+        openFirmDetail={accountId => this.setState({ detailFirmId: accountId, isVisibleDetailModal: true })
+        }
+      />
       <View style={styles.adListCommWrap}>
         <View style={styles.adItemTopWrap}>
           <View style={styles.adItemTopLeftWrap}>
@@ -244,11 +246,9 @@ class AdScreen extends React.Component {
       adList,
       isVisibleAdUpdateModal,
       isVisibleFinAccUpdateModal,
-      upAdId,
-      upAdTitle,
-      upAdSubTitle,
-      upAdPhotoUrl,
-      upAdTelNumber,
+      isVisibleDetailModal,
+      updateAd,
+      detailFirmId,
     } = this.state;
 
     if (isLoadingAdList) {
@@ -274,6 +274,11 @@ class AdScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        <FirmDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          accountId={detailFirmId}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+        />
         <AdUpdateModal
           isVisibleModal={isVisibleAdUpdateModal}
           closeModal={() => this.setState({ isVisibleAdUpdateModal: false })}
@@ -281,11 +286,7 @@ class AdScreen extends React.Component {
             this.setAdList();
             this.setState({ isVisibleAdUpdateModal: false });
           }}
-          upAdId={upAdId}
-          upAdTitle={upAdTitle}
-          upAdSubTitle={upAdSubTitle}
-          upAdPhotoUrl={upAdPhotoUrl}
-          upAdTelNumber={upAdTelNumber}
+          updateAd={updateAd}
         />
         <OpenBankAccSelectModal
           isVisibleModal={isVisibleFinAccUpdateModal}
@@ -296,7 +297,7 @@ class AdScreen extends React.Component {
         />
         <FlatList
           data={adList}
-          renderItem={this.renderAdListItem}
+          renderItem={item => this.renderAdListItem(item)}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={this.renderSeparator}
         />
@@ -316,12 +317,7 @@ class AdScreen extends React.Component {
               underline
               Primary
             />
-            <View
-              style={{
-                borderLeftColor: colors.point2,
-                borderLeftWidth: 1,
-              }}
-            />
+            <View style={styles.buttonTopLine} />
             <JBButton
               title="내장비 홍보하기"
               onPress={() => navigation.navigate('AdCreate')}
