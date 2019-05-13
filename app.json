@@ -5,12 +5,10 @@
     "name": "장비 콜",
     "slug": "Everyone_will_be_own_at_JangbeeCall",
     "privacy": "public",
+    "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "32.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "version": "1.0.0",
+    "platforms": ["ios", "android"],
+    "version": "0.1.5_20190511",
     "orientation": "portrait",
     "icon": "./assets/images/icon-512.png",
     "splash": {
@@ -21,14 +19,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "androidStatusBar": {
-      "backgroundColor": "#4D4A4A"
+      "backgroundColor": "#4D4A4A",
+      "bundleIdentifier": "com.kan.jangbeecall"
+    },
+    "android": {
+      "package": "com.kan.jangbeecall",
+      "permissions": ["ACCESS_FINE_LOCATION"],
+      "versionCode": 6
     },
     "description": ""
   }

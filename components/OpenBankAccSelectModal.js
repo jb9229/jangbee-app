@@ -99,7 +99,7 @@ export default class OpenBankAccSelectModal extends React.Component {
 
   render() {
     const {
-      isVisibleModal, navigation, closeModal, reauthAfterAction,
+      isVisibleModal, navigation, closeModal, reauthAfterAction, actionName,
     } = this.props;
     const { isEmptyList, accList, selFinUseNum } = this.state;
 
@@ -172,7 +172,7 @@ export default class OpenBankAccSelectModal extends React.Component {
               ItemSeparatorComponent={ListSeparator}
             />
             <JBButton
-              title="결제통장 바꾸기"
+              title={actionName}
               onPress={() => this.completeAction()}
               size="full"
               Primary

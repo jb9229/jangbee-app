@@ -34,8 +34,8 @@ export default class App extends React.Component {
       // We include SpaceMono because we use it in HomeScreen.js. Feel free
       // to remove this if you are not using it in your app
       SsangmundongGulimB: require('./assets/fonts/Typo_SsangmundongGulimB.ttf'),
+      NanumSquareRoundR: require('./assets/fonts/NanumSquareRoundR.ttf'),
       NanumGothic: require('./assets/fonts/NanumGothic.ttf'),
-      'Hamchorong-batang': require('./assets/fonts/Hamchorong-batang.ttf'),
       NanumPen: require('./assets/fonts/NanumPen.ttf'),
     }),
   ]);

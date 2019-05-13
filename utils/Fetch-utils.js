@@ -1,6 +1,4 @@
 import CmException from '../common/CmException';
-import JBServerException from '../common/JBServerException';
-import * as obconfig from '../openbank-config';
 
 /**
  * HttpRequest Json 응답처리
@@ -25,7 +23,7 @@ export function handleJsonResponse(res) {
  *
  * @param {Object} res HttpResponse
  */
-export function handleJBServerJsonResponse(res) {
+export async function handleJBServerJsonResponse(res) {
   if (res.ok) {
     if (res.status === 204) {
       // NO_CONTENTS
@@ -35,7 +33,15 @@ export function handleJBServerJsonResponse(res) {
     return res.json();
   }
 
-  throw res;
+  const badRes = res.text();
+
+  if (badRes) {
+    const eMsg = await badRes.then(errorText => errorText);
+    const eMsgJson = JSON.parse(eMsg);
+    throw eMsgJson;
+  }
+
+  throw new CmException('예상치 못한 예외입니다', `관리자에게 문의 부탁 드립니다(${res})`);
 }
 
 /**

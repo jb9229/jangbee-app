@@ -6,28 +6,25 @@ import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
 const TouchableHighlight = styled.TouchableHighlight`
-  background-color: ${props => (props.isSelected ? colors.batangDark : 'white')};
-  border-color: ${props => (props.isSelected ? 'white' : colors.point)};
-  border-width: 1px;
+  border-color: ${props => (props.isSelected ? 'white' : colors.point2Dark)};
+  border-width: 2px;
   border-radius: 5;
   align-items: center;
   justify-content: center;
   padding: 15px 25px;
   ${props => props.isSelected
     && `
+    background-color: ${colors.batangDark};
     border-radius: 15;
     border-color: ${colors.batangDark};
   `};
 `;
 
 const Text = styled.Text`
-  color: ${props => (props.isSelected ? colors.point : colors.pointLight)};
+  color: ${props => (props.isSelected ? colors.point : colors.point2)};
   font-family: ${fonts.button};
   font-size: 20;
-  ${props => props.isSelected
-    && `
-    font-weight: bold;
-  `};
+  font-weight: bold;
 `;
 
 const styles = StyleSheet.create({

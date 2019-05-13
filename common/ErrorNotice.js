@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 
 export function notifyError(eName, eMessage, refreshFunc) {
-  if (eMessage.endsWith('Network request failed')) {
+  if (eMessage && eMessage.endsWith('Network request failed')) {
     if (refreshFunc) {
       return Alert.alert(
         '통신 상태가 좋지 않습니다.',

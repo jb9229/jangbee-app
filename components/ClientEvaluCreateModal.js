@@ -32,23 +32,7 @@ const ContentsView = styled.View`
 export default class ClientEvaluCreateModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      cliName: '',
-      firmName: '',
-      telNumber: '',
-      telNumber2: '',
-      telNumber3: '',
-      firmNumber: '',
-      reason: '',
-      isDuplTelNChecked: undefined,
-      cliNameValErrMessage: '',
-      firmNameValErrMessage: '',
-      telNumberValErrMessage: '',
-      telNumber2ValErrMessage: '',
-      telNumber3ValErrMessage: '',
-      firmNumberValErrMessage: '',
-      reasonValErrMessage: '',
-    };
+    this.state = {};
   }
 
   /**
@@ -69,7 +53,7 @@ export default class ClientEvaluCreateModal extends React.Component {
         completeAction(resBody);
         closeModal();
       })
-      .catch(ex => notifyError('블랙리스트 추가 실패', ex.message));
+      .catch(error => notifyError(error.error, error.message));
   };
 
   /**
@@ -79,10 +63,14 @@ export default class ClientEvaluCreateModal extends React.Component {
     this.setState({
       cliNameValErrMessage: '',
       firmNameValErrMessage: '',
-      firmNumberValErrMessage: '',
       telNumberValErrMessage: '',
       telNumber2ValErrMessage: '',
       telNumber3ValErrMessage: '',
+      firmNumberValErrMessage: '',
+      equipmentValErrMessage: '',
+      localValErrMessage: '',
+      amountValErrMessage: '',
+      regiTelNumberValErrMessage: '',
       reasonValErrMessage: '',
     });
   };
@@ -92,7 +80,17 @@ export default class ClientEvaluCreateModal extends React.Component {
    */
   validateCreateForm = async () => {
     const {
-      cliName, firmName, telNumber, telNumber2, telNumber3, firmNumber, reason,
+      cliName,
+      firmName,
+      telNumber,
+      telNumber2,
+      telNumber3,
+      firmNumber,
+      equipment,
+      local,
+      amount,
+      regiTelNumber,
+      reason,
     } = this.state;
     const { accountId } = this.props;
 
@@ -104,7 +102,7 @@ export default class ClientEvaluCreateModal extends React.Component {
       return false;
     }
 
-    let v = validate('textMax', cliName, true, 8);
+    let v = validate('textMax', cliName, false, 8);
     if (!v[0]) {
       this.setState({ cliNameValErrMessage: v[1] });
       return false;
@@ -134,8 +132,32 @@ export default class ClientEvaluCreateModal extends React.Component {
       return false;
     }
 
-    if (firmNumber !== '' && firmNumber.length !== 12) {
+    if (firmNumber && firmNumber.length !== 12) {
       this.setState({ firmNumberValErrMessage: '사업자번호가 유효하지 않습니다.' });
+      return false;
+    }
+
+    v = validate('textMax', equipment, false, 45);
+    if (!v[0]) {
+      this.setState({ equipmentValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', local, false, 45);
+    if (!v[0]) {
+      this.setState({ localValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', amount, false, 45);
+    if (!v[0]) {
+      this.setState({ amountValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', regiTelNumber, false);
+    if (!v[0]) {
+      this.setState({ regiTelNumberValErrMessage: v[1] });
       return false;
     }
 
@@ -174,8 +196,16 @@ export default class ClientEvaluCreateModal extends React.Component {
         telNumber2,
         telNumber3,
         firmNumber,
+        equipment,
+        local,
+        amount,
+        regiTelNumber,
         reason,
       };
+
+      if (!newEvaluData.firmNumber) {
+        delete newEvaluData.firmNumber;
+      }
 
       return newEvaluData;
     }
@@ -192,6 +222,10 @@ export default class ClientEvaluCreateModal extends React.Component {
       telNumber2,
       telNumber3,
       firmNumber,
+      equipment,
+      local,
+      amount,
+      regiTelNumber,
       reason,
       cliNameValErrMessage,
       firmNameValErrMessage,
@@ -199,6 +233,10 @@ export default class ClientEvaluCreateModal extends React.Component {
       telNumber2ValErrMessage,
       telNumber3ValErrMessage,
       firmNumberValErrMessage,
+      equipmentValErrMessage,
+      localValErrMessage,
+      amountValErrMessage,
+      regiTelNumberValErrMessage,
       reasonValErrMessage,
     } = this.state;
 
@@ -214,8 +252,18 @@ export default class ClientEvaluCreateModal extends React.Component {
             <ScrollView>
               <ContentsView size={size}>
                 <JBIcon name="close" size={23} onPress={() => closeModal()} />
+
                 <JBTextInput
-                  title="고객명*"
+                  title="전화번호(숫자만)*"
+                  value={telNumber}
+                  onChangeText={text => this.setState({ telNumber: text })}
+                  placeholder="블랙리스트 전화번호를 기입해 주세요"
+                  keyboardType="phone-pad"
+                />
+                <JBErrorMessage errorMSG={telNumberValErrMessage} />
+
+                <JBTextInput
+                  title="고객명"
                   value={cliName}
                   onChangeText={text => this.setState({ cliName: text })}
                   placeholder="고객명을 기입해 주세요"
@@ -229,15 +277,6 @@ export default class ClientEvaluCreateModal extends React.Component {
                   placeholder="업체명을 기입해 주세요"
                 />
                 <JBErrorMessage errorMSG={firmNameValErrMessage} />
-
-                <JBTextInput
-                  title="전화번호(숫자만)*"
-                  value={telNumber}
-                  onChangeText={text => this.setState({ telNumber: text })}
-                  placeholder="블랙리스트 전화번호를 기입해 주세요"
-                  keyboardType="phone-pad"
-                />
-                <JBErrorMessage errorMSG={telNumberValErrMessage} />
 
                 <JBTextInput
                   title="전화번호2(숫자만)"
@@ -264,6 +303,38 @@ export default class ClientEvaluCreateModal extends React.Component {
                   placeholder="사업자번호를 기입해 주세요"
                 />
                 <JBErrorMessage errorMSG={firmNumberValErrMessage} />
+
+                <JBTextInput
+                  title="장비"
+                  value={equipment}
+                  onChangeText={text => this.setState({ equipment: text })}
+                  placeholder="어떤 장비의 피해사례 입니까?"
+                />
+                <JBErrorMessage errorMSG={equipmentValErrMessage} />
+
+                <JBTextInput
+                  title="지역"
+                  value={local}
+                  onChangeText={text => this.setState({ local: text })}
+                  placeholder="어떤 지역의 피해사례 입니까?"
+                />
+                <JBErrorMessage errorMSG={localValErrMessage} />
+
+                <JBTextInput
+                  title="금액"
+                  value={amount}
+                  onChangeText={text => this.setState({ amount: text })}
+                  placeholder="피해금액이 얼마입니까?"
+                />
+                <JBErrorMessage errorMSG={amountValErrMessage} />
+
+                <JBTextInput
+                  title="작성자 전화번호"
+                  value={regiTelNumber}
+                  onChangeText={text => this.setState({ regiTelNumber: text })}
+                  placeholder="행적을 신고해 줄 수 있습니다."
+                />
+                <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
 
                 <JBTextInput
                   title="사유*"

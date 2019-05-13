@@ -33,9 +33,6 @@ export default class ModalTemplate extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.editItem) {
-      this.setState({phoneNumber: editItem.phoneNumber})
-    }
   }
 
   /**

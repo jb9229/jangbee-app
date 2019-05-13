@@ -42,15 +42,19 @@ export default function CliEvaluItem({
   updateCliEvalu,
   deleteCliEvalu,
   openCliEvaluLikeModal,
+  openDetailModal,
 }) {
   return (
     <View style={styles.Container}>
       <View style={styles.topWrap}>
-        <JBTextItem
-          value={`${item.cliName} (${convertHyphen(item.firmName)}, ${convertHyphen(
+        <JBButton
+          title={`${convertHyphen(item.cliName)} (${convertHyphen(item.firmName)}, ${convertHyphen(
             item.firmNumber,
           )})`}
-          small
+          onPress={() => openDetailModal(item)}
+          size="small"
+          underline
+          Secondary
         />
         <View style={styles.likeWrap}>
           <View style={styles.likeWrap}>

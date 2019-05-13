@@ -29,27 +29,35 @@ const ContentsView = styled.View`
 `;
 
 export default class ClientEvaluUpdateModal extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {};
   }
 
   componentWillReceiveProps(nextProps) {
-    const {
-      id, cliName, firmName, telNumber2, telNumber3, firmNumber, reason,
-    } = nextProps;
+    const { updateEvalu } = nextProps;
 
-    if (cliName && reason) {
+    if (updateEvalu) {
       this.setState({
-        id,
-        cliName,
-        firmName,
-        telNumber2,
-        telNumber3,
-        firmNumber,
-        reason,
+        id: updateEvalu.id,
+        cliName: updateEvalu.cliName,
+        firmName: updateEvalu.firmName,
+        telNumber2: updateEvalu.telNumber2,
+        telNumber3: updateEvalu.telNumber3,
+        firmNumber: updateEvalu.firmNumber,
+        equipment: updateEvalu.equipment,
+        local: updateEvalu.local,
+        amount: updateEvalu.amount,
+        regiTelNumber: updateEvalu.regiTelNumber,
+        reason: updateEvalu.reason,
       });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   /**
@@ -60,9 +68,17 @@ export default class ClientEvaluUpdateModal extends React.Component {
 
     const updateData = this.validateForm();
 
+    if (!updateData) {
+      return;
+    }
+
     api
       .updateClientEvaluation(updateData)
       .then((resBody) => {
+        if (!this._isMounted) {
+          return;
+        }
+
         completeAction(resBody);
       })
       .catch(error => notifyError(
@@ -78,7 +94,17 @@ export default class ClientEvaluUpdateModal extends React.Component {
    */
   validateForm = () => {
     const {
-      id, cliName, firmName, telNumber2, telNumber3, firmNumber, reason,
+      id,
+      cliName,
+      firmName,
+      telNumber2,
+      telNumber3,
+      firmNumber,
+      equipment,
+      local,
+      amount,
+      regiTelNumber,
+      reason,
     } = this.state;
 
     // Validation Error Massage Initialize
@@ -88,10 +114,14 @@ export default class ClientEvaluUpdateModal extends React.Component {
       telNumber2ValErrMessage: '',
       telNumber3ValErrMessage: '',
       firmNumberValErrMessage: '',
+      equipmentValErrMessage: '',
+      localValErrMessage: '',
+      amountValErrMessage: '',
+      regiTelNumberValErrMessage: '',
       reasonValErrMessage: '',
     });
 
-    let v = validate('textMax', cliName, true, 45);
+    let v = validate('textMax', cliName, false, 45);
     if (!v[0]) {
       this.setState({ cliNameValErrMessage: v[1] });
       return false;
@@ -120,6 +150,30 @@ export default class ClientEvaluUpdateModal extends React.Component {
       return false;
     }
 
+    v = validate('textMax', equipment, false, 45);
+    if (!v[0]) {
+      this.setState({ equipmentValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', local, false, 45);
+    if (!v[0]) {
+      this.setState({ localValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', amount, false, 45);
+    if (!v[0]) {
+      this.setState({ amountValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('cellPhone', regiTelNumber, false);
+    if (!v[0]) {
+      this.setState({ regiTelNumberValErrMessage: v[1] });
+      return false;
+    }
+
     v = validate('textMax', reason, true, 1000);
     if (!v[0]) {
       this.setState({ reasonValErrMessage: v[1] });
@@ -133,9 +187,13 @@ export default class ClientEvaluUpdateModal extends React.Component {
       telNumber2,
       telNumber3,
       firmNumber,
+      equipment,
+      local,
+      amount,
+      regiTelNumber,
       reason,
     };
-
+    console.log(updateData);
     return updateData;
   };
 
@@ -147,12 +205,20 @@ export default class ClientEvaluUpdateModal extends React.Component {
       telNumber2,
       telNumber3,
       firmNumber,
+      equipment,
+      local,
+      amount,
+      regiTelNumber,
       reason,
       cliNameValErrMessage,
       firmNameValErrMessage,
       telNumber2ValErrMessage,
       telNumber3ValErrMessage,
       firmNumberValErrMessage,
+      equipmentValErrMessage,
+      localValErrMessage,
+      amountValErrMessage,
+      regiTelNumberValErrMessage,
       reasonValErrMessage,
     } = this.state;
 
@@ -209,6 +275,38 @@ export default class ClientEvaluUpdateModal extends React.Component {
                   placeholder="사업자번호를 기입해 주세요"
                 />
                 <JBErrorMessage errorMSG={firmNumberValErrMessage} />
+
+                <JBTextInput
+                  title="장비"
+                  value={equipment}
+                  onChangeText={text => this.setState({ equipment: text })}
+                  placeholder="어떤 장비의 피해사례 입니까?"
+                />
+                <JBErrorMessage errorMSG={equipmentValErrMessage} />
+
+                <JBTextInput
+                  title="지역"
+                  value={local}
+                  onChangeText={text => this.setState({ local: text })}
+                  placeholder="어떤 지역의 피해사례 입니까?"
+                />
+                <JBErrorMessage errorMSG={localValErrMessage} />
+
+                <JBTextInput
+                  title="금액"
+                  value={amount}
+                  onChangeText={text => this.setState({ amount: text })}
+                  placeholder="피해금액이 얼마입니까?"
+                />
+                <JBErrorMessage errorMSG={amountValErrMessage} />
+
+                <JBTextInput
+                  title="작성자 전화번호"
+                  value={regiTelNumber}
+                  onChangeText={text => this.setState({ regiTelNumber: text })}
+                  placeholder="행적을 신고해 줄 수 있습니다."
+                />
+                <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
 
                 <JBTextInput
                   title="사유"

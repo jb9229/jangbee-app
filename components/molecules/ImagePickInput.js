@@ -24,14 +24,14 @@ const styles = StyleSheet.create({
   },
   urlInput: {},
   urlText: {
-    fontFamily: 'Hamchorong-batang',
+    fontFamily: fonts.batang,
     fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#7A7373',
   },
   placeholder: {
     color: 'gray',
-    fontFamily: 'Hamchorong-batang',
+    fontFamily: fonts.batang,
     fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#7A7373',

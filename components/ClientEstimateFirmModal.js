@@ -150,7 +150,7 @@ export default class ClientEstimateFirmModal extends React.Component {
                 count={5}
                 reviews={[
                   '형편없었어요',
-                  '부족합니다.',
+                  '부족합니다',
                   '그저그랬어요',
                   '만족하지만, 좀 아쉬운 점이 있네요',
                   '훌륭합니다, 만족해요',

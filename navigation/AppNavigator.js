@@ -1,6 +1,5 @@
 import React from 'react';
-import { Alert, createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { Permissions, Notifications } from 'expo';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import SignUpScreen from '../screens/SignUpScreen';
 import LoginScreen from '../screens/LoginScreen';
 import AuthLoading from '../auth/AuthLoading';
@@ -22,28 +21,7 @@ export default class RootNavigator extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.getiOSNotificationPermission();
-  }
-
-  componentWillUnmount() {
-    this._notificationSubscription && this._notificationSubscription.remove();
-  }
-
-  // android permissions are given on install
-  async getiOSNotificationPermission() {
-    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    if (status !== 'granted') {
-      return;
-    }
-    this._notificationSubscription = Notifications.addListener(this._handleNotification);
-  }
-
-  _handleNotification = ({ origin, data, remote }) => {
-    const type = remote ? 'Push' : 'Local';
-    const info = `${type} notification ${origin} with data: ${JSON.stringify(data)}`;
-    setTimeout(() => Alert.alert('Notification!', info), 500);
-  };
+  componentDidMount() {}
 
   completeAuth = (isClient) => {
     AppContainer = createAppContainer(

@@ -3,7 +3,6 @@ import {
   FlatList, Picker, StyleSheet, Text, View,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import moment from 'moment';
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
@@ -15,6 +14,7 @@ import { notifyError } from '../common/ErrorNotice';
 import CliEvaluItem from '../components/organisms/CliEvaluItem';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
+import ClientEvaluDetailModal from '../components/ClientEvaluDetailModal';
 
 const styles = StyleSheet.create({
   Container: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   searchPicker: {
-    width: 140,
+    width: 169,
     color: colors.point,
   },
   containerSearchBar: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 
 class ClientEvaluScreen extends React.Component {
   static navigationOptions = {
-    title: '블랙리스트 고객',
+    title: '피해사례 고객',
     headerStyle: {
       marginTop: -28,
     },
@@ -76,6 +76,7 @@ class ClientEvaluScreen extends React.Component {
     this.state = {
       isVisibleCreateModal: false,
       isVisibleUpdateModal: false,
+      isVisibleDetailModal: false,
       isVisibleEvaluLikeModal: false,
       isCliEvaluLoadComplete: undefined,
       evaluLikeList: [],
@@ -103,8 +104,8 @@ class ClientEvaluScreen extends React.Component {
       .deleteCliEvalu(id)
       .then(() => this.setClinetEvaluList())
       .catch(error => notifyError(
-        '블랙리스트 삭제 문제',
-        `블랙리스트 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`,
+        '피해사례 삭제 문제',
+        `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`,
       ));
   };
 
@@ -126,7 +127,7 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 평가 팝업 오픈
+   * 피해사례 평가 팝업 오픈
    *
    */
   openCliEvaluLikeModal = (item, isMine) => {
@@ -140,7 +141,7 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 평가 데이터 설정 함수
+   * 피해사례 평가 데이터 설정 함수
    */
   setCliEvaluLikeList = (evaluId) => {
     api
@@ -149,7 +150,7 @@ class ClientEvaluScreen extends React.Component {
         this.setState({ evaluLikeList: resBody });
       })
       .catch(error => notifyError(
-        '블랙리스트 공감 조회 문제',
+        '피해사례 공감 조회 문제',
         `공감 조회에 문제가 있습니다, 다시 시도해 주세요(${error.message})`,
       ));
   };
@@ -166,9 +167,7 @@ class ClientEvaluScreen extends React.Component {
       .then(() => this.setCliEvaluLikeList(evaluation.id))
       .catch(error => notifyError(
         '공감/비공감 취소 문제',
-        `블랙리스트 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${
-          error.messages
-        })`,
+        `피해사례 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`,
       ));
   };
 
@@ -178,7 +177,7 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 요청 함수
+   * 피해사례 요청 함수
    */
   setClinetEvaluList = () => {
     const { user } = this.props;
@@ -189,13 +188,9 @@ class ClientEvaluScreen extends React.Component {
         if (resBody) {
           let notice;
           if (resBody.length === 0) {
-            notice = '블랙리스트를 조회 또는 추가해 주세요.';
+            notice = '피해사례를 조회 또는 추가해 주세요.';
           } else {
-            const beforeTwoMonth = moment()
-              .add(-2, 'month')
-              .format('MM/DD');
-            const now = moment().format('MM/DD');
-            notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
+            notice = '내가 등록한 피해사례 입니다';
           }
           this.setState({
             cliEvaluList: resBody,
@@ -209,8 +204,8 @@ class ClientEvaluScreen extends React.Component {
       })
       .catch((ex) => {
         notifyError(
-          '최근 블랙리스트 요청 문제',
-          `최근 블랙리스트 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
+          '최근 피해사례 요청 문제',
+          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
         );
 
         this.setState({ isCliEvaluLoadComplete: false });
@@ -218,7 +213,7 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 필터링 함수
+   * 피해사례 필터링 함수
    */
   searchFilterCliEvalu = () => {
     const { searchArea, searchWord } = this.state;
@@ -252,7 +247,7 @@ class ClientEvaluScreen extends React.Component {
         if (resBody) {
           let notice = '';
           if (resBody.length === 0) {
-            notice = `[${searchWord}]는 현재 블랙리스트에 조회되지 않습니다.`;
+            notice = `[${searchWord}]는 현재 피해사례에 조회되지 않습니다.`;
           }
           this.setState({
             cliEvaluList: resBody,
@@ -263,8 +258,8 @@ class ClientEvaluScreen extends React.Component {
       })
       .catch((ex) => {
         notifyError(
-          '블랙리스트 요청 문제',
-          `블랙리스트 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
+          '피해사례 요청 문제',
+          `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
         );
 
         this.setState({ isCliEvaluLoadComplete: false });
@@ -272,17 +267,11 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 업데이트 함수
+   * 피해사례 업데이트 함수
    */
   openUpdateCliEvaluForm = (item) => {
     this.setState({
-      updateId: item.id,
-      updateCliName: item.cliName,
-      updateFirmName: item.firmName,
-      updateTelNumber2: item.telNumber2,
-      updateTelNumber3: item.telNumber3,
-      updateFirmNumber: item.firmNumber,
-      updateReason: item.reason,
+      updateEvalu: item,
       isVisibleUpdateModal: true,
     });
   };
@@ -303,7 +292,7 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 블랙리스트 아이템 UI 렌더링 함수
+   * 피해사례 아이템 UI 렌더링 함수
    */
   renderCliEvaluItem = ({ item }) => {
     const { user } = this.props;
@@ -315,6 +304,7 @@ class ClientEvaluScreen extends React.Component {
         updateCliEvalu={this.openUpdateCliEvaluForm}
         deleteCliEvalu={this.deleteCliEvalu}
         openCliEvaluLikeModal={this.openCliEvaluLikeModal}
+        openDetailModal={evalu => this.setState({ detailEvalu: evalu, isVisibleDetailModal: true })}
       />
     );
   };
@@ -325,13 +315,8 @@ class ClientEvaluScreen extends React.Component {
       searchArea,
       searchNotice,
       searchPlaceholder,
-      updateId,
-      updateCliName,
-      updateFirmName,
-      updateTelNumber2,
-      updateTelNumber3,
-      updateFirmNumber,
-      updateReason,
+      updateEvalu,
+      detailEvalu,
       cliEvaluList,
       evaluLikeList,
       evaluLikeSelected,
@@ -339,6 +324,7 @@ class ClientEvaluScreen extends React.Component {
       isVisibleCreateModal,
       isVisibleUpdateModal,
       isVisibleEvaluLikeModal,
+      isVisibleDetailModal,
       isCliEvaluLoadComplete,
     } = this.state;
     const { user } = this.props;
@@ -353,16 +339,17 @@ class ClientEvaluScreen extends React.Component {
           size="full"
         />
         <ClientEvaluUpdateModal
-          id={updateId}
-          cliName={updateCliName}
-          firmName={updateFirmName}
-          telNumber2={updateTelNumber2}
-          telNumber3={updateTelNumber3}
-          firmNumber={updateFirmNumber}
-          reason={updateReason}
+          updateEvalu={updateEvalu}
           isVisibleModal={isVisibleUpdateModal}
           closeModal={() => this.setState({ isVisibleUpdateModal: false })}
           completeAction={() => this.setClinetEvaluList()}
+        />
+        <ClientEvaluDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          detailEvalu={detailEvalu}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+          completeAction={() => {}}
+          size="full"
         />
         <ClientEvaluLikeModal
           isVisibleModal={isVisibleEvaluLikeModal}
@@ -381,13 +368,13 @@ class ClientEvaluScreen extends React.Component {
               style={styles.searchPicker}
               onValueChange={this.onSearchAreaChange}
             >
-              <Picker.Item label="전화번호" value="TEL" />
-              <Picker.Item label="사업자번호" value="FIRM_NUMBER" />
-              <Picker.Item label="업체명" value="FIRM_NAME" />
-              <Picker.Item label="고객명" value="CLI_NAME" />
+              <Picker.Item label="전화번호 검색" value="TEL" />
+              <Picker.Item label="사업자번호 검색" value="FIRM_NUMBER" />
+              <Picker.Item label="업체명 검색" value="FIRM_NAME" />
+              <Picker.Item label="고객명 검색" value="CLI_NAME" />
             </Picker>
             <JBButton
-              title="블랙리스트 추가"
+              title="피해사례 추가"
               onPress={() => this.setState({ isVisibleCreateModal: true })}
               size="small"
               align="right"
@@ -424,7 +411,7 @@ class ClientEvaluScreen extends React.Component {
         {isCliEvaluLoadComplete === false && (
           <View>
             <Text>
-              블랙리스트 요청에 실패했거나 등록된 블랙 리스트가 없습니다, 다시 시도해 주세요.
+              피해사례 요청에 실패했거나 등록된 블랙 리스트가 없습니다, 다시 시도해 주세요.
             </Text>
           </View>
         )}

@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 });
 
 const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
-  '',
+  '/?',
 )}`;
 
 class LoginScreen extends React.PureComponent {

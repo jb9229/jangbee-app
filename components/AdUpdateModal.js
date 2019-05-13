@@ -93,7 +93,9 @@ export default class AdUpdateModal extends React.Component {
       this.setState({ isVisibleActIndiModal: false });
     }
 
-    updateData.photoUrl = serverAdImgUrl;
+    if (serverAdImgUrl) {
+      updateData.photoUrl = serverAdImgUrl;
+    }
 
     api
       .updateAd(updateData)

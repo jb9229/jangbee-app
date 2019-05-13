@@ -293,6 +293,7 @@ class AdScreen extends React.Component {
           closeModal={() => this.setState({ isVisibleFinAccUpdateModal: false })}
           completeSelect={this.changeAdPayAccount}
           accountId={user.uid}
+          actionName="결제통장 바꾸기"
           {...this.props}
         />
         <FlatList

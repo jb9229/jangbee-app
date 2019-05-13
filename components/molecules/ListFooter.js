@@ -44,6 +44,29 @@ export default class ListFooter extends React.PureComponent {
     Linking.openURL(url).catch(Alert.alert(`링크 열기에 문제가 있습니다 [${url}]`));
   };
 
+  convertPSEquipStr = (equipStr) => {
+    if (equipStr) {
+      let conEquipArr = equipStr.split(' ');
+      let conEquip;
+
+      if (conEquipArr && conEquipArr.length === 2) {
+        [, conEquip] = conEquipArr;
+      } else {
+        [conEquip] = conEquipArr;
+      }
+
+      conEquipArr = conEquip.split('-');
+      [conEquip] = conEquipArr;
+
+      if (conEquip === '굴착기') {
+        return '굴삭기';
+      }
+      return conEquip;
+    }
+
+    return equipStr;
+  };
+
   render() {
     const {
       hasMore, isLoading, selEquipment, selSido, selGungu,
@@ -64,7 +87,9 @@ export default class ListFooter extends React.PureComponent {
               size="small"
               underline
               onPress={() => this.openLinkUrl(
-                `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selEquipment}+${selSido}+${selGungu}`,
+                `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selSido}+${this.convertPSEquipStr(
+                  selEquipment,
+                )}`,
               )
               }
             />
@@ -73,7 +98,9 @@ export default class ListFooter extends React.PureComponent {
               size="small"
               underline
               onPress={() => this.openLinkUrl(
-                `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selEquipment}+${selSido}+${selGungu}`,
+                `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selSido}+${this.convertPSEquipStr(
+                  selEquipment,
+                )}`,
               )
               }
             />

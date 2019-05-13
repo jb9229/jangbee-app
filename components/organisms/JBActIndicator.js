@@ -22,10 +22,15 @@ const styles = StyleSheet.create({
 export default class JBActIndicator extends React.PureComponent {
   render() {
     const { title, size } = this.props;
+
+    let sizeValue = size;
+    if (!size) {
+      sizeValue = 28;
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.message}>{title || '정보 불러오는중..'}</Text>
-        <ActivityIndicator size={size} color={colors.indicator} />
+        <ActivityIndicator size={sizeValue} color={colors.indicator} />
       </View>
     );
   }

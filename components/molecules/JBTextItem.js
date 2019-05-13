@@ -22,6 +22,7 @@ const Container = styled.View`
 const Title = styled.Text`
   font-family: ${fonts.titleMiddle};
   font-size: 18px;
+  margin-bottom: 10px;
   ${props => props.underline !== undefined
     && `
     text-decoration-line: underline;
@@ -29,6 +30,10 @@ const Title = styled.Text`
   ${props => props.small
     && `
     font-size: 14px;
+  `}
+  ${props => props.row
+    && `
+    margin-bottom: 0px;
   `}
 `;
 
@@ -61,13 +66,24 @@ export default class JBTextItem extends React.PureComponent {
     if (revColor) {
       color = { color: 'white' };
     }
+
+    let valueText = value;
+    if (!value) {
+      valueText = '-';
+    }
     return (
       <Container row={row} small={small}>
-        <Title small={small}>{title === undefined ? '' : `${title}: `}</Title>
-        <Contents underline={underline} noneTitle={title === undefined}>
-          {value}
+        <Title small={small} row={row}>
+          {title === undefined ? '' : `${title}: `}
+        </Title>
+        <Contents underline={underline} noneTitle={title === undefined} row={row}>
+          {valueText}
         </Contents>
-        {secondeValue && <Contents underline={underline}>{secondeValue}</Contents>}
+        {secondeValue && (
+          <Contents underline={underline} row={row}>
+            {secondeValue}
+          </Contents>
+        )}
       </Container>
     );
   }
