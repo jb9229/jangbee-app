@@ -7,6 +7,7 @@ import JBButton from './molecules/JBButton';
 import JBTextItem from './molecules/JBTextItem';
 import JBActIndicator from './organisms/JBActIndicator';
 import { convertHyphen, formatTelnumber } from '../utils/StringUtils';
+import { formatNumber } from '../utils/NumberUtils';
 
 const Container = styled.View`
   flex: 1;
@@ -32,7 +33,7 @@ const ContentsWrap = styled.View`
 const CommandWrap = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 export default class ClientEvaluDetailModal extends React.Component {
@@ -49,16 +50,8 @@ export default class ClientEvaluDetailModal extends React.Component {
     }
   }
 
-  /**
-   * 모달 액션 완료 함수
-   */
-  completeAction = () => {
-    const { closeModal } = this.props;
-
-    closeModal();
-  };
-
   noticeRegi = async () => {
+    const { closeModal } = this.props;
     const { evalu } = this.state;
 
     const isAvailable = await SMS.isAvailableAsync();
@@ -67,12 +60,23 @@ export default class ClientEvaluDetailModal extends React.Component {
         [evalu.regiTelNumber],
         `작성하신 [${formatTelnumber(evalu.telNumber)}] 불량 거래처에대해 행적을 신고 합니다.`,
       );
+
+      if (result) {
+        closeModal();
+      } else {
+        Alert.alert(
+          'SMS 전송불가',
+          `해당 디바이스에서 SMS 자동 전송이 불가 합니다. [${
+            evalu.regiTelNumber
+          }] 해당 번호로 불량업체에 대한 행적을 알려주세요`,
+        );
+      }
     } else {
       Alert.alert(
         'SMS 전송불가',
         `해당 디바이스에서 SMS 자동 전송이 불가 합니다. [${
           evalu.regiTelNumber
-        }] 해당 번호로 알려주세요`,
+        }] 해당 번호로 불량업체에 대한 행적을 알려주세요`,
       );
     }
   };
@@ -96,7 +100,7 @@ export default class ClientEvaluDetailModal extends React.Component {
           evalu.equipment,
         )}${this.makeShareContent('지역', evalu.local)}${this.makeSharePriceContent(
           '금액',
-          evalu.amount,
+          formatNumber(evalu.amount),
         )}${this.makeShareContent(
           '피해내용',
           evalu.reason,
@@ -180,7 +184,7 @@ export default class ClientEvaluDetailModal extends React.Component {
             <JBTextItem title="업체명" value={convertHyphen(evalu.firmName)} small row />
             <JBTextItem title="장비" value={convertHyphen(evalu.equipment)} small row />
             <JBTextItem title="지역" value={convertHyphen(evalu.local)} small row />
-            <JBTextItem title="금액" value={`${convertHyphen(evalu.amount)} 원`} small row />
+            <JBTextItem title="금액" value={`${formatNumber(evalu.amount)} 원`} small row />
             <JBTextItem title="피해내용" value={evalu.reason} small />
 
             <CommandWrap>

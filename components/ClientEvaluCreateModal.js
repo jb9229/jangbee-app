@@ -132,7 +132,7 @@ export default class ClientEvaluCreateModal extends React.Component {
       return false;
     }
 
-    if (firmNumber && firmNumber.length !== 12) {
+    if (firmNumber && (firmNumber.length !== 12 && firmNumber.length !== 10)) {
       this.setState({ firmNumberValErrMessage: '사업자번호가 유효하지 않습니다.' });
       return false;
     }
@@ -342,6 +342,7 @@ export default class ClientEvaluCreateModal extends React.Component {
                   onChangeText={text => this.setState({ reason: text })}
                   placeholder="블랙리스트 사유를 기입해 주세요"
                   numberOfLines={5}
+                  multiline
                 />
                 <JBErrorMessage errorMSG={reasonValErrMessage} />
 

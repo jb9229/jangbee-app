@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { Permissions, Notifications } from 'expo';
 import firebase from 'firebase';
 
@@ -5,6 +6,13 @@ export default async function registerForPushNotificationsAsync(uid) {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
 
   let finalStatus = existingStatus;
+
+  if (Platform.OS === 'android') {
+    Notifications.createChannelAndroidAsync('jbcall-messages', {
+      name: 'JBCall Messages',
+      sound: true,
+    });
+  }
 
   // only ask if permissions have not already been determined, because
   // iOS won't necessarily prompt the user a second time.

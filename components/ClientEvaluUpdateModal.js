@@ -36,6 +36,10 @@ export default class ClientEvaluUpdateModal extends React.Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
   componentWillReceiveProps(nextProps) {
     const { updateEvalu } = nextProps;
 
@@ -80,13 +84,12 @@ export default class ClientEvaluUpdateModal extends React.Component {
         }
 
         completeAction(resBody);
+        closeModal();
       })
       .catch(error => notifyError(
         '블랙리스트 업데이트 문제',
         `업데이트 요청에 문제가 있습니다, 다시 시도해 주세요(${error.message})`,
       ));
-
-    closeModal();
   };
 
   /**
@@ -145,7 +148,7 @@ export default class ClientEvaluUpdateModal extends React.Component {
       return false;
     }
 
-    if (firmNumber && firmNumber.length !== 12) {
+    if (firmNumber && (firmNumber.length !== 12 && firmNumber.length !== 10)) {
       this.setState({ firmNumberValErrMessage: '사업자번호가 유효하지 않습니다.' });
       return false;
     }
@@ -193,7 +196,7 @@ export default class ClientEvaluUpdateModal extends React.Component {
       regiTelNumber,
       reason,
     };
-    console.log(updateData);
+
     return updateData;
   };
 
@@ -314,6 +317,7 @@ export default class ClientEvaluUpdateModal extends React.Component {
                   onChangeText={text => this.setState({ reason: text })}
                   placeholder="사유를 기입해 주세요(최대 1000자)"
                   numberOfLines={3}
+                  multiline
                 />
                 <JBErrorMessage errorMSG={reasonValErrMessage} />
 

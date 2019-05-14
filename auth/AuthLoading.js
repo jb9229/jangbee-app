@@ -3,7 +3,6 @@ import {
   Alert, ActivityIndicator, StyleSheet, Text, View,
 } from 'react-native';
 import firebase from 'firebase';
-import moment from 'moment';
 import colors from '../constants/Colors';
 import { getUserInfo } from '../utils/FirebaseUtils';
 import { withLogin } from '../contexts/LoginProvider';
@@ -57,8 +56,6 @@ class AuthLoading extends React.Component {
               obUserSeqNo,
             );
 
-            this.checkOBAccDiscDate(obAccTokenDiscDate);
-
             // Go to Screeen By User Type
             if (userType === 1) {
               completeAuth(true);
@@ -74,20 +71,6 @@ class AuthLoading extends React.Component {
         changeAuthPath(3);
       }
     });
-  };
-
-  checkOBAccDiscDate = (discardDate) => {
-    if (discardDate === undefined) {
-      return;
-    }
-    const beforeTwentyDay = moment()
-      .add(-20, 'days')
-      .format('YYYY-MM-DD');
-
-    const compareResult = moment(beforeTwentyDay).isAfter(discardDate);
-    if (compareResult) {
-      this.comfirmReOpenBankAuth();
-    }
   };
 
   render() {

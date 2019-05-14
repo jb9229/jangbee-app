@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, Linking, Image, ScrollView, StyleSheet, Text, View,
+  Alert, Linking, ScrollView, StyleSheet, Text, View,
 } from 'react-native';
 import firebase from 'firebase';
 import * as api from '../api/api';
