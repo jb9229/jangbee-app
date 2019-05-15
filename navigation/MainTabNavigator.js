@@ -10,7 +10,7 @@ import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 import AppliFirmList from '../components/AppliFirmList';
 
 const ClientHomeStack = createStackNavigator({
-  ClientHome: HomeScreen,
+  ClientHome: { screen: HomeScreen, navigationOptions: { header: null } },
 });
 
 ClientHomeStack.navigationOptions = {

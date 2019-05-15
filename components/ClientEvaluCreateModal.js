@@ -329,10 +329,10 @@ export default class ClientEvaluCreateModal extends React.Component {
                 <JBErrorMessage errorMSG={amountValErrMessage} />
 
                 <JBTextInput
-                  title="작성자 전화번호"
+                  title="작성자 연락처"
                   value={regiTelNumber}
                   onChangeText={text => this.setState({ regiTelNumber: text })}
-                  placeholder="행적을 신고해 줄 수 있습니다."
+                  placeholder="타업체가 행적을 신고해 줄 수 있습니다."
                 />
                 <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
 
@@ -347,7 +347,7 @@ export default class ClientEvaluCreateModal extends React.Component {
                 <JBErrorMessage errorMSG={reasonValErrMessage} />
 
                 <JBButton
-                  title="블랙리스트 추가하기"
+                  title="피해사례 추가하기"
                   onPress={() => this.completeAction()}
                   size="full"
                   Secondary

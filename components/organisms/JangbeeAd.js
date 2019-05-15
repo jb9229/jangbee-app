@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   titleWrap: {
     flex: 2,
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 15,
   },
   titleText: {
     color: 'white',
@@ -35,12 +35,16 @@ const styles = StyleSheet.create({
   bottomWrap: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 5,
-    height: 50,
-    marginBottom: 3,
+    height: 40,
+    marginBottom: 8,
+    justifyContent: 'center',
   },
   subTitleWrap: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 40,
+    marginRight: 40,
   },
   subTitleText: {
     color: 'white',
@@ -49,7 +53,7 @@ const styles = StyleSheet.create({
   },
   telIconWrap: {
     position: 'absolute',
-    top: 8,
+    top: 1,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
