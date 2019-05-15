@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Alert, ImageBackground, Linking, StyleSheet, Text, View,
 } from 'react-native';
+import Styled from 'styled-components';
 import JBIcon from '../molecules/JBIcon';
 import AdImage from './AdImage';
 import colors from '../../constants/Colors';
@@ -51,21 +52,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: fonts.batang,
   },
-  telIconWrap: {
-    position: 'absolute',
-    top: 1,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 5,
-    paddingRight: 5,
-  },
+  telIconWrap: {},
   text: {
     color: '#fff',
     fontSize: 30,
     fontWeight: 'bold',
   },
 });
+
+const TelIconWrap = Styled.View`
+  position: absolute;
+  top: 1;
+  width: 100%;
+  flex-direction: row;
+  justify-content: ${props => (props.isMultiIcon ? 'space-between' : 'flex-end')};
+  padding-left: 5;
+  padding-right: 5;
+`;
 
 function telAdvertiser(phoneNumber) {
   if (!phoneNumber) {
@@ -87,7 +90,7 @@ const JangbeeAd = ({ ad, openFirmDetail }) => (
           <View style={styles.subTitleWrap}>
             <Text style={styles.subTitleText}>{ad.subTitle}</Text>
           </View>
-          <View style={styles.telIconWrap}>
+          <TelIconWrap isMultiIcon={ad.accountId}>
             {ad.accountId ? (
               <JBIcon
                 name="information-circle"
@@ -102,7 +105,7 @@ const JangbeeAd = ({ ad, openFirmDetail }) => (
               color={colors.point}
               onPress={() => telAdvertiser(ad.telNumber)}
             />
-          </View>
+          </TelIconWrap>
         </View>
       </View>
     ) : (
@@ -115,7 +118,7 @@ const JangbeeAd = ({ ad, openFirmDetail }) => (
             <View style={styles.subTitleWrap}>
               <Text style={styles.subTitleText}>{ad.subTitle}</Text>
             </View>
-            <View style={styles.telIconWrap}>
+            <TelIconWrap isMultiIcon={ad.accountId}>
               {ad.accountId ? (
                 <JBIcon
                   name="information-circle"
@@ -130,7 +133,7 @@ const JangbeeAd = ({ ad, openFirmDetail }) => (
                 color={colors.pointDark}
                 onPress={() => telAdvertiser(ad.telNumber)}
               />
-            </View>
+            </TelIconWrap>
           </View>
         </View>
       </ImageBackground>

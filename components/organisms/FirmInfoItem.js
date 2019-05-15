@@ -79,7 +79,12 @@ function openLinkUrl(url) {
     return;
   }
 
-  Linking.openURL(url).catch(Alert.alert(`링크 열기에 문제가 있습니다 [${url}]`));
+  let urlStr = url;
+  if (!url.startsWith('http')) {
+    urlStr = `http://${urlStr}`;
+  }
+
+  Linking.openURL(urlStr).catch(Alert.alert(`링크 열기에 문제가 있습니다 [${urlStr}]`));
 }
 
 export default function FirmInfoItem({ firm, evaluList }) {
