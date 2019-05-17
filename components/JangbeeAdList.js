@@ -20,19 +20,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  slide3: {
+  slide: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -115,11 +103,10 @@ export default class JangbeeAdList extends React.Component {
   renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
 
   render() {
-    const { admob} = this.props;
+    const { admob } = this.props;
     const {
       adList, isEmptyAdlist, isVisibleDetailModal, detailFirmId,
     } = this.state;
-    const slidStyles = [styles.slide1, styles.slide2, styles.slide3];
 
     // console.log(
     //   `adLocation: ${this.props.adLocation}, isEmptyAdlist: ${isEmptyAdlist}, render: ${admob}`,
@@ -150,7 +137,7 @@ export default class JangbeeAdList extends React.Component {
     }
 
     const adViewList = adList.map((ad, index) => (
-      <View style={slidStyles[index]} key={index}>
+      <View style={styles.slide} key={index}>
         <JangbeeAd
           ad={ad}
           openFirmDetail={accountId => this.setState({ detailFirmId: accountId, isVisibleDetailModal: true })

@@ -56,6 +56,15 @@ class FirmWorkListScreen extends React.Component {
     this.init();
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { params } = nextProps.navigation.state;
+
+    if (params && params.refresh) {
+      this.setOpenWorkListData();
+      this.setMatchedWorkListData();
+    }
+  }
+
   init = async () => {
     const { navigation, user } = this.props;
     const myEquipment = await getMyEquipment(user.uid);

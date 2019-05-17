@@ -3,7 +3,7 @@ import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import {
-  AppLoading, Asset, Font, Icon,
+  AppLoading, Asset, Font, Icon, Notifications,
 } from 'expo';
 import firebase from 'firebase';
 import AppNavigator from './navigation/AppNavigator';
@@ -21,6 +21,14 @@ const styles = StyleSheet.create({
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+  };
+
+  // componentDidMount() {
+  //   this._notificationSubscription = Notifications.addListener(this.notifi);
+  // }
+
+  notifi = (notifi) => {
+    console.log(notifi);
   };
 
   _loadResourcesAsync = async () => Promise.all([

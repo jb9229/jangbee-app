@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Alert, ActivityIndicator, StyleSheet, Text, View,
 } from 'react-native';
+import { Notifications } from 'expo';
 import firebase from 'firebase';
 import colors from '../constants/Colors';
 import { getUserInfo } from '../utils/FirebaseUtils';

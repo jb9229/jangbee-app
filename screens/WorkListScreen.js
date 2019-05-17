@@ -60,6 +60,7 @@ class ClientWorkListScreen extends React.Component {
 
     if (params && params.refresh) {
       this.setOpenWorkListData();
+      this.setMatchedWorkListData();
     }
   }
 

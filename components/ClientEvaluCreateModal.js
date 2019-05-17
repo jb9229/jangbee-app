@@ -51,6 +51,7 @@ export default class ClientEvaluCreateModal extends React.Component {
       .createClientEvaluation(newEvaluation)
       .then((resBody) => {
         completeAction(resBody);
+        this.refreshEvaluValue();
         closeModal();
       })
       .catch(error => notifyError(error.error, error.message));
@@ -72,6 +73,22 @@ export default class ClientEvaluCreateModal extends React.Component {
       amountValErrMessage: '',
       regiTelNumberValErrMessage: '',
       reasonValErrMessage: '',
+    });
+  };
+
+  refreshEvaluValue = () => {
+    this.setState({
+      cliName: '',
+      firmName: '',
+      telNumber: '',
+      telNumber2: '',
+      telNumber3: '',
+      firmNumber: '',
+      equipment: '',
+      local: '',
+      amount: '',
+      regiTelNumber: '',
+      reason: '',
     });
   };
 

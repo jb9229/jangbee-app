@@ -55,6 +55,7 @@ class WorkRegisterScreen extends React.Component {
       isVisibleMapAddModal: false,
       equipment: '',
       phoneNumber: '',
+      period: '0.3',
     };
   }
 
@@ -226,21 +227,6 @@ class WorkRegisterScreen extends React.Component {
       .map((_, i) => <Picker.Item key={i} label={`${i + 1}일`} value={`${i + 1}`} />);
     return (
       <View style={styles.Container}>
-        <View style={styles.modalWrap}>
-          <EquipementModal
-            isVisibleEquiModal={isVisibleEquiModal}
-            closeModal={() => this.setState({ isVisibleEquiModal: false })}
-            selEquipmentStr={equipment}
-            completeSelEqui={seledEuipListStr => this.setState({ equipment: seledEuipListStr })}
-            depth={2}
-          />
-          <MapAddWebModal
-            isVisibleMapAddModal={isVisibleMapAddModal}
-            setMapAddModalVisible={flag => this.setState({ isVisibleMapAddModal: flag })}
-            saveAddrInfo={this.saveAddrInfo}
-            nextFocus={() => {}}
-          />
-        </View>
         <KeyboardAvoidingView>
           <ScrollView>
             <CardUI>
@@ -333,6 +319,21 @@ class WorkRegisterScreen extends React.Component {
             />
           </ScrollView>
         </KeyboardAvoidingView>
+        <View style={styles.modalWrap}>
+          <EquipementModal
+            isVisibleEquiModal={isVisibleEquiModal}
+            closeModal={() => this.setState({ isVisibleEquiModal: false })}
+            selEquipmentStr={equipment}
+            completeSelEqui={seledEuipListStr => this.setState({ equipment: seledEuipListStr })}
+            depth={2}
+          />
+          <MapAddWebModal
+            isVisibleMapAddModal={isVisibleMapAddModal}
+            setMapAddModalVisible={flag => this.setState({ isVisibleMapAddModal: flag })}
+            saveAddrInfo={this.saveAddrInfo}
+            nextFocus={() => {}}
+          />
+        </View>
       </View>
     );
   }

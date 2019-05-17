@@ -8,7 +8,7 @@
     "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "32.0.0",
     "platforms": ["ios", "android"],
-    "version": "0.1.9_20190516",
+    "version": "0.1.11_20190517",
     "orientation": "portrait",
     "icon": "./assets/images/icon-512.png",
     "splash": {
@@ -30,7 +30,7 @@
     "android": {
       "package": "com.kan.jangbeecall",
       "permissions": ["ACCESS_FINE_LOCATION"],
-      "versionCode": 10
+      "versionCode": 12
     },
     "description": ""
   }

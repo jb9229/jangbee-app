@@ -86,7 +86,7 @@ class AdCreateScreen extends React.Component {
       accList: [],
       bookedAdTypeList: [1, 2],
       payErrMessage: '',
-      selFinUseNum: [],
+      selFinUseNum: '',
       adType: undefined,
       adTitle: '',
       adSubTitle: '',
@@ -271,11 +271,8 @@ class AdCreateScreen extends React.Component {
     });
   };
 
-  onAccListItemPress = (idStr) => {
-    const newAccListSelcted = [];
-
-    newAccListSelcted.push(idStr); // toggle
-    this.setState({ selFinUseNum: newAccListSelcted });
+  onAccListItemPress = (selectedFUN) => {
+    this.setState({ selFinUseNum: selectedFUN });
   };
 
   /**
@@ -338,7 +335,7 @@ class AdCreateScreen extends React.Component {
       forMonths,
       photoUrl: serverAdImgUrl,
       telNumber: adTelNumber,
-      fintechUseNum: selFinUseNum[0],
+      fintechUseNum: selFinUseNum,
       equiTarget: adEquipmentTypeData,
       sidoTarget: adSidoTypeData,
       gugunTarget: adGunguTypeData,
@@ -350,9 +347,7 @@ class AdCreateScreen extends React.Component {
       .createAd(newAd)
       .then(() => navigation.navigate('Ad', { refresh: true }))
       .catch((errorResponse) => {
-        errorResponse.json().then((errorMessage) => {
-          Alert.alert('광고생성 실패', errorMessage.message);
-        });
+        Alert.alert('광고생성 실패', errorResponse.message);
       });
   };
 
@@ -467,7 +462,7 @@ class AdCreateScreen extends React.Component {
       return false;
     }
 
-    if (selFinUseNum.length === 0) {
+    if (!selFinUseNum) {
       this.setState({ selFinUseNumValErrMessage: '광고비 이체계좌를 선택해 주세요' });
       return false;
     }
@@ -585,7 +580,7 @@ class AdCreateScreen extends React.Component {
               nextFocus={() => {}}
             />
             <View style={styles.adTypeFormWrap}>
-              <Text style={styles.adTypeTitle}>광고타입</Text>
+              <Text style={styles.adTypeTitle}>광고타입*</Text>
               <Picker
                 selectedValue={adType}
                 style={styles.adTypePicker}
@@ -603,7 +598,7 @@ class AdCreateScreen extends React.Component {
               </Picker>
             </View>
             <JBTextInput
-              title="계약기간(월)"
+              title="계약기간(월)*"
               value={forMonths}
               onChangeText={text => this.setState({ forMonths: text })}
               placeholder="몇개월간 홍보하시겠습니까?"
@@ -611,14 +606,14 @@ class AdCreateScreen extends React.Component {
             />
             <JBErrorMessage errorMSG={forMonthsValErrMessage} />
             <JBTextInput
-              title="광고 타이틀(10자까지)"
+              title="광고 타이틀(10자까지)*"
               value={adTitle}
               onChangeText={text => this.setState({ adTitle: text })}
               placeholder="광고상단 문구를 입력하세요(최대 10자)"
             />
             <JBErrorMessage errorMSG={adTitleValErrMessage} />
             <JBTextInput
-              title="광고 슬로건(20자까지)"
+              title="광고 슬로건(20자까지)*"
               value={adSubTitle}
               onChangeText={text => this.setState({ adSubTitle: text })}
               placeholder="광고하단 문구를 입력하세요(최대 20자)"
