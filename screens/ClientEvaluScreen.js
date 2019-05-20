@@ -171,8 +171,8 @@ class ClientEvaluScreen extends React.Component {
       ));
   };
 
-  closeEvaluLikeModal = () => {
-    this.setClinetEvaluList();
+  closeEvaluLikeModal = (refresh) => {
+    if (refresh) { this.setClinetEvaluList(); }
     this.setState({ isVisibleEvaluLikeModal: false });
   };
 
@@ -358,7 +358,7 @@ class ClientEvaluScreen extends React.Component {
           evaluLikeList={evaluLikeList}
           createClientEvaluLike={this.createClientEvaluLike}
           cancelClientEvaluLike={this.cancelClientEvaluLike}
-          closeModal={() => this.closeEvaluLikeModal()}
+          closeModal={refresh => this.closeEvaluLikeModal(refresh)}
           isMine={isMineEvaluation}
         />
         <View style={styles.searchHeaderWrap}>

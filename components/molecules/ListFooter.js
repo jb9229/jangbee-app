@@ -67,11 +67,21 @@ export default class ListFooter extends React.PureComponent {
     return equipStr;
   };
 
+  custormizingGungu = (selSido, gungu) => {
+    if (!gungu) { return ''; }
+    if (selSido && selSido === '세종특별자치시') { return ''; }
+    const gunguStrArr = gungu.split(' ');
+    if (gunguStrArr && gunguStrArr.length > 2) { return `${gunguStrArr[0]} ${gunguStrArr[1]}` }
+    return gungu;
+  }
+
   render() {
     const {
       hasMore, isLoading, selEquipment, selSido, selGungu,
     } = this.props;
     const title = hasMore ? '리스트 조회중...' : '끝!';
+
+    const searchGungu = this.custormizingGungu(selSido, selGungu);
 
     return (
       <View style={styles.container}>
@@ -87,7 +97,7 @@ export default class ListFooter extends React.PureComponent {
               size="small"
               underline
               onPress={() => this.openLinkUrl(
-                `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selSido}+${this.convertPSEquipStr(
+                `https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=${selSido}+${searchGungu}+${this.convertPSEquipStr(
                   selEquipment,
                 )}`,
               )
@@ -98,7 +108,7 @@ export default class ListFooter extends React.PureComponent {
               size="small"
               underline
               onPress={() => this.openLinkUrl(
-                `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selSido}+${this.convertPSEquipStr(
+                `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=${selSido}+${searchGungu}+${this.convertPSEquipStr(
                   selEquipment,
                 )}`,
               )

@@ -96,7 +96,9 @@ class SignUpScreen extends React.Component {
    * Firebase user DB에 사용자 추가정보 저장
    */
   onSignUp = () => {
-    const { user, completeAuth, setUser, setUserType } = this.props;
+    const {
+      user, completeAuth, setUser, setUserType,
+    } = this.props;
     const { userType } = this.state;
     if (userType === undefined) {
       this.setState({ errorMessage: '사용자님의 업무를 선택해 주세요.' });
@@ -144,8 +146,14 @@ class SignUpScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.thanksWrap}>
-          <Text style={styles.thanksRegiText}>장비콜 가입을 축하 합니다,</Text>
-          <Text style={styles.thanksRegiText}>건설 장비의 커뮤니티장을 만들어 갑니다.</Text>
+          <Text style={styles.thanksRegiText}>장비 콜 가입을 축하 합니다,</Text>
+          <Text style={styles.thanksRegiText}>...</Text>
+          <Text style={styles.thanksRegiText}>
+            건설장비 사용에도 서비스개선 및 향상이 필요합니다.
+          </Text>
+          <Text style={styles.thanksRegiText}>
+            일잘하는 장비 쉽게찾기, 수금문제... 장비 콜이 시작합니다.
+          </Text>
         </View>
         <View style={styles.titleWrap}>
           <Text style={styles.titleText}>어떤 서비스를 이용하시겠습니까?</Text>
@@ -155,7 +163,7 @@ class SignUpScreen extends React.Component {
             style={[styles.accountTypeTO, userType === USER_CLIENT ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_CLIENT)}
           >
-            <Text style={[styles.accountTypeText]}>장비 호출</Text>
+            <Text style={[styles.accountTypeText]}>장비 찾기</Text>
             <Text style={[styles.accountTypeSubText]}>(장비사용 고객)</Text>
           </TouchableOpacity>
           <TouchableOpacity

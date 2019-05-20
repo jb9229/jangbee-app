@@ -342,6 +342,7 @@ export default class ClientEvaluCreateModal extends React.Component {
                   value={amount}
                   onChangeText={text => this.setState({ amount: text })}
                   placeholder="피해금액이 얼마입니까?"
+                  keyboardType="numeric"
                 />
                 <JBErrorMessage errorMSG={amountValErrMessage} />
 
@@ -350,6 +351,7 @@ export default class ClientEvaluCreateModal extends React.Component {
                   value={regiTelNumber}
                   onChangeText={text => this.setState({ regiTelNumber: text })}
                   placeholder="타업체가 행적을 신고해 줄 수 있습니다."
+                  keyboardType="phone-pad"
                 />
                 <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
 

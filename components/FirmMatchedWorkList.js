@@ -32,7 +32,8 @@ export default class FirmMatchedWorkList extends React.PureComponent {
             size="small"
           />
         )}
-        {item.workState === 'CLOSED' && <WorkCommText text="종료됨" />}
+        {item.workState === 'CLOSED' && item.firmEstimated && <WorkCommText text="종료됨" />}
+        {item.workState === 'CLOSED' && !item.firmEstimated && <WorkCommText text="종료됨(평가 대기중..)" />}
       </WorkCommWrap>
     );
   };

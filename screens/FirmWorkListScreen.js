@@ -12,6 +12,7 @@ import { notifyError } from '../common/ErrorNotice';
 import { getMyEquipment } from '../utils/AsyncStorageUtils';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
+import JBButton from '../components/molecules/JBButton';
 
 const dispatchFee = '3000';
 
@@ -347,7 +348,7 @@ class FirmWorkListScreen extends React.Component {
       openWorkListRefreshing,
       matchedWorkListRefreshing,
     } = this.state;
-    const { user } = this.props;
+    const { user, navigation } = this.props;
 
     const renderOpenWorkList = () => (
       <FirmOpenWorkList
@@ -399,6 +400,12 @@ class FirmWorkListScreen extends React.Component {
               labelStyle={styles.tabBarLabel}
             />
           )}
+        />
+        <JBButton
+          title="일감 등록하기"
+          onPress={() => navigation.navigate('WorkRegister')}
+          size="full"
+          Primary
         />
       </View>
     );

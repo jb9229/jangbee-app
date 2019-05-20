@@ -123,6 +123,25 @@ export default class EquipementModal extends React.Component {
 const EQUIPMENT_CONTENT = [
   {
     isExpanded: false,
+    category_name: '크레인',
+    subcategory: [
+      { id: 1, val: '10톤' },
+      { id: 2, val: '25톤' },
+      { id: 3, val: '50톤' },
+      { id: 4, val: '100톤' },
+      { id: 4, val: '160톤' },
+      { id: 4, val: '200톤' },
+      { id: 4, val: '250톤' },
+      { id: 4, val: '300톤' },
+      { id: 4, val: '400톤' },
+      { id: 4, val: '500톤' },
+      { id: 4, val: '700톤' },
+      { id: 4, val: '800톤' },
+      { id: 4, val: '1200톤' },
+    ],
+  },
+  {
+    isExpanded: false,
     category_name: '카고크레인',
     subcategory: [
       { id: 1, val: '5톤' },
