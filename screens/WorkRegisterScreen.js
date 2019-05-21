@@ -64,6 +64,7 @@ class WorkRegisterScreen extends React.Component {
    */
   createWork = () => {
     const { navigation } = this.props;
+    const { firmRegister } = this.props.navigation.state.params;
     const newWork = this.validateWorkForm();
     if (!newWork) {
       return;
@@ -73,7 +74,11 @@ class WorkRegisterScreen extends React.Component {
       .createWork(newWork)
       .then((resBody) => {
         if (resBody) {
-          navigation.navigate('WorkList', { refresh: true });
+          if (firmRegister) {
+            navigation.navigate('FirmWorkList', { refresh: true });
+          } else {
+            navigation.navigate('WorkList', { refresh: true });
+          }
           return;
         }
 
@@ -122,6 +127,7 @@ class WorkRegisterScreen extends React.Component {
    * 일감 데이터 유효성검사 함수
    */
   validateWorkForm = () => {
+    const { firmRegister } = this.props.navigation.state.params;
     const { user } = this.props;
     const {
       equipment,
@@ -188,6 +194,7 @@ class WorkRegisterScreen extends React.Component {
     }
 
     const newWork = {
+      firmRegister,
       accountId: user.uid,
       equipment,
       phoneNumber,
@@ -204,6 +211,8 @@ class WorkRegisterScreen extends React.Component {
   };
 
   render() {
+    const { firmRegister } = this.props.navigation.state.params;
+
     const {
       isVisibleEquiModal,
       isVisibleMapAddModal,
@@ -230,6 +239,7 @@ class WorkRegisterScreen extends React.Component {
         <KeyboardAvoidingView>
           <ScrollView>
             <CardUI>
+            {firmRegister && <Text>차주 일감등록은 선착순 자동매칭 됩니다, 지원하는 차주가 실수하지 않게, 등록 전 다시한번 확인해 주세요.</Text>}
               <JBTextInput
                 title="호출장비*"
                 value={equipment}
@@ -243,7 +253,7 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={equipmentValErrMessage} />
 
               <JBTextInput
-                title="전화번호*"
+                title="전화번호(*, 매칭 후 공개됨)"
                 value={phoneNumber}
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
@@ -255,7 +265,7 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
               <JBTextInput
-                title="현장주소(*)"
+                title="현장주소(*, 매칭 후 공개됨)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;

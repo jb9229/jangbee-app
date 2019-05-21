@@ -12,10 +12,15 @@ import AdScreen from '../screens/AdScreen';
 import AdCreateScreen from '../screens/AdCreateScreen';
 import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import FirmWorkListScreen from '../screens/FirmWorkListScreen';
+import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 import colors from '../constants/Colors';
 
 const FirmWorkStack = createStackNavigator({
   FirmWorkList: { screen: FirmWorkListScreen, navigationOptions: { header: null } },
+  WorkRegister: {
+    screen: WorkRegisterScreen,
+    navigationOptions: { title: '일감 등록하기', headerStyle: { marginTop: -28 } },
+  }
 });
 
 FirmWorkStack.navigationOptions = {

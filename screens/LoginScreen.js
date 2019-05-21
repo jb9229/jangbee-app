@@ -109,6 +109,8 @@ class LoginScreen extends React.PureComponent {
         getUserInfo(user.uid)
           .then((data) => {
             const userInfo = data.val();
+            if (!userInfo) { changeAuthPath(2, user); return; }
+
             const { userType } = userInfo;
 
             if (!userType) {

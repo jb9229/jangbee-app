@@ -259,7 +259,7 @@ class ClientWorkListScreen extends React.Component {
 
         <JBButton
           title="일감 등록하기"
-          onPress={() => navigation.navigate('WorkRegister')}
+          onPress={() => navigation.navigate('WorkRegister', { firmRegister: false })}
           size="full"
           Primary
         />

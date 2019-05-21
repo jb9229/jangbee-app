@@ -450,6 +450,16 @@ export function applyWork(applyData) {
   }).then(handleJBServerJsonResponse);
 }
 
+export function applyFirmWork(applyData) {
+  return fetch(url.JBSERVER_FIRMWORK_FIRM_APPLY, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(applyData),
+  }).then(handleJBServerJsonResponse);
+}
+
 export function selectAppliFirm(selectData) {
   return fetch(url.JBSERVER_WORK_CLIENT_SELECT, {
     method: 'PUT',

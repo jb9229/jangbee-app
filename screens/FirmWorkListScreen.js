@@ -163,6 +163,33 @@ class FirmWorkListScreen extends React.Component {
       });
   };
 
+  /**
+   * 차주 일감지원하기 요청 함수
+   */
+  applyFirmWork = (fintechUseNum) => {
+    const { user, userProfile } = this.props;
+    const { acceptWorkId } = this.state;
+
+    const applyData = {
+      authToken: userProfile.obAccessToken,
+      fintechUseNum,
+      workId: acceptWorkId,
+      accountId: user.uid,
+    };
+
+    api
+      .applyFirmWork(applyData)
+      .then((resBody) => {
+        if (resBody) {
+          this.setOpenWorkListData();
+        }
+      })
+      .catch((error) => {
+        notifyError(error.name, error.message);
+        this.setOpenWorkListData();
+      });
+  };
+
   changeTabView = (index) => {
     const { matchedWorkList } = this.state;
 
@@ -225,6 +252,19 @@ class FirmWorkListScreen extends React.Component {
     );
   };
 
+  confirmApplyFirmWork = (workId) => {
+    // TODO
+    // 잔액확인
+    Alert.alert(
+      '해당 날짜와 장소에 배차 가능하십니까?',
+      '다른 차주가 올린 일감은, 선착순으로 한 업체만 매칭비 결재와 동시에 바로 매칭됩니다.',
+      [
+        { text: '취소', onPress: () => {} },
+        { text: '지원하기', onPress: () => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId, withdrawCompleteFnc: this.applyFirmWork }) },
+      ],
+    );
+  };
+
   confirmAcceptWork = (workId) => {
     Alert.alert(
       '매칭비 5천원 자동이체 후, 매칭이 완료 됩니다.',
@@ -234,7 +274,7 @@ class FirmWorkListScreen extends React.Component {
         { text: '포기하기', onPress: () => this.abandonWork(workId) },
         {
           text: '결제하기',
-          onPress: () => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId }),
+          onPress: () => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId, withdrawCompleteFnc: this.withdrawDispatchFee }),
         },
       ],
       { cancelabel: false },
@@ -347,6 +387,7 @@ class FirmWorkListScreen extends React.Component {
       matchedWorkList,
       openWorkListRefreshing,
       matchedWorkListRefreshing,
+      withdrawCompleteFnc,
     } = this.state;
     const { user, navigation } = this.props;
 
@@ -358,6 +399,7 @@ class FirmWorkListScreen extends React.Component {
         refreshing={openWorkListRefreshing}
         isListEmpty={isOpenWorkListEmpty}
         applyWork={this.confirmApplyWork}
+        applyFirmWork={this.confirmApplyFirmWork}
         acceptWork={this.confirmAcceptWork}
         abandonWork={this.confirmAbandonWork}
       />
@@ -379,7 +421,7 @@ class FirmWorkListScreen extends React.Component {
         <OpenBankAccSelectModal
           isVisibleModal={isVisibleAccSelModal}
           closeModal={() => this.setState({ isVisibleAccSelModal: false })}
-          completeSelect={this.withdrawDispatchFee}
+          completeSelect={(fintechUseNum) => {this.setState({isVisibleAccSelModal: false}); withdrawCompleteFnc(fintechUseNum);}}
           accountId={user.uid}
           actionName="결제통장 선택"
           {...this.props}
@@ -402,8 +444,8 @@ class FirmWorkListScreen extends React.Component {
           )}
         />
         <JBButton
-          title="일감 등록하기"
-          onPress={() => navigation.navigate('WorkRegister')}
+          title="차주 일감 등록하기"
+          onPress={() => navigation.navigate('WorkRegister', { firmRegister: true })}
           size="full"
           Primary
         />

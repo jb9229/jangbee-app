@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  warningWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   formWrap: {},
   adTypeFormWrap: {
     flex: 1,
@@ -557,6 +562,16 @@ class AdCreateScreen extends React.Component {
       adLocalValErrMessage,
       imgUploadingMessage,
     } = this.state;
+
+    if (isAccEmpty === undefined || isAccEmpty) {
+      return (
+        <View style={styles.warningWrap}>
+          <Text style={styles.warningText}>먼저, 홍보비 결제 통장을 등록해 주세요.</Text>
+          <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <KeyboardAvoidingView>
@@ -667,13 +682,7 @@ class AdCreateScreen extends React.Component {
             </View>
             <View style={styles.botCommWrap}>
               <JBErrorMessage errorMSG={payErrMessage} />
-              {isAccEmpty === undefined || isAccEmpty ? (
-                <View>
-                  <Text style={styles.warningText}>먼저, 자동이체 계좌를 등록해 주세요.</Text>
-                </View>
-              ) : (
-                <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" Primary />
-              )}
+              <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" Primary />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
