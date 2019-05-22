@@ -11,12 +11,12 @@
       "ios",
       "android"
     ],
-    "version": "0.1.11_20190517",
+    "version": "0.1.12_20190521",
     "orientation": "portrait",
     "icon": "./assets/images/icon-512.png",
     "splash": {
       "image": "./assets/images/splash-20190502.png",
-      "resizeMode": "cover",
+      "resizeMode": "contain",
       "backgroundColor": "#4D4A4A"
     },
     "updates": {
@@ -37,7 +37,11 @@
       "permissions": [
         "ACCESS_FINE_LOCATION"
       ],
-      "versionCode": 12
+      "versionCode": 13,
+      "splash": {
+        "backgroundColor": "#4D4A4A",
+        "resizeMode": "cover"
+      }
     },
     "description": ""
   }

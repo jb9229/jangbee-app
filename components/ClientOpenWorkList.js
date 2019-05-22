@@ -34,16 +34,20 @@ export default class ClientOpenWorkList extends React.PureComponent {
       <WorkCommWrap row>
         <JBButton title="편집" onPress={() => editWork(item)} size="small" underline Primary />
 
-        {item.workState === 'OPEN' && item.applicantCount === 0 && (
+        {item.workState === 'OPEN' && item.guarTimeExpire && item.applicantCount === 0 && (
+          <WorkCommText text="차주일감 시간만료됨" />
+        )}
+        {item.workState === 'OPEN' && !item.guarTimeExpire && item.applicantCount === 0 && (
           <WorkCommText text="지원자 모집중..." />
         )}
-        {item.workState === 'OPEN' && item.applicantCount > 0 && (
+        {item.workState === 'OPEN' && !item.guarTimeExpire && item.applicantCount > 0 && (
           <JBButton
             title={`지원자 선택하기(${item.applicantCount}명)`}
             onPress={() => selectFirm(item.id)}
             size="small"
           />
         )}
+
         {item.workState === 'SELECTED' && item.overAcceptTime && (
           <JBButton
             title="지원자선택 취소하기"

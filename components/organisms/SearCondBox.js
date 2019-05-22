@@ -21,7 +21,7 @@ const TouchableHighlight = styled.TouchableHighlight`
 `;
 
 const Text = styled.Text`
-  color: ${props => (props.isSelected ? colors.point : colors.point2)};
+  color: ${props => (props.isSelected ? colors.point : colors.point2Dark)};
   font-family: ${fonts.button};
   font-size: 20;
   font-weight: bold;

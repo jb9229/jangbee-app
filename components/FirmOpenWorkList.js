@@ -21,15 +21,27 @@ export default class FirmWorkingList extends React.PureComponent {
   );
 
   renderCommand = (item) => {
-    const { applyWork, applyFirmWork, abandonWork, acceptWork } = this.props;
+    const {
+      applyWork, applyFirmWork, abandonWork, acceptWork,
+    } = this.props;
 
     return (
       <WorkCommWrap>
-        {item.workState === 'OPEN' && !item.applied && !item.firmRegister &&(
+        {item.workState === 'OPEN' && !item.applied && !item.firmRegister && (
           <JBButton title="지원하기" onPress={() => applyWork(item.id)} size="small" />
         )}
-        {item.workState === 'OPEN' && !item.applied && item.firmRegister && (
-          <JBButton title="차주일감 지원하기(선착순 바로매칭)" onPress={() => applyFirmWork(item.id)} size="small" />
+        {item.workState === 'OPEN'
+          && !item.applied
+          && item.firmRegister
+          && !item.guarTimeExpire && (
+            <JBButton
+              title="차주일감 지원하기(선착순 바로매칭)"
+              onPress={() => applyFirmWork(item.id)}
+              size="small"
+            />
+        )}
+        {item.workState === 'OPEN' && !item.applied && item.firmRegister && item.guarTimeExpire && (
+          <WorkCommText text="차주일감 매칭시간 만료됨" />
         )}
         {item.workState === 'OPEN' && item.applied && <WorkCommText text="지원중.." />}
         {item.workState === 'SELECTED' && (

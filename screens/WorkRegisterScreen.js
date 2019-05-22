@@ -1,13 +1,16 @@
 import React from 'react';
 import {
+  Alert,
   DatePickerAndroid,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   Picker,
   View,
 } from 'react-native';
+import { Header } from 'react-navigation';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import { notifyError } from '../common/ErrorNotice';
@@ -39,7 +42,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 50,
   },
-  periodTitle: {
+  guaranteePicker: {
+    width: 100,
+    height: 50,
+  },
+  pickerTitle: {
     fontFamily: fonts.titleMiddle,
     color: colors.title,
     fontSize: 15,
@@ -56,7 +63,35 @@ class WorkRegisterScreen extends React.Component {
       equipment: '',
       phoneNumber: '',
       period: '0.3',
+      guaranteeTime: null,
     };
+  }
+
+  componentDidMount() {
+    const { params } = this.props.navigation.state;
+
+    if (params && params.firmRegister) {
+      this.setState({guaranteeTime: '30'});
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { params } = this.props.navigation.state;
+
+    if (params && params.firmRegister) {
+      this.setState({guaranteeTime: '30'});
+    }
+  }
+
+  confirmCreateWork = () => {
+    const { firmRegister } = this.props.navigation.state.params;
+    const { guaranteeTime } = this.state;
+
+    if (firmRegister) {
+      Alert.alert('차주일감 주의사항', `차주 일감등록은 선착순 자동매칭(매칭비 지불) 입니다, 설정하신 [${guaranteeTime}]분까지는 일감이 보장되어야 합니다(다른경로로 일감을 넘기시면 안됩니다)`, [ {text: '취소', onPress: () => {} }, { text: '일감등록', onPress: () => {this.createWork();} }]);
+    } else {
+      this.createWork();
+    }
   }
 
   /**
@@ -136,6 +171,7 @@ class WorkRegisterScreen extends React.Component {
       addressDetail,
       startDate,
       period,
+      guaranteeTime,
       detailRequest,
       addrLongitude,
       addrLatitude,
@@ -202,6 +238,7 @@ class WorkRegisterScreen extends React.Component {
       addressDetail,
       startDate,
       period,
+      guaranteeTime,
       detailRequest,
       addrLongitude,
       addrLatitude,
@@ -221,6 +258,7 @@ class WorkRegisterScreen extends React.Component {
       addressDetail,
       startDate,
       period,
+      guaranteeTime,
       detailRequest,
       phoneNumber,
       equipmentValErrMessage,
@@ -236,10 +274,9 @@ class WorkRegisterScreen extends React.Component {
       .map((_, i) => <Picker.Item key={i} label={`${i + 1}일`} value={`${i + 1}`} />);
     return (
       <View style={styles.Container}>
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
           <ScrollView>
             <CardUI>
-            {firmRegister && <Text>차주 일감등록은 선착순 자동매칭 됩니다, 지원하는 차주가 실수하지 않게, 등록 전 다시한번 확인해 주세요.</Text>}
               <JBTextInput
                 title="호출장비*"
                 value={equipment}
@@ -265,7 +302,7 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
               <JBTextInput
-                title="현장주소(*, 매칭 후 공개됨)"
+                title="현장주소(*, 매칭 후 자세히 공개됨)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;
@@ -297,7 +334,7 @@ class WorkRegisterScreen extends React.Component {
                   placeholder="시작일을 선택 하세요"
                 />
                 <View style={styles.periodWrap}>
-                  <Text style={styles.periodTitle}>기간</Text>
+                  <Text style={styles.pickerTitle}>기간</Text>
                   <Picker
                     selectedValue={period}
                     style={styles.periodPicker}
@@ -310,6 +347,25 @@ class WorkRegisterScreen extends React.Component {
                 </View>
               </View>
               <JBErrorMessage errorMSG={dateValErrMessage} />
+              {firmRegister && (
+                <View style={styles.guaranteeWrap}>
+                  <Text style={styles.pickerTitle}>최대 보장시간 (이 시간까지는 일감을 다른 곳에 넘기시면 안됩니다!)</Text>
+                  <Picker
+                    selectedValue={guaranteeTime}
+                    style={styles.guaranteePicker}
+                    onValueChange={itemValue => this.setState({ guaranteeTime: itemValue })}
+                  >
+                    <Picker.Item label="10분" value="10" />
+                    <Picker.Item label="20분" value="20" />
+                    <Picker.Item label="30분" value="30" />
+                    <Picker.Item label="1시간" value="60" />
+                    <Picker.Item label="2시간" value="120" />
+                    <Picker.Item label="3시간" value="180" />
+                    <Picker.Item label="5시간" value="300" />
+                    <Picker.Item label="1일" value="1440" />
+                  </Picker>
+                </View>
+              )}
 
               <JBTextInput
                 title="작업 세부사항"
@@ -320,30 +376,30 @@ class WorkRegisterScreen extends React.Component {
                 numberOfLines={3}
               />
               <JBErrorMessage errorMSG={detailRequestValErrMessage} />
+              <JBButton
+                title="일감 등록완료"
+                onPress={() => this.confirmCreateWork()}
+                size="full"
+                Secondary
+              />
+              <View style={styles.modalWrap}>
+                <EquipementModal
+                  isVisibleEquiModal={isVisibleEquiModal}
+                  closeModal={() => this.setState({ isVisibleEquiModal: false })}
+                  selEquipmentStr={equipment}
+                  completeSelEqui={seledEuipListStr => this.setState({ equipment: seledEuipListStr })}
+                  depth={2}
+                />
+                <MapAddWebModal
+                  isVisibleMapAddModal={isVisibleMapAddModal}
+                  setMapAddModalVisible={flag => this.setState({ isVisibleMapAddModal: flag })}
+                  saveAddrInfo={this.saveAddrInfo}
+                  nextFocus={() => {}}
+                />
+              </View>
             </CardUI>
-            <JBButton
-              title="일감 등록완료"
-              onPress={() => this.createWork()}
-              size="full"
-              Secondary
-            />
           </ScrollView>
         </KeyboardAvoidingView>
-        <View style={styles.modalWrap}>
-          <EquipementModal
-            isVisibleEquiModal={isVisibleEquiModal}
-            closeModal={() => this.setState({ isVisibleEquiModal: false })}
-            selEquipmentStr={equipment}
-            completeSelEqui={seledEuipListStr => this.setState({ equipment: seledEuipListStr })}
-            depth={2}
-          />
-          <MapAddWebModal
-            isVisibleMapAddModal={isVisibleMapAddModal}
-            setMapAddModalVisible={flag => this.setState({ isVisibleMapAddModal: flag })}
-            saveAddrInfo={this.saveAddrInfo}
-            nextFocus={() => {}}
-          />
-        </View>
       </View>
     );
   }

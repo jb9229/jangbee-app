@@ -5,10 +5,12 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   ScrollView,
+  Platform,
   Picker,
   Text,
   View,
 } from 'react-native';
+import { Header } from 'react-navigation';
 import JBTextInput from '../components/molecules/JBTextInput';
 import JBButton from '../components/molecules/JBButton';
 import ImagePickInput from '../components/molecules/ImagePickInput';
@@ -24,7 +26,7 @@ import * as firebaseDB from '../utils/FirebaseUtils';
 import { validate, validatePresence } from '../utils/Validation';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
-import JBActIndicatorModal from '../components/JBActIndicatorModal';
+import JBActIndicator from '../components/organisms/JBActIndicator';
 import * as imageManager from '../common/ImageManager';
 
 const styles = StyleSheet.create({
@@ -563,7 +565,11 @@ class AdCreateScreen extends React.Component {
       imgUploadingMessage,
     } = this.state;
 
-    if (isAccEmpty === undefined || isAccEmpty) {
+    if (isAccEmpty === undefined) {
+      return <JBActIndicator title="통장 리스트 불러오는중..." size={35} />;
+    }
+
+    if (isAccEmpty) {
       return (
         <View style={styles.warningWrap}>
           <Text style={styles.warningText}>먼저, 홍보비 결제 통장을 등록해 주세요.</Text>
@@ -574,7 +580,7 @@ class AdCreateScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
           <ScrollView contentContainerStyle={styles.formWrap}>
             <EquipementModal
               isVisibleEquiModal={isVisibleEquiModal}
