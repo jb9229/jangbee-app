@@ -1,11 +1,13 @@
 import React from 'react';
 import {
-  FlatList, Modal, StyleSheet, View,
+  FlatList, Modal, Picker, StyleSheet, View,
 } from 'react-native';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
 import ListSeparator from './molecules/ListSeparator';
 import OBAccount from './molecules/OBAccount';
+import Coupon from './molecules/Coupon';
+import JBText from './molecules/JBText';
 import * as firebaseDB from '../utils/FirebaseUtils';
 import * as api from '../api/api';
 import JBActIndicator from './organisms/JBActIndicator';
@@ -26,6 +28,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
   },
+  couponListWrap: {
+    alignItems: 'center',
+    padding: 10,
+  },
   commWrap: {
     flexDirection: 'row',
   },
@@ -36,30 +42,46 @@ export default class OpenBankAccSelectModal extends React.Component {
     super(props);
     this.state = {
       selFinUseNum: '',
+      isLoadingCoupon: true,
+      couponSelected: false,
     };
   }
 
   componentDidMount() {
-    this.setOpenBankAccountList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isVisibleModal, showFirmWorkCoupon } = nextProps;
+
+    if (isVisibleModal) {
+      if (showFirmWorkCoupon) {
+        this.setFirmworkCoupon();
+      }
+      this.setOpenBankAccountList();
+    }
   }
 
   /**
    * 모달 액션 완료 함수
    */
   completeAction = () => {
-    const { closeModal, completeSelect } = this.props;
-    const { selFinUseNum } = this.state;
+    const { selFinUseNum, couponSelected } = this.state;
+    const { completeSelect, closeModal } = this.props;
 
-    if (!selFinUseNum) {
-      notifyError('유효성검사 에러', `[${selFinUseNum}] 계좌번호를 선택해 주세요`);
-      return;
+    if (!couponSelected) {
+      if (!selFinUseNum) {
+        notifyError('유효성검사 에러', `[${selFinUseNum}] 계좌번호를 선택해 주세요`);
+        return;
+      }
     }
 
-    completeSelect(selFinUseNum);
+    completeSelect(selFinUseNum, couponSelected);
+    closeModal();
   };
 
+
   onAccListItemPress = (fintechUseNum) => {
-    this.setState({ selFinUseNum: fintechUseNum });
+    this.setState({ selFinUseNum: fintechUseNum, couponSelected: false });
   };
 
   /**
@@ -97,14 +119,77 @@ export default class OpenBankAccSelectModal extends React.Component {
     });
   };
 
+  /**
+   * 차주일감 쿠폰 요청함수
+   */
+  setFirmworkCoupon = () => {
+    const { accountId } = this.props;
+
+    this.setState({ isLoadingCoupon: true });
+    api
+      .getCoupon(accountId)
+      .then((coupon) => {
+        if (coupon) {
+          this.setState({ couponCnt: coupon.cpCount });
+        }
+
+        this.setState({ isLoadingCoupon: false });
+      })
+      .catch((error) => {
+        notifyError(
+          '네트워크 문제가 있습니다, 다시 시도해 주세요.',
+          `쿠폰 조회 실패 -> [${error.name}] ${error.message}`,
+        );
+
+        this.setState({ isLoadingCoupon: false });
+      });
+  };
+
+  selectFirmWorkCoupon = (selected) => {
+    if (!selected) {
+      this.setState({ couponSelected: !selected, selFinUseNum: '' });
+    } else {
+      this.setState({ couponSelected: !selected });
+    }
+  }
+
   render() {
     const {
-      isVisibleModal, navigation, closeModal, reauthAfterAction, actionName,
+      isVisibleModal, navigation, closeModal, reauthAfterAction, actionName, showFirmWorkCoupon,
     } = this.props;
-    const { isEmptyList, accList, selFinUseNum } = this.state;
+    const {
+      isEmptyList,
+      isLoadingCoupon,
+      accList,
+      selFinUseNum,
+      couponCnt,
+      couponSelected,
+    } = this.state;
+
+    if (showFirmWorkCoupon && isLoadingCoupon) {
+      return (
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
+          <JBActIndicator title="쿠폰을 불러오는중.." size={35} />
+        </Modal>
+      );
+    }
 
     if (isEmptyList === undefined) {
-      return <JBActIndicator title="통장리스트 불러오는중.." size={35} />;
+      return (
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
+          <JBActIndicator title="통장리스트 불러오는중.." size={35} />
+        </Modal>
+      );
     }
 
     if (isEmptyList === null) {
@@ -164,6 +249,17 @@ export default class OpenBankAccSelectModal extends React.Component {
         <View style={styles.bgWrap}>
           <View style={styles.contentsWrap}>
             <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            {showFirmWorkCoupon && (
+              <View style={styles.couponListWrap}>
+                {!couponCnt && (
+                  <JBText text="일감수락쿠폰 미보유(차주일감 등록시 추가됨)" />
+                )}
+                {couponCnt === 1 && (
+                  <JBText text="일감수락쿠폰 1개보유(2개이상 시 사용가능)" />
+                )}
+                {couponCnt >= 2 && <Coupon name="일감수락 쿠폰" count={couponCnt} selected={couponSelected} onPress={selected => this.selectFirmWorkCoupon(selected)} />}
+              </View>
+            )}
             <FlatList
               data={accList}
               extraData={selFinUseNum}

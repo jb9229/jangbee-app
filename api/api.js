@@ -396,13 +396,13 @@ export function createWork(newWork) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function updateWork(updateWork) {
+export function updateWork(work) {
   return fetch(url.JBSERVER_WORK, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: JSON.stringify(updateWork),
+    body: JSON.stringify(work),
   }).then(handleJBServerJsonResponse);
 }
 
@@ -498,6 +498,11 @@ export function cancelSelFirm(workId) {
     method: 'PUT',
     body: formData,
   }).then(handleJBServerJsonResponse);
+}
+
+/** ******************** Coupon Api List ************************** */
+export function getCoupon(accountId) {
+  return fetch(`${url.JBSERVER_COUPON}?accountId=${accountId}`).then(handleJBServerJsonResponse);
 }
 
 /** ******************** Open Bank Api List ************************** */

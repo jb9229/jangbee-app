@@ -110,17 +110,18 @@ class FirmWorkListScreen extends React.Component {
   /**
    * 일감 매칭요청 수락하기 함수
    */
-  acceptWork = (fintechUseNum) => {
+  acceptWork = (couponSelected, fintechUseNum) => {
     const { user } = this.props;
     const { acceptWorkId } = this.state;
 
-    const applyData = {
+    const acceptData = {
       workId: acceptWorkId,
       accountId: user.uid,
+      coupon: couponSelected,
     };
 
     api
-      .acceptWork(applyData)
+      .acceptWork(acceptData)
       .then((resBody) => {
         if (resBody) {
           this.setOpenWorkListData();
@@ -132,13 +133,33 @@ class FirmWorkListScreen extends React.Component {
           '배차하기 문제',
           '배차되지 않았습니다, 통장잔고 및 통장 1년인증 상태, 배차요청 3시간이 지났는지 리스트 리프레쉬 후 확인해 주세요',
         );
-        this.cancelDispatchFee(fintechUseNum);
+        if (!couponSelected) {
+          this.cancelDispatchFee(fintechUseNum);
+        }
         this.setOpenWorkListData();
       })
       .catch((error) => {
         notifyError(error.name, error.message);
       });
   };
+
+  acceptWorkUsingCoupon = () => {
+    const { acceptWorkId } = this.state;
+
+    api
+      .acceptCouponWork(acceptWorkId)
+      .then((resBody) => {
+        if (resBody) {
+          this.setOpenWorkListData();
+          this.setMatchedWorkListData();
+          return;
+        }
+        this.setOpenWorkListData();
+      })
+      .catch((error) => {
+        notifyError(error.name, error.message);
+      });
+  }
 
   /**
    * 일감지원하기 요청 함수
@@ -166,7 +187,7 @@ class FirmWorkListScreen extends React.Component {
   /**
    * 차주 일감지원하기 요청 함수
    */
-  applyFirmWork = (fintechUseNum) => {
+  applyFirmWork = (couponSelected, fintechUseNum) => {
     const { user, userProfile } = this.props;
     const { acceptWorkId } = this.state;
 
@@ -175,6 +196,7 @@ class FirmWorkListScreen extends React.Component {
       fintechUseNum,
       workId: acceptWorkId,
       accountId: user.uid,
+      coupon: couponSelected,
     };
 
     api
@@ -267,8 +289,8 @@ class FirmWorkListScreen extends React.Component {
 
   confirmAcceptWork = (workId) => {
     Alert.alert(
-      '매칭비 5천원 자동이체 후, 매칭이 완료 됩니다.',
-      '매칭후, 매칭된 일감 화면에서(오른쪽 상단 메뉴) 꼭! [전화]를 걸어 금액 및 최종 확인을 통화해 해주세요.',
+      '매칭비 자동이체 후, 매칭이 완료 됩니다.',
+      '매칭 후, 매칭된 일감(오른쪽 상단 메뉴)화면에서 꼭! [전화걸기]통해 고객과 최종 협의하세요.',
       [
         { text: '취소', onPress: () => {} },
         { text: '포기하기', onPress: () => this.abandonWork(workId) },
@@ -349,16 +371,21 @@ class FirmWorkListScreen extends React.Component {
   /**
    * 일감 매칭요청 수락하기 함수
    */
-  withdrawDispatchFee = (fintechUseNum) => {
+  withdrawDispatchFee = (couponSelected, fintechUseNum) => {
     const { userProfile } = this.props;
     const { acceptWorkId } = this.state;
+
+    if (couponSelected) {
+      this.acceptWork(couponSelected, fintechUseNum);
+      return;
+    }
 
     // 지원비 이체
     api
       .transferWithdraw(userProfile.obAccessToken, fintechUseNum, dispatchFee, '장비콜 배차비 출금')
       .then((res) => {
         if (res && res.rsp_code && res.rsp_code === 'A0000') {
-          this.acceptWork(fintechUseNum);
+          this.acceptWork(couponSelected, fintechUseNum);
           return;
         }
         notifyError(
@@ -421,9 +448,10 @@ class FirmWorkListScreen extends React.Component {
         <OpenBankAccSelectModal
           isVisibleModal={isVisibleAccSelModal}
           closeModal={() => this.setState({ isVisibleAccSelModal: false })}
-          completeSelect={(fintechUseNum) => {this.setState({isVisibleAccSelModal: false}); withdrawCompleteFnc(fintechUseNum);}}
+          completeSelect={(fintechUseNum, couponSelected) => { withdrawCompleteFnc(couponSelected, fintechUseNum);}}
           accountId={user.uid}
-          actionName="결제통장 선택"
+          actionName="결제방법 선택하기"
+          showFirmWorkCoupon
           {...this.props}
         />
         <TabView
