@@ -88,7 +88,7 @@ class WorkRegisterScreen extends React.Component {
     const { guaranteeTime } = this.state;
 
     if (firmRegister) {
-      Alert.alert('차주일감 주의사항', `차주 일감등록은 선착순 자동매칭(매칭비 지불) 입니다, 설정하신 [${guaranteeTime}]분까지는 일감이 보장되어야 합니다(다른경로로 일감을 넘기시면 안됩니다)`, [ {text: '취소', onPress: () => {} }, { text: '일감등록', onPress: () => {this.createWork();} }]);
+      Alert.alert('차주일감 주의사항', `차주 일감등록은 선착순 자동매칭(매칭비 지불) 입니다, 설정하신 [${guaranteeTime}]분까지는 일감이 보장되어야 합니다(다른경로로 일감을 넘기시면 안됩니다)\n\n차주일감은 매칭비의 50%를 쿠폰으로 돌려받습니다, 일감지원시 사용가능 합니다.`, [{ text: '취소', onPress: () => {} }, { text: '일감등록', onPress: () => { this.createWork(); } }]);
     } else {
       this.createWork();
     }
@@ -173,6 +173,8 @@ class WorkRegisterScreen extends React.Component {
       period,
       guaranteeTime,
       detailRequest,
+      sidoAddr,
+      sigunguAddr,
       addrLongitude,
       addrLatitude,
     } = this.state;
@@ -200,6 +202,18 @@ class WorkRegisterScreen extends React.Component {
     }
 
     v = validate('textMax', address, true, 100);
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', sidoAddr, true, 45);
+    if (!v[0]) {
+      this.setState({ addressValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', sigunguAddr, true, 45);
     if (!v[0]) {
       this.setState({ addressValErrMessage: v[1] });
       return false;
@@ -236,6 +250,8 @@ class WorkRegisterScreen extends React.Component {
       phoneNumber,
       address,
       addressDetail,
+      sidoAddr,
+      sigunguAddr,
       startDate,
       period,
       guaranteeTime,

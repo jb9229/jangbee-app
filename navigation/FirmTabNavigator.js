@@ -13,6 +13,7 @@ import AdCreateScreen from '../screens/AdCreateScreen';
 import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import FirmWorkListScreen from '../screens/FirmWorkListScreen';
 import WorkRegisterScreen from '../screens/WorkRegisterScreen';
+import JBServiceTerms from '../screens/JBServiceTerms';
 import colors from '../constants/Colors';
 
 const FirmWorkStack = createStackNavigator({
@@ -37,6 +38,10 @@ const FirmMyInfoStack = createStackNavigator({
   FirmUpdate: {
     screen: FirmUpdateScreen,
     navigationOptions: { title: '업체정보 수정', headerStyle: { marginTop: -28 } },
+  },
+  ServiceTerms: {
+    screen: JBServiceTerms,
+    navigationOptions: { title: '이용약관', headerStyle: { marginTop: -28 } },
   },
 });
 

@@ -8,6 +8,7 @@ import ClientMyInfoScreen from '../screens/ClientMyInfoScreen';
 import WorkListScreen from '../screens/WorkListScreen';
 import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 import AppliFirmList from '../components/AppliFirmList';
+import JBServiceTerms from '../screens/JBServiceTerms';
 
 const ClientHomeStack = createStackNavigator({
   ClientHome: { screen: HomeScreen, navigationOptions: { header: null } },
@@ -41,6 +42,10 @@ const ClientInfoStack = createStackNavigator({
   ClientInfo: {
     screen: ClientMyInfoScreen,
     navigationOptions: { title: '사용자 정보', headerStyle: { marginTop: -28 } },
+  },
+  ServiceTerms: {
+    screen: JBServiceTerms,
+    navigationOptions: { title: '이용약관', headerStyle: { marginTop: -28 } },
   },
 });
 

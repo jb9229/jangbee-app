@@ -15,9 +15,10 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 25,
     marginRight: 25,
+    width: '80%',
   },
   accListItemWrap: {
-    padding: 5,
+    padding: 10,
     borderWidth: 1,
     borderRadius: 5,
   },
@@ -58,19 +59,17 @@ export default function renderCoupon({
   name, count, selected, onPress,
 }) {
   return (
-    <View style={styles.container}>
-      <TouchableHighlight onPress={() => onPress(selected)} selected={selected}>
-        <View style={[styles.accListItemWrap]}>
-          <View style={styles.topWrap}>
-            <Text style={styles.holderText}>보유량: </Text>
-            <Text style={styles.holderText}>{count}</Text>
-          </View>
-          <View style={styles.middleWrap}>
-            <Text style={styles.aliasText}>{name}</Text>
-          </View>
-          <View style={styles.bottomWrap} />
+    <TouchableHighlight onPress={() => onPress(selected)} selected={selected} style={styles.container}>
+      <View style={[styles.accListItemWrap]}>
+        <View style={styles.topWrap}>
+          <Text style={styles.holderText}>보유량: </Text>
+          <Text style={styles.holderText}>{count}</Text>
         </View>
-      </TouchableHighlight>
-    </View>
+        <View style={styles.middleWrap}>
+          <Text style={styles.aliasText}>{name}</Text>
+        </View>
+        <View style={styles.bottomWrap} />
+      </View>
+    </TouchableHighlight>
   );
 }

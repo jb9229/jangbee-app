@@ -15,9 +15,10 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 25,
     marginRight: 25,
+    width: '80%',
   },
   accListItemWrap: {
-    padding: 5,
+    padding: 10,
     borderWidth: 1,
     borderRadius: 5,
   },
@@ -56,22 +57,21 @@ const styles = StyleSheet.create({
  */
 export default function renderAccListItem(item, selFinUseNum, onPress) {
   return (
-    <View style={styles.container}>
-      <TouchableHighlight
-        onPress={() => onPress(item.fintech_use_num)}
-        selected={selFinUseNum === item.fintech_use_num}
-      >
-        <View style={[styles.accListItemWrap]}>
-          <View style={styles.topWrap}>
-            <Text style={styles.bankNameText}>{item.bank_name}</Text>
-            <Text style={styles.holderText}>{item.account_holder_name}</Text>
-          </View>
-          <View style={styles.middleWrap}>
-            <Text style={styles.aliasText}>{item.account_alias}</Text>
-          </View>
-          <View style={styles.bottomWrap} />
+    <TouchableHighlight
+      onPress={() => onPress(item.fintech_use_num)}
+      selected={selFinUseNum === item.fintech_use_num}
+      style={styles.container}
+    >
+      <View style={[styles.accListItemWrap]}>
+        <View style={styles.topWrap}>
+          <Text style={styles.bankNameText}>{item.bank_name}</Text>
+          <Text style={styles.holderText}>{item.account_holder_name}</Text>
         </View>
-      </TouchableHighlight>
-    </View>
+        <View style={styles.middleWrap}>
+          <Text style={styles.aliasText}>{item.account_alias}</Text>
+        </View>
+        <View style={styles.bottomWrap} />
+      </View>
+    </TouchableHighlight>
   );
 }

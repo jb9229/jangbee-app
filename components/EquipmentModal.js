@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   ScrollView,
   Modal,
   StyleSheet,
@@ -64,17 +65,73 @@ export default class EquipementModal extends React.Component {
 
     const array = [...listDataSource];
     array[index].isExpanded = !array[index].isExpanded;
+    array[index].willUpdate = true;
     this.setState(() => ({
       listDataSource: array,
     }));
   };
 
-  completeSelEqui = (category, type) => {
-    const { closeModal, completeSelEqui } = this.props;
+  updateCheck = (index) => {
+    const { listDataSource } = this.state;
 
-    const equipment = `${type} ${category}`;
+    const array = [...listDataSource];
+    const isChecked = !array[index].isChecked;
+    array[index].isChecked = isChecked;
+    array[index].willUpdate = true;
+
+    this.setState(() => ({
+      listDataSource: array,
+    }));
+  };
+
+  updateItemCheck = (catIndex, itemIndex) => {
+    const { listDataSource } = this.state;
+
+    const array = [...listDataSource];
+    array[catIndex].subcategory[itemIndex].isChecked = !array[catIndex].subcategory[itemIndex]
+      .isChecked;
+    array[catIndex].willUpdate = true;
+
+    this.setState(() => ({
+      listDataSource: array,
+    }));
+  };
+
+  completeSelEqui = (item, type) => {
+    const { closeModal, completeSelEqui, multiSelect } = this.props;
+
+    const equipment = `${type} ${item.category_name}`;
     completeSelEqui(equipment);
     closeModal();
+  };
+
+  selectSubCate = (group, catIndex, itemIndex) => {
+    const { multiSelect } = this.props;
+
+    if (!this.validateSelect(group)) {
+      return;
+    }
+
+    if (multiSelect) {
+      this.updateItemCheck(catIndex, itemIndex);
+    } else {
+      this.completeSelEqui(group, group.subcategory[itemIndex].val);
+    }
+  };
+
+  /**
+   * 장비선택 유효성검사 함수
+   */
+  validateSelect = (group) => {
+    if (group.isChecked) {
+      Alert.alert(
+        '장비 모델을 선택할 수 없습니다',
+        '장비 전체선택을 해제 후, 모델을 선택해 주세요.',
+      );
+      return false;
+    }
+
+    return true;
   };
 
   cancel = () => {
@@ -87,8 +144,8 @@ export default class EquipementModal extends React.Component {
   };
 
   render() {
-    const { isVisibleEquiModal, advertisement, closeModal } = this.props;
-    const { listDataSource } = this.state;
+    const { isVisibleEquiModal, advertisement, closeModal, multiSelect } = this.props;
+    const { listDataSource, update } = this.state;
 
     return (
       <View style={styles.container}>
@@ -103,12 +160,15 @@ export default class EquipementModal extends React.Component {
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
               {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
               <ScrollView>
-                {listDataSource.map((item, key) => (
+                {listDataSource.map((group, key) => (
                   <ExpandableItem
-                    key={item.category_name}
+                    key={group.category_name}
                     onClickFunction={() => this.updateLayout(key)}
-                    item={item}
+                    onCatCheck={() => this.updateCheck(key)}
+                    item={group}
                     completeSel={this.completeSelEqui}
+                    selectSubCate={itemIndex => this.selectSubCate(group, key, itemIndex)}
+                    multiSelect={multiSelect}
                   />
                 ))}
               </ScrollView>
@@ -123,136 +183,165 @@ export default class EquipementModal extends React.Component {
 const EQUIPMENT_CONTENT = [
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '크레인',
+    willUpdate: false,
     subcategory: [
-      { id: 1, val: '10톤' },
-      { id: 2, val: '25톤' },
-      { id: 3, val: '50톤' },
-      { id: 4, val: '100톤' },
-      { id: 4, val: '160톤' },
-      { id: 4, val: '200톤' },
-      { id: 4, val: '250톤' },
-      { id: 4, val: '300톤' },
-      { id: 4, val: '400톤' },
-      { id: 4, val: '500톤' },
-      { id: 4, val: '700톤' },
-      { id: 4, val: '800톤' },
-      { id: 4, val: '1200톤' },
+      { isChecked: false, val: '10톤' },
+      { isChecked: false, val: '25톤' },
+      { isChecked: false, val: '50톤' },
+      { isChecked: false, val: '100톤' },
+      { isChecked: false, val: '160톤' },
+      { isChecked: false, val: '200톤' },
+      { isChecked: false, val: '250톤' },
+      { isChecked: false, val: '300톤' },
+      { isChecked: false, val: '400톤' },
+      { isChecked: false, val: '500톤' },
+      { isChecked: false, val: '700톤' },
+      { isChecked: false, val: '800톤' },
+      { isChecked: false, val: '1200톤' },
     ],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '카고크레인',
+    willUpdate: false,
     subcategory: [
-      { id: 1, val: '5톤' },
-      { id: 2, val: '11톤' },
-      { id: 3, val: '18톤' },
-      { id: 4, val: '25톤' },
+      { isChecked: false, val: '5톤' },
+      { isChecked: false, val: '11톤' },
+      { isChecked: false, val: '18톤' },
+      { isChecked: false, val: '25톤' },
     ],
   },
   {
     isExpanded: false,
-    category_name: '굴착기-타이어',
-    subcategory: [{ id: 20, val: '02W' }, { id: 21, val: '06W' }, { id: 22, val: '08W' }],
-  },
-  {
-    isExpanded: false,
-    category_name: '굴착기-트랙',
-    subcategory: [{ id: 30, val: '02LC' }, { id: 31, val: '04LC' }, { id: 32, val: '06LC' }],
-  },
-  {
-    isExpanded: false,
-    category_name: '스카이-일반',
+    isChecked: false,
+    category_name: '굴착기',
+    willUpdate: false,
     subcategory: [
-      { id: 40, val: '1톤' },
-      { id: 41, val: '1.2톤' },
-      { id: 42, val: '2톤' },
-      { id: 43, val: '2.5톤' },
-      { id: 44, val: '3.5톤' },
-      { id: 45, val: '5톤' },
+      { isChecked: false, val: '02W' },
+      { isChecked: false, val: '06W' },
+      { isChecked: false, val: '08W' },
+      { isChecked: false, val: '02LC' },
+      { isChecked: false, val: '04LC' },
+      { isChecked: false, val: '06LC' },
     ],
   },
   {
     isExpanded: false,
-    category_name: '스카이-굴절',
-    subcategory: [{ id: 50, val: '28m' }, { id: 51, val: '45m' }],
+    isChecked: false,
+    category_name: '스카이',
+    willUpdate: false,
+    subcategory: [
+      { isChecked: false, val: '1톤' },
+      { isChecked: false, val: '1.2톤' },
+      { isChecked: false, val: '2톤' },
+      { isChecked: false, val: '2.5톤' },
+      { isChecked: false, val: '3.5톤' },
+      { isChecked: false, val: '5톤' },
+      { isChecked: false, val: '28m' },
+      { isChecked: false, val: '45m' },
+      { isChecked: false, val: '58m' },
+      { isChecked: false, val: '60m' },
+      { isChecked: false, val: '75m' },
+    ],
   },
   {
     isExpanded: false,
-    category_name: '스카이-대형',
-    subcategory: [{ id: 60, val: '58m' }, { id: 61, val: '60m' }, { id: 62, val: '75m' }],
-  },
-  {
-    isExpanded: false,
+    isChecked: false,
     category_name: '지게차',
+    willUpdate: false,
     subcategory: [
-      { id: 70, val: '2톤' },
-      { id: 71, val: '2.5톤' },
-      { id: 72, val: '3톤' },
-      { id: 73, val: '4.5톤' },
-      { id: 74, val: '5톤' },
-      { id: 75, val: '6톤' },
-      { id: 76, val: '7톤' },
-      { id: 77, val: '8톤' },
-      { id: 78, val: '11.5톤' },
-      { id: 79, val: '15톤' },
-      { id: 80, val: '18톤' },
-      { id: 81, val: '25톤' },
+      { isChecked: false, val: '2톤' },
+      { isChecked: false, val: '2.5톤' },
+      { isChecked: false, val: '3톤' },
+      { isChecked: false, val: '4.5톤' },
+      { isChecked: false, val: '5톤' },
+      { isChecked: false, val: '6톤' },
+      { isChecked: false, val: '7톤' },
+      { isChecked: false, val: '8톤' },
+      { isChecked: false, val: '11.5톤' },
+      { isChecked: false, val: '15톤' },
+      { isChecked: false, val: '18톤' },
+      { isChecked: false, val: '25톤' },
     ],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '사다리차',
-    subcategory: [{ id: 60, val: '사다리차' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '사다리차' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '하이랜더',
-    subcategory: [{ id: 60, val: '하이랜더' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '하이랜더' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '고소작업렌탈',
-    subcategory: [{ id: 60, val: '고소작업렌탈' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '고소작업렌탈' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '펌프카',
-    subcategory: [{ id: 60, val: '펌프카' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '펌프카' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '도로포장장비',
-    subcategory: [{ id: 60, val: '도로포장장비' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '도로포장장비' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '로우더',
-    subcategory: [{ id: 60, val: '로우더' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '로우더' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '항타천공오가',
-    subcategory: [{ id: 60, val: '항타천공오가' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '항타천공오가' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '불도저',
-    subcategory: [{ id: 60, val: '불도저' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '불도저' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '진동로라/발전기',
-    subcategory: [{ id: 60, val: '진동로라/발전기' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '진동로라/발전기' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '덤프임대',
-    subcategory: [{ id: 60, val: '덤프임대' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '덤프임대' }],
   },
   {
     isExpanded: false,
+    isChecked: false,
     category_name: '거미크레인',
-    subcategory: [{ id: 10, val: '2톤' }, { id: 11, val: '3톤' }],
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '2톤' }, { isChecked: false, val: '3톤' }],
   },
 ];

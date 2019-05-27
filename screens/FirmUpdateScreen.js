@@ -14,6 +14,7 @@ import * as api from '../api/api';
 import JBButton from '../components/molecules/JBButton';
 import { withLogin } from '../contexts/LoginProvider';
 import JBActIndicatorModal from '../components/JBActIndicatorModal';
+import LocalSelModal from '../components/LocalSelModal';
 import * as imageManager from '../common/ImageManager';
 import { notifyError } from '../common/ErrorNotice';
 import Card from '../components/molecules/CardUI';
@@ -57,6 +58,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       isVisibleActIndiModal: false,
+      isVisibleLocalModal: false,
       fname: '',
       phoneNumber: '',
       equiListStr: '',
@@ -67,6 +69,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       sigunguAddr: '',
       addrLongitude: undefined,
       addrLatitude: undefined,
+      workAlarmSido: '',
+      workAlarmSigungu: '',
       introduction: '',
       thumbnail: '',
       photo1: '',
@@ -79,6 +83,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       fnameValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      workAlarmValErrMessage: '',
       introductionValErrMessage: '',
       thumbnailValErrMessage: '',
       photo1ValErrMessage: '',
@@ -125,6 +130,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       sigunguAddr,
       addrLongitude,
       addrLatitude,
+      workAlarmSido,
+      workAlarmSigungu,
       introduction,
       thumbnail,
       photo1,
@@ -168,6 +175,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       addrLongitude,
       addrLatitude,
       location: `${addrLongitude},${addrLatitude}`,
+      workAlarmSido,
+      workAlarmSigungu,
       introduction,
       thumbnail: uploadedThumbnailImgUrl || thumbnail,
       photo1: uploadedPhoto1ImgUrl || photo1,
@@ -177,7 +186,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       homepage,
       sns,
     };
-
+console.log(updateFirm);
     api
       .updateFirm(updateFirm)
       .then(() => {
@@ -262,6 +271,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       photo1ValErrMessage: '',
       photo2ValErrMessage: '',
       photo3ValErrMessage: '',
+      workAlarmValErrMessage: '',
       introductionValErrMessage: '',
       blogValErrMessage: '',
       homepageValErrMessage: '',
@@ -290,6 +300,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       modelYear,
       address,
       addressDetail,
+      workAlarmSido,
+      workAlarmSigungu,
       thumbnail,
       photo1,
       photo2,
@@ -368,6 +380,29 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       return false;
     }
 
+    if (!workAlarmSido && !workAlarmSigungu) {
+      this.setState({ workAlarmValErrMessage: '일감알람을 받을 지역을 선택해 주세요' });
+      return false;
+    }
+
+    v = validate('textMax', workAlarmSido, false, 100);
+    if (!v[0]) {
+      this.setState({ workAlarmValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', workAlarmSigungu, false, 300);
+    if (!v[0]) {
+      this.setState({ workAlarmValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', introduction, false, 100);
+    if (!v[0]) {
+      this.setState({ introductionValErrMessage: v[1] });
+      return false;
+    }
+
     v = validate('textMax', introduction, true, 1000);
     if (!v[0]) {
       this.setState({ introductionValErrMessage: v[1] });
@@ -432,6 +467,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       sigunguAddr: firm.sigunguAddr,
       addrLongitude: firm.addrLongitude,
       addrLatitude: firm.addrLatitude,
+      workAlarmSido: firm.workAlarmSido,
+      workAlarmSigungu: firm.workAlarmSigungu,
       introduction: firm.introduction,
       thumbnail: firm.thumbnail,
       photo1: firm.photo1,
@@ -453,12 +490,15 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       isVisibleEquiModal,
       isVisibleMapAddModal,
       isVisibleActIndiModal,
+      isVisibleLocalModal,
       fname,
       phoneNumber,
       equiListStr,
       modelYear,
       address,
       addressDetail,
+      workAlarmSido,
+      workAlarmSigungu,
       introduction,
       thumbnail,
       photo1,
@@ -471,6 +511,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       fnameValErrMessage,
       equiListStrValErrMessage,
       addressValErrMessage,
+      workAlarmValErrMessage,
       introductionValErrMessage,
       thumbnailValErrMessage,
       photo1ValErrMessage,
@@ -561,7 +602,15 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               />
 
               <JBTextInput
-                title="업체 소개"
+                title="일감 알람받을 지역"
+                value={`${workAlarmSido} ${workAlarmSigungu}`}
+                onFocus={() => this.setState({ isVisibleLocalModal: true })}
+                placeholder="일감알람 받을 지역을 선택해 주세요."
+              />
+              <JBErrorMessage errorMSG={workAlarmValErrMessage} />
+
+              <JBTextInput
+                title="업체 소개*"
                 value={introduction}
                 onChangeText={text => this.setState({ introduction: text })}
                 placeholder="업체 소개를 해 주세요"
@@ -651,6 +700,14 @@ class FirmUpdateScreen extends React.Component<Props, State> {
           isVisibleModal={isVisibleActIndiModal}
           message={imgUploadingMessage}
           size="large"
+        />
+        <LocalSelModal
+          isVisibleModal={isVisibleLocalModal}
+          closeModal={() => this.setState({ isVisibleLocalModal: false })}
+          multiSelComplte={(sidoArrStr, sigunguArrStr) => this.setState({ workAlarmSido: sidoArrStr, workAlarmSigungu: sigunguArrStr })}
+          nextFocus={() => {}}
+          multiSelect
+          actionName="일감알람 선택완료"
         />
       </View>
     );

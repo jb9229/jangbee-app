@@ -11,6 +11,15 @@ import {
 import * as kakaoconfig from '../kakao-config';
 import * as obconfig from '../openbank-config';
 
+/** ******************** Jangbee Sever Account  Api List ************************** */
+export function deleteFirmAccount(accountId) {
+  return fetch(`${url.JBSERVER_ACCOUNT}?accountId=${accountId}`, {
+    method: 'DELETE',
+    headers: {},
+  }).then(handleJBServerJsonResponse);
+}
+
+/** ******************** Jangbee Sever Firm  Api List ************************** */
 export function getEquipList() {
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
 }

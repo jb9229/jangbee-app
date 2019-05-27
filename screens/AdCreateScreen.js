@@ -27,6 +27,7 @@ import { validate, validatePresence } from '../utils/Validation';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import JBActIndicator from '../components/organisms/JBActIndicator';
+import JBActIndicatorModal from '../components/JBActIndicatorModal';
 import * as imageManager from '../common/ImageManager';
 
 const styles = StyleSheet.create({
@@ -183,7 +184,7 @@ class AdCreateScreen extends React.Component {
       const userInfo = data.val();
       const { obAccessToken, obUserSeqNo } = userInfo;
       if (obAccessToken === undefined || obUserSeqNo === undefined) {
-        this.setState({ isAccEmpty: true });
+        this.setState({ isAccEmpty: undefined });
         return;
       }
 

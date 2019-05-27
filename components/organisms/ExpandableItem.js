@@ -1,7 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet, Text, TouchableOpacity, View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import Styled from 'styled-components';
 import colors from '../../constants/Colors';
 
@@ -9,12 +8,38 @@ const Container = Styled.View`
   margin-bottom: 10px;
 `;
 
+const CateWrap = Styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  elevation: 3;
+  border-radius: 10;
+  background-color: ${props => props.bgColor};
+`;
+
+const CateTO = Styled.TouchableOpacity`
+  padding: 12px;
+  border-right-width: 1;
+  border-color: ${colors.batangLight};
+  flex: 1;
+`;
+
+const SubCatTO = Styled.TouchableOpacity`
+  margin-left: 8;
+  margin-right: 8;
+  padding-left: 8;
+  padding-right: 8;
+  background-color: #fff;
+  ${props => props.checked
+    && `
+    background-color: ${colors.pointLight};
+  `}
+`;
+
 const styles = StyleSheet.create({
   header: {
+    flexDirection: 'row',
     backgroundColor: colors.point2Light,
-    padding: 16,
-    borderRadius: 10,
-    elevation: 3,
   },
   headerText: {
     fontSize: 16,
@@ -32,13 +57,6 @@ const styles = StyleSheet.create({
     color: '#606070',
     padding: 10,
   },
-  content: {
-    marginLeft: 8,
-    marginRight: 8,
-    paddingLeft: 8,
-    paddingRight: 8,
-    backgroundColor: '#fff',
-  },
 });
 
 export default class ExpandableItem extends React.Component {
@@ -46,12 +64,20 @@ export default class ExpandableItem extends React.Component {
   constructor() {
     super();
     this.state = {
+      willUpdate: false,
       layoutHeight: 0,
+      catBgColor: colors.point2Light,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.item.isExpanded) {
+    const { item } = nextProps;
+
+    if (!item) {
+      return;
+    }
+
+    if (item.isExpanded) {
       this.setState(() => ({
         layoutHeight: null,
       }));
@@ -60,26 +86,52 @@ export default class ExpandableItem extends React.Component {
         layoutHeight: 0,
       }));
     }
+
+    if (item.isChecked) {
+      this.setState({ catBgColor: colors.pointLight });
+    } else {
+      this.setState({ catBgColor: colors.point2Light });
+    }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { layoutHeight } = this.state;
+  shouldComponentUpdate(nextProps) {
+    const { item } = nextProps;
 
-    if (layoutHeight !== nextState.layoutHeight) {
+    if (item.willUpdate) {
+      console.log('=== 리스트 업데이트 ===');
+      item.willUpdate = false;
       return true;
     }
     return false;
   }
 
   render() {
-    const { onClickFunction, item, completeSel } = this.props;
-    const { layoutHeight } = this.state;
+    const {
+      onClickFunction,
+      onCatCheck,
+      item,
+      completeSel,
+      selectSubCate,
+      multiSelect,
+    } = this.props;
+    const { layoutHeight, catBgColor } = this.state;
     return (
       <Container>
         {/* Header of the Expandable List Item */}
-        <TouchableOpacity activeOpacity={0.8} onPress={onClickFunction} style={styles.header}>
-          <Text style={styles.headerText}>{item.category_name}</Text>
-        </TouchableOpacity>
+        <CateWrap bgColor={catBgColor}>
+          <CateTO activeOpacity={0.8} onPress={onClickFunction}>
+            <Text style={styles.headerText}>{item.category_name}</Text>
+          </CateTO>
+          {multiSelect && (
+            <CheckBox
+              iconRight
+              checked={item.isChecked}
+              size={40}
+              containerStyle={{ margin: 0, padding: 0 }}
+              onPress={onCatCheck}
+            />
+          )}
+        </CateWrap>
         <View
           style={{
             height: layoutHeight,
@@ -88,14 +140,10 @@ export default class ExpandableItem extends React.Component {
         >
           {/* Content under the header of the Expandable List Item */}
           {item.subcategory.map((local, key) => (
-            <TouchableOpacity
-              key={key}
-              style={styles.content}
-              onPress={() => completeSel(item.category_name, local.val)}
-            >
+            <SubCatTO key={key} checked={local.isChecked} onPress={() => selectSubCate(key)}>
               <Text style={styles.text}>{local.val}</Text>
               <View style={styles.separator} />
-            </TouchableOpacity>
+            </SubCatTO>
           ))}
         </View>
       </Container>

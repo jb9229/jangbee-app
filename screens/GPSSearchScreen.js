@@ -527,7 +527,6 @@ export default class GPSSearchScreen extends React.Component {
           closeModal={() => this.setState({ isVisibleLocalModal: false })}
           completeSelLocal={(sido, gungu) => this.setState({ searSido: sido, searGungu: gungu })}
           nextFocus={() => {}}
-          selEquipment={searEquipment}
         />
         <View style={styles.adWrap}>
           <JangbeeAdList

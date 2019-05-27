@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   LayoutAnimation,
   ScrollView,
   Modal,
@@ -11,8 +12,11 @@ import {
 import colors from '../constants/Colors';
 import JBIcon from './molecules/JBIcon';
 import JangbeeAdList from './JangbeeAdList';
-import JBErroMessage from './organisms/JBErrorMessage';
 import ExpandableItem from './organisms/ExpandableItem';
+import JBButton from './molecules/JBButton';
+
+const SIGUNGU_MAX_COUNT = 5;
+const SIDO_MAX_COUNT = 3;
 
 const styles = StyleSheet.create({
   container: {},
@@ -38,8 +42,9 @@ export default class EquipementModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      validationMessage: '',
       listDataSource: ADD_CONTENT,
+      selSidoArr: [],
+      selSigunguArr: [],
     };
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -55,28 +60,24 @@ export default class EquipementModal extends React.Component {
         const localData = data;
         localData.isExpanded = false;
       });
+
+      this.setState({ selSidoArr: [], selSigunguArr: [] });
     }
   }
 
-  completeSelLocal = (sido, gugun) => {
+  completeSelLocal = (item, gugun) => {
     const { completeSelLocal, closeModal } = this.props;
 
-    if (!this.validateSelLocal(sido, gugun)) {
-      return;
-    }
-
-    completeSelLocal(sido, gugun);
+    completeSelLocal(item.category_name, gugun);
     closeModal();
   };
 
   /**
    * 지역선택 유효성검사 함수
    */
-  validateSelLocal = (sido, gugun) => {
-    this.setState({ validationMessage: '' });
-
-    if (sido === '-' || gugun === '-') {
-      this.setState({ validationMessage: '검색할 지역을 선택해 주세요' });
+  validateSelLocal = (item) => {
+    if (item.isChecked) {
+      Alert.alert('시군구를 선택할 수 없습니다', '시도 전체선택을 해제 후, 시군구을 선택해 주세요.');
       return false;
     }
 
@@ -95,14 +96,107 @@ export default class EquipementModal extends React.Component {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...listDataSource];
     array[index].isExpanded = !array[index].isExpanded;
+    array[index].willUpdate = true;
+
     this.setState(() => ({
       listDataSource: array,
     }));
   };
 
+  updateCheck = (index) => {
+    const { listDataSource, selSidoArr } = this.state;
+
+    const array = [...listDataSource];
+    const isChecked = !array[index].isChecked;
+
+    if (isChecked && selSidoArr.length === SIDO_MAX_COUNT) {
+      Alert.alert('시도를 선택할 수 없습니다', `최대 ${SIDO_MAX_COUNT}까지 선택 가능합니다.`);
+      return;
+    }
+
+    array[index].isChecked = isChecked;
+    array[index].willUpdate = true;
+
+    const catName = array[index].category_name;
+    let newSidoArr;
+    if (isChecked) {
+      newSidoArr = [...selSidoArr];
+      newSidoArr.push(catName);
+    } else {
+      newSidoArr = selSidoArr.filter(returnableObjects => returnableObjects !== catName);
+    }
+
+    this.setState(() => ({
+      listDataSource: array,
+      selSidoArr: newSidoArr,
+    }));
+  };
+
+  updateItemCheck = (catIndex, itemIndex) => {
+    const { listDataSource, selSigunguArr } = this.state;
+
+    const nextCheck = !listDataSource[catIndex].subcategory[itemIndex].isChecked;
+    if (nextCheck && selSigunguArr.length === SIGUNGU_MAX_COUNT) {
+      Alert.alert('시군구를 선택할 수 없습니다', `최대 ${SIGUNGU_MAX_COUNT}까지 선택 가능합니다.`);
+      return;
+    }
+
+    const array = [...listDataSource];
+    array[catIndex].subcategory[itemIndex].isChecked = nextCheck;
+    array[catIndex].willUpdate = true;
+
+    const sigunguName = `${array[catIndex].category_name} ${array[catIndex].subcategory[itemIndex].val}`;
+    let newSigunguArr;
+    if (nextCheck) {
+      newSigunguArr = [...selSigunguArr];
+      newSigunguArr.push(sigunguName);
+    } else {
+      newSigunguArr = selSigunguArr.filter((returnableObjects) => {
+        return returnableObjects !== sigunguName;
+      });
+    }
+
+    this.setState(() => ({
+      listDataSource: array,
+      selSigunguArr: newSigunguArr,
+    }));
+  };
+
+  selectSubCate = (group, catIndex, itemIndex) => {
+    const { multiSelect } = this.props;
+
+    if (!this.validateSelLocal(group)) {
+      return;
+    }
+
+    if (multiSelect) {
+      this.updateItemCheck(catIndex, itemIndex);
+    } else {
+      this.completeSelLocal(group, group.subcategory[itemIndex].val);
+    }
+  };
+
+  multiSelComplete = () => {
+    const { selSidoArr, selSigunguArr } = this.state;
+    const { multiSelComplte, closeModal } = this.props;
+
+    if (selSidoArr.length === 0 && selSigunguArr === 0) {
+      closeModal();
+      return;
+    }
+
+    let sidoArrStr = '';
+    let sigunguArrStr = '';
+    selSidoArr.forEach((sido) => { sidoArrStr += `${sido},` });
+    selSigunguArr.forEach((sigungu) => { sigunguArrStr += `${sigungu},` });
+
+    multiSelComplte(sidoArrStr, sigunguArrStr);
+    closeModal();
+  }
+
   render() {
-    const { isVisibleModal, selEquipment, closeModal } = this.props;
-    const { listDataSource, validationMessage } = this.state;
+    const { isVisibleModal, closeModal, multiSelect, actionName } = this.props;
+    const { listDataSource } = this.state;
 
     return (
       <View style={styles.container}>
@@ -115,18 +209,21 @@ export default class EquipementModal extends React.Component {
           <View style={styles.cardWrap}>
             <View style={styles.card}>
               <JBIcon name="close" size={23} onPress={() => this.cancel()} />
-              <JangbeeAdList admob {...this.props} />
-              <JBErroMessage errorMSG={validationMessage} />
+              {!actionName && (<JangbeeAdList admob {...this.props} />)}
               <ScrollView>
-                {listDataSource.map((item, key) => (
+                {listDataSource.map((group, key) => (
                   <ExpandableItem
-                    key={item.category_name}
+                    key={group.category_name}
                     onClickFunction={() => this.updateLayout(key)}
-                    item={item}
+                    onCatCheck={() => this.updateCheck(key)}
+                    item={group}
                     completeSel={this.completeSelLocal}
+                    selectSubCate={itemIndex => this.selectSubCate(group, key, itemIndex)}
+                    multiSelect={multiSelect}
                   />
                 ))}
               </ScrollView>
+              {actionName && (<JBButton title={actionName} onPress={this.multiSelComplete} size="full" Secondary />)}
             </View>
           </View>
         </Modal>
@@ -138,362 +235,394 @@ export default class EquipementModal extends React.Component {
 const ADD_CONTENT = [
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '서울',
     subcategory: [
-      { id: 1, val: '강남구' },
-      { id: 2, val: '강동구' },
-      { id: 3, val: '강북구' },
-      { id: 4, val: '강서구' },
-      { id: 5, val: '관악구' },
-      { id: 6, val: '광진구' },
-      { id: 7, val: '구로구' },
-      { id: 8, val: '금천구' },
-      { id: 9, val: '노원구' },
-      { id: 10, val: '도봉구' },
-      { id: 11, val: '동대문구' },
-      { id: 12, val: '동작구' },
-      { id: 13, val: '마포구' },
-      { id: 14, val: '서대문구' },
-      { id: 15, val: '서초구' },
-      { id: 16, val: '성동구' },
-      { id: 17, val: '성북구' },
-      { id: 18, val: '송파구' },
-      { id: 19, val: '양천구' },
-      { id: 20, val: '영등포구' },
-      { id: 21, val: '용산구' },
-      { id: 22, val: '은평구' },
-      { id: 23, val: '종로구' },
-      { id: 24, val: '중구' },
-      { id: 25, val: '중랑구' },
+      { isChecked: false, val: '강남구' },
+      { isChecked: false, val: '강동구' },
+      { isChecked: false, val: '강북구' },
+      { isChecked: false, val: '강서구' },
+      { isChecked: false, val: '관악구' },
+      { isChecked: false, val: '광진구' },
+      { isChecked: false, val: '구로구' },
+      { isChecked: false, val: '금천구' },
+      { isChecked: false, val: '노원구' },
+      { isChecked: false, val: '도봉구' },
+      { isChecked: false, val: '동대문구' },
+      { isChecked: false, val: '동작구' },
+      { isChecked: false, val: '마포구' },
+      { isChecked: false, val: '서대문구' },
+      { isChecked: false, val: '서초구' },
+      { isChecked: false, val: '성동구' },
+      { isChecked: false, val: '성북구' },
+      { isChecked: false, val: '송파구' },
+      { isChecked: false, val: '양천구' },
+      { isChecked: false, val: '영등포구' },
+      { isChecked: false, val: '용산구' },
+      { isChecked: false, val: '은평구' },
+      { isChecked: false, val: '종로구' },
+      { isChecked: false, val: '중구' },
+      { isChecked: false, val: '중랑구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '부산',
     subcategory: [
-      { id: 40, val: '강서구' },
-      { id: 41, val: '금정구' },
-      { id: 42, val: '기장구' },
-      { id: 43, val: '남구' },
-      { id: 44, val: '동구' },
-      { id: 45, val: '동래구' },
-      { id: 46, val: '부산진구' },
-      { id: 47, val: '북구' },
-      { id: 48, val: '사상구' },
-      { id: 49, val: '서구' },
-      { id: 50, val: '수영구' },
-      { id: 51, val: '연제구' },
-      { id: 52, val: '영도구' },
-      { id: 53, val: '중구' },
-      { id: 54, val: '해운대구' },
+      { isChecked: false, val: '강서구' },
+      { isChecked: false, val: '금정구' },
+      { isChecked: false, val: '기장구' },
+      { isChecked: false, val: '남구' },
+      { isChecked: false, val: '동구' },
+      { isChecked: false, val: '동래구' },
+      { isChecked: false, val: '부산진구' },
+      { isChecked: false, val: '북구' },
+      { isChecked: false, val: '사상구' },
+      { isChecked: false, val: '서구' },
+      { isChecked: false, val: '수영구' },
+      { isChecked: false, val: '연제구' },
+      { isChecked: false, val: '영도구' },
+      { isChecked: false, val: '중구' },
+      { isChecked: false, val: '해운대구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '경기',
     subcategory: [
-      { id: 60, val: '가평군' },
-      { id: 61, val: '고양시 덕양구' },
-      { id: 62, val: '고양시 일산 동구' },
-      { id: 63, val: '고양시 일산 서구' },
-      { id: 64, val: '과천시' },
-      { id: 65, val: '광명시' },
-      { id: 66, val: '광주구' },
-      { id: 67, val: '구리시' },
-      { id: 68, val: '군포시' },
-      { id: 69, val: '김포시' },
-      { id: 70, val: '남양주시' },
-      { id: 71, val: '동두천시' },
-      { id: 72, val: '부천시' },
-      { id: 73, val: '성남시 분당구' },
-      { id: 74, val: '성남시 수정구' },
-      { id: 75, val: '성남시 중원구' },
-      { id: 76, val: '수원시 권선구' },
-      { id: 77, val: '수원시 영통구' },
-      { id: 78, val: '수원시 장안구' },
-      { id: 79, val: '수원시 팔달구' },
-      { id: 80, val: '시흥시' },
-      { id: 81, val: '안산시 단원구' },
-      { id: 82, val: '안산시 상록구' },
-      { id: 83, val: '안성시' },
-      { id: 84, val: '안양시 동안구' },
-      { id: 85, val: '안양시 만안구' },
-      { id: 86, val: '양주시' },
-      { id: 87, val: '양평군' },
-      { id: 88, val: '여주시' },
-      { id: 89, val: '연천군' },
-      { id: 90, val: '오산시' },
-      { id: 91, val: '용인시 기흥구' },
-      { id: 92, val: '용인시 수지구' },
-      { id: 93, val: '용인시 처인구' },
-      { id: 94, val: '의왕시' },
-      { id: 95, val: '의정부시' },
-      { id: 96, val: '이천시' },
-      { id: 96, val: '파주시' },
-      { id: 96, val: '평택시' },
-      { id: 96, val: '포천시' },
-      { id: 100, val: '하남시' },
-      { id: 101, val: '화성시' },
+      { isChecked: false, val: '가평군' },
+      { isChecked: false, val: '고양시 덕양구' },
+      { isChecked: false, val: '고양시 일산 동구' },
+      { isChecked: false, val: '고양시 일산 서구' },
+      { isChecked: false, val: '과천시' },
+      { isChecked: false, val: '광명시' },
+      { isChecked: false, val: '광주구' },
+      { isChecked: false, val: '구리시' },
+      { isChecked: false, val: '군포시' },
+      { isChecked: false, val: '김포시' },
+      { isChecked: false, val: '남양주시' },
+      { isChecked: false, val: '동두천시' },
+      { isChecked: false, val: '부천시' },
+      { isChecked: false, val: '성남시 분당구' },
+      { isChecked: false, val: '성남시 수정구' },
+      { isChecked: false, val: '성남시 중원구' },
+      { isChecked: false, val: '수원시 권선구' },
+      { isChecked: false, val: '수원시 영통구' },
+      { isChecked: false, val: '수원시 장안구' },
+      { isChecked: false, val: '수원시 팔달구' },
+      { isChecked: false, val: '시흥시' },
+      { isChecked: false, val: '안산시 단원구' },
+      { isChecked: false, val: '안산시 상록구' },
+      { isChecked: false, val: '안성시' },
+      { isChecked: false, val: '안양시 동안구' },
+      { isChecked: false, val: '안양시 만안구' },
+      { isChecked: false, val: '양주시' },
+      { isChecked: false, val: '양평군' },
+      { isChecked: false, val: '여주시' },
+      { isChecked: false, val: '연천군' },
+      { isChecked: false, val: '오산시' },
+      { isChecked: false, val: '용인시 기흥구' },
+      { isChecked: false, val: '용인시 수지구' },
+      { isChecked: false, val: '용인시 처인구' },
+      { isChecked: false, val: '의왕시' },
+      { isChecked: false, val: '의정부시' },
+      { isChecked: false, val: '이천시' },
+      { isChecked: false, val: '파주시' },
+      { isChecked: false, val: '평택시' },
+      { isChecked: false, val: '포천시' },
+      { isChecked: false, val: '하남시' },
+      { isChecked: false, val: '화성시' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '인천',
     subcategory: [
-      { id: 110, val: '강화군' },
-      { id: 111, val: '계양군' },
-      { id: 112, val: '남동구' },
-      { id: 113, val: '동구' },
-      { id: 114, val: '미추홀구' },
-      { id: 115, val: '부평구' },
-      { id: 116, val: '서구' },
-      { id: 117, val: '연수구' },
-      { id: 118, val: '옹진군' },
-      { id: 119, val: '중구' },
+      { isChecked: false, val: '강화군' },
+      { isChecked: false, val: '계양군' },
+      { isChecked: false, val: '남동구' },
+      { isChecked: false, val: '동구' },
+      { isChecked: false, val: '미추홀구' },
+      { isChecked: false, val: '부평구' },
+      { isChecked: false, val: '서구' },
+      { isChecked: false, val: '연수구' },
+      { isChecked: false, val: '옹진군' },
+      { isChecked: false, val: '중구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '강원',
     subcategory: [
-      { id: 120, val: '강릉시' },
-      { id: 121, val: '고성군' },
-      { id: 122, val: '동해시' },
-      { id: 123, val: '삼척시' },
-      { id: 124, val: '속초시' },
-      { id: 125, val: '양구군' },
-      { id: 126, val: '양양군' },
-      { id: 127, val: '영월군' },
-      { id: 128, val: '원주시' },
-      { id: 129, val: '인제군' },
-      { id: 130, val: '정선군' },
-      { id: 131, val: '철원군' },
-      { id: 132, val: '춘천시' },
-      { id: 133, val: '태백시' },
-      { id: 134, val: '평창군' },
-      { id: 135, val: '홍천군' },
-      { id: 136, val: '화천군' },
-      { id: 137, val: '횡성군' },
+      { isChecked: false, val: '강릉시' },
+      { isChecked: false, val: '고성군' },
+      { isChecked: false, val: '동해시' },
+      { isChecked: false, val: '삼척시' },
+      { isChecked: false, val: '속초시' },
+      { isChecked: false, val: '양구군' },
+      { isChecked: false, val: '양양군' },
+      { isChecked: false, val: '영월군' },
+      { isChecked: false, val: '원주시' },
+      { isChecked: false, val: '인제군' },
+      { isChecked: false, val: '정선군' },
+      { isChecked: false, val: '철원군' },
+      { isChecked: false, val: '춘천시' },
+      { isChecked: false, val: '태백시' },
+      { isChecked: false, val: '평창군' },
+      { isChecked: false, val: '홍천군' },
+      { isChecked: false, val: '화천군' },
+      { isChecked: false, val: '횡성군' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '대전',
     subcategory: [
-      { id: 140, val: '대덕구' },
-      { id: 141, val: '동구' },
-      { id: 142, val: '서구' },
-      { id: 143, val: '유성구' },
-      { id: 144, val: '중구' },
+      { isChecked: false, val: '대덕구' },
+      { isChecked: false, val: '동구' },
+      { isChecked: false, val: '서구' },
+      { isChecked: false, val: '유성구' },
+      { isChecked: false, val: '중구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '세종특별자치시',
     subcategory: [
-      { id: 30, val: '가람동' },
-      { id: 31, val: '고운동' },
-      { id: 32, val: '금남면' },
-      { id: 33, val: '나성동' },
-      { id: 34, val: '다정동' },
-      { id: 34, val: '대평동' },
-      { id: 34, val: '도담동' },
-      { id: 34, val: '반곡동' },
-      { id: 34, val: '보람동' },
-      { id: 34, val: '부강면' },
-      { id: 300, val: '새롬동' },
-      { id: 301, val: '소담동' },
-      { id: 302, val: '소정면' },
-      { id: 303, val: '아름동' },
-      { id: 304, val: '어진동' },
-      { id: 305, val: '연기면' },
-      { id: 306, val: '연동면' },
-      { id: 307, val: '연서면' },
-      { id: 308, val: '장군면' },
-      { id: 309, val: '전동면' },
-      { id: 310, val: '전의면' },
-      { id: 311, val: '조치원읍' },
-      { id: 312, val: '종촌동' },
-      { id: 313, val: '한솔동' },
+      { isChecked: false, val: '가람동' },
+      { isChecked: false, val: '고운동' },
+      { isChecked: false, val: '금남면' },
+      { isChecked: false, val: '나성동' },
+      { isChecked: false, val: '다정동' },
+      { isChecked: false, val: '대평동' },
+      { isChecked: false, val: '도담동' },
+      { isChecked: false, val: '반곡동' },
+      { isChecked: false, val: '보람동' },
+      { isChecked: false, val: '부강면' },
+      { isChecked: false, val: '새롬동' },
+      { isChecked: false, val: '소담동' },
+      { isChecked: false, val: '소정면' },
+      { isChecked: false, val: '아름동' },
+      { isChecked: false, val: '어진동' },
+      { isChecked: false, val: '연기면' },
+      { isChecked: false, val: '연동면' },
+      { isChecked: false, val: '연서면' },
+      { isChecked: false, val: '장군면' },
+      { isChecked: false, val: '전동면' },
+      { isChecked: false, val: '전의면' },
+      { isChecked: false, val: '조치원읍' },
+      { isChecked: false, val: '종촌동' },
+      { isChecked: false, val: '한솔동' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '충북',
     subcategory: [
-      { id: 150, val: '괴산군' },
-      { id: 151, val: '단양군' },
-      { id: 152, val: '보은군' },
-      { id: 153, val: '영동군' },
-      { id: 154, val: '옥천군' },
-      { id: 155, val: '음성군' },
-      { id: 156, val: '제천군' },
-      { id: 157, val: '증평군' },
-      { id: 158, val: '진천군' },
-      { id: 159, val: '청주시 상당구' },
-      { id: 160, val: '청주시 서원구' },
-      { id: 161, val: '청주시 청원구' },
-      { id: 162, val: '청주시 흥덕구' },
-      { id: 163, val: '충주시' },
+      { isChecked: false, val: '괴산군' },
+      { isChecked: false, val: '단양군' },
+      { isChecked: false, val: '보은군' },
+      { isChecked: false, val: '영동군' },
+      { isChecked: false, val: '옥천군' },
+      { isChecked: false, val: '음성군' },
+      { isChecked: false, val: '제천군' },
+      { isChecked: false, val: '증평군' },
+      { isChecked: false, val: '진천군' },
+      { isChecked: false, val: '청주시 상당구' },
+      { isChecked: false, val: '청주시 서원구' },
+      { isChecked: false, val: '청주시 청원구' },
+      { isChecked: false, val: '청주시 흥덕구' },
+      { isChecked: false, val: '충주시' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '충남',
     subcategory: [
-      { id: 170, val: '계룡시' },
-      { id: 171, val: '공주시' },
-      { id: 172, val: '금산군' },
-      { id: 173, val: '논산시' },
-      { id: 174, val: '당진시' },
-      { id: 175, val: '보령시' },
-      { id: 176, val: '부여군' },
-      { id: 177, val: '서산시' },
-      { id: 178, val: '서천군' },
-      { id: 179, val: '아산시' },
-      { id: 180, val: '예산군' },
-      { id: 181, val: '천안시 동남구' },
-      { id: 182, val: '천안시 서북구' },
-      { id: 183, val: '청양군' },
-      { id: 184, val: '태안군' },
-      { id: 185, val: '홍성군' },
+      { isChecked: false, val: '계룡시' },
+      { isChecked: false, val: '공주시' },
+      { isChecked: false, val: '금산군' },
+      { isChecked: false, val: '논산시' },
+      { isChecked: false, val: '당진시' },
+      { isChecked: false, val: '보령시' },
+      { isChecked: false, val: '부여군' },
+      { isChecked: false, val: '서산시' },
+      { isChecked: false, val: '서천군' },
+      { isChecked: false, val: '아산시' },
+      { isChecked: false, val: '예산군' },
+      { isChecked: false, val: '천안시 동남구' },
+      { isChecked: false, val: '천안시 서북구' },
+      { isChecked: false, val: '청양군' },
+      { isChecked: false, val: '태안군' },
+      { isChecked: false, val: '홍성군' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '광주',
     subcategory: [
-      { id: 130, val: '광산구' },
-      { id: 131, val: '남구' },
-      { id: 132, val: '동구' },
-      { id: 133, val: '북구' },
-      { id: 134, val: '서구' },
+      { isChecked: false, val: '광산구' },
+      { isChecked: false, val: '남구' },
+      { isChecked: false, val: '동구' },
+      { isChecked: false, val: '북구' },
+      { isChecked: false, val: '서구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '전북',
     subcategory: [
-      { id: 140, val: '고창군' },
-      { id: 141, val: '군산시' },
-      { id: 142, val: '김제시' },
-      { id: 143, val: '남원시' },
-      { id: 144, val: '무주군' },
-      { id: 145, val: '부안군' },
-      { id: 146, val: '순창군' },
-      { id: 147, val: '완주군' },
-      { id: 148, val: '익산시' },
-      { id: 149, val: '임실군' },
-      { id: 150, val: '장수군' },
-      { id: 151, val: '전주시 덕진구' },
-      { id: 152, val: '전주시 완산구' },
-      { id: 153, val: '정읍시' },
-      { id: 154, val: '진안군' },
+      { isChecked: false, val: '고창군' },
+      { isChecked: false, val: '군산시' },
+      { isChecked: false, val: '김제시' },
+      { isChecked: false, val: '남원시' },
+      { isChecked: false, val: '무주군' },
+      { isChecked: false, val: '부안군' },
+      { isChecked: false, val: '순창군' },
+      { isChecked: false, val: '완주군' },
+      { isChecked: false, val: '익산시' },
+      { isChecked: false, val: '임실군' },
+      { isChecked: false, val: '장수군' },
+      { isChecked: false, val: '전주시 덕진구' },
+      { isChecked: false, val: '전주시 완산구' },
+      { isChecked: false, val: '정읍시' },
+      { isChecked: false, val: '진안군' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '전남',
     subcategory: [
-      { id: 150, val: '강진군' },
-      { id: 151, val: '고흥군' },
-      { id: 152, val: '곡성군' },
-      { id: 153, val: '광양시' },
-      { id: 154, val: '구례군' },
-      { id: 155, val: '나주시' },
-      { id: 156, val: '담양군' },
-      { id: 157, val: '목포시' },
-      { id: 158, val: '무안군' },
-      { id: 159, val: '보성군' },
-      { id: 160, val: '순천시' },
-      { id: 161, val: '신안군' },
-      { id: 162, val: '여수시' },
-      { id: 163, val: '영광군' },
-      { id: 164, val: '영암군' },
-      { id: 165, val: '완도군' },
-      { id: 166, val: '장성군' },
-      { id: 167, val: '장흥군' },
-      { id: 168, val: '진도군' },
-      { id: 169, val: '함평군' },
-      { id: 170, val: '해남군' },
-      { id: 171, val: '화순군' },
+      { isChecked: false, val: '강진군' },
+      { isChecked: false, val: '고흥군' },
+      { isChecked: false, val: '곡성군' },
+      { isChecked: false, val: '광양시' },
+      { isChecked: false, val: '구례군' },
+      { isChecked: false, val: '나주시' },
+      { isChecked: false, val: '담양군' },
+      { isChecked: false, val: '목포시' },
+      { isChecked: false, val: '무안군' },
+      { isChecked: false, val: '보성군' },
+      { isChecked: false, val: '순천시' },
+      { isChecked: false, val: '신안군' },
+      { isChecked: false, val: '여수시' },
+      { isChecked: false, val: '영광군' },
+      { isChecked: false, val: '영암군' },
+      { isChecked: false, val: '완도군' },
+      { isChecked: false, val: '장성군' },
+      { isChecked: false, val: '장흥군' },
+      { isChecked: false, val: '진도군' },
+      { isChecked: false, val: '함평군' },
+      { isChecked: false, val: '해남군' },
+      { isChecked: false, val: '화순군' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '대구',
     subcategory: [
-      { id: 160, val: '남구' },
-      { id: 161, val: '달서구' },
-      { id: 162, val: '달성군' },
-      { id: 163, val: '동구' },
-      { id: 164, val: '북구' },
-      { id: 165, val: '서구' },
-      { id: 166, val: '수성구' },
-      { id: 167, val: '중구' },
+      { isChecked: false, val: '남구' },
+      { isChecked: false, val: '달서구' },
+      { isChecked: false, val: '달성군' },
+      { isChecked: false, val: '동구' },
+      { isChecked: false, val: '북구' },
+      { isChecked: false, val: '서구' },
+      { isChecked: false, val: '수성구' },
+      { isChecked: false, val: '중구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '경북',
     subcategory: [
-      { id: 170, val: '경산시' },
-      { id: 171, val: '경주시' },
-      { id: 172, val: '고령군' },
-      { id: 173, val: '구미시' },
-      { id: 174, val: '군위군' },
-      { id: 175, val: '김천시' },
-      { id: 176, val: '문경시' },
-      { id: 177, val: '봉화군' },
-      { id: 178, val: '상주시' },
-      { id: 179, val: '성주군' },
-      { id: 180, val: '안동시' },
-      { id: 181, val: '영덕군' },
-      { id: 182, val: '영양군' },
-      { id: 183, val: '영주시' },
-      { id: 184, val: '영천시' },
-      { id: 185, val: '예천군' },
-      { id: 186, val: '울릉군' },
-      { id: 187, val: '울진군' },
-      { id: 188, val: '의성군' },
-      { id: 189, val: '청도군' },
-      { id: 190, val: '청송군' },
-      { id: 191, val: '칠곡군' },
-      { id: 192, val: '포항시 남구' },
-      { id: 193, val: '포항시 북구' },
+      { isChecked: false, val: '경산시' },
+      { isChecked: false, val: '경주시' },
+      { isChecked: false, val: '고령군' },
+      { isChecked: false, val: '구미시' },
+      { isChecked: false, val: '군위군' },
+      { isChecked: false, val: '김천시' },
+      { isChecked: false, val: '문경시' },
+      { isChecked: false, val: '봉화군' },
+      { isChecked: false, val: '상주시' },
+      { isChecked: false, val: '성주군' },
+      { isChecked: false, val: '안동시' },
+      { isChecked: false, val: '영덕군' },
+      { isChecked: false, val: '영양군' },
+      { isChecked: false, val: '영주시' },
+      { isChecked: false, val: '영천시' },
+      { isChecked: false, val: '예천군' },
+      { isChecked: false, val: '울릉군' },
+      { isChecked: false, val: '울진군' },
+      { isChecked: false, val: '의성군' },
+      { isChecked: false, val: '청도군' },
+      { isChecked: false, val: '청송군' },
+      { isChecked: false, val: '칠곡군' },
+      { isChecked: false, val: '포항시 남구' },
+      { isChecked: false, val: '포항시 북구' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '경남',
     subcategory: [
-      { id: 180, val: '거제시' },
-      { id: 181, val: '거창군' },
-      { id: 181, val: '고성군' },
-      { id: 181, val: '김해시' },
-      { id: 181, val: '남해군' },
-      { id: 181, val: '밀양시' },
-      { id: 181, val: '사천시' },
-      { id: 181, val: '산청군' },
-      { id: 181, val: '양산시' },
-      { id: 181, val: '의령군' },
-      { id: 190, val: '진주시' },
-      { id: 191, val: '창녕군' },
-      { id: 192, val: '창원시 마산합포구' },
-      { id: 193, val: '창원시 마산회원구' },
-      { id: 194, val: '창원시 성산구' },
-      { id: 195, val: '창원시 의창구' },
-      { id: 196, val: '창원시 진해구' },
-      { id: 197, val: '통영시' },
-      { id: 198, val: '하동군' },
-      { id: 199, val: '함안군' },
-      { id: 200, val: '함양군' },
-      { id: 200, val: '합천군' },
+      { isChecked: false, val: '거제시' },
+      { isChecked: false, val: '거창군' },
+      { isChecked: false, val: '고성군' },
+      { isChecked: false, val: '김해시' },
+      { isChecked: false, val: '남해군' },
+      { isChecked: false, val: '밀양시' },
+      { isChecked: false, val: '사천시' },
+      { isChecked: false, val: '산청군' },
+      { isChecked: false, val: '양산시' },
+      { isChecked: false, val: '의령군' },
+      { isChecked: false, val: '진주시' },
+      { isChecked: false, val: '창녕군' },
+      { isChecked: false, val: '창원시 마산합포구' },
+      { isChecked: false, val: '창원시 마산회원구' },
+      { isChecked: false, val: '창원시 성산구' },
+      { isChecked: false, val: '창원시 의창구' },
+      { isChecked: false, val: '창원시 진해구' },
+      { isChecked: false, val: '통영시' },
+      { isChecked: false, val: '하동군' },
+      { isChecked: false, val: '함안군' },
+      { isChecked: false, val: '함양군' },
+      { isChecked: false, val: '합천군' },
     ],
   },
   {
     isExpanded: false,
+    willUpdate: false,
+    isChecked: false,
     category_name: '제주특별자치도',
-    subcategory: [{ id: 190, val: '서귀포시' }, { id: 191, val: '제주시' }],
+    subcategory: [{ isChecked: false, val: '서귀포시' }, { isChecked: false, val: '제주시' }],
   },
 ];
