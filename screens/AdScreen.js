@@ -262,9 +262,9 @@ class AdScreen extends React.Component {
             <Text style={styles.emptyText}>+</Text>
             <Text style={styles.emptyText}>등록된 광고가 없습니다.</Text>
             <Text style={styles.emptyText}>
-              언제든 광고문구수정 가능, 저렴한 가격(월 1만원부터)
+              언제든 광고문구 수정가능, 저렴한 가격(월 1만원부터)
             </Text>
-            <Text style={styles.emptyText}>한정된 광고자리, 나중엔 하고싶어도 못합니다.</Text>
+            <Text style={styles.emptyText}>한정된 광고자리라, 나중엔 하고싶어도 못합니다.</Text>
             <Text style={styles.emptyText}>전봇대 스티커 붙이는 것보다 훨~씬 효과적 입니다.</Text>
           </View>
           <JBButton title="내장비 홍보하기" onPress={() => navigation.navigate('AdCreate')} />

@@ -186,7 +186,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       homepage,
       sns,
     };
-console.log(updateFirm);
+
     api
       .updateFirm(updateFirm)
       .then(() => {
@@ -264,7 +264,6 @@ console.log(updateFirm);
     this.setState({
       fnameValErrMessage: '',
       phoneNumberValErrMessage: '',
-      // passwordValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
       thumbnailValErrMessage: '',
@@ -394,12 +393,6 @@ console.log(updateFirm);
     v = validate('textMax', workAlarmSigungu, false, 300);
     if (!v[0]) {
       this.setState({ workAlarmValErrMessage: v[1] });
-      return false;
-    }
-
-    v = validate('textMax', introduction, false, 100);
-    if (!v[0]) {
-      this.setState({ introductionValErrMessage: v[1] });
       return false;
     }
 
@@ -707,7 +700,7 @@ console.log(updateFirm);
           multiSelComplte={(sidoArrStr, sigunguArrStr) => this.setState({ workAlarmSido: sidoArrStr, workAlarmSigungu: sigunguArrStr })}
           nextFocus={() => {}}
           multiSelect
-          actionName="일감알람 선택완료"
+          actionName="일감알람 지역선택 완료"
         />
       </View>
     );

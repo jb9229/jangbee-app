@@ -12,7 +12,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingRight: 2,
+  },
+  contentsWrap: {
+    marginLeft: 12,
+    marginRight: 12,
   },
   likeWrap: {
     flexDirection: 'row',
@@ -68,15 +71,17 @@ export default function CliEvaluItem({
           </View>
         </View>
       </View>
-      <JBTextItem
-        title="전화번호"
-        value={`${formatTelnumber(item.telNumber)}, ${formatTelnumber(
-          item.telNumber2,
-        )}, ${formatTelnumber(item.telNumber3)}`}
-        small
-        row
-      />
-      <JBTextItem title="사유" value={item.reason} small />
+      <View style={styles.contentsWrap}>
+        <JBTextItem
+          title="전화번호"
+          value={`${formatTelnumber(item.telNumber)}, ${formatTelnumber(
+            item.telNumber2,
+          )}, ${formatTelnumber(item.telNumber3)}`}
+          small
+          row
+        />
+        <JBTextItem title="사유" value={item.reason} small />
+      </View>
       {accountId === item.accountId && (
         <View style={styles.commWrap}>
           <JBButton

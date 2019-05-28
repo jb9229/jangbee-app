@@ -98,7 +98,6 @@ export default class ExpandableItem extends React.Component {
     const { item } = nextProps;
 
     if (item.willUpdate) {
-      console.log('=== 리스트 업데이트 ===');
       item.willUpdate = false;
       return true;
     }

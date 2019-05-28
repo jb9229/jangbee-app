@@ -59,6 +59,11 @@ export default class EquipementModal extends React.Component {
       listDataSource.forEach((data) => {
         const localData = data;
         localData.isExpanded = false;
+        localData.isChecked = false;
+        data.subcategory.forEach((subData) => {
+          const sigungu = subData;
+          sigungu.isChecked = false;
+        });
       });
 
       this.setState({ selSidoArr: [], selSigunguArr: [] });
@@ -223,8 +228,8 @@ export default class EquipementModal extends React.Component {
                   />
                 ))}
               </ScrollView>
-              {actionName && (<JBButton title={actionName} onPress={this.multiSelComplete} size="full" Secondary />)}
             </View>
+            {actionName && (<JBButton title={actionName} onPress={this.multiSelComplete} size="full" Secondary />)}
           </View>
         </Modal>
       </View>
@@ -296,9 +301,7 @@ const ADD_CONTENT = [
     category_name: '경기',
     subcategory: [
       { isChecked: false, val: '가평군' },
-      { isChecked: false, val: '고양시 덕양구' },
-      { isChecked: false, val: '고양시 일산 동구' },
-      { isChecked: false, val: '고양시 일산 서구' },
+      { isChecked: false, val: '고양시' },
       { isChecked: false, val: '과천시' },
       { isChecked: false, val: '광명시' },
       { isChecked: false, val: '광주구' },
@@ -308,27 +311,18 @@ const ADD_CONTENT = [
       { isChecked: false, val: '남양주시' },
       { isChecked: false, val: '동두천시' },
       { isChecked: false, val: '부천시' },
-      { isChecked: false, val: '성남시 분당구' },
-      { isChecked: false, val: '성남시 수정구' },
-      { isChecked: false, val: '성남시 중원구' },
-      { isChecked: false, val: '수원시 권선구' },
-      { isChecked: false, val: '수원시 영통구' },
-      { isChecked: false, val: '수원시 장안구' },
-      { isChecked: false, val: '수원시 팔달구' },
+      { isChecked: false, val: '성남시' },
+      { isChecked: false, val: '수원시' },
       { isChecked: false, val: '시흥시' },
-      { isChecked: false, val: '안산시 단원구' },
-      { isChecked: false, val: '안산시 상록구' },
+      { isChecked: false, val: '안산시' },
       { isChecked: false, val: '안성시' },
-      { isChecked: false, val: '안양시 동안구' },
-      { isChecked: false, val: '안양시 만안구' },
+      { isChecked: false, val: '안양시' },
       { isChecked: false, val: '양주시' },
       { isChecked: false, val: '양평군' },
       { isChecked: false, val: '여주시' },
       { isChecked: false, val: '연천군' },
       { isChecked: false, val: '오산시' },
-      { isChecked: false, val: '용인시 기흥구' },
-      { isChecked: false, val: '용인시 수지구' },
-      { isChecked: false, val: '용인시 처인구' },
+      { isChecked: false, val: '용인시' },
       { isChecked: false, val: '의왕시' },
       { isChecked: false, val: '의정부시' },
       { isChecked: false, val: '이천시' },
@@ -443,10 +437,7 @@ const ADD_CONTENT = [
       { isChecked: false, val: '제천군' },
       { isChecked: false, val: '증평군' },
       { isChecked: false, val: '진천군' },
-      { isChecked: false, val: '청주시 상당구' },
-      { isChecked: false, val: '청주시 서원구' },
-      { isChecked: false, val: '청주시 청원구' },
-      { isChecked: false, val: '청주시 흥덕구' },
+      { isChecked: false, val: '청주시' },
       { isChecked: false, val: '충주시' },
     ],
   },
@@ -467,8 +458,7 @@ const ADD_CONTENT = [
       { isChecked: false, val: '서천군' },
       { isChecked: false, val: '아산시' },
       { isChecked: false, val: '예산군' },
-      { isChecked: false, val: '천안시 동남구' },
-      { isChecked: false, val: '천안시 서북구' },
+      { isChecked: false, val: '천안시' },
       { isChecked: false, val: '청양군' },
       { isChecked: false, val: '태안군' },
       { isChecked: false, val: '홍성군' },
@@ -504,8 +494,7 @@ const ADD_CONTENT = [
       { isChecked: false, val: '익산시' },
       { isChecked: false, val: '임실군' },
       { isChecked: false, val: '장수군' },
-      { isChecked: false, val: '전주시 덕진구' },
-      { isChecked: false, val: '전주시 완산구' },
+      { isChecked: false, val: '전주시' },
       { isChecked: false, val: '정읍시' },
       { isChecked: false, val: '진안군' },
     ],
@@ -584,8 +573,7 @@ const ADD_CONTENT = [
       { isChecked: false, val: '청도군' },
       { isChecked: false, val: '청송군' },
       { isChecked: false, val: '칠곡군' },
-      { isChecked: false, val: '포항시 남구' },
-      { isChecked: false, val: '포항시 북구' },
+      { isChecked: false, val: '포항시' },
     ],
   },
   {
@@ -606,11 +594,7 @@ const ADD_CONTENT = [
       { isChecked: false, val: '의령군' },
       { isChecked: false, val: '진주시' },
       { isChecked: false, val: '창녕군' },
-      { isChecked: false, val: '창원시 마산합포구' },
-      { isChecked: false, val: '창원시 마산회원구' },
-      { isChecked: false, val: '창원시 성산구' },
-      { isChecked: false, val: '창원시 의창구' },
-      { isChecked: false, val: '창원시 진해구' },
+      { isChecked: false, val: '창원시' },
       { isChecked: false, val: '통영시' },
       { isChecked: false, val: '하동군' },
       { isChecked: false, val: '함안군' },

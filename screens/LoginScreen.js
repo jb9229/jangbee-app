@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import fonts from '../constants/Fonts';
 import { getUserInfo } from '../utils/FirebaseUtils';
 import { validate } from '../utils/Validation';
+import { formatTelnumber } from '../utils/StringUtils';
 import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
@@ -233,6 +234,7 @@ class LoginScreen extends React.PureComponent {
             }}
             placeholder="휴대전화 번호입력(숫자만)"
             editable={!authReadOnly}
+            onEndEditing={() => { const formatPN = formatTelnumber(phoneNumber); this.setState({phoneNumber: formatPN})}}
           />
           <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
           <Text style={authTitleStyle}>인증코드: </Text>

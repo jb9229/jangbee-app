@@ -11,6 +11,7 @@ import JBErrorMessage from '../../components/organisms/JBErrorMessage';
 import EquipementModal from '../../components/EquipmentModal';
 import MapAddWebModal from '../../components/MapAddWebModal';
 import JBActIndicatorModal from '../../components/JBActIndicatorModal';
+import LocalSelModal from '../../components/LocalSelModal';
 import JBButton from '../../components/molecules/JBButton';
 import * as imageManager from '../../common/ImageManager';
 import Card from '../../components/molecules/CardUI';
@@ -46,6 +47,7 @@ class FirmRegisterScreen extends React.Component {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       isVisibleActIndiModal: false,
+      isVisibleLocalModal: false,
       fname: '',
       phoneNumber: '',
       equiListStr: '',
@@ -56,6 +58,8 @@ class FirmRegisterScreen extends React.Component {
       sigunguAddr: '',
       addrLongitude: undefined,
       addrLatitude: undefined,
+      workAlarmSido: '',
+      workAlarmSigungu: '',
       introduction: '',
       thumbnail: '',
       photo1: '',
@@ -101,6 +105,8 @@ class FirmRegisterScreen extends React.Component {
       sigunguAddr,
       addrLongitude,
       addrLatitude,
+      workAlarmSido,
+      workAlarmSigungu,
       introduction,
       thumbnail,
       photo1,
@@ -144,6 +150,8 @@ class FirmRegisterScreen extends React.Component {
       sigunguAddr,
       addrLongitude,
       addrLatitude,
+      workAlarmSido,
+      workAlarmSigungu,
       introduction,
       thumbnail: uploadedThumbnailImgUrl,
       photo1: uploadedPhoto1ImgUrl,
@@ -204,13 +212,13 @@ class FirmRegisterScreen extends React.Component {
     this.setState({
       fnameValErrMessage: '',
       phoneNumberValErrMessage: '',
-      // passwordValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
       thumbnailValErrMessage: '',
       photo1ValErrMessage: '',
       photo2ValErrMessage: '',
       photo3ValErrMessage: '',
+      workAlarmValErrMessage: '',
       introductionValErrMessage: '',
       blogValErrMessage: '',
       homepageValErrMessage: '',
@@ -239,6 +247,8 @@ class FirmRegisterScreen extends React.Component {
       modelYear,
       address,
       addressDetail,
+      workAlarmSido,
+      workAlarmSigungu,
       thumbnail,
       photo1,
       photo2,
@@ -317,6 +327,23 @@ class FirmRegisterScreen extends React.Component {
       return false;
     }
 
+    if (!workAlarmSido && !workAlarmSigungu) {
+      this.setState({ workAlarmValErrMessage: '일감알람을 받을 지역을 선택해 주세요' });
+      return false;
+    }
+
+    v = validate('textMax', workAlarmSido, false, 100);
+    if (!v[0]) {
+      this.setState({ workAlarmValErrMessage: v[1] });
+      return false;
+    }
+
+    v = validate('textMax', workAlarmSigungu, false, 300);
+    if (!v[0]) {
+      this.setState({ workAlarmValErrMessage: v[1] });
+      return false;
+    }
+
     v = validate('textMax', introduction, true, 1000);
     if (!v[0]) {
       this.setState({ introductionValErrMessage: v[1] });
@@ -373,12 +400,15 @@ class FirmRegisterScreen extends React.Component {
       isVisibleEquiModal,
       isVisibleMapAddModal,
       isVisibleActIndiModal,
+      isVisibleLocalModal,
       fname,
       phoneNumber,
       equiListStr,
       modelYear,
       address,
       addressDetail,
+      workAlarmSido,
+      workAlarmSigungu,
       introduction,
       thumbnail,
       photo1,
@@ -392,6 +422,7 @@ class FirmRegisterScreen extends React.Component {
       phoneNumberValErrMessage,
       equiListStrValErrMessage,
       addressValErrMessage,
+      workAlarmValErrMessage,
       introductionValErrMessage,
       thumbnailValErrMessage,
       photo1ValErrMessage,
@@ -479,7 +510,15 @@ class FirmRegisterScreen extends React.Component {
               />
 
               <JBTextInput
-                title="업체 소개"
+                title="일감알람 받을지역"
+                value={`${workAlarmSido}${workAlarmSigungu}`}
+                onFocus={() => this.setState({ isVisibleLocalModal: true })}
+                placeholder="일감알람 받을 지역을 선택해 주세요."
+              />
+              <JBErrorMessage errorMSG={workAlarmValErrMessage} />
+
+              <JBTextInput
+                title="업체 소개*"
                 value={introduction}
                 onChangeText={text => this.setState({ introduction: text })}
                 placeholder="업체 소개를 해 주세요"
@@ -569,6 +608,14 @@ class FirmRegisterScreen extends React.Component {
           isVisibleModal={isVisibleActIndiModal}
           message={imgUploadingMessage}
           size="large"
+        />
+        <LocalSelModal
+          isVisibleModal={isVisibleLocalModal}
+          closeModal={() => this.setState({ isVisibleLocalModal: false })}
+          multiSelComplte={(sidoArrStr, sigunguArrStr) => this.setState({ workAlarmSido: sidoArrStr, workAlarmSigungu: sigunguArrStr })}
+          nextFocus={() => {}}
+          multiSelect
+          actionName="일감알람 지역선택 완료"
         />
       </View>
     );
