@@ -1,9 +1,30 @@
 import React from 'react';
-import {
-  StyleSheet, Text, TextInput, View,
-} from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
+import styled from 'styled-components/native';
 import fonts from '../../constants/Fonts';
 import colors from '../../constants/Colors';
+
+const Title = styled.Text`
+  font-family: ${fonts.titleMiddle};
+  color: ${colors.title};
+  font-size: 15;
+  margin-bottom: 3;
+  ${props => props.fill
+    && `
+    color: ${colors.point2};
+  `}
+`;
+
+const TitleWrap = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SubTitle = styled.Text`
+  font-family: ${fonts.title};
+  color: ${colors.titleDark};
+  font-size: 12;
+`;
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -11,12 +32,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginBottom: 20,
   },
-  itemTitle: {
-    fontFamily: fonts.titleMiddle,
-    color: colors.title,
-    fontSize: 15,
-    marginBottom: 3,
-  },
+  itemTitle: {},
   itemInput: {
     fontFamily: fonts.batang,
     fontSize: 18,
@@ -30,6 +46,7 @@ export default class JBTextInput extends React.PureComponent {
   render() {
     const {
       title,
+      subTitle,
       value,
       placeholder,
       onChangeText,
@@ -42,7 +59,10 @@ export default class JBTextInput extends React.PureComponent {
     } = this.props;
     return (
       <View style={styles.itemWrap}>
-        {title ? <Text style={styles.itemTitle}>{title}</Text> : null}
+        <TitleWrap>
+          {title && <Title fill={!!value}>{title}</Title>}
+          {subTitle && <SubTitle>{subTitle}</SubTitle>}
+        </TitleWrap>
         <TextInput
           ref={tiRefer ? input => tiRefer(input) : null}
           style={styles.itemInput}

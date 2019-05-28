@@ -23,6 +23,7 @@ import JBErrorMessage from '../components/organisms/JBErrorMessage';
 import { validate, validatePresence } from '../utils/Validation';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';
+import JBPicker from '../components/molecules/JBPicker';
 
 const styles = StyleSheet.create({
   Container: {
@@ -42,6 +43,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 50,
   },
+  guaranteeWrap: {
+    marginLeft: 10,
+  },
   guaranteePicker: {
     width: 100,
     height: 50,
@@ -53,6 +57,28 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
 });
+
+const dayPickItems = new Array(30)
+  .fill()
+  .map((_, i) => <Picker.Item key={i} label={`${i + 1}일`} value={`${i + 1}`} />);
+
+dayPickItems.splice(0, 0, <Picker.Item label="오전" value="0.3" />);
+dayPickItems.splice(1, 0, <Picker.Item label="오후" value="0.8" />);
+
+const guarMinPItems = [10, 20, 30, 60, 120, 180, 300, 1440]
+  .map(min => <Picker.Item key={min} label={`${min}분`} value={`${min}`} />);
+
+const licensePItems = ['기중기면허 필요', '굴착지면허 필요', '지게차면허 필요']
+  .map(lin => <Picker.Item key={lin} label={lin} value={lin} />);
+
+const nondestPItems = [6, 12, 24, 36]
+  .map(mon => <Picker.Item key={mon} label={`${mon}개월이하`} value={`${mon}`} />);
+
+const careerPItems = [5, 7, 10, 15, 20, 25, 30, 35, 40]
+  .map(year => <Picker.Item key={year} label={`${year}년이상`} value={`${year}`} />);
+
+const thisYear = new Date().getFullYear();
+const modelYearPItems = new Array(10).fill().map((_, i) => <Picker.Item key={thisYear - i} label={`${thisYear - i}년이상`} value={`${i + 1}`} />);
 
 class WorkRegisterScreen extends React.Component {
   constructor(props) {
@@ -277,6 +303,10 @@ class WorkRegisterScreen extends React.Component {
       guaranteeTime,
       detailRequest,
       phoneNumber,
+      modelYearLimit,
+      licenseLimit,
+      nondestLimit,
+      careerLimit,
       equipmentValErrMessage,
       addressValErrMessage,
       addressDetailValErrMessage,
@@ -285,9 +315,6 @@ class WorkRegisterScreen extends React.Component {
       phoneNumberValErrMessage,
     } = this.state;
 
-    const dayPickItems = new Array(30)
-      .fill()
-      .map((_, i) => <Picker.Item key={i} label={`${i + 1}일`} value={`${i + 1}`} />);
     return (
       <View style={styles.Container}>
         <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
@@ -306,7 +333,8 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={equipmentValErrMessage} />
 
               <JBTextInput
-                title="전화번호(*, 매칭 후 공개됨)"
+                title="전화번호*"
+                subTitle="(매칭 후 공개됨)"
                 value={phoneNumber}
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
@@ -318,7 +346,8 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
               <JBTextInput
-                title="현장주소(*, 매칭 후 자세히 공개됨)"
+                title="현장주소*"
+                subTitle="(매칭 후 자세히 공개됨)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;
@@ -340,7 +369,7 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={addressDetailValErrMessage} />
               <View style={styles.workDateWrap}>
                 <JBTextInput
-                  title="작업시작일"
+                  title="작업시작일*"
                   value={startDate}
                   tiRefer={(input) => {
                     this.startDateTextInput = input;
@@ -349,38 +378,23 @@ class WorkRegisterScreen extends React.Component {
                   onFocus={() => this.openStartWorkDatePicker()}
                   placeholder="시작일을 선택 하세요"
                 />
-                <View style={styles.periodWrap}>
-                  <Text style={styles.pickerTitle}>기간</Text>
-                  <Picker
-                    selectedValue={period}
-                    style={styles.periodPicker}
-                    onValueChange={itemValue => this.setState({ period: itemValue })}
-                  >
-                    <Picker.Item label="오전" value="0.3" />
-                    <Picker.Item label="오후" value="0.8" />
-                    {dayPickItems}
-                  </Picker>
-                </View>
+                <JBPicker
+                  title="기간"
+                  selectedValue={period}
+                  onValueChange={itemValue => this.setState({ period: itemValue })}
+                  items={dayPickItems}
+                  size={100}
+                />
               </View>
               <JBErrorMessage errorMSG={dateValErrMessage} />
               {firmRegister && (
-                <View style={styles.guaranteeWrap}>
-                  <Text style={styles.pickerTitle}>최대 보장시간 (이 시간까지는 일감을 다른 곳에 넘기시면 안됩니다!)</Text>
-                  <Picker
-                    selectedValue={guaranteeTime}
-                    style={styles.guaranteePicker}
-                    onValueChange={itemValue => this.setState({ guaranteeTime: itemValue })}
-                  >
-                    <Picker.Item label="10분" value="10" />
-                    <Picker.Item label="20분" value="20" />
-                    <Picker.Item label="30분" value="30" />
-                    <Picker.Item label="1시간" value="60" />
-                    <Picker.Item label="2시간" value="120" />
-                    <Picker.Item label="3시간" value="180" />
-                    <Picker.Item label="5시간" value="300" />
-                    <Picker.Item label="1일" value="1440" />
-                  </Picker>
-                </View>
+                <JBPicker
+                  title="최대 일감보장시간"
+                  subTitle="(일감 넘기지않고 기다릴 수 있는 시간)"
+                  selectedValue={guaranteeTime}
+                  onValueChange={itemValue => this.setState({ guaranteeTime: itemValue })}
+                  items={guarMinPItems}
+                />
               )}
 
               <JBTextInput
@@ -392,6 +406,39 @@ class WorkRegisterScreen extends React.Component {
                 numberOfLines={3}
               />
               <JBErrorMessage errorMSG={detailRequestValErrMessage} />
+
+              <JBPicker
+                title="년식제한"
+                selectedValue={modelYearLimit}
+                items={modelYearPItems}
+                onValueChange={item => this.setState({ modelYearLimit: item })}
+                selectLabel="년식 선택(옵션)"
+              />
+
+              <JBPicker
+                title="필수면허"
+                selectedValue={licenseLimit}
+                items={licensePItems}
+                onValueChange={item => this.setState({ licenseLimit: item })}
+                selectLabel="면허 선택(옵션)"
+              />
+
+              <JBPicker
+                title="비파괴 개월제한"
+                selectedValue={nondestLimit}
+                items={nondestPItems}
+                onValueChange={item => this.setState({ nondestLimit: item })}
+                selectLabel="개월 선택(옵션)"
+              />
+
+              <JBPicker
+                title="경력제한"
+                selectedValue={careerLimit}
+                items={careerPItems}
+                onValueChange={item => this.setState({ careerLimit: item })}
+                selectLabel="경력 선택(옵션)"
+              />
+
               <JBButton
                 title="일감 등록완료"
                 onPress={() => this.confirmCreateWork()}

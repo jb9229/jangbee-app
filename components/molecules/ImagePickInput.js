@@ -3,9 +3,21 @@ import {
   Image, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
+import styled from 'styled-components/native';
 import fonts from '../../constants/Fonts';
 import colors from '../../constants/Colors';
 import JBIcon from './JBIcon';
+
+const Title = styled.Text`
+  font-family: ${fonts.titleMiddle};
+  color: ${colors.title};
+  font-size: 15;
+  margin-bottom: 3;
+  ${props => props.fill
+    && `
+    color: ${colors.point2};
+  `}
+`;
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -15,12 +27,6 @@ const styles = StyleSheet.create({
   titleWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  itemTitle: {
-    fontFamily: fonts.titleMiddle,
-    color: colors.title,
-    fontSize: 15,
-    marginBottom: 3,
   },
   urlInput: {},
   urlText: {
@@ -83,7 +89,7 @@ export default class ImagePickInput extends React.Component {
     return (
       <View style={styles.itemWrap}>
         <View style={styles.titleWrap}>
-          <Text style={styles.itemTitle}>{itemTitle}</Text>
+          {itemTitle && <Title fill={!!imgUrl}>{itemTitle}</Title>}
           {imgUrl ? <JBIcon name="close" size={32} onPress={() => this.removeImg()} /> : null}
         </View>
 

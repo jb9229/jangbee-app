@@ -568,6 +568,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   selectedValue={modelYear}
                   style={styles.adTypePicker}
                   onValueChange={itemValue => this.setState({ modelYear: itemValue })}
+                  size={100}
                 />
               </View>
               <JBErrorMessage errorMSG={equiListStrValErrMessage} />
