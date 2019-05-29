@@ -8,6 +8,7 @@ import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
 import JBTextItem from '../components/molecules/JBTextItem';
 import Card from '../components/molecules/CardUI';
+import JBTerm from '../components/JBTerm';
 
 const Container = Styled.View`
   flex: 1;
@@ -108,19 +109,14 @@ class ClientMyInfoScreen extends React.PureComponent {
             />
           </TopMenu>
           <JBTextItem title="전화번호" value={user.phoneNumber} align="center" row />
+          <JBButton
+            title="장비콜 메일 문의하기"
+            onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
+            size="full"
+            Secondary
+          />
+          <JBTerm />
         </Card>
-        <JBButton
-          title="이용 약관"
-          onPress={() => navigation.navigate('ServiceTerms')}
-          size="full"
-          Primary
-        />
-        <JBButton
-          title="장비콜 메일 문의하기"
-          onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
-          size="full"
-          Secondary
-        />
       </Container>
     );
   }

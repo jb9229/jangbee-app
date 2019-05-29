@@ -13,6 +13,7 @@ import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JBIcon from '../components/molecules/JBIcon';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
+import JBTerm from '../components/JBTerm';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,11 +25,11 @@ const styles = StyleSheet.create({
   regFirmWrap: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.point2,
   },
   regFirmWordingWrap: {
+    flex: 3,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fonts.batang,
     color: 'white',
+    margin: 5,
   },
   regFirmText: {
     fontSize: 24,
@@ -219,13 +221,21 @@ class FirmMyInfoScreen extends React.Component {
     if (!firm) {
       return (
         <View style={styles.regFirmWrap}>
+          <JBButton
+            title="로그아웃"
+            onPress={() => this.onSignOut()}
+            size="small"
+            underline
+            Secondary
+            align="right"
+          />
           <View style={styles.regFirmWordingWrap}>
             <Text style={styles.regFirmNotice}>+</Text>
             <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
             <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
           </View>
-          <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" Primary />
-          <JBButton title="로그아웃" onPress={() => this.onSignOut()} size="small" Primary />
+          <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" align="center" Primary />
+          <JBTerm bg={colors.point2Light} />
         </View>
       );
     }
@@ -237,7 +247,7 @@ class FirmMyInfoScreen extends React.Component {
         </ScrollView>
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
-          <JBIcon name="menu" size={30} onPress={() => this.setVisibleProfileModal(true)} />
+          <JBIcon name="settings" size={30} onPress={() => this.setVisibleProfileModal(true)} />
         </View>
         <FirmProfileModal
           isVisibleModal={isVisibleProfileModal}

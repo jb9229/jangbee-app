@@ -6,7 +6,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   Picker,
   View,
 } from 'react-native';
@@ -65,11 +64,16 @@ const dayPickItems = new Array(30)
 dayPickItems.splice(0, 0, <Picker.Item label="오전" value="0.3" />);
 dayPickItems.splice(1, 0, <Picker.Item label="오후" value="0.8" />);
 
-const guarMinPItems = [10, 20, 30, 60, 120, 180, 300, 1440]
+const guarMinPItems = [10, 20, 30, 60]
   .map(min => <Picker.Item key={min} label={`${min}분`} value={`${min}`} />);
+guarMinPItems.push(<Picker.Item key={120} label="2시간" value="120" />);
+guarMinPItems.push(<Picker.Item key={180} label="3시간" value="180" />);
+guarMinPItems.push(<Picker.Item key={300} label="5시간" value="300" />);
+guarMinPItems.push(<Picker.Item key={7200} label="12시간" value="720" />);
+guarMinPItems.push(<Picker.Item key={1440} label="1일" value="1440" />);
 
-const licensePItems = ['기중기면허 필요', '굴착지면허 필요', '지게차면허 필요']
-  .map(lin => <Picker.Item key={lin} label={lin} value={lin} />);
+const licensePItems = ['기중기면허', '굴착기면허', '지게차면허']
+  .map(lin => <Picker.Item key={lin} label={`${lin}필요`} value={lin} />);
 
 const nondestPItems = [6, 12, 24, 36]
   .map(mon => <Picker.Item key={mon} label={`${mon}개월이하`} value={`${mon}`} />);
@@ -78,7 +82,7 @@ const careerPItems = [5, 7, 10, 15, 20, 25, 30, 35, 40]
   .map(year => <Picker.Item key={year} label={`${year}년이상`} value={`${year}`} />);
 
 const thisYear = new Date().getFullYear();
-const modelYearPItems = new Array(10).fill().map((_, i) => <Picker.Item key={thisYear - i} label={`${thisYear - i}년이상`} value={`${i + 1}`} />);
+const modelYearPItems = new Array(10).fill().map((_, i) => <Picker.Item key={thisYear - i} label={`${thisYear - i}년이상`} value={`${thisYear - i}`} />);
 
 class WorkRegisterScreen extends React.Component {
   constructor(props) {
@@ -126,6 +130,7 @@ class WorkRegisterScreen extends React.Component {
   createWork = () => {
     const { navigation } = this.props;
     const { firmRegister } = this.props.navigation.state.params;
+
     const newWork = this.validateWorkForm();
     if (!newWork) {
       return;
@@ -199,6 +204,10 @@ class WorkRegisterScreen extends React.Component {
       period,
       guaranteeTime,
       detailRequest,
+      modelYearLimit,
+      licenseLimit,
+      nondestLimit,
+      careerLimit,
       sidoAddr,
       sigunguAddr,
       addrLongitude,
@@ -245,7 +254,7 @@ class WorkRegisterScreen extends React.Component {
       return false;
     }
 
-    v = validate('textMax', addressDetail, false, 45);
+    v = validate('textMax', addressDetail, true, 45);
     if (!v[0]) {
       this.setState({ addressDetailValErrMessage: v[1] });
       return false;
@@ -282,6 +291,10 @@ class WorkRegisterScreen extends React.Component {
       period,
       guaranteeTime,
       detailRequest,
+      modelYearLimit,
+      licenseLimit,
+      nondestLimit,
+      careerLimit,
       addrLongitude,
       addrLatitude,
     };
@@ -358,7 +371,8 @@ class WorkRegisterScreen extends React.Component {
               />
               <JBErrorMessage errorMSG={addressValErrMessage} />
               <JBTextInput
-                title="상세주소"
+                title="현장위치*"
+                subTitle="(현장위치를 짧게 설명해 주세요)"
                 value={addressDetail}
                 tiRefer={(input) => {
                   this.addrDetTextInput = input;

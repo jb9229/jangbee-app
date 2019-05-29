@@ -18,6 +18,10 @@ class LoginProvider extends React.Component {
         obAccTokenDiscDate: undefined,
         obUserSeqNo: undefined,
       },
+      firmInfo: {
+        equipment: undefined,
+        modelYear: undefined,
+      },
     };
 
     this.actions = {
@@ -46,6 +50,16 @@ class LoginProvider extends React.Component {
             obAccTokenExpDate,
             obAccTokenDiscDate,
             obUserSeqNo,
+          },
+        });
+      },
+      setFirmInfo: (equipment, modelYear) => {
+        this.setState({
+          ...this.state,
+          userProfile: {
+            ...this.state.firmInfo,
+            equipment,
+            modelYear,
           },
         });
       },
@@ -88,6 +102,7 @@ function withLogin(WrappedComponent) {
             setUser={actions.setUser}
             setUserType={actions.setUserType}
             setOBInfo={actions.setOBInfo}
+            setFirmInfo={actions.setFirmInfo}
             refreshUserOBInfo={actions.refreshUserOBInfo}
             {...props}
           />

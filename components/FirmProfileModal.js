@@ -17,6 +17,7 @@ import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
+import JBTerm from './JBTerm';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   itemsWrap: {
-    flex: 3,
+    flex: 4,
     justifyContent: 'space-around',
   },
   thumbnail: {
@@ -197,21 +198,13 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
                 Primary
               />
               <JBButton
-                title="이용약관"
-                onPress={() => {
-                  navigation.navigate('ServiceTerms');
-                  setVisibleModal(false);
-                }}
-                size="full"
-                Primary
-              />
-              <JBButton
                 title="장비콜 메일 문의하기"
                 onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
                 size="full"
                 Primary
               />
             </View>
+            <JBTerm />
           </View>
         </Modal>
       </View>
