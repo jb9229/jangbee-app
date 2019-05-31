@@ -29,8 +29,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   couponListWrap: {
-    alignItems: 'center',
-    padding: 10,
   },
   commWrap: {
     flexDirection: 'row',
@@ -222,8 +220,8 @@ export default class OpenBankAccSelectModal extends React.Component {
             <View style={styles.contentsWrap}>
               <JBIcon name="close" size={23} onPress={() => closeModal()} />
               <JBEmptyView
-                title="통장리스트가 비어 있습니다."
-                subTitle="결제계좌 등록 또는 재인증후 다시 진행해 주세요."
+                title="결재 통장리스트가 비어 있습니다."
+                subTitle="결제계좌 등록/재인증을 진행해 주세요."
                 actionName="통장 등록하기"
                 refresh={() => {
                   closeModal();

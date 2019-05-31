@@ -45,7 +45,7 @@ const ClientInfoStack = createStackNavigator({
   },
   ServiceTerms: {
     screen: JBServiceTerms,
-    navigationOptions: { title: '이용약관', headerStyle: { marginTop: -28 } },
+    navigationOptions: { title: '약관 및 회사정보', headerStyle: { marginTop: -28 } },
   },
 });
 

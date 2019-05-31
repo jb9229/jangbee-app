@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { AntDesign } from '@expo/vector-icons';
 import Styled from 'styled-components';
 import colors from '../../constants/Colors';
 
@@ -18,6 +19,8 @@ const CateWrap = Styled.View`
 `;
 
 const CateTO = Styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: space-between;
   padding: 12px;
   border-right-width: 1;
   border-color: ${colors.batangLight};
@@ -44,6 +47,10 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 16,
     fontWeight: '500',
+  },
+  catCB: {
+    margin: 0,
+    padding: 0,
   },
   separator: {
     height: 0.5,
@@ -111,7 +118,7 @@ export default class ExpandableItem extends React.Component {
       item,
       completeSel,
       selectSubCate,
-      multiSelect,
+      isCatSelectable,
     } = this.props;
     const { layoutHeight, catBgColor } = this.state;
     return (
@@ -120,13 +127,18 @@ export default class ExpandableItem extends React.Component {
         <CateWrap bgColor={catBgColor}>
           <CateTO activeOpacity={0.8} onPress={onClickFunction}>
             <Text style={styles.headerText}>{item.category_name}</Text>
+            {item.isExpanded ? (
+              <AntDesign name="up" size={20} color={colors.batangDark} />
+            ) : (
+              <AntDesign name="down" size={20} color={colors.batang} />
+            )}
           </CateTO>
-          {multiSelect && (
+          {isCatSelectable && (
             <CheckBox
               iconRight
               checked={item.isChecked}
               size={40}
-              containerStyle={{ margin: 0, padding: 0 }}
+              containerStyle={styles.catCB}
               onPress={onCatCheck}
             />
           )}

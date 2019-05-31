@@ -64,21 +64,27 @@ export function getNearFirmList(page, equipment, sLongitude, sLatitude) {
 /**
  * 지역 장비업체 검색요청 함수
  */
-export function getLocalFirmList(page, equipment, searSido, searGungo) {
+export function getLocalFirmList(page, equipment, searSido, searSigungu) {
   const paramData = {
     equipment,
     sido: searSido,
-    gungu: searGungo,
+    gungu: searSigungu,
     page,
     size: 10,
   };
 
+  let sigunguQuery;
+
+  if (searSigungu) {
+    sigunguQuery = `&gungu=${encodeURIComponent(paramData.gungu)}`;
+  } else {
+    sigunguQuery = '';
+  }
+
   return fetch(
     `${url.JBSERVER_FIRMLOCAL}?equipment=${encodeURIComponent(
       paramData.equipment,
-    )}&sido=${encodeURIComponent(paramData.sido)}&gungu=${encodeURIComponent(
-      paramData.gungu,
-    )}&page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(paramData.size)}`,
+    )}&sido=${encodeURIComponent(paramData.sido)}${sigunguQuery}&page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(paramData.size)}`,
   ).then(handleJsonResponse);
 }
 

@@ -3,7 +3,6 @@ import { FlatList, View } from 'react-native';
 import JBActIndicator from './organisms/JBActIndicator';
 import JBEmptyView from './organisms/JBEmptyView';
 import WorkItem from './organisms/WorkItem';
-import ListSeparator from './molecules/ListSeparator';
 import JBButton from './molecules/JBButton';
 import WorkCommWrap from './molecules/WorkCommWrapUI';
 import WorkCommText from './molecules/WorkCommTextUI';

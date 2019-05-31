@@ -11,8 +11,9 @@
       "ios",
       "android"
     ],
-    "version": "0.1.12_20190521",
+    "version": "0.2.0_20190531",
     "orientation": "portrait",
+    "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
     "splash": {
       "image": "./assets/images/splash-20190502.png",
@@ -37,7 +38,7 @@
       "permissions": [
         "ACCESS_FINE_LOCATION"
       ],
-      "versionCode": 13,
+      "versionCode": 14,
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"

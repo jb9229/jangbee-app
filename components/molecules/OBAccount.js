@@ -12,20 +12,20 @@ const TouchableHighlight = styled.TouchableHighlight`
 `;
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: 25,
-    marginRight: 25,
-    width: '80%',
-  },
-  accListItemWrap: {
-    padding: 10,
+  containerTH: {
+    borderColor: colors.point2Dark,
     borderWidth: 1,
     borderRadius: 5,
+    margin: 10,
+  },
+  contentsWrap: {
+    padding: 5,
   },
   topWrap: {
     padding: 2,
     paddingLeft: 10,
     paddingRight: 10,
+    marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   },
   bottomWrap: {
     flexDirection: 'row',
+    marginBottom: 5,
   },
   aliasText: {
     fontFamily: fonts.batang,
@@ -60,9 +61,9 @@ export default function renderAccListItem(item, selFinUseNum, onPress) {
     <TouchableHighlight
       onPress={() => onPress(item.fintech_use_num)}
       selected={selFinUseNum === item.fintech_use_num}
-      style={styles.container}
+      style={styles.containerTH}
     >
-      <View style={[styles.accListItemWrap]}>
+      <View style={[styles.contentsWrap]}>
         <View style={styles.topWrap}>
           <Text style={styles.bankNameText}>{item.bank_name}</Text>
           <Text style={styles.holderText}>{item.account_holder_name}</Text>

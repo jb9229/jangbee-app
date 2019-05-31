@@ -152,7 +152,9 @@ class LoginScreen extends React.PureComponent {
     if (phoneNumber === '') {
       return undefined;
     }
-    const newPN = phoneNumber.substring(1); // Remove 010 -> 10
+    let newPN = phoneNumber.replace(/-/g, ''); // without hyphen
+
+    newPN = newPN.substring(1); // Remove 010 -> 10
 
     return `${koreaNationalPhoneNumber}${newPN}`;
   };
@@ -169,8 +171,10 @@ class LoginScreen extends React.PureComponent {
 
     const { phoneNumber } = this.state;
 
+    const pnWithoutHyphen = phoneNumber.replace(/-/g, '');
+
     // Validation
-    const v = validate('cellPhone', phoneNumber, true);
+    const v = validate('cellPhone', pnWithoutHyphen, true);
     if (!v[0]) {
       this.setState({ phoneNumberValErrMessage: v[1] });
       return;
@@ -187,7 +191,7 @@ class LoginScreen extends React.PureComponent {
     await WebBrowser.openBrowserAsync(captchaUrl);
     Linking.removeEventListener('url', listener);
     if (token) {
-      const nationalPNumber = this.convertNationalPN(phoneNumber);
+      const nationalPNumber = this.convertNationalPN(pnWithoutHyphen);
 
       // fake firebase.auth.ApplicationVerifier
       const captchaVerifier = {
@@ -233,8 +237,9 @@ class LoginScreen extends React.PureComponent {
               this.onPhoneChange(text);
             }}
             placeholder="휴대전화 번호입력(숫자만)"
-            editable={!authReadOnly}
             onEndEditing={() => { const formatPN = formatTelnumber(phoneNumber); this.setState({phoneNumber: formatPN})}}
+            onSubmitEditing={() => this.onPhoneComplete()}
+            editable={!authReadOnly}
           />
           <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
           <Text style={authTitleStyle}>인증코드: </Text>

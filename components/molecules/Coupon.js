@@ -12,20 +12,20 @@ const TouchableHighlight = styled.TouchableHighlight`
 `;
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: 25,
-    marginRight: 25,
-    width: '80%',
-  },
-  accListItemWrap: {
-    padding: 10,
+  containerTH: {
+    borderColor: colors.pointDark,
     borderWidth: 1,
     borderRadius: 5,
+    margin: 10,
+  },
+  contentsWrap: {
+    padding: 5,
   },
   topWrap: {
     padding: 2,
     paddingLeft: 10,
     paddingRight: 10,
+    marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   },
   bottomWrap: {
     flexDirection: 'row',
+    marginBottom: 5,
   },
   aliasText: {
     fontFamily: fonts.batang,
@@ -59,11 +60,18 @@ export default function renderCoupon({
   name, count, selected, onPress,
 }) {
   return (
-    <TouchableHighlight onPress={() => onPress(selected)} selected={selected} style={styles.container}>
-      <View style={[styles.accListItemWrap]}>
+    <TouchableHighlight
+      onPress={() => onPress(selected)}
+      selected={selected}
+      style={styles.containerTH}
+    >
+      <View style={[styles.contentsWrap]}>
         <View style={styles.topWrap}>
           <Text style={styles.holderText}>보유량: </Text>
-          <Text style={styles.holderText}>{count}</Text>
+          <Text style={styles.holderText}>
+            {count}
+개
+          </Text>
         </View>
         <View style={styles.middleWrap}>
           <Text style={styles.aliasText}>{name}</Text>

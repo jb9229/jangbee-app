@@ -108,7 +108,7 @@ class SignUpScreen extends React.Component {
     firebase
       .database()
       .ref(`users/${user.uid}`)
-      .set(
+      .update(
         {
           userType,
         },

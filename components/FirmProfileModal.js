@@ -199,7 +199,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
               />
               <JBButton
                 title="장비콜 메일 문의하기"
-                onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
+                onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
                 size="full"
                 Primary
               />

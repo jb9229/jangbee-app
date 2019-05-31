@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, Platform } from 'react-native';
 import { Notifications } from 'expo';
 import moment from 'moment';
+import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import GPSSearchScreen from './GPSSearchScreen';
 
@@ -19,6 +20,7 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     this.addNotificationListener();
     this.checkOBAccDiscDate();
+    this.setUserFirmInfo();
   }
 
   componentWillUnmount() {
@@ -131,6 +133,22 @@ class HomeScreen extends React.Component {
         { cancelable: false },
       );
     }
+  };
+
+  /**
+   * 장비기사인경우 장비정보 설정함수
+   */
+  setUserFirmInfo = () => {
+    const { user, userProfile, setFirmInfo } = this.props;
+
+    if (!user.uid || !userProfile || userProfile.type !== 2) {
+      return;
+    }
+
+    api
+      .getFirm(user.uid)
+      .then((firm) => { setFirmInfo(firm.equiListStr, firm.modelYear); })
+      .catch(() => {});
   };
 
   render() {

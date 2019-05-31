@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Image, StyleSheet, TouchableOpacity, Text, View,
+  Alert, Image, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
 import styled from 'styled-components/native';
@@ -56,19 +56,12 @@ const styles = StyleSheet.create({
 });
 
 export default class ImagePickInput extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isUploaded: false,
-    };
-  }
 
   pickImage = async () => {
     const { aspect, setImageUrl } = this.props;
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: aspect !== null ? aspect : null,
+      aspect: aspect || undefined,
     });
 
     if (!result.cancelled) {
@@ -83,7 +76,6 @@ export default class ImagePickInput extends React.Component {
 
   render() {
     const { itemTitle, imgUrl, itemWrapStyle } = this.props;
-    const { isUploaded } = this.state;
 
     const urlTextStyle = imgUrl ? styles.urlText : styles.placeholder;
     return (

@@ -25,14 +25,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabBarIndicator: {
-    backgroundColor: colors.point,
+    backgroundColor: colors.point2,
   },
   tabBar: {
-    backgroundColor: colors.point2Dark,
+    backgroundColor: colors.batangDark,
   },
   tabBarLabel: {
     fontFamily: fonts.titleMiddle,
     fontWeight: 'bold',
+    color: colors.point,
   },
 });
 
@@ -67,11 +68,10 @@ class FirmWorkListScreen extends React.Component {
   }
 
   init = async () => {
-    const { navigation, user } = this.props;
-    const myEquipment = await getMyEquipment(user.uid);
+    const { navigation, user, firmInfo } = this.props;
 
-    if (myEquipment) {
-      this.setState({ myEquipment }, () => this.setOpenWorkListData());
+    if (firmInfo.equipment) {
+      this.setState({ myEquipment: firmInfo.equipment }, () => this.setOpenWorkListData());
     } else {
       Alert.alert(
         '보유장비 조회 문제',
@@ -263,10 +263,10 @@ class FirmWorkListScreen extends React.Component {
       });
   };
 
-  confirmApplyWork = (workId) => {
+  confirmApplyWork = (workId) => { // (매칭이된다면, 5천원의 결제 후 배차 할 수 있습니다)
     Alert.alert(
       '해당 날짜와 장소에 배차 가능하십니까?',
-      '지원 후, 장비사용 고객의 선택을 기다려 주세요(매칭이된다면, 5천원의 결제 후 배차 할 수 있습니다)',
+      '2019.7월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n지원 후, 장비사용 고객의 선택을 기다려야 합니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
       [
         { text: '취소', onPress: () => {} },
         { text: '지원하기', onPress: () => this.applyWork(workId) },
@@ -274,15 +274,21 @@ class FirmWorkListScreen extends React.Component {
     );
   };
 
-  confirmApplyFirmWork = (workId) => {
-    // TODO
-    // 잔액확인
+  confirmApplyFirmWork = (work) => { // '다른 차주가 올린 일감은, 선착순으로 한 업체만 매칭비 결재와 동시에 바로 매칭됩니다.',
+    const { firmInfo } = this.props;
+
+    if (firmInfo && firmInfo.modelYear && Number(firmInfo.modelYear) < Number(work.modelYearLimit)) {
+      Alert.alert('죄송합니다, 지원할 수 없는 일감입니다', `${work.modelYearLimit}년식이상을 요청한 일감으로 지원할 수 없습니다(보유장비: ${firmInfo.modelYear}년식)`);
+
+      return;
+    }
+
     Alert.alert(
       '해당 날짜와 장소에 배차 가능하십니까?',
-      '다른 차주가 올린 일감은, 선착순으로 한 업체만 매칭비 결재와 동시에 바로 매칭됩니다.',
+      '2019.7월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n차주일감은 선착순 한업체만 바로매칭 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
       [
         { text: '취소', onPress: () => {} },
-        { text: '지원하기', onPress: () => this.setState({ isVisibleAccSelModal: true, acceptWorkId: workId, withdrawCompleteFnc: this.applyFirmWork }) },
+        { text: '지원하기', onPress: () => this.setState({ isVisibleAccSelModal: true, acceptWorkId: work.id, withdrawCompleteFnc: this.applyFirmWork }) },
       ],
     );
   };
@@ -429,6 +435,7 @@ class FirmWorkListScreen extends React.Component {
         applyFirmWork={this.confirmApplyFirmWork}
         acceptWork={this.confirmAcceptWork}
         abandonWork={this.confirmAbandonWork}
+        accountId={user.uid}
       />
     );
 

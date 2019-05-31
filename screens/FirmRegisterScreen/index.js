@@ -617,6 +617,7 @@ class FirmRegisterScreen extends React.Component {
           nextFocus={() => {}}
           multiSelect
           actionName="일감알람 지역선택 완료"
+          isCatSelectable
         />
       </View>
     );

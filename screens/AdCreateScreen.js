@@ -115,9 +115,9 @@ class AdCreateScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.setAvailableAdType();
-    this.setOpenBankAccountList();
-    this.setFirmInfo();
+    const { navigation } = this.props;
+
+    Alert.alert('무료광고 등록', '2019. 7월 중순까지 무료로 사용해 보세요. 2019. 7월 중순 이후 고객의 동의하에(전화통화로 동의를 구함) 신규신청 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다', [{ text: '취소', onPress: () => navigation.navigate('Ad') }, { text: '등록하기', onPress: () => this.init() }], { cancelable: false });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -127,6 +127,12 @@ class AdCreateScreen extends React.Component {
       this.setAvailableAdType();
       this.setOpenBankAccountList();
     }
+  }
+
+  init = () => {
+    this.setAvailableAdType();
+    this.setOpenBankAccountList();
+    this.setFirmInfo();
   }
 
   setAvailableAdType = () => {
@@ -184,7 +190,7 @@ class AdCreateScreen extends React.Component {
       const userInfo = data.val();
       const { obAccessToken, obUserSeqNo } = userInfo;
       if (obAccessToken === undefined || obUserSeqNo === undefined) {
-        this.setState({ isAccEmpty: undefined });
+        this.setState({ isAccEmpty: true });
         return;
       }
 
@@ -628,14 +634,16 @@ class AdCreateScreen extends React.Component {
             />
             <JBErrorMessage errorMSG={forMonthsValErrMessage} />
             <JBTextInput
-              title="광고 타이틀(10자까지)*"
+              title="광고 타이틀*"
+              subTitle="(10자까지)"
               value={adTitle}
               onChangeText={text => this.setState({ adTitle: text })}
               placeholder="광고상단 문구를 입력하세요(최대 10자)"
             />
             <JBErrorMessage errorMSG={adTitleValErrMessage} />
             <JBTextInput
-              title="광고 슬로건(20자까지)*"
+              title="광고 슬로건*"
+              subTitle="(20자까지)"
               value={adSubTitle}
               onChangeText={text => this.setState({ adSubTitle: text })}
               placeholder="광고하단 문구를 입력하세요(최대 20자)"

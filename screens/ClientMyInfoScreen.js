@@ -111,7 +111,7 @@ class ClientMyInfoScreen extends React.PureComponent {
           <JBTextItem title="전화번호" value={user.phoneNumber} align="center" row />
           <JBButton
             title="장비콜 메일 문의하기"
-            onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
+            onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
             size="full"
             Secondary
           />

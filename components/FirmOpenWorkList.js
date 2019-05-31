@@ -17,13 +17,21 @@ export default class FirmWorkingList extends React.PureComponent {
    * 리스트 아이템 렌더링 함수
    */
   renderItem = ({ item }) => (
-    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} />
+    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} hideAddress />
   );
 
   renderCommand = (item) => {
     const {
-      applyWork, applyFirmWork, abandonWork, acceptWork,
+      applyWork, applyFirmWork, abandonWork, acceptWork, accountId,
     } = this.props;
+
+    if (item.firmRegister && item.accountId === accountId) {
+      return (
+        <WorkCommWrap>
+          <WorkCommText text="내가올린 일감" />
+        </WorkCommWrap>
+      );
+    }
 
     return (
       <WorkCommWrap>
@@ -36,7 +44,7 @@ export default class FirmWorkingList extends React.PureComponent {
           && !item.guarTimeExpire && (
             <JBButton
               title="차주일감 지원하기(선착순 바로매칭)"
-              onPress={() => applyFirmWork(item.id)}
+              onPress={() => applyFirmWork(item)}
               size="small"
             />
         )}

@@ -56,7 +56,7 @@ class LoginProvider extends React.Component {
       setFirmInfo: (equipment, modelYear) => {
         this.setState({
           ...this.state,
-          userProfile: {
+          firmInfo: {
             ...this.state.firmInfo,
             equipment,
             modelYear,
@@ -99,6 +99,7 @@ function withLogin(WrappedComponent) {
           <WrappedComponent
             user={state.user}
             userProfile={state.userProfile}
+            firmInfo={state.firmInfo}
             setUser={actions.setUser}
             setUserType={actions.setUserType}
             setOBInfo={actions.setOBInfo}

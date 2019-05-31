@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import * as url from '../constants/Url';
+import JBTerm from '../components/JBTerm';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 
@@ -82,6 +83,7 @@ export default class JBServiceTerms extends React.Component {
             />
           )}
         />
+        <JBTerm />
       </View>
     );
   }

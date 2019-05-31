@@ -71,7 +71,7 @@ export default function renderJBTerm({ bg }) {
       <Row>
         <Column>
           <Title>이메일:</Title>
-          <Text>jb9229@gamil.com</Text>
+          <Text>support@jangbeecall.com</Text>
         </Column>
       </Row>
       <Row>

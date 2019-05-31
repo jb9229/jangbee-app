@@ -702,6 +702,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
           nextFocus={() => {}}
           multiSelect
           actionName="일감알람 지역선택 완료"
+          isCatSelectable
         />
       </View>
     );

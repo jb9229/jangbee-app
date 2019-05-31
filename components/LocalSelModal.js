@@ -109,7 +109,12 @@ export default class EquipementModal extends React.Component {
   };
 
   updateCheck = (index) => {
+    const { multiSelect } = this.props;
     const { listDataSource, selSidoArr } = this.state;
+
+    if (!multiSelect) {
+      this.completeSelLocal(listDataSource[index], undefined);
+    }
 
     const array = [...listDataSource];
     const isChecked = !array[index].isChecked;
@@ -200,7 +205,7 @@ export default class EquipementModal extends React.Component {
   }
 
   render() {
-    const { isVisibleModal, closeModal, multiSelect, actionName } = this.props;
+    const { isVisibleModal, closeModal, actionName } = this.props;
     const { listDataSource } = this.state;
 
     return (
@@ -224,7 +229,7 @@ export default class EquipementModal extends React.Component {
                     item={group}
                     completeSel={this.completeSelLocal}
                     selectSubCate={itemIndex => this.selectSubCate(group, key, itemIndex)}
-                    multiSelect={multiSelect}
+                    isCatSelectable
                   />
                 ))}
               </ScrollView>

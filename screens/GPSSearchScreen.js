@@ -413,12 +413,6 @@ export default class GPSSearchScreen extends React.Component {
       return false;
     }
 
-    v = validatePresence(searGungu);
-    if (!v[0]) {
-      this.setState({ validationMessage: '검색할 지역(군구) 선택해 주세요' });
-      return false;
-    }
-
     return true;
   };
 
@@ -511,6 +505,16 @@ export default class GPSSearchScreen extends React.Component {
       return <JBActIndicator title="위치정보 불러오는중..." size={35} />;
     }
 
+    let searchLocalCondition = '';
+
+    if (searSido && searGungu) {
+      searchLocalCondition = `${searSido} ${searGungu}`;
+    }
+
+    if (searSido && !searGungu) {
+      searchLocalCondition = `${searSido}`;
+    }
+
     return (
       <View style={styles.container}>
         <EquipementModal
@@ -527,6 +531,7 @@ export default class GPSSearchScreen extends React.Component {
           closeModal={() => this.setState({ isVisibleLocalModal: false })}
           completeSelLocal={(sido, gungu) => this.setState({ searSido: sido, searGungu: gungu })}
           nextFocus={() => {}}
+          isCatSelectable
         />
         <View style={styles.adWrap}>
           <JangbeeAdList
@@ -570,7 +575,7 @@ export default class GPSSearchScreen extends React.Component {
                       <View style={styles.roundSeperator} />
                     </View>
                     <SearCondBox
-                      searchCondition={!searSido && !searGungu ? '' : `${searSido} ${searGungu}`}
+                      searchCondition={searchLocalCondition}
                       defaultCondtion="지역 선택하기"
                       onPress={() => this.openSelLocModal()}
                     />

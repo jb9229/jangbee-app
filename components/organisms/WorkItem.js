@@ -12,17 +12,19 @@ const TagWrap = styled.View`
   flex-wrap: wrap;
 `;
 
-export default class ClientMatchedWorkItem extends React.PureComponent {
+export default class WorkItem extends React.PureComponent {
   render() {
-    const { item, renderCommand, phoneNumber } = this.props;
+    const {
+      item, renderCommand, phoneNumber, hideAddress,
+    } = this.props;
 
     return (
       <Card Finished={item.workState === 'CLOSED' && item.firmEstimated}>
         <TagWrap>
-          {item.modelYearLimit && <JBTag name={`${item.modelYearLimit}년식이상`} />}
-          {item.licenseLimit && <JBTag name={`${item.licenseLimit}필요`} />}
-          {item.nondestLimit && <JBTag name={`비파괴검사 ${item.nondestLimit}개월이하`} />}
-          {item.careerLimit && <JBTag name={`${item.careerLimit}년경력이상`} />}
+          {item.modelYearLimit ? <JBTag name={`${item.modelYearLimit}년식이상`} /> : null}
+          {item.licenseLimit ? <JBTag name={`${item.licenseLimit}필요`} /> : null}
+          {item.nondestLimit ? <JBTag name={`비파괴검사 ${item.nondestLimit}개월이하`} /> : null}
+          {item.careerLimit ? <JBTag name={`${item.careerLimit}년경력이상`} /> : null}
         </TagWrap>
         <JBTextItem title="장비" value={item.equipment} small row />
         {phoneNumber && (
@@ -34,7 +36,16 @@ export default class ClientMatchedWorkItem extends React.PureComponent {
           small
           row
         />
-        <JBTextItem title="현장주소" value={item.address} secondeValue={item.addressDetail} small />
+        {hideAddress ? (
+          <JBTextItem title="현장주소" value={`${item.sidoAddr} ${item.sigunguAddr}`} small />
+        ) : (
+          <JBTextItem
+            title="현장주소"
+            value={item.address}
+            secondeValue={item.addressDetail}
+            small
+          />
+        )}
         <JBTextItem title="요청내용" value={item.detailRequest} small />
         {renderCommand()}
       </Card>

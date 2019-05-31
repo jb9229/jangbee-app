@@ -21,14 +21,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.batangLight,
   },
   tabBarIndicator: {
-    backgroundColor: colors.point,
+    backgroundColor: colors.point2,
   },
   tabBar: {
-    backgroundColor: colors.point2,
+    backgroundColor: colors.batangDark,
   },
   tabBarLabel: {
     fontFamily: fonts.titleMiddle,
     fontWeight: 'bold',
+    color: colors.point,
   },
 });
 

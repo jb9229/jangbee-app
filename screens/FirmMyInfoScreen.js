@@ -13,7 +13,6 @@ import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JBIcon from '../components/molecules/JBIcon';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
-import JBTerm from '../components/JBTerm';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +20,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.batangLight,
+  },
+  emptyFirmTopWrap: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   regFirmWrap: {
     flex: 1,
@@ -140,7 +143,7 @@ class FirmMyInfoScreen extends React.Component {
   setMyFirmInfo = () => {
     const { user } = this.props;
 
-    if (user.uid === null || user.uid === undefined) {
+    if (!user.uid) {
       Alert.alert('유효하지 않은 사용자 입니다');
       return;
     }
@@ -211,6 +214,8 @@ class FirmMyInfoScreen extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
+
     const {
       firm, isVisibleProfileModal, isLoadingComplete, evaluList,
     } = this.state;
@@ -221,21 +226,30 @@ class FirmMyInfoScreen extends React.Component {
     if (!firm) {
       return (
         <View style={styles.regFirmWrap}>
-          <JBButton
-            title="로그아웃"
-            onPress={() => this.onSignOut()}
-            size="small"
-            underline
-            Secondary
-            align="right"
-          />
+          <View style={styles.emptyFirmTopWrap}>
+            <JBButton
+              title="로그아웃"
+              onPress={() => this.onSignOut()}
+              size="small"
+              underline
+              Secondary
+              align="right"
+            />
+            <JBButton
+              title="이용약관 및 회사정보"
+              onPress={() => navigation.navigate('ServiceTerms')}
+              size="small"
+              underline
+              Secondary
+              align="right"
+            />
+          </View>
           <View style={styles.regFirmWordingWrap}>
             <Text style={styles.regFirmNotice}>+</Text>
             <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
             <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
+            <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" align="center" Primary />
           </View>
-          <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" align="center" Primary />
-          <JBTerm bg={colors.point2Light} />
         </View>
       );
     }

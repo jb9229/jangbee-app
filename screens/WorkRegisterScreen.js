@@ -61,8 +61,8 @@ const dayPickItems = new Array(30)
   .fill()
   .map((_, i) => <Picker.Item key={i} label={`${i + 1}일`} value={`${i + 1}`} />);
 
-dayPickItems.splice(0, 0, <Picker.Item label="오전" value="0.3" />);
-dayPickItems.splice(1, 0, <Picker.Item label="오후" value="0.8" />);
+dayPickItems.splice(0, 0, <Picker.Item key={0.3} label="오전" value="0.3" />);
+dayPickItems.splice(1, 0, <Picker.Item key={0.8} label="오후" value="0.8" />);
 
 const guarMinPItems = [10, 20, 30, 60]
   .map(min => <Picker.Item key={min} label={`${min}분`} value={`${min}`} />);
