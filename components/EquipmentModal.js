@@ -28,10 +28,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     borderRadius: 5,
   },
-  equiListWrap: {
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
 });
 
 export default class EquipementModal extends React.Component {
@@ -188,6 +184,7 @@ const EQUIPMENT_CONTENT = [
     willUpdate: false,
     subcategory: [
       { isChecked: false, val: '10톤' },
+      { isChecked: false, val: '13톤' },
       { isChecked: false, val: '25톤' },
       { isChecked: false, val: '50톤' },
       { isChecked: false, val: '100톤' },

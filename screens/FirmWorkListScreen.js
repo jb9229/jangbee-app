@@ -19,7 +19,7 @@ const dispatchFee = '3000';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: colors.batangLight,
+    backgroundColor: colors.pointBatang,
   },
   scene: {
     flex: 1,
@@ -440,15 +440,13 @@ class FirmWorkListScreen extends React.Component {
     );
 
     const renderMatchedWorkList = () => (
-      <View style={styles.scene}>
-        <FirmMatchedWorkList
-          list={matchedWorkList}
-          handleRefresh={() => this.setState({ matchedWorkListRefreshing: true }, () => this.setMatchedWorkListData())
-          }
-          refreshing={matchedWorkListRefreshing}
-          isListEmpty={isMatchedWorkListEmpty}
-        />
-      </View>
+      <FirmMatchedWorkList
+        list={matchedWorkList}
+        handleRefresh={() => this.setState({ matchedWorkListRefreshing: true }, () => this.setMatchedWorkListData())
+        }
+        refreshing={matchedWorkListRefreshing}
+        isListEmpty={isMatchedWorkListEmpty}
+      />
     );
     return (
       <View style={styles.Container}>

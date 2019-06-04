@@ -147,7 +147,9 @@ class HomeScreen extends React.Component {
 
     api
       .getFirm(user.uid)
-      .then((firm) => { setFirmInfo(firm.equiListStr, firm.modelYear); })
+      .then((firm) => {
+        setFirmInfo(firm.equiListStr, firm.modelYear);
+      })
       .catch(() => {});
   };
 

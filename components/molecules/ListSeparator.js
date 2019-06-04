@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     width: '100%',
-    backgroundColor: colors.pointDark,
+    backgroundColor: colors.pointLight,
     marginLeft: 3,
     marginRight: 3,
   },

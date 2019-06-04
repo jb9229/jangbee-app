@@ -20,8 +20,12 @@ const FirmWorkStack = createStackNavigator({
   FirmWorkList: { screen: FirmWorkListScreen, navigationOptions: { header: null } },
   WorkRegister: {
     screen: WorkRegisterScreen,
-    navigationOptions: { title: '일감 등록하기', headerStyle: { marginTop: -28 } },
-  }
+    navigationOptions: {
+      title: '일감 등록하기',
+      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerTintColor: '#fff',
+    },
+  },
 });
 
 FirmWorkStack.navigationOptions = {
@@ -33,15 +37,24 @@ const FirmMyInfoStack = createStackNavigator({
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
   FirmRegister: {
     screen: FirmRegisterScreen,
-    navigationOptions: { title: '업체정보 등록', headerStyle: { marginTop: -28 } },
+    navigationOptions: {
+      title: '업체정보 등록',
+      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+    },
   },
   FirmUpdate: {
     screen: FirmUpdateScreen,
-    navigationOptions: { title: '업체정보 수정', headerStyle: { marginTop: -28 } },
+    navigationOptions: {
+      title: '업체정보 수정',
+      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+    },
   },
   ServiceTerms: {
     screen: JBServiceTerms,
-    navigationOptions: { title: '약관 및 회사정보', headerStyle: { marginTop: -28 } },
+    navigationOptions: {
+      title: '약관 및 회사정보',
+      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+    },
   },
 });
 
@@ -62,7 +75,7 @@ const AdStack = createStackNavigator({
     navigationOptions: {
       title: '내광고 리스트',
       headerStyle: {
-        backgroundColor: colors.point2,
+        backgroundColor: colors.point3_other2,
         elevation: 10,
         marginTop: -28,
       },
@@ -71,7 +84,11 @@ const AdStack = createStackNavigator({
   },
   AdCreate: {
     screen: AdCreateScreen,
-    navigationOptions: { title: '내장비 홍보하기', headerStyle: { marginTop: -28 } },
+    navigationOptions: {
+      title: '내장비 홍보하기',
+      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerTintColor: '#fff',
+    },
   },
   OpenBankAuth: { screen: OpenBankAuthWebView, navigationOptions: { header: null } },
 });
@@ -107,10 +124,19 @@ ClientEvaluStack.navigationOptions = {
   ),
 };
 
-export default createBottomTabNavigator({
-  HomeStack,
-  FirmWorkStack,
-  AdStack,
-  ClientEvaluStack,
-  FirmMyInfoStack,
-});
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    FirmWorkStack,
+    AdStack,
+    ClientEvaluStack,
+    FirmMyInfoStack,
+  },
+  {
+    tabBarOptions: {
+      tabStyle: { backgroundColor: '#83868B' },
+      inactiveTintColor: 'white',
+      activeTintColor: colors.pointDark,
+    },
+  },
+);

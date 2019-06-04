@@ -13,21 +13,13 @@ const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  ${props => props.size === 'full'
-    && `
-    background-color: white;
-  `}
+  background-color: white;
+  padding: 10px;
 `;
 
 const ContentsWrap = styled.View`
   flex: 1;
   width: 100%;
-  background-color: white;
-  padding: 20px;
-  ${props => props.size === 'full'
-    && `
-  `}
 `;
 
 const CommandWrap = styled.View`
@@ -168,9 +160,13 @@ export default class ClientEvaluDetailModal extends React.Component {
           <ContentsWrap>
             <JBIcon name="close" size={23} onPress={() => closeModal()} />
 
-            <JBTextItem title="전화번호" value={formatTelnumber(evalu.telNumber)} small row />
-            <JBTextItem title="전화번호2" value={formatTelnumber(evalu.telNumber2)} small row />
-            <JBTextItem title="전화번호3" value={formatTelnumber(evalu.telNumber3)} small row />
+            <JBTextItem
+              title="전화번호"
+              value={`${formatTelnumber(evalu.telNumber)}${'\n'}${formatTelnumber(
+                evalu.telNumber1,
+              )}${'\n'}${formatTelnumber(evalu.telNumber2)}`}
+              small
+            />
 
             {evalu.regiTelNumber && (
               <JBTextItem

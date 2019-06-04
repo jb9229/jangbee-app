@@ -35,3 +35,13 @@ export function formatHideTelnumber(number) {
 
   return '-';
 }
+
+export function ellipsisStr(str, number) {
+  if (str) {
+    if (str.length > number) {
+      return `${str.substring(0, number)}...`;
+    }
+  }
+
+  return '-';
+}

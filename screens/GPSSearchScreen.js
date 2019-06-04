@@ -1,14 +1,14 @@
 import React from 'react';
 import {
-  Alert, BackHandler, Switch, StyleSheet, Text, TouchableOpacity, View,
+  Alert, BackHandler, ScrollView, StyleSheet, Text, Dimensions, View,
 } from 'react-native';
+import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import { Location, Permissions } from 'expo';
 import Styled from 'styled-components/native';
 import JBButton from '../components/molecules/JBButton';
-import SearCondBox from '../components/organisms/SearCondBox';
+import JBTerm from '../components/JBTerm';
 import JangbeeAdList from '../components/JangbeeAdList';
-import EquipementModal from '../components/EquipmentModal';
-import LocalSelModal from '../components/LocalSelModal';
+import Card from '../components/molecules/CardUI';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import adLocation from '../constants/AdLocation';
@@ -18,6 +18,7 @@ import JBIcon from '../components/molecules/JBIcon';
 import { validatePresence } from '../utils/Validation';
 import FirmCreaErrMSG from '../components/organisms/JBErrorMessage';
 import JBActIndicator from '../components/organisms/JBActIndicator';
+import JBSelectBox from '../components/organisms/JBSelectBox';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,34 +46,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 10,
-    paddingBottom: 10,
+    marginBottom: 5,
+    paddingBottom: 5,
     borderBottomWidth: 1,
     borderBottomColor: colors.pointDark,
     borderStyle: 'dashed',
     borderRadius: 5,
   },
-  searEquiWrap: {
+  searOptionWrap: {
+    height: 250,
     alignItems: 'center',
+    padding: 10,
   },
-  roundSeperatorWrap: {
+  searModeWrap: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    margin: 5,
   },
-  roundSeperator: {
-    borderWidth: 2,
-    borderRadius: 50,
-    borderColor: colors.batangDark,
-    marginLeft: 8,
-    marginRight: 8,
+  optionTabWrap: {
+    marginTop: 15,
+    height: 250,
+    width: '100%',
+  },
+  tabBar: {
+    height: 40,
+    backgroundColor: colors.batangDark,
   },
   commWrap: {
-    justifyContent: 'flex-end',
+    marginTop: 20,
+    height: 80,
     paddingTop: 3,
     paddingBottom: 3,
   },
   gpsWrap: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    borderWidth: 1,
   },
   currLocText: {
     color: colors.point2,
@@ -105,8 +115,14 @@ const SwitchText = Styled.Text`
   `}
 `;
 
-const SwitchTO = Styled.TouchableOpacity`
-    
+const SearchModeTO = Styled.TouchableOpacity`
+    padding: 5px;
+`;
+
+const SearchModeText = Styled.Text`
+    ${props => props.active &&`
+      color: ${colors.pointDark}
+    `}
 `;
 
 export default class GPSSearchScreen extends React.Component {
@@ -469,6 +485,18 @@ export default class GPSSearchScreen extends React.Component {
   };
 
   /**
+   * Tab View 변경함수
+   */
+  changeTabView = (index) => {
+    const { matchedWorkList } = this.state;
+
+    if (index === 1 && matchedWorkList === undefined) {
+    }
+
+    this.setState({ index });
+  };
+
+  /**
    * 검색지역 설정 팝업창열기 함수
    */
   openSelLocModal = () => {
@@ -516,23 +544,7 @@ export default class GPSSearchScreen extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
-        <EquipementModal
-          isVisibleEquiModal={isVisibleEquiModal}
-          closeModal={() => this.setState({ isVisibleEquiModal: false })}
-          selEquipmentStr={searEquipment}
-          completeSelEqui={seledEuipListStr => this.setState({ searEquipment: seledEuipListStr })}
-          nextFocus={() => {}}
-          singleSelectMode
-          advertisement
-        />
-        <LocalSelModal
-          isVisibleModal={isVisibleLocalModal}
-          closeModal={() => this.setState({ isVisibleLocalModal: false })}
-          completeSelLocal={(sido, gungu) => this.setState({ searSido: sido, searGungu: gungu })}
-          nextFocus={() => {}}
-          isCatSelectable
-        />
+      <ScrollView style={styles.container}>
         <View style={styles.adWrap}>
           <JangbeeAdList
             adLocation={isSearchViewMode ? adLocation.main : adLocation.local}
@@ -543,78 +555,51 @@ export default class GPSSearchScreen extends React.Component {
           />
         </View>
         {isSearchViewMode ? (
-          <View style={styles.cardWrap}>
-            <View style={styles.card}>
-              <View style={styles.switchWrap}>
-                <SwitchTO onPress={() => this.changeSearMode(false)}>
-                  <SwitchText select={isLocalSearch}>주변 검색</SwitchText>
-                </SwitchTO>
-                <Switch
-                  value={isLocalSearch}
-                  onValueChange={newValue => this.changeSearMode(newValue)}
-                  thumbColor={colors.point2}
-                  style={styles.searchModeSwitch}
-                  trackColor={{ false: colors.batang, true: colors.batang }}
-                />
-                <SwitchTO onPress={() => this.changeSearMode(true)}>
-                  <SwitchText select={!isLocalSearch}>지역 검색</SwitchText>
-                </SwitchTO>
+          <Card>
+            <View style={styles.searOptionWrap}>
+              <View style={styles.searModeWrap}>
+                <SearchModeTO onPress={() => this.changeSearMode(false)} >
+                  <SearchModeText active={!isLocalSearch}>내 주변 장비검색</SearchModeText>
+                </SearchModeTO>
+                <Text>|</Text>
+                <SearchModeTO onPress={() => this.changeSearMode(true)}>
+                  <SearchModeText active={isLocalSearch}>지역 장비검색</SearchModeText>
+                </SearchModeTO>
               </View>
-              <View style={styles.searEquiWrap}>
-                <SearCondBox
-                  searchCondition={searEquipment}
-                  onPress={() => this.setState({ isVisibleEquiModal: true })}
-                  defaultCondtion="장비 선택하기"
-                />
-
-                {isLocalSearch && (
-                  <View>
-                    <View style={styles.roundSeperatorWrap}>
-                      <View style={styles.roundSeperator} />
-                      <View style={styles.roundSeperator} />
-                      <View style={styles.roundSeperator} />
-                    </View>
-                    <SearCondBox
-                      searchCondition={searchLocalCondition}
-                      defaultCondtion="지역 선택하기"
-                      onPress={() => this.openSelLocModal()}
-                    />
-                  </View>
-                )}
-              </View>
-              <View style={styles.commWrap}>
-                {!isLocalSearch ? (
-                  <View style={styles.gpsWrap}>
-                    <Text style={styles.currLocText}>{currLocation}</Text>
-                    <JBIcon
-                      name="refresh"
-                      size={24}
-                      color={colors.point2}
-                      onPress={() => this.setLocationInfo()}
-                    />
-                  </View>
-                ) : null}
-                <FirmCreaErrMSG errorMSG={validationMessage} />
-                {isLocalSearch ? (
-                  <JBButton
-                    title="지역 검색하기"
-                    onPress={() => this.searchLocJangbee()}
-                    size="full"
-                    bgColor={colors.point2}
-                    color="white"
+              <JBSelectBox categoryList={EQUIPMENT_CATEGORY} itemList={EQUIPMENT_ITEM} />
+              <View style={styles.optionTabWrap}>
+                {isLocalSearch ? (<JBSelectBox categoryList={LOCAL_CATEGORY} itemList={LOCAL_ITEM} />) : (<View style={styles.gpsWrap}>
+                  <Text style={styles.currLocText}>{currLocation}</Text>
+                  <JBIcon
+                    name="refresh"
+                    size={24}
+                    color={colors.point2}
+                    onPress={() => this.setLocationInfo()}
                   />
-                ) : (
-                  <JBButton
-                    title="주변 검색하기"
-                    onPress={() => this.searchNearJangbee()}
-                    size="full"
-                    bgColor={colors.point2}
-                    color="white"
-                  />
-                )}
+                </View>)}
               </View>
             </View>
-          </View>
+            <View style={styles.commWrap}>
+              <FirmCreaErrMSG errorMSG={validationMessage} />
+              {isLocalSearch ? (
+                <JBButton
+                  title="지역 검색하기"
+                  onPress={() => this.searchLocJangbee()}
+                  size="full"
+                  bgColor={colors.point2}
+                  color="white"
+                />
+              ) : (
+                <JBButton
+                  title="내 주변 검색하기"
+                  onPress={() => this.searchNearJangbee()}
+                  size="full"
+                  bgColor={colors.point2}
+                  color="white"
+                />
+              )}
+            </View>
+          </Card>
         ) : (
           <View style={styles.firmListWrap}>
             <JBIcon
@@ -638,7 +623,190 @@ export default class GPSSearchScreen extends React.Component {
             />
           </View>
         )}
-      </View>
+        <JBTerm />
+      </ScrollView>
     );
   }
 }
+
+const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카이', '지게차'];
+
+const EQUIPMENT_ITEM = [];
+EQUIPMENT_ITEM['크레인'] = ['10톤', '13톤', '25톤', '50톤', '100톤', '160톤', '200톤', '250톤', '300톤', '400톤', '500톤', '700톤', '800톤', '1200톤'];
+EQUIPMENT_ITEM['카고크레인'] = ['5톤', '11톤', '18톤', '25톤'];
+EQUIPMENT_ITEM['굴착기'] = ['02W', '06W', '08W', '02LC', '04LC', '06LC'];
+EQUIPMENT_ITEM['스카이'] = ['1톤', '1.2톤', '2톤', '2.5톤', '3.5톤', '5톤', '28m', '45m', '58m', '60m', '75m'];
+EQUIPMENT_ITEM['지게차'] = ['2톤', '2.5톤', '3톤', '4.5톤', '5톤', '6톤', '7톤', '8톤', '11.5톤', '15톤', '18톤', '25톤'];
+
+const LOCAL_CATEGORY = ['서울', '경기', '강원', '세종', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
+const LOCAL_ITEM = [];
+LOCAL_ITEM['서울'] = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중량구'];
+LOCAL_ITEM['경기'] = ['가평군', '고양시', '과천시', '광명시', '광주구', '구리시', '군포시', '김포시', '남양주시', '동두천시', '부천시', '성남시', '수원시', '시흥시', '안산시', '안성시', '안양시', '양주시', '양평군', '여주시', '연천군', '오산시', '용인시', '의왕시', '의정부시', '이천시', '파주시', '평택시', '포천시', '하남시', '화성시'];
+
+const EQUIPMENT_CONTENT = [
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '크레인',
+    willUpdate: false,
+    subcategory: [
+      { isChecked: false, val: '10톤' },
+      { isChecked: false, val: '13톤' },
+      { isChecked: false, val: '25톤' },
+      { isChecked: false, val: '50톤' },
+      { isChecked: false, val: '100톤' },
+      { isChecked: false, val: '160톤' },
+      { isChecked: false, val: '200톤' },
+      { isChecked: false, val: '250톤' },
+      { isChecked: false, val: '300톤' },
+      { isChecked: false, val: '400톤' },
+      { isChecked: false, val: '500톤' },
+      { isChecked: false, val: '700톤' },
+      { isChecked: false, val: '800톤' },
+      { isChecked: false, val: '1200톤' },
+    ],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '카고크레인',
+    willUpdate: false,
+    subcategory: [
+      { isChecked: false, val: '5톤' },
+      { isChecked: false, val: '11톤' },
+      { isChecked: false, val: '18톤' },
+      { isChecked: false, val: '25톤' },
+    ],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '굴착기',
+    willUpdate: false,
+    subcategory: [
+      { isChecked: false, val: '02W' },
+      { isChecked: false, val: '06W' },
+      { isChecked: false, val: '08W' },
+      { isChecked: false, val: '02LC' },
+      { isChecked: false, val: '04LC' },
+      { isChecked: false, val: '06LC' },
+    ],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '스카이',
+    willUpdate: false,
+    subcategory: [
+      { isChecked: false, val: '1톤' },
+      { isChecked: false, val: '1.2톤' },
+      { isChecked: false, val: '2톤' },
+      { isChecked: false, val: '2.5톤' },
+      { isChecked: false, val: '3.5톤' },
+      { isChecked: false, val: '5톤' },
+      { isChecked: false, val: '28m' },
+      { isChecked: false, val: '45m' },
+      { isChecked: false, val: '58m' },
+      { isChecked: false, val: '60m' },
+      { isChecked: false, val: '75m' },
+    ],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '지게차',
+    willUpdate: false,
+    subcategory: [
+      { isChecked: false, val: '2톤' },
+      { isChecked: false, val: '2.5톤' },
+      { isChecked: false, val: '3톤' },
+      { isChecked: false, val: '4.5톤' },
+      { isChecked: false, val: '5톤' },
+      { isChecked: false, val: '6톤' },
+      { isChecked: false, val: '7톤' },
+      { isChecked: false, val: '8톤' },
+      { isChecked: false, val: '11.5톤' },
+      { isChecked: false, val: '15톤' },
+      { isChecked: false, val: '18톤' },
+      { isChecked: false, val: '25톤' },
+    ],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '사다리차',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '사다리차' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '하이랜더',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '하이랜더' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '고소작업렌탈',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '고소작업렌탈' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '펌프카',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '펌프카' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '도로포장장비',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '도로포장장비' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '로우더',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '로우더' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '항타천공오가',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '항타천공오가' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '불도저',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '불도저' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '진동로라/발전기',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '진동로라/발전기' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '덤프임대',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '덤프임대' }],
+  },
+  {
+    isExpanded: false,
+    isChecked: false,
+    category_name: '거미크레인',
+    willUpdate: false,
+    subcategory: [{ isChecked: false, val: '2톤' }, { isChecked: false, val: '3톤' }],
+  },
+];
+

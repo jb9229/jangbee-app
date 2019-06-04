@@ -14,7 +14,7 @@ const Container = Styled.View`
   margin: 3px 10px;
   padding: 3px 0px;
   border-top-width: 1;
-  border-color: ${colors.point2}
+  border-color: ${colors.pointDark}
 `;
 
 export default class WorkCommWrapUI extends React.PureComponent {

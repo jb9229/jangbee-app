@@ -26,14 +26,21 @@ export default class WorkItem extends React.PureComponent {
           {item.nondestLimit ? <JBTag name={`비파괴검사 ${item.nondestLimit}개월이하`} /> : null}
           {item.careerLimit ? <JBTag name={`${item.careerLimit}년경력이상`} /> : null}
         </TagWrap>
-        <JBTextItem title="장비" value={item.equipment} small row />
+        <JBTextItem title="장비" value={item.equipment} small titleSize={70} row />
         {phoneNumber && (
-          <JBTextItem title="전화번호" value={formatTelnumber(item.phoneNumber)} small row />
+          <JBTextItem
+            title="전화번호"
+            value={formatTelnumber(item.phoneNumber)}
+            small
+            titleSize={70}
+            row
+          />
         )}
         <JBTextItem
           title="기간"
           value={`${item.startDate} ~ ${item.endDate}(${convertWorkStr(item.period)})`}
           small
+          titleSize={70}
           row
         />
         {hideAddress ? (

@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   frimTopItemWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 30,
   },
   topLeftWrap: {},
   firmLinkWrap: {
@@ -32,9 +31,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginBottom: 10,
   },
+  equiWrap: {
+    flex: 1,
+  },
   topCommWrap: {
     alignItems: 'center',
-    marginRight: 25,
+    marginRight: 5,
   },
   ratingWrap: {
     marginTop: 5,
@@ -90,7 +92,7 @@ function openLinkUrl(url) {
 export default function FirmInfoItem({ firm, evaluList }) {
   return (
     <View>
-      <Card>
+      <Card bgColor="white">
         <View style={styles.frimTopItemWrap}>
           <View style={styles.topLeftWrap}>
             <View style={styles.firmLinkWrap}>
@@ -116,11 +118,13 @@ export default function FirmInfoItem({ firm, evaluList }) {
                 />
               </TouchableOpacity>
             </View>
-            <JBTextItem
-              title="보유장비"
-              value={`${firm.equiListStr}(${firm.modelYear}년식)`}
-              revColor
-            />
+            <View style={styles.equiWrap}>
+              <JBTextItem
+                title="보유장비"
+                value={`${firm.equiListStr}(${firm.modelYear}년식)`}
+                revColor
+              />
+            </View>
           </View>
           <View style={styles.topCommWrap}>
             <Image style={styles.thumbnail} source={{ uri: firm.thumbnail }} />
@@ -148,7 +152,7 @@ export default function FirmInfoItem({ firm, evaluList }) {
         <FirmImageItem title="작업사진3" value={firm.photo3} />
       </Card>
       {evaluList && (
-        <Card>
+        <Card bgColor="white">
           <FlatList
             data={evaluList}
             renderItem={item => <FirmEvaluListItem item={item.item} />}

@@ -7,6 +7,7 @@ import * as api from '../api/api';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
+import Card from './molecules/CardUI';
 import JBErrorMessage from './organisms/JBErrorMessage';
 import { validate } from '../utils/Validation';
 import { notifyError } from '../common/ErrorNotice';
@@ -22,7 +23,6 @@ const Container = styled.View`
 `;
 
 const ContentsView = styled.View`
-  background-color: white;
   padding: 20px;
   ${props => props.size === 'full'
     && `
@@ -267,111 +267,113 @@ export default class ClientEvaluCreateModal extends React.Component {
         <Container size={size}>
           <KeyboardAvoidingView>
             <ScrollView>
-              <ContentsView size={size}>
-                <JBIcon name="close" size={23} onPress={() => closeModal()} />
+              <Card>
+                <ContentsView size={size}>
+                  <JBIcon name="close" size={23} onPress={() => closeModal()} />
 
-                <JBTextInput
-                  title="전화번호(숫자만)*"
-                  value={telNumber}
-                  onChangeText={text => this.setState({ telNumber: text })}
-                  placeholder="블랙리스트 전화번호를 기입해 주세요"
-                  keyboardType="phone-pad"
-                />
-                <JBErrorMessage errorMSG={telNumberValErrMessage} />
+                  <JBTextInput
+                    title="전화번호(숫자만)*"
+                    value={telNumber}
+                    onChangeText={text => this.setState({ telNumber: text })}
+                    placeholder="블랙리스트 전화번호를 기입해 주세요"
+                    keyboardType="phone-pad"
+                  />
+                  <JBErrorMessage errorMSG={telNumberValErrMessage} />
 
-                <JBTextInput
-                  title="고객명"
-                  value={cliName}
-                  onChangeText={text => this.setState({ cliName: text })}
-                  placeholder="고객명을 기입해 주세요"
-                />
-                <JBErrorMessage errorMSG={cliNameValErrMessage} />
+                  <JBTextInput
+                    title="고객명"
+                    value={cliName}
+                    onChangeText={text => this.setState({ cliName: text })}
+                    placeholder="고객명을 기입해 주세요"
+                  />
+                  <JBErrorMessage errorMSG={cliNameValErrMessage} />
 
-                <JBTextInput
-                  title="업체명"
-                  value={firmName}
-                  onChangeText={text => this.setState({ firmName: text })}
-                  placeholder="업체명을 기입해 주세요"
-                />
-                <JBErrorMessage errorMSG={firmNameValErrMessage} />
+                  <JBTextInput
+                    title="업체명"
+                    value={firmName}
+                    onChangeText={text => this.setState({ firmName: text })}
+                    placeholder="업체명을 기입해 주세요"
+                  />
+                  <JBErrorMessage errorMSG={firmNameValErrMessage} />
 
-                <JBTextInput
-                  title="전화번호2(숫자만)"
-                  value={telNumber2}
-                  onChangeText={text => this.setState({ telNumber2: text })}
-                  placeholder="추가 전화번호를 기입해 주세요"
-                  keyboardType="phone-pad"
-                />
-                <JBErrorMessage errorMSG={telNumber2ValErrMessage} />
+                  <JBTextInput
+                    title="전화번호2(숫자만)"
+                    value={telNumber2}
+                    onChangeText={text => this.setState({ telNumber2: text })}
+                    placeholder="추가 전화번호를 기입해 주세요"
+                    keyboardType="phone-pad"
+                  />
+                  <JBErrorMessage errorMSG={telNumber2ValErrMessage} />
 
-                <JBTextInput
-                  title="전화번호3(숫자만)"
-                  value={telNumber3}
-                  onChangeText={text => this.setState({ telNumber3: text })}
-                  placeholder="추가 전화번호를 기입해 주세요"
-                  keyboardType="phone-pad"
-                />
-                <JBErrorMessage errorMSG={telNumber3ValErrMessage} />
+                  <JBTextInput
+                    title="전화번호3(숫자만)"
+                    value={telNumber3}
+                    onChangeText={text => this.setState({ telNumber3: text })}
+                    placeholder="추가 전화번호를 기입해 주세요"
+                    keyboardType="phone-pad"
+                  />
+                  <JBErrorMessage errorMSG={telNumber3ValErrMessage} />
 
-                <JBTextInput
-                  title="사업자번호"
-                  value={firmNumber}
-                  onChangeText={text => this.setState({ firmNumber: text })}
-                  placeholder="사업자번호를 기입해 주세요"
-                />
-                <JBErrorMessage errorMSG={firmNumberValErrMessage} />
+                  <JBTextInput
+                    title="사업자번호"
+                    value={firmNumber}
+                    onChangeText={text => this.setState({ firmNumber: text })}
+                    placeholder="사업자번호를 기입해 주세요"
+                  />
+                  <JBErrorMessage errorMSG={firmNumberValErrMessage} />
 
-                <JBTextInput
-                  title="장비"
-                  value={equipment}
-                  onChangeText={text => this.setState({ equipment: text })}
-                  placeholder="어떤 장비의 피해사례 입니까?"
-                />
-                <JBErrorMessage errorMSG={equipmentValErrMessage} />
+                  <JBTextInput
+                    title="장비"
+                    value={equipment}
+                    onChangeText={text => this.setState({ equipment: text })}
+                    placeholder="어떤 장비의 피해사례 입니까?"
+                  />
+                  <JBErrorMessage errorMSG={equipmentValErrMessage} />
 
-                <JBTextInput
-                  title="지역"
-                  value={local}
-                  onChangeText={text => this.setState({ local: text })}
-                  placeholder="어떤 지역의 피해사례 입니까?"
-                />
-                <JBErrorMessage errorMSG={localValErrMessage} />
+                  <JBTextInput
+                    title="지역"
+                    value={local}
+                    onChangeText={text => this.setState({ local: text })}
+                    placeholder="어떤 지역의 피해사례 입니까?"
+                  />
+                  <JBErrorMessage errorMSG={localValErrMessage} />
 
-                <JBTextInput
-                  title="금액"
-                  value={amount}
-                  onChangeText={text => this.setState({ amount: text })}
-                  placeholder="피해금액이 얼마입니까?"
-                  keyboardType="numeric"
-                />
-                <JBErrorMessage errorMSG={amountValErrMessage} />
+                  <JBTextInput
+                    title="금액"
+                    value={amount}
+                    onChangeText={text => this.setState({ amount: text })}
+                    placeholder="피해금액이 얼마입니까?"
+                    keyboardType="numeric"
+                  />
+                  <JBErrorMessage errorMSG={amountValErrMessage} />
 
-                <JBTextInput
-                  title="작성자 연락처"
-                  value={regiTelNumber}
-                  onChangeText={text => this.setState({ regiTelNumber: text })}
-                  placeholder="타업체가 행적을 신고해 줄 수 있습니다."
-                  keyboardType="phone-pad"
-                />
-                <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
+                  <JBTextInput
+                    title="작성자 연락처"
+                    value={regiTelNumber}
+                    onChangeText={text => this.setState({ regiTelNumber: text })}
+                    placeholder="타업체가 행적을 신고해 줄 수 있습니다."
+                    keyboardType="phone-pad"
+                  />
+                  <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
 
-                <JBTextInput
-                  title="사유*"
-                  value={reason}
-                  onChangeText={text => this.setState({ reason: text })}
-                  placeholder="블랙리스트 사유를 기입해 주세요"
-                  numberOfLines={5}
-                  multiline
-                />
-                <JBErrorMessage errorMSG={reasonValErrMessage} />
+                  <JBTextInput
+                    title="사유*"
+                    value={reason}
+                    onChangeText={text => this.setState({ reason: text })}
+                    placeholder="블랙리스트 사유를 기입해 주세요"
+                    numberOfLines={5}
+                    multiline
+                  />
+                  <JBErrorMessage errorMSG={reasonValErrMessage} />
 
-                <JBButton
-                  title="피해사례 추가하기"
-                  onPress={() => this.completeAction()}
-                  size="full"
-                  Secondary
-                />
-              </ContentsView>
+                  <JBButton
+                    title="피해사례 추가하기"
+                    onPress={() => this.completeAction()}
+                    size="full"
+                    Secondary
+                  />
+                </ContentsView>
+              </Card>
             </ScrollView>
           </KeyboardAvoidingView>
         </Container>

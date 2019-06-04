@@ -19,6 +19,7 @@ import EquipementModal from '../components/EquipmentModal';
 import MapAddWebModal from '../components/MapAddWebModal';
 import ListSeparator from '../components/molecules/ListSeparator';
 import OBAccount from '../components/molecules/OBAccount';
+import Card from '../components/molecules/CardUI';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import { notifyError } from '../common/ErrorNotice';
@@ -587,125 +588,127 @@ class AdCreateScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
-          <ScrollView contentContainerStyle={styles.formWrap}>
-            <EquipementModal
-              isVisibleEquiModal={isVisibleEquiModal}
-              closeModal={() => this.setState({ isVisibleEquiModal: false })}
-              selEquipmentStr={adEquipment}
-              completeSelEqui={seledEuipListStr => this.setState({ adEquipment: seledEuipListStr })}
-              nextFocus={() => {}}
-              singleSelectMode
-            />
-            <MapAddWebModal
-              isVisibleMapAddModal={isVisibleMapAddModal}
-              setMapAddModalVisible={(visible) => {
-                this.setState({ isVisibleMapAddModal: visible });
-              }}
-              saveAddrInfo={(addrData) => {
-                this.setState({ adSido: addrData.sidoAddr, adGungu: addrData.sigunguAddr });
-              }}
-              nextFocus={() => {}}
-            />
-            <View style={styles.adTypeFormWrap}>
-              <Text style={styles.adTypeTitle}>광고타입*</Text>
-              <Picker
-                selectedValue={adType}
-                style={styles.adTypePicker}
-                onValueChange={itemValue => this.onPickAdType(itemValue)}
-              >
-                <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
-                {this.renderAdTypeList(1, '메인광고_첫번째(월 7만원)')}
-                {this.renderAdTypeList(2, '메인광고_두번째(월 5만원)')}
-                {this.renderAdTypeList(3, '메인광고_세번째(월 3만원)')}
-                <Picker.Item
-                  label="장비 타켓광고_첫번째(월 2만원)"
-                  value={ADTYPE_EQUIPMENT_FIRST}
-                />
-                <Picker.Item label="지역 타켓광고_첫번째(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
-              </Picker>
-            </View>
-            <JBTextInput
-              title="계약기간(월)*"
-              value={forMonths}
-              onChangeText={text => this.setState({ forMonths: text })}
-              placeholder="몇개월간 홍보하시겠습니까?"
-              keyboardType="numeric"
-            />
-            <JBErrorMessage errorMSG={forMonthsValErrMessage} />
-            <JBTextInput
-              title="광고 타이틀*"
-              subTitle="(10자까지)"
-              value={adTitle}
-              onChangeText={text => this.setState({ adTitle: text })}
-              placeholder="광고상단 문구를 입력하세요(최대 10자)"
-            />
-            <JBErrorMessage errorMSG={adTitleValErrMessage} />
-            <JBTextInput
-              title="광고 슬로건*"
-              subTitle="(20자까지)"
-              value={adSubTitle}
-              onChangeText={text => this.setState({ adSubTitle: text })}
-              placeholder="광고하단 문구를 입력하세요(최대 20자)"
-            />
-            <JBErrorMessage errorMSG={adSubTitleValErrMessage} />
-            <ImagePickInput
-              itemTitle="광고배경 사진"
-              imgUrl={adPhotoUrl}
-              aspect={[4, 3]}
-              setImageUrl={url => this.setState({ adPhotoUrl: url })}
-            />
-            <JBErrorMessage errorMSG={adPhotoUrlValErrMessage} />
-            <JBTextInput
-              title="전화번호"
-              value={adTelNumber}
-              onChangeText={text => this.setState({ adTelNumber: text })}
-              placeholder="휴대전화 번호입력(숫자만)"
-            />
-            <JBErrorMessage errorMSG={adTelNumberValErrMessage} />
-            {(adType === 11 || adType === 21) && (
-              <JBTextInput
-                title="타켓 광고(장비)"
-                value={adEquipment}
-                onChangeText={text => this.setState({ adEquipment: text })}
-                onFocus={() => this.setState({ isVisibleEquiModal: true })}
-                placeholder="타켓광고 장비 선택해 주세요"
+        <Card>
+          <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
+            <ScrollView contentContainerStyle={styles.formWrap}>
+              <EquipementModal
+                isVisibleEquiModal={isVisibleEquiModal}
+                closeModal={() => this.setState({ isVisibleEquiModal: false })}
+                selEquipmentStr={adEquipment}
+                completeSelEqui={seledEuipListStr => this.setState({ adEquipment: seledEuipListStr })}
+                nextFocus={() => {}}
+                singleSelectMode
               />
-            )}
-            <JBErrorMessage errorMSG={adEquipmentValErrMessage} />
-            {adType === 21 && (
-              <JBTextInput
-                title="타켓 광고(지역)"
-                value={`${adSido}${adGungu}`}
-                onFocus={() => this.setState({ isVisibleMapAddModal: true })}
-                placeholder="타켓광고 지역을 선택해 주세요"
+              <MapAddWebModal
+                isVisibleMapAddModal={isVisibleMapAddModal}
+                setMapAddModalVisible={(visible) => {
+                  this.setState({ isVisibleMapAddModal: visible });
+                }}
+                saveAddrInfo={(addrData) => {
+                  this.setState({ adSido: addrData.sidoAddr, adGungu: addrData.sigunguAddr });
+                }}
+                nextFocus={() => {}}
               />
-            )}
-            <JBErrorMessage errorMSG={adLocalValErrMessage} />
-            <View>
-              {isAccEmpty !== undefined && !isAccEmpty && (
-                <FlatList
-                  data={accList}
-                  extraData={selFinUseNum}
-                  renderItem={item => OBAccount(item.item, selFinUseNum, this.onAccListItemPress)}
-                  keyExtractor={(item, index) => index.toString()}
-                  ItemSeparatorComponent={ListSeparator}
+              <View style={styles.adTypeFormWrap}>
+                <Text style={styles.adTypeTitle}>광고타입*</Text>
+                <Picker
+                  selectedValue={adType}
+                  style={styles.adTypePicker}
+                  onValueChange={itemValue => this.onPickAdType(itemValue)}
+                >
+                  <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
+                  {this.renderAdTypeList(1, '메인광고_첫번째(월 7만원)')}
+                  {this.renderAdTypeList(2, '메인광고_두번째(월 5만원)')}
+                  {this.renderAdTypeList(3, '메인광고_세번째(월 3만원)')}
+                  <Picker.Item
+                    label="장비 타켓광고_첫번째(월 2만원)"
+                    value={ADTYPE_EQUIPMENT_FIRST}
+                  />
+                  <Picker.Item label="지역 타켓광고_첫번째(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
+                </Picker>
+              </View>
+              <JBTextInput
+                title="계약기간(월)*"
+                value={forMonths}
+                onChangeText={text => this.setState({ forMonths: text })}
+                placeholder="몇개월간 홍보하시겠습니까?"
+                keyboardType="numeric"
+              />
+              <JBErrorMessage errorMSG={forMonthsValErrMessage} />
+              <JBTextInput
+                title="광고 타이틀*"
+                subTitle="(10자까지)"
+                value={adTitle}
+                onChangeText={text => this.setState({ adTitle: text })}
+                placeholder="광고상단 문구를 입력하세요(최대 10자)"
+              />
+              <JBErrorMessage errorMSG={adTitleValErrMessage} />
+              <JBTextInput
+                title="광고 슬로건*"
+                subTitle="(20자까지)"
+                value={adSubTitle}
+                onChangeText={text => this.setState({ adSubTitle: text })}
+                placeholder="광고하단 문구를 입력하세요(최대 20자)"
+              />
+              <JBErrorMessage errorMSG={adSubTitleValErrMessage} />
+              <ImagePickInput
+                itemTitle="광고배경 사진"
+                imgUrl={adPhotoUrl}
+                aspect={[4, 3]}
+                setImageUrl={url => this.setState({ adPhotoUrl: url })}
+              />
+              <JBErrorMessage errorMSG={adPhotoUrlValErrMessage} />
+              <JBTextInput
+                title="전화번호"
+                value={adTelNumber}
+                onChangeText={text => this.setState({ adTelNumber: text })}
+                placeholder="휴대전화 번호입력(숫자만)"
+              />
+              <JBErrorMessage errorMSG={adTelNumberValErrMessage} />
+              {(adType === 11 || adType === 21) && (
+                <JBTextInput
+                  title="타켓 광고(장비)"
+                  value={adEquipment}
+                  onChangeText={text => this.setState({ adEquipment: text })}
+                  onFocus={() => this.setState({ isVisibleEquiModal: true })}
+                  placeholder="타켓광고 장비 선택해 주세요"
                 />
               )}
-              <JBErrorMessage errorMSG={selFinUseNumValErrMessage} />
-              <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
-            </View>
-            <View style={styles.botCommWrap}>
-              <JBErrorMessage errorMSG={payErrMessage} />
-              <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" Primary />
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-        <JBActIndicatorModal
-          isVisibleModal={isVisibleActIndiModal}
-          message={imgUploadingMessage}
-          size="large"
-        />
+              <JBErrorMessage errorMSG={adEquipmentValErrMessage} />
+              {adType === 21 && (
+                <JBTextInput
+                  title="타켓 광고(지역)"
+                  value={`${adSido}${adGungu}`}
+                  onFocus={() => this.setState({ isVisibleMapAddModal: true })}
+                  placeholder="타켓광고 지역을 선택해 주세요"
+                />
+              )}
+              <JBErrorMessage errorMSG={adLocalValErrMessage} />
+              <View>
+                {isAccEmpty !== undefined && !isAccEmpty && (
+                  <FlatList
+                    data={accList}
+                    extraData={selFinUseNum}
+                    renderItem={item => OBAccount(item.item, selFinUseNum, this.onAccListItemPress)}
+                    keyExtractor={(item, index) => index.toString()}
+                    ItemSeparatorComponent={ListSeparator}
+                  />
+                )}
+                <JBErrorMessage errorMSG={selFinUseNumValErrMessage} />
+                <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
+              </View>
+              <View style={styles.botCommWrap}>
+                <JBErrorMessage errorMSG={payErrMessage} />
+                <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" Primary />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+          <JBActIndicatorModal
+            isVisibleModal={isVisibleActIndiModal}
+            message={imgUploadingMessage}
+            size="large"
+          />
+        </Card>
       </View>
     );
   }

@@ -10,7 +10,7 @@ const Container = Styled.View`
 const Card = Styled.View`
   flex: 1;
   justify-content: space-between;
-  background-color: white;
+  background-color: ${props => (props.bgColor ? props.bgColor : colors.point2Batang)};
   padding: 5px;
   border-radius: 15;
   margin: 10px;
@@ -22,17 +22,17 @@ const Card = Styled.View`
 
   ${props => props.Primary
     && `
-    background-color: ${colors.point2Batang};
+    background-color: ${colors.pointBatang};
   `}
 `;
 
 export default class CardUI extends React.PureComponent {
   render() {
-    const { Finished, Primary } = this.props;
+    const { Finished, Primary, bgColor } = this.props;
 
     return (
       <Container ref={c => (this._root = c)} {...this.props}>
-        <Card Finished={Finished} Primary={Primary}>
+        <Card Finished={Finished} Primary={Primary} bgColor={bgColor}>
           {this.props.children}
         </Card>
       </Container>

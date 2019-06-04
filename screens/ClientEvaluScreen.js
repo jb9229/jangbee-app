@@ -8,6 +8,7 @@ import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
 import ClientEvaluLikeModal from '../components/ClientEvaluLikeModal';
 import ListSeparator from '../components/molecules/ListSeparator';
+import Card from '../components/molecules/CardUI';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
   },
   searchHeaderWrap: {
     marginBottom: 10,
+    padding: 5,
     backgroundColor: colors.batangDark,
     elevation: 14,
     borderRadius: 10,
@@ -39,6 +41,16 @@ const styles = StyleSheet.create({
   searchPicker: {
     width: 169,
     color: colors.point,
+    backgroundColor: 'transparent',
+  },
+  pickerArrowWrap: {
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 15,
+    left: 120,
+  },
+  pickerArrow: {
+    color: colors.pointDark,
   },
   containerSearchBar: {
     backgroundColor: colors.batangDark,
@@ -52,6 +64,8 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
   },
   searchNoticeWrap: {
+    padding: 5,
+    paddingBottom: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -373,6 +387,9 @@ class ClientEvaluScreen extends React.Component {
               <Picker.Item label="업체명 검색" value="FIRM_NAME" />
               <Picker.Item label="고객명 검색" value="CLI_NAME" />
             </Picker>
+            <View style={styles.pickerArrowWrap}>
+              <Text style={styles.pickerArrow}>&#9660;</Text>
+            </View>
             <JBButton
               title="피해사례 추가"
               onPress={() => this.setState({ isVisibleCreateModal: true })}
@@ -400,13 +417,15 @@ class ClientEvaluScreen extends React.Component {
         </View>
 
         {isCliEvaluLoadComplete === true && (
-          <FlatList
-            data={cliEvaluList}
-            renderItem={this.renderCliEvaluItem}
-            keyExtractor={(item, index) => index.toString()}
-            ListHeaderComponent={this.renderCliEvaluHeader}
-            ItemSeparatorComponent={ListSeparator}
-          />
+          <Card>
+            <FlatList
+              data={cliEvaluList}
+              renderItem={this.renderCliEvaluItem}
+              keyExtractor={(item, index) => index.toString()}
+              ListHeaderComponent={this.renderCliEvaluHeader}
+              ItemSeparatorComponent={ListSeparator}
+            />
+          </Card>
         )}
         {isCliEvaluLoadComplete === false && (
           <View>

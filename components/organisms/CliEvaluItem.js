@@ -12,6 +12,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   contentsWrap: {
     marginLeft: 12,
@@ -47,13 +49,22 @@ export default function CliEvaluItem({
   openCliEvaluLikeModal,
   openDetailModal,
 }) {
+  let titleStr = '';
+  if (item.firmName) {
+    titleStr = item.firmName;
+  } else if (item.firmNumber) {
+    titleStr = item.firmNumber;
+  } else if (item.cliName) {
+    titleStr = item.cliName;
+  } else {
+    titleStr = '이름없음';
+  }
+
   return (
     <View style={styles.Container}>
       <View style={styles.topWrap}>
         <JBButton
-          title={`${convertHyphen(item.cliName)} (${convertHyphen(item.firmName)}, ${convertHyphen(
-            item.firmNumber,
-          )})`}
+          title={titleStr}
           onPress={() => openDetailModal(item)}
           size="small"
           underline
@@ -79,6 +90,7 @@ export default function CliEvaluItem({
           )}, ${formatTelnumber(item.telNumber3)}`}
           small
           row
+          ellipsis={30}
         />
         <JBTextItem title="사유" value={item.reason} small />
       </View>

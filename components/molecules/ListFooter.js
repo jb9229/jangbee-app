@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   },
   webLinkWrap: {
     flex: 1,
+    marginBottom: 25,
   },
   webLinkButWrap: {
     flex: 1,
@@ -68,12 +69,18 @@ export default class ListFooter extends React.PureComponent {
   };
 
   custormizingGungu = (selSido, gungu) => {
-    if (!gungu) { return ''; }
-    if (selSido && selSido === '세종특별자치시') { return ''; }
+    if (!gungu) {
+      return '';
+    }
+    if (selSido && selSido === '세종특별자치시') {
+      return '';
+    }
     const gunguStrArr = gungu.split(' ');
-    if (gunguStrArr && gunguStrArr.length > 2) { return `${gunguStrArr[0]} ${gunguStrArr[1]}` }
+    if (gunguStrArr && gunguStrArr.length > 2) {
+      return `${gunguStrArr[0]} ${gunguStrArr[1]}`;
+    }
     return gungu;
-  }
+  };
 
   render() {
     const {
