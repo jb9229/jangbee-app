@@ -7,10 +7,13 @@ const Container = styled.View`
   margin-bottom: 5;
 `;
 
+const Title = styled.Text``;
+
 const CategoryListWrap = styled.ScrollView`
-  margin-bottom: 5;
-  padding: 5px;
+  flex-direction: row;
 `;
+
+const CategoryWrap = styled.View``;
 
 const CategoryTO = styled.TouchableOpacity`
   border-width: 1;
@@ -19,9 +22,24 @@ const CategoryTO = styled.TouchableOpacity`
   padding: 8px;
   margin-right: 10;
   background-color: ${colors.batangLight};
+  ${props => props.selected
+    && `
+    border-color: ${colors.pointLight};
+    background-color: ${colors.pointLight};
+  `}
 `;
 
 const CategoryText = styled.Text``;
+
+const SelectedIndicator = styled.View`
+  height: 12;
+  margin-right: 10;
+  ${props => props.selected
+    && `
+    border-color: ${colors.pointBatang};
+    background-color: ${colors.pointBatang};
+  `}
+`;
 
 const ItemListWrap = styled.ScrollView`
   background-color: ${colors.pointBatang};
@@ -29,11 +47,17 @@ const ItemListWrap = styled.ScrollView`
 `;
 
 const ItemTO = styled.TouchableOpacity`
+  justify-content: center;
   border-width: 1;
   border-color: ${colors.pointLight};
   border-radius: 15;
   padding: 10px;
   margin-right: 10;
+  ${props => props.selected
+    && `
+    border-color: ${colors.pointLight};
+    background-color: ${colors.pointLight};
+  `}
 `;
 
 const ItemText = styled.Text``;
@@ -41,43 +65,67 @@ const ItemText = styled.Text``;
 export default class JBSelectBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      categoryList: null,
+      itemList: null,
+    };
   }
 
   componentDidMount() {
-    const { categoryList } = this.props;
+    const { categoryList, itemList } = this.props;
 
-    const categoryUIList = categoryList.map(catStr => (
-      <CategoryTO onPress={() => this.selectCategory(catStr)}>
-        <CategoryText>{catStr}</CategoryText>
-      </CategoryTO>
-    ));
-
-    this.selectCategory(categoryList[0]);
-    this.setState({ categoryUIList });
+    this.setState({ categoryList, itemList });
   }
 
+  componentWillReceiveProps(nextProps) {}
+
   selectCategory = (category) => {
-    const { itemList } = this.props;
+    const { selectCategory, selectItem } = this.props;
 
-    const itemUIList = itemList[category].map(itemStr => (
-      <ItemTO onPress={() => this.selectItem()}>
-        <ItemText>{itemStr}</ItemText>
-      </ItemTO>
-    ));
-
-    this.setState({ itemUIList });
+    selectCategory(category);
+    selectItem('');
   };
 
-  selectItem = () => {};
+  selectItem = (item) => {
+    const { selectedItem, selectItem } = this.props;
+
+    if (selectedItem === item) {
+      selectItem('');
+    } else {
+      selectItem(item);
+    }
+  };
 
   render() {
-    const { categoryUIList, itemUIList } = this.state;
+    const {
+      title, categoryList, itemList, selectedCat, selectedItem,
+    } = this.props;
 
+    const selectedCatStr = selectedCat || categoryList[0];
+console.log("selectedCatStr: "+selectedCatStr);
     return (
       <Container>
-        <CategoryListWrap horizontal>{categoryUIList}</CategoryListWrap>
-        <ItemListWrap horizontal>{itemUIList}</ItemListWrap>
+        {title ? <Title>{title}</Title> : null}
+        <CategoryListWrap horizontal>
+          {categoryList.map(catStr => (
+            <CategoryWrap>
+              <CategoryTO
+                onPress={() => this.selectCategory(catStr)}
+                selected={catStr === selectedCat}
+              >
+                <CategoryText>{catStr}</CategoryText>
+              </CategoryTO>
+              <SelectedIndicator selected={catStr === selectedCat} />
+            </CategoryWrap>
+          ))}
+        </CategoryListWrap>
+        <ItemListWrap horizontal>
+          {itemList[selectedCatStr].map(itemStr => (
+            <ItemTO onPress={() => this.selectItem(itemStr)} selected={itemStr === selectedItem}>
+              <ItemText>{itemStr}</ItemText>
+            </ItemTO>
+          ))}
+        </ItemListWrap>
       </Container>
     );
   }
