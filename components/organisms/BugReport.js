@@ -30,7 +30,7 @@ export default class BugReport extends React.PureComponent {
         </Text>
         <JBButton
           title="메일로 의견보내기"
-          onPress={() => Linking.openURL('mailto:jb9229@gmail.com')}
+          onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
           size="small"
         />
       </View>

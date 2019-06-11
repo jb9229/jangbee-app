@@ -1,10 +1,18 @@
 import React from 'react';
 import { Alert, Platform } from 'react-native';
 import { Notifications } from 'expo';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import GPSSearchScreen from './GPSSearchScreen';
+import FirmCntChart from '../components/FirmCntChart';
+import JBTerm from '../components/JBTerm';
+import colors from '../constants/Colors';
+
+const Container = styled.ScrollView`
+  background-color: ${colors.batangLight};
+`;
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -154,7 +162,13 @@ class HomeScreen extends React.Component {
   };
 
   render() {
-    return <GPSSearchScreen {...this.props} />;
+    return (
+      <Container>
+        <GPSSearchScreen {...this.props} />
+        <FirmCntChart />
+        <JBTerm />
+      </Container>
+    );
   }
 }
 

@@ -83,7 +83,7 @@ export default function renderJBTerm({ bg }) {
       <Row>
         <Column>
           <Title>직업정보제공사업면허:</Title>
-          <Text>신청중..</Text>
+          <Text>J1711020190001호</Text>
         </Column>
       </Row>
       <Row>

@@ -520,6 +520,10 @@ export function getCoupon(accountId) {
   return fetch(`${url.JBSERVER_COUPON}?accountId=${accountId}`).then(handleJBServerJsonResponse);
 }
 
+export function getFirmCountChart(equipment) {
+  return fetch(`${url.JBSERVER_STAT}?equipment=${equipment}`).then(handleJBServerJsonResponse);
+}
+
 /** ******************** Open Bank Api List ************************** */
 
 /**

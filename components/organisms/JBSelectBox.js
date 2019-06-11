@@ -1,13 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import colors from '../../constants/Colors';
+import fonts from '../../constants/Fonts';
 
 const Container = styled.View`
-  height: 100;
+  height: 120;
   margin-bottom: 5;
+  border-width: 1;
+  border-color: ${colors.batangLight};
+  padding: 5px;
 `;
 
-const Title = styled.Text``;
+const Title = styled.Text`
+  font-family: ${fonts.title};
+  margin: 3px;
+`;
 
 const CategoryListWrap = styled.ScrollView`
   flex-direction: row;
@@ -32,7 +39,7 @@ const CategoryTO = styled.TouchableOpacity`
 const CategoryText = styled.Text``;
 
 const SelectedIndicator = styled.View`
-  height: 12;
+  height: 15;
   margin-right: 10;
   ${props => props.selected
     && `
@@ -81,7 +88,9 @@ export default class JBSelectBox extends React.Component {
 
   selectCategory = (category) => {
     const { selectCategory, selectItem } = this.props;
+    const { itemScrollView } = this.refs;
 
+    itemScrollView.scrollTo({x:0, y:0, animated:true});
     selectCategory(category);
     selectItem('');
   };
@@ -100,15 +109,14 @@ export default class JBSelectBox extends React.Component {
     const {
       title, categoryList, itemList, selectedCat, selectedItem,
     } = this.props;
-
+console.log('Rendering JBSelectBox');
     const selectedCatStr = selectedCat || categoryList[0];
-console.log("selectedCatStr: "+selectedCatStr);
     return (
       <Container>
         {title ? <Title>{title}</Title> : null}
         <CategoryListWrap horizontal>
-          {categoryList.map(catStr => (
-            <CategoryWrap>
+          {categoryList.map((catStr, i) => (
+            <CategoryWrap key={i}>
               <CategoryTO
                 onPress={() => this.selectCategory(catStr)}
                 selected={catStr === selectedCat}
@@ -119,9 +127,9 @@ console.log("selectedCatStr: "+selectedCatStr);
             </CategoryWrap>
           ))}
         </CategoryListWrap>
-        <ItemListWrap horizontal>
-          {itemList[selectedCatStr].map(itemStr => (
-            <ItemTO onPress={() => this.selectItem(itemStr)} selected={itemStr === selectedItem}>
+        <ItemListWrap ref="itemScrollView" horizontal>
+          {itemList[selectedCatStr].map((itemStr, i) => (
+            <ItemTO key={i} onPress={() => this.selectItem(itemStr)} selected={itemStr === selectedItem}>
               <ItemText>{itemStr}</ItemText>
             </ItemTO>
           ))}

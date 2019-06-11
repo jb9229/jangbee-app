@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  Alert, BackHandler, Dimensions, Picker, ScrollView, StyleSheet, Text, View,
+  Alert, BackHandler, StyleSheet, Text, View,
 } from 'react-native';
 import { Location, Permissions } from 'expo';
 import styled from 'styled-components/native';
 import JBButton from '../components/molecules/JBButton';
-import JBTerm from '../components/JBTerm';
 import JangbeeAdList from '../components/JangbeeAdList';
 import Card from '../components/molecules/CardUI';
-import JBPicker from '../components/molecules/JBPicker';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import adLocation from '../constants/AdLocation';
@@ -19,46 +17,29 @@ import { validatePresence } from '../utils/Validation';
 import FirmCreaErrMSG from '../components/organisms/JBErrorMessage';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JBSelectBox from '../components/organisms/JBSelectBox';
-import {LineChart} from 'react-native-chart-kit'
-
-const chartConfig = {
-  backgroundGradientFrom: '#1E2923',
-  backgroundGradientTo: '#08130D',
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  strokeWidth: 2 // optional, default 3
-}
-
-const screenWidth = Dimensions.get('window').width;
-
-const sidoEquiPickerItems = ['크레인', '카고크레인', '굴착기', '스카이']
-.map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.batangLight,
-  },
   adWrap: {
-    paddingBottom: 10,
+    paddingBottom: 2,
   },
   card: {
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: colors.pointBatang,
     padding: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
     borderRadius: 15,
   },
   searOptionWrap: {
-    height: 250,
-    padding: 10,
+    height: 275,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   searModeWrap: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     margin: 5,
+    marginBottom: 10,
   },
   optionWrap: {
     justifyContent: 'center',
@@ -66,8 +47,9 @@ const styles = StyleSheet.create({
     height: 110,
   },
   commWrap: {
+    alignItems: 'center',
     marginTop: 20,
-    height: 80,
+    height: 100,
     paddingTop: 3,
     paddingBottom: 3,
   },
@@ -77,7 +59,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   currLocText: {
-    color: colors.point2,
+    color: colors.pointDark,
     fontFamily: fonts.batang,
     fontSize: 12,
   },
@@ -90,42 +72,20 @@ const styles = StyleSheet.create({
   },
 });
 
+const Container = styled.View`
+`;
+
 const SearchModeTO = styled.TouchableOpacity`
     padding: 5px;
 `;
 
 const SearchModeText = styled.Text`
-    ${props => props.active &&`
-      color: ${colors.pointDark}
-    `}
-`;
-
-const ChartWrap = styled.View``;
-
-const ChartTopWrap = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ChartTitle = styled.Text``;
-
-const ChartLegendListWrap = styled.View`
-  flex-direction: row;
-  margin-bottom: 3;
-`;
-
-const ChartLegend = styled.View`
-  padding: 5px;
-  ${props => props.color &&`
-    background-color: ${props.color};
-    border-color: ${props.color};
-    border-radius: 30;
+  font-family: ${fonts.titleTop};
+  font-size: 20;
+  ${props => props.active &&`
+    color: ${colors.pointDark}
   `}
 `;
-
-const ChartLegendTitle = styled.Text``;
-
 export default class GPSSearchScreen extends React.Component {
   _didFocusSubscription;
 
@@ -153,8 +113,7 @@ export default class GPSSearchScreen extends React.Component {
       refreshing: false,
       isListLoading: undefined,
       isLastList: false,
-      chartSidoEquipment: '크레인',
-      validationMessage: ', ',
+      validationMessage: '',
     };
 
     this._didFocusSubscription = props.navigation.addListener('didFocus', payload => BackHandler.addEventListener('hardwareBackPress', this.handleBackPress));
@@ -261,7 +220,7 @@ export default class GPSSearchScreen extends React.Component {
             }
 
             this.setState({
-              currLocation: `현 위치 수신됨: ${addressName}`,
+              currLocation: `현 위치: ${addressName}`,
               searSido: sido,
               searGungu: gungu,
             });
@@ -385,7 +344,7 @@ export default class GPSSearchScreen extends React.Component {
   validateSearNearFirm = () => {
     const { searEquipment, searEquiModel, searLongitude, searLatitude } = this.state;
 
-    this.setState({ validationMessage: ', ' });
+    this.setState({ validationMessage: '' });
 
     let v = validatePresence(searEquipment);
     if (!v[0]) {
@@ -426,7 +385,7 @@ export default class GPSSearchScreen extends React.Component {
   validateSearLocFirm = () => {
     const { searEquipment, searEquiModel, searSido, searGungu } = this.state;
 
-    this.setState({ validationMessage: ', ' });
+    this.setState({ validationMessage: '' });
 
     let v = validatePresence(searEquipment);
     if (!v[0]) {
@@ -502,18 +461,6 @@ export default class GPSSearchScreen extends React.Component {
   };
 
   /**
-   * Tab View 변경함수
-   */
-  changeTabView = (index) => {
-    const { matchedWorkList } = this.state;
-
-    if (index === 1 && matchedWorkList === undefined) {
-    }
-
-    this.setState({ index });
-  };
-
-  /**
    * 검색지역 설정 팝업창열기 함수
    */
   openSelLocModal = () => {
@@ -540,7 +487,7 @@ export default class GPSSearchScreen extends React.Component {
       refreshing,
       isLastList,
       isListLoading,
-      chartSidoEquipment,
+      firmCntChartModels,
       validationMessage,
     } = this.state;
 
@@ -558,8 +505,9 @@ export default class GPSSearchScreen extends React.Component {
       searchLocalCondition = `${searSido}`;
     }
 
+  console.log('Rendering GPSSearchScreen.js');
     return (
-      <ScrollView style={styles.container}>
+      <Container>
         <View style={styles.adWrap}>
           <JangbeeAdList
             adLocation={isSearchViewMode ? adLocation.main : adLocation.local}
@@ -573,7 +521,7 @@ export default class GPSSearchScreen extends React.Component {
           <Card>
             <View style={styles.searOptionWrap}>
               <View style={styles.searModeWrap}>
-                <SearchModeTO onPress={() => this.changeSearMode(false)} >
+                <SearchModeTO onPress={() => this.changeSearMode(false)}>
                   <SearchModeText active={!isLocalSearch}>내 주변 장비검색</SearchModeText>
                 </SearchModeTO>
                 <Text>|</Text>
@@ -582,7 +530,7 @@ export default class GPSSearchScreen extends React.Component {
                 </SearchModeTO>
               </View>
               <JBSelectBox
-                title="장비선택"
+                title="[장비 선택하기]"
                 categoryList={EQUIPMENT_CATEGORY}
                 itemList={EQUIPMENT_ITEM}
                 selectedCat={searEquipment}
@@ -595,7 +543,7 @@ export default class GPSSearchScreen extends React.Component {
                 {isLocalSearch ?
                   (
                     <JBSelectBox
-                      title="지역선택"
+                      title="[지역 선택하기]"
                       categoryList={LOCAL_CATEGORY}
                       itemList={LOCAL_ITEM}
                       selectedCat={searSido}
@@ -660,51 +608,12 @@ export default class GPSSearchScreen extends React.Component {
             />
           </View>
         )}
-        <ChartWrap>
-          <ChartTopWrap>
-            <ChartTitle>주요장비 지역가입 현황</ChartTitle>
-            <JBPicker
-              selectedValue={chartSidoEquipment}
-              items={sidoEquiPickerItems}
-              onValueChange={(equipment) => this.setState({chartSidoEquipment: equipment})}
-              size={140} />
-          </ChartTopWrap>
-          <ChartLegendListWrap>
-            <ChartLegend color="red" >
-              <ChartLegendTitle>5톤</ChartLegendTitle>
-            </ChartLegend>
-            <ChartLegend color="blue">
-              <ChartLegendTitle>10톤</ChartLegendTitle>
-            </ChartLegend>
-          </ChartLegendListWrap>
-          <LineChart
-            data={data}
-            width={screenWidth}
-            height={220}
-            chartConfig={chartConfig}
-          />
-        </ChartWrap>
-        <JBTerm />
-      </ScrollView>
+      </Container>
     );
   }
 }
 
-const data = {
-  labels: ['서울', '부산', '인천', '세종', '대전', '광주', '대구'],
-  datasets: [{
-    data: [ 50, 65, 78, 90, 100, 30 ],
-    color: (opacity = 1) => `rgba(134, 165, 244, ${opacity})`, // optional
-    strokeWidth: 2, // optional
-  },
-  {
-    data: [ 20, 45, 28, 80, 99, 43 ],
-    color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-    strokeWidth: 2, // optional
-  }]
-}
-
-const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카이', '지게차'];
+const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카이', '지게차', '사다리차', '하이랜더', '고소작업렌탈', '펌프카', '도로포장장비', '로우더', '도로포장장비', '항타천공오가', '불도저', '진동로라/발전기', '덤프임대', '거미크레인'];
 
 const EQUIPMENT_ITEM = [];
 EQUIPMENT_ITEM['크레인'] = ['10톤', '13톤', '25톤', '50톤', '100톤', '160톤', '200톤', '250톤', '300톤', '400톤', '500톤', '700톤', '800톤', '1200톤'];
