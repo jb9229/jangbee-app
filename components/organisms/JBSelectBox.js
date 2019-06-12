@@ -14,19 +14,25 @@ const Container = styled.View`
 const Title = styled.Text`
   font-family: ${fonts.title};
   margin: 3px;
+  margin-bottom: 7px;
 `;
 
 const CategoryListWrap = styled.ScrollView`
   flex-direction: row;
 `;
 
-const CategoryWrap = styled.View``;
+const CategoryWrap = styled.View`
+  border-bottom-width: 1;
+  border-color: ${colors.batangLight};
+`;
 
 const CategoryTO = styled.TouchableOpacity`
   border-width: 1;
   border-color: ${colors.batangLight};
   border-radius: 5;
-  padding: 8px;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
   margin-right: 10;
   background-color: ${colors.batangLight};
   ${props => props.selected
@@ -36,10 +42,13 @@ const CategoryTO = styled.TouchableOpacity`
   `}
 `;
 
-const CategoryText = styled.Text``;
+const CategoryText = styled.Text`
+  font-family: ${fonts.title};
+  font-size: 16;
+`;
 
 const SelectedIndicator = styled.View`
-  height: 15;
+  height: 25;
   margin-right: 10;
   ${props => props.selected
     && `
@@ -58,7 +67,7 @@ const ItemTO = styled.TouchableOpacity`
   border-width: 1;
   border-color: ${colors.pointLight};
   border-radius: 15;
-  padding: 10px;
+  padding: 13px;
   margin-right: 10;
   ${props => props.selected
     && `
@@ -67,7 +76,10 @@ const ItemTO = styled.TouchableOpacity`
   `}
 `;
 
-const ItemText = styled.Text``;
+const ItemText = styled.Text`
+  font-family: ${fonts.title};
+  font-size: 16;
+`;
 
 export default class JBSelectBox extends React.Component {
   constructor(props) {
@@ -90,7 +102,7 @@ export default class JBSelectBox extends React.Component {
     const { selectCategory, selectItem } = this.props;
     const { itemScrollView } = this.refs;
 
-    itemScrollView.scrollTo({x:0, y:0, animated:true});
+    itemScrollView.scrollTo({ x: 0, y: 0, animated: true });
     selectCategory(category);
     selectItem('');
   };
@@ -109,7 +121,7 @@ export default class JBSelectBox extends React.Component {
     const {
       title, categoryList, itemList, selectedCat, selectedItem,
     } = this.props;
-console.log('Rendering JBSelectBox');
+    console.log('Rendering JBSelectBox');
     const selectedCatStr = selectedCat || categoryList[0];
     return (
       <Container>
@@ -129,7 +141,11 @@ console.log('Rendering JBSelectBox');
         </CategoryListWrap>
         <ItemListWrap ref="itemScrollView" horizontal>
           {itemList[selectedCatStr].map((itemStr, i) => (
-            <ItemTO key={i} onPress={() => this.selectItem(itemStr)} selected={itemStr === selectedItem}>
+            <ItemTO
+              key={i}
+              onPress={() => this.selectItem(itemStr)}
+              selected={itemStr === selectedItem}
+            >
               <ItemText>{itemStr}</ItemText>
             </ItemTO>
           ))}

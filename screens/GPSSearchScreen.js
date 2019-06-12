@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, BackHandler, StyleSheet, Text, View,
+  Alert, BackHandler, Switch, StyleSheet, Text, View,
 } from 'react-native';
 import { Location, Permissions } from 'expo';
 import styled from 'styled-components/native';
@@ -36,22 +36,30 @@ const styles = StyleSheet.create({
   },
   searModeWrap: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     margin: 5,
+    paddingBottom: 8,
     marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.pointDark,
+    borderStyle: 'dashed',
+    borderRadius: 10,
+  },
+  searchModeSwitch: {
+    transform: [{ scaleX: 1.8 }, { scaleY: 1.5 }],
+    marginLeft: 40,
+    marginRight: 30,
   },
   optionWrap: {
     justifyContent: 'center',
     marginTop: 15,
-    height: 110,
+    height: 120,
   },
   commWrap: {
     alignItems: 'center',
-    marginTop: 20,
+    justifyContent: 'flex-end',
     height: 100,
-    paddingTop: 3,
-    paddingBottom: 3,
   },
   gpsWrap: {
     flexDirection: 'row',
@@ -76,14 +84,17 @@ const Container = styled.View`
 `;
 
 const SearchModeTO = styled.TouchableOpacity`
-    padding: 5px;
 `;
 
-const SearchModeText = styled.Text`
+const SwitchText = styled.Text`
   font-family: ${fonts.titleTop};
-  font-size: 20;
-  ${props => props.active &&`
-    color: ${colors.pointDark}
+  font-size: 26;
+  align-items: flex-end;
+  justify-content: center;
+  color: ${colors.point2};
+  ${props => props.select
+    && `
+    color: ${colors.batang};
   `}
 `;
 export default class GPSSearchScreen extends React.Component {
@@ -505,7 +516,6 @@ export default class GPSSearchScreen extends React.Component {
       searchLocalCondition = `${searSido}`;
     }
 
-  console.log('Rendering GPSSearchScreen.js');
     return (
       <Container>
         <View style={styles.adWrap}>
@@ -522,11 +532,17 @@ export default class GPSSearchScreen extends React.Component {
             <View style={styles.searOptionWrap}>
               <View style={styles.searModeWrap}>
                 <SearchModeTO onPress={() => this.changeSearMode(false)}>
-                  <SearchModeText active={!isLocalSearch}>내 주변 장비검색</SearchModeText>
+                  <SwitchText select={isLocalSearch}>주변 검색</SwitchText>
                 </SearchModeTO>
-                <Text>|</Text>
+                <Switch
+                  value={isLocalSearch}
+                  onValueChange={newValue => this.changeSearMode(newValue)}
+                  thumbColor={colors.point2}
+                  style={styles.searchModeSwitch}
+                  trackColor={{ false: colors.batang, true: colors.batang }}
+                />
                 <SearchModeTO onPress={() => this.changeSearMode(true)}>
-                  <SearchModeText active={isLocalSearch}>지역 장비검색</SearchModeText>
+                  <SwitchText select={!isLocalSearch}>지역 검색</SwitchText>
                 </SearchModeTO>
               </View>
               <JBSelectBox
