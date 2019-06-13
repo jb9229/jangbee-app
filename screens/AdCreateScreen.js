@@ -385,7 +385,8 @@ class AdCreateScreen extends React.Component {
         .existEuipTarketAd(adEquipment)
         .then((dupliResult) => {
           if (dupliResult === null) {
-            this.requestCreaAd();
+            // this.requestCreaAd();
+            this.withdrawDispatchFee(); // (오픈뱅크 심사용)
           } else {
             notifyError(
               '장비 타켓광고 중복검사 실패',
@@ -405,6 +406,7 @@ class AdCreateScreen extends React.Component {
         .then((dupliResult) => {
           if (dupliResult === null) {
             this.requestCreaAd();
+            this.withdrawDispatchFee(); // (오픈뱅크 심사용)
           } else {
             notifyError(
               '지역 타켓광고 중복 확인 실패',
@@ -417,6 +419,7 @@ class AdCreateScreen extends React.Component {
         });
     } else {
       this.requestCreaAd();
+      this.withdrawDispatchFee(); // (오픈뱅크 심사용)
     }
   };
 
@@ -532,6 +535,39 @@ class AdCreateScreen extends React.Component {
     return true;
   };
 
+
+  /**
+   * 광고비 결제 요청함수(오픈뱅크 심사용)
+   */
+  withdrawDispatchFee = () => {
+    const { userProfile } = this.props;
+    const { fintechUseNum } = this.state;
+
+    // 지원비 이체
+    api
+      .transferWithdraw(userProfile.obAccessToken, fintechUseNum, 30000, '장비콜 광고비 출금')
+      .then((res) => {
+        if (res && res.rsp_code && res.rsp_code === 'A0000') {
+          this.requestCreaAd();
+          return;
+        }
+        notifyError(
+          '배차비 출금 문제',
+          `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${res.rsp_code}, ${
+            res.rsp_message
+          })`,
+        );
+      })
+      .catch((error) => {
+        notifyError(
+          '배차비 출금 문제',
+          `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${error.name}, ${
+            error.message
+          })`,
+        );
+      });
+  };
+
   /**
    * 광고타입 렌더링 함수
    */
@@ -589,7 +625,7 @@ class AdCreateScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Card>
-          <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
+          <KeyboardAvoidingView>
             <ScrollView contentContainerStyle={styles.formWrap}>
               <EquipementModal
                 isVisibleEquiModal={isVisibleEquiModal}

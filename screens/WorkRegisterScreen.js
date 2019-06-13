@@ -330,7 +330,7 @@ class WorkRegisterScreen extends React.Component {
 
     return (
       <View style={styles.Container}>
-        <KeyboardAvoidingView behavior={__DEV__ ? null : 'padding'} keyboardVerticalOffset={Platform.select({ ios: 0, android: Header.HEIGHT + 20 })}>
+        <KeyboardAvoidingView>
           <ScrollView>
             <CardUI>
               <JBTextInput

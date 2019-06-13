@@ -3,7 +3,7 @@
   "appName": "JangbeeCall",
   "expo": {
     "name": "장비 콜",
-    "slug": "jangbeecall_beta_020",
+    "slug": "jangbeecall_openbank",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "32.0.0",
@@ -21,7 +21,7 @@
       "backgroundColor": "#4D4A4A"
     },
     "updates": {
-      "fallbackToCacheTimeout": 17
+      "checkAutomatically": "ON_ERROR_RECOVERY"
     },
     "assetBundlePatterns": [
       "**/*"

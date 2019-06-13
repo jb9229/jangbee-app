@@ -3,10 +3,11 @@ import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import {
-  AppLoading, Asset, Font, Icon, Notifications,
+  AppLoading, Asset, Font, Icon, Updates,
 } from 'expo';
 import firebase from 'firebase';
 import AppNavigator from './navigation/AppNavigator';
+import JBActIndicator from './components/organisms/JBActIndicator';
 import { LoginProvider } from './contexts/LoginProvider';
 import colors from './constants/Colors';
 import firebaseconfig from './firebaseconfig';
@@ -21,11 +22,12 @@ const styles = StyleSheet.create({
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    isAppUpdateComplete: false,
   };
 
-  // componentDidMount() {
-  //   this._notificationSubscription = Notifications.addListener(this.notifi);
-  // }
+  componentDidMount() {
+    this.checkUpdate();
+  }
 
   notifi = (notifi) => {
     console.log(notifi);
@@ -59,6 +61,22 @@ export default class App extends React.Component {
     this.setState({ isLoadingComplete: true });
   };
 
+  checkUpdate = async () => {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        // ... notify user of update ...
+        Updates.reloadFromCache();
+        this.setState({ isAppUpdateComplete: true });
+      }
+
+      this.setState({ isAppUpdateComplete: true });
+    } catch (e) {
+      this.setState({ isAppUpdateComplete: true });
+    }
+  };
+
   initFirebase = () => {
     firebase.initializeApp(firebaseconfig);
 
@@ -67,7 +85,7 @@ export default class App extends React.Component {
 
   render() {
     const { skipLoadingScreen } = this.props;
-    const { isLoadingComplete } = this.state;
+    const { isLoadingComplete, isAppUpdateComplete } = this.state;
 
     if (!isLoadingComplete && !skipLoadingScreen) {
       return (
@@ -77,6 +95,10 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
+    }
+
+    if (!isAppUpdateComplete) {
+      return <JBActIndicator title="앱 버전 업데이트 체크중..." size={35} />;
     }
 
     return (
