@@ -5,25 +5,23 @@ import {
 import { Location, Permissions } from 'expo';
 import styled from 'styled-components/native';
 import JBButton from '../components/molecules/JBButton';
-import JangbeeAdList from '../components/JangbeeAdList';
 import Card from '../components/molecules/CardUI';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
-import adLocation from '../constants/AdLocation';
 import * as api from '../api/api';
-import FirmSearList from '../components/organisms/FirmSearList';
 import JBIcon from '../components/molecules/JBIcon';
 import { validatePresence } from '../utils/Validation';
 import FirmCreaErrMSG from '../components/organisms/JBErrorMessage';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JBSelectBox from '../components/organisms/JBSelectBox';
+import FirmSearListModal from '../components/FirmSearListModal';
 
 const styles = StyleSheet.create({
   adWrap: {
     paddingBottom: 2,
   },
   searOptionWrap: {
-    height: 265,
+    height: 285,
     paddingLeft: 8,
     paddingRight: 8,
   },
@@ -33,7 +31,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 5,
     paddingBottom: 8,
-    marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: colors.pointDark,
     borderStyle: 'dashed',
@@ -46,7 +43,7 @@ const styles = StyleSheet.create({
   },
   optionWrap: {
     justifyContent: 'center',
-    marginTop: 15,
+    marginTop: 10,
     height: 100,
   },
   commWrap: {
@@ -63,13 +60,6 @@ const styles = StyleSheet.create({
     color: colors.pointDark,
     fontFamily: fonts.batang,
     fontSize: 12,
-  },
-  firmListWrap: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    marginLeft: 5,
-    marginRight: 5,
   },
 });
 
@@ -90,6 +80,19 @@ const SwitchText = styled.Text`
     color: ${colors.batang};
   `}
 `;
+
+const SearSummaryWrap = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+const SearSummary = styled.Text`
+  font-family: ${fonts.title};
+  padding-top: 5;
+  padding-bottom: 5;
+  margin-right: 3;
+`;
+
 export default class GPSSearchScreen extends React.Component {
   _didFocusSubscription;
 
@@ -104,6 +107,7 @@ export default class GPSSearchScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isVisibleSearResultModal: false,
       isComponentMountComplete: false,
       isSearchViewMode: true,
       isLocalSearch: false,
@@ -111,10 +115,7 @@ export default class GPSSearchScreen extends React.Component {
       searEquipment: '크레인',
       searEquiModel: '10톤',
       searSido: '서울',
-      searGungu: '강남구',
-      searchedFirmList: null,
-      page: 0,
-      refreshing: false,
+      searGungu: '전체',
       isListLoading: undefined,
       isLastList: false,
       validationMessage: '',
@@ -148,10 +149,8 @@ export default class GPSSearchScreen extends React.Component {
 
     this.setState({
       isLocalSearch: isLocalMode,
-      page: 0,
-      isListLoading: undefined,
       searSido: '서울',
-      searGungu: '강남구',
+      searGungu: '전체',
     });
 
     if (!isSearchViewMode) {
@@ -257,92 +256,6 @@ export default class GPSSearchScreen extends React.Component {
   };
 
   /**
-   * 주변 장비업체 검색 요청함수
-   */
-  searchNearJangbee = () => {
-    const {
-      searchedFirmList, page, searEquipment, searEquiModel, searLongitude, searLatitude,
-    } = this.state;
-
-    if (!this.validateSearNearFirm()) {
-      return;
-    }
-
-    this.setSearchViewMode(false);
-
-    const searchStr = `${searEquiModel} ${searEquipment}`;
-
-    api
-      .getNearFirmList(page, searchStr, searLongitude, searLatitude)
-      .then((res) => {
-        if (!this._isMounted) {
-          return;
-        }
-
-        this.setState({
-          searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
-          isLastList: res.last,
-          isListLoading: false,
-          refreshing: false,
-        });
-      })
-      .catch((error) => {
-        if (!this._isMounted) {
-          return;
-        }
-
-        Alert.alert(
-          '주변 장비 조회에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-        this.setState({ isListLoading: false });
-      });
-  };
-
-  /**
-   * 지역 장비업체 검색 함수
-   */
-  searchLocJangbee = () => {
-    const {
-      page, searchedFirmList, searEquipment, searEquiModel, searSido, searGungu,
-    } = this.state;
-
-    if (!this.validateSearLocFirm()) {
-      return;
-    }
-
-    this.setSearchViewMode(false);
-
-    const searchStr = `${searEquiModel} ${searEquipment}`;
-
-    api
-      .getLocalFirmList(page, searchStr, searSido, searGungu)
-      .then((res) => {
-        if (!this._isMounted) {
-          return;
-        }
-
-        this.setState({
-          searchedFirmList: page === 0 ? res.content : [...searchedFirmList, ...res.content],
-          isLastList: res.last,
-          isListLoading: false,
-          refreshing: false,
-        });
-      })
-      .catch((error) => {
-        if (!this._isMounted) {
-          return;
-        }
-
-        Alert.alert(
-          '주변 장비 조회에 문제가 있습니다, 재 시도해 주세요.',
-          `[${error.name}] ${error.message}`,
-        );
-        this.setState({ isListLoading: false });
-      });
-  };
-
-  /**
    * 지역장비 검색 유효성 검사 함수
    */
   validateSearNearFirm = () => {
@@ -380,7 +293,7 @@ export default class GPSSearchScreen extends React.Component {
       return false;
     }
 
-    return true;
+    this.setState({isVisibleSearResultModal: true});
   };
 
   /**
@@ -409,48 +322,7 @@ export default class GPSSearchScreen extends React.Component {
       return false;
     }
 
-    return true;
-  };
-
-  /**
-   * 장비업체리스트 새로고침 함수
-   */
-  handleRefresh = () => {
-    const { isLocalSearch } = this.state;
-
-    this.setState(
-      {
-        page: 0,
-        refreshing: true,
-      },
-      () => {
-        if (isLocalSearch) {
-          this.searchLocJangbee();
-        } else {
-          this.searchNearJangbee();
-        }
-      },
-    );
-  };
-
-  /**
-   * 장비업체리스트 페이징 추가 함수
-   */
-  handleLoadMore = () => {
-    const { page, isLastList } = this.state;
-
-    if (isLastList) {
-      return;
-    }
-
-    this.setState(
-      {
-        page: page + 1,
-      },
-      () => {
-        this.searchNearJangbee();
-      },
-    );
+    this.setState({isVisibleSearResultModal: true})
   };
 
   /**
@@ -464,20 +336,10 @@ export default class GPSSearchScreen extends React.Component {
     }
   };
 
-  /**
-   * 검색지역 설정 팝업창열기 함수
-   */
-  openSelLocModal = () => {
-    const { searEquipment, searEquiModel } = this.state;
-
-    if (!searEquipment || !searEquiModel) {
-      Alert.alert('검색할 장비 먼저 선택해 주세요.');
-    }
-  };
-
   render() {
     const { navigation } = this.props;
     const {
+      isVisibleSearResultModal,
       isComponentMountComplete,
       isSearchViewMode,
       isLocalSearch,
@@ -486,137 +348,116 @@ export default class GPSSearchScreen extends React.Component {
       currLocation,
       searSido,
       searGungu,
-      searchedFirmList,
-      page,
-      refreshing,
-      isLastList,
-      isListLoading,
       firmCntChartModels,
       validationMessage,
+      searLongitude,
+      searLatitude,
     } = this.state;
 
     if (!isComponentMountComplete) {
       return <JBActIndicator title="위치정보 불러오는중..." size={35} />;
     }
 
-    let searchLocalCondition = ', ';
-
-    if (searSido && searGungu) {
-      searchLocalCondition = `${searSido} ${searGungu}`;
-    }
-
-    if (searSido && !searGungu) {
-      searchLocalCondition = `${searSido}`;
-    }
-
     return (
       <Container>
-        <View style={styles.adWrap}>
-          <JangbeeAdList
-            adLocation={isSearchViewMode ? adLocation.main : adLocation.local}
-            euqiTarget={searEquipment}
-            sidoTarget={searSido}
-            gugunTarget={searGungu}
-            navigation={navigation}
-          />
-        </View>
-        {isSearchViewMode ? (
-          <Card>
-            <View style={styles.searOptionWrap}>
-              <View style={styles.searModeWrap}>
-                <SearchModeTO onPress={() => this.changeSearMode(false)}>
-                  <SwitchText select={isLocalSearch}>주변 검색</SwitchText>
-                </SearchModeTO>
-                <Switch
-                  value={isLocalSearch}
-                  onValueChange={newValue => this.changeSearMode(newValue)}
-                  thumbColor={colors.point2}
-                  style={styles.searchModeSwitch}
-                  trackColor={{ false: colors.batang, true: colors.batang }}
-                />
-                <SearchModeTO onPress={() => this.changeSearMode(true)}>
-                  <SwitchText select={!isLocalSearch}>지역 검색</SwitchText>
-                </SearchModeTO>
-              </View>
-              <JBSelectBox
-                categoryList={EQUIPMENT_CATEGORY}
-                itemList={EQUIPMENT_ITEM}
-                selectedCat={searEquipment}
-                selectedItem={searEquiModel}
-                selectCategory={(equi) => this.setState({searEquipment: equi})}
-                selectItem={(item) => this.setState({searEquiModel: item})}
-                cateImageArr={EQUIPMENT_IMAGES}
+        <Card>
+          <View style={styles.searOptionWrap}>
+            <View style={styles.searModeWrap}>
+              <SearchModeTO onPress={() => this.changeSearMode(false)}>
+                <SwitchText select={isLocalSearch}>주변 검색</SwitchText>
+              </SearchModeTO>
+              <Switch
+                value={isLocalSearch}
+                onValueChange={newValue => this.changeSearMode(newValue)}
+                thumbColor={colors.point2}
+                style={styles.searchModeSwitch}
+                trackColor={{ false: colors.batang, true: colors.batang }}
               />
-
-              <View style={styles.optionWrap}>
-                {isLocalSearch ?
-                  (
-                    <JBSelectBox
-                      categoryList={LOCAL_CATEGORY}
-                      itemList={LOCAL_ITEM}
-                      selectedCat={searSido}
-                      selectedItem={searGungu}
-                      selectCategory={(sido) => {this.setState({searSido: sido})}}
-                      selectItem={(sigungu) => this.setState({searGungu: sigungu})}
-                      itemPicker="전체"
-                    />
-                  ) : (
-                    <View style={styles.gpsWrap}>
-                      <Text style={styles.currLocText}>{currLocation}</Text>
-                      <JBIcon
-                        name="refresh"
-                        size={24}
-                        color={colors.point2}
-                        onPress={() => this.setLocationInfo()}
-                      />
-                    </View>
-                  )}
-              </View>
+              <SearchModeTO onPress={() => this.changeSearMode(true)}>
+                <SwitchText select={!isLocalSearch}>지역 검색</SwitchText>
+              </SearchModeTO>
             </View>
-            <View style={styles.commWrap}>
-              <FirmCreaErrMSG errorMSG={validationMessage} />
-              {isLocalSearch ? (
-                <JBButton
-                  title="지역 검색하기"
-                  onPress={() => this.searchLocJangbee()}
-                  size="full"
-                  bgColor={colors.point2}
-                  color="white"
-                />
-              ) : (
-                <JBButton
-                  title="내 주변 검색하기"
-                  onPress={() => this.searchNearJangbee()}
-                  size="full"
-                  bgColor={colors.point2}
-                  color="white"
-                />
+            <SearSummaryWrap>
+              <SearSummary>[</SearSummary>
+              <SearSummary>{isLocalSearch ? '지역검색: ' : '주변검색: '}</SearSummary>
+              <SearSummary>{searEquiModel}</SearSummary>
+              <SearSummary>{searEquipment}</SearSummary>
+              {isLocalSearch && (
+                <SearSummaryWrap>
+                  <SearSummary>,</SearSummary>
+                  <SearSummary>{searSido}</SearSummary>
+                  <SearSummary>{searGungu}</SearSummary>
+                </SearSummaryWrap>
               )}
+              <SearSummary>]</SearSummary>
+            </SearSummaryWrap>
+            <JBSelectBox
+              categoryList={EQUIPMENT_CATEGORY}
+              itemList={EQUIPMENT_ITEM}
+              selectedCat={searEquipment}
+              selectedItem={searEquiModel}
+              selectCategory={equi => this.setState({ searEquipment: equi, searEquiModel: '' })}
+              selectItem={(equi, model) => this.setState({ searEquipment: equi, searEquiModel: model })}
+              cateImageArr={EQUIPMENT_IMAGES}
+            />
+
+            <View style={styles.optionWrap}>
+              {isLocalSearch ?
+                (
+                  <JBSelectBox
+                    categoryList={LOCAL_CATEGORY}
+                    itemList={LOCAL_ITEM}
+                    selectedCat={searSido}
+                    selectedItem={searGungu}
+                    selectCategory={sido => this.setState({ searSido: sido })}
+                    selectItem={(sido, sigungu) => this.setState({ searSido: sido, searGungu: sigungu })}
+                    itemPicker="전체"
+                  />
+                ) : (
+                  <View style={styles.gpsWrap}>
+                    <Text style={styles.currLocText}>{currLocation}</Text>
+                    <JBIcon
+                      name="refresh"
+                      size={24}
+                      color={colors.point2}
+                      onPress={() => this.setLocationInfo()}
+                    />
+                  </View>
+                )}
             </View>
-          </Card>
-        ) : (
-          <View style={styles.firmListWrap}>
-            <JBIcon
-              name="close"
-              size={23}
-              onPress={() => this.setState({ searchedFirmList: [], page: 0, isSearchViewMode: true })
-              }
-            />
-            <FirmSearList
-              data={searchedFirmList}
-              page={page}
-              refreshing={refreshing}
-              last={isLastList}
-              isLoading={isListLoading}
-              handleLoadMore={this.handleLoadMore}
-              handleRefresh={this.handleRefresh}
-              selEquipment={searEquipment}
-              selSido={searSido}
-              selGungu={searGungu}
-              {...this.props}
-            />
           </View>
-        )}
+          <View style={styles.commWrap}>
+            <FirmCreaErrMSG errorMSG={validationMessage} />
+            {isLocalSearch ? (
+              <JBButton
+                title="지역 검색하기"
+                onPress={() => this.validateSearLocFirm()}
+                size="full"
+                bgColor={colors.point2}
+                color="white"
+              />
+            ) : (
+              <JBButton
+                title="내 주변 검색하기"
+                onPress={() => this.validateSearNearFirm()}
+                size="full"
+                bgColor={colors.point2}
+                color="white"
+              />
+            )}
+          </View>
+        </Card>
+        <FirmSearListModal
+          isVisibleModal={isVisibleSearResultModal}
+          closeModal={() => this.setState({isVisibleSearResultModal: false})}
+          searEquipment={searEquipment}
+          searEquiModel={searEquiModel}
+          searLongitude={searLongitude}
+          searLatitude={searLatitude}
+          isLocalSearch={isLocalSearch}
+          size="full"
+          navigation={navigation}
+        />
       </Container>
     );
   }
@@ -648,7 +489,7 @@ const LOCAL_CATEGORY = ['서울', '부산', '경기', '인천', '세종', '대�
 const LOCAL_ITEM = [];
 LOCAL_ITEM['서울'] = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중량구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['부산'] = ['강서구', '금정구', '기장구', '남구', '동구', '동래구', '부산진구', '북구', '사상구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-LOCAL_ITEM['경기'] = ['가평군', '고양시', '과천시', '광명시', '광주구', '구리시', '군포시', '김포시', '남양주시', '동두천시', '부천시', '성남시', '수원시', '시흥시', '안산시', '안성시', '안양시', '양주시', '양평군', '여주시', '연천군', '오산시', '용인시', '의왕시', '의정부시', '이천시', '파주시', '평택시', '포천시', '하남시', '화성시'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
+LOCAL_ITEM['경기'] = ['가평군', '고양시', '과천시', '광명시', '광주시', '구리시', '군포시', '김포시', '남양주시', '동두천시', '부천시', '성남시', '수원시', '시흥시', '안산시', '안성시', '안양시', '양주시', '양평군', '여주시', '연천군', '오산시', '용인시', '의왕시', '의정부시', '이천시', '파주시', '평택시', '포천시', '하남시', '화성시'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['인천'] = ['강화군', '계양군', '남동구', '동구', '미추홀구', '부평구', '서구', '연수구', '옹진군', '중구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['세종'] = ['가람동', '고운동', '금남면', '나성동', '다정동', '대평동', '도담동', '반곡동', '보람동', '부강면', '새롬동', '소담동', '소정면', '아름동', '어진동', '연기면', '연동면', '연서면', '장군면', '전동면', '전의면', '조치원읍', '종촌동', '한솔동'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['대전'] = ['대덕구', '동구', '서구', '유성구', '중구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));

@@ -9,7 +9,6 @@ const Container = styled.View`
     && `
     width: ${props.size};
   `}
-  margin: 0px 5px;
 `;
 
 const TitleWrap = styled.View`

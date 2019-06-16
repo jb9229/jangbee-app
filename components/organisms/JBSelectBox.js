@@ -5,14 +5,13 @@ import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
 const Container = styled.View`
-  margin-bottom: 5;
   border-width: 1;
   border-color: ${colors.batangLight};
   padding: 5px;
-  height: 100;
+  height: 90;
   ${props => props.isImageBox
     && `
-    height: 130;
+    height: 150;
   `}
 `;
 
@@ -31,9 +30,8 @@ const SelectListWrap = styled.ScrollView.attrs(props => ({
 `;
 
 const SelectBox = styled.View`
-  flex-direction: row;
-  height: 100;
-  padding: 4px;
+  align-items: center;
+  height: 70;
   margin-right: 12;
   border-width: 1;
   border-radius: 10;
@@ -46,11 +44,14 @@ const SelectBox = styled.View`
   `}
   ${props => props.isImageBox
     && `
-    height: 70;
+    height: 130;
+    padding-top: 5;
   `}
 `;
 
-const CateImgTO = styled.TouchableOpacity``;
+const CateImgTO = styled.TouchableOpacity`
+  justify-content: center;
+`;
 
 const CateImage = styled.Image`
   width: 90;
@@ -58,66 +59,51 @@ const CateImage = styled.Image`
   border-radius: 20;
 `;
 
-const CateTextTO = styled.TouchableOpacity`
-  flex: 3;
+const CateTextWrap = styled.TouchableOpacity`
+  flex: 1;
+  width: 100%;
   align-items: center;
   justify-content: center;
-  border-bottom-width: 1;
-  margin-left: 3;
+  ${props => props.isImageBox
+    && `
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  `}
 `;
 
 const CategoryText = styled.Text`
   font-family: ${fonts.titleMiddle};
   font-size: 16;
+  padding: 5px;
+  color: ${colors.batangDark};
   ${props => props.selected
     && `
-    color: ${colors.pointDark}
-  `}
+    color: ${colors.pointDark};
+  `};
 `;
 
 const ItemListWrap = styled.View`
-  flex: 1;
-  justify-content: space-around;
+  justify-content: center;
 `;
 
 const ItemPickerWrap = styled.View`
-  flex: 2;
+  height: 25;
+  border-top-width: 1;
+  margin-top: 5;
   justify-content: center;
 `;
 
 export default class JBSelectBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      categoryList: null,
-      itemList: null,
-    };
+    this.state = {};
   }
 
-  componentDidMount() {
-    const { categoryList, itemList } = this.props;
-
-    this.setState({ categoryList, itemList });
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {}
-
-  selectCategory = (category) => {
-    const { selectCategory, selectItem } = this.props;
-
-    selectCategory(category);
-    selectItem('');
-  };
-
-  selectItem = (item) => {
-    const { selectedItem, selectItem } = this.props;
-
-    if (selectedItem === item) {
-      selectItem('');
-    } else {
-      selectItem(item);
-    }
-  };
 
   render() {
     const {
@@ -132,26 +118,24 @@ export default class JBSelectBox extends React.Component {
       itemPicker,
     } = this.props;
 
-    const selectedCatStr = selectedCat || categoryList[0];
-
     return (
       <Container isImageBox={!!cateImageArr}>
         {title ? <Title>{title}</Title> : null}
         <SelectListWrap horizontal>
           {categoryList.map((catStr, i) => (
-            <SelectBox key={i} selected={catStr === selectedCat} isImageBox={!cateImageArr}>
-              <CateImgTO onPress={() => this.selectCategory(catStr)}>
+            <SelectBox key={i} selected={catStr === selectedCat} isImageBox={!!cateImageArr}>
+              <CateImgTO onPress={() => selectCategory(catStr)}>
                 {cateImageArr && <CateImage source={cateImageArr[i]} />}
               </CateImgTO>
+              <CateTextWrap isImageBox={!!cateImageArr} onPress={() => selectCategory(catStr)}>
+                <CategoryText selected={catStr === selectedCat}>{catStr}</CategoryText>
+              </CateTextWrap>
               <ItemListWrap>
-                <CateTextTO onPress={() => this.selectCategory(catStr)}>
-                  <CategoryText selected={catStr === selectedCat}>{catStr}</CategoryText>
-                </CateTextTO>
                 <ItemPickerWrap>
                   <JBPicker
                     items={itemList[catStr]}
                     selectedValue={catStr === selectedCat ? selectedItem : ''}
-                    onValueChange={itemValue => selectItem(itemValue)}
+                    onValueChange={itemValue => selectItem(catStr, itemValue)}
                     selectLabel={itemPicker || undefined}
                     size={110}
                   />

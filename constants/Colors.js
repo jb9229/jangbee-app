@@ -18,7 +18,7 @@ export default {
   point2Dark: '#175AA8', // #6299D2(64,142,228) -> #175AA8
   point2: '#82b6ed', // RGB: 130, 182, 237
   point2Light: '#D3E5F9', // rgb(239, 248, 252)
-  point2Batang: '#ECF5FF', //
+  point2Batang: '#ECF5FF', // rgb(236, 245, 255)
 
   point3: '#E1EDAF',
   point3_other: '#ADD0A6',

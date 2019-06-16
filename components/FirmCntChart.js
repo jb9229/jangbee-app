@@ -6,7 +6,9 @@ import JBPicker from './molecules/JBPicker';
 import fonts from '../constants/Fonts';
 import * as api from '../api/api';
 
-const ChartWrap = styled.View``;
+const ChartWrap = styled.View`
+  flex: 1;
+`;
 
 const ChartTopWrap = styled.View`
   flex-direction: row;

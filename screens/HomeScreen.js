@@ -7,6 +7,8 @@ import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import GPSSearchScreen from './GPSSearchScreen';
 import FirmCntChart from '../components/FirmCntChart';
+import JangbeeAdList from '../components/JangbeeAdList';
+import adLocation from '../constants/AdLocation';
 import JBTerm from '../components/JBTerm';
 import colors from '../constants/Colors';
 
@@ -162,8 +164,14 @@ class HomeScreen extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <Container>
+        <JangbeeAdList
+          adLocation={adLocation.main}
+          navigation={navigation}
+        />
         <GPSSearchScreen {...this.props} />
         <FirmCntChart />
         <JBTerm />
