@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FlatList, Picker, StyleSheet, Text, View,
+  Alert, FlatList, Picker, StyleSheet, Text, View,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import JBButton from '../components/molecules/JBButton';
@@ -9,6 +9,7 @@ import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
 import ClientEvaluLikeModal from '../components/ClientEvaluLikeModal';
 import ListSeparator from '../components/molecules/ListSeparator';
 import Card from '../components/molecules/CardUI';
+import moment from 'moment';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
@@ -25,32 +26,38 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchHeaderWrap: {
+    marginTop: 10,
+    marginLeft: 3,
+    marginRight: 3,
     marginBottom: 10,
-    padding: 5,
+    padding: 3,
     backgroundColor: colors.batangDark,
     elevation: 14,
     borderRadius: 10,
-    margin: 5,
   },
   searchHeaderTopWrap: {
-    paddingLeft: 5,
-    paddingRight: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   searchPicker: {
-    width: 169,
+    width: 167,
     color: colors.point,
     backgroundColor: 'transparent',
+    margin: 0,
+    padding: 0,
   },
   pickerArrowWrap: {
     justifyContent: 'center',
     position: 'absolute',
     top: 15,
-    left: 120,
+    left: 117,
   },
   pickerArrow: {
     color: colors.pointDark,
+  },
+  commWrap: {
+    flexDirection: 'row',
+    marginRight: 3,
   },
   containerSearchBar: {
     backgroundColor: colors.batangDark,
@@ -191,18 +198,18 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
-   * 피해사례 요청 함수
+   * 내가 등록한 피해사례 요청 함수
    */
-  setClinetEvaluList = () => {
+  setMyClinetEvaluList = () => {
     const { user } = this.props;
 
     api
-      .getClientEvaluList(user.uid)
+      .getClientEvaluList(user.uid, true)
       .then((resBody) => {
         if (resBody) {
           let notice;
           if (resBody.length === 0) {
-            notice = '피해사례를 조회 또는 추가해 주세요.';
+            notice = '내가 등록한 피해사례가 없습니다.';
           } else {
             notice = '내가 등록한 피해사례 입니다';
           }
@@ -225,6 +232,49 @@ class ClientEvaluScreen extends React.Component {
         this.setState({ isCliEvaluLoadComplete: false });
       });
   };
+
+  
+  /**
+   * 피해사례 요청 함수
+   */
+  setClinetEvaluList = () => {
+    const { user } = this.props;
+
+    api
+      .getClientEvaluList(user.uid, false)
+      .then((resBody) => {
+        if (resBody) {
+          let notice;
+          if (resBody.length === 0) {
+            notice = '블랙리스트를 조회 또는 추가해 주세요.';
+          } else {
+            const beforeTwoMonth = moment()
+              .add(-2, 'month')
+              .format('MM/DD');
+            const now = moment().format('MM/DD');
+            notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
+          }
+
+          this.setState({
+            cliEvaluList: resBody,
+            searchNotice: notice,
+            isCliEvaluLoadComplete: true,
+          });
+          return;
+        }
+
+        this.setState({ isCliEvaluLoadComplete: false });
+      })
+      .catch((ex) => {
+        notifyError(
+          '최근 피해사례 요청 문제',
+          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
+        );
+
+        this.setState({ isCliEvaluLoadComplete: false });
+      });
+  };
+
 
   /**
    * 피해사례 필터링 함수
@@ -293,12 +343,15 @@ class ClientEvaluScreen extends React.Component {
   onSearchAreaChange = (itemValue) => {
     if (itemValue === 'TEL') {
       this.setState({ searchArea: itemValue, searchPlaceholder: '전화번호 입력(- 없이)' });
+      return;
     }
     if (itemValue === 'FIRM_NUMBER') {
       this.setState({ searchArea: itemValue, searchPlaceholder: '사업자번호 입력(- 포함)' });
+      return;
     }
     if (itemValue === 'FIRM_NAME') {
       this.setState({ searchArea: itemValue, searchPlaceholder: '업체명 입력' });
+      return;
     }
     if (itemValue === 'CLI_NAME') {
       this.setState({ searchArea: itemValue, searchPlaceholder: '고객명 입력' });
@@ -390,14 +443,32 @@ class ClientEvaluScreen extends React.Component {
             <View style={styles.pickerArrowWrap}>
               <Text style={styles.pickerArrow}>&#9660;</Text>
             </View>
-            <JBButton
-              title="피해사례 추가"
-              onPress={() => this.setState({ isVisibleCreateModal: true })}
-              size="small"
-              align="right"
-              bgColor={colors.batangDark}
-              color={colors.pointDark}
-            />
+            <View style={styles.commWrap}>
+              <JBButton
+                title="내 사례"
+                onPress={() => this.setMyClinetEvaluList()}
+                size="small"
+                align="right"
+                bgColor={colors.batangDark}
+                color={colors.pointDark}
+              />
+              <JBButton
+                title="최근"
+                onPress={() => this.setClinetEvaluList()}
+                size="small"
+                align="right"
+                bgColor={colors.batangDark}
+                color={colors.pointDark}
+              />
+              <JBButton
+                title="추가"
+                onPress={() => this.setState({ isVisibleCreateModal: true })}
+                size="small"
+                align="right"
+                bgColor={colors.batangDark}
+                color={colors.pointDark}
+              />
+            </View>
           </View>
           <SearchBar
             value={searchWord}

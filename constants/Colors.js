@@ -23,6 +23,7 @@ export default {
   point3: '#E1EDAF',
   point3_other: '#ADD0A6',
   point3_other2: '#075760',
+  point3Light: '#0c97a6',
 
   iconDefault: '#5392aa',
   indicator: '#FDCA24',

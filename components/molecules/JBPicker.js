@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Picker } from 'react-native';
+import { StyleSheet, Picker } from 'react-native';
 import styled from 'styled-components/native';
 import fonts from '../../constants/Fonts';
 import colors from '../../constants/Colors';
@@ -26,6 +26,9 @@ const Title = styled.Text`
     && `
     color: ${colors.point2};
   `}
+`;
+
+const PickerWrap = styled.View`
 `;
 
 const SubTitle = styled.Text`
@@ -59,14 +62,17 @@ export default function JBPicker({
         {title && <Title fill={!!selectedValue}>{title}</Title>}
         {subTitle && <SubTitle>{subTitle}</SubTitle>}
       </TitleWrap>
-      <Picker
-        selectedValue={selectedValue}
-        style={styles.itemPicker}
-        onValueChange={itemValue => onValueChange(itemValue)}
-      >
-        <Picker.Item label={selectLabel || '선택'} value="" key={-1} />
-        {items}
-      </Picker>
+      <PickerWrap>
+        <Picker
+          selectedValue={selectedValue}
+          style={styles.itemPicker}
+          onValueChange={itemValue => onValueChange(itemValue)}
+          mode="dropdown"
+        >
+          <Picker.Item label={selectLabel || '선택'} value="" key={-1} />
+          {items}
+        </Picker>
+      </PickerWrap>
     </Container>
   );
 }

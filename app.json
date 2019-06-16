@@ -7,11 +7,8 @@
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "32.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "version": "0.2.1_20190531",
+    "platforms": ["ios", "android"],
+    "version": "0.2.1_openbank_20190531",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
@@ -23,9 +20,7 @@
     "updates": {
       "checkAutomatically": "ON_ERROR_RECOVERY"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -35,10 +30,8 @@
     },
     "android": {
       "package": "com.kan.jangbeecall",
-      "permissions": [
-        "ACCESS_FINE_LOCATION"
-      ],
-      "versionCode": 15,
+      "permissions": ["ACCESS_FINE_LOCATION"],
+      "versionCode": 16,
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"

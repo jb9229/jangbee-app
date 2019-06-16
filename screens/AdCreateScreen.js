@@ -418,7 +418,7 @@ class AdCreateScreen extends React.Component {
           notifyError('지역 타켓광고 중복검사 문제', error.message);
         });
     } else {
-      this.requestCreaAd();
+      // this.requestCreaAd();
       this.withdrawDispatchFee(); // (오픈뱅크 심사용)
     }
   };
@@ -541,18 +541,18 @@ class AdCreateScreen extends React.Component {
    */
   withdrawDispatchFee = () => {
     const { userProfile } = this.props;
-    const { fintechUseNum } = this.state;
+    const { selFinUseNum } = this.state;
 
     // 지원비 이체
     api
-      .transferWithdraw(userProfile.obAccessToken, fintechUseNum, 30000, '장비콜 광고비 출금')
+      .transferWithdraw(userProfile.obAccessToken, selFinUseNum, 30000, '장비콜 광고비 출금')
       .then((res) => {
         if (res && res.rsp_code && res.rsp_code === 'A0000') {
           this.requestCreaAd();
           return;
         }
         notifyError(
-          '배차비 출금 문제',
+          '광고비 출금 문제',
           `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${res.rsp_code}, ${
             res.rsp_message
           })`,
@@ -560,7 +560,7 @@ class AdCreateScreen extends React.Component {
       })
       .catch((error) => {
         notifyError(
-          '배차비 출금 문제',
+          '광고비 출금 문제',
           `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${error.name}, ${
             error.message
           })`,

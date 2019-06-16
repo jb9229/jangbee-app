@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import JBPicker from '../molecules/JBPicker';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
 const Container = styled.View`
-  height: 120;
   margin-bottom: 5;
   border-width: 1;
   border-color: ${colors.batangLight};
   padding: 5px;
+  height: 100;
+  ${props => props.isImageBox
+    && `
+    height: 130;
+  `}
 `;
 
 const Title = styled.Text`
@@ -17,68 +22,67 @@ const Title = styled.Text`
   margin-bottom: 7px;
 `;
 
-const CategoryListWrap = styled.ScrollView`
+const SelectListWrap = styled.ScrollView.attrs(props => ({
+  contentContainerStyle: {
+    alignItems: 'center',
+  },
+}))`
+  flex-direction row;
+`;
+
+const SelectBox = styled.View`
   flex-direction: row;
-`;
-
-const CategoryWrap = styled.View`
-  border-bottom-width: 1;
-  border-color: ${colors.batangLight};
-`;
-
-const CategoryTO = styled.TouchableOpacity`
+  height: 100;
+  padding: 4px;
+  margin-right: 12;
   border-width: 1;
-  border-color: ${colors.batangLight};
-  border-radius: 5;
-  padding: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-right: 10;
+  border-radius: 10;
   background-color: ${colors.batangLight};
+  border-color: ${colors.batangLight};
   ${props => props.selected
     && `
-    border-color: ${colors.pointLight};
-    background-color: ${colors.pointLight};
+    background-color: ${colors.point3Light};
+    border-color: ${colors.point3Light};
   `}
+  ${props => props.isImageBox
+    && `
+    height: 70;
+  `}
+`;
+
+const CateImgTO = styled.TouchableOpacity``;
+
+const CateImage = styled.Image`
+  width: 90;
+  height: 90;
+  border-radius: 20;
+`;
+
+const CateTextTO = styled.TouchableOpacity`
+  flex: 3;
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 1;
+  margin-left: 3;
 `;
 
 const CategoryText = styled.Text`
-  font-family: ${fonts.title};
+  font-family: ${fonts.titleMiddle};
   font-size: 16;
-`;
-
-const SelectedIndicator = styled.View`
-  height: 25;
-  margin-right: 10;
   ${props => props.selected
     && `
-    border-color: ${colors.pointBatang};
-    background-color: ${colors.pointBatang};
+    color: ${colors.pointDark}
   `}
 `;
 
-const ItemListWrap = styled.ScrollView`
-  background-color: ${colors.pointBatang};
-  padding: 5px;
+const ItemListWrap = styled.View`
+  flex: 1;
+  justify-content: space-around;
 `;
 
-const ItemTO = styled.TouchableOpacity`
+const ItemPickerWrap = styled.View`
+  flex: 2;
   justify-content: center;
-  border-width: 1;
-  border-color: ${colors.pointLight};
-  border-radius: 15;
-  padding: 13px;
-  margin-right: 10;
-  ${props => props.selected
-    && `
-    border-color: ${colors.pointLight};
-    background-color: ${colors.pointLight};
-  `}
-`;
-
-const ItemText = styled.Text`
-  font-family: ${fonts.title};
-  font-size: 16;
 `;
 
 export default class JBSelectBox extends React.Component {
@@ -100,9 +104,7 @@ export default class JBSelectBox extends React.Component {
 
   selectCategory = (category) => {
     const { selectCategory, selectItem } = this.props;
-    const { itemScrollView } = this.refs;
 
-    itemScrollView.scrollTo({ x: 0, y: 0, animated: true });
     selectCategory(category);
     selectItem('');
   };
@@ -119,37 +121,45 @@ export default class JBSelectBox extends React.Component {
 
   render() {
     const {
-      title, categoryList, itemList, selectedCat, selectedItem,
+      title,
+      categoryList,
+      itemList,
+      selectCategory,
+      selectItem,
+      selectedCat,
+      selectedItem,
+      cateImageArr,
+      itemPicker,
     } = this.props;
-    console.log('Rendering JBSelectBox');
+
     const selectedCatStr = selectedCat || categoryList[0];
+
     return (
-      <Container>
+      <Container isImageBox={!!cateImageArr}>
         {title ? <Title>{title}</Title> : null}
-        <CategoryListWrap horizontal>
+        <SelectListWrap horizontal>
           {categoryList.map((catStr, i) => (
-            <CategoryWrap key={i}>
-              <CategoryTO
-                onPress={() => this.selectCategory(catStr)}
-                selected={catStr === selectedCat}
-              >
-                <CategoryText>{catStr}</CategoryText>
-              </CategoryTO>
-              <SelectedIndicator selected={catStr === selectedCat} />
-            </CategoryWrap>
+            <SelectBox key={i} selected={catStr === selectedCat} isImageBox={!cateImageArr}>
+              <CateImgTO onPress={() => this.selectCategory(catStr)}>
+                {cateImageArr && <CateImage source={cateImageArr[i]} />}
+              </CateImgTO>
+              <ItemListWrap>
+                <CateTextTO onPress={() => this.selectCategory(catStr)}>
+                  <CategoryText selected={catStr === selectedCat}>{catStr}</CategoryText>
+                </CateTextTO>
+                <ItemPickerWrap>
+                  <JBPicker
+                    items={itemList[catStr]}
+                    selectedValue={catStr === selectedCat ? selectedItem : ''}
+                    onValueChange={itemValue => selectItem(itemValue)}
+                    selectLabel={itemPicker || undefined}
+                    size={110}
+                  />
+                </ItemPickerWrap>
+              </ItemListWrap>
+            </SelectBox>
           ))}
-        </CategoryListWrap>
-        <ItemListWrap ref="itemScrollView" horizontal>
-          {itemList[selectedCatStr].map((itemStr, i) => (
-            <ItemTO
-              key={i}
-              onPress={() => this.selectItem(itemStr)}
-              selected={itemStr === selectedItem}
-            >
-              <ItemText>{itemStr}</ItemText>
-            </ItemTO>
-          ))}
-        </ItemListWrap>
+        </SelectListWrap>
       </Container>
     );
   }
