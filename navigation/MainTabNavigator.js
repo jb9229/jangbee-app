@@ -9,6 +9,7 @@ import WorkListScreen from '../screens/WorkListScreen';
 import WorkRegisterScreen from '../screens/WorkRegisterScreen';
 import AppliFirmList from '../components/AppliFirmList';
 import JBServiceTerms from '../screens/JBServiceTerms';
+import colors from '../constants/Colors';
 
 const ClientHomeStack = createStackNavigator({
   ClientHome: { screen: HomeScreen, navigationOptions: { header: null } },
@@ -59,8 +60,17 @@ ClientInfoStack.navigationOptions = {
   ),
 };
 
-export default createBottomTabNavigator({
-  ClientHomeStack,
-  FirmWorkListStack,
-  ClientInfoStack,
-});
+export default createBottomTabNavigator(
+  {
+    ClientHomeStack,
+    FirmWorkListStack,
+    ClientInfoStack,
+  },
+  {
+    tabBarOptions: {
+      tabStyle: { backgroundColor: '#83868B' },
+      inactiveTintColor: 'white',
+      activeTintColor: colors.pointDark,
+    },
+  }
+);

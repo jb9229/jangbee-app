@@ -40,6 +40,7 @@ const FirmMyInfoStack = createStackNavigator({
     navigationOptions: {
       title: '업체정보 등록',
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerTintColor: '#fff',
     },
   },
   FirmUpdate: {
@@ -47,6 +48,7 @@ const FirmMyInfoStack = createStackNavigator({
     navigationOptions: {
       title: '업체정보 수정',
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerTintColor: '#fff',
     },
   },
   ServiceTerms: {
@@ -54,6 +56,7 @@ const FirmMyInfoStack = createStackNavigator({
     navigationOptions: {
       title: '약관 및 회사정보',
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerTintColor: '#fff',
     },
   },
 });

@@ -7,8 +7,8 @@ import fonts from '../../constants/Fonts';
 const Container = styled.View`
   border-width: 1;
   border-color: ${colors.batangLight};
-  padding: 5px;
-  height: 90;
+  padding: 6px;
+  height: 80;
   ${props => props.isImageBox
     && `
     height: 150;
@@ -31,8 +31,8 @@ const SelectListWrap = styled.ScrollView.attrs(props => ({
 
 const SelectBox = styled.View`
   align-items: center;
-  height: 70;
-  margin-right: 12;
+  height: 60;
+  margin-right: 15;
   border-width: 1;
   border-radius: 10;
   background-color: ${colors.batangLight};
@@ -51,11 +51,12 @@ const SelectBox = styled.View`
 
 const CateImgTO = styled.TouchableOpacity`
   justify-content: center;
+  margin-top: 8;
 `;
 
 const CateImage = styled.Image`
-  width: 90;
-  height: 90;
+  width: 95;
+  height: 80;
   border-radius: 20;
 `;
 
@@ -69,14 +70,21 @@ const CateTextWrap = styled.TouchableOpacity`
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-width: 1;
+    border-radius: 5;
+    border-color: rgba(255, 255, 255, 0.5);
+    ${props.selected
+      && `
+      background-color: rgba(0, 0, 0, 0.7);
+    `};
   `}
 `;
 
 const CategoryText = styled.Text`
   font-family: ${fonts.titleMiddle};
   font-size: 16;
-  padding: 5px;
+  padding: 4px;
   color: ${colors.batangDark};
   ${props => props.selected
     && `
@@ -86,6 +94,7 @@ const CategoryText = styled.Text`
 
 const ItemListWrap = styled.View`
   justify-content: center;
+  align-items: center;
 `;
 
 const ItemPickerWrap = styled.View`
@@ -127,7 +136,11 @@ export default class JBSelectBox extends React.Component {
               <CateImgTO onPress={() => selectCategory(catStr)}>
                 {cateImageArr && <CateImage source={cateImageArr[i]} />}
               </CateImgTO>
-              <CateTextWrap isImageBox={!!cateImageArr} onPress={() => selectCategory(catStr)}>
+              <CateTextWrap
+                isImageBox={!!cateImageArr}
+                selected={catStr === selectedCat}
+                onPress={() => selectCategory(catStr)}
+              >
                 <CategoryText selected={catStr === selectedCat}>{catStr}</CategoryText>
               </CateTextWrap>
               <ItemListWrap>

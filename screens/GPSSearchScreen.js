@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   searOptionWrap: {
-    height: 285,
+    height: 290,
     paddingLeft: 8,
     paddingRight: 8,
   },
@@ -463,9 +463,9 @@ export default class GPSSearchScreen extends React.Component {
   }
 }
 
-const EQUIPMENT_IMAGES = [require('../assets/images/equipment/crain.png'), require('../assets/images/equipment/cago_crain.png'), require('../assets/images/equipment/excavator.jpg'), require('../assets/images/equipment/sky.jpg'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png'), require('../assets/images/crain.png')]
+const EQUIPMENT_IMAGES = [require('../assets/images/equipment/crain_candi.jpg'), require('../assets/images/equipment/cago_crain.png'), require('../assets/images/equipment/excavator.jpg'), require('../assets/images/equipment/sky.jpg'), require('../assets/images/equipment/lift.jpg'), require('../assets/images/equipment/ladder.jpg'), require('../assets/images/equipment/highlander.jpg'), require('../assets/images/equipment/bulldozer.jpg'), require('../assets/images/equipment/spider_crain.jpg')]
 
-const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카이', '지게차', '사다리차', '하이랜더', '고소작업렌탈', '펌프카', '도로포장장비', '로우더', '항타천공오가', '불도저', '진동로라/발전기', '덤프임대', '거미크레인'];
+const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카이', '지게차', '사다리차', '하이랜더', '불도저', '거미크레인'];
 
 const EQUIPMENT_ITEM = [];
 EQUIPMENT_ITEM['크레인'] = ['10톤', '13톤', '25톤', '50톤', '100톤', '160톤', '200톤', '250톤', '300톤', '400톤', '500톤', '700톤', '800톤', '1200톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
@@ -475,14 +475,7 @@ EQUIPMENT_ITEM['스카이'] = ['1톤', '1.2톤', '2톤', '2.5톤', '3.5톤', '5�
 EQUIPMENT_ITEM['지게차'] = ['2톤', '2.5톤', '3톤', '4.5톤', '5톤', '6톤', '7톤', '8톤', '11.5톤', '15톤', '18톤', '25톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['사다리차'] = ['사다리차'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['하이랜더'] = ['하이랜더'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['고소작업렌탈'] = ['고소작업렌탈'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['펌프카'] = ['펌프카'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['도로포장장비'] = ['도로포장장비'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['로우더'] = ['로우더'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['항타천공오가'] = ['항타천공오가'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['불도저'] = ['불도저'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['진동로라/발전기'] = ['진동로라/발전기'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['덤프임대'] = ['덤프임대'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['거미크레인'] = ['2톤', '3톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 
 const LOCAL_CATEGORY = ['서울', '부산', '경기', '인천', '세종', '대전', '광주', '대구', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];

@@ -2,68 +2,50 @@ import React from 'react';
 import { Alert, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import JBIcon from './molecules/JBIcon';
-import JBButton from './molecules/JBButton';
-import JBTextInput from './molecules/JBTextInput';
-import JBErrorMessage from './organisms/JBErrorMessage';
-import { validate } from '../utils/Validation';
+import Card from './molecules/CardUI';
 import FirmSearList from './organisms/FirmSearList';
 import JangbeeAdList from './JangbeeAdList';
 import adLocation from '../constants/AdLocation';
 import * as api from '../api/api';
+import colors from '../constants/Colors';
 
 const Container = styled.View`
   flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
   ${props => props.size === 'full'
     && `
-    background-color: white;
-  `}
-`;
-
-const ContentsView = styled.View`
-  flex: 1;
-  background-color: white;
-  padding: 20px;
-  ${props => props.size === 'full'
-    && `
+    background-color: ${colors.batangLight};
   `}
 `;
 
 const TopWrap = styled.View`
-  flex: 1;
 `;
 
 const SearchResultWrap = styled.View`
-  flex: 3;
+  flex: 1;
 `;
 
 export default class FirmSearListModal extends React.Component {
   _isMounted = false;
-  
+
   constructor(props) {
     super(props);
     this.state = {
-        searchedFirmList: null,
-        page: 0,
-        refreshing: false,
-        isListLoading: undefined,
-        isLastList: false,
+      searchedFirmList: null,
+      page: 0,
+      refreshing: false,
+      isListLoading: undefined,
+      isLastList: false,
     };
   }
 
   componentDidMount() {
     this._isMounted = true;
   }
-  
+
   componentWillReceiveProps(nextProps) {
-      console.log("componentWillReceiveProps")
-      if(nextProps && nextProps.isVisibleModal ) {
-          console.log("search: "+nextProps.isLocalSearch)
-          this.setState({page: 0}, () => this.search(nextProps.isLocalSearch));
-      }
+    if (nextProps && nextProps.isVisibleModal) {
+      this.setState({ page: 0 }, () => this.search(nextProps.isLocalSearch));
+    }
   }
 
   componentWillUnmount() {
@@ -71,11 +53,11 @@ export default class FirmSearListModal extends React.Component {
   }
 
   search = (isLocalSearch) => {
-      if (isLocalSearch) {
-        this.searchLocJangbee();
-      } else {
-        this.searchNearJangbee();
-      }
+    if (isLocalSearch) {
+      this.searchLocJangbee();
+    } else {
+      this.searchNearJangbee();
+    }
   }
 
   /**
@@ -152,12 +134,6 @@ export default class FirmSearListModal extends React.Component {
       });
   };
 
-  componentWillReceiveProps(nextProps) {
-      if(nextProps && nextProps.isVisibleModal) {
-          this.search();
-      }
-  }
-
   /**
    * 모달 액션 완료 함수
    */
@@ -167,7 +143,7 @@ export default class FirmSearListModal extends React.Component {
     closeModal();
   };
 
-  
+
   /**
    * 장비업체리스트 페이징 추가 함수
    */
@@ -188,7 +164,7 @@ export default class FirmSearListModal extends React.Component {
     );
   };
 
-    /**
+  /**
    * 장비업체리스트 새로고침 함수
    */
   handleRefresh = () => {
@@ -221,19 +197,19 @@ export default class FirmSearListModal extends React.Component {
         onRequestClose={() => closeModal()}
       >
         <Container size={size}>
-          <ContentsView size={size}>
-            <TopWrap>
-                <JBIcon name="close" size={23} onPress={() => closeModal()} />
-                <JangbeeAdList
-                adLocation={adLocation.local}
-                euqiTarget={searEquipment}
-                sidoTarget={searSido}
-                gugunTarget={searGungu}
-                navigation={navigation}
-                />
-            </TopWrap>
+          <TopWrap>
+            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            <JangbeeAdList
+              adLocation={adLocation.local}
+              euqiTarget={searEquipment}
+              sidoTarget={searSido}
+              gugunTarget={searGungu}
+              navigation={navigation}
+            />
+          </TopWrap>
+          <Card>
             <SearchResultWrap>
-                <FirmSearList
+              <FirmSearList
                 data={searchedFirmList}
                 page={page}
                 refreshing={refreshing}
@@ -245,9 +221,9 @@ export default class FirmSearListModal extends React.Component {
                 selSido={searSido}
                 selGungu={searGungu}
                 {...this.props}
-                />
+              />
             </SearchResultWrap>
-          </ContentsView>
+          </Card>
         </Container>
       </Modal>
     );
