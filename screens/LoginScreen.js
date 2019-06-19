@@ -3,6 +3,7 @@ import {
   Alert, StyleSheet, TextInput, Text, View,
 } from 'react-native';
 import { Linking, WebBrowser } from 'expo';
+import styled from 'styled-components';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
 import { getUserInfo } from '../utils/FirebaseUtils';
@@ -65,6 +66,11 @@ const styles = StyleSheet.create({
   },
   accTypePickerItem: {},
 });
+
+const CommWrap = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+`;
 
 const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
   '/?',
@@ -138,7 +144,7 @@ class LoginScreen extends React.PureComponent {
     }
   };
 
-  reset = () => {
+  cancelSignIn = () => {
     this.setState({
       phoneNumber: '',
       confirmationResult: undefined,
@@ -262,7 +268,10 @@ class LoginScreen extends React.PureComponent {
           {!confirmationResult ? (
             <JBButton title="전화번호 인증하기" onPress={() => this.onPhoneComplete()} />
           ) : (
-            <JBButton title="로그인하기" onPress={() => this.onSignIn()} Primary />
+            <CommWrap>
+              <JBButton title="취소" onPress={() => this.cancelSignIn()} />
+              <JBButton title="로그인하기" onPress={() => this.onSignIn()} Primary />
+            </CommWrap>
           )}
         </View>
       </View>
