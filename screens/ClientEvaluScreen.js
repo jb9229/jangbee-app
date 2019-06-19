@@ -233,7 +233,7 @@ class ClientEvaluScreen extends React.Component {
       });
   };
 
-  
+
   /**
    * 피해사례 요청 함수
    */
@@ -488,7 +488,7 @@ class ClientEvaluScreen extends React.Component {
         </View>
 
         {isCliEvaluLoadComplete === true && (
-          <Card>
+          <Card bgColor={colors.pointBatang}>
             <FlatList
               data={cliEvaluList}
               renderItem={this.renderCliEvaluItem}

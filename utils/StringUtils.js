@@ -41,6 +41,8 @@ export function ellipsisStr(str, number) {
     if (str.length > number) {
       return `${str.substring(0, number)}...`;
     }
+
+    return str;
   }
 
   return '-';

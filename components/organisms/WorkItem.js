@@ -15,11 +15,11 @@ const TagWrap = styled.View`
 export default class WorkItem extends React.PureComponent {
   render() {
     const {
-      item, renderCommand, phoneNumber, hideAddress,
+      item, renderCommand, phoneNumber, hideAddress, cardColor
     } = this.props;
 
     return (
-      <Card Finished={item.workState === 'CLOSED' && item.firmEstimated}>
+      <Card Finished={item.workState === 'CLOSED' && item.firmEstimated} bgColor={cardColor}>
         <TagWrap>
           {item.modelYearLimit ? <JBTag name={`${item.modelYearLimit}년식이상`} /> : null}
           {item.licenseLimit ? <JBTag name={`${item.licenseLimit}필요`} /> : null}

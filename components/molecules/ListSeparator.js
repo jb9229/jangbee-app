@@ -4,11 +4,9 @@ import colors from '../../constants/Colors';
 
 const styles = StyleSheet.create({
   separator: {
-    height: 1,
+    height: 3,
     width: '100%',
-    backgroundColor: colors.pointLight,
-    marginLeft: 3,
-    marginRight: 3,
+    backgroundColor: colors.batangLight,
   },
 });
 const ListSepartor = () => <View style={styles.separator} />;

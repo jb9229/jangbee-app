@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
   commWrap: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    borderTopColor: colors.point2,
-    borderTopWidth: 1,
+    backgroundColor: colors.pointBatang,
   },
   emptyText: {
     alignItems: 'center',
@@ -315,15 +314,11 @@ class AdScreen extends React.Component {
             <JBButton
               title="결제통장 바꾸기"
               onPress={() => this.setState({ isVisibleFinAccUpdateModal: true })}
-              underline
-              Primary
             />
-            <View style={styles.buttonTopLine} />
             <JBButton
               title="내장비 홍보하기"
               onPress={() => navigation.navigate('AdCreate')}
               Primary
-              underline
             />
           </View>
         )}

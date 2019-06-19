@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Alert, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
+import styled from 'styled-components';
 import firebase from 'firebase';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
   thanksRegiText: {
     fontSize: 15,
     fontFamily: fonts.batang,
+    paddingBottom: 5,
   },
   titleText: {
     fontSize: 25,
@@ -79,6 +81,21 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+const UserTypeImage = styled.Image`
+  height: 90;
+  width: 110;
+  margin: 5px;
+`;
+
+const NoticeWrap = styled.View`
+  align-items: center;
+`;
+
+const Notice = styled.Text`
+  font-family: ${fonts.titleTop};
+  font-size: 11;
+`;
 
 const USER_CLIENT = 1;
 const USER_FIRM = 2;
@@ -152,30 +169,35 @@ class SignUpScreen extends React.Component {
             건설장비 사용에도 서비스개선 및 향상이 필요합니다.
           </Text>
           <Text style={styles.thanksRegiText}>
-            일잘하는 장비 쉽게찾기, 수금문제... 장비 콜이 시작합니다.
+            일잘하는 장비 쉽게찾기, 수금문제 [장비 콜]이 시작합니다.
           </Text>
         </View>
         <View style={styles.titleWrap}>
-          <Text style={styles.titleText}>어떤 서비스를 이용하시겠습니까?</Text>
+          <Text style={styles.titleText}>어떤 서비스로 가입하시겠습니까?</Text>
         </View>
         <View style={styles.accoutTypeWrap}>
           <TouchableOpacity
             style={[styles.accountTypeTO, userType === USER_CLIENT ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_CLIENT)}
           >
-            <Text style={[styles.accountTypeText]}>장비 찾기</Text>
-            <Text style={[styles.accountTypeSubText]}>(장비사용 고객)</Text>
+            <Text style={[styles.accountTypeText]}>화주 등록</Text>
+            <UserTypeImage source={require('../assets/images/manager.png')} />
+            <Text style={[styles.accountTypeSubText]}>(장비사용 고객님)</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.accountTypeTO, userType === USER_FIRM ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_FIRM)}
           >
-            <Text style={[styles.accountTypeText]}>내 장비등록 </Text>
-            <Text style={[styles.accountTypeSubText]}>(장비업체)</Text>
+            <Text style={[styles.accountTypeText]}>차주 등록 </Text>
+            <UserTypeImage source={require('../assets/images/operator.jpg')} />
+            <Text style={[styles.accountTypeSubText]}>(장비 사장님)</Text>
           </TouchableOpacity>
         </View>
+        <NoticeWrap>
+          <Notice>※ 실수로 잘못 등록시, 탈퇴후 다시 로그인하세요.</Notice>
+        </NoticeWrap>
         <JBErrorMessage errorMSG={errorMessage} />
-        <JBButton title="등록하기" onPress={() => this.onSignUp()} align="center" Secondary />
+        <JBButton title="가입 완료하기" onPress={() => this.onSignUp()} align="center" Primary />
       </View>
     );
   }

@@ -8,6 +8,7 @@ import * as api from '../api/api';
 
 const ChartWrap = styled.View`
   flex: 1;
+  height: 305;
 `;
 
 const ChartTopWrap = styled.View`

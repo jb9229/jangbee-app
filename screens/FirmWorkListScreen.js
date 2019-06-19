@@ -14,12 +14,12 @@ import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import JBButton from '../components/molecules/JBButton';
 
-const dispatchFee = '3000';
+const dispatchFee = '10000';
 
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: colors.pointBatang,
+    backgroundColor: colors.batangLight,
   },
   scene: {
     flex: 1,

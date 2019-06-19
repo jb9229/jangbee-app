@@ -9,17 +9,10 @@ import JBActIndicator from './organisms/JBActIndicator';
 import { convertHyphen, formatTelnumber } from '../utils/StringUtils';
 import { formatNumber } from '../utils/NumberUtils';
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
-  align-items: center;
-  justify-content: center;
   background-color: white;
   padding: 10px;
-`;
-
-const ContentsWrap = styled.View`
-  flex: 1;
-  width: 100%;
 `;
 
 const CommandWrap = styled.View`
@@ -157,39 +150,37 @@ export default class ClientEvaluDetailModal extends React.Component {
         onRequestClose={() => closeModal()}
       >
         <Container>
-          <ContentsWrap>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+          <JBIcon name="close" size={23} onPress={() => closeModal()} />
 
+          <JBTextItem title="전화번호" value={`${formatTelnumber(evalu.telNumber)}`} small row />
+          {evalu.telNumber1 ? (
+            <JBTextItem value={`${formatTelnumber(evalu.telNumber1)}`} small row />
+          ) : null}
+          {evalu.telNumber2 ? (
+            <JBTextItem value={`${formatTelnumber(evalu.telNumber2)}`} small row />
+          ) : null}
+          <JBTextItem title="이름" value={convertHyphen(evalu.cliName)} small row />
+          <JBTextItem title="업체명" value={convertHyphen(evalu.firmName)} small row />
+          <JBTextItem title="장비" value={convertHyphen(evalu.equipment)} small row />
+          <JBTextItem title="지역" value={convertHyphen(evalu.local)} small row />
+          <JBTextItem title="금액" value={`${formatNumber(evalu.amount)} 원`} small row />
+          <JBTextItem title="피해내용" value={evalu.reason} small />
+
+          {evalu.regiTelNumber && (
             <JBTextItem
-              title="전화번호"
-              value={`${formatTelnumber(evalu.telNumber)}${'\n'}${formatTelnumber(
-                evalu.telNumber1,
-              )}${'\n'}${formatTelnumber(evalu.telNumber2)}`}
+              title="피해자 연락처"
+              value={formatTelnumber(evalu.regiTelNumber)}
               small
+              row
             />
+          )}
 
+          <CommandWrap>
             {evalu.regiTelNumber && (
-              <JBTextItem
-                title="작성자 번호"
-                value={formatTelnumber(evalu.regiTelNumber)}
-                small
-                row
-              />
+              <JBButton title="작성자에게 행적신고" onPress={() => this.noticeRegi()} />
             )}
-            <JBTextItem title="이름" value={convertHyphen(evalu.cliName)} small row />
-            <JBTextItem title="업체명" value={convertHyphen(evalu.firmName)} small row />
-            <JBTextItem title="장비" value={convertHyphen(evalu.equipment)} small row />
-            <JBTextItem title="지역" value={convertHyphen(evalu.local)} small row />
-            <JBTextItem title="금액" value={`${formatNumber(evalu.amount)} 원`} small row />
-            <JBTextItem title="피해내용" value={evalu.reason} small />
-
-            <CommandWrap>
-              {evalu.regiTelNumber && (
-                <JBButton title="작성자에게 행적신고" onPress={() => this.noticeRegi()} />
-              )}
-              <JBButton title="공유하기" onPress={() => this.shareClientEvalu()} Primary />
-            </CommandWrap>
-          </ContentsWrap>
+            <JBButton title="공유하기" onPress={() => this.shareClientEvalu()} Primary />
+          </CommandWrap>
         </Container>
       </Modal>
     );

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { Icon } from 'expo';
 import JBTextItem from '../molecules/JBTextItem';
 import JBButton from '../molecules/JBButton';
-import { convertHyphen, formatTelnumber } from '../../utils/StringUtils';
+import { formatTelnumber } from '../../utils/StringUtils';
+import colors from '../../constants/Colors';
 
 const styles = StyleSheet.create({
   Container: {
@@ -15,13 +17,18 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
   },
+  topLeftWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   contentsWrap: {
-    marginLeft: 12,
-    marginRight: 12,
+    marginLeft: 10,
+    marginRight: 10,
   },
   likeWrap: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   commWrap: {
     flexDirection: 'row',
@@ -63,23 +70,25 @@ export default function CliEvaluItem({
   return (
     <View style={styles.Container}>
       <View style={styles.topWrap}>
-        <JBButton
-          title={titleStr}
-          onPress={() => openDetailModal(item)}
-          size="small"
-          underline
-          Secondary
-        />
+        <View style={styles.topLeftWrap}>
+          <JBButton
+            title={titleStr}
+            onPress={() => openDetailModal(item)}
+            size="small"
+            underline
+            Secondary
+          />
+          <Icon.AntDesign name="right" size={16} color={colors.pointDark} />
+        </View>
         <View style={styles.likeWrap}>
-          <View style={styles.likeWrap}>
-            <JBButton
-              title={`공감: ${item.likeCount}, 비공감: ${item.unlikeCount}`}
-              onPress={() => openCliEvaluLikeModal(item, accountId === item.accountId)}
-              size="small"
-              underline
-              Primary
-            />
-          </View>
+          <JBButton
+            title={`공감: ${item.likeCount}, 비공감: ${item.unlikeCount}`}
+            onPress={() => openCliEvaluLikeModal(item, accountId === item.accountId)}
+            size="small"
+            underline
+            Primary
+          />
+          <Icon.AntDesign name="right" size={16} color={colors.point2} />
         </View>
       </View>
       <View style={styles.contentsWrap}>
@@ -90,7 +99,7 @@ export default function CliEvaluItem({
           )}, ${formatTelnumber(item.telNumber3)}`}
           small
           row
-          ellipsis={30}
+          ellipsis={20}
         />
         <JBTextItem title="사유" value={item.reason} small />
       </View>

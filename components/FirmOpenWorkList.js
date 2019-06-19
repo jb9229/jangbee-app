@@ -17,7 +17,12 @@ export default class FirmWorkingList extends React.PureComponent {
    * 리스트 아이템 렌더링 함수
    */
   renderItem = ({ item }) => (
-    <WorkItem item={item} renderCommand={() => this.renderCommand(item)} hideAddress />
+    <WorkItem
+      item={item}
+      renderCommand={() => this.renderCommand(item)}
+      hideAddress
+      cardColor="white"
+    />
   );
 
   renderCommand = (item) => {
