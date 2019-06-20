@@ -489,7 +489,8 @@ class FirmRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
               <JBTextInput
-                title="업체주소(고객검색시 거리계산 기준이됨)*"
+                title="업체주소*"
+                subTitle="(장비 검색시 거리계산 기준이됨)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;
@@ -538,6 +539,7 @@ class FirmRegisterScreen extends React.Component {
 
               <ImagePickInput
                 itemTitle="작업사진1*"
+                subTitle="(1장만 올려도 되지만 많으면 좋음)"
                 imgUrl={photo1}
                 setImageUrl={url => this.setState({ photo1: url })}
               />

@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
     <title>Entering captcha</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
       .button {
         background-color: transparent;
@@ -32,7 +33,53 @@
         <span id="continue-btn" style="display:none; font-size: 1.5em; text-decoration: underline; margin: 10px;color: #5392aa;" />앱으로 돌아가기</span>
     </div>
     <div style="text-align: right;">
-      <button id="confirmAuthBtn" type="button" class="confirmButton" onclick="confirmAuthByUser();">보안사항 확인하기(클릭)</button>
+      <checkbox id="confirmAuthBtn" type="button" class="confirmButton" onclick="confirmAuthByUser();">보안사항 확인하기(클릭)</button>
+    </div>
+    <div class="card" style="text-align: left;">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" style="font-weight: bold; text-align: center;">이용약관 동의</li>
+        <li class="list-group-item">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+            <label class="form-check-label" for="defaultCheck1">
+              전체동의
+            </label>
+          </div>
+        </li>
+        <li>
+          <div class="card-body">
+            <div class="form-check" style="display: line-block;">
+              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+              <label class="form-check-label" for="defaultCheck1">
+                Google 전화번호 인증(전화번호 변경시 중의, 탈퇴 필수)
+              </label>
+            </div>
+            <a href="#" class="card-link" style="display: line-block;">내용 보기</a>
+          </div>
+        </li>
+        <li>
+          <div class="card-body">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+              <label class="form-check-label" for="defaultCheck1">
+                이용약관
+              </label>
+            </div>
+            <a href="#" class="card-link">내용 보기</a>
+          </div>
+        </li>
+        <li>
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                  개인정보약관
+                </label>
+              </div>
+              <a href="#" class="card-link">내용 보기</a>
+            </div>
+          </li>
+      </ul>
     </div>
     <div style="text-align: right; font-size: 0.9rem; overflow: auto; height:250px;">
         <p>안녕하세요, 장비콜 입니다.<p>

@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  Alert, FlatList, Picker, StyleSheet, Text, View,
+  FlatList, Picker, StyleSheet, Text, View,
 } from 'react-native';
+import moment from 'moment';
 import { SearchBar } from 'react-native-elements';
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
@@ -9,7 +10,6 @@ import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
 import ClientEvaluLikeModal from '../components/ClientEvaluLikeModal';
 import ListSeparator from '../components/molecules/ListSeparator';
 import Card from '../components/molecules/CardUI';
-import moment from 'moment';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';

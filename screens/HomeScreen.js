@@ -149,7 +149,7 @@ class HomeScreen extends React.Component {
    * 장비기사인경우 장비정보 설정함수
    */
   setUserFirmInfo = () => {
-    const { user, userProfile, setFirmInfo } = this.props;
+    const { user, userProfile, setFirmInfo, navigation } = this.props;
 
     if (!user.uid || !userProfile || userProfile.type !== 2) {
       return;
@@ -158,7 +158,16 @@ class HomeScreen extends React.Component {
     api
       .getFirm(user.uid)
       .then((firm) => {
-        setFirmInfo(firm.equiListStr, firm.modelYear);
+        if (firm) {
+          setFirmInfo(firm.equiListStr, firm.modelYear);
+        } else {
+          Alert.alert(
+            '업체 정보가 없습니다.',
+            '업체 등록하기를 먼저 진행해 주세요.',
+            [{ text: '업체정보 등록하기', onPress: () => navigation.navigate('FirmMyInfo') }],
+            { cancelable: false },
+          );
+        }
       })
       .catch(() => {});
   };

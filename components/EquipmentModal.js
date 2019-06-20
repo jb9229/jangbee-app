@@ -217,6 +217,7 @@ const EQUIPMENT_CONTENT = [
     category_name: '굴착기',
     willUpdate: false,
     subcategory: [
+      { isChecked: false, val: '미니' },
       { isChecked: false, val: '02W' },
       { isChecked: false, val: '06W' },
       { isChecked: false, val: '08W' },

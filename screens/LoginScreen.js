@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  Alert, StyleSheet, TextInput, Text, View,
+  Alert, StyleSheet, Text, View,
 } from 'react-native';
 import { Linking, WebBrowser } from 'expo';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
+import colors from '../constants/Colors';
 import { getUserInfo } from '../utils/FirebaseUtils';
 import { validate } from '../utils/Validation';
 import { formatTelnumber } from '../utils/StringUtils';
@@ -37,23 +38,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginRight: 20,
   },
-  title: {
-    width: 300,
-    fontFamily: fonts.titleMiddle,
-    fontSize: 22,
-    marginTop: 20,
-  },
   titleDisable: {
     width: 300,
     fontFamily: fonts.titleMiddle,
     fontSize: 22,
     color: 'gray',
     marginTop: 20,
-  },
-  loginTI: {
-    width: 300,
-    fontSize: 24,
-    fontFamily: fonts.batang,
   },
   commText: {
     fontSize: 25,
@@ -70,6 +60,23 @@ const styles = StyleSheet.create({
 const CommWrap = styled.View`
   flex-direction: row;
   justify-content: flex-end;
+`;
+
+const TextInput = styled.TextInput`
+  font-family: ${fonts.batang};
+  width: 300;
+  font-size: 24;
+`;
+
+const Title = styled.Text`
+  width: 300;
+  font-family: ${fonts.titleMiddle};
+  font-size: 22;
+  margin-top: 20;
+  ${props => props.fill
+    && `
+    color: ${colors.point2};
+  `}
 `;
 
 const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
@@ -234,7 +241,7 @@ class LoginScreen extends React.PureComponent {
     return (
       <View style={styles.container}>
         <View style={styles.itemWrap}>
-          <Text style={styles.title}>핸드폰번호: </Text>
+          <Title fill={!!phoneNumber}>핸드폰번호: </Title>
           <TextInput
             style={styles.loginTI}
             value={phoneNumber}
@@ -248,7 +255,7 @@ class LoginScreen extends React.PureComponent {
             editable={!authReadOnly}
           />
           <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
-          <Text style={authTitleStyle}>인증코드: </Text>
+          <Title fill={!!code}>인증코드: </Title>
           <TextInput
             style={styles.loginTI}
             value={code}

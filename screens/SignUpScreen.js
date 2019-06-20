@@ -169,7 +169,7 @@ class SignUpScreen extends React.Component {
             건설장비 사용에도 서비스개선 및 향상이 필요합니다.
           </Text>
           <Text style={styles.thanksRegiText}>
-            일잘하는 장비 쉽게찾기, 수금문제 [장비 콜]이 시작합니다.
+            일잘하는 장비 쉽게찾기, 피해사례 공유부터 시작합니다.
           </Text>
         </View>
         <View style={styles.titleWrap}>
@@ -180,7 +180,7 @@ class SignUpScreen extends React.Component {
             style={[styles.accountTypeTO, userType === USER_CLIENT ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_CLIENT)}
           >
-            <Text style={[styles.accountTypeText]}>화주 등록</Text>
+            <Text style={[styles.accountTypeText]}>화주</Text>
             <UserTypeImage source={require('../assets/images/manager.png')} />
             <Text style={[styles.accountTypeSubText]}>(장비사용 고객님)</Text>
           </TouchableOpacity>
@@ -188,7 +188,7 @@ class SignUpScreen extends React.Component {
             style={[styles.accountTypeTO, userType === USER_FIRM ? styles.selectedAccType : null]}
             onPress={() => this.onChangeUserType(USER_FIRM)}
           >
-            <Text style={[styles.accountTypeText]}>차주 등록 </Text>
+            <Text style={[styles.accountTypeText]}>차주</Text>
             <UserTypeImage source={require('../assets/images/operator.jpg')} />
             <Text style={[styles.accountTypeSubText]}>(장비 사장님)</Text>
           </TouchableOpacity>

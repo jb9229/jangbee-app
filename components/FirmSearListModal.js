@@ -107,8 +107,12 @@ export default class FirmSearListModal extends React.Component {
 
     const searchStr = `${searEquiModel} ${searEquipment}`;
 
+    let searGunguStr = searGungu;
+
+    if (searGungu === '전체') { searGunguStr = ''; }
+
     api
-      .getLocalFirmList(page, searchStr, searSido, searGungu)
+      .getLocalFirmList(page, searchStr, searSido, searGunguStr)
       .then((res) => {
         if (!this._isMounted) {
           return;

@@ -133,7 +133,11 @@ export default class JBSelectBox extends React.Component {
         <SelectListWrap horizontal>
           {categoryList.map((catStr, i) => (
             <SelectBox key={i} selected={catStr === selectedCat} isImageBox={!!cateImageArr}>
-              <CateImgTO onPress={() => selectCategory(catStr)}>
+              <CateImgTO
+                onPress={() => {
+                  selectCategory(catStr, itemList[catStr][0].value);
+                }}
+              >
                 {cateImageArr && <CateImage source={cateImageArr[i]} />}
               </CateImgTO>
               <CateTextWrap

@@ -396,34 +396,33 @@ export default class GPSSearchScreen extends React.Component {
               itemList={EQUIPMENT_ITEM}
               selectedCat={searEquipment}
               selectedItem={searEquiModel}
-              selectCategory={equi => this.setState({ searEquipment: equi, searEquiModel: '' })}
+              selectCategory={equi => this.setState({ searEquipment: equi })}
               selectItem={(equi, model) => this.setState({ searEquipment: equi, searEquiModel: model })}
               cateImageArr={EQUIPMENT_IMAGES}
             />
 
             <View style={styles.optionWrap}>
-              {isLocalSearch ?
-                (
-                  <JBSelectBox
-                    categoryList={LOCAL_CATEGORY}
-                    itemList={LOCAL_ITEM}
-                    selectedCat={searSido}
-                    selectedItem={searGungu}
-                    selectCategory={sido => this.setState({ searSido: sido })}
-                    selectItem={(sido, sigungu) => this.setState({ searSido: sido, searGungu: sigungu })}
-                    itemPicker="전체"
+              {isLocalSearch ? (
+                <JBSelectBox
+                  categoryList={LOCAL_CATEGORY}
+                  itemList={LOCAL_ITEM}
+                  selectedCat={searSido}
+                  selectedItem={searGungu}
+                  selectCategory={sido => this.setState({ searSido: sido })}
+                  selectItem={(sido, sigungu) => this.setState({ searSido: sido, searGungu: sigungu })}
+                  itemPicker="전체"
+                />
+              ) : (
+                <View style={styles.gpsWrap}>
+                  <Text style={styles.currLocText}>{currLocation}</Text>
+                  <JBIcon
+                    name="refresh"
+                    size={24}
+                    color={colors.point2}
+                    onPress={() => this.setLocationInfo()}
                   />
-                ) : (
-                  <View style={styles.gpsWrap}>
-                    <Text style={styles.currLocText}>{currLocation}</Text>
-                    <JBIcon
-                      name="refresh"
-                      size={24}
-                      color={colors.point2}
-                      onPress={() => this.setLocationInfo()}
-                    />
-                  </View>
-                )}
+                </View>
+              )}
             </View>
           </View>
           <View style={styles.commWrap}>
@@ -454,6 +453,8 @@ export default class GPSSearchScreen extends React.Component {
           searEquiModel={searEquiModel}
           searLongitude={searLongitude}
           searLatitude={searLatitude}
+          searSido={searSido}
+          searGungu={searGungu}
           isLocalSearch={isLocalSearch}
           size="full"
           navigation={navigation}
@@ -470,7 +471,7 @@ const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카
 const EQUIPMENT_ITEM = [];
 EQUIPMENT_ITEM['크레인'] = ['10톤', '13톤', '25톤', '50톤', '100톤', '160톤', '200톤', '250톤', '300톤', '400톤', '500톤', '700톤', '800톤', '1200톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['카고크레인'] = ['5톤', '11톤', '18톤', '25톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['굴착기'] = ['02W', '06W', '08W', '02LC', '04LC', '06LC'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
+EQUIPMENT_ITEM['굴착기'] = ['미니', '02W', '06W', '08W', '02LC', '04LC', '06LC'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['스카이'] = ['1톤', '1.2톤', '2톤', '2.5톤', '3.5톤', '5톤', '28m', '45m', '58m', '60m', '75m'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['지게차'] = ['2톤', '2.5톤', '3톤', '4.5톤', '5톤', '6톤', '7톤', '8톤', '11.5톤', '15톤', '18톤', '25톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['사다리차'] = ['사다리차'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
@@ -478,13 +479,13 @@ EQUIPMENT_ITEM['하이랜더'] = ['하이랜더'].map(lin => (<Picker.Item key={
 EQUIPMENT_ITEM['불도저'] = ['불도저'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['거미크레인'] = ['2톤', '3톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 
-const LOCAL_CATEGORY = ['서울', '부산', '경기', '인천', '세종', '대전', '광주', '대구', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
+const LOCAL_CATEGORY = ['서울', '부산', '경기', '인천', '세종특별자치시', '대전', '광주', '대구', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주특별자치도'];
 const LOCAL_ITEM = [];
 LOCAL_ITEM['서울'] = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중량구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['부산'] = ['강서구', '금정구', '기장구', '남구', '동구', '동래구', '부산진구', '북구', '사상구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['경기'] = ['가평군', '고양시', '과천시', '광명시', '광주시', '구리시', '군포시', '김포시', '남양주시', '동두천시', '부천시', '성남시', '수원시', '시흥시', '안산시', '안성시', '안양시', '양주시', '양평군', '여주시', '연천군', '오산시', '용인시', '의왕시', '의정부시', '이천시', '파주시', '평택시', '포천시', '하남시', '화성시'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['인천'] = ['강화군', '계양군', '남동구', '동구', '미추홀구', '부평구', '서구', '연수구', '옹진군', '중구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-LOCAL_ITEM['세종'] = ['가람동', '고운동', '금남면', '나성동', '다정동', '대평동', '도담동', '반곡동', '보람동', '부강면', '새롬동', '소담동', '소정면', '아름동', '어진동', '연기면', '연동면', '연서면', '장군면', '전동면', '전의면', '조치원읍', '종촌동', '한솔동'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
+LOCAL_ITEM['세종특별자치시'] = ['가람동', '고운동', '금남면', '나성동', '다정동', '대평동', '도담동', '반곡동', '보람동', '부강면', '새롬동', '소담동', '소정면', '아름동', '어진동', '연기면', '연동면', '연서면', '장군면', '전동면', '전의면', '조치원읍', '종촌동', '한솔동'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['대전'] = ['대덕구', '동구', '서구', '유성구', '중구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['광주'] = ['광산구', '남구', '동구', '북구', '서구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['대구'] = ['남구', '달서구', '달성군', '동구', '북구', '서구', '수성구', '중구'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
@@ -495,4 +496,4 @@ LOCAL_ITEM['전북'] = ['고창군', '군산시', '김제시', '남원시', '무
 LOCAL_ITEM['전남'] = ['강진군', '고흥군', '곡성군', '광양시', '구례군', '나주시', '담양군', '목포시', '무안군', '보성군', '순천시', '신안군', '여수시', '영광군', '영암군', '완도군', '장성군', '장흥군', '진도군', '함평군', '해남군', '화순군'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['경북'] = ['경산시', '경주시', '고령군', '구미시', '군위군', '김천시', '문경시', '봉화군', '상주시', '성주군', '안동시', '영덕군', '영양군', '영주시', '영천시', '예천군', '울릉군'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 LOCAL_ITEM['경남'] = ['거제시', '거창군', '고성군', '김해시', '남해군', '밀양시', '사천시', '산청군', '양산시', '의령군', '진주시', '창녕군', '창원시', '통영시', '하동군', '함안군', '함양군', '합천군'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-LOCAL_ITEM['제주'] = ['서귀포시', '제주시'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
+LOCAL_ITEM['제주특별자치도'] = ['서귀포시', '제주시'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));

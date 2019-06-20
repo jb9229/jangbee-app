@@ -19,6 +19,17 @@ const Title = styled.Text`
   `}
 `;
 
+const TitleWrap = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SubTitle = styled.Text`
+  font-family: ${fonts.title};
+  color: ${colors.titleDark};
+  font-size: 12;
+`;
+
 const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
@@ -75,13 +86,16 @@ export default class ImagePickInput extends React.Component {
   };
 
   render() {
-    const { itemTitle, imgUrl, itemWrapStyle } = this.props;
+    const { itemTitle, subTitle, imgUrl, itemWrapStyle } = this.props;
 
     const urlTextStyle = imgUrl ? styles.urlText : styles.placeholder;
     return (
       <View style={styles.itemWrap}>
         <View style={styles.titleWrap}>
-          {itemTitle && <Title fill={!!imgUrl}>{itemTitle}</Title>}
+          <TitleWrap>
+            {itemTitle && <Title fill={!!imgUrl}>{itemTitle}</Title>}
+            {subTitle && <SubTitle>{subTitle}</SubTitle>}
+          </TitleWrap>
           {imgUrl ? <JBIcon name="close" size={32} onPress={() => this.removeImg()} /> : null}
         </View>
 

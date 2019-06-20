@@ -3,6 +3,7 @@ import {
   Alert, ScrollView, StyleSheet, Text, View,
 } from 'react-native';
 import firebase from 'firebase';
+import styled from 'styled-components';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
 import fonts from '../constants/Fonts';
@@ -13,6 +14,8 @@ import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import JBIcon from '../components/molecules/JBIcon';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
+import { openLinkUrl } from '../utils/LinkUtil';
+import * as jbcallConfig from '../jbcallconfig';
 
 const styles = StyleSheet.create({
   container: {
@@ -111,6 +114,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
+
+const CommWrap = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  width: 50%;
+`;
 
 class FirmMyInfoScreen extends React.Component {
   static navigationOptions = {
@@ -248,7 +257,21 @@ class FirmMyInfoScreen extends React.Component {
             <Text style={styles.regFirmNotice}>+</Text>
             <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
             <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
-            <JBButton title="업체 등록하기" onPress={() => this.registerFirm()} size="big" align="center" Primary />
+            <Text style={styles.regFirmNotice}>작성 중 어려움점이있으면 지금 바로 전화하세요</Text>
+            <CommWrap>
+              <JBButton
+                title="전화 문의"
+                onPress={() => openLinkUrl(`tel: ${jbcallConfig.adminTelNumber}`)}
+                align="center"
+                Primary
+              />
+              <JBButton
+                title="업체 등록하기"
+                onPress={() => this.registerFirm()}
+                align="center"
+                Primary
+              />
+            </CommWrap>
           </View>
         </View>
       );
