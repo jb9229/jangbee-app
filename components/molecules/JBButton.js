@@ -1,7 +1,6 @@
 import React from 'react';
 import { InteractionManager } from 'react-native';
 import styled from 'styled-components/native';
-import { render } from 'react-native-testing-library';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 
@@ -10,7 +9,7 @@ const BIG_SIZE = 'big';
 const SMALL_SIZE = 'small';
 const Container = styled.View`
   flex-direction: row;
-  margin: 5px 5px;
+  margin: 5px;
   ${props => props.align === 'right'
     && `
     justify-content: flex-end;
@@ -18,6 +17,10 @@ const Container = styled.View`
   ${props => props.align === 'center'
     && `
     justify-content: center;
+  `}
+  ${props => props.nonemargin
+    && `
+    margin: 0px;
   `}
 `;
 
@@ -112,7 +115,15 @@ export default class JBButton extends React.PureComponent {
 
   render() {
     const {
-      title, size, underline, color, bgColor, align, Secondary, Primary,
+      title,
+      size,
+      underline,
+      color,
+      bgColor,
+      align,
+      Secondary,
+      Primary,
+      nonemargin,
     } = this.props;
 
     let colorTheme = color;
@@ -139,7 +150,7 @@ export default class JBButton extends React.PureComponent {
     }
 
     return (
-      <Container align={align}>
+      <Container align={align} nonemargin={nonemargin}>
         <TouchableHighlight
           size={size}
           color={bgColorTheme}

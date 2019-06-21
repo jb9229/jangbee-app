@@ -16,6 +16,7 @@ import JBIcon from '../components/molecules/JBIcon';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
 import { openLinkUrl } from '../utils/LinkUtil';
 import * as jbcallConfig from '../jbcallconfig';
+import shareJBCall from '../common/JBCallShare';
 
 const styles = StyleSheet.create({
   container: {
@@ -117,8 +118,12 @@ const styles = StyleSheet.create({
 
 const CommWrap = styled.View`
   flex-direction: row;
-  justify-content: center;
-  width: 50%;
+  justify-content: space-between;
+`;
+
+const TopCommWrap = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
 
 class FirmMyInfoScreen extends React.Component {
@@ -257,11 +262,11 @@ class FirmMyInfoScreen extends React.Component {
             <Text style={styles.regFirmNotice}>+</Text>
             <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
             <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
-            <Text style={styles.regFirmNotice}>작성 중 어려움점이있으면 지금 바로 전화하세요</Text>
+            <Text style={styles.regFirmNotice}>작성 중 어려움점이있으면 지금 바로 연락주세요</Text>
             <CommWrap>
               <JBButton
-                title="전화 문의"
-                onPress={() => openLinkUrl(`tel: ${jbcallConfig.adminTelNumber}`)}
+                title="문자(전화) 문의"
+                onPress={() => openLinkUrl(`sms: ${jbcallConfig.adminTelNumber}`)}
                 align="center"
                 Primary
               />
@@ -284,7 +289,10 @@ class FirmMyInfoScreen extends React.Component {
         </ScrollView>
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
-          <JBIcon name="settings" size={30} onPress={() => this.setVisibleProfileModal(true)} />
+          <TopCommWrap>
+            <JBButton title="장비 콜 공유하기" onPress={() => shareJBCall()} size="small" nonemargin Primary />
+            <JBIcon name="settings" size={30} onPress={() => this.setVisibleProfileModal(true)} />
+          </TopCommWrap>
         </View>
         <FirmProfileModal
           isVisibleModal={isVisibleProfileModal}

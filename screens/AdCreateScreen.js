@@ -385,8 +385,8 @@ class AdCreateScreen extends React.Component {
         .existEuipTarketAd(adEquipment)
         .then((dupliResult) => {
           if (dupliResult === null) {
-            // this.requestCreaAd();
-            this.withdrawDispatchFee(); // (오픈뱅크 심사용)
+            this.requestCreaAd();
+            // this.withdrawDispatchFee(); // (오픈뱅크 심사용)
           } else {
             notifyError(
               '장비 타켓광고 중복검사 실패',
@@ -406,7 +406,7 @@ class AdCreateScreen extends React.Component {
         .then((dupliResult) => {
           if (dupliResult === null) {
             this.requestCreaAd();
-            this.withdrawDispatchFee(); // (오픈뱅크 심사용)
+            // this.withdrawDispatchFee(); // (오픈뱅크 심사용)
           } else {
             notifyError(
               '지역 타켓광고 중복 확인 실패',
@@ -418,8 +418,8 @@ class AdCreateScreen extends React.Component {
           notifyError('지역 타켓광고 중복검사 문제', error.message);
         });
     } else {
-      // this.requestCreaAd();
-      this.withdrawDispatchFee(); // (오픈뱅크 심사용)
+      this.requestCreaAd();
+      // this.withdrawDispatchFee(); // (오픈뱅크 심사용)
     }
   };
 

@@ -293,7 +293,7 @@ export default class GPSSearchScreen extends React.Component {
       return false;
     }
 
-    this.setState({isVisibleSearResultModal: true});
+    this.setState({ isVisibleSearResultModal: true });
   };
 
   /**
@@ -322,7 +322,7 @@ export default class GPSSearchScreen extends React.Component {
       return false;
     }
 
-    this.setState({isVisibleSearResultModal: true})
+    this.setState({ isVisibleSearResultModal: true });
   };
 
   /**
@@ -348,7 +348,6 @@ export default class GPSSearchScreen extends React.Component {
       currLocation,
       searSido,
       searGungu,
-      firmCntChartModels,
       validationMessage,
       searLongitude,
       searLatitude,
@@ -396,7 +395,7 @@ export default class GPSSearchScreen extends React.Component {
               itemList={EQUIPMENT_ITEM}
               selectedCat={searEquipment}
               selectedItem={searEquiModel}
-              selectCategory={equi => this.setState({ searEquipment: equi })}
+              selectCategory={equi => this.setState({ searEquipment: equi, searEquiModel: '' })}
               selectItem={(equi, model) => this.setState({ searEquipment: equi, searEquiModel: model })}
               cateImageArr={EQUIPMENT_IMAGES}
             />
@@ -408,7 +407,7 @@ export default class GPSSearchScreen extends React.Component {
                   itemList={LOCAL_ITEM}
                   selectedCat={searSido}
                   selectedItem={searGungu}
-                  selectCategory={sido => this.setState({ searSido: sido })}
+                  selectCategory={sido => this.setState({ searSido: sido, searGungu: '' })}
                   selectItem={(sido, sigungu) => this.setState({ searSido: sido, searGungu: sigungu })}
                   itemPicker="전체"
                 />
