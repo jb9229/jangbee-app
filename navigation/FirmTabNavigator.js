@@ -121,7 +121,7 @@ const ClientEvaluStack = createStackNavigator({
 });
 
 ClientEvaluStack.navigationOptions = {
-  tabBarLabel: '피해사례',
+  tabBarLabel: '피해사례(악덕)',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),

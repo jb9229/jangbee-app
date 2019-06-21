@@ -6,6 +6,7 @@ import moment from 'moment';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import GPSSearchScreen from './GPSSearchScreen';
+import { notifyError } from '../common/ErrorNotice';
 import FirmCntChart from '../components/FirmCntChart';
 import JangbeeAdList from '../components/JangbeeAdList';
 import adLocation from '../constants/AdLocation';
@@ -169,7 +170,16 @@ class HomeScreen extends React.Component {
           );
         }
       })
-      .catch(() => {});
+      .catch((error) => {
+        notifyError(
+          '업체정보 확인중 문제발생',
+          `업체정보를 불러오는 도중 문제가 발생했습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+          [
+            { text: '취소', onPress: () => {} },
+            { text: '업체정보 요청하기', onPress: () => this.setUserFirmInfo() },
+          ],
+        );
+      });
   };
 
   render() {

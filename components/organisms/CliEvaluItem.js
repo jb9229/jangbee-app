@@ -9,6 +9,8 @@ import colors from '../../constants/Colors';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+    margin: 10,
+    backgroundColor: colors.pointBatang,
   },
   topWrap: {
     flexDirection: 'row',

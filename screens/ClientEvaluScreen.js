@@ -8,7 +8,6 @@ import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
 import ClientEvaluLikeModal from '../components/ClientEvaluLikeModal';
-import ListSeparator from '../components/molecules/ListSeparator';
 import Card from '../components/molecules/CardUI';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
@@ -21,6 +20,7 @@ import ClientEvaluDetailModal from '../components/ClientEvaluDetailModal';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+    backgroundColor: colors.batangLight,
   },
   evaluListWrap: {
     flex: 1,
@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 3,
     marginRight: 3,
-    marginBottom: 10,
     padding: 3,
     backgroundColor: colors.batangDark,
     elevation: 14,
@@ -100,6 +99,11 @@ class ClientEvaluScreen extends React.Component {
       isVisibleDetailModal: false,
       isVisibleEvaluLikeModal: false,
       isCliEvaluLoadComplete: undefined,
+      cliEvaluList: [],
+      page: 0,
+      refreshing: false,
+      isLastList: false,
+      isNewestEvaluList: true,
       evaluLikeList: [],
       searchNotice: '',
       searchWord: '',
@@ -202,26 +206,39 @@ class ClientEvaluScreen extends React.Component {
    */
   setMyClinetEvaluList = () => {
     const { user } = this.props;
+    const { page, cliEvaluList } = this.state;
 
     api
-      .getClientEvaluList(user.uid, true)
+      .getClientEvaluList(page, user.uid, true)
       .then((resBody) => {
-        if (resBody) {
+
+        if (resBody && resBody.content) {
           let notice;
-          if (resBody.length === 0) {
+          if (resBody.content.length === 0) {
             notice = '내가 등록한 피해사례가 없습니다.';
-          } else {
-            notice = '내가 등록한 피해사례 입니다';
+            this.setState({
+              cliEvaluList: [],
+              searchNotice: notice,
+              isCliEvaluLoadComplete: true,
+              isLastList: resBody.last,
+              refreshing: false,
+            });
+
+            return;
           }
+
+          notice = '내가 등록한 피해사례 입니다';
           this.setState({
-            cliEvaluList: resBody,
+            cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
             searchNotice: notice,
             isCliEvaluLoadComplete: true,
+            isLastList: resBody.last,
+            refreshing: false,
           });
           return;
         }
 
-        this.setState({ isCliEvaluLoadComplete: false });
+        this.setState({ isCliEvaluLoadComplete: false, isNewestEvaluList: false });
       })
       .catch((ex) => {
         notifyError(
@@ -239,26 +256,43 @@ class ClientEvaluScreen extends React.Component {
    */
   setClinetEvaluList = () => {
     const { user } = this.props;
-
+    const { page, cliEvaluList } = this.state;
     api
-      .getClientEvaluList(user.uid, false)
+      .getClientEvaluList(page, user.uid, false)
       .then((resBody) => {
-        if (resBody) {
+        // console.log(resBody.number);
+        // console.log(resBody.number);
+        // console.log(resBody.numberOfElements);
+        // console.log(resBody.last);
+        if (resBody && resBody.content) {
           let notice;
-          if (resBody.length === 0) {
+          if (resBody.content.length === 0) {
             notice = '블랙리스트를 조회 또는 추가해 주세요.';
-          } else {
-            const beforeTwoMonth = moment()
-              .add(-2, 'month')
-              .format('MM/DD');
-            const now = moment().format('MM/DD');
-            notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
-          }
+            this.setState({
+              cliEvaluList: [],
+              searchNotice: notice,
+              isCliEvaluLoadComplete: false,
+              isLastList: resBody.last,
+              refreshing: false,
+              isNewestEvaluList: true,
+            });
 
-          this.setState({
-            cliEvaluList: resBody,
-            searchNotice: notice,
-            isCliEvaluLoadComplete: true,
+            return;
+          }
+          const beforeTwoMonth = moment()
+            .add(-2, 'month')
+            .format('MM/DD');
+          const now = moment().format('MM/DD');
+          notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
+
+          this.setState({isLastList: resBody.last}, () => {
+            this.setState({
+              searchNotice: notice,
+              isCliEvaluLoadComplete: true,
+              refreshing: false,
+              isNewestEvaluList: true,
+              cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
+            });
           });
           return;
         }
@@ -359,6 +393,76 @@ class ClientEvaluScreen extends React.Component {
   };
 
   /**
+   * 장비업체리스트 페이징 추가 함수
+   */
+  handleLoadMore = () => {
+    const { page, isLastList, isNewestEvaluList } = this.state;
+
+    if (isLastList) {
+      return;
+    }
+
+    this.setState(
+      {
+        page: page + 1,
+      },
+      () => {
+        if (isNewestEvaluList) {
+          this.setClinetEvaluList();
+        } else {
+          this.setMyClinetEvaluList();
+        }
+      },
+    );
+  };
+
+  /**
+   * 장비업체리스트 새로고침 함수
+   */
+  handleRefresh = () => {
+    const { isNewestEvaluList } = this.state;
+
+    this.setState(
+      {
+        page: 0,
+        refreshing: true,
+      },
+      () => {
+        if (isNewestEvaluList) {
+          this.setClinetEvaluList();
+        } else {
+          this.setMyClinetEvaluList();
+        }
+      },
+    );
+  };
+
+  onClickNewestEvaluList = () => {
+    this.setState(
+      {
+        page: 0,
+        isNewestEvaluList: true,
+      },
+      () => {
+        this.setClinetEvaluList();
+      },
+    );
+  }
+
+  onClickMyEvaluList = () => {
+    this.setState(
+      {
+        page: 0,
+        isNewestEvaluList: false,
+      },
+      () => {
+        this.setMyClinetEvaluList();
+      },
+    );
+  }
+
+
+  /**
    * 피해사례 아이템 UI 렌더링 함수
    */
   renderCliEvaluItem = ({ item }) => {
@@ -385,6 +489,8 @@ class ClientEvaluScreen extends React.Component {
       updateEvalu,
       detailEvalu,
       cliEvaluList,
+      isLastList,
+      refreshing,
       evaluLikeList,
       evaluLikeSelected,
       isMineEvaluation,
@@ -398,36 +504,6 @@ class ClientEvaluScreen extends React.Component {
 
     return (
       <View style={styles.Container}>
-        <ClientEvaluCreateModal
-          isVisibleModal={isVisibleCreateModal}
-          accountId={user.uid}
-          closeModal={() => this.setState({ isVisibleCreateModal: false })}
-          completeAction={() => this.setClinetEvaluList()}
-          size="full"
-        />
-        <ClientEvaluUpdateModal
-          updateEvalu={updateEvalu}
-          isVisibleModal={isVisibleUpdateModal}
-          closeModal={() => this.setState({ isVisibleUpdateModal: false })}
-          completeAction={() => this.setClinetEvaluList()}
-        />
-        <ClientEvaluDetailModal
-          isVisibleModal={isVisibleDetailModal}
-          detailEvalu={detailEvalu}
-          closeModal={() => this.setState({ isVisibleDetailModal: false })}
-          completeAction={() => {}}
-          size="full"
-        />
-        <ClientEvaluLikeModal
-          isVisibleModal={isVisibleEvaluLikeModal}
-          accountId={user.uid}
-          evaluation={evaluLikeSelected}
-          evaluLikeList={evaluLikeList}
-          createClientEvaluLike={this.createClientEvaluLike}
-          cancelClientEvaluLike={this.cancelClientEvaluLike}
-          closeModal={refresh => this.closeEvaluLikeModal(refresh)}
-          isMine={isMineEvaluation}
-        />
         <View style={styles.searchHeaderWrap}>
           <View style={styles.searchHeaderTopWrap}>
             <Picker
@@ -454,7 +530,7 @@ class ClientEvaluScreen extends React.Component {
               />
               <JBButton
                 title="최근"
-                onPress={() => this.setClinetEvaluList()}
+                onPress={() => this.onClickNewestEvaluList()}
                 size="small"
                 align="right"
                 bgColor={colors.batangDark}
@@ -488,15 +564,16 @@ class ClientEvaluScreen extends React.Component {
         </View>
 
         {isCliEvaluLoadComplete === true && (
-          <Card bgColor={colors.pointBatang}>
-            <FlatList
-              data={cliEvaluList}
-              renderItem={this.renderCliEvaluItem}
-              keyExtractor={(item, index) => index.toString()}
-              ListHeaderComponent={this.renderCliEvaluHeader}
-              ItemSeparatorComponent={ListSeparator}
-            />
-          </Card>
+          <FlatList
+            data={cliEvaluList}
+            renderItem={this.renderCliEvaluItem}
+            keyExtractor={(item, index) => index.toString()}
+            last={isLastList}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={10}
+          />
         )}
         {isCliEvaluLoadComplete === false && (
           <View>
@@ -505,6 +582,36 @@ class ClientEvaluScreen extends React.Component {
             </Text>
           </View>
         )}
+        <ClientEvaluCreateModal
+          isVisibleModal={isVisibleCreateModal}
+          accountId={user.uid}
+          closeModal={() => this.setState({ isVisibleCreateModal: false })}
+          completeAction={() => this.setClinetEvaluList()}
+          size="full"
+        />
+        <ClientEvaluUpdateModal
+          updateEvalu={updateEvalu}
+          isVisibleModal={isVisibleUpdateModal}
+          closeModal={() => this.setState({ isVisibleUpdateModal: false })}
+          completeAction={() => this.setClinetEvaluList()}
+        />
+        <ClientEvaluDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          detailEvalu={detailEvalu}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+          completeAction={() => {}}
+          size="full"
+        />
+        <ClientEvaluLikeModal
+          isVisibleModal={isVisibleEvaluLikeModal}
+          accountId={user.uid}
+          evaluation={evaluLikeSelected}
+          evaluLikeList={evaluLikeList}
+          createClientEvaluLike={this.createClientEvaluLike}
+          cancelClientEvaluLike={this.cancelClientEvaluLike}
+          closeModal={refresh => this.closeEvaluLikeModal(refresh)}
+          isMine={isMineEvaluation}
+        />
       </View>
     );
   }

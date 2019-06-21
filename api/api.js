@@ -303,9 +303,9 @@ export function createClientEvaluation(newEvaluation) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getClientEvaluList(accountId, mine) {
+export function getClientEvaluList(page, accountId, mine) {
   const param = encodeURIComponent(accountId);
-  return fetch(`${url.JBSERVER_CLIENT_EVALU_ALL}?accountId=${param}&mine=${mine}`).then(
+  return fetch(`${url.JBSERVER_CLIENT_EVALU_ALL}?page=${page}&size=${10}&accountId=${param}&mine=${mine}`).then(
     handleJBServerJsonResponse,
   );
 }
