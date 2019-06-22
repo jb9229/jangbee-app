@@ -1,6 +1,6 @@
 // const SERVER_URL = 'http://10.65.25.81/api/v1/';
-const SERVER_URL = 'http://192.168.35.74/api/v1/';
-// const SERVER_URL = 'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+// const SERVER_URL = 'http://192.168.35.74/api/v1/';
+const SERVER_URL = 'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
 module.exports = {

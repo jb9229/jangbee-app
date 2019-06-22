@@ -163,9 +163,9 @@ class HomeScreen extends React.Component {
           setFirmInfo(firm.equiListStr, firm.modelYear);
         } else {
           Alert.alert(
-            '업체 정보가 없습니다.',
-            '업체 등록하기를 먼저 진행해 주세요.',
-            [{ text: '업체정보 등록하기', onPress: () => navigation.navigate('FirmMyInfo') }],
+            '장비등록 정보가 없습니다.',
+            '장비등록을 먼저 해 주세요.',
+            [{ text: '장비등록 하기', onPress: () => navigation.navigate('FirmMyInfo') }],
             { cancelable: false },
           );
         }
