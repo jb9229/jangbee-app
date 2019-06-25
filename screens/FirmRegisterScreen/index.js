@@ -269,18 +269,21 @@ class FirmRegisterScreen extends React.Component {
     let v = validate('textMax', fname, true, 15);
     if (!v[0]) {
       this.setState({ fnameValErrMessage: v[1] });
+      Alert.alert('[업체명] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('cellPhone', phoneNumber, true);
     if (!v[0]) {
       this.setState({ phoneNumberValErrMessage: v[1] });
+      Alert.alert('[전화번호] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(equiListStr);
     if (!v[0]) {
       this.setState({ equiListStrValErrMessage: v[1] });
+      Alert.alert('[선택 장비] 다시 확인해 주세요!', v[1]);
       this.fnameTextInput.focus();
       return false;
     }
@@ -288,107 +291,125 @@ class FirmRegisterScreen extends React.Component {
     v = validatePresence(modelYear);
     if (!v[0]) {
       this.setState({ equiListStrValErrMessage: v[1] });
+      Alert.alert('[장비 년식] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(address);
     if (!v[0]) {
       this.setState({ addressValErrMessage: v[1] });
+      Alert.alert('[장비 년식] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', addressDetail, false, 45);
     if (!v[0]) {
       this.setState({ addressValErrMessage: `[상세주소] ${v[1]}` });
+      Alert.alert('[상세주소] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(sidoAddr);
     if (!v[0]) {
       this.setState({ addressValErrMessage: `[시도] ${v[1]}` });
+      Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(sigunguAddr);
     if (!v[0]) {
       this.setState({ addressValErrMessage: `[시군] ${v[1]}` });
+      Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(addrLongitude);
     if (!v[0]) {
       this.setState({ addressValErrMessage: `[경도] ${v[1]}` });
+      Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(addrLatitude);
     if (!v[0]) {
       this.setState({ addressValErrMessage: `[위도] ${v[1]}` });
+      Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     if (!workAlarmSido && !workAlarmSigungu) {
       this.setState({ workAlarmValErrMessage: '일감알람을 받을 지역을 선택해 주세요' });
+      Alert.alert('[일감 알람지역] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', workAlarmSido, false, 100);
     if (!v[0]) {
       this.setState({ workAlarmValErrMessage: v[1] });
+      Alert.alert('[일감 알람지역] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', workAlarmSigungu, false, 300);
     if (!v[0]) {
       this.setState({ workAlarmValErrMessage: v[1] });
+      Alert.alert('[일감 알람지역] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', introduction, true, 1000);
     if (!v[0]) {
       this.setState({ introductionValErrMessage: v[1] });
+      Alert.alert('[업체 소개] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', thumbnail, true, 250);
     if (!v[0]) {
       this.setState({ thumbnailValErrMessage: v[1] });
+      Alert.alert('[대표사진] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', photo1, true, 250);
     if (!v[0]) {
       this.setState({ photo1ValErrMessage: v[1] });
+      Alert.alert('[작업사진 1] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', photo2, false, 250);
     if (!v[0]) {
       this.setState({ photo2ValErrMessage: v[1] });
+      Alert.alert('[작업사진 2] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', photo3, false, 250);
     if (!v[0]) {
       this.setState({ photo3ValErrMessage: v[1] });
+      Alert.alert('[작업사진 3] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', blog, false, 250);
     if (!v[0]) {
       this.setState({ blogValErrMessage: v[1] });
+      Alert.alert('[블로그] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', homepage, false, 250);
     if (!v[0]) {
       this.setState({ homepageValErrMessage: v[1] });
+      Alert.alert('[홈페이지] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', sns, false, 250);
     if (!v[0]) {
       this.setState({ snsValErrMessage: v[1] });
+      Alert.alert('[SNS] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
@@ -446,7 +467,8 @@ class FirmRegisterScreen extends React.Component {
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <Card>
               <JBTextInput
-                title="업체명*"
+                title="업체명"
+                subTitle="(필수)"
                 value={fname}
                 onChangeText={text => this.setState({ fname: text })}
                 placeholder="업체명을 입력해 주세요"
@@ -457,7 +479,8 @@ class FirmRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={fnameValErrMessage} />
 
               <JBTextInput
-                title="전화번호*"
+                title="전화번호"
+                subTitle="(필수)"
                 value={phoneNumber}
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
@@ -470,7 +493,8 @@ class FirmRegisterScreen extends React.Component {
 
               <View style={styles.equiWrap}>
                 <JBTextInput
-                  title="보유 장비*"
+                  title="보유 장비"
+                  subTitle="(필수)"
                   value={equiListStr}
                   onChangeText={text => this.setState({ equiListStr: text })}
                   onFocus={() => this.openSelEquipmentModal()}
@@ -478,7 +502,8 @@ class FirmRegisterScreen extends React.Component {
                 />
 
                 <JBPicker
-                  title="년식*"
+                  title="년식"
+                  subTitle="(필수)"
                   items={pickerItems}
                   selectedValue={modelYear}
                   style={styles.adTypePicker}
@@ -489,8 +514,8 @@ class FirmRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
               <JBTextInput
-                title="업체주소*"
-                subTitle="(장비 검색시 거리계산 기준이됨)"
+                title="업체주소"
+                subTitle="(필수, 장비 검색시 거리계산 기준이됨)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;
@@ -513,6 +538,7 @@ class FirmRegisterScreen extends React.Component {
 
               <JBTextInput
                 title="일감알람 받을지역"
+                subTitle="(필수)"
                 value={`${workAlarmSido}${workAlarmSigungu}`}
                 onFocus={() => this.setState({ isVisibleLocalModal: true })}
                 placeholder="일감알람 받을 지역을 선택해 주세요."
@@ -520,7 +546,8 @@ class FirmRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={workAlarmValErrMessage} />
 
               <JBTextInput
-                title="업체 소개*"
+                title="업체 소개"
+                subTitle="(필수)"
                 value={introduction}
                 onChangeText={text => this.setState({ introduction: text })}
                 placeholder="업체 소개를 해 주세요"
@@ -530,7 +557,8 @@ class FirmRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={introductionValErrMessage} />
 
               <ImagePickInput
-                itemTitle="대표사진*"
+                itemTitle="대표사진"
+                subTitle="(필수)"
                 imgUrl={thumbnail}
                 aspect={[1, 1]}
                 setImageUrl={url => this.setState({ thumbnail: url })}
@@ -538,8 +566,8 @@ class FirmRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={thumbnailValErrMessage} />
 
               <ImagePickInput
-                itemTitle="작업사진1*"
-                subTitle="(1장만 올려도 되지만 많으면 좋음)"
+                itemTitle="작업사진1"
+                subTitle="(필수, 1장만 올려도 되지만 많으면 좋음)"
                 imgUrl={photo1}
                 setImageUrl={url => this.setState({ photo1: url })}
               />

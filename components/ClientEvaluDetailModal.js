@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Modal, Share } from 'react-native';
 import { SMS } from 'expo';
 import styled from 'styled-components/native';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextItem from './molecules/JBTextItem';
 import JBActIndicator from './organisms/JBActIndicator';
@@ -150,8 +150,7 @@ export default class ClientEvaluDetailModal extends React.Component {
         onRequestClose={() => closeModal()}
       >
         <Container>
-          <JBIcon name="close" size={23} onPress={() => closeModal()} />
-
+          <CloseButton onClose={() => closeModal()} />
           <JBTextItem title="전화번호" value={`${formatTelnumber(evalu.telNumber)}`} small row />
           {evalu.telNumber1 ? (
             <JBTextItem value={`${formatTelnumber(evalu.telNumber1)}`} small row />

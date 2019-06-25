@@ -334,7 +334,8 @@ class WorkRegisterScreen extends React.Component {
           <ScrollView>
             <CardUI>
               <JBTextInput
-                title="호출장비*"
+                title="호출장비"
+                subTitle="(필수)"
                 value={equipment}
                 onChangeText={text => this.setState({ equipment: text })}
                 placeholder="장비를 선택해 주세요"
@@ -346,8 +347,8 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={equipmentValErrMessage} />
 
               <JBTextInput
-                title="전화번호*"
-                subTitle="(매칭 후 공개됨)"
+                title="전화번호"
+                subTitle="(매칭 후 공개됨, 필수)"
                 value={phoneNumber}
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
@@ -359,8 +360,8 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
 
               <JBTextInput
-                title="현장주소*"
-                subTitle="(매칭 후 자세히 공개됨)"
+                title="현장주소"
+                subTitle="(매칭 후 자세히 공개됨, 필수)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;
@@ -371,8 +372,8 @@ class WorkRegisterScreen extends React.Component {
               />
               <JBErrorMessage errorMSG={addressValErrMessage} />
               <JBTextInput
-                title="현장위치*"
-                subTitle="(현장위치를 짧게 설명해 주세요)"
+                title="현장위치"
+                subTitle="(현장위치를 짧게 설명해 주세요, 필수)"
                 value={addressDetail}
                 tiRefer={(input) => {
                   this.addrDetTextInput = input;
@@ -383,7 +384,8 @@ class WorkRegisterScreen extends React.Component {
               <JBErrorMessage errorMSG={addressDetailValErrMessage} />
               <View style={styles.workDateWrap}>
                 <JBTextInput
-                  title="작업시작일*"
+                  title="작업시작일"
+                  subTitle="(필수)"
                   value={startDate}
                   tiRefer={(input) => {
                     this.startDateTextInput = input;

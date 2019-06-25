@@ -83,14 +83,24 @@ const SwitchText = styled.Text`
 
 const SearSummaryWrap = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
+
+const SearSummaryTextWrap = styled.View`
+  flex-direction: row;
+`;
+
 const SearSummary = styled.Text`
   font-family: ${fonts.title};
   padding-top: 5;
   padding-bottom: 5;
   margin-right: 3;
+`;
+
+const ScrollImage = styled.Image`
+  width: 35;
+  height: 22;
 `;
 
 export default class GPSSearchScreen extends React.Component {
@@ -377,18 +387,21 @@ export default class GPSSearchScreen extends React.Component {
               </SearchModeTO>
             </View>
             <SearSummaryWrap>
-              <SearSummary>[</SearSummary>
-              <SearSummary>{isLocalSearch ? '지역검색: ' : '주변검색: '}</SearSummary>
-              <SearSummary>{searEquiModel}</SearSummary>
-              <SearSummary>{searEquipment}</SearSummary>
-              {isLocalSearch && (
-                <SearSummaryWrap>
-                  <SearSummary>,</SearSummary>
-                  <SearSummary>{searSido}</SearSummary>
-                  <SearSummary>{searGungu}</SearSummary>
-                </SearSummaryWrap>
-              )}
-              <SearSummary>]</SearSummary>
+              <SearSummaryTextWrap>
+                <SearSummary>[</SearSummary>
+                <SearSummary>{isLocalSearch ? '지역검색: ' : '주변검색: '}</SearSummary>
+                <SearSummary>{searEquiModel}</SearSummary>
+                <SearSummary>{searEquipment}</SearSummary>
+                {isLocalSearch && (
+                  <SearSummaryWrap>
+                    <SearSummary>,</SearSummary>
+                    <SearSummary>{searSido}</SearSummary>
+                    <SearSummary>{searGungu}</SearSummary>
+                  </SearSummaryWrap>
+                )}
+                <SearSummary>]</SearSummary>
+              </SearSummaryTextWrap>
+              <ScrollImage source={require('../assets/images/scroll-icon_6_4.png')} />
             </SearSummaryWrap>
             <JBSelectBox
               categoryList={EQUIPMENT_CATEGORY}

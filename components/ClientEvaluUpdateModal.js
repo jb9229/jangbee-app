@@ -1,7 +1,7 @@
 import React from 'react';
 import { KeyboardAvoidingView, Modal, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
 import JBErrorMessage from './organisms/JBErrorMessage';
@@ -236,7 +236,7 @@ export default class ClientEvaluUpdateModal extends React.Component {
           <KeyboardAvoidingView>
             <ScrollView>
               <ContentsView>
-                <JBIcon name="close" size={23} onPress={() => closeModal()} />
+                <CloseButton onClose={() => closeModal()} />
                 <JBTextInput
                   title="이름"
                   value={cliName}

@@ -532,7 +532,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
           <ScrollView contentContainerStyle={styles.contentContainer}>
             <Card>
               <JBTextInput
-                title="업체명*"
+                title="업체명"
+                subTitle="(필수)"
                 value={fname}
                 onChangeText={text => this.setState({ fname: text })}
                 placeholder="업체명을 입력해 주세요"
@@ -543,7 +544,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               <JBErrorMessage errorMSG={fnameValErrMessage} />
 
               <JBTextInput
-                title="전화번호*"
+                title="전화번호"
+                subTitle="(필수)"
                 value={phoneNumber}
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
@@ -556,14 +558,16 @@ class FirmUpdateScreen extends React.Component<Props, State> {
 
               <View style={styles.equiWrap}>
                 <JBTextInput
-                  title="보유 장비*"
+                  title="보유 장비"
+                  subTitle="(필수)"
                   value={equiListStr}
                   onChangeText={text => this.setState({ equiListStr: text })}
                   onFocus={() => this.openSelEquipmentModal()}
                   placeholder="보유 장비를 선택해 주세요"
                 />
                 <JBPicker
-                  title="년식*"
+                  title="년식"
+                  subTitle="(필수)"
                   items={pickerItems}
                   selectedValue={modelYear}
                   style={styles.adTypePicker}
@@ -574,7 +578,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               <JBErrorMessage errorMSG={equiListStrValErrMessage} />
 
               <JBTextInput
-                title="업체주소(고객검색시 거리계산 기준이됨)*"
+                title="업체주소"
+                subTitle="(필수, 고객검색시 거리계산 기준이됨)"
                 value={address}
                 tiRefer={(input) => {
                   this.addrTextInput = input;
@@ -597,6 +602,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
 
               <JBTextInput
                 title="일감 알람받을 지역"
+                subTitle="(필수)"
                 value={`${workAlarmSido} ${workAlarmSigungu}`}
                 onFocus={() => this.setState({ isVisibleLocalModal: true })}
                 placeholder="일감알람 받을 지역을 선택해 주세요."
@@ -604,7 +610,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               <JBErrorMessage errorMSG={workAlarmValErrMessage} />
 
               <JBTextInput
-                title="업체 소개*"
+                title="업체 소개"
+                subTitle="(필수)"
                 value={introduction}
                 onChangeText={text => this.setState({ introduction: text })}
                 placeholder="업체 소개를 해 주세요"
@@ -614,7 +621,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               <JBErrorMessage errorMSG={introductionValErrMessage} />
 
               <ImagePickInput
-                itemTitle="대표사진*"
+                itemTitle="대표사진"
+                subTitle="(필수)"
                 imgUrl={thumbnail}
                 aspect={[1, 1]}
                 setImageUrl={url => this.setState({ thumbnail: url })}
@@ -622,7 +630,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               <JBErrorMessage errorMSG={thumbnailValErrMessage} />
 
               <ImagePickInput
-                itemTitle="작업사진1*"
+                itemTitle="작업사진1"
+                subTitle="(필수)"
                 imgUrl={photo1}
                 setImageUrl={url => this.setState({ photo1: url })}
               />

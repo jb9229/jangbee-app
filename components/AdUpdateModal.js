@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Alert, KeyboardAvoidingView, ScrollView, Modal, StyleSheet, View,
 } from 'react-native';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
 import ImagePickInput from './molecules/ImagePickInput';
@@ -228,7 +228,7 @@ export default class AdUpdateModal extends React.Component {
           <View style={styles.contentsWrap}>
             <KeyboardAvoidingView>
               <ScrollView contentContainerStyle={styles.formWrap}>
-                <JBIcon name="close" size={23} onPress={() => closeModal()} />
+                <CloseButton onClose={() => closeModal()} />
                 <JBTextInput
                   title="광고 타이틀(10자까지)"
                   value={adTitle}

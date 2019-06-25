@@ -165,9 +165,11 @@ class HomeScreen extends React.Component {
           Alert.alert(
             '장비등록 정보가 없습니다.',
             '장비등록을 먼저 해 주세요.',
-            [{ text: '장비등록 하기', onPress: () => navigation.navigate('FirmMyInfo') }],
+            [{ text: '확인', onPress: () => {} }],
             { cancelable: false },
           );
+
+          setTimeout(() => { navigation.navigate('FirmRegister'); }, 500);
         }
       })
       .catch((error) => {

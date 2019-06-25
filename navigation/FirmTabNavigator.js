@@ -38,7 +38,7 @@ const FirmMyInfoStack = createStackNavigator({
   FirmRegister: {
     screen: FirmRegisterScreen,
     navigationOptions: {
-      title: '업체정보 등록',
+      title: '내 장비 등록',
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff',
     },
@@ -46,7 +46,7 @@ const FirmMyInfoStack = createStackNavigator({
   FirmUpdate: {
     screen: FirmUpdateScreen,
     navigationOptions: {
-      title: '업체정보 수정',
+      title: '내 장비 수정',
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff',
     },

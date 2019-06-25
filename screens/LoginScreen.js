@@ -79,7 +79,7 @@ const Title = styled.Text`
   `}
 `;
 
-const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/catcha_temp.html?appurl=${Linking.makeUrl(
+const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
   '/?',
 )}`;
 

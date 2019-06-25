@@ -10,7 +10,7 @@ import {
   LayoutAnimation,
 } from 'react-native';
 import colors from '../constants/Colors';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JangbeeAdList from './JangbeeAdList';
 import ExpandableItem from './organisms/ExpandableItem';
 
@@ -153,7 +153,7 @@ export default class EquipementModal extends React.Component {
         >
           <View style={styles.cardWrap}>
             <View style={styles.card}>
-              <JBIcon name="close" size={23} onPress={() => this.cancel()} />
+              <CloseButton onClose={() => closeModal()} />
               {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
               <ScrollView>
                 {listDataSource.map((group, key) => (

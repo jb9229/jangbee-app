@@ -664,7 +664,8 @@ class AdCreateScreen extends React.Component {
                 </Picker>
               </View>
               <JBTextInput
-                title="계약기간(월)*"
+                title="계약기간"
+                subTitle="(월, 필수)"
                 value={forMonths}
                 onChangeText={text => this.setState({ forMonths: text })}
                 placeholder="몇개월간 홍보하시겠습니까?"
@@ -672,16 +673,16 @@ class AdCreateScreen extends React.Component {
               />
               <JBErrorMessage errorMSG={forMonthsValErrMessage} />
               <JBTextInput
-                title="광고 타이틀*"
-                subTitle="(10자까지)"
+                title="광고 타이틀"
+                subTitle="(10자까지, 필수)"
                 value={adTitle}
                 onChangeText={text => this.setState({ adTitle: text })}
                 placeholder="광고상단 문구를 입력하세요(최대 10자)"
               />
               <JBErrorMessage errorMSG={adTitleValErrMessage} />
               <JBTextInput
-                title="광고 슬로건*"
-                subTitle="(20자까지)"
+                title="광고 슬로건"
+                subTitle="(20자까지, 필수)"
                 value={adSubTitle}
                 onChangeText={text => this.setState({ adSubTitle: text })}
                 placeholder="광고하단 문구를 입력하세요(최대 20자)"

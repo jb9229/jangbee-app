@@ -27,6 +27,7 @@
   </head>
   <body style="text-align: center;">
     <p style="text-align: center; font-size: 1.5em; margin-top: 30px;">자동가입 방지를 위한 절차 입니다<p/>
+    <p id="captchaHelp" style="display: none; text-align: center; color: darkred; margin-top: 5px; margin-bottom: 5px;">※ '로봇이 아닙니다' 체크박스를 클릭해 주세요!<p/>
     <div id="captchaWrap" style="width: 100%; margin: 0 auto; text-align: center;">
     </div>
     <div style="width: 100%; margin: 10px; text-align:right;">
@@ -87,6 +88,7 @@
     <script>
         let openCaptcha = false;
         function getToken(callback) {
+            document.getElementById('captchaHelp').style.display = 'block';
             var container = document.createElement('div');
             container.id = 'captcha';
             container.style.textAlign = 'center';

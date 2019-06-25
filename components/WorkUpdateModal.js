@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Modal } from 'react-native';
 import styled from 'styled-components/native';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
 import JBErrorMessage from './organisms/JBErrorMessage';
@@ -125,7 +125,7 @@ export default class WorkUpdateModal extends React.Component {
       >
         <Container>
           <ContentsView>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            <CloseButton onClose={() => closeModal()} />
             <JBTextInput
               title="전화번호"
               value={phoneNumber}

@@ -98,9 +98,9 @@ const ItemListWrap = styled.View`
 `;
 
 const ItemPickerWrap = styled.View`
-  height: 25;
+  height: 31;
   border-top-width: 1;
-  margin-top: 5;
+  margin-top: 2;
   justify-content: center;
 `;
 

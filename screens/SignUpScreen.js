@@ -106,6 +106,7 @@ class SignUpScreen extends React.Component {
     this.state = {
       userType: undefined,
       errorMessage: null,
+      regiText: '화주인지 차주인지 먼저 선택하세요',
     };
   }
 
@@ -154,11 +155,15 @@ class SignUpScreen extends React.Component {
   };
 
   onChangeUserType = (userType) => {
-    this.setState({ userType });
+    if (userType === 1) {
+      this.setState({ userType, regiText: '가입 완료하기' });
+    } else if (userType === 2) {
+      this.setState({ userType, regiText: '장비등록 하러가기' });
+    }
   };
 
   render() {
-    const { userType, errorMessage } = this.state;
+    const { userType, errorMessage, regiText } = this.state;
 
     return (
       <View style={styles.container}>
@@ -197,7 +202,7 @@ class SignUpScreen extends React.Component {
           <Notice>※ 실수로 잘못 등록시, 탈퇴후 다시 로그인하세요.</Notice>
         </NoticeWrap>
         <JBErrorMessage errorMSG={errorMessage} />
-        <JBButton title="가입 완료하기" onPress={() => this.onSignUp()} align="center" Primary />
+        <JBButton title={regiText} onPress={() => this.onSignUp()} align="center" Primary />
       </View>
     );
   }

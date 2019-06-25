@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import * as api from '../api/api';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
 import Card from './molecules/CardUI';
@@ -269,10 +269,11 @@ export default class ClientEvaluCreateModal extends React.Component {
             <ScrollView>
               <Card>
                 <ContentsView size={size}>
-                  <JBIcon name="close" size={23} onPress={() => closeModal()} />
+                  <CloseButton onClose={() => closeModal()} />
 
                   <JBTextInput
-                    title="전화번호(숫자만)*"
+                    title="전화번호"
+                    subTitle="(숫자만, 필수)"
                     value={telNumber}
                     onChangeText={text => this.setState({ telNumber: text })}
                     placeholder="블랙리스트 전화번호를 기입해 주세요"
@@ -297,7 +298,8 @@ export default class ClientEvaluCreateModal extends React.Component {
                   <JBErrorMessage errorMSG={firmNameValErrMessage} />
 
                   <JBTextInput
-                    title="전화번호2(숫자만)"
+                    title="전화번호2"
+                    subTitle="(숫자만)"
                     value={telNumber2}
                     onChangeText={text => this.setState({ telNumber2: text })}
                     placeholder="추가 전화번호를 기입해 주세요"
@@ -306,7 +308,8 @@ export default class ClientEvaluCreateModal extends React.Component {
                   <JBErrorMessage errorMSG={telNumber2ValErrMessage} />
 
                   <JBTextInput
-                    title="전화번호3(숫자만)"
+                    title="전화번호3"
+                    subTitle="(숫자만)"
                     value={telNumber3}
                     onChangeText={text => this.setState({ telNumber3: text })}
                     placeholder="추가 전화번호를 기입해 주세요"
@@ -357,7 +360,8 @@ export default class ClientEvaluCreateModal extends React.Component {
                   <JBErrorMessage errorMSG={regiTelNumberValErrMessage} />
 
                   <JBTextInput
-                    title="사유*"
+                    title="사유"
+                    subTitle="(필수)"
                     value={reason}
                     onChangeText={text => this.setState({ reason: text })}
                     placeholder="블랙리스트 사유를 기입해 주세요"

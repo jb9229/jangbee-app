@@ -2,7 +2,7 @@ import React from 'react';
 import {
   FlatList, Modal, Picker, StyleSheet, View,
 } from 'react-native';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import ListSeparator from './molecules/ListSeparator';
 import OBAccount from './molecules/OBAccount';
@@ -218,7 +218,7 @@ export default class OpenBankAccSelectModal extends React.Component {
         >
           <View style={styles.bgWrap}>
             <View style={styles.contentsWrap}>
-              <JBIcon name="close" size={23} onPress={() => closeModal()} />
+              <CloseButton onClose={() => closeModal()} />
               <JBEmptyView
                 title="결재 통장리스트가 비어 있습니다."
                 subTitle="결제계좌 등록/재인증을 진행해 주세요."
@@ -246,7 +246,7 @@ export default class OpenBankAccSelectModal extends React.Component {
       >
         <View style={styles.bgWrap}>
           <View style={styles.contentsWrap}>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            <CloseButton onClose={() => closeModal()} />
             {showFirmWorkCoupon && (
               <View style={styles.couponListWrap}>
                 {!couponCnt && (

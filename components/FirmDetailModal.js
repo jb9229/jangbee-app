@@ -9,7 +9,7 @@ import JBButton from './molecules/JBButton';
 import FirmInfoItem from './organisms/FirmInfoItem';
 import { notifyError } from '../common/ErrorNotice';
 import callLink from '../common/CallLink';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBActIndicator from './organisms/JBActIndicator';
 
 const styles = StyleSheet.create({
@@ -214,7 +214,7 @@ export default class FirmMyInfoScreen extends React.Component {
             <FirmInfoItem firm={firm} evaluList={evaluList} />
           </ScrollView>
           <View style={styles.titleWrap}>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            <CloseButton onClose={() => closeModal()} />
             <Text style={styles.fnameText}>{firm.fname}</Text>
           </View>
 

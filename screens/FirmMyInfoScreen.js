@@ -262,7 +262,7 @@ class FirmMyInfoScreen extends React.Component {
             <Text style={styles.regFirmNotice}>+</Text>
             <Text style={styles.regFirmNotice}>고객이 장비업체를 찾고 있습니다.</Text>
             <Text style={styles.regFirmNotice}>무료등록 기회를 놓치지 마세요</Text>
-            <Text style={styles.regFirmNotice}>작성 중 어려움점이있으면 지금 바로 연락주세요</Text>
+            <Text style={styles.regFirmNotice}>작성 중 어려운점이있으면 지금 바로 연락주세요</Text>
             <CommWrap>
               <JBButton
                 title="문자(전화) 문의"
@@ -271,10 +271,10 @@ class FirmMyInfoScreen extends React.Component {
                 Primary
               />
               <JBButton
-                title="업체 등록하기"
+                title="내 장비 등록하기"
                 onPress={() => this.registerFirm()}
                 align="center"
-                Primary
+                Secondary
               />
             </CommWrap>
           </View>

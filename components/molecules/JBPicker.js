@@ -18,7 +18,7 @@ const TitleWrap = styled.View`
 
 const Title = styled.Text`
   font-family: ${fonts.titleMiddle};
-  color: ${colors.title};
+  color: ${colors.titleDark};
   font-size: 15;
   margin-bottom: 3;
   ${props => props.fill
@@ -27,12 +27,11 @@ const Title = styled.Text`
   `}
 `;
 
-const PickerWrap = styled.View`
-`;
+const PickerWrap = styled.View``;
 
 const SubTitle = styled.Text`
   font-family: ${fonts.title};
-  color: ${colors.titleDark};
+  color: ${colors.pointDark};
   font-size: 12;
 `;
 

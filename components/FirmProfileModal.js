@@ -192,7 +192,7 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
             </View>
             <View style={styles.itemsWrap}>
               <JBButton
-                title="업체정보 수정"
+                title="내 장비 정보수정"
                 onPress={() => this.updateFirm()}
                 size="full"
                 Primary

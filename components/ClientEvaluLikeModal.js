@@ -5,7 +5,7 @@ import {
 import { ListItem } from 'react-native-elements';
 import styled from 'styled-components';
 import * as api from '../api/api';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextItem from './molecules/JBTextItem';
 import ListSeparator from './molecules/ListSeparator';
@@ -194,7 +194,7 @@ export default class ClientEvaluLikeModal extends React.Component {
       >
         <Container>
           <ContentsView>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            <CloseButton onClose={() => closeModal()} />
 
             <FlatList
               data={evaluLikeList}

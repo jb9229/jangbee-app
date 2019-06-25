@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Modal } from 'react-native';
 import styled from 'styled-components/native';
-import JBIcon from './molecules/JBIcon';
+import CloseButton from './molecules/CloseButton';
 import Card from './molecules/CardUI';
 import FirmSearList from './organisms/FirmSearList';
 import JangbeeAdList from './JangbeeAdList';
@@ -202,7 +202,7 @@ export default class FirmSearListModal extends React.Component {
       >
         <Container size={size}>
           <TopWrap>
-            <JBIcon name="close" size={23} onPress={() => closeModal()} />
+            <CloseButton onClose={() => closeModal()} />
             <JangbeeAdList
               adLocation={adLocation.local}
               euqiTarget={searEquipment}

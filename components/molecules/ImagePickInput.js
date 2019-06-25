@@ -10,7 +10,7 @@ import JBIcon from './JBIcon';
 
 const Title = styled.Text`
   font-family: ${fonts.titleMiddle};
-  color: ${colors.title};
+  color: ${colors.titleDark};
   font-size: 15;
   margin-bottom: 3;
   ${props => props.fill
@@ -26,7 +26,7 @@ const TitleWrap = styled.View`
 
 const SubTitle = styled.Text`
   font-family: ${fonts.title};
-  color: ${colors.titleDark};
+  color: ${colors.pointDark};
   font-size: 12;
 `;
 
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
 });
 
 export default class ImagePickInput extends React.Component {
-
   pickImage = async () => {
     const { aspect, setImageUrl } = this.props;
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -86,7 +85,9 @@ export default class ImagePickInput extends React.Component {
   };
 
   render() {
-    const { itemTitle, subTitle, imgUrl, itemWrapStyle } = this.props;
+    const {
+      itemTitle, subTitle, imgUrl, itemWrapStyle,
+    } = this.props;
 
     const urlTextStyle = imgUrl ? styles.urlText : styles.placeholder;
     return (
