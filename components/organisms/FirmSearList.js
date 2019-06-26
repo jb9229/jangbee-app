@@ -67,7 +67,7 @@ export default class FirmSearList extends React.Component {
           onRefresh={handleRefresh}
           refreshing={refreshing}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={10}
+          onEndReachedThreshold={1}
         />
       </View>
     );

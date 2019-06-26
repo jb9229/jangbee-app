@@ -285,15 +285,15 @@ class ClientEvaluScreen extends React.Component {
           const now = moment().format('MM/DD');
           notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
 
-          this.setState({isLastList: resBody.last}, () => {
-            this.setState({
-              searchNotice: notice,
-              isCliEvaluLoadComplete: true,
-              refreshing: false,
-              isNewestEvaluList: true,
-              cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
-            });
+          this.setState({
+            isLastList: resBody.last,
+            searchNotice: notice,
+            isCliEvaluLoadComplete: true,
+            refreshing: false,
+            isNewestEvaluList: true,
+            cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
           });
+
           return;
         }
 
@@ -572,7 +572,7 @@ class ClientEvaluScreen extends React.Component {
             onRefresh={this.handleRefresh}
             refreshing={refreshing}
             onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={10}
+            onEndReachedThreshold={1}
           />
         )}
         {isCliEvaluLoadComplete === false && (

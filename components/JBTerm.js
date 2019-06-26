@@ -88,6 +88,12 @@ export default function renderJBTerm({ bg }) {
         </Column>
       </Row>
       <Row>
+        <Column>
+          <Title>Version: </Title>
+          <Text>beta_v0.3.0_20190625</Text>
+        </Column>
+      </Row>
+      <Row>
         <JBButton
           title="서비스 이용약관"
           size="small"
