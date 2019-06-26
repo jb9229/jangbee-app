@@ -16,7 +16,7 @@ import JBIcon from '../components/molecules/JBIcon';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
 import { openLinkUrl } from '../utils/LinkUtil';
 import * as jbcallConfig from '../jbcallconfig';
-import shareJBCall from '../common/JBCallShare';
+import { shareJBCall } from '../common/JBCallShare';
 
 const styles = StyleSheet.create({
   container: {

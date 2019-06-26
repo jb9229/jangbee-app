@@ -1,10 +1,12 @@
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { Icon } from 'expo';
+import styled from 'styled-components';
 import JBTextItem from '../molecules/JBTextItem';
 import JBButton from '../molecules/JBButton';
 import { formatTelnumber } from '../../utils/StringUtils';
 import colors from '../../constants/Colors';
+import { shareClientEvalu } from '../../common/JBCallShare';
 
 const styles = StyleSheet.create({
   Container: {
@@ -32,11 +34,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  commWrap: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
 });
+
+const CommWrap = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+  ${props => props.mine
+    && `
+    justify-content: space-between;
+  `}
+`;
+
+const EditCommWrap = styled.View`
+  flex-direction: row;
+`;
 
 /**
  * 블랙리스트 삭제 확인 함수
@@ -103,26 +114,36 @@ export default function CliEvaluItem({
           row
           ellipsis={20}
         />
+        {item.local ? <JBTextItem title="지역" value={item.local} small row /> : null}
         <JBTextItem title="사유" value={item.reason} small />
       </View>
-      {accountId === item.accountId && (
-        <View style={styles.commWrap}>
-          <JBButton
-            title="수정"
-            onPress={() => updateCliEvalu(item)}
-            size="small"
-            underline
-            Primary
-          />
-          <JBButton
-            title="삭제"
-            onPress={() => confirmDeleteCE(item, deleteCliEvalu)}
-            size="small"
-            underline
-            Primary
-          />
-        </View>
-      )}
+      <CommWrap mine={accountId === item.accountId}>
+        {accountId === item.accountId && (
+          <EditCommWrap>
+            <JBButton
+              title="수정"
+              onPress={() => updateCliEvalu(item)}
+              size="small"
+              underline
+              Secondary
+            />
+            <JBButton
+              title="삭제"
+              onPress={() => confirmDeleteCE(item, deleteCliEvalu)}
+              size="small"
+              underline
+              Secondary
+            />
+          </EditCommWrap>
+        )}
+        <JBButton
+          title="공유하기 >"
+          onPress={() => shareClientEvalu()}
+          size="small"
+          underline
+          Primary
+        />
+      </CommWrap>
     </View>
   );
 }

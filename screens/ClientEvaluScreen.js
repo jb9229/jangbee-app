@@ -572,7 +572,7 @@ class ClientEvaluScreen extends React.Component {
             onRefresh={this.handleRefresh}
             refreshing={refreshing}
             onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={1}
+            onEndReachedThreshold={2}
           />
         )}
         {isCliEvaluLoadComplete === false && (

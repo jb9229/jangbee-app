@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, Modal, Share } from 'react-native';
 import { SMS } from 'expo';
 import styled from 'styled-components/native';
+import { shareClientEvalu } from '../common/JBCallShare';
 import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextItem from './molecules/JBTextItem';
@@ -71,26 +72,7 @@ export default class ClientEvaluDetailModal extends React.Component {
     const { evalu } = this.state;
 
     try {
-      const result = await Share.share({
-        message: `[건설장비 피해사례 공유]\n\n전화번호: ${formatTelnumber(
-          evalu.telNumber,
-        )}${this.makeShareContent('이름', evalu.cliName)}${this.makeShareContent(
-          '업체명',
-          evalu.firmName,
-        )}${this.makeShareContent('전화번호2', evalu.telNumber2)}${this.makeShareContent(
-          '전화번호3',
-          evalu.telNumber3,
-        )}${this.makeShareContent('사업자번호', evalu.firmNumber)}${this.makeShareContent(
-          '장비',
-          evalu.equipment,
-        )}${this.makeShareContent('지역', evalu.local)}${this.makeSharePriceContent(
-          '금액',
-          formatNumber(evalu.amount),
-        )}${this.makeShareContent(
-          '피해내용',
-          evalu.reason,
-        )}\n\n자세한 내용은 장비콜 앱에서 확인해 주세요.https://play.google.com/store/apps/details?id=com.kan.jangbeecall`,
-      });
+      const result = shareClientEvalu(evalu);
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -101,26 +83,11 @@ export default class ClientEvaluDetailModal extends React.Component {
         }
       } else if (result.action === Share.dismissedAction) {
         // dismissed
+        Alert.alert(Share.dismissedAction);
       }
     } catch (error) {
       Alert.alert(error.message);
     }
-  };
-
-  makeShareContent = (title, content) => {
-    if (content) {
-      return `\n${title}: ${content}`;
-    }
-
-    return '';
-  };
-
-  makeSharePriceContent = (title, content) => {
-    if (content) {
-      return `\n${title}: ${content} 원`;
-    }
-
-    return '';
   };
 
   render() {

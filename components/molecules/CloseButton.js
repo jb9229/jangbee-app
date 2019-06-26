@@ -9,9 +9,10 @@ const Container = styled.View`
 `;
 const TouchableHighlight = styled.TouchableHighlight`
   background-color: ${colors.pointBatang};
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+  margin: 4px;
+  margin-bottom: 3px;
   border-width: 1;
   border-radius: 30;
   border-color: ${colors.iconDefault};
@@ -24,7 +25,7 @@ export default function CloseButton({ onClose }) {
       <TouchableHighlight onPress={onClose}>
         <Ionicons
           name={Platform.OS === 'ios' ? 'ios-close' : 'md-close'}
-          size={33}
+          size={30}
           color={colors.iconDefault}
         />
       </TouchableHighlight>

@@ -5,7 +5,7 @@ import fonts from '../constants/Fonts';
 import JBButton from './molecules/JBButton';
 import * as url from '../constants/Url';
 import { openLinkUrl } from '../utils/LinkUtil';
-import shareJBCall from '../common/JBCallShare';
+import { shareJBCall } from '../common/JBCallShare';
 
 const Container = styled.View`
   padding: 8px;
@@ -90,7 +90,7 @@ export default function renderJBTerm({ bg }) {
       <Row>
         <Column>
           <Title>Version: </Title>
-          <Text>beta_v0.3.0_20190625</Text>
+          <Text>beta_v0.3.1_20190626</Text>
         </Column>
       </Row>
       <Row>
