@@ -8,3 +8,4 @@ npm-debug.*
 *.mobileprovision
 firebaseconfig.js
 kakao-config.js
+jbcallconfig.js

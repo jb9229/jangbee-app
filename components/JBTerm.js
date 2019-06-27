@@ -30,9 +30,24 @@ const Title = styled.Text`
   font-size: 11;
 `;
 
+const TelHO = styled.TouchableOpacity`
+  padding: 1px;
+`;
+
 const Text = styled.Text`
   font-family: ${fonts.title};
   font-size: 13;
+  background-color: ${colors.point2Light};
+  padding: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin: 2px;
+`;
+
+const TelText = styled.Text`
+  font-family: ${fonts.title};
+  font-size: 13;
+  text-decoration-line: underline;
   background-color: ${colors.point2Light};
   padding: 1px;
   padding-left: 4px;
@@ -61,8 +76,16 @@ export default function renderJBTerm({ bg }) {
       </Row>
       <Row>
         <Column>
-          <Title>전화번호:</Title>
-          <Text>010-8577-7407</Text>
+          <Title>이메일:</Title>
+          <Text>support@jangbeecall.com</Text>
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <Title>기술 문의:</Title>
+          <TelHO onPress={() => openLinkUrl('tel:010-5202-3337')}>
+            <TelText>010-5202-3337</TelText>
+          </TelHO>
         </Column>
         <Column>
           <Title>개인정보관리책임자:</Title>
@@ -71,11 +94,11 @@ export default function renderJBTerm({ bg }) {
       </Row>
       <Row>
         <Column>
-          <Title>이메일:</Title>
-          <Text>support@jangbeecall.com</Text>
+          <Title>대표님:</Title>
+          <TelHO onPress={() => openLinkUrl('tel:010-8755-7407')}>
+            <TelText>010-8755-7407</TelText>
+          </TelHO>
         </Column>
-      </Row>
-      <Row>
         <Column>
           <Title>사업자번호:</Title>
           <Text>111-07-51491</Text>

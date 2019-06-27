@@ -80,6 +80,16 @@ export default function CliEvaluItem({
     titleStr = '이름없음';
   }
 
+  let telStr = formatTelnumber(item.telNumber);
+
+  if (item.telNumber2) {
+    telStr = `${telStr}, ${formatTelnumber(item.telNumber2)}`;
+  }
+
+  if (item.telNumber3) {
+    telStr = `${telStr}, ${formatTelnumber(item.telNumber3)}`;
+  }
+
   return (
     <View style={styles.Container}>
       <View style={styles.topWrap}>
@@ -105,15 +115,7 @@ export default function CliEvaluItem({
         </View>
       </View>
       <View style={styles.contentsWrap}>
-        <JBTextItem
-          title="전화번호"
-          value={`${formatTelnumber(item.telNumber)}, ${formatTelnumber(
-            item.telNumber2,
-          )}, ${formatTelnumber(item.telNumber3)}`}
-          small
-          row
-          ellipsis={20}
-        />
+        <JBTextItem title="전화번호" value={telStr} small row ellipsis={20} />
         {item.local ? <JBTextItem title="지역" value={item.local} small row /> : null}
         <JBTextItem title="사유" value={item.reason} small />
       </View>
@@ -138,7 +140,7 @@ export default function CliEvaluItem({
         )}
         <JBButton
           title="공유하기 >"
-          onPress={() => shareClientEvalu()}
+          onPress={() => shareClientEvalu(item)}
           size="small"
           underline
           Primary
