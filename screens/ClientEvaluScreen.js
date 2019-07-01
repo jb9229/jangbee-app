@@ -2,15 +2,21 @@ import React from 'react';
 import {
   FlatList, Picker, StyleSheet, Text, View,
 } from 'react-native';
+<<<<<<< HEAD
 import styled from 'styled-components';
 import moment from 'moment';
 import { SearchBar } from 'react-native-elements';
 import { notifyError } from '../common/ErrorNotice';
 import { shareNotExistCEvalu } from '../common/JBCallShare';
+=======
+import moment from 'moment';
+import { SearchBar } from 'react-native-elements';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import JBButton from '../components/molecules/JBButton';
 import ClientEvaluCreateModal from '../components/ClientEvaluCreateModal';
 import ClientEvaluUpdateModal from '../components/ClientEvaluUpdateModal';
 import ClientEvaluLikeModal from '../components/ClientEvaluLikeModal';
+<<<<<<< HEAD
 import CliEvaluItem from '../components/organisms/CliEvaluItem';
 import ClientEvaluDetailModal from '../components/ClientEvaluDetailModal';
 import JangbeeAdList from '../components/JangbeeAdList';
@@ -18,12 +24,28 @@ import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
+=======
+import Card from '../components/molecules/CardUI';
+import { withLogin } from '../contexts/LoginProvider';
+import * as api from '../api/api';
+import { notifyError } from '../common/ErrorNotice';
+import CliEvaluItem from '../components/organisms/CliEvaluItem';
+import colors from '../constants/Colors';
+import fonts from '../constants/Fonts';
+import ClientEvaluDetailModal from '../components/ClientEvaluDetailModal';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
     backgroundColor: colors.batangLight,
   },
+<<<<<<< HEAD
+=======
+  evaluListWrap: {
+    flex: 1,
+  },
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   searchHeaderWrap: {
     marginTop: 10,
     marginLeft: 3,
@@ -32,7 +54,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.batangDark,
     elevation: 14,
     borderRadius: 10,
+<<<<<<< HEAD
     borderWidth: 1,
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   },
   searchHeaderTopWrap: {
     flexDirection: 'row',
@@ -83,12 +108,15 @@ const styles = StyleSheet.create({
   },
 });
 
+<<<<<<< HEAD
 const NotExitButWrap = styled.View`
   flex: 1;
   justify-content: center;
   border-width: 1;
 `;
 
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 class ClientEvaluScreen extends React.Component {
   static navigationOptions = {
     title: '피해사례 고객',
@@ -104,8 +132,15 @@ class ClientEvaluScreen extends React.Component {
       isVisibleUpdateModal: false,
       isVisibleDetailModal: false,
       isVisibleEvaluLikeModal: false,
+<<<<<<< HEAD
       cliEvaluList: [],
       page: 0,
+=======
+      isCliEvaluLoadComplete: undefined,
+      cliEvaluList: [],
+      page: 0,
+      refreshing: false,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       isLastList: false,
       isNewestEvaluList: true,
       evaluLikeList: [],
@@ -120,8 +155,18 @@ class ClientEvaluScreen extends React.Component {
     this.setClinetEvaluList();
   }
 
+<<<<<<< HEAD
   componentWillReceiveProps(nextProps) {
   }
+=======
+  // componentWillReceiveProps(nextProps) {
+  //   const { params } = nextProps.navigation.state;
+
+  //   if (params !== undefined && params.refresh === true) {
+  //     this.setClinetEvaluList();
+  //   }
+  // }
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
   deleteCliEvalu = (id) => {
     api
@@ -210,6 +255,10 @@ class ClientEvaluScreen extends React.Component {
     api
       .getClientEvaluList(page, user.uid, true)
       .then((resBody) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
         if (resBody && resBody.content) {
           let notice;
           if (resBody.content.length === 0) {
@@ -217,8 +266,14 @@ class ClientEvaluScreen extends React.Component {
             this.setState({
               cliEvaluList: [],
               searchNotice: notice,
+<<<<<<< HEAD
               isLastList: resBody.last,
               notExistCEvalu: false,
+=======
+              isCliEvaluLoadComplete: true,
+              isLastList: resBody.last,
+              refreshing: false,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
             });
 
             return;
@@ -228,12 +283,19 @@ class ClientEvaluScreen extends React.Component {
           this.setState({
             cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
             searchNotice: notice,
+<<<<<<< HEAD
             isLastList: resBody.last,
             notExistCEvalu: false,
+=======
+            isCliEvaluLoadComplete: true,
+            isLastList: resBody.last,
+            refreshing: false,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
           });
           return;
         }
 
+<<<<<<< HEAD
         this.setState({ isNewestEvaluList: false, notExistCEvalu: false });
       })
       .catch((ex) => {
@@ -243,12 +305,27 @@ class ClientEvaluScreen extends React.Component {
         );
 
         this.setState({ notExistCEvalu: false });
+=======
+        this.setState({ isCliEvaluLoadComplete: false, isNewestEvaluList: false });
+      })
+      .catch((ex) => {
+        notifyError(
+          '최근 피해사례 요청 문제',
+          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
+        );
+
+        this.setState({ isCliEvaluLoadComplete: false });
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       });
   };
 
 
   /**
+<<<<<<< HEAD
    * 최근 피해사례 요청 함수
+=======
+   * 피해사례 요청 함수
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
    */
   setClinetEvaluList = () => {
     const { user } = this.props;
@@ -256,6 +333,13 @@ class ClientEvaluScreen extends React.Component {
     api
       .getClientEvaluList(page, user.uid, false)
       .then((resBody) => {
+<<<<<<< HEAD
+=======
+        // console.log(resBody.number);
+        // console.log(resBody.number);
+        // console.log(resBody.numberOfElements);
+        // console.log(resBody.last);
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
         if (resBody && resBody.content) {
           let notice;
           if (resBody.content.length === 0) {
@@ -263,9 +347,16 @@ class ClientEvaluScreen extends React.Component {
             this.setState({
               cliEvaluList: [],
               searchNotice: notice,
+<<<<<<< HEAD
               isLastList: resBody.last,
               isNewestEvaluList: true,
               notExistCEvalu: false,
+=======
+              isCliEvaluLoadComplete: false,
+              isLastList: resBody.last,
+              refreshing: false,
+              isNewestEvaluList: true,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
             });
 
             return;
@@ -279,15 +370,26 @@ class ClientEvaluScreen extends React.Component {
           this.setState({
             isLastList: resBody.last,
             searchNotice: notice,
+<<<<<<< HEAD
             isNewestEvaluList: true,
             cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
             notExistCEvalu: false,
+=======
+            isCliEvaluLoadComplete: true,
+            refreshing: false,
+            isNewestEvaluList: true,
+            cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
           });
 
           return;
         }
 
+<<<<<<< HEAD
         this.setState({ notExistCEvalu: false });
+=======
+        this.setState({ isCliEvaluLoadComplete: false });
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       })
       .catch((ex) => {
         notifyError(
@@ -295,7 +397,11 @@ class ClientEvaluScreen extends React.Component {
           `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
         );
 
+<<<<<<< HEAD
         this.setState({ notExistCEvalu: false });
+=======
+        this.setState({ isCliEvaluLoadComplete: false });
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       });
   };
 
@@ -307,9 +413,13 @@ class ClientEvaluScreen extends React.Component {
     const { searchArea, searchWord } = this.state;
 
     if (!searchWord) {
+<<<<<<< HEAD
       this.setState({
         searchNotice: '검색어를 기입해 주세요!',
       });
+=======
+      this.setClinetEvaluList();
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       return;
     }
 
@@ -338,6 +448,7 @@ class ClientEvaluScreen extends React.Component {
           let notice = '';
           if (resBody.length === 0) {
             notice = `[${searchWord}]는 현재 피해사례에 조회되지 않습니다.`;
+<<<<<<< HEAD
             this.setState({
               notExistCEvalu: true,
               isLastList: true,
@@ -349,6 +460,13 @@ class ClientEvaluScreen extends React.Component {
             cliEvaluList: resBody,
             searchNotice: notice,
             searchTime: moment().format('YYYY.MM.DD HH:mm'),
+=======
+          }
+          this.setState({
+            cliEvaluList: resBody,
+            searchNotice: notice,
+            isCliEvaluLoadComplete: true,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
           });
         }
       })
@@ -357,6 +475,11 @@ class ClientEvaluScreen extends React.Component {
           '피해사례 요청 문제',
           `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`,
         );
+<<<<<<< HEAD
+=======
+
+        this.setState({ isCliEvaluLoadComplete: false });
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       });
   };
 
@@ -412,6 +535,30 @@ class ClientEvaluScreen extends React.Component {
     );
   };
 
+<<<<<<< HEAD
+=======
+  /**
+   * 장비업체리스트 새로고침 함수
+   */
+  handleRefresh = () => {
+    const { isNewestEvaluList } = this.state;
+
+    this.setState(
+      {
+        page: 0,
+        refreshing: true,
+      },
+      () => {
+        if (isNewestEvaluList) {
+          this.setClinetEvaluList();
+        } else {
+          this.setMyClinetEvaluList();
+        }
+      },
+    );
+  };
+
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   onClickNewestEvaluList = () => {
     this.setState(
       {
@@ -458,16 +605,26 @@ class ClientEvaluScreen extends React.Component {
   render() {
     const {
       searchWord,
+<<<<<<< HEAD
       searchedWord,
       searchArea,
       searchNotice,
       searchPlaceholder,
       searchTime,
       notExistCEvalu,
+=======
+      searchArea,
+      searchNotice,
+      searchPlaceholder,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       updateEvalu,
       detailEvalu,
       cliEvaluList,
       isLastList,
+<<<<<<< HEAD
+=======
+      refreshing,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       evaluLikeList,
       evaluLikeSelected,
       isMineEvaluation,
@@ -475,6 +632,10 @@ class ClientEvaluScreen extends React.Component {
       isVisibleUpdateModal,
       isVisibleEvaluLikeModal,
       isVisibleDetailModal,
+<<<<<<< HEAD
+=======
+      isCliEvaluLoadComplete,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     } = this.state;
     const { user } = this.props;
 
@@ -539,6 +700,7 @@ class ClientEvaluScreen extends React.Component {
           </View>
         </View>
 
+<<<<<<< HEAD
         {notExistCEvalu ? (
           <NotExitButWrap>
             <JBButton
@@ -560,6 +722,27 @@ class ClientEvaluScreen extends React.Component {
             />
           )}
         <JangbeeAdList admob admobUnitID="ca-app-pub-9415708670922576/2793380882" admonSize="fullBanner" admonHeight="60" />
+=======
+        {isCliEvaluLoadComplete === true && (
+          <FlatList
+            data={cliEvaluList}
+            renderItem={this.renderCliEvaluItem}
+            keyExtractor={(item, index) => index.toString()}
+            last={isLastList}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={2}
+          />
+        )}
+        {isCliEvaluLoadComplete === false && (
+          <View>
+            <Text>
+              피해사례 요청에 실패했거나 등록된 블랙 리스트가 없습니다, 다시 시도해 주세요.
+            </Text>
+          </View>
+        )}
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
         <ClientEvaluCreateModal
           isVisibleModal={isVisibleCreateModal}
           accountId={user.uid}

@@ -1,7 +1,11 @@
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+<<<<<<< HEAD
 import { AdMobBanner } from 'expo-ads-admob';
 import styled from 'styled-components/native';
+=======
+import { AdMobBanner } from 'expo';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import Swiper from 'react-native-swiper';
 import JBActIndicator from './organisms/JBActIndicator';
 import BugReport from './organisms/BugReport';
@@ -13,6 +17,14 @@ const styles = StyleSheet.create({
   container: {
     height: 200,
   },
+<<<<<<< HEAD
+=======
+  adMobContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 120,
+  },
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   wrapper: {
     flex: 1,
   },
@@ -24,12 +36,15 @@ const styles = StyleSheet.create({
   },
 });
 
+<<<<<<< HEAD
 const AdMobContainer = styled.View`
   height: ${props => (props.height ? props.height : '120')};
   align-items: center;
   justify-content: center;
 `
 
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 export default class JangbeeAdList extends React.Component {
   _isMounted = false;
 
@@ -105,11 +120,16 @@ export default class JangbeeAdList extends React.Component {
   renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
 
   render() {
+<<<<<<< HEAD
     const { admob, admobUnitID, admonSize, admonHeight } = this.props;
+=======
+    const { admob } = this.props;
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     const {
       adList, isEmptyAdlist, isVisibleDetailModal, detailFirmId,
     } = this.state;
 
+<<<<<<< HEAD
     if (admob || isEmptyAdlist) {
       const unitID = admobUnitID || 'ca-app-pub-9415708670922576/6931111723';
 
@@ -123,6 +143,21 @@ export default class JangbeeAdList extends React.Component {
             onDidFailToReceiveAdWithError={this.renderAdmobError}
           />
         </AdMobContainer>
+=======
+    // console.log(
+    //   `adLocation: ${this.props.adLocation}, isEmptyAdlist: ${isEmptyAdlist}, render: ${admob}`,
+    // );
+    if (admob || isEmptyAdlist) {
+      return (
+        <View style={styles.adMobContainer}>
+          <AdMobBanner
+            bannerSize="largeBanner"
+            adUnitID="ca-app-pub-9415708670922576/6931111723" // Test ID, Replace with your-admob-unit-id
+            testDeviceID="EMULATOR"
+            onDidFailToReceiveAdWithError={this.renderAdmobError}
+          />
+        </View>
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       );
     }
 

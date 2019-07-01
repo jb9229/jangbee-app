@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import fonts from '../../constants/Fonts';
 import colors from '../../constants/Colors';
 
+<<<<<<< HEAD
 const Container = styled.View`
   ${props => props.row
     && `
@@ -14,6 +15,8 @@ const Container = styled.View`
   `}
 `;
 
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 const Title = styled.Text`
   font-family: ${fonts.titleMiddle};
   color: ${colors.titleDark};
@@ -55,7 +58,10 @@ const styles = StyleSheet.create({
 export default class JBTextInput extends React.PureComponent {
   render() {
     const {
+<<<<<<< HEAD
       row,
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       title,
       subTitle,
       value,
@@ -67,10 +73,16 @@ export default class JBTextInput extends React.PureComponent {
       multiline,
       numberOfLines,
       tiRefer,
+<<<<<<< HEAD
       editable,
     } = this.props;
     return (
       <Container row={row}>
+=======
+    } = this.props;
+    return (
+      <View style={styles.itemWrap}>
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
         <TitleWrap>
           {title && <Title fill={!!value}>{title}</Title>}
           {subTitle && <SubTitle>{subTitle}</SubTitle>}
@@ -88,9 +100,14 @@ export default class JBTextInput extends React.PureComponent {
           numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
           ellipsizeMode="tail"
           blurOnSubmit={false}
+<<<<<<< HEAD
           editable={editable}
         />
       </Container>
+=======
+        />
+      </View>
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     );
   }
 }

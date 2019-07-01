@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions'
+=======
+import { Permissions, Notifications } from 'expo';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import firebase from 'firebase';
 
 export default async function registerForPushNotificationsAsync(uid) {

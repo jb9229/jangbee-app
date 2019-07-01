@@ -554,6 +554,7 @@ const ADD_CONTENT = [
     isExpanded: false,
     willUpdate: false,
     isChecked: false,
+<<<<<<< HEAD
     category_name: '울산',
     subcategory: [
       { isChecked: false, val: '남구' },
@@ -567,6 +568,8 @@ const ADD_CONTENT = [
     isExpanded: false,
     willUpdate: false,
     isChecked: false,
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     category_name: '경북',
     subcategory: [
       { isChecked: false, val: '경산시' },

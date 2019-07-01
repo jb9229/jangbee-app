@@ -153,7 +153,10 @@ export default class FirmSearListModal extends React.Component {
    */
   handleLoadMore = () => {
     const { page, isLastList } = this.state;
+<<<<<<< HEAD
     const { isLocalSearch } = this.props;
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
     if (isLastList) {
       return;
@@ -164,7 +167,11 @@ export default class FirmSearListModal extends React.Component {
         page: page + 1,
       },
       () => {
+<<<<<<< HEAD
         this.search(isLocalSearch);
+=======
+        this.searchNearJangbee();
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       },
     );
   };
@@ -173,14 +180,28 @@ export default class FirmSearListModal extends React.Component {
    * 장비업체리스트 새로고침 함수
    */
   handleRefresh = () => {
+<<<<<<< HEAD
     const { isLocalSearch } = this.props;
+=======
+    const { isLocalSearch } = this.state;
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
     this.setState(
       {
         page: 0,
         refreshing: true,
       },
+<<<<<<< HEAD
       () => { this.search(isLocalSearch); },
+=======
+      () => {
+        if (isLocalSearch) {
+          this.search();
+        } else {
+          this.search();
+        }
+      },
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     );
   };
 

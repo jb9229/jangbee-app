@@ -68,8 +68,11 @@ class HomeScreen extends React.Component {
         this.noticeCommonNavigation(notification, '배차 다시 요청하기', () => navigation.navigate('WorkList', { refresh: true }));
       } else if (notification.data.notice === 'NOTI_WORK_CLOSED') {
         this.noticeCommonNavigation(notification, '업체 평가하기', () => navigation.navigate('WorkList', { refresh: true }));
+<<<<<<< HEAD
       } else if (notification.data.notice === 'NOTI_CEVALU_REGISTER') {
         this.noticeCommonNavigation(notification, '피해사례(악덕) 조회하기', () => navigation.navigate('ClientEvalu'));
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       } else {
         this.noticeCommonNavigation(notification, '확인', () => {});
       }

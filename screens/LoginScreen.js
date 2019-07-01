@@ -1,7 +1,14 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Alert, StyleSheet, View } from 'react-native';
 import { Linking } from 'expo';
 import * as WebBrowser from 'expo-web-browser';
+=======
+import {
+  Alert, StyleSheet, Text, View,
+} from 'react-native';
+import { Linking, WebBrowser } from 'expo';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import styled from 'styled-components';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
@@ -78,6 +85,7 @@ const Title = styled.Text`
   `}
 `;
 
+<<<<<<< HEAD
 const ErrorMsg = styled.Text`
   color: red;
 `;
@@ -87,6 +95,11 @@ const LogMsg = styled.Text`
 `;
 
 const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha_v3.html?appurl=${Linking.makeUrl()}`;
+=======
+const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
+  '/?',
+)}`;
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
 class LoginScreen extends React.PureComponent {
   constructor(props) {
@@ -95,12 +108,16 @@ class LoginScreen extends React.PureComponent {
       phoneNumber: '',
       confirmationResult: undefined,
       code: '',
+<<<<<<< HEAD
       capchaListener: undefined,
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       phoneNumberValErrMessage: '',
       codeValErrMessage: '',
     };
   }
 
+<<<<<<< HEAD
   componentDidMount() {
     const capchaListener = ({ url }) => {
       let token;
@@ -119,6 +136,8 @@ class LoginScreen extends React.PureComponent {
     Linking.removeEventListener('url', capchaListener);
   }
 
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   onPhoneChange = (phoneNumber) => {
     this.setState({ phoneNumber });
   };
@@ -147,10 +166,14 @@ class LoginScreen extends React.PureComponent {
         getUserInfo(user.uid)
           .then((data) => {
             const userInfo = data.val();
+<<<<<<< HEAD
             if (!userInfo) {
               changeAuthPath(2, user);
               return;
             }
+=======
+            if (!userInfo) { changeAuthPath(2, user); return; }
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
             const { userType } = userInfo;
 
@@ -166,7 +189,11 @@ class LoginScreen extends React.PureComponent {
           ));
       })
       .catch((error) => {
+<<<<<<< HEAD
         Alert.alert('잘못된 인증 코드입니다', error.message);
+=======
+        Alert.alert(`잘못된 인증 코드입니다: ${error}`);
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       });
   };
 
@@ -203,17 +230,24 @@ class LoginScreen extends React.PureComponent {
    * Validation 에러 메세지 초기화
    */
   resetValErrMsg = () => {
+<<<<<<< HEAD
     this.setState({ phoneNumberValErrMessage: '', codeValErrMessage: '', logMsg: '', errorMsg: '' });
+=======
+    this.setState({ phoneNumberValErrMessage: '', codeValErrMessage: '' });
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   };
 
   onPhoneComplete = async () => {
     this.resetValErrMsg();
 
+<<<<<<< HEAD
     // Check Captcha
     WebBrowser.openBrowserAsync(captchaUrl);
   };
 
   setCaptchaListener = async (token) => {
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     const { phoneNumber } = this.state;
 
     const pnWithoutHyphen = phoneNumber.replace(/-/g, '');
@@ -225,6 +259,19 @@ class LoginScreen extends React.PureComponent {
       return;
     }
 
+<<<<<<< HEAD
+=======
+    // Check Captcha
+    let token = null;
+    const listener = ({ url }) => {
+      WebBrowser.dismissBrowser();
+      const tokenEncoded = Linking.parse(url).queryParams.token;
+      if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
+    };
+    Linking.addEventListener('url', listener);
+    await WebBrowser.openBrowserAsync(captchaUrl);
+    Linking.removeEventListener('url', listener);
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     if (token) {
       const nationalPNumber = this.convertNationalPN(pnWithoutHyphen);
 
@@ -233,17 +280,28 @@ class LoginScreen extends React.PureComponent {
         type: 'recaptcha',
         verify: () => Promise.resolve(token),
       };
+<<<<<<< HEAD
       this.setState({ logMsg: `Listener Token: ${token}` });
+=======
+
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       try {
         const confirmationResult = await firebase
           .auth()
           .signInWithPhoneNumber(nationalPNumber, captchaVerifier);
         this.setState({ confirmationResult });
       } catch (e) {
+<<<<<<< HEAD
         this.setState({ errorMsg: `Listener Error: ${e.message}` });
       }
     }
   }
+=======
+        Alert.alert('핸드폰 인증에 요청에 문제가 있습니다, 재시도해 주세요');
+      }
+    }
+  };
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
   render() {
     const {
@@ -252,11 +310,19 @@ class LoginScreen extends React.PureComponent {
       code,
       phoneNumberValErrMessage,
       codeValErrMessage,
+<<<<<<< HEAD
       logMsg,
       errorMsg,
     } = this.state;
     let authReadOnly = true;
     if (!confirmationResult) {
+=======
+    } = this.state;
+    let authTitleStyle = styles.title;
+    let authReadOnly = true;
+    if (!confirmationResult) {
+      authTitleStyle = styles.titleDisable;
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       authReadOnly = false;
     }
 
@@ -272,10 +338,14 @@ class LoginScreen extends React.PureComponent {
               this.onPhoneChange(text);
             }}
             placeholder="휴대전화 번호입력(숫자만)"
+<<<<<<< HEAD
             onEndEditing={() => {
               const formatPN = formatTelnumber(phoneNumber);
               this.setState({ phoneNumber: formatPN });
             }}
+=======
+            onEndEditing={() => { const formatPN = formatTelnumber(phoneNumber); this.setState({phoneNumber: formatPN})}}
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
             onSubmitEditing={() => this.onPhoneComplete()}
             editable={!authReadOnly}
           />
@@ -291,6 +361,10 @@ class LoginScreen extends React.PureComponent {
             secureTextEntry
             placeholder="SMS 인증코드 입력"
             editable={authReadOnly}
+<<<<<<< HEAD
+=======
+            onSubmitEditing={() => this.onSignIn()}
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
           />
           <JBErrorMessage errorMSG={codeValErrMessage} />
         </View>
@@ -305,6 +379,7 @@ class LoginScreen extends React.PureComponent {
             </CommWrap>
           )}
         </View>
+<<<<<<< HEAD
         {phoneNumber === '010-5202-3337' || phoneNumber === '010-8755-7407' ? (
           <View>
             <LogMsg>
@@ -315,6 +390,8 @@ class LoginScreen extends React.PureComponent {
             </ErrorMsg>
           </View>
         ) : null}
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       </View>
     );
   }

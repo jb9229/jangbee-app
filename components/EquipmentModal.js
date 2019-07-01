@@ -219,7 +219,10 @@ const EQUIPMENT_CONTENT = [
     subcategory: [
       { isChecked: false, val: '미니' },
       { isChecked: false, val: '02W' },
+<<<<<<< HEAD
       { isChecked: false, val: '03W' },
+=======
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       { isChecked: false, val: '06W' },
       { isChecked: false, val: '08W' },
       { isChecked: false, val: '02LC' },

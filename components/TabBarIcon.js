@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import * as Icon from '@expo/vector-icons'
+=======
+import { Icon } from 'expo';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
 import Colors from '../constants/Colors';
 

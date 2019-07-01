@@ -16,6 +16,10 @@ import JBIcon from '../components/molecules/JBIcon';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
 import { openLinkUrl } from '../utils/LinkUtil';
 import * as jbcallConfig from '../jbcallconfig';
+<<<<<<< HEAD
+=======
+import { shareJBCall } from '../common/JBCallShare';
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
 const styles = StyleSheet.create({
   container: {
@@ -104,7 +108,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   fnameText: {
+<<<<<<< HEAD
     fontSize: 25,
+=======
+    fontSize: 30,
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     fontFamily: fonts.titleTop,
     color: colors.point2,
   },
@@ -289,6 +297,10 @@ class FirmMyInfoScreen extends React.Component {
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
           <TopCommWrap>
+<<<<<<< HEAD
+=======
+            <JBButton title="장비 콜 공유하기" onPress={() => shareJBCall()} size="small" nonemargin Primary />
+>>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
             <JBIcon name="settings" size={30} onPress={() => this.setVisibleProfileModal(true)} />
           </TopCommWrap>
         </View>
