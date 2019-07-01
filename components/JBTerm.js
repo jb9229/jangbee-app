@@ -113,7 +113,7 @@ export default function renderJBTerm({ bg }) {
       <Row>
         <Column>
           <Title>Version: </Title>
-          <Text>beta_v0.5.0_20190628</Text>
+          <Text>beta_v0.5.1_20190701</Text>
         </Column>
       </Row>
       <Row>

@@ -78,7 +78,15 @@ const Title = styled.Text`
   `}
 `;
 
-const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha_v2.html?appurl=${Linking.makeUrl('')}`;
+const ErrorMsg = styled.Text`
+  color: red;
+`;
+
+const LogMsg = styled.Text`
+  color: blue;
+`;
+
+const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha_v3.html?appurl=${Linking.makeUrl()}`;
 
 class LoginScreen extends React.PureComponent {
   constructor(props) {
@@ -94,6 +102,15 @@ class LoginScreen extends React.PureComponent {
   }
 
   componentDidMount() {
+    const capchaListener = ({ url }) => {
+      let token;
+      const tokenEncoded = Linking.parse(url).queryParams.token;
+      if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
+      this.setCaptchaListener(token);
+    };
+
+    this.setState({ capchaListener });
+    Linking.addEventListener('url', capchaListener);
   }
 
   componentWillUnmount() {
@@ -186,21 +203,11 @@ class LoginScreen extends React.PureComponent {
    * Validation 에러 메세지 초기화
    */
   resetValErrMsg = () => {
-    this.setState({ phoneNumberValErrMessage: '', codeValErrMessage: '' });
+    this.setState({ phoneNumberValErrMessage: '', codeValErrMessage: '', logMsg: '', errorMsg: '' });
   };
 
   onPhoneComplete = async () => {
     this.resetValErrMsg();
-
-    const capchaListener = ({ url }) => {
-      let token;
-      const tokenEncoded = Linking.parse(url).queryParams.token;
-      if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
-      this.setCaptchaListener(token);
-    };
-
-    this.setState({ capchaListener });
-    Linking.addEventListener('url', capchaListener);
 
     // Check Captcha
     WebBrowser.openBrowserAsync(captchaUrl);
@@ -226,14 +233,14 @@ class LoginScreen extends React.PureComponent {
         type: 'recaptcha',
         verify: () => Promise.resolve(token),
       };
-
+      this.setState({ logMsg: `Listener Token: ${token}` });
       try {
         const confirmationResult = await firebase
           .auth()
           .signInWithPhoneNumber(nationalPNumber, captchaVerifier);
         this.setState({ confirmationResult });
       } catch (e) {
-        Alert.alert('핸드폰 인증 요청에 문제가 있습니다, 재시도해 주세요', e.message);
+        this.setState({ errorMsg: `Listener Error: ${e.message}` });
       }
     }
   }
@@ -245,6 +252,8 @@ class LoginScreen extends React.PureComponent {
       code,
       phoneNumberValErrMessage,
       codeValErrMessage,
+      logMsg,
+      errorMsg,
     } = this.state;
     let authReadOnly = true;
     if (!confirmationResult) {
@@ -296,6 +305,16 @@ class LoginScreen extends React.PureComponent {
             </CommWrap>
           )}
         </View>
+        {phoneNumber === '010-5202-3337' || phoneNumber === '010-8755-7407' ? (
+          <View>
+            <LogMsg>
+              {logMsg}
+            </LogMsg>
+            <ErrorMsg>
+              {errorMsg}
+            </ErrorMsg>
+          </View>
+        ) : null}
       </View>
     );
   }
