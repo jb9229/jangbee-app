@@ -3,16 +3,11 @@ import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import {
-<<<<<<< HEAD
   AppLoading, Updates,
 } from 'expo';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import * as Icon from '@expo/vector-icons';
-=======
-  AppLoading, Asset, Font, Icon, Updates,
-} from 'expo';
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import firebase from 'firebase';
 import AppNavigator from './navigation/AppNavigator';
 import JBActIndicator from './components/organisms/JBActIndicator';
