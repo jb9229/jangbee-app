@@ -5,12 +5,10 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   ScrollView,
-  Platform,
   Picker,
   Text,
   View,
 } from 'react-native';
-import { Header } from 'react-navigation';
 import JBTextInput from '../components/molecules/JBTextInput';
 import JBButton from '../components/molecules/JBButton';
 import ImagePickInput from '../components/molecules/ImagePickInput';

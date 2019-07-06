@@ -8,17 +8,11 @@ import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import JBTextInput from './molecules/JBTextInput';
 import Card from './molecules/CardUI';
-<<<<<<< HEAD
 import JBSelectBox from './organisms/JBSelectBox';
 import JBErrorMessage from './organisms/JBErrorMessage';
 import { validate } from '../utils/Validation';
 import { notifyError } from '../common/ErrorNotice';
 import { LOCAL_CATEGORY, LOCAL_ITEM } from '../STRING';
-=======
-import JBErrorMessage from './organisms/JBErrorMessage';
-import { validate } from '../utils/Validation';
-import { notifyError } from '../common/ErrorNotice';
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 
 const Container = styled.View`
   align-items: center;
@@ -94,11 +88,8 @@ export default class ClientEvaluCreateModal extends React.Component {
       firmNumber: '',
       equipment: '',
       local: '',
-<<<<<<< HEAD
       searSido: '',
       searGungu: '',
-=======
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       amount: '',
       regiTelNumber: '',
       reason: '',
@@ -254,11 +245,8 @@ export default class ClientEvaluCreateModal extends React.Component {
       firmNumber,
       equipment,
       local,
-<<<<<<< HEAD
       searSido,
       searGungu,
-=======
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       amount,
       regiTelNumber,
       reason,
@@ -355,7 +343,6 @@ export default class ClientEvaluCreateModal extends React.Component {
                     title="지역"
                     value={local}
                     onChangeText={text => this.setState({ local: text })}
-<<<<<<< HEAD
                     placeholder="어느 지역 피해사례 입니까?"
                     editable={false}
                     row
@@ -368,9 +355,6 @@ export default class ClientEvaluCreateModal extends React.Component {
                     selectCategory={sido => this.setState({ searSido: sido, searGungu: '', local: sido })}
                     selectItem={(sido, sigungu) => this.setState({ searSido: sido, searGungu: sigungu, local: `${sido} ${sigungu}` })}
                     itemPicker="전체"
-=======
-                    placeholder="어떤 지역의 피해사례 입니까?"
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
                   />
                   <JBErrorMessage errorMSG={localValErrMessage} />
 

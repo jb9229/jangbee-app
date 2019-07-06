@@ -456,7 +456,7 @@ class FirmWorkListScreen extends React.Component {
           completeSelect={(fintechUseNum, couponSelected) => { withdrawCompleteFnc(couponSelected, fintechUseNum);}}
           accountId={user.uid}
           actionName="결제방법 선택하기"
-          showFirmWorkCoupon
+          mode="COUPON_MODE"
           {...this.props}
         />
         <TabView

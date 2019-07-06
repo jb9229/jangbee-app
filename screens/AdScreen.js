@@ -293,6 +293,7 @@ class AdScreen extends React.Component {
           completeSelect={this.changeAdPayAccount}
           accountId={user.uid}
           actionName="결제통장 바꾸기"
+          mode="ACCOUNT_MODE"
           {...this.props}
         />
         <FlatList

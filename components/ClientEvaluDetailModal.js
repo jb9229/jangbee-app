@@ -132,32 +132,19 @@ export default class ClientEvaluDetailModal extends React.Component {
           <JBTextItem title="금액" value={`${formatNumber(evalu.amount)} 원`} small row />
           <JBTextItem title="피해내용" value={evalu.reason} small />
 
-<<<<<<< HEAD
           {evalu.regiTelNumber ? (
-=======
-          {evalu.regiTelNumber && (
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
             <JBTextItem
               title="피해자 연락처"
               value={formatTelnumber(evalu.regiTelNumber)}
               small
               row
             />
-<<<<<<< HEAD
           ) : null}
 
           <CommandWrap>
             {evalu.regiTelNumber ? (
               <JBButton title="작성자에게 행적신고" onPress={() => this.noticeRegi()} />
             ) : null}
-=======
-          )}
-
-          <CommandWrap>
-            {evalu.regiTelNumber && (
-              <JBButton title="작성자에게 행적신고" onPress={() => this.noticeRegi()} />
-            )}
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
             <JBButton title="공유하기" onPress={() => this.shareClientEvalu()} Primary />
           </CommandWrap>
         </Container>

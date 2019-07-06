@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-// const SERVER_URL = 'http://172.30.1.19/api/v1/';
-// const SERVER_URL = 'http://192.168.0.6/api/v1/';
-=======
-// const SERVER_URL = 'http://10.65.25.81/api/v1/';
-// const SERVER_URL = 'http://192.168.0.4/api/v1/';
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
-const SERVER_URL = 'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+// const SERVER_URL = 'http://10.1.0.121/api/v1/';
+const SERVER_URL = 'http://192.168.0.4/api/v1/';
+// const SERVER_URL = 'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
 module.exports = {
@@ -40,6 +35,7 @@ module.exports = {
   JBSERVER_WORK_APPLICANTS: `${SERVER_URL}works/applicants`,
   JBSERVER_FIRMWORK_FIRM_APPLY: `${SERVER_URL}firm_works/firm/apply`,
   JBSERVER_COUPON: `${SERVER_URL}coupon`,
+  JBSERVER_CASHBACK: `${SERVER_URL}cashback`,
   JBSERVER_STAT: `${SERVER_URL}stat`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
   OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-<<<<<<< HEAD
-import * as Icon from '@expo/vector-icons'
-=======
-import { Icon } from 'expo';
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import styled from 'styled-components';
-import JBTextItem from '../molecules/JBTextItem';
+import * as Icon from '@expo/vector-icons';
 import JBButton from '../molecules/JBButton';
-import { formatTelnumber } from '../../utils/StringUtils';
+import JBTextItem from '../molecules/JBTextItem';
 import colors from '../../constants/Colors';
 import { shareClientEvalu } from '../../common/JBCallShare';
+import { formatTelnumber } from '../../utils/StringUtils';
 
 const styles = StyleSheet.create({
   Container: {

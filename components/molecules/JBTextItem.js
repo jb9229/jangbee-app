@@ -24,10 +24,6 @@ const Container = styled.View`
   `};
 `;
 const TitleWrap = styled.View`
-  ${props => props.titleSize
-    && `
-      width: ${props.titleSize};
-  `};
   ${props => !props.row
     && `
     flex: 1;
@@ -37,6 +33,10 @@ const TitleWrap = styled.View`
     flex-basis: 80;
     width: 80;
   `}
+  ${props => props.titleSize
+    && `
+      width: ${props.titleSize};
+  `};
 `;
 
 const Title = styled.Text`
@@ -96,10 +96,6 @@ export default class JBTextItem extends React.PureComponent {
       titleSize,
       ellipsis,
     } = this.props;
-    let color = null;
-    if (revColor) {
-      color = { color: 'white' };
-    }
 
     let valueText = value;
     if (!value) {
@@ -109,7 +105,7 @@ export default class JBTextItem extends React.PureComponent {
       <Container row={row} small={small}>
         <TitleWrap row={row} titleSize={titleSize}>
           <Title small={small} row={row}>
-            {title === undefined ? '' : `${title} `}
+            {title || ''}
           </Title>
         </TitleWrap>
         <ContentsWrap row={row} titleSize={titleSize}>

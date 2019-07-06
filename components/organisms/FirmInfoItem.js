@@ -13,13 +13,8 @@ import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { Rating } from 'react-native-elements';
 import JBTextItem from '../molecules/JBTextItem';
 import ListSeparator from '../molecules/ListSeparator';
-<<<<<<< HEAD
 import Card from '../molecules/CardUI';
 import FirmImageItem from '../FirmImageItem';
-=======
-import FirmImageItem from '../FirmImageItem';
-import Card from '../molecules/CardUI';
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 import FirmEvaluListItem from './FirmEvaluListItem';

@@ -1,30 +1,14 @@
 {
-<<<<<<< HEAD
   "scheme": "Jangbeecall",
   "appName": "Jangbeecall",
-=======
-  "scheme": "JangbeeCall",
-  "appName": "JangbeeCall",
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
   "expo": {
     "name": "장비 콜",
     "slug": "Everyone_will_be_own_at_JangbeeCall",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
-<<<<<<< HEAD
     "sdkVersion": "33.0.0",
-=======
-    "sdkVersion": "32.0.0",
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
-    "platforms": [
-      "ios",
-      "android"
-    ],
-<<<<<<< HEAD
+    "platforms": ["ios", "android"],
     "version": "0.5.1_20190630",
-=======
-    "version": "0.3.0_20190621",
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
@@ -36,9 +20,7 @@
     "updates": {
       "checkAutomatically": "ON_ERROR_RECOVERY"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -48,14 +30,8 @@
     },
     "android": {
       "package": "com.kan.jangbeecall",
-      "permissions": [
-        "ACCESS_FINE_LOCATION"
-      ],
-<<<<<<< HEAD
+      "permissions": ["ACCESS_FINE_LOCATION"],
       "versionCode": 17,
-=======
-      "versionCode": 16,
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"

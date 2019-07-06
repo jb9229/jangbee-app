@@ -176,12 +176,9 @@ class SignUpScreen extends React.Component {
           <Text style={styles.thanksRegiText}>
             일잘하는 장비 쉽게찾기, 피해사례 공유부터 시작합니다.
           </Text>
-<<<<<<< HEAD
           <Text style={styles.thanksRegiText}>
             무료가입☆무료장비등록☆무료콜받기
           </Text>
-=======
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
         </View>
         <View style={styles.titleWrap}>
           <Text style={styles.titleText}>어떤 서비스로 가입하시겠습니까?</Text>

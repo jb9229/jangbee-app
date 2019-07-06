@@ -101,11 +101,8 @@ export default class FirmCntChart extends React.Component {
    * 지역별 각장비모델 등록갯수 데이터요청 함수
    */
   setFirmCountChart = (equipment) => {
-<<<<<<< HEAD
     if (!equipment) { return; }
 
-=======
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
     api
       .getFirmCountChart(equipment)
       .then((firmCNTData) => {
@@ -136,10 +133,7 @@ export default class FirmCntChart extends React.Component {
               '대전',
               '광주',
               '대구',
-<<<<<<< HEAD
               '울산',
-=======
->>>>>>> 4fe4d1bf290305a261ffc4a9ad5a07874dd7912b
               '강원',
               '충북',
               '충남',

@@ -520,6 +520,20 @@ export function getCoupon(accountId) {
   return fetch(`${url.JBSERVER_COUPON}?accountId=${accountId}`).then(handleJBServerJsonResponse);
 }
 
+export function getAvailCashback(accountId) {
+  return fetch(`${url.JBSERVER_CASHBACK}?accountId=${accountId}`).then(handleJBServerJsonResponse);
+}
+
+export function requestCashback(depositData) {
+  return fetch(url.JBSERVER_CASHBACK, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(depositData),
+  }).then(handleJBServerJsonResponse);
+}
+
 export function getFirmCountChart(equipment) {
   return fetch(`${url.JBSERVER_STAT}?equipment=${equipment}`).then(handleJBServerJsonResponse);
 }

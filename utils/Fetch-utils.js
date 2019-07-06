@@ -24,6 +24,7 @@ export function handleJsonResponse(res) {
  * @param {Object} res HttpResponse
  */
 export async function handleJBServerJsonResponse(res) {
+  console.log(res);
   if (res.ok) {
     if (res.status === 204) {
       // NO_CONTENTS

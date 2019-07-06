@@ -15,9 +15,12 @@ import Styled from 'styled-components';
 import firebase from 'firebase';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';
+import { notifyError } from '../common/ErrorNotice';
+import OpenBankAccSelectModal from './OpenBankAccSelectModal';
 import JBIcon from './molecules/JBIcon';
 import JBButton from './molecules/JBButton';
 import JBTerm from './JBTerm';
+import { validate, validatePresence } from '../utils/Validation';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,7 +68,14 @@ type Props = {
 };
 type State = {};
 
-class FirmProfileModal extends React.PureComponent<Props, State> {
+class FirmProfileModal extends React.Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOBSelVisibleModal: false,
+    };
+  }
+
   confirmDeleteUser = () => {
     Alert.alert(
       '탈퇴확인',
@@ -149,10 +159,47 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
     setVisibleModal(false);
   };
 
+  requestCashback = (fintechUseNum, cashbackAmount) => {
+    const depositData = this.validateDepositData(fintechUseNum, cashbackAmount);
+
+    if (!depositData) { return; }
+
+    api
+      .requestCashback(depositData)
+      .then((result) => { Alert.alert('캐쉬백 처리 완료', `선택하신 통장으로 캐쉬백처리가 완료 되었습니다: ${result}원`); })
+      .catch((error) => { notifyError('캐쉬백 요청에 문제가 있습니다', error.message); });
+  }
+
+  validateDepositData = (fintechUseNum, cashbackAmount) => {
+    const { user, userProfile } = this.props;
+
+    let v = validatePresence(user.uid);
+    if (!v[0]) {
+      Alert.alert('계정값이 유효하지 않습니다', `재 로그인 부탁 드립니다: ${v[1]}`);
+      return false;
+    }
+
+    v = validatePresence(userProfile.obAccessToken);
+    if (!v[0]) {
+      Alert.alert('계좌 접근정보가 유효하지 않습니다', `재 로그인 부탁 드립니다: ${v[1]}`);
+      return false;
+    }
+
+    const depositData = {
+      accountId: user.uid,
+      authToken: userProfile.obAccessToken,
+      fintechUseNum,
+      cashback: cashbackAmount,
+    };
+
+    return depositData;
+  }
+
   render() {
     const {
       isVisibleModal, setVisibleModal, navigation, firm, user, onSignOut,
     } = this.props;
+    const { isOBSelVisibleModal, errMessage } = this.state;
     return (
       <View style={styles.container}>
         <Modal
@@ -198,6 +245,12 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
                 Primary
               />
               <JBButton
+                title="캐쉬백"
+                onPress={() => this.setState({ isOBSelVisibleModal: true })}
+                size="full"
+                Primary
+              />
+              <JBButton
                 title="장비콜 메일 문의하기"
                 onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
                 size="full"
@@ -207,6 +260,16 @@ class FirmProfileModal extends React.PureComponent<Props, State> {
             <JBTerm />
           </View>
         </Modal>
+        <OpenBankAccSelectModal
+          accountId={user.uid}
+          isVisibleModal={isOBSelVisibleModal}
+          navigation={navigation}
+          completeSelect={this.requestCashback}
+          closeModal={() => this.setState({ isOBSelVisibleModal: false })}
+          reauthAfterAction={() => this.setState({ isOBSelVisibleModal: true })}
+          actionName="캐쉬백 요청하기"
+          mode="CASHBACK_MODE"
+        />
       </View>
     );
   }
