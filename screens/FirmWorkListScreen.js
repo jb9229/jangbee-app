@@ -9,7 +9,6 @@ import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
 import FirmOpenWorkList from '../components/FirmOpenWorkList';
 import FirmMatchedWorkList from '../components/FirmMatchedWorkList';
 import { notifyError } from '../common/ErrorNotice';
-import { getMyEquipment } from '../utils/AsyncStorageUtils';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import JBButton from '../components/molecules/JBButton';
@@ -453,7 +452,7 @@ class FirmWorkListScreen extends React.Component {
         <OpenBankAccSelectModal
           isVisibleModal={isVisibleAccSelModal}
           closeModal={() => this.setState({ isVisibleAccSelModal: false })}
-          completeSelect={(fintechUseNum, couponSelected) => { withdrawCompleteFnc(couponSelected, fintechUseNum);}}
+          completeSelect={(fintechUseNum, couponSelected) => { withdrawCompleteFnc(couponSelected, fintechUseNum); }}
           accountId={user.uid}
           actionName="결제방법 선택하기"
           mode="COUPON_MODE"

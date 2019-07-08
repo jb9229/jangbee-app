@@ -8,11 +8,10 @@ import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
 import fonts from '../constants/Fonts';
 import { withLogin } from '../contexts/LoginProvider';
-import FirmProfileModal from '../components/FirmProfileModal';
 import colors from '../constants/Colors';
 import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
-import JBIcon from '../components/molecules/JBIcon';
+import CloseButton from '../components/molecules/CloseButton';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
 import { openLinkUrl } from '../utils/LinkUtil';
 import * as jbcallConfig from '../jbcallconfig';
@@ -134,7 +133,6 @@ class FirmMyInfoScreen extends React.Component {
     super(props);
     this.state = {
       firm: undefined,
-      isVisibleProfileModal: false,
       isLoadingComplete: false,
       evaluList: [],
     };
@@ -202,13 +200,6 @@ class FirmMyInfoScreen extends React.Component {
       });
   };
 
-  /**
-   * 프로파일 팝업창 열기 플래그 함수
-   */
-  setVisibleProfileModal = (visible) => {
-    this.setState({ isVisibleProfileModal: visible });
-  };
-
   registerFirm = () => {
     const { navigation } = this.props;
 
@@ -230,7 +221,7 @@ class FirmMyInfoScreen extends React.Component {
     const { navigation } = this.props;
 
     const {
-      firm, isVisibleProfileModal, isLoadingComplete, evaluList,
+      firm, isLoadingComplete, evaluList,
     } = this.state;
     if (!isLoadingComplete) {
       return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
@@ -289,16 +280,10 @@ class FirmMyInfoScreen extends React.Component {
         <View style={styles.titleWrap}>
           <Text style={styles.fnameText}>{firm.fname}</Text>
           <TopCommWrap>
-            <JBIcon name="settings" size={30} onPress={() => this.setVisibleProfileModal(true)} />
+            <CloseButton onClose={() => navigation.goBack()} />
           </TopCommWrap>
         </View>
-        <FirmProfileModal
-          isVisibleModal={isVisibleProfileModal}
-          setVisibleModal={this.setVisibleProfileModal}
-          firm={firm}
-          onSignOut={this.onSignOut}
-          {...this.props}
-        />
+        <JBButton title="내장비 정보수정하기" onPress={() => navigation.navigate('FirmUpdate')} size="full" Primary />
       </View>
     );
   }

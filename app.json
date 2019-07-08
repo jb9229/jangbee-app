@@ -3,12 +3,15 @@
   "appName": "Jangbeecall",
   "expo": {
     "name": "장비 콜",
-    "slug": "Everyone_will_be_own_at_JangbeeCall",
+    "slug": "jangbeecall_beta_020",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "33.0.0",
-    "platforms": ["ios", "android"],
-    "version": "0.5.1_20190630",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "0.5.2_20190708",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
@@ -20,7 +23,9 @@
     "updates": {
       "checkAutomatically": "ON_ERROR_RECOVERY"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -30,7 +35,9 @@
     },
     "android": {
       "package": "com.kan.jangbeecall",
-      "permissions": ["ACCESS_FINE_LOCATION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION"
+      ],
       "versionCode": 17,
       "splash": {
         "backgroundColor": "#4D4A4A",

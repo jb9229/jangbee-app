@@ -6,6 +6,7 @@ import moment from 'moment';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import GPSSearchScreen from './GPSSearchScreen';
+import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import { notifyError } from '../common/ErrorNotice';
 import FirmCntChart from '../components/FirmCntChart';
 import JangbeeAdList from '../components/JangbeeAdList';
@@ -24,6 +25,9 @@ class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isVisibleOBAuthModal: false,
+    };
 
     this._notificationSubscription = undefined;
   }
@@ -57,7 +61,7 @@ class HomeScreen extends React.Component {
       Notifications.setBadgeNumberAsync(1);
       // TODO Notice 확인 시, Notice 알람 제거
       if (notification.data.notice === 'NOTI_ARRIVE_ACCTOKEN_DISCARDDATE') {
-        this.noticeCommonNavigation(notification, '통장 재인증하기', () => navigation.navigate('OpenBankAuth', { type: 'REAUTH' }));
+        this.noticeCommonNavigation(notification, '통장 재인증하기', () => this.setState({ isVisibleOBAuthModal: true }));
       } else if (notification.data.notice === 'NOTI_WORK_REGISTER') {
         this.noticeCommonNavigation(notification, '일감 지원하기', () => navigation.navigate('FirmWorkList', { refresh: true }));
       } else if (notification.data.notice === 'NOTI_WORK_ADD_REGISTER') {
@@ -75,7 +79,7 @@ class HomeScreen extends React.Component {
       }
     } else {
       Alert.alert(
-        '유효하지 않음 알람입니다',
+        '유효하지 않은 알람입니다',
         `내용: ${notification}`,
         [
           {
@@ -188,6 +192,7 @@ class HomeScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
+    const { isVisibleOBAuthModal } = this.state;
 
     return (
       <Container>
@@ -198,6 +203,13 @@ class HomeScreen extends React.Component {
         <GPSSearchScreen {...this.props} />
         <FirmCntChart />
         <JBTerm />
+        <OpenBankAuthWebView
+          isVisibleModal={isVisibleOBAuthModal}
+          type="REAUTH"
+          navigation={navigation}
+          completeAction={() => { this.setState({ isVisibleOBAuthModal: false }); }}
+          closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
+        />
       </Container>
     );
   }

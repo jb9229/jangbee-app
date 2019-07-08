@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import JBTextInput from '../components/molecules/JBTextInput';
 import JBButton from '../components/molecules/JBButton';
 import ImagePickInput from '../components/molecules/ImagePickInput';
@@ -90,6 +91,7 @@ class AdCreateScreen extends React.Component {
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       isVisibleActIndiModal: false,
+      isVisibleOBAuthModal: false,
       accList: [],
       bookedAdTypeList: [1, 2],
       payErrMessage: '',
@@ -149,12 +151,7 @@ class AdCreateScreen extends React.Component {
    * 결제계좌 추가 함수
    */
   addOBAccount = () => {
-    const { navigation } = this.props;
-
-    navigation.navigate('OpenBankAuth', {
-      type: 'ADD_ACCOUNT',
-      completeAction: navigation.navigate('AdCreate', { action: 'RELOAD' }),
-    });
+    this.setState({ isVisibleOBAuthModal: true });
   };
 
   /**
@@ -579,11 +576,13 @@ class AdCreateScreen extends React.Component {
   };
 
   render() {
+    const { navigation, user } = this.props;
     const {
       isAccEmpty,
       isVisibleEquiModal,
       isVisibleMapAddModal,
       isVisibleActIndiModal,
+      isVisibleOBAuthModal,
       accList,
       selFinUseNum,
       adType,
@@ -616,6 +615,13 @@ class AdCreateScreen extends React.Component {
         <View style={styles.warningWrap}>
           <Text style={styles.warningText}>먼저, 홍보비 결제 통장을 등록해 주세요.</Text>
           <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
+          <OpenBankAuthWebView
+            isVisibleModal={isVisibleOBAuthModal}
+            type="ADD_ACCOUNT"
+            navigation={navigation}
+            completeAction={() => { this.setState({ isVisibleOBAuthModal: false }); this.setOpenBankAccountList(); }}
+            closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
+          />
         </View>
       );
     }
@@ -742,6 +748,13 @@ class AdCreateScreen extends React.Component {
             isVisibleModal={isVisibleActIndiModal}
             message={imgUploadingMessage}
             size="large"
+          />
+          <OpenBankAuthWebView
+            isVisibleModal={isVisibleOBAuthModal}
+            type="ADD_ACCOUNT"
+            navigation={navigation}
+            completeAction={() => { this.setState({ isVisibleOBAuthModal: false }); this.setOpenBankAccountList(); }}
+            closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
           />
         </Card>
       </View>

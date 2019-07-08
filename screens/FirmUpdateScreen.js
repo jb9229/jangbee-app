@@ -530,7 +530,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <KeyboardAvoidingView>
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            <Card>
+            <Card bgColor="white">
               <JBTextInput
                 title="업체명"
                 subTitle="(필수)"

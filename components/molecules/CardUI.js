@@ -11,7 +11,7 @@ const Card = Styled.View`
   flex: 1;
   justify-content: space-between;
   background-color: ${props => (props.bgColor ? props.bgColor : colors.point2Batang)};
-  padding: 5px;
+  padding: 10px;
   border-radius: 15;
   margin: 10px;
   

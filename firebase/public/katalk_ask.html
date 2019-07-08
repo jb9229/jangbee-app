@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"
+    />
+    <title>장비 콜 상담하기 - 플러스 친구</title>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+  </head>
+  <body style="text-align: center; vertical-align: middle;">
+    <a href="javascript:void plusFriendChat()">
+      <img
+        src="https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png"
+      />
+    </a>
+    <script type="text/javascript">
+      //<![CDATA[
+      // 사용할 앱의 JavaScript 키를 설정해 주세요.
+      Kakao.init("e58edd180ca9edbac661ded4969a2348");
+      function plusFriendChat() {
+        Kakao.PlusFriend.chat({
+          plusFriendId: "_ygCxjT" // 플러스친구 홈 URL에 명시된 id로 설정합니다.
+        });
+      }
+      //]]>
+      document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+          plusFriendChat();
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

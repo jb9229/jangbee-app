@@ -3,13 +3,13 @@ import {
   Alert, FlatList, Modal, StyleSheet, View,
 } from 'react-native';
 import styled from 'styled-components';
+import OpenBankAuthWebView from './OpenBankAuthWebView';
 import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';
 import ListSeparator from './molecules/ListSeparator';
 import OBAccount from './molecules/OBAccount';
 import Coupon from './molecules/Coupon';
 import JBText from './molecules/JBText';
-import JBTextItem from './molecules/JBTextItem';
 import JBTextInput from './molecules/JBTextInput';
 import * as firebaseDB from '../utils/FirebaseUtils';
 import * as api from '../api/api';
@@ -19,6 +19,7 @@ import JBEmptyView from './organisms/JBEmptyView';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';
 import { validate } from '../utils/Validation';
+import { formatNumber } from '../utils/NumberUtils';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,8 +41,30 @@ const styles = StyleSheet.create({
   },
 });
 
+const Container = styled.View`
+  flex: 1;
+`;
 const CashbackContainer = styled.View`
-  height: 165;
+`;
+
+const AvailCBWrap = styled.View`
+  flex-direction: row;
+`;
+
+const AvailCBTitle = styled.Text`
+  font-family: ${fonts.titleMiddle};
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: ${colors.batangDark};
+`;
+
+const AvailCB = styled.Text`
+  font-family: ${fonts.title};
+  font-size: 16;
+  background-color: ${colors.point2Light};
+  padding: 3px;
+  padding-left: 7px;
+  padding-right: 7px;
 `;
 
 const CashbackAccSelNotice = styled.Text`
@@ -64,7 +87,9 @@ export default class OpenBankAccSelectModal extends React.Component {
       selFinUseNum: '',
       isLoadingCoupon: true,
       isLoadingAvailCashback: true,
+      isVisibleOBAuthModal: false,
       couponSelected: false,
+      availCashback: 0,
     };
   }
 
@@ -232,11 +257,13 @@ export default class OpenBankAccSelectModal extends React.Component {
       reauthAfterAction,
       actionName,
       mode,
+      addAccountAction,
     } = this.props;
     const {
       isEmptyList,
       isLoadingCoupon,
       isLoadingAvailCashback,
+      isVisibleOBAuthModal,
       accList,
       selFinUseNum,
       couponCnt,
@@ -304,6 +331,38 @@ export default class OpenBankAccSelectModal extends React.Component {
 
     if (isEmptyList) {
       return (
+        <Container>
+          <Modal
+            animationType="slide"
+            transparent
+            visible={isVisibleModal}
+            onRequestClose={() => closeModal()}
+          >
+            <View style={styles.bgWrap}>
+              <View style={styles.contentsWrap}>
+                <CloseButton onClose={() => closeModal()} />
+                <JBEmptyView
+                  title="결재 통장리스트가 비어 있습니다."
+                  subTitle="결제계좌 등록/재인증을 진행해 주세요."
+                  actionName="통장 등록하기"
+                  refresh={() => this.setState({ isVisibleOBAuthModal: true })}
+                />
+              </View>
+            </View>
+          </Modal>
+          <OpenBankAuthWebView
+            isVisibleModal={isVisibleOBAuthModal}
+            type="ADD_ACCOUNT"
+            navigation={navigation}
+            completeAction={() => this.setState({ isVisibleOBAuthModal: false })}
+            closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
+          />
+        </Container>
+      );
+    }
+
+    return (
+      <Container>
         <Modal
           animationType="slide"
           transparent
@@ -313,89 +372,79 @@ export default class OpenBankAccSelectModal extends React.Component {
           <View style={styles.bgWrap}>
             <View style={styles.contentsWrap}>
               <CloseButton onClose={() => closeModal()} />
-              <JBEmptyView
-                title="결재 통장리스트가 비어 있습니다."
-                subTitle="결제계좌 등록/재인증을 진행해 주세요."
-                actionName="통장 등록하기"
-                refresh={() => {
-                  closeModal();
-                  navigation.navigate('OpenBankAuth', {
-                    type: 'REAUTH',
-                    completeAction: reauthAfterAction,
-                  });
-                }}
+              {mode === COUPON_MODE ? (
+                <View style={styles.couponListWrap}>
+                  {!couponCnt && <JBText text="일감수락쿠폰 미보유(차주일감 등록시 추가됨)" />}
+                  {couponCnt === 1 && <JBText text="일감수락쿠폰 1개보유(2개이상 시 사용가능)" />}
+                  {couponCnt >= 2 && (
+                    <Coupon
+                      name="일감수락 쿠폰"
+                      count={couponCnt}
+                      selected={couponSelected}
+                      onPress={selected => this.selectFirmWorkCoupon(selected)}
+                    />
+                  )}
+                </View>
+              ) : null}
+              {mode === CASHBACK_MODE ? (
+                <CashbackContainer>
+                  <AvailCBWrap>
+                    <AvailCBTitle>가용캐쉬백:</AvailCBTitle>
+                    <AvailCB>{`${formatNumber(availCashback)}원`}</AvailCB>
+                  </AvailCBWrap>
+                  <JBTextInput
+                    title="캐쉬백 신청 금액:"
+                    value={requestCashback}
+                    onChangeText={text => this.setState({ requestCashback: text })}
+                    placeholder="캐쉬백할 금액을 기입해 주세요."
+                    keyboardType="numeric"
+                    onEndEditing={() => {
+                      if (requestCashback > availCashback) {
+                        Alert.alert('가용캐쉬백을 확인해 주세요', `[${availCashback}] 이하값을 기입해 주세요.`);
+                        this.setState({ requestCashback: 0 });
+                      }
+                    }}
+                    onSubmitEditing={() => {
+                      if (requestCashback > availCashback) {
+                        Alert.alert('가용캐쉬백을 확인해 주세요', `[${availCashback}] 이하값을 기입해 주세요.`);
+                        this.setState({ requestCashback: 0 });
+                      }
+                    }}
+                  />
+                  <CashbackAccSelNotice>캐쉬백 계좌를 선택해 주세요:</CashbackAccSelNotice>
+                </CashbackContainer>
+              ) : null}
+              <JBButton
+                title="통장추가하기"
+                onPress={() => this.setState({ isVisibleOBAuthModal: true })}
+                underline
+                align="right"
+                Secondary
+              />
+              <FlatList
+                data={accList}
+                extraData={selFinUseNum}
+                renderItem={({ item }) => OBAccount(item, selFinUseNum, this.onAccListItemPress)}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={ListSeparator}
+              />
+              <JBButton
+                title={actionName}
+                onPress={() => this.completeAction()}
+                size="full"
+                Primary
               />
             </View>
           </View>
         </Modal>
-      );
-    }
-
-    return (
-      <Modal
-        animationType="slide"
-        transparent
-        visible={isVisibleModal}
-        onRequestClose={() => closeModal()}
-      >
-        <View style={styles.bgWrap}>
-          <View style={styles.contentsWrap}>
-            <CloseButton onClose={() => closeModal()} />
-            {mode === COUPON_MODE ? (
-              <View style={styles.couponListWrap}>
-                {!couponCnt && <JBText text="일감수락쿠폰 미보유(차주일감 등록시 추가됨)" />}
-                {couponCnt === 1 && <JBText text="일감수락쿠폰 1개보유(2개이상 시 사용가능)" />}
-                {couponCnt >= 2 && (
-                  <Coupon
-                    name="일감수락 쿠폰"
-                    count={couponCnt}
-                    selected={couponSelected}
-                    onPress={selected => this.selectFirmWorkCoupon(selected)}
-                  />
-                )}
-              </View>
-            ) : null}
-            {mode === CASHBACK_MODE ? (
-              <CashbackContainer>
-                <JBTextItem title="가용캐쉬백:" value={`${availCashback}원`} titleSize={320} row />
-                <JBTextInput
-                  title="캐쉬백 신청 금액"
-                  value={requestCashback}
-                  onChangeText={text => this.setState({ requestCashback: text })}
-                  placeholder="캐쉬백할 금액을 기입해 주세요."
-                  keyboardType="numeric"
-                  onEndEditing={() => {
-                    if (requestCashback > availCashback) {
-                      Alert.alert('가용캐쉬백을 확인해 주세요', `[${availCashback}] 이하값을 기입해 주세요.`);
-                      this.setState({ requestCashback: 0 });
-                    }
-                  }}
-                  onSubmitEditing={() => {
-                    if (requestCashback > availCashback) {
-                      Alert.alert('가용캐쉬백을 확인해 주세요', `[${availCashback}] 이하값을 기입해 주세요.`);
-                      this.setState({ requestCashback: 0 });
-                    }
-                  }}
-                />
-                <CashbackAccSelNotice>캐쉬백 계좌를 선택해 주세요:</CashbackAccSelNotice>
-              </CashbackContainer>
-            ) : null}
-            <FlatList
-              data={accList}
-              extraData={selFinUseNum}
-              renderItem={({ item }) => OBAccount(item, selFinUseNum, this.onAccListItemPress)}
-              keyExtractor={(item, index) => index.toString()}
-              ItemSeparatorComponent={ListSeparator}
-            />
-            <JBButton
-              title={actionName}
-              onPress={() => this.completeAction()}
-              size="full"
-              Primary
-            />
-          </View>
-        </View>
-      </Modal>
+        <OpenBankAuthWebView
+          isVisibleModal={isVisibleOBAuthModal}
+          type="ADD_ACCOUNT"
+          navigation={navigation}
+          completeAction={() => this.setState({ isVisibleOBAuthModal: false })}
+          closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
+        />
+      </Container>
     );
   }
 }

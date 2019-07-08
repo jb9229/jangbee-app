@@ -4,6 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
+import FirmSettingScreen from '../screens/FirmSettingScreen';
 import FirmMyInfoScreen from '../screens/FirmMyInfoScreen';
 import ClientEvaluScreen from '../screens/ClientEvaluScreen';
 import FirmRegisterScreen from '../screens/FirmRegisterScreen';
@@ -33,7 +34,8 @@ FirmWorkStack.navigationOptions = {
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="work" type="MaterialIcons" />,
 };
 
-const FirmMyInfoStack = createStackNavigator({
+const FirmSettingStack = createStackNavigator({
+  FirmSetting: { screen: FirmSettingScreen, navigationOptions: { header: null } },
   FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
   FirmRegister: {
     screen: FirmRegisterScreen,
@@ -103,7 +105,7 @@ AdStack.navigationOptions = {
   ),
 };
 
-FirmMyInfoStack.navigationOptions = {
+FirmSettingStack.navigationOptions = {
   tabBarLabel: '내정보',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -133,7 +135,7 @@ export default createBottomTabNavigator(
     FirmWorkStack,
     AdStack,
     ClientEvaluStack,
-    FirmMyInfoStack,
+    FirmSettingStack,
   },
   {
     tabBarOptions: {

@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  Alert, ActivityIndicator, Text, View, WebView,
+  Alert, ActivityIndicator, Modal, Text, View, WebView,
 } from 'react-native';
+import styled from 'styled-components';
 import moment from 'moment';
 import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from '../constants/Url';
 import * as obconfig from '../openbank-config';
@@ -11,6 +12,18 @@ import { withLogin } from '../contexts/LoginProvider';
 const TYPE_REAUTH = 'REAUTH';
 const ADD_ACCOUNT = 'ADD_ACCOUNT';
 
+const Container = styled.View`
+  flex: 1;
+`;
+const Contents = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoticeWrap = styled.View`
+  background-color: white;
+`;
 class OpenBankAuthWebView extends React.Component {
   constructor(props) {
     super(props);
@@ -69,8 +82,7 @@ class OpenBankAuthWebView extends React.Component {
    * 웹뷰 종료 함수
    */
   closeWebView = () => {
-    const { navigation } = this.props;
-    const { type, completeAction } = navigation.state.params;
+    const { type, navigation, completeAction } = this.props;
 
     this.setState({ noticeMSG: '곧(10초) 창이 닫힙니다~' });
 
@@ -91,8 +103,7 @@ class OpenBankAuthWebView extends React.Component {
    * @param {string} webViewMSG Webview에서 전달된 메세지
    */
   receiveWebViewMSG = async (webViewMSG) => {
-    const { navigation } = this.props;
-    const { type } = navigation.state.params;
+    const { type, navigation } = this.props;
 
     const webData = JSON.parse(webViewMSG);
     let postData = null;
@@ -130,7 +141,7 @@ class OpenBankAuthWebView extends React.Component {
   };
 
   saveOpenBankTokenInfo = async (tokenData) => {
-    const { navigation, user } = this.props;
+    const { navigation, user, refreshUserOBInfo } = this.props;
 
     const expireDate = moment()
       .add(90, 'day')
@@ -158,14 +169,15 @@ class OpenBankAuthWebView extends React.Component {
       },
     );
 
-    user.refreshUserOBInfo();
+    refreshUserOBInfo();
 
     return true;
   };
 
   render() {
-    const { navigation } = this.props;
-    const { type } = navigation.state.params;
+    const {
+      type, navigation, isVisibleModal, closeModal,
+    } = this.props;
     const { isWebViewLoadingComplete, noticeMSG } = this.state;
 
     let authUrl;
@@ -209,41 +221,41 @@ class OpenBankAuthWebView extends React.Component {
       .join('&');
 
     return (
-      <View
-        style={{
-          flex: 1,
-          padding: 5,
-          margin: 5,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <View>
-          <Text>{noticeMSG}</Text>
-        </View>
-        <WebView
-          ref={(view) => {
-            this.webView = view;
-          }}
-          source={{
-            uri: `${authUrl}?${paramsStr}`,
-            // uri: 'https://jb9229.github.io/openBankApiCallback/index.html',
-          }}
-          onNavigationStateChange={this.handleNavigationStateChange}
-          onLoadStart={() => this.setState({ isWebViewLoadingComplete: false })}
-          onLoadEnd={() => this.setState({ isWebViewLoadingComplete: true })}
-          style={{
-            width: 380,
-            height: 600,
-            marginTop: 5,
-            marginLeft: 5,
-            marginRight: 5,
-          }}
-          onMessage={event => this.receiveWebViewMSG(event.nativeEvent.data)}
-        />
-
-        {!isWebViewLoadingComplete && <ActivityIndicator size="large" color="#0000ff" />}
-      </View>
+      <Container>
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isVisibleModal}
+          onRequestClose={() => closeModal()}
+        >
+          <Contents>
+            <WebView
+              ref={(view) => {
+                this.webView = view;
+              }}
+              source={{
+                uri: `${authUrl}?${paramsStr}`,
+                // uri: 'https://jb9229.github.io/openBankApiCallback/index.html',
+              }}
+              onNavigationStateChange={this.handleNavigationStateChange}
+              onLoadStart={() => this.setState({ isWebViewLoadingComplete: false })}
+              onLoadEnd={() => this.setState({ isWebViewLoadingComplete: true })}
+              style={{
+                width: 380,
+                height: 600,
+                marginTop: 5,
+                marginLeft: 5,
+                marginRight: 5,
+              }}
+              onMessage={event => this.receiveWebViewMSG(event.nativeEvent.data)}
+            />
+            <NoticeWrap>
+              <Text>{noticeMSG}</Text>
+            </NoticeWrap>
+            {!isWebViewLoadingComplete && <ActivityIndicator size="large" color="#0000ff" />}
+          </Contents>
+        </Modal>
+      </Container>
     );
   }
 }
