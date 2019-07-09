@@ -6,6 +6,11 @@ import colors from '../../constants/Colors';
 
 const Container = styled.View`
   flex-direction: row;
+  ${props => props.align
+    && `
+    justify-content: ${props.align};
+    padding-right: 10;
+  `}
 `;
 const TouchableHighlight = styled.TouchableHighlight`
   background-color: ${colors.pointBatang};
@@ -19,9 +24,9 @@ const TouchableHighlight = styled.TouchableHighlight`
   elevation: 10;
 `;
 
-export default function CloseButton({ onClose }) {
+export default function CloseButton({ onClose, align }) {
   return (
-    <Container>
+    <Container align={align}>
       <TouchableHighlight onPress={onClose}>
         <Ionicons
           name={Platform.OS === 'ios' ? 'ios-close' : 'md-close'}

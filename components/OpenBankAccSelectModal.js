@@ -19,7 +19,6 @@ import JBEmptyView from './organisms/JBEmptyView';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';
 import { validate } from '../utils/Validation';
-import { formatNumber } from '../utils/NumberUtils';
 
 const styles = StyleSheet.create({
   container: {
@@ -86,10 +85,8 @@ export default class OpenBankAccSelectModal extends React.Component {
     this.state = {
       selFinUseNum: '',
       isLoadingCoupon: true,
-      isLoadingAvailCashback: true,
       isVisibleOBAuthModal: false,
       couponSelected: false,
-      availCashback: 0,
     };
   }
 
@@ -104,7 +101,7 @@ export default class OpenBankAccSelectModal extends React.Component {
         this.setFirmworkCoupon();
       }
       if (mode === CASHBACK_MODE) {
-        this.setAvailCashback();
+        this.setFirmworkCoupon();
       }
       this.setOpenBankAccountList();
     }
@@ -215,32 +212,6 @@ export default class OpenBankAccSelectModal extends React.Component {
       });
   };
 
-  /**
-   * 사용가능한 캐쉬백 금액 요청함수
-   */
-  setAvailCashback = () => {
-    const { accountId } = this.props;
-
-    this.setState({ isLoadingAvailCashback: true });
-    api
-      .getAvailCashback(accountId)
-      .then((availCashback) => {
-        if (availCashback) {
-          this.setState({ availCashback });
-        }
-
-        this.setState({ isLoadingAvailCashback: false });
-      })
-      .catch((error) => {
-        notifyError(
-          '네트워크 문제가 있습니다, 다시 시도해 주세요.',
-          `가용 캐쉬백 조회 실패 -> [${error.name}] ${error.message}`,
-        );
-
-        this.setState({ isLoadingAvailCashback: false });
-      });
-  }
-
   selectFirmWorkCoupon = (selected) => {
     if (!selected) {
       this.setState({ couponSelected: !selected, selFinUseNum: '' });
@@ -262,17 +233,15 @@ export default class OpenBankAccSelectModal extends React.Component {
     const {
       isEmptyList,
       isLoadingCoupon,
-      isLoadingAvailCashback,
       isVisibleOBAuthModal,
       accList,
       selFinUseNum,
       couponCnt,
       couponSelected,
-      availCashback,
       requestCashback,
     } = this.state;
 
-    if (mode === COUPON_MODE && isLoadingCoupon) {
+    if ((mode === COUPON_MODE || mode === CASHBACK_MODE) && isLoadingCoupon) {
       return (
         <Modal
           animationType="slide"
@@ -281,19 +250,6 @@ export default class OpenBankAccSelectModal extends React.Component {
           onRequestClose={() => closeModal()}
         >
           <JBActIndicator title="쿠폰을 불러오는중.." size={35} />
-        </Modal>
-      );
-    }
-
-    if (mode === CASHBACK_MODE && isLoadingAvailCashback) {
-      return (
-        <Modal
-          animationType="slide"
-          transparent
-          visible={isVisibleModal}
-          onRequestClose={() => closeModal()}
-        >
-          <JBActIndicator title="가용 캐쉬백 불러오는중.." size={35} />
         </Modal>
       );
     }
@@ -389,24 +345,24 @@ export default class OpenBankAccSelectModal extends React.Component {
               {mode === CASHBACK_MODE ? (
                 <CashbackContainer>
                   <AvailCBWrap>
-                    <AvailCBTitle>가용캐쉬백:</AvailCBTitle>
-                    <AvailCB>{`${formatNumber(availCashback)}원`}</AvailCB>
+                    <AvailCBTitle>가용쿠폰개수(장당 5천원):</AvailCBTitle>
+                    <AvailCB>{`${couponCnt}장`}</AvailCB>
                   </AvailCBWrap>
                   <JBTextInput
-                    title="캐쉬백 신청 금액:"
+                    title="캐쉬백할 쿠폰개수:"
                     value={requestCashback}
                     onChangeText={text => this.setState({ requestCashback: text })}
-                    placeholder="캐쉬백할 금액을 기입해 주세요."
+                    placeholder="캐쉬백할 쿠폰 개수를 기입해 주세요."
                     keyboardType="numeric"
                     onEndEditing={() => {
-                      if (requestCashback > availCashback) {
-                        Alert.alert('가용캐쉬백을 확인해 주세요', `[${availCashback}] 이하값을 기입해 주세요.`);
+                      if (requestCashback > couponCnt) {
+                        Alert.alert('가용 쿠폰개수를 확인해 주세요!', `[${couponCnt}] 이하값을 기입해 주세요.`);
                         this.setState({ requestCashback: 0 });
                       }
                     }}
                     onSubmitEditing={() => {
-                      if (requestCashback > availCashback) {
-                        Alert.alert('가용캐쉬백을 확인해 주세요', `[${availCashback}] 이하값을 기입해 주세요.`);
+                      if (requestCashback > couponCnt) {
+                        Alert.alert('가용 쿠폰개수를 확인해 주세요!', `[${couponCnt}] 이하값을 기입해 주세요.`);
                         this.setState({ requestCashback: 0 });
                       }
                     }}

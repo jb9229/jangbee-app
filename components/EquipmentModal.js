@@ -185,6 +185,7 @@ const EQUIPMENT_CONTENT = [
     subcategory: [
       { isChecked: false, val: '10톤' },
       { isChecked: false, val: '13톤' },
+      { isChecked: false, val: '15톤' },
       { isChecked: false, val: '25톤' },
       { isChecked: false, val: '50톤' },
       { isChecked: false, val: '100톤' },

@@ -55,6 +55,8 @@ const TelText = styled.Text`
   margin: 2px;
 `;
 
+const pkg = require('../app.json');
+
 export default function renderJBTerm({ bg }) {
   return (
     <Container bg={bg}>
@@ -113,7 +115,7 @@ export default function renderJBTerm({ bg }) {
       <Row>
         <Column>
           <Title>Version: </Title>
-          <Text>beta_v0.5.1_20190701</Text>
+          <Text>{`${pkg.expo.version}`}</Text>
         </Column>
       </Row>
       <Row>

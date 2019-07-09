@@ -482,9 +482,9 @@ const EQUIPMENT_IMAGES = [require('../assets/images/equipment/crain_candi.jpg'),
 const EQUIPMENT_CATEGORY = ['크레인', '카고크레인', '굴착기', '스카이', '지게차', '사다리차', '하이랜더', '불도저', '거미크레인'];
 
 const EQUIPMENT_ITEM = [];
-EQUIPMENT_ITEM['크레인'] = ['10톤', '13톤', '25톤', '50톤', '100톤', '160톤', '200톤', '250톤', '300톤', '400톤', '500톤', '700톤', '800톤', '1200톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
+EQUIPMENT_ITEM['크레인'] = ['10톤', '13톤', '15톤', '25톤', '50톤', '100톤', '160톤', '200톤', '250톤', '300톤', '400톤', '500톤', '700톤', '800톤', '1200톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['카고크레인'] = ['5톤', '11톤', '18톤', '25톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
-EQUIPMENT_ITEM['굴착기'] = ['미니', '02W', '03W','06W', '08W', '02LC', '04LC', '06LC'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
+EQUIPMENT_ITEM['굴착기'] = ['미니', '02W', '03W', '06W', '08W', '02LC', '04LC', '06LC'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['스카이'] = ['1톤', '1.2톤', '2톤', '2.5톤', '3.5톤', '5톤', '28m', '45m', '58m', '60m', '75m'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['지게차'] = ['2톤', '2.5톤', '3톤', '4.5톤', '5톤', '6톤', '7톤', '8톤', '11.5톤', '15톤', '18톤', '25톤'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));
 EQUIPMENT_ITEM['사다리차'] = ['사다리차'].map(lin => (<Picker.Item key={lin} label={`${lin}`} value={lin} />));

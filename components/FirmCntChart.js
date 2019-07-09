@@ -70,6 +70,7 @@ const CHART_COLORS = [
   '74, 16, 44,',
   '160,82,45,',
   '188,143,143,',
+  '143,160,143,',
 ];
 
 export default class FirmCntChart extends React.Component {

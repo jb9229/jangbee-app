@@ -5,9 +5,10 @@ import firebase from 'firebase';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
 import { withLogin } from '../contexts/LoginProvider';
-import JBIconButton from '../components/molecules/JBIconButton';
 import KatalkAskWebview from '../components/KatalkAskWebview';
 import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
+import DocumentsModal from '../components/DocumentsModal';
+import JBIconButton from '../components/molecules/JBIconButton';
 import colors from '../constants/Colors';
 import { validatePresence } from '../utils/Validation';
 
@@ -27,11 +28,13 @@ const TopMenu = styled.View`
 
 const MenuWrap = styled.ScrollView.attrs(props => ({
   contentContainerStyle: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
   },
 }))``;
+
+const MenueRowWrap = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+`;
 
 class FirmSettingScreen extends React.Component {
   static navigationOptions = {
@@ -43,6 +46,7 @@ class FirmSettingScreen extends React.Component {
     this.state = {
       isVisibleKatalkAskModal: false,
       isOBSelVisibleModal: false,
+      isVisibleDocModal: false,
     };
   }
 
@@ -158,10 +162,11 @@ class FirmSettingScreen extends React.Component {
         api
           .requestCashback(depositData)
           .then((result) => {
-            Alert.alert(
-              '캐쉬백 처리 완료',
-              `선택하신 통장으로 캐쉬백처리가 완료 되었습니다: ${result}원`,
-            );
+            if (result) {
+              Alert.alert('캐쉬백 처리 완료', '선택하신 통장으로 캐쉬백처리가 완료 되었습니다');
+            } else {
+              Alert.alert('캐쉬백 처리 실패!', '창을 새로열어, 가용 캐쉬백을 다시 확인해주세요');
+            }
           })
           .catch((error) => {
             notifyError('캐쉬백 요청에 문제가 있습니다', error.message);
@@ -196,57 +201,65 @@ class FirmSettingScreen extends React.Component {
 
   render() {
     const { navigation, user } = this.props;
-    const { isVisibleKatalkAskModal, isOBSelVisibleModal } = this.state;
+    const { isVisibleKatalkAskModal, isOBSelVisibleModal, isVisibleDocModal } = this.state;
     return (
       <Container>
         <Top>
           <TopMenu />
         </Top>
         <MenuWrap>
-          <JBIconButton
-            title="내장비 등록정보"
-            img={require('../assets/images/icon/edit_equipinfo_icon.png')}
-            onPress={() => navigation.navigate('FirmMyInfo')}
-          />
-          <JBIconButton
-            title="자료실"
-            img={require('../assets/images/icon/doc_equipment_icon.png')}
-            onPress={() => Alert.alert('준비중..', '해당서비스를 준비중 입니다(7월안 오픈목표)')}
-          />
-          <JBIconButton
-            title="카톡상담하기"
-            img={{
-              uri:
-                'https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png',
-            }}
-            onPress={() => this.setState({ isVisibleKatalkAskModal: true })}
-            imgWith={100}
-            imgHeight={10}
-          />
-          <JBIconButton
-            title="알람 설정"
-            img={require('../assets/images/icon/alarm_icon.png')}
-            onPress={() => Alert.alert('준비중..', '해당서비스를 준비중 입니다(8월안 오픈목표)')}
-          />
-          <JBIconButton
-            title="캐쉬백"
-            img={require('../assets/images/icon/cashback_icon.png')}
-            onPress={() => this.setState({ isOBSelVisibleModal: true })}
-          />
-          <JBIconButton
-            title="로그아웃"
-            img={require('../assets/images/icon/sign_out_icon.png')}
-            onPress={() => {
-              this.confirmLogout();
-            }}
-          />
-          <JBIconButton
-            title="탈퇴하기"
-            img={require('../assets/images/icon/delete_user_icon.png')}
-            onPress={() => {
-              this.confirmDeleteUser();
-            }}
-          />
+          <MenueRowWrap>
+            <JBIconButton
+              title="내장비 등록정보"
+              img={require('../assets/images/icon/edit_equipinfo_icon.png')}
+              onPress={() => navigation.navigate('FirmMyInfo')}
+            />
+            <JBIconButton
+              title="자료실"
+              img={require('../assets/images/icon/doc_equipment_icon.png')}
+              onPress={() => this.setState({ isVisibleDocModal: true })}
+            />
+          </MenueRowWrap>
+          <MenueRowWrap>
+            <JBIconButton
+              title="카톡상담하기"
+              img={{
+                uri:
+                  'https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png',
+              }}
+              onPress={() => this.setState({ isVisibleKatalkAskModal: true })}
+              imgWith={100}
+              imgHeight={10}
+            />
+            <JBIconButton
+              title="알람 설정"
+              img={require('../assets/images/icon/alarm_icon.png')}
+              onPress={() => Alert.alert('준비중..', '해당서비스를 준비중 입니다(8월안 오픈목표)')}
+            />
+          </MenueRowWrap>
+          <MenueRowWrap>
+            <JBIconButton
+              title="캐쉬백"
+              img={require('../assets/images/icon/cashback_icon.png')}
+              onPress={() => this.setState({ isOBSelVisibleModal: true })}
+            />
+            <JBIconButton
+              title="로그아웃"
+              img={require('../assets/images/icon/sign_out_icon.png')}
+              onPress={() => {
+                this.confirmLogout();
+              }}
+            />
+          </MenueRowWrap>
+          <MenueRowWrap>
+            <JBIconButton
+              title="탈퇴하기"
+              img={require('../assets/images/icon/delete_user_icon.png')}
+              onPress={() => {
+                this.confirmDeleteUser();
+              }}
+            />
+          </MenueRowWrap>
         </MenuWrap>
         <KatalkAskWebview
           isVisibleModal={isVisibleKatalkAskModal}
@@ -261,6 +274,10 @@ class FirmSettingScreen extends React.Component {
           reauthAfterAction={() => this.setState({ isOBSelVisibleModal: true })}
           actionName="캐쉬백 요청하기"
           mode="CASHBACK_MODE"
+        />
+        <DocumentsModal
+          isVisibleModal={isVisibleDocModal}
+          closeModal={() => this.setState({ isVisibleDocModal: false })}
         />
       </Container>
     );
