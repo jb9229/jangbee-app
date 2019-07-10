@@ -11,7 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import firebase from 'firebase';
 import { withLogin } from '../contexts/LoginProvider';
 import * as api from '../api/api';

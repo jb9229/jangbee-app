@@ -1,11 +1,11 @@
 import React from 'react';
-import { Alert, Dimensions, Modal } from 'react-native';
+import { Dimensions, Modal } from 'react-native';
 import styled from 'styled-components/native';
-import * as FileSystem from 'expo-file-system';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import download from '../common/Download';
+import ContracDocTabView from './ContractDocTabView';
 import JBButton from './molecules/JBButton';
 import CloseButton from './molecules/CloseButton';
-import download from '../common/Download';
 
 const Container = styled.View`
   flex: 1;
@@ -33,19 +33,31 @@ const FirstRoute = () => (
   </RouteContainer>
 );
 
-const SecondRoute = () => <RouteContainer />;
+const SecondRoute = () => (
+  <RouteContainer>
+    <JBButton title="서보실업벨트 전화연결" onPress={() => download('tel: 0313344288')} underline />
+  </RouteContainer>
+);
+
+const ThirdRoute = () => (<ContracDocTabView />);
 
 export default class DocumentsModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       index: 0,
-      routes: [{ key: 'first', title: '계약 문서양식' }, { key: 'second', title: '전화번호부' }],
+      routes: [
+        { key: 'first', title: '계약 문서양식' },
+        { key: 'second', title: '전화번호부' },
+        { key: 'third', title: '제원표' },
+      ],
+      isVisibleImageModal: false,
     };
   }
 
   render() {
     const { isVisibleModal, closeModal } = this.props;
+    const { isVisibleImageModal, visibleImage } = this.state;
 
     return (
       <Modal
@@ -61,6 +73,7 @@ export default class DocumentsModal extends React.Component {
             renderScene={SceneMap({
               first: FirstRoute,
               second: SecondRoute,
+              third: ThirdRoute,
             })}
             onIndexChange={index => this.setState({ index })}
             initialLayout={{ width: Dimensions.get('window').width }}

@@ -3,7 +3,7 @@ import {
   Alert, FlatList, Modal, StyleSheet, TextInput,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import * as api from '../api/api';
 import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';

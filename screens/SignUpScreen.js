@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Alert, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import firebase from 'firebase';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';

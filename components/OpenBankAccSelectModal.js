@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Alert, FlatList, Modal, StyleSheet, View,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import OpenBankAuthWebView from './OpenBankAuthWebView';
 import CloseButton from './molecules/CloseButton';
 import JBButton from './molecules/JBButton';

@@ -3,7 +3,7 @@ import {
   Alert, ScrollView, StyleSheet, Text, View,
 } from 'react-native';
 import firebase from 'firebase';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';
 import fonts from '../constants/Fonts';

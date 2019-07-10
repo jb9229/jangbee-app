@@ -2,7 +2,7 @@ import React from 'react';
 import {
   FlatList, Picker, StyleSheet, Text, View,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import { SearchBar } from 'react-native-elements';
 import { notifyError } from '../common/ErrorNotice';

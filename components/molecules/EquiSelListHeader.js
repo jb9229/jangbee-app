@@ -1,5 +1,5 @@
 import React from 'react';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import colors from '../../constants/Colors';
 
 const Container = Styled.View`

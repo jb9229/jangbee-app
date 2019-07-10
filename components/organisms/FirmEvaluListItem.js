@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Rating } from 'react-native-elements';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import fonts from '../../constants/Fonts';
 import { formatHideTelnumber } from '../../utils/StringUtils';
 

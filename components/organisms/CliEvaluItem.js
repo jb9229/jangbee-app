@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import * as Icon from '@expo/vector-icons';
 import JBButton from '../molecules/JBButton';
 import JBTextItem from '../molecules/JBTextItem';

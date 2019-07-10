@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import pkg from '../app.json';
 import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import JBButton from './molecules/JBButton';
@@ -54,8 +55,6 @@ const TelText = styled.Text`
   padding-right: 4px;
   margin: 2px;
 `;
-
-const pkg = require('../app.json');
 
 export default function renderJBTerm({ bg }) {
   return (
@@ -115,7 +114,7 @@ export default function renderJBTerm({ bg }) {
       <Row>
         <Column>
           <Title>Version: </Title>
-          <Text>{`${pkg.expo.version}`}</Text>
+          <Text>{`${pkg.mode}_${pkg.expo.version}`}</Text>
         </Column>
       </Row>
       <Row>

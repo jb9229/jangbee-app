@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Alert, ImageBackground, Linking, StyleSheet, Text, View,
 } from 'react-native';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import JBIcon from '../molecules/JBIcon';
 import AdImage from './AdImage';
 import colors from '../../constants/Colors';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Platform, ToastAndroid } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import firebase from 'firebase';
 import * as api from '../api/api';
 import { notifyError } from '../common/ErrorNotice';

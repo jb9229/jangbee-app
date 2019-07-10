@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Alert, ActivityIndicator, Modal, Text, View, WebView,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from '../constants/Url';
 import * as obconfig from '../openbank-config';

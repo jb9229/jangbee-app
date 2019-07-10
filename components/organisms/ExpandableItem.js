@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import colors from '../../constants/Colors';
 
 const Container = Styled.View`

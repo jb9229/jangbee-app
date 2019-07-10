@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import JBTextItem from '../molecules/JBTextItem';
 import convertWorkStr from '../../constants/WorkPeriodConverter';
 import Card from '../molecules/CardUI';

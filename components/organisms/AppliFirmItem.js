@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Image, StyleSheet, Text, TouchableHighlight, View,
 } from 'react-native';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import colors from '../../constants/Colors';
 import fonts from '../../constants/Fonts';
 import JBButton from '../molecules/JBButton';

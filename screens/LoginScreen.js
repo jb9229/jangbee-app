@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { Linking } from 'expo';
 import * as WebBrowser from 'expo-web-browser';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import firebase from 'firebase';
 import fonts from '../constants/Fonts';
 import colors from '../constants/Colors';

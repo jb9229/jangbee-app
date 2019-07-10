@@ -3,7 +3,7 @@ import {
   Alert, Linking, Platform, ToastAndroid,
 } from 'react-native';
 import firebase from 'firebase';
-import Styled from 'styled-components';
+import Styled from 'styled-components/native';
 import { withLogin } from '../contexts/LoginProvider';
 import JBButton from '../components/molecules/JBButton';
 import JBTextItem from '../components/molecules/JBTextItem';

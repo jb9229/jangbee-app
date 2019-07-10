@@ -6,29 +6,29 @@ exports[`App snapshot renders the root without loading screen 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#fff",
+      "alignItems": "center",
       "flex": 1,
+      "justifyContent": "center",
     }
   }
 >
-  <View
+  <Text
     style={
       Object {
-        "alignItems": "center",
-        "flex": 1,
-        "justifyContent": "center",
+        "color": "#F7AE43",
+        "fontFamily": "NanumSquareRoundR",
+        "fontSize": 15,
+        "marginBottom": 20,
       }
     }
   >
-    <Text>
-      Login Checking...
-    </Text>
-    <ActivityIndicator
-      animating={true}
-      color="#FDCA24"
-      hidesWhenStopped={true}
-      size="large"
-    />
-  </View>
+    앱 버전 업데이트 체크중...
+  </Text>
+  <ActivityIndicator
+    animating={true}
+    color="#FDCA24"
+    hidesWhenStopped={true}
+    size={35}
+  />
 </View>
 `;
