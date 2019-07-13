@@ -24,6 +24,12 @@ const SearchResultWrap = styled.View`
   flex: 1;
 `;
 
+const CloseView = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
 export default class FirmSearListModal extends React.Component {
   _isMounted = false;
 
@@ -185,7 +191,7 @@ export default class FirmSearListModal extends React.Component {
   };
 
   render() {
-    const { isVisibleModal, closeModal, searEquipment, searSido, searGungu, size, navigation } = this.props;
+    const { isVisibleModal, closeModal, searEquipment, searEquiModel, searSido, searGungu, size, navigation } = this.props;
     const { page, refreshing, searchedFirmList, isLastList, isListLoading } = this.state;
 
     return (
@@ -197,10 +203,12 @@ export default class FirmSearListModal extends React.Component {
       >
         <Container size={size}>
           <TopWrap>
-            <CloseButton onClose={() => closeModal()} />
+            <CloseView>
+              <CloseButton onClose={() => closeModal()} />
+            </CloseView>
             <JangbeeAdList
               adLocation={adLocation.local}
-              euqiTarget={searEquipment}
+              euqiTarget={`${searEquiModel} ${searEquipment}`}
               sidoTarget={searSido}
               gugunTarget={searGungu}
               navigation={navigation}

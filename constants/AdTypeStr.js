@@ -8,6 +8,9 @@ export function getAdtypeStr(adType) {
   if (adType === 3) {
     return '메인광고_세번째';
   }
+  if (adType === 4) {
+    return '메인광고_네번째';
+  }
   if (adType === 11) {
     return '장비 타켓광고_첫번째';
   }

@@ -3,6 +3,7 @@ import {
   Alert, Dimensions, StyleSheet, View,
 } from 'react-native';
 import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
+import styled from 'styled-components';
 import * as api from '../api/api';
 import { withLogin } from '../contexts/LoginProvider';
 import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
@@ -35,6 +36,10 @@ const styles = StyleSheet.create({
     color: colors.point,
   },
 });
+
+const ModalView = styled.View`
+  height: 0;
+`;
 
 class FirmWorkListScreen extends React.Component {
   constructor(props) {
@@ -449,15 +454,6 @@ class FirmWorkListScreen extends React.Component {
     );
     return (
       <View style={styles.Container}>
-        <OpenBankAccSelectModal
-          isVisibleModal={isVisibleAccSelModal}
-          closeModal={() => this.setState({ isVisibleAccSelModal: false })}
-          completeSelect={(fintechUseNum, couponSelected) => { withdrawCompleteFnc(couponSelected, fintechUseNum); }}
-          accountId={user.uid}
-          actionName="결제방법 선택하기"
-          mode="COUPON_MODE"
-          {...this.props}
-        />
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
@@ -481,6 +477,17 @@ class FirmWorkListScreen extends React.Component {
           size="full"
           Primary
         />
+        <ModalView>
+          <OpenBankAccSelectModal
+            isVisibleModal={isVisibleAccSelModal}
+            closeModal={() => this.setState({ isVisibleAccSelModal: false })}
+            completeSelect={(fintechUseNum, couponSelected) => { withdrawCompleteFnc(couponSelected, fintechUseNum); }}
+            accountId={user.uid}
+            actionName="결제방법 선택하기"
+            mode="COUPON_MODE"
+            {...this.props}
+          />
+        </ModalView>
       </View>
     );
   }

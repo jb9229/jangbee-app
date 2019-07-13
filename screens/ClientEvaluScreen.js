@@ -230,6 +230,7 @@ class ClientEvaluScreen extends React.Component {
             searchNotice: notice,
             isLastList: resBody.last,
             notExistCEvalu: false,
+            searchTime: moment().format('YYYY.MM.DD HH:mm'),
           });
           return;
         }
@@ -282,6 +283,7 @@ class ClientEvaluScreen extends React.Component {
             isNewestEvaluList: true,
             cliEvaluList: page === 0 ? resBody.content : [...cliEvaluList, ...resBody.content],
             notExistCEvalu: false,
+            searchTime: moment().format('YYYY.MM.DD HH:mm'),
           });
 
           return;
@@ -442,6 +444,7 @@ class ClientEvaluScreen extends React.Component {
    */
   renderCliEvaluItem = ({ item }) => {
     const { user } = this.props;
+    const { searchTime } = this.state;
 
     return (
       <CliEvaluItem
@@ -451,6 +454,7 @@ class ClientEvaluScreen extends React.Component {
         deleteCliEvalu={this.deleteCliEvalu}
         openCliEvaluLikeModal={this.openCliEvaluLikeModal}
         openDetailModal={evalu => this.setState({ detailEvalu: evalu, isVisibleDetailModal: true })}
+        searchTime={searchTime}
       />
     );
   };
@@ -579,6 +583,7 @@ class ClientEvaluScreen extends React.Component {
           closeModal={() => this.setState({ isVisibleDetailModal: false })}
           completeAction={() => {}}
           size="full"
+          searchTime={searchTime}
         />
         <ClientEvaluLikeModal
           isVisibleModal={isVisibleEvaluLikeModal}

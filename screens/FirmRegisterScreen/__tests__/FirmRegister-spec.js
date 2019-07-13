@@ -47,6 +47,11 @@ describe('업체등록 유효성검사 함수 테스트', () => {
     setDefaultState(firmRegiScreen);
 
     // Case2: fname is empty
+    const user = {
+      phoneNumber: '01052023337',
+    };
+    
+    firmRegiScreen.setUser(user);
     firmRegiScreen.setState({ fname: '' });
     valResult = firmRegiScreen.isValidateSubmit();
     expect(valResult).toEqual(false);

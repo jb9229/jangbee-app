@@ -4,6 +4,7 @@ import renderer from 'react-test-renderer';
 import NavigationTestUtils from 'react-navigation/NavigationTestUtils';
 import AdCreateScreen from '../../screens/AdCreateScreen';
 import { LoginProvider } from '../../contexts/LoginProvider';
+import JBActIndicator from '../../components/organisms/JBActIndicator';
 
 describe('test', () => {
   beforeEach(() => {
@@ -15,18 +16,26 @@ describe('test', () => {
     const result = await res.json();
     expect(result.name).toBe('Leanne Graham'); // Success!
   });
-  it('openbank payment test', () => {
-    const adCreateScreen = renderer
-      .create(
-        <LoginProvider>
-          <AdCreateScreen />
-        </LoginProvider>,
-      )
-      .getInstance();
 
-    adCreateScreen.setState({ isAccEmpty: false });
-    console.log(adCreateScreen);
-    const result = adCreateScreen.validateCreaAd();
-    expect(valResult).toEqual(true);
+  it('openbank payment test', () => {
+    const createRenderer = renderer.create(
+      <LoginProvider>
+        <AdCreateScreen />
+      </LoginProvider>,
+    );
+    const indicator = createRenderer.root.findByType(JBActIndicator);
+
+    expect(indicator.props.size).toBe(35);
+  });
+
+  it('openbank payment test', () => {
+    const createRenderer = renderer.create(
+      <LoginProvider>
+        <AdCreateScreen test="abc" />
+      </LoginProvider>,
+    );
+    const instanceType = createRenderer.root;
+    const tesProps = instanceType.findByType(AdCreateScreen).valiCreAdForm();
+    console.log(tesProps);
   });
 });

@@ -153,8 +153,8 @@ export default class ClientEvaluCreateModal extends React.Component {
       return false;
     }
 
-    if (firmNumber && (firmNumber.length !== 12 && firmNumber.length !== 10)) {
-      this.setState({ firmNumberValErrMessage: '사업자번호가 유효하지 않습니다.' });
+    if (firmNumber && (firmNumber.length !== 12)) {
+      this.setState({ firmNumberValErrMessage: '사업자번호가 유효하지 않습니다(예: 123-45-56789)' });
       return false;
     }
 
@@ -328,6 +328,7 @@ export default class ClientEvaluCreateModal extends React.Component {
                     value={firmNumber}
                     onChangeText={text => this.setState({ firmNumber: text })}
                     placeholder="사업자번호를 기입해 주세요"
+                    keyboardType="numeric"
                   />
                   <JBErrorMessage errorMSG={firmNumberValErrMessage} />
 

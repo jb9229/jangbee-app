@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import PKG_ENV from '../app.json';
+import pkg from '../app.json';
 import OpenBankAuthWebView from '../components/OpenBankAuthWebView';
 import JBTextInput from '../components/molecules/JBTextInput';
 import JBButton from '../components/molecules/JBButton';
@@ -382,9 +382,9 @@ class AdCreateScreen extends React.Component {
         .existEuipTarketAd(adEquipment)
         .then((dupliResult) => {
           if (dupliResult === null) {
-            if (PKG_ENV === 'BETA') {
+            if (pkg.mode === 'BETA') {
               this.requestCreaAd();
-            } else if (PKG_ENV === 'OPENBANK') {
+            } else if (pkg.mode === 'OPENBANK') {
               this.withdrawDispatchFee(); // (오픈뱅크 심사용)
             }
           } else {
@@ -405,9 +405,9 @@ class AdCreateScreen extends React.Component {
         .existLocalTarketAd(adEquipment, adSido, adGungu)
         .then((dupliResult) => {
           if (dupliResult === null) {
-            if (PKG_ENV === 'BETA') {
+            if (pkg.mode === 'BETA') {
               this.requestCreaAd();
-            } else if (PKG_ENV === 'OPENBANK') {
+            } else if (pkg.mode === 'OPENBANK') {
               this.withdrawDispatchFee(); // (오픈뱅크 심사용)
             }
           } else {
@@ -420,9 +420,9 @@ class AdCreateScreen extends React.Component {
         .catch((error) => {
           notifyError('지역 타켓광고 중복검사 문제', error.message);
         });
-    } else if (PKG_ENV === 'BETA') {
+    } else if (pkg.mode === 'BETA') {
       this.requestCreaAd();
-    } else if (PKG_ENV === 'OPENBANK') {
+    } else if (pkg.mode === 'OPENBANK') {
       this.withdrawDispatchFee(); // (오픈뱅크 심사용)
     }
   };
@@ -704,7 +704,6 @@ class AdCreateScreen extends React.Component {
               <ImagePickInput
                 itemTitle="광고배경 사진"
                 imgUrl={adPhotoUrl}
-                aspect={[4, 3]}
                 setImageUrl={url => this.setState({ adPhotoUrl: url })}
               />
               <JBErrorMessage errorMSG={adPhotoUrlValErrMessage} />

@@ -68,11 +68,11 @@ export default class ClientEvaluDetailModal extends React.Component {
   };
 
   shareClientEvalu = async () => {
-    const { closeModal } = this.props;
+    const { closeModal, searchTime } = this.props;
     const { evalu } = this.state;
 
     try {
-      const result = shareClientEvalu(evalu);
+      const result = shareClientEvalu(evalu, searchTime);
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

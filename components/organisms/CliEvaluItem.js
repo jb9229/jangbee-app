@@ -68,6 +68,7 @@ export default function CliEvaluItem({
   deleteCliEvalu,
   openCliEvaluLikeModal,
   openDetailModal,
+  searchTime,
 }) {
   let titleStr = '';
   if (item.firmName) {
@@ -140,7 +141,7 @@ export default function CliEvaluItem({
         )}
         <JBButton
           title="공유하기 >"
-          onPress={() => shareClientEvalu(item)}
+          onPress={() => shareClientEvalu(item, searchTime)}
           size="small"
           underline
           Primary

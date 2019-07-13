@@ -73,6 +73,7 @@ class FirmRegisterScreen extends React.Component {
       phoneNumberValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      addressDetailValErrMessage: '',
       introductionValErrMessage: '',
       thumbnailValErrMessage: '',
       photo1ValErrMessage: '',
@@ -214,6 +215,7 @@ class FirmRegisterScreen extends React.Component {
       phoneNumberValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      addressDetailValErrMessage: '',
       thumbnailValErrMessage: '',
       photo1ValErrMessage: '',
       photo2ValErrMessage: '',
@@ -304,7 +306,7 @@ class FirmRegisterScreen extends React.Component {
 
     v = validate('textMax', addressDetail, false, 45);
     if (!v[0]) {
-      this.setState({ addressValErrMessage: `[상세주소] ${v[1]}` });
+      this.setState({ addressDetailValErrMessage: `[상세주소] ${v[1]}` });
       Alert.alert('[상세주소] 다시 확인해 주세요!', v[1]);
       return false;
     }
@@ -443,6 +445,7 @@ class FirmRegisterScreen extends React.Component {
       phoneNumberValErrMessage,
       equiListStrValErrMessage,
       addressValErrMessage,
+      addressDetailValErrMessage,
       workAlarmValErrMessage,
       introductionValErrMessage,
       thumbnailValErrMessage,
@@ -465,7 +468,7 @@ class FirmRegisterScreen extends React.Component {
       <View style={styles.container}>
         <KeyboardAvoidingView>
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            <Card>
+            <Card bgColor="white">
               <JBTextInput
                 title="업체명"
                 subTitle="(필수)"
@@ -498,7 +501,7 @@ class FirmRegisterScreen extends React.Component {
                   value={equiListStr}
                   onChangeText={text => this.setState({ equiListStr: text })}
                   onFocus={() => this.openSelEquipmentModal()}
-                  placeholder="보유 장비를 선택해 주세요"
+                  placeholder="보유장비를 선택해 주세요"
                 />
 
                 <JBPicker
@@ -508,7 +511,7 @@ class FirmRegisterScreen extends React.Component {
                   selectedValue={modelYear}
                   style={styles.adTypePicker}
                   onValueChange={itemValue => this.setState({ modelYear: itemValue })}
-                  size={100}
+                  size={110}
                 />
               </View>
               <JBErrorMessage errorMSG={equiListStrValErrMessage} />
@@ -533,9 +536,9 @@ class FirmRegisterScreen extends React.Component {
                   this.addrDetTextInput = input;
                 }}
                 onChangeText={text => this.setState({ addressDetail: text })}
-                placeholder="상세주소를 입력해 주세요"
+                placeholder="혹시 추가로 위치설명이 필요하면 기입해주세요"
               />
-
+              <JBErrorMessage errorMSG={addressDetailValErrMessage} />
               <JBTextInput
                 title="일감알람 받을지역"
                 subTitle="(필수)"

@@ -2,9 +2,7 @@ import React from 'react';
 import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
-import {
-  AppLoading, Updates,
-} from 'expo';
+import { AppLoading, Updates } from 'expo';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import * as Icon from '@expo/vector-icons';
@@ -31,10 +29,6 @@ export default class App extends React.Component {
   componentDidMount() {
     this.checkUpdate();
   }
-
-  notifi = (notifi) => {
-    console.log(notifi);
-  };
 
   _loadResourcesAsync = async () => Promise.all([
     Asset.loadAsync([

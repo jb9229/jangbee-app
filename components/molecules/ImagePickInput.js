@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert, Image, StyleSheet, TouchableOpacity, Text, View,
+  Image, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import { ImagePicker } from 'expo';
 import styled from 'styled-components/native';
@@ -33,7 +33,6 @@ const SubTitle = styled.Text`
 const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
-    margin: 10,
   },
   titleWrap: {
     flexDirection: 'row',

@@ -9,13 +9,31 @@
     />
     <title>장비 콜 상담하기 - 플러스 친구</title>
     <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css"
+    />
   </head>
-  <body style="text-align: center; vertical-align: middle;">
-    <a href="javascript:void plusFriendChat()">
-      <img
-        src="https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png"
-      />
-    </a>
+  <body>
+    <div
+      style="display: flex; height: -webkit-fill-available; flex-direction: column; align-items: center; justify-content: center;"
+    >
+      <a
+        href="javascript:void plusFriendChat()"
+        style="display: flex; flex-direction: column; justify-content: center;"
+      >
+        <img
+          src="https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png"
+          style="width: 100;"
+        />
+        <label
+          style="font-size: 1.3rem; margin-top: 0.5rem; font-family: 'NanumSquareRound',sans-serif;"
+        >
+          1:1톡 상담시작 >
+        </label>
+      </a>
+    </div>
     <script type="text/javascript">
       //<![CDATA[
       // 사용할 앱의 JavaScript 키를 설정해 주세요.

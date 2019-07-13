@@ -83,6 +83,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       fnameValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      addressDetailValErrMessage: '',
       workAlarmValErrMessage: '',
       introductionValErrMessage: '',
       thumbnailValErrMessage: '',
@@ -266,6 +267,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       phoneNumberValErrMessage: '',
       equiListStrValErrMessage: '',
       addressValErrMessage: '',
+      addressDetailValErrMessage: '',
       thumbnailValErrMessage: '',
       photo1ValErrMessage: '',
       photo2ValErrMessage: '',
@@ -351,7 +353,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
 
     v = validate('textMax', addressDetail, false, 45);
     if (!v[0]) {
-      this.setState({ addressValErrMessage: `[상세주소] ${v[1]}` });
+      this.setState({ addressDetailValErrMessage: `[상세주소] ${v[1]}` });
       return false;
     }
 
@@ -504,6 +506,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       fnameValErrMessage,
       equiListStrValErrMessage,
       addressValErrMessage,
+      addressDetailValErrMessage,
       workAlarmValErrMessage,
       introductionValErrMessage,
       thumbnailValErrMessage,
@@ -597,9 +600,9 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                   this.addrDetTextInput = input;
                 }}
                 onChangeText={text => this.setState({ addressDetail: text })}
-                placeholder="상세주소를 입력해 주세요"
+                placeholder="혹시 추가로 위치설명이 필요하면 기입해주세요"
               />
-
+              <JBErrorMessage errorMSG={addressDetailValErrMessage} />
               <JBTextInput
                 title="일감 알람받을 지역"
                 subTitle="(필수)"

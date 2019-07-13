@@ -9,12 +9,11 @@ import { notifyError } from '../common/ErrorNotice';
 import fonts from '../constants/Fonts';
 import { withLogin } from '../contexts/LoginProvider';
 import colors from '../constants/Colors';
+import KatalkAskWebview from '../components/KatalkAskWebview';
 import JBButton from '../components/molecules/JBButton';
 import JBActIndicator from '../components/organisms/JBActIndicator';
 import CloseButton from '../components/molecules/CloseButton';
 import FirmInfoItem from '../components/organisms/FirmInfoItem';
-import { openLinkUrl } from '../utils/LinkUtil';
-import * as jbcallConfig from '../jbcallconfig';
 
 const styles = StyleSheet.create({
   container: {
@@ -134,6 +133,7 @@ class FirmMyInfoScreen extends React.Component {
     this.state = {
       firm: undefined,
       isLoadingComplete: false,
+      isVisibleKatalkAskModal: false,
       evaluList: [],
     };
   }
@@ -221,7 +221,7 @@ class FirmMyInfoScreen extends React.Component {
     const { navigation } = this.props;
 
     const {
-      firm, isLoadingComplete, evaluList,
+      firm, isLoadingComplete, isVisibleKatalkAskModal, evaluList,
     } = this.state;
     if (!isLoadingComplete) {
       return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
@@ -255,8 +255,8 @@ class FirmMyInfoScreen extends React.Component {
             <Text style={styles.regFirmNotice}>작성 중 어려운점이있으면 지금 바로 연락주세요</Text>
             <CommWrap>
               <JBButton
-                title="문자(전화) 문의"
-                onPress={() => openLinkUrl(`sms: ${jbcallConfig.adminTelNumber}`)}
+                title="카톡 상담"
+                onPress={() => this.setState({ isVisibleKatalkAskModal: true })}
                 align="center"
                 Primary
               />
@@ -268,6 +268,10 @@ class FirmMyInfoScreen extends React.Component {
               />
             </CommWrap>
           </View>
+          <KatalkAskWebview
+            isVisibleModal={isVisibleKatalkAskModal}
+            closeModal={() => this.setState({ isVisibleKatalkAskModal: false })}
+          />
         </View>
       );
     }

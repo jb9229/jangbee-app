@@ -9,7 +9,7 @@ class LoginProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: undefined,
+      user: { phoneNumber: '0102376555' },
       userProfile: {
         type: undefined,
         obAccessToken: undefined,
