@@ -3,19 +3,20 @@ import { Dimensions, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import * as FileSystem from 'expo-file-system';
 import ImageZoom from 'react-native-image-pan-zoom';
+import { blue } from 'ansi-colors';
 import JBButton from './molecules/JBButton';
 import CloseButton from './molecules/CloseButton';
 import download from '../common/Download';
 
 const Container = styled.View`
   flex: 1;
-  width: 100%;
   background-color: white;
 `;
 
 const Image = styled.Image`
-  width: 90%;
-  height: 300;
+  width: ${props => (props.width ? props.width : '90%')};
+  height: ${props => (props.height ? props.height : '300')};
+  margin: 10px auto;
 `;
 
 export default class DocumentsModal extends React.Component {
@@ -32,7 +33,9 @@ export default class DocumentsModal extends React.Component {
   }
 
   render() {
-    const { isVisibleModal, closeModal, img } = this.props;
+    const {
+      isVisibleModal, closeModal, img, width, height,
+    } = this.props;
 
     return (
       <Modal
@@ -47,9 +50,9 @@ export default class DocumentsModal extends React.Component {
             cropWidth={Dimensions.get('window').width}
             cropHeight={Dimensions.get('window').height}
             imageWidth={Dimensions.get('window').width}
-            imageHeight={500}
+            imageHeight={Dimensions.get('window').height}
           >
-            <Image source={img} />
+            <Image source={img} width={width} height={height} />
           </ImageZoom>
         </Container>
       </Modal>

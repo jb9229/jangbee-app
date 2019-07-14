@@ -10,7 +10,7 @@
     "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "33.0.0",
     "platforms": ["ios", "android"],
-    "version": "0.6.0_20190713",
+    "version": "0.6.1_20190714",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",

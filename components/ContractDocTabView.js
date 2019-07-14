@@ -20,12 +20,19 @@ export default class ContractDocTabView extends React.Component {
   }
 
   render() {
-    const { isVisibleImageModal, popupIMG } = this.state;
+    const {
+      isVisibleImageModal, popupIMG, imgWidth, imgHeight,
+    } = this.state;
     return (
       <RouteContainer>
         <JBButton
           title="작업반경-양정도"
-          onPress={() => this.setState({ popupIMG: workImgs.IMG_RADIUS_WORKRULE, isVisibleImageModal: true })
+          onPress={() => this.setState({
+            popupIMG: workImgs.IMG_RADIUS_WORKRULE,
+            isVisibleImageModal: true,
+            imgWidth: undefined,
+            imgHeight: undefined,
+          })
           }
           underline
         />
@@ -43,6 +50,8 @@ export default class ContractDocTabView extends React.Component {
           onPress={() => this.setState({
             popupIMG: workImgs.IMG_SAFETY_CERTIFICATION,
             isVisibleImageModal: true,
+            imgWidth: undefined,
+            imgHeight: 400,
           })
           }
           underline
@@ -51,6 +60,8 @@ export default class ContractDocTabView extends React.Component {
           isVisibleModal={isVisibleImageModal}
           img={popupIMG}
           closeModal={() => this.setState({ isVisibleImageModal: false })}
+          width={imgWidth}
+          height={imgHeight}
         />
       </RouteContainer>
     );
