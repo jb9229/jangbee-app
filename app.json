@@ -33,7 +33,7 @@
     "android": {
       "package": "com.kan.jangbeecall",
       "permissions": ["ACCESS_FINE_LOCATION"],
-      "versionCode": 17,
+      "versionCode": 18,
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"

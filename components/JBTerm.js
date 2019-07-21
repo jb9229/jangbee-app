@@ -77,8 +77,8 @@ export default function renderJBTerm({ bg }) {
       </Row>
       <Row>
         <Column>
-          <Title>이메일:</Title>
-          <Text>support@jangbeecall.com</Text>
+          <Title>상담:</Title>
+          <Text>내정보 -> 카톡상담하기 클릭</Text>
         </Column>
       </Row>
       <Row>
