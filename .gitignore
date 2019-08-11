@@ -9,3 +9,7 @@ npm-debug.*
 firebaseconfig.js
 kakao-config.js
 jbcallconfig.js
+android/.idea/libraries/*
+android/app/build/*
+android/.idea/*
+android/.gradle/*

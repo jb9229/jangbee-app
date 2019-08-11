@@ -8,6 +8,7 @@ import { withLogin } from '../contexts/LoginProvider';
 import KatalkAskWebview from '../components/KatalkAskWebview';
 import OpenBankAccSelectModal from '../components/OpenBankAccSelectModal';
 import DocumentsModal from '../components/DocumentsModal';
+import AlarmSettingModal from '../components/AlarmSettingModal';
 import JBIconButton from '../components/molecules/JBIconButton';
 import colors from '../constants/Colors';
 import { validatePresence } from '../utils/Validation';
@@ -47,6 +48,7 @@ class FirmSettingScreen extends React.Component {
       isVisibleKatalkAskModal: false,
       isOBSelVisibleModal: false,
       isVisibleDocModal: false,
+      isVisibleAlarmSettingModal: false
     };
   }
 
@@ -201,7 +203,7 @@ class FirmSettingScreen extends React.Component {
 
   render() {
     const { navigation, user } = this.props;
-    const { isVisibleKatalkAskModal, isOBSelVisibleModal, isVisibleDocModal } = this.state;
+    const { isVisibleKatalkAskModal, isOBSelVisibleModal, isVisibleDocModal, isVisibleAlarmSettingModal } = this.state;
     return (
       <Container>
         <Top>
@@ -234,7 +236,7 @@ class FirmSettingScreen extends React.Component {
             <JBIconButton
               title="알람 설정"
               img={require('../assets/images/icon/alarm_icon.png')}
-              onPress={() => Alert.alert('준비중..', '해당서비스를 준비중 입니다(8월안 오픈목표)')}
+              onPress={() => this.setState({ isVisibleAlarmSettingModal: true })}
             />
           </MenueRowWrap>
           <MenueRowWrap>
@@ -278,6 +280,10 @@ class FirmSettingScreen extends React.Component {
         <DocumentsModal
           isVisibleModal={isVisibleDocModal}
           closeModal={() => this.setState({ isVisibleDocModal: false })}
+        />
+        <AlarmSettingModal
+          isVisibleModal={isVisibleAlarmSettingModal}
+          closeModal={() => this.setState({ isVisibleAlarmSettingModal: false })}
         />
       </Container>
     );
