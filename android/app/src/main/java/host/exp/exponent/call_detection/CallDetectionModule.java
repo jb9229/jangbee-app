@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 
 import host.exp.exponent.IncomingCallBroadcastReceiver;
 import host.exp.exponent.IncomingCallScanService;
+import host.exp.exponent.PhoneStateService;
 import host.exp.exponent.utils.ReactAsyncStorageUtils;
 import host.exp.exponent.utils.ServiceUtils;
 
@@ -56,8 +57,12 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
                 boolean isScanBlackList = ReactAsyncStorageUtils.retrieveBoolean(reactContext, ReactAsyncStorageUtils.ISSCANBALCKLIST_SPKEY);
                 Toast.makeText(getReactApplicationContext(), "Call Detection Flag:"+isScanBlackList, Toast.LENGTH_LONG).show();
 
-//                boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, IncomingCallScanService.class);
-                successCallback.invoke(isScanBlackList);
+                boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, PhoneStateService.class);
+                if(isRunningService && isScanBlackList) {
+                    successCallback.invoke(isScanBlackList);
+                } else {
+                    successCallback.invoke(false);
+                }
             } else {
                 errorCallback.invoke("권한 설정을 완료해 주세요");
             }
@@ -72,19 +77,24 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
 
         try{
             if(checkPhonestatePermission()) {
-//                Intent serviceIntent = new Intent(reactContext, IncomingCallScanService.class);
-//                if (Build.VERSION.SDK_INT >= 26) {
-//                    reactContext.startForegroundService(serviceIntent);
-//                } else {
-//                    reactContext.startService(serviceIntent);
-//                }
+                Intent serviceIntent = new Intent(reactContext, PhoneStateService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    reactContext.startForegroundService(serviceIntent);
+                } else {
+                    reactContext.startService(serviceIntent);
+                }
 
                 ReactAsyncStorageUtils.storeBoolean(reactContext, ReactAsyncStorageUtils.ISSCANBALCKLIST_SPKEY, true);
 
-//                boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, IncomingCallScanService.class);
+                boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, PhoneStateService.class);
 
                 boolean isScanBlackList = ReactAsyncStorageUtils.retrieveBoolean(reactContext, ReactAsyncStorageUtils.ISSCANBALCKLIST_SPKEY);
-                successCallback.invoke(isScanBlackList);
+
+                if(isRunningService && isScanBlackList) {
+                    successCallback.invoke(true);
+                } else {
+                    successCallback.invoke(false);
+                }
             } else {
                 successCallback.invoke(false);
             }
@@ -98,17 +108,21 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
         Toast.makeText(getReactApplicationContext(), "Finish Call Detection", Toast.LENGTH_LONG).show();
 
         try{
-//            Intent serviceIntent = new Intent(reactContext, IncomingCallScanService.class);
-//
-//            reactContext.stopService(serviceIntent);
+            Intent serviceIntent = new Intent(reactContext, PhoneStateService.class);
+
+            reactContext.stopService(serviceIntent);
 
 
             ReactAsyncStorageUtils.storeBoolean(reactContext, ReactAsyncStorageUtils.ISSCANBALCKLIST_SPKEY, false);
 
-//            boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, IncomingCallScanService.class);
+            boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, PhoneStateService.class);
 
             boolean isScanBlackList = ReactAsyncStorageUtils.retrieveBoolean(reactContext, ReactAsyncStorageUtils.ISSCANBALCKLIST_SPKEY);
-            successCallback.invoke(isScanBlackList);
+            if(!isRunningService && !isScanBlackList) {
+                successCallback.invoke(false);
+            } else {
+                successCallback.invoke(isScanBlackList);
+            }
         } catch (IllegalViewOperationException e) {
             errorCallback.invoke(e.getMessage());
         }
@@ -118,8 +132,12 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
         boolean checkResult = true;
 
         Activity currentActivity = getCurrentActivity();
-        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG}, PHONE_STATE_REQCODE);
+//        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG}, PHONE_STATE_REQCODE);
+//            checkResult = false;
+//        }
+        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_STATE_REQCODE);
             checkResult = false;
         }
 

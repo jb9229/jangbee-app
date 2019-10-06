@@ -1,15 +1,18 @@
-import React from 'react';
+import * as Font from 'expo-font';
+import * as Icon from '@expo/vector-icons';
+
+import { AppLoading, Updates } from 'expo';
 import {
   Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
-import { AppLoading, Updates } from 'expo';
-import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
-import * as Icon from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import React from 'react';
 import firebase from 'firebase';
+
+import { LoginProvider } from './contexts/LoginProvider';
 import AppNavigator from './navigation/AppNavigator';
 import JBActIndicator from './components/organisms/JBActIndicator';
-import { LoginProvider } from './contexts/LoginProvider';
 import colors from './constants/Colors';
 import firebaseconfig from './firebaseconfig';
 
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
     isLoadingComplete: false,
     isAppUpdateComplete: false,
@@ -112,3 +115,7 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default (Constants.manifest.slug === 'jangbeecall_native_storybook'
+  ? require('./storybook').default
+  : App);

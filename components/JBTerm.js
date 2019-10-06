@@ -135,7 +135,12 @@ export default function renderJBTerm({ bg }) {
         <Column>
           <Title>@2019 장비 콜 All rights reserved.</Title>
         </Column>
-        <JBButton title="장비 콜 공유하기" onPress={() => shareJBCall()} size="small" Primary />
+        <JBButton
+          title="장비 콜 공유하기"
+          onPress={() => shareJBCall()}
+          size="small"
+          Primary
+        />
       </Row>
     </Container>
   );

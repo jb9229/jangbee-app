@@ -71,7 +71,9 @@ export default function renderAccListItem(item, selFinUseNum, onPress) {
         <View style={styles.middleWrap}>
           <Text style={styles.aliasText}>{item.account_alias}</Text>
         </View>
-        <View style={styles.bottomWrap} />
+        <View style={styles.bottomWrap}>
+          <Text style={styles.aliasText}>{item.available_amt}</Text>
+        </View>
       </View>
     </TouchableHighlight>
   );

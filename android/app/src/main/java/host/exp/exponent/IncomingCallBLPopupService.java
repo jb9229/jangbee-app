@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import android.widget.Button;
 
 public class IncomingCallBLPopupService extends Service {
     // Variables
@@ -63,6 +64,21 @@ public class IncomingCallBLPopupService extends Service {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         rootView = layoutInflater.inflate(R.layout.incomingcall_scan_popup, null);
         ButterKnife.bind(this, rootView);
+
+        Button btnShowBalcklist = rootView.findViewById(R.id.btn_show_blacklist);
+        btnShowBalcklist.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    if (rootView != null && windowManager != null) windowManager.removeView(rootView);
+
+                    Intent appStartIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+                    startActivity(appStartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         setDraggable();
     }
 

@@ -14,7 +14,7 @@ import colors from '../constants/Colors';
 import fonts from '../constants/Fonts';
 import JBButton from '../components/molecules/JBButton';
 
-const dispatchFee = '10000';
+const dispatchFee = '20000';
 
 const styles = StyleSheet.create({
   Container: {
@@ -267,7 +267,7 @@ class FirmWorkListScreen extends React.Component {
       });
   };
 
-  confirmApplyWork = (workId) => { // (매칭이된다면, 5천원의 결제 후 배차 할 수 있습니다)
+  confirmApplyWork = (workId) => {
     Alert.alert(
       '해당 날짜와 장소에 배차 가능하십니까?',
       '2019.7월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n지원 후, 장비사용 고객의 선택을 기다려야 합니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',

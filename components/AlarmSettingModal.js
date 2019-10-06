@@ -68,8 +68,6 @@ export default class AlarmSettingModal extends React.Component {
   completeAction = () => {
     const { closeModal } = this.props;
 
-    const newData = this.validateForm();
-
     closeModal();
   };
 

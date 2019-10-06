@@ -181,7 +181,7 @@ class AdCreateScreen extends React.Component {
   /**
    * 광고 결재할 계좌리스트 설정함수
    */
-  setOpenBankAccountList = () => {
+  setOpenBankAccountList = async () => {
     const { user } = this.props;
 
     firebaseDB.getUserInfo(user.uid).then((data) => {
@@ -208,7 +208,20 @@ class AdCreateScreen extends React.Component {
           }
 
           if (accInfo.res_cnt !== '0') {
-            this.setState({ accList: accInfo.res_list, isAccEmpty: false });
+            const resAccList = accInfo.res_list;
+
+            const accountList = [];
+            resAccList.forEach((element, index) => {
+              this.setAccBalance(obAccessToken, element)
+                .then((newAccount) => {
+                  accountList.push(newAccount);
+
+                  if (index === accInfo.res_cnt - 1) {
+                    this.setState({ accList: accountList, isAccEmpty: false });
+                  }
+                })
+                .catch(error => notifyError(error.name, error.message));
+            });
             return;
           }
 
@@ -224,6 +237,30 @@ class AdCreateScreen extends React.Component {
         });
     });
   };
+
+  setAccBalance = (obAccessToken, account) => {
+    const fintechUseNum = account.fintech_use_num;
+    const newAccount = account;
+
+    return api
+      .getOBAccBalance(obAccessToken, fintechUseNum)
+      .then((res) => {
+        if (res && res.rsp_code && res.rsp_code === 'A0000') {
+          newAccount.available_amt = res.available_amt;
+        } else {
+          console.log(res);
+        }
+
+        return newAccount;
+      })
+      .catch((error) => {
+        notifyError(
+          '잔액조회 실패',
+          `네트워크 환경 확인 후 다시 시도해 주세요(${error.name}, ${error.message})`,
+        );
+        return newAccount;
+      });
+  }
 
   /**
    * 광고생성폼 유효성검사 메세지 초기화함수

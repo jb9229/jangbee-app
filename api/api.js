@@ -572,6 +572,21 @@ export function getOBAccList(accessTokenInfo, userSeqNo, isInclCancAccount, sort
   ).then(handleOpenBankJsonResponse);
 }
 
+export function getOBAccBalance(accessTokenInfo, fintechUseNum) {
+  const tranDTime = moment().format('YYYYMMDDHHmmss');
+
+  return fetch(
+    `${url.OPENBANK_BALANCE}?fintech_use_num=${encodeURIComponent(
+      fintechUseNum,
+    )}&tran_dtime=${encodeURIComponent(tranDTime)}`,
+    {
+      headers: {
+        Authorization: getAccessToken(accessTokenInfo),
+      },
+    },
+  ).then(handleOpenBankJsonResponse);
+}
+
 /**
  * 오픈뱅크 토큰재인증 함수
  *

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
     View rootView;
     TextView incoCallNumberTextView;
     ImageButton closeButton;
+    Button btnShowBalcklist;
     String bllistResult;
 
     @Override
@@ -86,11 +88,20 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String result = response.body().string();
-                    bllistResult = "피해사례가 조회되지 않습니다.";
-                    if(result != null && !result.isEmpty() && Boolean.parseBoolean(result)) {
-                        final String phone_number = PhoneNumberUtils.formatNumber(incomingNumber);
-                        bllistResult = phone_number;
+                    String blResult = "피해사례가 조회되지 않습니다.";
+                    String result   = response.body().string();
+                    if (result != null && !result.isEmpty() ) { //&& Boolean.parseBoolean(result)
+                        if (Boolean.parseBoolean(result)) {
+                            blResult = PhoneNumberUtils.formatNumber(incomingNumber);
+                        }
+
+                        Intent serviceIntent = new Intent(context, IncomingCallBLPopupService.class);
+                        serviceIntent.putExtra(IncomingCallBLPopupService.INCOMINGCALL_NUMBER_EXTRA, blResult);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            context.startForegroundService(serviceIntent);
+                        } else {
+                            context.startService(serviceIntent);
+                        }
                     }
 
 //                    Intent serviceIntent = new Intent(context, IncomingCallBLPopupService.class);
@@ -108,55 +119,7 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
 //                    }
 
 
-                    windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-                    Display display = windowManager.getDefaultDisplay();
-                    int width = (int) (display.getWidth() * 0.9);
 
-                    int layoutType;
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        layoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-                    } else {
-                        layoutType = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-                    }
-
-                    //Display 사이즈의 90%
-                    wmParams = new WindowManager.LayoutParams(
-                            width,
-                            WindowManager.LayoutParams.WRAP_CONTENT,
-                            layoutType,
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                                    | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                            PixelFormat.TRANSLUCENT);
-
-                    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    rootView = layoutInflater.inflate(R.layout.incomingcall_scan_popup, null);
-                    ButterKnife.bind(this, rootView);
-                    setDraggable();
-
-                    incoCallNumberTextView = rootView.findViewById(R.id.inco_scan_callnumber);
-                    closeButton = rootView.findViewById(R.id.btn_close);
-                    closeButton.setOnClickListener(new View.OnClickListener()   {
-                        public void onClick(View v)  {
-                            try {
-                                if (rootView != null && windowManager != null) windowManager.removeView(rootView);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                    Handler mHandler = new Handler(Looper.getMainLooper());
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 사용하고자 하는 코드
-                            windowManager.addView(rootView, wmParams);
-
-                            incoCallNumberTextView.setText(bllistResult);
-                        }
-                    }, 0);
                 }
             };
 

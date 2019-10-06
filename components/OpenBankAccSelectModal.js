@@ -170,7 +170,11 @@ export default class OpenBankAccSelectModal extends React.Component {
         .getOBAccList(obAccessToken, obUserSeqNo, 'N', 'A')
         .then((userInfo) => {
           if (userInfo.res_cnt !== '0') {
-            this.setState({ accList: userInfo.res_list, isEmptyList: false });
+            const resAccList = userInfo.res_list;
+
+            const accountList = resAccList.map(item => this.setAccBalance(obAccessToken, item));
+
+            this.setState({ accList: accountList, isEmptyList: false });
             return;
           }
           this.setState({ isEmptyList: true });
@@ -185,6 +189,27 @@ export default class OpenBankAccSelectModal extends React.Component {
         });
     });
   };
+
+  setAccBalance = async (obAccessToken, account) => {
+    const fintechUseNum = account.fintech_use_num;
+    const newAccount = account;
+
+    await api
+      .getOBAccBalance(obAccessToken, fintechUseNum)
+      .then((res) => {
+        if (res && res.rsp_code && res.rsp_code === 'A0000') {
+          newAccount.available_amt = res.available_amt;
+        }
+      })
+      .catch((error) => {
+        notifyError(
+          '잔액조회 실패',
+          `네트워크 환경 확인 후 다시 시도해 주세요(${error.name}, ${error.message})`,
+        );
+      });
+
+    return newAccount;
+  }
 
   /**
    * 차주일감 쿠폰 요청함수

@@ -1,13 +1,20 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb", "plugin:flowtype/recommended"],
-  "plugins": ["react", "jsx-a11y", "import", "react-native", "flowtype"],
+  "parser": "@typescript-eslint/parser",
+  "extends": ["standard", "plugin:react/recommended"],
+  "plugins": ["@typescript-eslint"],
   "env": {
-    "browser": true
+    "browser": true,
+    "jest": true
   },
   "rules": {
-    "global-require": 0,
-    "no-underscore-dangle": 0,
-    "react/jsx-filename-extension": 0
+    "max-len": ["error", { "code": 100 }],
+    "sort-imports": [
+      2,
+      {
+        "ignoreCase": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ]
   }
 }

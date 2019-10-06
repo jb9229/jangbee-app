@@ -42,6 +42,7 @@ module.exports = {
   OPENBANK_REAUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize_account2`,
   OPENBANK_TOKEN: `${OPENBANK_URL}/oauth/2.0/token`,
   OPENBANK_ACCOUNTLIST: `${OPENBANK_URL}/v1.0/account/list`,
+  OPENBANK_BALANCE: `${OPENBANK_URL}/v1.0/account/balance`,
   OPENBANK_USERINFO: `${OPENBANK_URL}/v1.0/user/me`,
   OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
   OPENBANK_DEPOSIT: `${OPENBANK_URL}/v1.0/transfer/deposit`,

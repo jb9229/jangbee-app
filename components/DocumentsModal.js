@@ -1,11 +1,12 @@
 import React from 'react';
 import { Dimensions, Modal } from 'react-native';
-import styled from 'styled-components/native';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import styled from 'styled-components/native';
 import download from '../common/Download';
 import ContracDocTabView from './ContractDocTabView';
-import JBButton from './molecules/JBButton';
 import CloseButton from './molecules/CloseButton';
+import JBButton from './molecules/JBButton';
+import JangbeeAdList from './JangbeeAdList';
 
 const Container = styled.View`
   flex: 1;
@@ -105,6 +106,12 @@ export default class DocumentsModal extends React.Component {
             })}
             onIndexChange={index => this.setState({ index })}
             initialLayout={{ width: Dimensions.get('window').width }}
+          />
+          <JangbeeAdList
+            admob
+            admobUnitID="ca-app-pub-9415708670922576/2729403292"
+            admonSize="fullBanner"
+            admonHeight="11e0"
           />
         </Container>
       </Modal>
