@@ -5,7 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll",
+    "test": "node ./node_modules/jest/bin/jest.js",
     "storybook": "start-storybook -p 7007",
     "prestorybook": "rnstl"
   },
@@ -85,8 +85,7 @@
   "config": {
     "react-native-storybook-loader": {
       "searchDir": [
-        "./screens",
-        "./components"
+        "./storybook/stories"
       ],
       "pattern": "**/*.story.js"
     }

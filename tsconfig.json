@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "dist",
     "allowJs": true,
     "sourceMap": true,
@@ -19,13 +18,30 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["./src/*"],
+      "atoms/*": ["src/components/atoms/*"],
+      "molecules/*": ["src/components/molecules/*"],
+      "organisms/*": ["src/components/organisms/*"],
+      "templates/*": ["src/components/templates/*"],
+      "api/*": ["./src/api"],
+      "auth": ["./src/auth"],
+      "utils": ["./src/utils"],
+      "screens": ["./src/screens"],
+      "common": ["./src/common"],
+      "constants": ["./src/constants"],
+      "contexts": ["./src/contexts"],
+      "navigation": ["./src/navigation"],
+      "native_modules": ["./src/native_modules"]
+    }
   },
   "include": [
-    "./screens/**/*.ts",
-    "./screens/**/*.tsx",
-    "./components/**/*.ts",
-    "./components/**/*.tsx"
+    "src/screens/**/*.ts",
+    "src/screens/**/*.tsx",
+    "src/components/**/*.ts",
+    "src/components/**/*.tsx"
   ],
   "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
   "types": ["typePatches"],

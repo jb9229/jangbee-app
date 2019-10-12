@@ -1,58 +1,27 @@
-import * as Font from 'expo-font';
-import * as Icon from '@expo/vector-icons';
-import React, { useContext } from 'react';
+import * as React from 'react';
 import { addDecorator } from '@storybook/react-native';
-import { ThemeProvider } from 'styled-components';
-// import { createTheme, ThemeType } from "../theme";
-// import { AppContext, AppProvider } from "../providers/AppProvider";
+import { createTheme } from '../src/theme';
+// import { withKnobs } from '@storybook/addon-ondevice-knobs';
+import { withKnobs } from '@storybook/addon-knobs';
+import { ThemeProvider } from 'styled-components/native';
+import { ThemeType } from '../src/types';
 
-/**
- * 루트 앱 프로바이더 데코레이터
- * @param {StoryRootComponent} story 스토리 루트 컴포넌트
- */
-// const AppProviderDecorator = story => <AppProvider>{story()}</AppProvider>;
+const ThemeProviderWrapper = (props) => {
+  // const { state } = useContext(AppContext);
+  // console.log(state);
+  const theme = 'LIGHT';
 
-/**
- * 테마 프로바이더 Wrapper
- *
- * @param {Props} props 상위 컴포넌트의 Props들
- */
-// const ThemeProviderWrapper = props => {
-//   const { state } = useContext(AppContext);
-//   const { theme } = state;
+  return (
+    <ThemeProvider theme={createTheme(ThemeType.LIGHT)}>{props.children}</ThemeProvider>
+  );
+};
 
-//   return (
-//     <ThemeProvider theme={createTheme(theme)}>{props.children}</ThemeProvider>
-//   );
-// };
-
-/**
- * 테마 프로바이더 테코레이터
- *
- * @param {Component} story 스토리 Root Component
- */
-// const ThemeProviderDecorator = story => (
-//   <ThemeProviderWrapper>{story()}</ThemeProviderWrapper>
-// );
-
-_loadResourcesAsync = async () =>
-  Promise.all([
-    Font.loadAsync({
-      // This is the font that we are using for our tab bar
-      ...Icon.Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free
-      // to remove this if you are not using it in your app
-      SsangmundongGulimB: require('../assets/fonts/Typo_SsangmundongGulimB.ttf'),
-      NanumSquareRoundR: require('../assets/fonts/NanumSquareRoundR.ttf'),
-      NanumGothic: require('../assets/fonts/NanumGothic.ttf'),
-      NanumPen: require('../assets/fonts/NanumPen.ttf')
-    })
-  ]);
+const ThemeProviderDecorator = (storyFn) => (
+  <ThemeProviderWrapper>{storyFn()}</ThemeProviderWrapper>
+);
 
 export const setupGlobalDecorators = () => {
-  // ※ the order is important, the decorators warp from bottom to top
-  // addDecorator(ThemeProviderDecorator);
-  // addDecorator(AppProviderDecorator);
-
-  _loadResourcesAsync();
+  //* the order is important, the decoratos wrap from bottom to top
+  addDecorator(ThemeProviderDecorator);
+  addDecorator(withKnobs);
 };

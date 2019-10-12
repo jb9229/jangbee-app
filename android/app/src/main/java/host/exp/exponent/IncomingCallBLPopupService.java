@@ -45,7 +45,7 @@ public class IncomingCallBLPopupService extends Service {
         //Display 사이즈의 90%
 
         int layoutType;
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             layoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             layoutType = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
@@ -135,7 +135,7 @@ public class IncomingCallBLPopupService extends Service {
     @OnClick(R.id.btn_close)
     public void removePopup() {
         if (rootView != null && windowManager != null) windowManager.removeView(rootView);
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             stopForeground(true);
         } else {
             stopSelf();

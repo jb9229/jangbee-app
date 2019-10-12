@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -18,31 +17,18 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.ButterKnife;
-import butterknife.BindView;
-import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Response;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.ResponseBody;
+import okhttp3.Response;
 
 public class PhoneStateService extends Service {
     NotificationManager blNotifyManager;
@@ -65,8 +51,6 @@ public class PhoneStateService extends Service {
                 } else {
                     preState = state;
                 }
-
-                Toast.makeText(context, "[장비 콜]RECEIVER Phone State: ", Toast.LENGTH_LONG).show();
 
                 if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)){
                     String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
@@ -151,18 +135,15 @@ public class PhoneStateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("PhoneStateService :", "\nOnCreate...");
 
         IntentFilter callFilter = new IntentFilter();
         callFilter.addAction("android.intent.action.PHONE_STATE");
         this.registerReceiver(blBroadcastReceiver, callFilter);
 
-        Log.d("PhoneStateService : ", "\nblBroadcastReceiver Create....");
-
         blNotifyManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         blBuilder = new NotificationCompat.Builder(this, null);
-        blBuilder.setContentTitle("[장비 콜]피해사례 확인중")
-                .setContentText("수신전화번호를 확인하여 피해사례 건이 있는지 알려 드립니다")
+        blBuilder.setContentTitle("수신 전화 피해사례 확인 중")
+                .setContentText("수신전화번호를 확인하여 피해사례가 있는지 알려 드립니다")
                 .setTicker("Checking New Numbers")
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -195,8 +176,6 @@ public class PhoneStateService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int staertId) {
         Log.d("PhoneStateService : ", "\nblBroadcastReceiver Listening....");
-
-        // return super.onStartCommnad(intent, flags, startId);
 
         return START_STICKY;
     }
