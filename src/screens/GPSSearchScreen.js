@@ -16,7 +16,7 @@ import Card from 'molecules/CardUI';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import * as api from 'api/api';
-import JBIcon from 'organisms/JangbeeAdList';
+import JBIcon from 'atoms/JBIcon';
 import { validatePresence } from 'utils/Validation';
 import FirmCreaErrMSG from 'organisms/JBErrorMessage';
 import JBActIndicator from 'molecules/JBActIndicator';

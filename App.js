@@ -13,6 +13,9 @@ import AppNavigator from 'navigation/AppNavigator';
 import JBActIndicator from 'molecules/JBActIndicator';
 import colors from 'constants/Colors';
 import firebaseconfig from './firebaseconfig';
+import { ThemeProvider } from 'styled-components/native';
+import { ThemeType } from 'src/types';
+import { createTheme } from 'src/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -102,22 +105,24 @@ class App extends React.Component {
 
     return (
       <LoginProvider>
-        <View style={styles.container}>
-          {Platform.OS === 'ios' ? (
-            <StatusBar barStyle="default" />
-          ) : (
-            <StatusBar
-              backgroundColor={colors.batangDark}
-              currentHeight={32}
-              barStyle="default"
-            />
-          )}
-          <AppNavigator />
-        </View>
+        <ThemeProvider theme={createTheme(ThemeType.LIGHT)}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' ? (
+              <StatusBar barStyle="default" />
+            ) : (
+              <StatusBar
+                backgroundColor={colors.batangDark}
+                currentHeight={32}
+                barStyle="default"
+              />
+            )}
+            <AppNavigator />
+          </View>
+        </ThemeProvider>
       </LoginProvider>
     );
   }
 }
 
-const loadingStorybook = true;
+const loadingStorybook = false;
 export default (loadingStorybook ? require('./storybook').default : App);

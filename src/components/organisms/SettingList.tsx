@@ -4,9 +4,7 @@ import SettingItems from 'molecules/SettingItems';
 import styled from 'styled-components/native';
 
 function Item({ item }): React.ReactElement {
-  return (
-    <SettingItems {...item}/>
-  );
+  return <SettingItems {...item} />;
 }
 
 function Header({ title }): React.ReactElement {
@@ -17,8 +15,7 @@ function Header({ title }): React.ReactElement {
   );
 }
 
-const Container = styled.View`
-`;
+const Container = styled.View``;
 
 const HeaderContainer = styled.View`
   background-color: ${({ theme }): string => theme.ColorBGGray};
@@ -29,17 +26,20 @@ const HeaderItems = styled.Text``;
 
 interface Props {
   data: [];
-  title: string;
 }
 export default function SettingList(props: Props): React.ReactElement {
   return (
     <Container>
-      <SectionList
-        sections={props.data}
-        keyExtractor={(item, index): string => item + index}
-        renderItem={({ item }): React.ReactElement => <Item item={item} />}
-        renderSectionHeader={({ section: { title } }): React.ReactElement => <Header title={title}/>}
-      />
+      {props.data && (
+        <SectionList
+          sections={props.data}
+          keyExtractor={(item, index): string => item + index}
+          renderItem={({ item }): React.ReactElement => <Item item={item} />}
+          renderSectionHeader={({ section: { title } }): React.ReactElement => (
+            <Header title={title} />
+          )}
+        />
+      )}
     </Container>
   );
 }

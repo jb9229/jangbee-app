@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { AirbnbRating } from 'react-native-elements';
 import * as api from 'api/api';
 import fonts from 'constants/Fonts';
-import JBIcon from 'organisms/JangbeeAdList';
+import JBIcon from 'atoms/JBIcon';
 import JBButton from 'molecules/JBButton';
 import JBTextInput from 'molecules/JBTextInput';
 import JBErrorMessage from 'organisms/JBErrorMessage';

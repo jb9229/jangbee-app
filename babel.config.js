@@ -20,6 +20,7 @@ module.exports = function(api) {
           ],
           root: ['./'],
           alias: {
+            src: './src',
             navigation: './src/navigation',
             contexts: './src/contexts',
             constants: './src/constants',

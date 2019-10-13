@@ -33,7 +33,14 @@ const DATA = [
   {
     title: 'Sides',
     data: [
-      { iconName: 'ios-cafe', switchOn: false, text: '이디야 커피' },
+      {
+        iconName: 'ios-cafe',
+        switchOn: false,
+        text: '이디야 커피',
+        switchAction: () => {
+          action('coffeSettingAction');
+        }
+      },
       { iconName: 'ios-call', switchOn: true, text: '전화사용' }
     ]
   }

@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 import { Rating } from 'react-native-elements';
-import JBIcon from 'organisms/JangbeeAdList';
+import JBIcon from 'atoms/JBIcon';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import callLink from 'common/CallLink';

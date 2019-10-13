@@ -4,23 +4,31 @@ import styled from 'styled-components/native';
 import JBButton from 'molecules/JBButton';
 import CloseButton from 'molecules/CloseButton';
 import CallDetection from 'native_modules/CallDetection';
+import SettingList from 'organisms/SettingList';
 
 const Container = styled.View`
   flex: 1;
-  align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
-  ${props => props.size === 'full'
-    && `
+  margin-top: 15%;
+  margin-bottom: 30%;
+  margin-left: 5%;
+  margin-right: 5%;
+  ${props =>
+    props.size === 'full' &&
+    `
     background-color: white;
   `}
 `;
 
 const ContentsView = styled.View`
+  flex: 1;
+  justify-content: space-around;
   background-color: white;
-  padding: 20px;
-  ${props => props.size === 'full'
-    && `
+  padding: 3%;
+  ${props =>
+    props.size === 'full' &&
+    `
   `}
 `;
 
@@ -51,14 +59,14 @@ export default class AlarmSettingModal extends React.Component {
     const { closeModal } = this.props;
 
     CallDetection.isRunningService(
-      (isRunning) => {
+      isRunning => {
         this.setState({ blCallScanSwitch: isRunning });
       },
-      (errorMsg) => {
+      errorMsg => {
         Alert.alert('수신전화 피해사례조회 권한 설정 필요', `${errorMsg}`);
 
         closeModal();
-      },
+      }
     );
   };
 
@@ -74,30 +82,32 @@ export default class AlarmSettingModal extends React.Component {
   /**
    * Switching Black List Imcomming Calling Scan
    */
-  switchBLCallScan = (value) => {
-    if (value) {
+  switchBLCallScan = () => {
+    const { blCallScanSwitch } = this.state;
+
+    if (!blCallScanSwitch) {
       CallDetection.start(
-        (startResult) => {
+        startResult => {
           this.setState({ blCallScanSwitch: startResult });
         },
-        (errorMsg) => {
+        errorMsg => {
           Alert.alert(
             '수신전화 피해사례조회 서비스 시작 실패',
-            `요청에 문제가 발생했습니다, 다시 시작해 주세요: ${errorMsg}`,
+            `요청에 문제가 발생했습니다, 다시 시작해 주세요: ${errorMsg}`
           );
-        },
+        }
       );
     } else {
       CallDetection.finish(
-        (stopResult) => {
+        stopResult => {
           this.setState({ blCallScanSwitch: stopResult });
         },
-        (errorMsg) => {
+        errorMsg => {
           Alert.alert(
             '수신전화 피해사례조회 서비스 종료 실패',
-            `요청에 문제가 발생했습니다, 다시 종료해 주세요: ${errorMsg}`,
+            `요청에 문제가 발생했습니다, 다시 종료해 주세요: ${errorMsg}`
           );
-        },
+        }
       );
     }
   };
@@ -113,15 +123,28 @@ export default class AlarmSettingModal extends React.Component {
         visible={isVisibleModal}
         onRequestClose={() => closeModal()}
       >
-        <Container>
+        <Container size="full">
           <ContentsView>
             <CloseButton onClose={() => closeModal()} />
-            <SettingWrap>
-              <SettingText>피해사례조회: </SettingText>
-              <BLScanSwitch onValueChange={this.switchBLCallScan} value={blCallScanSwitch} />
-            </SettingWrap>
-
-            <JBButton title="완료" onPress={() => this.completeAction()} />
+            <SettingList
+              data={[
+                {
+                  title: '알람설정',
+                  data: [
+                    {
+                      switchOn: blCallScanSwitch,
+                      text: '피해사례조회',
+                      switchAction: this.switchBLCallScan
+                    }
+                  ]
+                }
+              ]}
+            />
+            <JBButton
+              title="완료"
+              onPress={() => this.completeAction()}
+              align="right"
+            />
           </ContentsView>
         </Container>
       </Modal>

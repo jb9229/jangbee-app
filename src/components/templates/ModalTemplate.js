@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-native';
 import styled from 'styled-components/native';
-import JBIcon from 'organisms/JangbeeAdList';
+import JBIcon from 'atoms/JBIcon';
 import JBButton from 'molecules/JBButton';
 import CloseButton from 'molecules/CloseButton';
 import JBTextInput from 'molecules/JBTextInput';
