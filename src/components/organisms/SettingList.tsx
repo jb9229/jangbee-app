@@ -8,6 +8,9 @@ function Item({ item }): React.ReactElement {
 }
 
 function Header({ title }): React.ReactElement {
+  if (!title) {
+    return null;
+  }
   return (
     <HeaderContainer>
       <HeaderItems>{title}</HeaderItems>

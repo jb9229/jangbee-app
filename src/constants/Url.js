@@ -1,6 +1,7 @@
 // const SERVER_URL = 'http://10.1.0.121/api/v1/';
 // const SERVER_URL = 'http://192.168.0.4/api/v1/';
-const SERVER_URL = 'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+const SERVER_URL =
+  'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
 module.exports = {
@@ -47,7 +48,7 @@ module.exports = {
   OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
   OPENBANK_DEPOSIT: `${OPENBANK_URL}/v1.0/transfer/deposit`,
   TERM_SERVICE: 'https://jangbee-inpe21.firebaseapp.com/serviceTerms.html',
-  TERM_SECURITY: 'https://jangbee-inpe21.firebaseapp.com/privacy.html',
+  TERM_SECURITY: 'https://jangbee-inpe21.firebaseapp.com/privacy.html'
 };
 
 // 수신이 원활하지 않습니다.

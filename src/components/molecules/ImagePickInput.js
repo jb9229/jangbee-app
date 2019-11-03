@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
-import { ImagePicker } from 'expo';
+import * as ImagePicker from 'expo-image-picker';
 import styled from 'styled-components/native';
 import fonts from 'constants/Fonts';
 import colors from 'constants/Colors';
@@ -68,9 +68,12 @@ export default class ImagePickInput extends React.Component {
   pickImage = async () => {
     const { aspect, setImageUrl } = this.props;
     const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: aspect || undefined
     });
+
+    console.log(result);
 
     if (!result.cancelled) {
       setImageUrl(result.uri);

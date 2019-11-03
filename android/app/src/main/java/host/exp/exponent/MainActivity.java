@@ -12,7 +12,7 @@ import host.exp.exponent.experience.DetachActivity;
 import host.exp.exponent.generated.DetachBuildConstants;
 
 public class MainActivity extends DetachActivity {
-
+    Bundle mInitialProps = null;
   @Override
   public String publishedUrl() {
     return "exp://exp.host/@jb9229/jangbeecall_native";
@@ -41,6 +41,10 @@ public class MainActivity extends DetachActivity {
   @Override
   public Bundle initialProps(Bundle expBundle) {
     // Add extra initialProps here
+    Bundle extraBundle = getIntent().getExtras();
+    if(extraBundle != null && extraBundle.containsKey("BLACKLIST_LAUNCH")) {
+      expBundle.putString("BLACKLIST_LAUNCH", extraBundle.getString("BLACKLIST_LAUNCH"));
+    }
     return expBundle;
   }
 }

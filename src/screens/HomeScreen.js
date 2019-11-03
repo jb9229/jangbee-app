@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert, DeviceEventEmitter, Platform } from 'react-native';
 import { Notifications } from 'expo';
 import styled from 'styled-components/native';
 import moment from 'moment';
@@ -36,6 +36,8 @@ class HomeScreen extends React.Component {
     this.addNotificationListener();
     this.checkOBAccDiscDate();
     this.setUserFirmInfo();
+    this.runListener();
+    this.checkBLListLoading();
   }
 
   componentWillUnmount() {
@@ -219,6 +221,26 @@ class HomeScreen extends React.Component {
           ]
         );
       });
+  };
+
+  runListener = () => {
+    const { navigation } = this.props;
+
+    DeviceEventEmitter.addListener('blackListAppLauchEvent', function(
+      e: Event
+    ) {
+      // handle event and you will get a value in event object, you can log it here
+      const paramObj = e;
+      navigation.navigate('ClientEvalu', { search: e.telNumber });
+    });
+  };
+
+  checkBLListLoading = () => {
+    const { screenProps, navigation } = this.props;
+
+    if (screenProps && screenProps.blListNumber) {
+      navigation.navigate('ClientEvalu', { search: screenProps.blListNumber });
+    }
   };
 
   render() {

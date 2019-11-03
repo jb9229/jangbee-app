@@ -10,10 +10,7 @@ const Container = styled.View`
   flex: 1;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
-  margin-top: 15%;
-  margin-bottom: 30%;
-  margin-left: 5%;
-  margin-right: 5%;
+
   ${props =>
     props.size === 'full' &&
     `
@@ -22,10 +19,12 @@ const Container = styled.View`
 `;
 
 const ContentsView = styled.View`
-  flex: 1;
   justify-content: space-around;
   background-color: white;
-  padding: 3%;
+  height: 250;
+  margin-left: 8;
+  margin-right: 8;
+  border-radius: 12;
   ${props =>
     props.size === 'full' &&
     `
@@ -123,17 +122,17 @@ export default class AlarmSettingModal extends React.Component {
         visible={isVisibleModal}
         onRequestClose={() => closeModal()}
       >
-        <Container size="full">
+        <Container>
           <ContentsView>
             <CloseButton onClose={() => closeModal()} />
             <SettingList
               data={[
                 {
-                  title: '알람설정',
+                  title: null,
                   data: [
                     {
                       switchOn: blCallScanSwitch,
-                      text: '피해사례조회',
+                      text: '수신전화 피해사례알림(베타)',
                       switchAction: this.switchBLCallScan
                     }
                   ]

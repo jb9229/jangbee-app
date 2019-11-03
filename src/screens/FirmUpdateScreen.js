@@ -24,7 +24,6 @@ import * as imageManager from 'common/ImageManager';
 import { notifyError } from 'common/ErrorNotice';
 import Card from 'molecules/CardUI';
 import JBPicker from 'molecules/JBPicker';
-import { updateMyEquipment } from 'utils/AsyncStorageUtils';
 
 const styles = StyleSheet.create({
   container: {
@@ -202,7 +201,6 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     api
       .updateFirm(updateFirm)
       .then(() => {
-        updateMyEquipment(user.uid);
         navigation.navigate('FirmMyInfo', { refresh: 'update' });
       })
       .catch(error => {

@@ -303,6 +303,7 @@
     <orderEntry type="module" module-name="expo-constants" />
     <orderEntry type="module" module-name="unimodules-image-loader-interface" />
     <orderEntry type="module" module-name="expo-permissions" />
+    <orderEntry type="module" module-name="expo-image-picker" />
     <orderEntry type="module" module-name="expo-web-browser" />
     <orderEntry type="module" module-name="expo-ads-admob" />
     <orderEntry type="module" module-name="expo-file-system" />

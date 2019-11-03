@@ -3,6 +3,7 @@ package host.exp.exponent;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,18 +11,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -36,12 +44,12 @@ public class PhoneStateService extends Service {
     NotificationChannel notificationChannel;
     String NOTIFIVATION_CHANNEL_ID = "17";
 
+
     BroadcastReceiver blBroadcastReceiver = new BroadcastReceiver() {
         String preState;
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("RECEIVER : ", "IS UP Phone State...");
-
             try
             {
                 // Check Duplicate Receive
@@ -53,8 +61,8 @@ public class PhoneStateService extends Service {
                 }
 
                 if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)){
+//                    Toast.makeText(context, "[장비 콜]수신전화번호: "+incomingNumber, Toast.LENGTH_LONG).show();
                     String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                    Toast.makeText(context, "[장비 콜]수신전화번호: "+incomingNumber, Toast.LENGTH_LONG).show();
 
                     Callback httpCallBack = new Callback() {
                         //비동기 처리를 위해 Callback 구현
@@ -72,12 +80,9 @@ public class PhoneStateService extends Service {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            String blResult = "피해사례가 조회되지 않습니다.";
                             String result   = response.body().string();
-                            if (result != null && !result.isEmpty() ) { //&& Boolean.parseBoolean(result)
-                                if (Boolean.parseBoolean(result)) {
-                                    blResult = PhoneNumberUtils.formatNumber(incomingNumber);
-                                }
+                            if (result != null && !result.isEmpty() && Boolean.parseBoolean(result)) {
+                                String blResult = PhoneNumberUtils.formatNumber(incomingNumber);
 
                                 Intent serviceIntent = new Intent(context, IncomingCallBLPopupService.class);
                                 serviceIntent.putExtra(IncomingCallBLPopupService.INCOMINGCALL_NUMBER_EXTRA, blResult);
@@ -90,8 +95,8 @@ public class PhoneStateService extends Service {
                         }
                     };
 
-                    Map paramData = new HashMap();
-                    if(incomingNumber == null || incomingNumber.trim().isEmpty()) {paramData.put("telNumber", "0101112222");} else {paramData.put("telNumber", incomingNumber);}
+                    Map paramData = new HashMap(); //
+                    if(incomingNumber == null || incomingNumber.trim().isEmpty()) {Toast.makeText(context, "["+incomingNumber+"]"+"유효하지 않은 번호입니다.", Toast.LENGTH_LONG).show(); return ;} else {paramData.put("telNumber", incomingNumber);}
 
                     String[] pathParamArr = {"api", "v1", "client", "evaluation", "exist", "telnumber"};
                     getHttpAsync("http", "jangbeecall.ap-northeast-2.elasticbeanstalk.com", pathParamArr, paramData, httpCallBack);
@@ -104,7 +109,11 @@ public class PhoneStateService extends Service {
 
         void getHttpAsync(String scheme, String host, String[] pathSegment, Map<String, String> parameterData, Callback callback) {
             try {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 HttpUrl.Builder builder = new HttpUrl.Builder();
                 builder.scheme(scheme);
                 builder.host(host);
@@ -140,10 +149,13 @@ public class PhoneStateService extends Service {
         callFilter.addAction("android.intent.action.PHONE_STATE");
         this.registerReceiver(blBroadcastReceiver, callFilter);
 
+        Intent startAppIntent = new Intent(this, MainActivity.class);
+        PendingIntent startAppPendingIntent = PendingIntent.getActivity(this, 1, startAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         blNotifyManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         blBuilder = new NotificationCompat.Builder(this, null);
         blBuilder.setContentTitle("수신 전화 피해사례 확인 중")
                 .setContentText("수신전화번호를 확인하여 피해사례가 있는지 알려 드립니다")
+                .setContentIntent(startAppPendingIntent)
                 .setTicker("Checking New Numbers")
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -153,7 +165,7 @@ public class PhoneStateService extends Service {
                 .setAutoCancel(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = new NotificationChannel(NOTIFIVATION_CHANNEL_ID, "Black List Notifications", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel = new NotificationChannel(NOTIFIVATION_CHANNEL_ID, "Black List Notifications", NotificationManager.IMPORTANCE_HIGH); // IMPORTANCE_NONE
 
             // Configure the notification channel.
             notificationChannel.setDescription("Channel description");
@@ -196,4 +208,5 @@ public class PhoneStateService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
 }

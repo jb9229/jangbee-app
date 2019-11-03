@@ -115,10 +115,29 @@ class ClientEvaluScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.setClinetEvaluList();
+    const { params } = this.props.navigation.state;
+
+    if (params && params.search) {
+      this.setState({ searchArea: 'TEL', searchWord: params.search }, () => {
+        this.searchFilterCliEvalu();
+      });
+    } else {
+      this.setClinetEvaluList();
+    }
   }
 
-  componentWillReceiveProps(nextProps) {}
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.navigation) {
+      return;
+    }
+    const { params } = nextProps.navigation.state;
+
+    if (params && params.search) {
+      this.setState({ searchArea: 'TEL', searchWord: params.search }, () => {
+        this.searchFilterCliEvalu();
+      });
+    }
+  }
 
   deleteCliEvalu = id => {
     api

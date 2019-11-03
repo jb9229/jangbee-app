@@ -10,12 +10,13 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 
 import javax.annotation.Nonnull;
@@ -31,7 +32,7 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
     static int PHONE_STATE_REQCODE = 3;
     static int REQ_CODE_OVERLAY_PERMISSION = 2;
 
-    ReactApplicationContext reactContext;
+    private static ReactApplicationContext reactContext;
     IncomingCallBroadcastReceiver callScanRecevier;
     public CallDetectionModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -42,6 +43,12 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "CallDetection";
+    }
+
+    public static void sendEvent(String event, WritableNativeMap params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(event, params);
     }
 
     @ReactMethod
@@ -55,7 +62,6 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
             if(checkPhonestatePermission()) {
                 // Check BlackList Scan Setting Value
                 boolean isScanBlackList = ReactAsyncStorageUtils.retrieveBoolean(reactContext, ReactAsyncStorageUtils.ISSCANBALCKLIST_SPKEY);
-                Toast.makeText(getReactApplicationContext(), "Call Detection Flag:"+isScanBlackList, Toast.LENGTH_LONG).show();
 
                 boolean isRunningService = ServiceUtils.isLaunchingService(reactContext, PhoneStateService.class);
                 if(isRunningService && isScanBlackList) {
@@ -73,8 +79,6 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void start(Callback successCallback, Callback errorCallback) {
-        Toast.makeText(getReactApplicationContext(), "Start Call Detection", Toast.LENGTH_LONG).show();
-
         try{
             if(checkPhonestatePermission()) {
                 Intent serviceIntent = new Intent(reactContext, PhoneStateService.class);
@@ -105,8 +109,6 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void finish(Callback successCallback, Callback errorCallback) {
-        Toast.makeText(getReactApplicationContext(), "Finish Call Detection", Toast.LENGTH_LONG).show();
-
         try{
             Intent serviceIntent = new Intent(reactContext, PhoneStateService.class);
 

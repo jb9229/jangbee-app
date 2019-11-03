@@ -43,6 +43,7 @@ export default class RootNavigator extends React.Component {
   };
 
   render() {
+    const { blListNumber } = this.props;
     const { authPath, authData } = this.state;
 
     if (authPath === AUTHPATH_AUTHING) {
@@ -70,6 +71,6 @@ export default class RootNavigator extends React.Component {
       );
     }
 
-    return <AppContainer />;
+    return <AppContainer screenProps={{ blListNumber: blListNumber }} />;
   }
 }

@@ -1,12 +1,18 @@
 package host.exp.exponent;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,12 +23,38 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import host.exp.exponent.call_detection.CallDetectionModule;
+import host.exp.exponent.utils.AppStatusHelper;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class IncomingCallBLPopupService extends Service {
     // Variables
     public static final String INCOMINGCALL_NUMBER_EXTRA = "INCOMING_CALL_NUMBER";
 
+    Context context;
     WindowManager windowManager;
     WindowManager.LayoutParams wmParams;
     View rootView;
@@ -39,10 +71,8 @@ public class IncomingCallBLPopupService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = (Context)this;
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        int width = (int) (display.getWidth() * 0.9);
-        //Display 사이즈의 90%
 
         int layoutType;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -52,7 +82,7 @@ public class IncomingCallBLPopupService extends Service {
         }
 
         wmParams = new WindowManager.LayoutParams(
-                width,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 layoutType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
@@ -72,8 +102,23 @@ public class IncomingCallBLPopupService extends Service {
                     if (rootView != null && windowManager != null) windowManager.removeView(rootView);
 
                     Intent appStartIntent = new Intent(getApplicationContext(), MainActivity.class);
-
+                    appStartIntent.putExtra("BLACKLIST_LAUNCH", incomingCallNumber);
                     startActivity(appStartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    if (AppStatusHelper.isAppRunning(getApplicationContext(), "com.kan.jangbeecall")) {
+                        // App is running
+                        Toast.makeText(context, "App is running", Toast.LENGTH_LONG).show();
+                        try {
+                            WritableNativeMap map = new WritableNativeMap();
+                            map.putString("telNumber", incomingCallNumber);
+                            CallDetectionModule.sendEvent("blackListAppLauchEvent", map);
+
+                        } catch (Exception e){
+                            System.out.println("Caught Exception: " + e.getMessage());
+                        }
+                    } else {
+                        // App is not running
+                        Toast.makeText(context, "App is not running", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,7 +133,9 @@ public class IncomingCallBLPopupService extends Service {
         windowManager.addView(rootView, wmParams);
         setExtra(intent);
 
-        incoCallNumberTextView.setText(incomingCallNumber);
+        String phoneNumber = PhoneNumberUtils.formatNumber(incomingCallNumber);
+        String blNotice = "["+phoneNumber+"] 번호가\n장비 콜 피해사례에 있습니다,\n주의 및 참고해 주세요.";
+        incoCallNumberTextView.setText(blNotice);
 
         return Service.START_NOT_STICKY;
     }

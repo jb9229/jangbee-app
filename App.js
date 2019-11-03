@@ -86,7 +86,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { skipLoadingScreen } = this.props;
+    const { skipLoadingScreen, BLACKLIST_LAUNCH } = this.props;
     const { isLoadingComplete, isAppUpdateComplete } = this.state;
 
     if (!isLoadingComplete && !skipLoadingScreen) {
@@ -116,7 +116,7 @@ class App extends React.Component {
                 barStyle="default"
               />
             )}
-            <AppNavigator />
+            <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
           </View>
         </ThemeProvider>
       </LoginProvider>
