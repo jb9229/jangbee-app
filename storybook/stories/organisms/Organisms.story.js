@@ -1,9 +1,9 @@
 import * as React from 'react';
 
+import { Alert, SafeAreaView } from 'react-native';
 import { boolean, text } from '@storybook/addon-knobs';
 
 import CountBoard from 'organisms/CountBoard';
-import { SafeAreaView } from 'react-native';
 import SettingList from 'organisms/SettingList';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react-native';
@@ -15,7 +15,7 @@ storiesOf('Organisms Components', module)
   .add('Setting List', () => (
     <SettingList data={DATA} title={text('title', 'xxx 리스트')} />
   ))
-  .add('Setting List', () => (
+  .add('CountBoard', () => (
     <CountBoard
       data={CntBoardData}
       onClick={i => {

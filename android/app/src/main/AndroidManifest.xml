@@ -364,6 +364,10 @@
       android:theme="@style/Base.Theme.AppCompat">
     </activity>
 
+      <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+      <meta-data
+          android:name="com.google.android.gms.ads.APPLICATION_ID"
+          android:value="ca-app-pub-9415708670922576~1783614870"/>
 
     <!-- ADD FABRIC CONFIG HERE -->
     <!-- BEGIN FABRIC CONFIG -->
