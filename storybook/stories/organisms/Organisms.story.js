@@ -1,14 +1,18 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { Alert, SafeAreaView } from 'react-native';
-import { boolean, text } from '@storybook/addon-knobs';
+import { Alert, SafeAreaView, View } from 'react-native'
+import { boolean, text } from '@storybook/addon-knobs'
 
-import CountBoard from 'organisms/CountBoard';
-import SettingList from 'organisms/SettingList';
-import { action } from '@storybook/addon-actions';
-import { storiesOf } from '@storybook/react-native';
+import CountBoard from 'organisms/CountBoard'
+import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader'
+import SettingList from 'organisms/SettingList'
+import { storiesOf } from '@storybook/react-native'
 
-const SafeZonDecorator = storyFn => <SafeAreaView>{storyFn()}</SafeAreaView>;
+const SafeZonDecorator = storyFn => (
+  <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    {storyFn()}
+  </SafeAreaView>
+)
 
 storiesOf('Organisms Components', module)
   .addDecorator(SafeZonDecorator)
@@ -16,13 +20,16 @@ storiesOf('Organisms Components', module)
     <SettingList data={DATA} title={text('title', 'xxx 리스트')} />
   ))
   .add('CountBoard', () => (
-    <CountBoard
-      data={CntBoardData}
-      onClick={i => {
-        Alert.alert(`action: click${i}`);
-      }}
-    />
-  ));
+    <View style={{ width: '90%', aspectRatio: 6 }}>
+      <CountBoard
+        data={CntBoardData}
+        onClick={i => {
+          Alert.alert(`action: click${i}`)
+        }}
+      />
+    </View>
+  ))
+  .add('FirmHarmCaseHeader', () => <FirmHarmCaseHeader />)
 
 const DATA = [
   {
@@ -49,13 +56,13 @@ const DATA = [
         switchOn: false,
         text: '이디야 커피',
         switchAction: () => {
-          action('coffeSettingAction');
+          action('coffeSettingAction')
         }
       },
       { iconName: 'ios-call', switchOn: true, text: '전화사용' }
     ]
   }
-];
+]
 
 const CntBoardData = [
   {
@@ -66,4 +73,4 @@ const CntBoardData = [
     title: '내글',
     count: 123
   }
-];
+]

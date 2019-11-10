@@ -1,91 +1,22 @@
-import React from 'react';
-import { FlatList, Picker, StyleSheet, Text, View } from 'react-native';
-import styled from 'styled-components/native';
-import moment from 'moment';
-import { SearchBar } from 'react-native-elements';
-import { notifyError } from 'common/ErrorNotice';
-import { shareNotExistCEvalu } from 'common/JBCallShare';
-import JBButton from 'molecules/JBButton';
-import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
-import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
-import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
-import CliEvaluItem from 'organisms/CliEvaluItem';
-import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
-import JangbeeAdList from 'organisms/JangbeeAdList';
-import { withLogin } from 'contexts/LoginProvider';
 import * as api from 'api/api';
+
+import { FlatList, Picker, StyleSheet, Text, View } from 'react-native';
+
+import CliEvaluItem from 'organisms/CliEvaluItem';
+import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
+import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
+import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
+import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
+import JBButton from 'molecules/JBButton';
+import JangbeeAdList from 'organisms/JangbeeAdList';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-
-const styles = StyleSheet.create({
-  Container: {
-    flex: 1,
-    backgroundColor: colors.batangLight
-  },
-  searchHeaderWrap: {
-    marginTop: 10,
-    marginLeft: 3,
-    marginRight: 3,
-    padding: 3,
-    backgroundColor: colors.batangDark,
-    elevation: 14,
-    borderRadius: 10,
-    borderWidth: 1
-  },
-  searchHeaderTopWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  searchPicker: {
-    width: 167,
-    color: colors.point,
-    backgroundColor: 'transparent',
-    margin: 0,
-    padding: 0
-  },
-  pickerArrowWrap: {
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 15,
-    left: 117
-  },
-  pickerArrow: {
-    color: colors.pointDark
-  },
-  commWrap: {
-    flexDirection: 'row',
-    marginRight: 3
-  },
-  containerSearchBar: {
-    backgroundColor: colors.batangDark,
-    borderTopColor: colors.batangDark,
-    borderBottomColor: colors.batangDark,
-    paddingTop: 5,
-    paddingBottom: 5
-  },
-  inputSearchBar: {
-    fontSize: 16,
-    paddingLeft: 3
-  },
-  searchNoticeWrap: {
-    padding: 5,
-    paddingBottom: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  searchNoticeText: {
-    color: colors.pointDark,
-    fontFamily: fonts.batang,
-    justifyContent: 'center',
-    fontSize: 13
-  }
-});
-
-const NotExitButWrap = styled.View`
-  flex: 1;
-  justify-content: center;
-  border-width: 1;
-`;
+import moment from 'moment';
+import { notifyError } from 'common/ErrorNotice';
+import { shareNotExistCEvalu } from 'common/JBCallShare';
+import styled from 'styled-components/native';
+import { withLogin } from 'contexts/LoginProvider';
 
 class ClientEvaluScreen extends React.Component {
   static navigationOptions = {
@@ -95,7 +26,7 @@ class ClientEvaluScreen extends React.Component {
     }
   };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isVisibleCreateModal: false,
@@ -114,7 +45,7 @@ class ClientEvaluScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { params } = this.props.navigation.state;
 
     if (params && params.search) {
@@ -126,7 +57,7 @@ class ClientEvaluScreen extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (!nextProps.navigation) {
       return;
     }
@@ -146,9 +77,7 @@ class ClientEvaluScreen extends React.Component {
       .catch(error =>
         notifyError(
           '피해사례 삭제 문제',
-          `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${
-            error.messages
-          })`
+          `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`
         )
       );
   };
@@ -216,9 +145,7 @@ class ClientEvaluScreen extends React.Component {
       .catch(error =>
         notifyError(
           '공감/비공감 취소 문제',
-          `피해사례 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${
-            error.messages
-          })`
+          `피해사례 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`
         )
       );
   };
@@ -273,9 +200,7 @@ class ClientEvaluScreen extends React.Component {
       .catch(ex => {
         notifyError(
           '내가 등록한 피해사례 요청 문제',
-          `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${
-            ex.message
-          }`
+          `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
         );
 
         this.setState({ notExistCEvalu: false });
@@ -331,9 +256,7 @@ class ClientEvaluScreen extends React.Component {
       .catch(ex => {
         notifyError(
           '최근 피해사례 요청 문제',
-          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${
-            ex.message
-          }`
+          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
         );
 
         this.setState({ notExistCEvalu: false });
@@ -410,36 +333,6 @@ class ClientEvaluScreen extends React.Component {
     });
   };
 
-  onSearchAreaChange = itemValue => {
-    if (itemValue === 'TEL') {
-      this.setState({
-        searchArea: itemValue,
-        searchPlaceholder: '전화번호 입력(- 없이)'
-      });
-      return;
-    }
-    if (itemValue === 'FIRM_NUMBER') {
-      this.setState({
-        searchArea: itemValue,
-        searchPlaceholder: '사업자번호 입력(- 포함)'
-      });
-      return;
-    }
-    if (itemValue === 'FIRM_NAME') {
-      this.setState({
-        searchArea: itemValue,
-        searchPlaceholder: '업체명 입력'
-      });
-      return;
-    }
-    if (itemValue === 'CLI_NAME') {
-      this.setState({
-        searchArea: itemValue,
-        searchPlaceholder: '고객명 입력'
-      });
-    }
-  };
-
   /**
    * 장비업체리스트 페이징 추가 함수
    */
@@ -510,7 +403,7 @@ class ClientEvaluScreen extends React.Component {
     );
   };
 
-  render() {
+  render () {
     const {
       searchWord,
       searchedWord,
@@ -534,124 +427,8 @@ class ClientEvaluScreen extends React.Component {
     const { user } = this.props;
 
     return (
-      <View style={styles.Container}>
-        <View style={styles.searchHeaderWrap}>
-          <View style={styles.searchHeaderTopWrap}>
-            <Picker
-              selectedValue={searchArea}
-              style={styles.searchPicker}
-              onValueChange={this.onSearchAreaChange}
-            >
-              <Picker.Item label="전화번호 검색" value="TEL" />
-              <Picker.Item label="사업자번호 검색" value="FIRM_NUMBER" />
-              <Picker.Item label="업체명 검색" value="FIRM_NAME" />
-              <Picker.Item label="고객명 검색" value="CLI_NAME" />
-            </Picker>
-            <View style={styles.pickerArrowWrap}>
-              <Text style={styles.pickerArrow}>&#9660;</Text>
-            </View>
-            <View style={styles.commWrap}>
-              <JBButton
-                title="내 사례"
-                onPress={() => this.setMyClinetEvaluList()}
-                size="small"
-                align="right"
-                bgColor={colors.batangDark}
-                color={colors.pointDark}
-              />
-              <JBButton
-                title="최근"
-                onPress={() => this.onClickNewestEvaluList()}
-                size="small"
-                align="right"
-                bgColor={colors.batangDark}
-                color={colors.pointDark}
-              />
-              <JBButton
-                title="추가"
-                onPress={() => this.setState({ isVisibleCreateModal: true })}
-                size="small"
-                align="right"
-                bgColor={colors.batangDark}
-                color={colors.pointDark}
-              />
-            </View>
-          </View>
-          <SearchBar
-            value={searchWord}
-            placeholder={searchPlaceholder}
-            containerStyle={styles.containerSearchBar}
-            inputStyle={styles.inputSearchBar}
-            lightTheme
-            round
-            onChangeText={text => this.setState({ searchWord: text })}
-            searchIcon={{ onPress: () => this.searchFilterCliEvalu() }}
-            onSubmitEditing={() => this.searchFilterCliEvalu()}
-            autoCorrect={false}
-          />
-          <View style={styles.searchNoticeWrap}>
-            <Text style={styles.searchNoticeText}>{searchNotice}</Text>
-          </View>
-        </View>
-
-        {notExistCEvalu ? (
-          <NotExitButWrap>
-            <JBButton
-              title={`'${searchedWord}' 피해사례 없음 공유`}
-              onPress={() =>
-                shareNotExistCEvalu(searchArea, searchWord, searchTime)
-              }
-              align="center"
-              Secondary
-            />
-          </NotExitButWrap>
-        ) : (
-          <FlatList
-            data={cliEvaluList}
-            renderItem={this.renderCliEvaluItem}
-            keyExtractor={(item, index) => index.toString()}
-            last={isLastList}
-            onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={2}
-          />
-        )}
-        <JangbeeAdList
-          admob
-          admobUnitID="ca-app-pub-9415708670922576/2793380882"
-          admonSize="fullBanner"
-          admonHeight="60"
-        />
-        <ClientEvaluCreateModal
-          isVisibleModal={isVisibleCreateModal}
-          accountId={user.uid}
-          closeModal={() => this.setState({ isVisibleCreateModal: false })}
-          completeAction={() => this.setClinetEvaluList()}
-          size="full"
-        />
-        <ClientEvaluUpdateModal
-          updateEvalu={updateEvalu}
-          isVisibleModal={isVisibleUpdateModal}
-          closeModal={() => this.setState({ isVisibleUpdateModal: false })}
-          completeAction={() => this.setClinetEvaluList()}
-        />
-        <ClientEvaluDetailModal
-          isVisibleModal={isVisibleDetailModal}
-          detailEvalu={detailEvalu}
-          closeModal={() => this.setState({ isVisibleDetailModal: false })}
-          completeAction={() => {}}
-          size="full"
-          searchTime={searchTime}
-        />
-        <ClientEvaluLikeModal
-          isVisibleModal={isVisibleEvaluLikeModal}
-          accountId={user.uid}
-          evaluation={evaluLikeSelected}
-          evaluLikeList={evaluLikeList}
-          createClientEvaluLike={this.createClientEvaluLike}
-          cancelClientEvaluLike={this.cancelClientEvaluLike}
-          closeModal={refresh => this.closeEvaluLikeModal(refresh)}
-          isMine={isMineEvaluation}
-        />
+      <View>
+        <Text>To be deleted</Text>
       </View>
     );
   }

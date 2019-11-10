@@ -1,13 +1,29 @@
 {
+  "extends": [
+    "standard",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
-  "extends": ["standard", "plugin:react/recommended"],
   "plugins": ["@typescript-eslint"],
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
   "env": {
     "browser": true,
     "jest": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  },
   "rules": {
     "max-len": ["error", { "code": 100 }],
+    "semi": [2, "always"],
     "sort-imports": [
       2,
       {
@@ -15,6 +31,7 @@
         "ignoreMemberSort": false,
         "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
       }
-    ]
+    ],
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }]
   }
 }

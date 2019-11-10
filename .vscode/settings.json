@@ -1,5 +1,6 @@
 {
   "prettier.singleQuote": true,
+  "eslint.autoFixOnSave": true,
   // "react-native-storybooks.host": "192.168.43.135",
   // "react-native-storybooks.port": 7007
   // react-native-storybooks.storyRegex: string (default: "**/*.story.*")
