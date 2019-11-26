@@ -1,5 +1,6 @@
-import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 
@@ -27,7 +28,7 @@ export default class JBActIndicator extends React.PureComponent {
     }
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>{title || '정보 불러오는중..'}</Text>
+        <Text style={styles.message}>{title || '정보를 불러오는 중..'}</Text>
         <ActivityIndicator size={sizeValue} color={colors.indicator} />
       </View>
     );

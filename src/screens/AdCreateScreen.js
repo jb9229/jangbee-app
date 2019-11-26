@@ -1,74 +1,76 @@
-import React from 'react';
+import * as api from 'api/api';
+import * as firebaseDB from 'utils/FirebaseUtils';
+import * as imageManager from 'common/ImageManager';
+
 import {
   Alert,
   FlatList,
   KeyboardAvoidingView,
-  StyleSheet,
-  ScrollView,
   Picker,
+  ScrollView,
+  StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
-import pkg from '../../app.json';
-import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
-import JBTextInput from 'molecules/JBTextInput';
-import JBButton from 'molecules/JBButton';
-import ImagePickInput from 'molecules/ImagePickInput';
-import JBErrorMessage from 'organisms/JBErrorMessage';
-import EquipementModal from 'templates/EquipmentModal';
-import MapAddWebModal from 'templates/MapAddWebModal';
-import ListSeparator from 'molecules/ListSeparator';
-import OBAccount from 'molecules/OBAccount';
-import Card from 'molecules/CardUI';
-import * as api from 'api/api';
-import { withLogin } from 'contexts/LoginProvider';
-import { notifyError } from 'common/ErrorNotice';
-import * as firebaseDB from 'utils/FirebaseUtils';
 import { validate, validatePresence } from 'utils/Validation';
-import colors from 'constants/Colors';
-import fonts from 'constants/Fonts';
+
+import Card from 'molecules/CardUI';
+import EquipementModal from 'templates/EquipmentModal';
+import ImagePickInput from 'molecules/ImagePickInput';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBActIndicatorModal from 'templates/JBActIndicatorModal';
-import * as imageManager from 'common/ImageManager';
+import JBButton from 'molecules/JBButton';
+import JBErrorMessage from 'organisms/JBErrorMessage';
+import JBTextInput from 'molecules/JBTextInput';
+import ListSeparator from 'molecules/ListSeparator';
+import MapAddWebModal from 'templates/MapAddWebModal';
+import OBAccount from 'molecules/OBAccount';
+import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
+import React from 'react';
+import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
+import { notifyError } from 'common/ErrorNotice';
+import pkg from '../../app.json';
+import { withLogin } from 'contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   warningWrap: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   formWrap: {},
   adTypeFormWrap: {
     flex: 1,
     margin: 10,
-    marginBottom: 3,
+    marginBottom: 3
   },
   adTypeTitle: {
     fontFamily: fonts.titleMiddle,
     color: colors.title,
     fontSize: 15,
-    marginBottom: 3,
+    marginBottom: 3
   },
   adTypePicker: {},
   bookedAdTypeText: {
-    textDecorationLine: 'line-through',
+    textDecorationLine: 'line-through'
   },
   AdTypeText: {},
   accListItemTH: {},
   accItemSelTH: {
     backgroundColor: colors.point,
-    color: 'white',
+    color: 'white'
   },
   botCommWrap: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   warningText: {
     fontFamily: fonts.batang,
-    color: colors.point,
-  },
+    color: colors.point
+  }
 });
 
 const ADTYPE_MAIN_FIRST = 1;
@@ -85,7 +87,7 @@ const ADTYPE_SEARCH_SECONDE = 32;
 const ADTYPE_SEARCH_THIRD = 33;
 
 class AdCreateScreen extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isAccEmpty: undefined,
@@ -112,18 +114,18 @@ class AdCreateScreen extends React.Component {
       selFinUseNumValErrMessage: '',
       adEquipmentValErrMessage: '',
       adLocalValErrMessage: '',
-      imgUploadingMessage: '',
+      imgUploadingMessage: ''
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { navigation } = this.props;
 
-    Alert.alert('무료광고 등록', '2019. 7월 중순까지 무료로 사용해 보세요. 2019. 7월 중순 이후 고객의 동의하에(전화통화로 동의를 구함) 신규신청 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다', [{ text: '취소', onPress: () => navigation.navigate('Ad') }, { text: '등록하기', onPress: () => this.init() }], { cancelable: false });
+    Alert.alert('무료광고 등록', '2019. 12월 중순까지 무료로 사용해 보세요. 2019. 12월 중순 이후 고객의 동의하에(전화통화로 동의를 구함) 신규신청 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다', [{ text: '취소', onPress: () => navigation.navigate('Ad') }, { text: '등록하기', onPress: () => this.init() }], { cancelable: false });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.navigation) {return;}
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.navigation) { return; }
     const { params } = nextProps.navigation.state;
 
     if (params !== undefined && params.action === 'RELOAD') {
@@ -200,7 +202,7 @@ class AdCreateScreen extends React.Component {
               '계좌리스트 요청 문제',
               `계좌리스트를 불러오는데 문제가 있습니다(${accInfo.rsp_code}, ${
                 accInfo.rsp_message
-              }), 메일로 문의 또는 다시 결제계좌를 추가해 주세요.`,
+              }), 메일로 문의 또는 다시 결제계좌를 추가해 주세요.`
             );
 
             this.setState({ isAccEmpty: true });
@@ -209,6 +211,16 @@ class AdCreateScreen extends React.Component {
 
           if (accInfo.res_cnt !== '0') {
             const resAccList = accInfo.res_list;
+
+            // Vaidation
+            if (!resAccList) {
+              this.setState({ isEmptyList: true });
+              notifyError(
+                '등록 계좌 조회 실패',
+                `등록뢴 계좌를 찾을 수 없습니다. -> [${resAccList}]`
+              );
+              return;
+            }
 
             const accountList = [];
             resAccList.forEach((element, index) => {
@@ -230,7 +242,7 @@ class AdCreateScreen extends React.Component {
         .catch((error) => {
           Alert.alert(
             '네트워크 문제가 있습니다, 다시 시도해 주세요.',
-            `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`,
+            `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`
           );
 
           this.setState({ isAccEmpty: true });
@@ -256,7 +268,7 @@ class AdCreateScreen extends React.Component {
       .catch((error) => {
         notifyError(
           '잔액조회 실패',
-          `네트워크 환경 확인 후 다시 시도해 주세요(${error.name}, ${error.message})`,
+          `네트워크 환경 확인 후 다시 시도해 주세요(${error.name}, ${error.message})`
         );
         return newAccount;
       });
@@ -274,7 +286,7 @@ class AdCreateScreen extends React.Component {
       forMonthsValErrMessage: '',
       selFinUseNumValErrMessage: '',
       adEquipmentValErrMessage: '',
-      adLocalValErrMessage: '',
+      adLocalValErrMessage: ''
     });
   };
 
@@ -294,7 +306,7 @@ class AdCreateScreen extends React.Component {
             '업체 정보가 없습니다.',
             '업체 등록하기를 먼저 진행해 주세요.',
             [{ text: '업체정보 등록하기', onPress: () => navigation.navigate('FirmMyInfo') }],
-            { cancelable: false },
+            { cancelable: false }
           );
         }
       })
@@ -303,7 +315,7 @@ class AdCreateScreen extends React.Component {
           '업체정보 요청에 문제가 있습니다',
           `업체정보 등록을 먼저 해주세요, 또는 다시 시도해 주세요 -> [${error.name}] ${
             error.message
-          }`,
+          }`
         );
       });
   };
@@ -316,7 +328,7 @@ class AdCreateScreen extends React.Component {
       adTelNumber: firm.phoneNumber,
       adEquipment: firm.equiListStr,
       adSido: firm.sidoAddr,
-      adGungu: firm.sigunguAddr,
+      adGungu: firm.sigunguAddr
     });
   };
 
@@ -352,7 +364,7 @@ class AdCreateScreen extends React.Component {
       adTelNumber,
       adSido,
       adGungu,
-      selFinUseNum,
+      selFinUseNum
     } = this.state;
     const { navigation, user, userProfile } = this.props;
 
@@ -389,7 +401,7 @@ class AdCreateScreen extends React.Component {
       sidoTarget: adSidoTypeData,
       gugunTarget: adGunguTypeData,
       price: this.getAdPrice(adType),
-      obAccessToken: userProfile.obAccessToken,
+      obAccessToken: userProfile.obAccessToken
     };
 
     api
@@ -405,7 +417,7 @@ class AdCreateScreen extends React.Component {
    */
   validateCreaAd = () => {
     const {
-      adType, adEquipment, adSido, adGungu,
+      adType, adEquipment, adSido, adGungu
     } = this.state;
 
     // Check Validation Create Ad Form Item
@@ -429,7 +441,7 @@ class AdCreateScreen extends React.Component {
               '장비 타켓광고 중복검사 실패',
               `죄송합니다, 해당 ${adSido} ${adGungu}는 [${
                 dupliResult.endDate
-              }]까지 계약된 광고가 존재 합니다.`,
+              }]까지 계약된 광고가 존재 합니다.`
             );
           }
         })
@@ -450,7 +462,7 @@ class AdCreateScreen extends React.Component {
           } else {
             notifyError(
               '지역 타켓광고 중복 확인 실패',
-              `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`,
+              `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`
             );
           }
         })
@@ -475,7 +487,7 @@ class AdCreateScreen extends React.Component {
       forMonths,
       adPhotoUrl,
       adTelNumber,
-      selFinUseNum,
+      selFinUseNum
     } = this.state;
     const { user, userProfile } = this.props;
 
@@ -576,7 +588,6 @@ class AdCreateScreen extends React.Component {
     return true;
   };
 
-
   /**
    * 광고비 결제 요청함수(오픈뱅크 심사용)
    */
@@ -596,7 +607,7 @@ class AdCreateScreen extends React.Component {
           '광고비 출금 문제',
           `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${res.rsp_code}, ${
             res.rsp_message
-          })`,
+          })`
         );
       })
       .catch((error) => {
@@ -604,7 +615,7 @@ class AdCreateScreen extends React.Component {
           '광고비 출금 문제',
           `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${error.name}, ${
             error.message
-          })`,
+          })`
         );
       });
   };
@@ -621,7 +632,7 @@ class AdCreateScreen extends React.Component {
     return <Picker.Item label={typeDescription} value={type} />;
   };
 
-  render() {
+  render () {
     const { navigation, user } = this.props;
     const {
       isAccEmpty,
@@ -649,7 +660,7 @@ class AdCreateScreen extends React.Component {
       selFinUseNumValErrMessage,
       adEquipmentValErrMessage,
       adLocalValErrMessage,
-      imgUploadingMessage,
+      imgUploadingMessage
     } = this.state;
 
     if (isAccEmpty === undefined) {

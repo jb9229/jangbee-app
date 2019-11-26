@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import { boolean, text } from '@storybook/addon-knobs';
 
-import FirmHarmCase from '../../../src/components/templates/FirmHarmCaseLayout';
+import FirmHarmCaseLayout from '../../../src/components/templates/FirmHarmCaseLayout';
 import { storiesOf } from '@storybook/react-native';
 
 const SafeZonDecorator = storyFn => (
@@ -15,12 +15,17 @@ const SafeZonDecorator = storyFn => (
 storiesOf('Layout Components', module)
   .addDecorator(SafeZonDecorator)
   .add('FirmHarmCase Layout', () => (
-    <FirmHarmCase
+    <FirmHarmCaseLayout
       isLoading={boolean('isLoading', false)}
       counter={CntBoardData}
+      list={[]}
       onClick={i => {
         Alert.alert(`action: click${i}`);
       }}
+      setMyClinetEvaluList={() => {}}
+      onClickNewestEvaluList={() => {}}
+      setVisibleCreateModal={(flag: boolean) => {}}
+      searchFilterCliEvalu={() => {}}
     />
   ));
 

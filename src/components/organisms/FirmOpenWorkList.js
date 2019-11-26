@@ -1,12 +1,12 @@
-import React from 'react';
 import { FlatList } from 'react-native';
-import Styled from 'styled-components/native';
 import JBActIndicator from 'molecules/JBActIndicator';
-import JBEmptyView from 'organisms/JBEmptyView';
-import WorkItem from 'organisms/WorkItem';
 import JBButton from 'molecules/JBButton';
-import WorkCommWrap from 'molecules/WorkCommWrapUI';
+import JBEmptyView from 'organisms/JBEmptyView';
+import React from 'react';
+import Styled from 'styled-components/native';
 import WorkCommText from 'molecules/WorkCommTextUI';
+import WorkCommWrap from 'molecules/WorkCommWrapUI';
+import WorkItem from 'organisms/WorkItem';
 
 const CommWrap = Styled.View`
   flexDirection: row;
@@ -94,7 +94,7 @@ export default class FirmWorkingList extends React.PureComponent {
     const { list, isListEmpty, handleRefresh, refreshing } = this.props;
 
     if (isListEmpty === undefined) {
-      return <JBActIndicator title="정보 불러오는중.." size={35} />;
+      return <JBActIndicator title="정보를 불러오는 중.." size={35} />;
     }
 
     if (isListEmpty) {

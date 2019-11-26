@@ -1,17 +1,19 @@
-import React from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
-import firebase from 'firebase';
-import styled from 'styled-components/native';
 import * as api from 'api/api';
-import { notifyError } from 'common/ErrorNotice';
-import fonts from 'constants/Fonts';
-import { withLogin } from 'contexts/LoginProvider';
-import colors from 'constants/Colors';
-import KatalkAskWebview from 'templates/KatalkAskWebview';
-import JBButton from 'molecules/JBButton';
-import JBActIndicator from 'molecules/JBActIndicator';
+
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+
 import CloseButton from 'molecules/CloseButton';
 import FirmInfoItem from 'organisms/FirmInfoItem';
+import JBActIndicator from 'molecules/JBActIndicator';
+import JBButton from 'molecules/JBButton';
+import KatalkAskWebview from 'templates/KatalkAskWebview';
+import React from 'react';
+import colors from 'constants/Colors';
+import firebase from 'firebase';
+import fonts from 'constants/Fonts';
+import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components/native';
+import { withLogin } from 'contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -126,7 +128,7 @@ class FirmMyInfoScreen extends React.Component {
     header: null
   };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       firm: undefined,
@@ -136,12 +138,12 @@ class FirmMyInfoScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.setMyFirmInfo();
     this.setFirmEvaluList();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const { params } = nextProps.navigation.state;
 
     if (params !== undefined && params.refresh !== undefined) {
@@ -219,7 +221,7 @@ class FirmMyInfoScreen extends React.Component {
     }
   };
 
-  render() {
+  render () {
     const { navigation } = this.props;
 
     const {
@@ -229,7 +231,7 @@ class FirmMyInfoScreen extends React.Component {
       evaluList
     } = this.state;
     if (!isLoadingComplete) {
-      return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
+      return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
     }
 
     if (!firm) {

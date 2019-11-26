@@ -32,8 +32,10 @@
       "screens": ["./src/screens"],
       "common": ["./src/common"],
       "constants": ["./src/constants"],
+      "types": ["./src/types"],
       "contexts": ["./src/contexts"],
       "navigation": ["./src/navigation"],
+      "container": ["./src/container"],
       "native_modules": ["./src/native_modules"]
     }
   },

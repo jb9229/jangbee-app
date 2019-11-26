@@ -1,29 +1,31 @@
-// @flow
-import React from 'react';
+import * as api from 'api/api';
+import * as imageManager from 'common/ImageManager';
+
 import {
   Alert,
   KeyboardAvoidingView,
+  Picker,
   ScrollView,
   StyleSheet,
-  Picker,
   View
 } from 'react-native';
-import EquipementModal from 'templates/EquipmentModal';
-import MapAddWebModal from 'templates/MapAddWebModal';
 import { validate, validatePresence } from 'utils/Validation';
-import ImagePickInput from 'molecules/ImagePickInput';
-import JBTextInput from 'molecules/JBTextInput';
-import JBErrorMessage from 'organisms/JBErrorMessage';
-import JBActIndicator from 'molecules/JBActIndicator';
-import * as api from 'api/api';
-import JBButton from 'molecules/JBButton';
-import { withLogin } from 'contexts/LoginProvider';
-import JBActIndicatorModal from 'templates/JBActIndicatorModal';
-import LocalSelModal from 'templates/LocalSelModal';
-import * as imageManager from 'common/ImageManager';
-import { notifyError } from 'common/ErrorNotice';
+
 import Card from 'molecules/CardUI';
+import EquipementModal from 'templates/EquipmentModal';
+import ImagePickInput from 'molecules/ImagePickInput';
+import JBActIndicator from 'molecules/JBActIndicator';
+import JBActIndicatorModal from 'templates/JBActIndicatorModal';
+import JBButton from 'molecules/JBButton';
+import JBErrorMessage from 'organisms/JBErrorMessage';
 import JBPicker from 'molecules/JBPicker';
+import JBTextInput from 'molecules/JBTextInput';
+import LocalSelModal from 'templates/LocalSelModal';
+import MapAddWebModal from 'templates/MapAddWebModal';
+// @flow
+import React from 'react';
+import { notifyError } from 'common/ErrorNotice';
+import { withLogin } from 'contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -531,7 +533,7 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     } = this.state;
 
     if (!isLoadingComplete) {
-      return <JBActIndicator title="업체정보 불러오는중..." size={35} />;
+      return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
     }
 
     const thisYear = new Date().getFullYear();

@@ -1,16 +1,18 @@
-import React from 'react';
-import { Alert, Dimensions, StyleSheet, View } from 'react-native';
-import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
-import styled from 'styled-components';
 import * as api from 'api/api';
-import { withLogin } from 'contexts/LoginProvider';
-import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
-import FirmOpenWorkList from 'organisms/FirmOpenWorkList';
+
+import { Alert, Dimensions, StyleSheet, View } from 'react-native';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+
 import FirmMatchedWorkList from 'organisms/FirmMatchedWorkList';
-import { notifyError } from 'common/ErrorNotice';
+import FirmOpenWorkList from 'organisms/FirmOpenWorkList';
+import JBButton from 'molecules/JBButton';
+import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import JBButton from 'molecules/JBButton';
+import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components';
+import { withLogin } from 'contexts/LoginProvider';
 
 const dispatchFee = '20000';
 
@@ -40,7 +42,7 @@ const ModalView = styled.View`
 `;
 
 class FirmWorkListScreen extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isOpenWorkListEmpty: undefined,
@@ -59,11 +61,11 @@ class FirmWorkListScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.init();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const { params } = nextProps.navigation.state;
 
     if (params && params.refresh) {
@@ -286,7 +288,7 @@ class FirmWorkListScreen extends React.Component {
   confirmApplyWork = workId => {
     Alert.alert(
       '해당 날짜와 장소에 배차 가능하십니까?',
-      '2019.7월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n지원 후, 장비사용 고객의 선택을 기다려야 합니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
+      '2019.12월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n지원 후, 장비사용 고객의 선택을 기다려야 합니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
       [
         { text: '취소', onPress: () => {} },
         { text: '지원하기', onPress: () => this.applyWork(workId) }
@@ -317,7 +319,7 @@ class FirmWorkListScreen extends React.Component {
 
     Alert.alert(
       '해당 날짜와 장소에 배차 가능하십니까?',
-      '2019.7월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n차주일감은 선착순 한업체만 바로매칭 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
+      '2019.12월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n차주일감은 선착순 한업체만 바로매칭 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
       [
         { text: '취소', onPress: () => {} },
         {
@@ -467,7 +469,7 @@ class FirmWorkListScreen extends React.Component {
       });
   };
 
-  render() {
+  render () {
     const {
       isOpenWorkListEmpty,
       isMatchedWorkListEmpty,

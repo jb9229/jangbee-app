@@ -1,22 +1,24 @@
-import React from 'react';
+import * as api from 'api/api';
+import * as imageManager from 'common/ImageManager';
+
 import {
   Alert,
   KeyboardAvoidingView,
-  ScrollView,
   Modal,
+  ScrollView,
   StyleSheet,
   View
 } from 'react-native';
+
 import CloseButton from 'molecules/CloseButton';
-import JBButton from 'molecules/JBButton';
-import JBTextInput from 'molecules/JBTextInput';
 import ImagePickInput from 'molecules/ImagePickInput';
+import JBActIndicatorModal from 'templates/JBActIndicatorModal';
+import JBButton from 'molecules/JBButton';
 import JBErrorMessage from 'organisms/JBErrorMessage';
-import * as api from 'api/api';
+import JBTextInput from 'molecules/JBTextInput';
+import React from 'react';
 import { notifyError } from 'common/ErrorNotice';
 import { validate } from 'utils/Validation';
-import * as imageManager from 'common/ImageManager';
-import JBActIndicator from 'molecules/JBActIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
 });
 
 export default class AdUpdateModal extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isVisibleActIndiModal: false,
@@ -58,7 +60,7 @@ export default class AdUpdateModal extends React.Component {
     }
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const { updateAd } = nextProps;
 
     if (updateAd) {
@@ -218,7 +220,7 @@ export default class AdUpdateModal extends React.Component {
     return updateData;
   };
 
-  render() {
+  render () {
     const { isVisibleModal, closeModal } = this.props;
     const {
       isVisibleActIndiModal,

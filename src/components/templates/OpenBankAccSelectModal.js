@@ -1,21 +1,23 @@
-import React from 'react';
+import * as api from 'api/api';
+import * as firebaseDB from 'utils/FirebaseUtils';
+
 import { Alert, FlatList, Modal, StyleSheet, View } from 'react-native';
-import styled from 'styled-components/native';
-import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
+
 import CloseButton from 'molecules/CloseButton';
-import JBButton from 'molecules/JBButton';
-import ListSeparator from 'molecules/ListSeparator';
-import OBAccount from 'molecules/OBAccount';
 import Coupon from 'molecules/Coupon';
+import JBActIndicator from 'molecules/JBActIndicator';
+import JBButton from 'molecules/JBButton';
+import JBEmptyView from 'organisms/JBEmptyView';
 import JBText from 'molecules/JBText';
 import JBTextInput from 'molecules/JBTextInput';
-import * as firebaseDB from 'utils/FirebaseUtils';
-import * as api from 'api/api';
-import JBActIndicator from 'molecules/JBActIndicator';
-import { notifyError } from 'common/ErrorNotice';
-import JBEmptyView from 'organisms/JBEmptyView';
-import fonts from 'constants/Fonts';
+import ListSeparator from 'molecules/ListSeparator';
+import OBAccount from 'molecules/OBAccount';
+import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
+import React from 'react';
 import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
+import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components/native';
 import { validate } from 'utils/Validation';
 
 const styles = StyleSheet.create({
@@ -77,7 +79,7 @@ const COUPON_MODE = 'COUPON_MODE';
 const CASHBACK_MODE = 'CASHBACK_MODE';
 
 export default class OpenBankAccSelectModal extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       selFinUseNum: '',
@@ -87,9 +89,9 @@ export default class OpenBankAccSelectModal extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount () {}
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const { isVisibleModal, mode } = nextProps;
 
     if (isVisibleModal) {
@@ -180,6 +182,15 @@ export default class OpenBankAccSelectModal extends React.Component {
           if (userInfo.res_cnt !== '0') {
             const resAccList = userInfo.res_list;
 
+            // Validation
+            if (!resAccList) {
+              this.setState({ isEmptyList: true });
+              notifyError(
+                '등록 계좌 조회 실패',
+                `등록뢴 계좌를 찾을 수 없습니다. -> [${resAccList}]`
+              );
+              return;
+            }
             const accountList = resAccList.map(item =>
               this.setAccBalance(obAccessToken, item)
             );
@@ -257,7 +268,7 @@ export default class OpenBankAccSelectModal extends React.Component {
     }
   };
 
-  render() {
+  render () {
     const {
       isVisibleModal,
       navigation,

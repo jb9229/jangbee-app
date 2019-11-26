@@ -1,15 +1,17 @@
-import moment from 'moment';
-import * as url from 'constants/Url';
-import {
-  handleJsonResponse,
-  handleJBServerJsonResponse,
-  handleTextResponse,
-  handleNoContentResponse,
-  handleBadReqJsonResponse,
-  handleOpenBankJsonResponse
-} from 'utils/Fetch-utils';
 import * as kakaoconfig from '../../kakao-config';
 import * as obconfig from '../../openbank-config';
+import * as url from 'constants/Url';
+
+import {
+  handleBadReqJsonResponse,
+  handleJBServerJsonResponse,
+  handleJsonResponse,
+  handleNoContentResponse,
+  handleOpenBankJsonResponse,
+  handleTextResponse
+} from 'utils/Fetch-utils';
+
+import moment from 'moment';
 
 /** ******************** Jangbee Sever Account  Api List ************************** */
 export function deleteFirmAccount(accountId) {
@@ -313,6 +315,15 @@ export function createClientEvaluation(newEvaluation) {
     },
     body: JSON.stringify(newEvaluation)
   }).then(handleJBServerJsonResponse);
+}
+
+export function getClientEvaluCount(accountId) {
+  const param = encodeURIComponent(accountId);
+  return fetch(
+    `${
+      url.JBSERVER_CLIENT_EVALU_COUNT
+    }?accountId=${param}`
+  ).then(handleJBServerJsonResponse);
 }
 
 export function getClientEvaluList(page, accountId, mine) {

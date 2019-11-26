@@ -1,4 +1,6 @@
-import React from 'react';
+import * as api from 'api/api';
+import * as imageManager from 'common/ImageManager';
+
 import {
   Alert,
   KeyboardAvoidingView,
@@ -8,19 +10,19 @@ import {
   View
 } from 'react-native';
 import { validate, validatePresence } from 'utils/Validation';
-import * as api from 'api/api';
-import { withLogin } from 'contexts/LoginProvider';
-import ImagePickInput from 'molecules/ImagePickInput';
-import JBTextInput from 'molecules/JBTextInput';
-import JBErrorMessage from 'organisms/JBErrorMessage';
-import EquipementModal from 'templates/EquipmentModal';
-import MapAddWebModal from 'templates/MapAddWebModal';
-import JBActIndicatorModal from 'templates/JBActIndicatorModal';
-import LocalSelModal from 'templates/LocalSelModal';
-import JBButton from 'molecules/JBButton';
-import * as imageManager from 'common/ImageManager';
+
 import Card from 'molecules/CardUI';
+import EquipementModal from 'templates/EquipmentModal';
+import ImagePickInput from 'molecules/ImagePickInput';
+import JBActIndicatorModal from 'templates/JBActIndicatorModal';
+import JBButton from 'molecules/JBButton';
+import JBErrorMessage from 'organisms/JBErrorMessage';
 import JBPicker from 'molecules/JBPicker';
+import JBTextInput from 'molecules/JBTextInput';
+import LocalSelModal from 'templates/LocalSelModal';
+import MapAddWebModal from 'templates/MapAddWebModal';
+import React from 'react';
+import { withLogin } from 'contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {

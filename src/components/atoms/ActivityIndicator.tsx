@@ -25,7 +25,7 @@ interface Props {
 export default function Indicator(props: Props): React.ReactElement {
   return (
     <Container>
-      <Message>{props.loadingMSG || '정보 불러오는중..'}</Message>
+      <Message>{props.loadingMSG || '정보를 불러오는 중..'}</Message>
       <ActivityIndicator size={props.size || 28} color={colors.indicator} />
     </Container>
   );

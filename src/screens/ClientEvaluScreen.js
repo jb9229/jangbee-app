@@ -26,25 +26,6 @@ class ClientEvaluScreen extends React.Component {
     }
   };
 
-  constructor (props) {
-    super(props);
-    this.state = {
-      isVisibleCreateModal: false,
-      isVisibleUpdateModal: false,
-      isVisibleDetailModal: false,
-      isVisibleEvaluLikeModal: false,
-      cliEvaluList: [],
-      page: 0,
-      isLastList: false,
-      isNewestEvaluList: true,
-      evaluLikeList: [],
-      searchNotice: '',
-      searchWord: '',
-      searchArea: 'TEL',
-      searchPlaceholder: '전화번호 입력(- 없이)'
-    };
-  }
-
   componentDidMount () {
     const { params } = this.props.navigation.state;
 
@@ -381,28 +362,6 @@ class ClientEvaluScreen extends React.Component {
     );
   };
 
-  /**
-   * 피해사례 아이템 UI 렌더링 함수
-   */
-  renderCliEvaluItem = ({ item }) => {
-    const { user } = this.props;
-    const { searchTime } = this.state;
-
-    return (
-      <CliEvaluItem
-        item={item}
-        accountId={user.uid}
-        updateCliEvalu={this.openUpdateCliEvaluForm}
-        deleteCliEvalu={this.deleteCliEvalu}
-        openCliEvaluLikeModal={this.openCliEvaluLikeModal}
-        openDetailModal={evalu =>
-          this.setState({ detailEvalu: evalu, isVisibleDetailModal: true })
-        }
-        searchTime={searchTime}
-      />
-    );
-  };
-
   render () {
     const {
       searchWord,
@@ -429,6 +388,37 @@ class ClientEvaluScreen extends React.Component {
     return (
       <View>
         <Text>To be deleted</Text>
+        <ClientEvaluCreateModal
+          isVisibleModal={isVisibleCreateModal}
+          accountId={user.uid}
+          closeModal={() => this.setState({ isVisibleCreateModal: false })}
+          completeAction={() => this.setClinetEvaluList()}
+          size="full"
+        />
+        <ClientEvaluUpdateModal
+          updateEvalu={updateEvalu}
+          isVisibleModal={isVisibleUpdateModal}
+          closeModal={() => this.setState({ isVisibleUpdateModal: false })}
+          completeAction={() => this.setClinetEvaluList()}
+        />
+        <ClientEvaluDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          detailEvalu={detailEvalu}
+          closeModal={() => setVisibleDetailModal(false)}
+          completeAction={() => {}}
+          size="full"
+          searchTime={searchTime}
+        />
+        <ClientEvaluLikeModal
+          isVisibleModal={isVisibleEvaluLikeModal}
+          accountId={user.uid}
+          evaluation={evaluLikeSelected}
+          evaluLikeList={evaluLikeList}
+          createClientEvaluLike={this.createClientEvaluLike}
+          cancelClientEvaluLike={this.cancelClientEvaluLike}
+          closeModal={refresh => this.closeEvaluLikeModal(refresh)}
+          isMine={isMineEvaluation}
+        />
       </View>
     );
   }

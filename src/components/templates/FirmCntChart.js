@@ -1,10 +1,12 @@
-import React from 'react';
-import { Alert, ScrollView, Picker } from 'react-native';
-import styled from 'styled-components/native';
-import { LineChart } from 'react-native-chart-kit';
-import JBPicker from 'molecules/JBPicker';
-import fonts from 'constants/Fonts';
 import * as api from 'api/api';
+
+import { Alert, Picker, ScrollView } from 'react-native';
+
+import JBPicker from 'molecules/JBPicker';
+import { LineChart } from 'react-native-chart-kit';
+import React from 'react';
+import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 const ChartWrap = styled.View`
   flex: 1;
@@ -77,7 +79,7 @@ const CHART_COLORS = [
 export default class FirmCntChart extends React.Component {
   _isMounted = false;
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       firmCntChartModels: [],
@@ -85,16 +87,16 @@ export default class FirmCntChart extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this._isMounted = true;
     this.setFirmCountChart('크레인');
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this._isMounted = false;
   }
 
-  changeChart = equipment => {
+  changeChart = (equipment) => {
     this.setFirmCountChart(equipment);
     this.setState({ selectedChartEqui: equipment });
   };
@@ -173,7 +175,7 @@ export default class FirmCntChart extends React.Component {
       });
   };
 
-  render() {
+  render () {
     const {
       firmCntChartData,
       selectedChartEqui,

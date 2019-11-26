@@ -1,28 +1,30 @@
-import React from 'react';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import * as api from 'api/api';
+
 import {
   Alert,
   BackHandler,
-  Switch,
-  StyleSheet,
   Picker,
+  StyleSheet,
+  Switch,
   Text,
   View
 } from 'react-native';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import styled from 'styled-components/native';
-import JBButton from 'molecules/JBButton';
+import { LOCAL_CATEGORY, LOCAL_ITEM } from 'src/STRING';
+
 import Card from 'molecules/CardUI';
+import FirmCreaErrMSG from 'organisms/JBErrorMessage';
+import FirmSearListModal from 'templates/FirmSearListModal';
+import JBActIndicator from 'molecules/JBActIndicator';
+import JBButton from 'molecules/JBButton';
+import JBIcon from 'atoms/JBIcon';
+import JBSelectBox from 'organisms/JBSelectBox';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import * as api from 'api/api';
-import JBIcon from 'atoms/JBIcon';
+import styled from 'styled-components/native';
 import { validatePresence } from 'utils/Validation';
-import FirmCreaErrMSG from 'organisms/JBErrorMessage';
-import JBActIndicator from 'molecules/JBActIndicator';
-import JBSelectBox from 'organisms/JBSelectBox';
-import FirmSearListModal from 'templates/FirmSearListModal';
-import { LOCAL_CATEGORY, LOCAL_ITEM } from 'src/STRING';
 
 const styles = StyleSheet.create({
   adWrap: {
@@ -386,7 +388,7 @@ export default class GPSSearchScreen extends React.Component {
     } = this.state;
 
     if (!isComponentMountComplete) {
-      return <JBActIndicator title="위치정보 불러오는중..." size={35} />;
+      return <JBActIndicator title="위치정보를 불러오는 중..." size={35} />;
     }
 
     return (

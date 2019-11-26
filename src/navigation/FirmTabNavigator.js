@@ -1,23 +1,23 @@
-import React from 'react';
-import { Platform } from 'react-native';
 import {
-  createStackNavigator,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createStackNavigator
 } from 'react-navigation';
 
-import TabBarIcon from 'atoms/TabBarIcon';
-import HomeScreen from 'screens/HomeScreen';
-import FirmSettingScreen from 'screens/FirmSettingScreen';
-import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
-import ClientEvaluScreen from 'screens/ClientEvaluScreen';
-import FirmRegisterScreen from 'screens/FirmRegisterScreen';
-import FirmUpdateScreen from 'screens/FirmUpdateScreen';
-import AdScreen from 'screens/AdScreen';
 import AdCreateScreen from 'screens/AdCreateScreen';
-import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
+import AdScreen from 'screens/AdScreen';
+import FirmHarmCaseContainer from 'container/FirmHarmCaseContainer';
+import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
+import FirmRegisterScreen from 'screens/FirmRegisterScreen';
+import FirmSettingScreen from 'screens/FirmSettingScreen';
+import FirmUpdateScreen from 'screens/FirmUpdateScreen';
 import FirmWorkListScreen from 'screens/FirmWorkListScreen';
-import WorkRegisterScreen from 'screens/WorkRegisterScreen';
+import HomeScreen from 'screens/HomeScreen';
 import JBServiceTerms from 'screens/JBServiceTerms';
+import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
+import { Platform } from 'react-native';
+import React from 'react';
+import TabBarIcon from 'atoms/TabBarIcon';
+import WorkRegisterScreen from 'screens/WorkRegisterScreen';
 import colors from 'constants/Colors';
 
 const FirmWorkStack = createStackNavigator({
@@ -141,7 +141,7 @@ FirmSettingStack.navigationOptions = {
 
 const ClientEvaluStack = createStackNavigator({
   ClientEvalu: {
-    screen: ClientEvaluScreen,
+    screen: FirmHarmCaseContainer,
     navigationOptions: { header: null }
   }
 });

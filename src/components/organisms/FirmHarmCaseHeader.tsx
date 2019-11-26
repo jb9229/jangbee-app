@@ -2,17 +2,21 @@ import * as React from 'react';
 
 import { Picker, StyleSheet } from 'react-native';
 
+import { FirmHarmCaseCountData } from 'types';
 import JBButton from 'molecules/JBButton';
 import { SearchBar } from 'react-native-elements';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 const HeaderWrap = styled.View`
   margin-top: 10;
   margin-left: 3;
   margin-right: 3;
-  padding: 3;
+  padding-top: 3;
+  padding-right: 3;
+  padding-left: 3;
+  padding-bottom: 3;
   background-color: ${colors.batangDark};
   elevation: 14;
   border-radius: 10;
@@ -33,16 +37,18 @@ const CommandWrap = styled.View`
   margin-right: 3;
 `;
 const SearchNoticeWrap = styled.View`
-  padding: 5;
-  padding-bottom: 8;
-  justify-content: center;
+  padding-top: 5;
+  padding-right: 5;
+  padding-left: 5;
+  justify-content: space-between;
   align-items: center;
 `;
 const SearchNoticeText = styled.Text`
-  color: ${colors.pointDark},
+  color: ${colors.pointDark};
   font-family: ${fonts.batang};
   justify-content: center;
   font-size: 13;
+  margin-bottom: 8;
 `;
 
 const PickerArrow = styled.Text`
@@ -71,24 +77,29 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  setMyClinetEvaluList: () => void;
+  searchArea: string;
+  searchWord: string;
+  searchNotice: string;
+  countData: FirmHarmCaseCountData;
+  setSearchArea: (a: string) => void;
+  setSearchWord: (w: string) => void;
+  onClickMyEvaluList: () => void;
   onClickNewestEvaluList: () => void;
   setVisibleCreateModal: (flag: boolean) => void;
   searchFilterCliEvalu: () => void;
 }
 
 export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
-  const [searchArea, setSearchArea] = React.useState('TEL');
-  const [searchWord, setSearchWord] = React.useState('');
   const [searchPlaceholder, setSearchPlaceholder] = React.useState('전화번호 입력(- 없이)');
-  const [searchNotice, setSearchNotice] = React.useState('');
+
   return (
     <HeaderWrap>
       <HeaderTopWrap>
         <Picker
-          selectedValue={searchArea}
+          selectedValue={props.searchArea}
           style={styles.searchPicker}
-          onValueChange={(val): void => onSearchAreaChange(val)}
+          onValueChange={(val): void =>
+            onSearchAreaChange(val, props.setSearchArea, setSearchPlaceholder)}
         >
           <Picker.Item label="전화번호 검색" value="TEL" />
           <Picker.Item label="사업자번호 검색" value="FIRM_NUMBER" />
@@ -101,7 +112,7 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
         <CommandWrap>
           <JBButton
             title="내 사례"
-            onPress={props.setMyClinetEvaluList}
+            onPress={props.onClickMyEvaluList}
             size="small"
             align="right"
             bgColor={colors.batangDark}
@@ -109,7 +120,7 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
           />
           <JBButton
             title="최근"
-            onPress={props.onClickNewestEvaluList()}
+            onPress={props.onClickNewestEvaluList}
             size="small"
             align="right"
             bgColor={colors.batangDark}
@@ -126,19 +137,22 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
         </CommandWrap>
       </HeaderTopWrap>
       <SearchBar
-        value={searchWord}
+        value={props.searchWord}
         placeholder={searchPlaceholder}
         containerStyle={styles.containerSearchBar}
         inputStyle={styles.inputSearchBar}
         lightTheme
         round
-        onChangeText={(text): void => setSearchWord(text)}
+        onChangeText={(text): void => props.setSearchWord(text)}
         searchIcon={{ onPress: props.searchFilterCliEvalu }}
         onSubmitEditing={props.searchFilterCliEvalu}
         autoCorrect={false}
       />
       <SearchNoticeWrap>
-        <SearchNoticeText>{searchNotice}</SearchNoticeText>
+        <SearchNoticeText>{props.searchNotice}</SearchNoticeText>
+        <SearchNoticeText>
+          {`전체글: ${props.countData ? props.countData.totalCnt : '-'}  |  내글: ${props.countData ? props.countData.myCnt : '-'}`}
+        </SearchNoticeText>
       </SearchNoticeWrap>
     </HeaderWrap>
   );

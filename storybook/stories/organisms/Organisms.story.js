@@ -1,18 +1,18 @@
-import * as React from 'react'
+import * as React from 'react';
 
-import { Alert, SafeAreaView, View } from 'react-native'
-import { boolean, text } from '@storybook/addon-knobs'
+import { Alert, SafeAreaView, View } from 'react-native';
+import { boolean, text } from '@storybook/addon-knobs';
 
-import CountBoard from 'organisms/CountBoard'
-import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader'
-import SettingList from 'organisms/SettingList'
-import { storiesOf } from '@storybook/react-native'
+import CountBoard from 'organisms/CountBoard';
+import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
+import SettingList from 'organisms/SettingList';
+import { storiesOf } from '@storybook/react-native';
 
 const SafeZonDecorator = storyFn => (
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
     {storyFn()}
   </SafeAreaView>
-)
+);
 
 storiesOf('Organisms Components', module)
   .addDecorator(SafeZonDecorator)
@@ -24,12 +24,15 @@ storiesOf('Organisms Components', module)
       <CountBoard
         data={CntBoardData}
         onClick={i => {
-          Alert.alert(`action: click${i}`)
+          Alert.alert(`action: click${i}`);
         }}
       />
     </View>
   ))
-  .add('FirmHarmCaseHeader', () => <FirmHarmCaseHeader />)
+  .add('FirmHarmCaseHeader', () => <FirmHarmCaseHeader setMyClinetEvaluList={() => {}}
+    onClickNewestEvaluList={() => {}}
+    setVisibleCreateModal={(flag: boolean) => {}}
+    searchFilterCliEvalu={() => {}}/>);
 
 const DATA = [
   {
@@ -56,13 +59,13 @@ const DATA = [
         switchOn: false,
         text: '이디야 커피',
         switchAction: () => {
-          action('coffeSettingAction')
+          action('coffeSettingAction');
         }
       },
       { iconName: 'ios-call', switchOn: true, text: '전화사용' }
     ]
   }
-]
+];
 
 const CntBoardData = [
   {
@@ -73,4 +76,4 @@ const CntBoardData = [
     title: '내글',
     count: 123
   }
-]
+];

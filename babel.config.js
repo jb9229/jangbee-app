@@ -3,8 +3,8 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo', '@babel/preset-typescript'],
     plugins: [
+      ['babel-plugin-styled-components'],
       [
-        ['babel-plugin-styled-components'],
         'module-resolver',
         {
           extensions: [
@@ -24,16 +24,18 @@ module.exports = function (api) {
             navigation: './src/navigation',
             contexts: './src/contexts',
             constants: './src/constants',
+            types: './src/types',
             common: './src/common',
             screens: './src/screens',
             auth: './src/auth',
             api: './src/api',
             utils: './src/utils',
-            native_modules: './src/native_modules',
             atoms: './src/components/atoms',
             molecules: './src/components/molecules',
             organisms: './src/components/organisms',
-            templates: './src/components/templates'
+            templates: './src/components/templates',
+            container: './src/container',
+            native_modules: './src/native_modules'
           }
         }
       ]

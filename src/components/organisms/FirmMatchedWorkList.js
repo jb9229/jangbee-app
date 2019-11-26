@@ -1,11 +1,11 @@
-import React from 'react';
 import { FlatList } from 'react-native';
 import JBActIndicator from 'molecules/JBActIndicator';
-import JBEmptyView from 'organisms/JBEmptyView';
-import WorkItem from 'organisms/WorkItem';
-import WorkCommWrap from 'molecules/WorkCommWrapUI';
-import WorkCommText from 'molecules/WorkCommTextUI';
 import JBButton from 'molecules/JBButton';
+import JBEmptyView from 'organisms/JBEmptyView';
+import React from 'react';
+import WorkCommText from 'molecules/WorkCommTextUI';
+import WorkCommWrap from 'molecules/WorkCommWrapUI';
+import WorkItem from 'organisms/WorkItem';
 import callLink from 'common/CallLink';
 
 export default class FirmMatchedWorkList extends React.PureComponent {
@@ -50,7 +50,7 @@ export default class FirmMatchedWorkList extends React.PureComponent {
     const { isListEmpty, list, handleRefresh, refreshing } = this.props;
 
     if (isListEmpty === undefined) {
-      return <JBActIndicator title="정보 불러오는중.." size={35} />;
+      return <JBActIndicator title="정보를 불러오는 중.." size={35} />;
     }
 
     if (isListEmpty) {

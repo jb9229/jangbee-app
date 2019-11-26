@@ -1,42 +1,54 @@
 import * as React from 'react';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
-import CountBoard from 'organisms/CountBoard';
-import { StyleSheet } from 'react-native';
-import colors from 'constants/Color';
-import fonts from 'constants/Fonts';
+import CliEvaluItem from 'organisms/CliEvaluItem';
+import { FirmHarmCaseCountData } from 'src/types';
+import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
+import { FlatList } from 'react-native';
+import JBButton from 'molecules/JBButton';
+import JangbeeAdList from 'organisms/JangbeeAdList';
+import colors from 'constants/Colors';
 import styled from 'styled-components/native';
 
 const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${colors.batangLight};
-  align-items: center;
-  justify-content: center;
 `;
 const LoadingContainer = styled.SafeAreaView`
   flex: 1;
   justify-content: center;
 `;
-const CounterContainer = styled.SafeAreaView`
-  width: 90%;
-  aspect-ratio: 4;
-`;
-
 const NotExitButWrap = styled.View`
   flex: 1;
   justify-content: center;
-  border-width: 1;
 `;
 
 interface Props {
-  counter?: [];
+  user: {};
+  searchArea: string;
+  searchWord: string;
+  countData: FirmHarmCaseCountData;
   listEmpty?: boolean;
   list?: [];
-  isLoading: boolean;
+  isLastList?: boolean;
+  searchTime: string;
+  searchNotice: string;
+  setSearchArea: (a: string) => void;
+  setSearchWord: (w: string) => void;
+  handleLoadMore: () => void;
+  onClickMyEvaluList: () => void;
+  onClickNewestEvaluList: () => void;
+  setVisibleCreateModal: (flag: boolean) => void;
+  searchFilterCliEvalu: () => void;
+  shareNotExistCEvalu: (searchArea: string, searchWord: string, searchTime: string) => void;
+  openDetailModal: (evalu) => void;
+  openUpdateCliEvaluForm: () => void;
+  deleteCliEvalu: () => void;
+  openCliEvaluLikeModal: () => void;
 }
 
 export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
-  if (props.isLoading) {
+  if (!props.list) {
     return (
       <LoadingContainer>
         <ActivityIndicator />
@@ -44,35 +56,52 @@ export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
     );
   }
 
-  if (!props.list) {
+  if (props.list.length === 0) {
     return (
       <Container>
-        <CounterContainer>
-          <CountBoard data={props.counter} />
-        </CounterContainer>
+        <FirmHarmCaseHeader
+          searchArea={props.searchArea}
+          searchWord={props.searchWord}
+          searchNotice={props.searchNotice}
+          countData={props.countData}
+          setSearchArea={props.setSearchArea}
+          setSearchWord={props.setSearchWord}
+          onClickMyEvaluList={props.onClickMyEvaluList}
+          onClickNewestEvaluList={props.onClickNewestEvaluList}
+          setVisibleCreateModal={props.setVisibleCreateModal}
+          searchFilterCliEvalu={props.searchFilterCliEvalu}/>
+        <NotExitButWrap>
+          <JBButton
+            title={`'${props.searchWord}' 피해사례 없음 공유`}
+            onPress={(): void => props.shareNotExistCEvalu(props.searchArea, props.searchWord, props.searchTime)}
+            align="center"
+            Secondary
+          />
+        </NotExitButWrap>
       </Container>
     );
   }
 
-  if (props.listEmpty) {
-    <NotExitButWrap>
-      <JBButton
-        title={`'${searchedWord}' 피해사례 없음 공유`}
-        onPress={() => shareNotExistCEvalu(searchArea, searchWord, searchTime)}
-        align="center"
-        Secondary
-      />
-    </NotExitButWrap>;
-  }
-
   return (
     <Container>
+      <FirmHarmCaseHeader
+        searchArea={props.searchArea}
+        searchWord={props.searchWord}
+        searchNotice={props.searchNotice}
+        countData={props.countData}
+        setSearchArea={props.setSearchArea}
+        setSearchWord={props.setSearchWord}
+        onClickMyEvaluList={props.onClickMyEvaluList}
+        onClickNewestEvaluList={props.onClickNewestEvaluList}
+        setVisibleCreateModal={props.setVisibleCreateModal}
+        searchFilterCliEvalu={props.searchFilterCliEvalu}/>
+
       <FlatList
-        data={cliEvaluList}
-        renderItem={this.renderCliEvaluItem}
+        data={props.list}
+        renderItem={({item}) => renderCliEvaluItem(item, props)}
         keyExtractor={(item, index) => index.toString()}
-        last={isLastList}
-        onEndReached={this.handleLoadMore}
+        last={props.isLastList}
+        onEndReached={props.handleLoadMore}
         onEndReachedThreshold={2}
       />
       <JangbeeAdList
@@ -81,41 +110,27 @@ export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
         admonSize="fullBanner"
         admonHeight="60"
       />
-      <ClientEvaluCreateModal
-        isVisibleModal={isVisibleCreateModal}
-        accountId={user.uid}
-        closeModal={() => this.setState({ isVisibleCreateModal: false })}
-        completeAction={() => this.setClinetEvaluList()}
-        size="full"
-      />
-      <ClientEvaluUpdateModal
-        updateEvalu={updateEvalu}
-        isVisibleModal={isVisibleUpdateModal}
-        closeModal={() => this.setState({ isVisibleUpdateModal: false })}
-        completeAction={() => this.setClinetEvaluList()}
-      />
-      <ClientEvaluDetailModal
-        isVisibleModal={isVisibleDetailModal}
-        detailEvalu={detailEvalu}
-        closeModal={() => this.setState({ isVisibleDetailModal: false })}
-        completeAction={() => {}}
-        size="full"
-        searchTime={searchTime}
-      />
-      <ClientEvaluLikeModal
-        isVisibleModal={isVisibleEvaluLikeModal}
-        accountId={user.uid}
-        evaluation={evaluLikeSelected}
-        evaluLikeList={evaluLikeList}
-        createClientEvaluLike={this.createClientEvaluLike}
-        cancelClientEvaluLike={this.cancelClientEvaluLike}
-        closeModal={refresh => this.closeEvaluLikeModal(refresh)}
-        isMine={isMineEvaluation}
-      />
     </Container>
   );
 }
 
 FirmHarmCaseLayout.defaultProps = {
   isLoading: true
+};
+
+/**
+ * 피해사례 아이템 UI 렌더링 함수
+ */
+const renderCliEvaluItem = (item, props) => {
+  return (
+    <CliEvaluItem
+      item={item}
+      accountId={props.uid}
+      updateCliEvalu={props.openUpdateCliEvaluForm}
+      deleteCliEvalu={props.deleteCliEvalu}
+      openCliEvaluLikeModal={props.openCliEvaluLikeModal}
+      openDetailModal={evalu =>props.openDetailModal(evalu)}
+      searchTime={props.searchTime}
+    />
+  );
 };
