@@ -16,7 +16,7 @@
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <!--<uses-permission android:name="android.permission.READ_CALL_LOG" />  &lt;!&ndash; form Android P need  Read_CALL_LOG Permission&ndash;&gt;-->
+  <uses-permission android:name="android.permission.READ_CALL_LOG" />  <!-- form Android P need  Read_CALL_LOG Permission-->
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   
@@ -302,6 +302,8 @@
         <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
       </intent-filter>
     </receiver>
+
+   <service android:name=".call_detection.CallScanJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true"/>
 
     <service android:name="com.google.android.gms.analytics.AnalyticsService"
              android:enabled="true"

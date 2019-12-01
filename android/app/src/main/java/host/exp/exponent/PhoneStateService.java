@@ -5,7 +5,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
@@ -31,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import host.exp.exponent.call_detection.CallScanJobService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -39,14 +44,48 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class PhoneStateService extends Service {
+    private static final int JOB_ID_UPDATE = 0x1000;
     NotificationManager blNotifyManager;
     NotificationCompat.Builder blBuilder;
     NotificationChannel notificationChannel;
     String NOTIFIVATION_CHANNEL_ID = "17";
+    String incomingNumber = "";
 
+
+    Callback httpCallBack = new Callback() {
+        //비동기 처리를 위해 Callback 구현
+        @Override
+        public void onFailure(Call call, IOException e) {
+            Handler mHandler = new Handler(Looper.getMainLooper());
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "[장비 콜]수신전화번호 Error: "+e.toString(), Toast.LENGTH_LONG).show();
+                };
+            }, 0);
+            Log.d("JB Server Error: ",  e.toString());
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            String result   = response.body().string();
+            if (result != null && !result.isEmpty() && Boolean.parseBoolean(result)) {
+                String blResult = PhoneNumberUtils.formatNumber(incomingNumber);
+
+                Intent serviceIntent = new Intent(getApplicationContext(), IncomingCallBLPopupService.class);
+                serviceIntent.putExtra(IncomingCallBLPopupService.INCOMINGCALL_NUMBER_EXTRA, blResult);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(serviceIntent);
+                } else {
+                    startService(serviceIntent);
+                }
+            }
+        }
+    };
 
     BroadcastReceiver blBroadcastReceiver = new BroadcastReceiver() {
         String preState;
+        String prePhoneNumber;
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("RECEIVER : ", "IS UP Phone State...");
@@ -54,87 +93,41 @@ public class PhoneStateService extends Service {
             {
                 // Check Duplicate Receive
                 String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-                if (state.equals(preState)) {
+                String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                if (state.equals(preState) && phoneNumber == null) {
                     return;
                 } else {
                     preState = state;
+                    prePhoneNumber = phoneNumber;
                 }
 
-                if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)){
+                if(TelephonyManager.EXTRA_STATE_RINGING.equals(state) && phoneNumber != null){
 //                    Toast.makeText(context, "[장비 콜]수신전화번호: "+incomingNumber, Toast.LENGTH_LONG).show();
-                    String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-
-                    Callback httpCallBack = new Callback() {
-                        //비동기 처리를 위해 Callback 구현
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Handler mHandler = new Handler(Looper.getMainLooper());
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(context, "[장비 콜]수신전화번호 Error: "+e.toString(), Toast.LENGTH_LONG).show();
-                                };
-                            }, 0);
-                            Log.d("JB Server Error: ",  e.toString());
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String result   = response.body().string();
-                            if (result != null && !result.isEmpty() && Boolean.parseBoolean(result)) {
-                                String blResult = PhoneNumberUtils.formatNumber(incomingNumber);
-
-                                Intent serviceIntent = new Intent(context, IncomingCallBLPopupService.class);
-                                serviceIntent.putExtra(IncomingCallBLPopupService.INCOMINGCALL_NUMBER_EXTRA, blResult);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    startForegroundService(serviceIntent);
-                                } else {
-                                    startService(serviceIntent);
-                                }
-                            }
-                        }
-                    };
 
                     Map paramData = new HashMap(); //
-                    if(incomingNumber == null || incomingNumber.trim().isEmpty()) {Toast.makeText(context, "["+incomingNumber+"]"+"유효하지 않은 번호입니다.", Toast.LENGTH_LONG).show(); return ;} else {paramData.put("telNumber", incomingNumber);}
+//                    phoneNumber = "01052023337";
+                    if(phoneNumber == null || phoneNumber.trim().isEmpty()) {Toast.makeText(context, "["+phoneNumber+"]"+"유효하지 않은 번호입니다.", Toast.LENGTH_LONG).show(); return ;} else {paramData.put("telNumber", phoneNumber);}
 
-                    String[] pathParamArr = {"api", "v1", "client", "evaluation", "exist", "telnumber"};
-                    getHttpAsync("http", "jangbeecall.ap-northeast-2.elasticbeanstalk.com", pathParamArr, paramData, httpCallBack);
+
+                    PersistableBundle bundle = new PersistableBundle();
+                    bundle.putString("telNumber", phoneNumber);
+
+                    JobInfo jobInfo = new JobInfo.Builder(JOB_ID_UPDATE, new ComponentName(getApplicationContext(), CallScanJobService.class))
+                            .setExtras(bundle)
+                            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                            .setMinimumLatency(1)
+                            .setOverrideDeadline(1)
+                            .build();
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        JobScheduler jobScheduler = (JobScheduler) getApplicationContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                        // Job을 등록한다.
+                        jobScheduler.schedule(jobInfo);
+                    }
                 }
             }catch (Exception e) {
                 e.printStackTrace();
                 Log.e("Receiver : ",  "Exception  is : ", e);
-            }
-        }
-
-        void getHttpAsync(String scheme, String host, String[] pathSegment, Map<String, String> parameterData, Callback callback) {
-            try {
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .readTimeout(30, TimeUnit.SECONDS)
-                        .retryOnConnectionFailure(true)
-                        .build();
-                HttpUrl.Builder builder = new HttpUrl.Builder();
-                builder.scheme(scheme);
-                builder.host(host);
-
-                for (String param : pathSegment) {
-                    builder.addPathSegment(param);
-                }
-
-//            parameterData.forEach((k, v) -> builder.addQueryParameter(k, v)); // from API24
-                for (String key : parameterData.keySet()) {
-                    builder.addQueryParameter(key, parameterData.get(key));
-                }
-
-                Request request = new Request.Builder()
-                        .url(builder.build())
-                        .build(); //GET Request
-
-                //동기 처리시 execute함수 사용
-                client.newCall(request).enqueue(callback);
-            } catch (Exception e){
-                System.err.println(e.toString());
             }
         }
     };
@@ -207,6 +200,41 @@ public class PhoneStateService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    void searchFirmHarmCase(Map paramData) {
+        String[] pathParamArr = {"api", "v1", "client", "evaluation", "exist", "telnumber"};
+        getHttpAsync1("http", "jangbeecall.ap-northeast-2.elasticbeanstalk.com", pathParamArr, paramData, httpCallBack);
+    }
+    void getHttpAsync1(String scheme, String host, String[] pathSegment, Map<String, String> parameterData, Callback callback) {
+        try {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .build();
+            HttpUrl.Builder builder = new HttpUrl.Builder();
+            builder.scheme(scheme);
+            builder.host(host);
+
+            for (String param : pathSegment) {
+                builder.addPathSegment(param);
+            }
+
+//            parameterData.forEach((k, v) -> builder.addQueryParameter(k, v)); // from API24
+            for (String key : parameterData.keySet()) {
+                builder.addQueryParameter(key, parameterData.get(key));
+            }
+
+            Request request = new Request.Builder()
+                    .url(builder.build())
+                    .build(); //GET Request
+
+            //동기 처리시 execute함수 사용
+            client.newCall(request).enqueue(callback);
+        } catch (Exception e){
+            System.err.println(e.toString());
+        }
     }
 
 }

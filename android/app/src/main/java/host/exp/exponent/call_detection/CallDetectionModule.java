@@ -134,14 +134,14 @@ public class CallDetectionModule extends ReactContextBaseJavaModule {
         boolean checkResult = true;
 
         Activity currentActivity = getCurrentActivity();
-//        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG}, PHONE_STATE_REQCODE);
-//            checkResult = false;
-//        }
-        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_STATE_REQCODE);
+        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG}, PHONE_STATE_REQCODE);
             checkResult = false;
         }
+//        if ( ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_STATE_REQCODE);
+//            checkResult = false;
+//        }
 
         return checkResult;
     }

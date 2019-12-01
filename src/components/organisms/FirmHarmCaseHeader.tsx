@@ -43,6 +43,9 @@ const SearchNoticeWrap = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
+const SearchCountWrap = styled.View`
+  flex-direction: row;
+`;
 const SearchNoticeText = styled.Text`
   color: ${colors.pointDark};
   font-family: ${fonts.batang};
@@ -64,11 +67,11 @@ const styles = StyleSheet.create({
     padding: 0
   },
   containerSearchBar: {
+    paddingTop: 5,
+    paddingBottom: 5,
     backgroundColor: colors.batangDark,
     borderTopColor: colors.batangDark,
-    borderBottomColor: colors.batangDark,
-    paddingTop: 5,
-    paddingBottom: 5
+    borderBottomColor: colors.batangDark
   },
   inputSearchBar: {
     fontSize: 16,
@@ -150,9 +153,17 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
       />
       <SearchNoticeWrap>
         <SearchNoticeText>{props.searchNotice}</SearchNoticeText>
-        <SearchNoticeText>
-          {`전체글: ${props.countData ? props.countData.totalCnt : '-'}  |  내글: ${props.countData ? props.countData.myCnt : '-'}`}
-        </SearchNoticeText>
+        <SearchCountWrap>
+          <SearchNoticeText>
+            {`전체글: ${props.countData ? props.countData.totalCnt : '-'}`}
+          </SearchNoticeText>
+          <SearchNoticeText>
+            {'  |  '}
+          </SearchNoticeText>
+          <SearchNoticeText>
+            {`내글: ${props.countData ? props.countData.myCnt : '-'}`}
+          </SearchNoticeText>
+        </SearchCountWrap>
       </SearchNoticeWrap>
     </HeaderWrap>
   );

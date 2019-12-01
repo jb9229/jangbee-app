@@ -16,7 +16,7 @@ const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
-function FirmHarmCaseScreen ({navigation, user}): React.ReactElement {
+function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);

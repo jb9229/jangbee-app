@@ -1,9 +1,10 @@
+import './rn-addons';
+
+import { configure, getStorybookUI } from '@storybook/react-native';
+
 import { AppRegistry } from 'react-native';
-import { getStorybookUI, configure } from '@storybook/react-native';
 import { loadStories } from './storyLoader';
 import { setupGlobalDecorators } from './global_decorators';
-
-import './rn-addons';
 
 /**
  * 전역 데코레이터 추가 설정
@@ -21,6 +22,6 @@ const StorybookUIRoot = getStorybookUI({});
 
 // If you are using React Native vanilla and after installation you don't see your app name here, write it manually.
 // If you use Expo you can safely remove this line.
-AppRegistry.registerComponent('%APP_NAME%', () => StorybookUIRoot);
+// AppRegistry.registerComponent('%APP_NAME%', () => StorybookUIRoot);
 
 export default StorybookUIRoot;

@@ -1,19 +1,21 @@
-import React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { Linking } from 'expo';
 import * as WebBrowser from 'expo-web-browser';
-import styled from 'styled-components/native';
+
+import { Alert, StyleSheet, View } from 'react-native';
+
+import JBButton from 'molecules/JBButton';
+import JBErrorMessage from 'organisms/JBErrorMessage';
+import { Linking } from 'expo';
+import React from 'react';
+import colors from 'constants/Colors';
 import firebase from 'firebase';
 import fonts from 'constants/Fonts';
-import colors from 'constants/Colors';
-import { getUserInfo } from 'utils/FirebaseUtils';
-import { validate } from 'utils/Validation';
 import { formatTelnumber } from 'utils/StringUtils';
-import JBErrorMessage from 'organisms/JBErrorMessage';
-import { withLogin } from 'contexts/LoginProvider';
-import JBButton from 'molecules/JBButton';
+import { getUserInfo } from 'utils/FirebaseUtils';
 import { notifyError } from 'common/ErrorNotice';
 import registerForPushNotificationsAsync from 'common/registerForPushNotificationsAsync';
+import styled from 'styled-components/native';
+import { validate } from 'utils/Validation';
+import { withLogin } from 'contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -90,7 +92,7 @@ const LogMsg = styled.Text`
 const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha_v3.html?appurl=${Linking.makeUrl()}`;
 
 class LoginScreen extends React.PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       phoneNumber: '',
@@ -102,7 +104,7 @@ class LoginScreen extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const capchaListener = ({ url }) => {
       let token;
       const tokenEncoded = Linking.parse(url).queryParams.token;
@@ -114,7 +116,7 @@ class LoginScreen extends React.PureComponent {
     Linking.addEventListener('url', capchaListener);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     const { capchaListener } = this.state;
 
     Linking.removeEventListener('url', capchaListener);
@@ -255,7 +257,7 @@ class LoginScreen extends React.PureComponent {
     }
   };
 
-  render() {
+  render () {
     const {
       confirmationResult,
       phoneNumber,
@@ -298,7 +300,6 @@ class LoginScreen extends React.PureComponent {
               this.onCodeChange(text);
             }}
             keyboardType="numeric"
-            secureTextEntry
             placeholder="SMS 인증코드 입력"
             editable={authReadOnly}
           />
