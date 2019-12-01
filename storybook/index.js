@@ -3,8 +3,13 @@ import './rn-addons';
 import { configure, getStorybookUI } from '@storybook/react-native';
 
 import { AppRegistry } from 'react-native';
+import { loadAllAssests } from 'src';
 import { loadStories } from './storyLoader';
 import { setupGlobalDecorators } from './global_decorators';
+
+Promise.all(loadAllAssests).then(() => {
+  console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
+});
 
 /**
  * 전역 데코레이터 추가 설정

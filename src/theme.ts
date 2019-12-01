@@ -2,13 +2,17 @@ import { DefaultTheme } from 'styled-components';
 import { ThemeType } from './types';
 
 export interface Theme {
+  ColorPrimary: string;
+  ColorError: string;
   ColorTextSubtitle: string;
+  ColorTextInput: string;
   ColorTextError: string;
   ColorBtnPrimary: string;
   ColorBtnSecondary: string;
   ColorBtnSuccess: string;
   ColorBtnDefault: string;
   ColorBtnStyle: string;
+  ColorBorderInput: string;
   ColorBGGray: string;
   background: string;
   backgroundDark: string;
@@ -40,13 +44,17 @@ const colors = {
 
 const theme = {
   light: {
+    ColorPrimary: '#ffbb00',
+    colorError: colors.red,
     ColorTextSubtitle: '#606060',
+    ColorTextInput: '#000000',
     ColorTextError: colors.red,
     ColorBtnPrimary: '#ffbb00', // Primary, Secondary, Success, Danger, Warning, Info, Light, Dark, Link
     ColorBtnSecondary: '#444444',
     ColorBtnSuccess: '#00b7ee',
     ColorBtnDefault: '#444444',
     ColorBtnStyle: 'white',
+    ColorBorderInput: '#000000',
     ColorBGGray: '#d7d7d7',
     background: colors.lightBackground,
     backgroundDark: colors.dodgerBlue,
@@ -61,13 +69,17 @@ const theme = {
     lineColor: colors.paleGray
   },
   dark: {
+    ColorPrimary: '#ffbb00',
+    colorError: colors.red,
     ColorTextSubtitle: '#606060',
+    ColorTextInput: '#000000',
     ColorTextError: colors.red,
     ColorBtnPrimary: '#ffbb00',
     ColorBtnSecondary: '#444444',
     ColorBtnSuccess: '#00b7ee',
     ColorBtnDefault: '#444444',
     ColorBtnStyle: 'white',
+    ColorBorderInput: '#000000',
     ColorBGGray: '#d7d7d7',
     background: colors.darkBackground,
     backgroundDark: colors.dodgerBlue,

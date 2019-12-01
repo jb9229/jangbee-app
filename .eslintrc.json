@@ -32,6 +32,7 @@
         "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
       }
     ],
-    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }]
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }],
+    "react/prop-types": 0
   }
 }

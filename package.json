@@ -89,7 +89,7 @@
       "searchDir": [
         "./storybook/stories"
       ],
-      "pattern": "**/*.story.js"
+      "pattern": "**/*.story.tsx"
     }
   }
 }
