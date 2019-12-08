@@ -1,8 +1,13 @@
 package host.exp.exponent;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -53,6 +59,10 @@ import java.util.concurrent.TimeUnit;
 public class IncomingCallBLPopupService extends Service {
     // Variables
     public static final String INCOMINGCALL_NUMBER_EXTRA = "INCOMING_CALL_NUMBER";
+    String NOTIFIVATION_CHANNEL_ID = "19";
+    NotificationChannel notificationChannel;
+    NotificationManager blNotifyManager;
+    NotificationCompat.Builder blBuilder;
 
     Context context;
     WindowManager windowManager;
@@ -73,6 +83,40 @@ public class IncomingCallBLPopupService extends Service {
         super.onCreate();
         context = (Context)this;
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        Intent startAppIntent = new Intent(this, MainActivity.class);
+        PendingIntent startAppPendingIntent = PendingIntent.getActivity(this, 1, startAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        blNotifyManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        blBuilder = new NotificationCompat.Builder(this, null);
+        blBuilder.setContentTitle("수신 전화 피해사례 존재")
+                .setContentText("수신전화번호로 피해사례가 존재 합니다")
+                .setContentIntent(startAppPendingIntent)
+                .setTicker("Checking The Numbers")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setOngoing(false)
+                .setAutoCancel(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel(NOTIFIVATION_CHANNEL_ID, "Found Black List Notifications", NotificationManager.IMPORTANCE_NONE); // IMPORTANCE_NONE
+
+            // Configure the notification channel.
+            notificationChannel.setDescription("Channel description");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            notificationChannel.enableVibration(true);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            blNotifyManager.createNotificationChannel(notificationChannel);
+
+            blBuilder.setChannelId(NOTIFIVATION_CHANNEL_ID);
+            startForeground(19, blBuilder.build());
+        } else {
+            blBuilder.setChannelId(NOTIFIVATION_CHANNEL_ID);
+            //startForeground(17, blBuilder.build());
+            blNotifyManager.notify(19, blBuilder.build());
+        }
 
         int layoutType;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

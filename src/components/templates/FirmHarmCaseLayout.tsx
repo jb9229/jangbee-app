@@ -39,7 +39,7 @@ interface Props {
   onClickMyEvaluList: () => void;
   onClickNewestEvaluList: () => void;
   setVisibleCreateModal: (flag: boolean) => void;
-  searchFilterCliEvalu: () => void;
+  searchFilterCliEvalu: (searchWord: string) => void;
   shareNotExistCEvalu: (searchArea: string, searchWord: string, searchTime: string) => void;
   openDetailModal: (evalu) => void;
   openUpdateCliEvaluForm: () => void;

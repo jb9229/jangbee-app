@@ -54,9 +54,9 @@ public class CallScanJobService extends JobService {
                 String result   = response.body().string();
                 if (result != null && !result.isEmpty() && Boolean.parseBoolean(result)) {
                     String blResult = PhoneNumberUtils.formatNumber(phoneNumber);
-
-                    Intent appStartIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(appStartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//
+//                    Intent appStartIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                    startActivity(appStartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                     Intent serviceIntent = new Intent(getApplicationContext(), IncomingCallBLPopupService.class);
                     serviceIntent.putExtra(IncomingCallBLPopupService.INCOMINGCALL_NUMBER_EXTRA, blResult);

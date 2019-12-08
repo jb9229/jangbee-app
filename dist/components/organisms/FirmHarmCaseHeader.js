@@ -82,7 +82,11 @@ export default function FirmHarmCaseHeader(props) {
           <JBButton title="추가" onPress={() => this.setState({ isVisibleCreateModal: true })} size="small" align="right" bgColor={colors.batangDark} color={colors.pointDark}/>
         </CommandWrap>
       </HeaderTopWrap>
-      <SearchBar value={searchWord} placeholder={searchPlaceholder} containerStyle={styles.containerSearchBar} inputStyle={styles.inputSearchBar} lightTheme round onChangeText={text => this.setState({ searchWord: text })} searchIcon={{ onPress: () => this.searchFilterCliEvalu() }} onSubmitEditing={() => this.searchFilterCliEvalu()} autoCorrect={false}/>
+      <SearchBar value={searchWord} placeholder={searchPlaceholder}
+        containerStyle={styles.containerSearchBar} inputStyle={styles.inputSearchBar} lightTheme round
+        onChangeText={text => this.setState({ searchWord: text })}
+        searchIcon={{ onPress: () => this.searchFilterCliEvalu() }}
+        onSubmitEditing={() => this.searchFilterCliEvalu()} autoCorrect={false}/>
       <SearchNoticeWrap>
         <SearchNoticeText>{searchNotice}</SearchNoticeText>
       </SearchNoticeWrap>

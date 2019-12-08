@@ -42,7 +42,7 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
     if (params && params.search) {
       setSearchArea('TEL');
       setSearchWord(params.search);
-      searchFilterCliEvalu();
+      searchFilterCliEvalu(params.search);
     } else {
       getClientEvaluCount(user.uid, setCountData);
       setClinetEvaluList();
@@ -215,7 +215,7 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 피해사례 필터링 함수
    */
-  const searchFilterCliEvalu = () => {
+  const searchFilterCliEvalu = (searchWord: string): void => {
     if (!searchWord) {
       setSearchNotice('검색어를 기입해 주세요!');
       return;
