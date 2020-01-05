@@ -1,10 +1,8 @@
 import * as api from 'api/api';
-import * as firebaseDB from 'utils/FirebaseUtils';
 import * as imageManager from 'common/ImageManager';
 
 import {
   Alert,
-  FlatList,
   KeyboardAvoidingView,
   Picker,
   ScrollView,
@@ -19,13 +17,9 @@ import EquipementModal from 'templates/EquipmentModal';
 import ImagePickInput from 'molecules/ImagePickInput';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBActIndicatorModal from 'templates/JBActIndicatorModal';
-import JBButton from 'molecules/JBButton';
 import JBErrorMessage from 'organisms/JBErrorMessage';
 import JBTextInput from 'molecules/JBTextInput';
-import ListSeparator from 'molecules/ListSeparator';
 import MapAddWebModal from 'templates/MapAddWebModal';
-import OBAccount from 'molecules/OBAccount';
-import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
@@ -43,18 +37,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   formWrap: {},
-  adTypeFormWrap: {
-    flex: 1,
-    margin: 10,
-    marginBottom: 3
-  },
   adTypeTitle: {
     fontFamily: fonts.titleMiddle,
     color: colors.title,
     fontSize: 15,
     marginBottom: 3
   },
-  adTypePicker: {},
   bookedAdTypeText: {
     textDecorationLine: 'line-through'
   },
@@ -90,15 +78,11 @@ class AdCreateScreen extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      isAccEmpty: undefined,
       isVisibleEquiModal: false,
       isVisibleMapAddModal: false,
       isVisibleActIndiModal: false,
-      isVisibleOBAuthModal: false,
       accList: [],
       bookedAdTypeList: [1, 2],
-      payErrMessage: '',
-      selFinUseNum: '',
       adType: undefined,
       adTitle: '',
       adSubTitle: '',
@@ -111,17 +95,10 @@ class AdCreateScreen extends React.Component {
       adSubTitleValErrMessage: '',
       adPhotoUrlValErrMessage: '',
       adTelNumberValErrMessage: '',
-      selFinUseNumValErrMessage: '',
       adEquipmentValErrMessage: '',
       adLocalValErrMessage: '',
       imgUploadingMessage: ''
     };
-  }
-
-  componentDidMount () {
-    const { navigation } = this.props;
-
-    Alert.alert('무료광고 등록', '2019. 12월 중순까지 무료로 사용해 보세요. 2019. 12월 중순 이후 고객의 동의하에(전화통화로 동의를 구함) 신규신청 됩니다\n\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다', [{ text: '취소', onPress: () => navigation.navigate('Ad') }, { text: '등록하기', onPress: () => this.init() }], { cancelable: false });
   }
 
   componentWillReceiveProps (nextProps) {
@@ -130,13 +107,11 @@ class AdCreateScreen extends React.Component {
 
     if (params !== undefined && params.action === 'RELOAD') {
       this.setAvailableAdType();
-      this.setOpenBankAccountList();
     }
   }
 
   init = () => {
     this.setAvailableAdType();
-    this.setOpenBankAccountList();
     this.setFirmInfo();
   }
 
@@ -149,13 +124,6 @@ class AdCreateScreen extends React.Component {
       .catch((error) => {
         notifyError(error.name, error.message);
       });
-  };
-
-  /**
-   * 결제계좌 추가 함수
-   */
-  addOBAccount = () => {
-    this.setState({ isVisibleOBAuthModal: true });
   };
 
   /**
@@ -181,100 +149,6 @@ class AdCreateScreen extends React.Component {
   };
 
   /**
-   * 광고 결재할 계좌리스트 설정함수
-   */
-  setOpenBankAccountList = async () => {
-    const { user } = this.props;
-
-    firebaseDB.getUserInfo(user.uid).then((data) => {
-      const userInfo = data.val();
-      const { obAccessToken, obUserSeqNo } = userInfo;
-      if (obAccessToken === undefined || obUserSeqNo === undefined) {
-        this.setState({ isAccEmpty: true });
-        return;
-      }
-
-      api
-        .getOBAccList(obAccessToken, obUserSeqNo, 'N', 'A')
-        .then((accInfo) => {
-          if (accInfo.rsp_code && accInfo.rsp_code !== 'A0000') {
-            Alert.alert(
-              '계좌리스트 요청 문제',
-              `계좌리스트를 불러오는데 문제가 있습니다(${accInfo.rsp_code}, ${
-                accInfo.rsp_message
-              }), 메일로 문의 또는 다시 결제계좌를 추가해 주세요.`
-            );
-
-            this.setState({ isAccEmpty: true });
-            return;
-          }
-
-          if (accInfo.res_cnt !== '0') {
-            const resAccList = accInfo.res_list;
-
-            // Vaidation
-            if (!resAccList) {
-              this.setState({ isEmptyList: true });
-              notifyError(
-                '등록 계좌 조회 실패',
-                `등록뢴 계좌를 찾을 수 없습니다. -> [${resAccList}]`
-              );
-              return;
-            }
-
-            const accountList = [];
-            resAccList.forEach((element, index) => {
-              this.setAccBalance(obAccessToken, element)
-                .then((newAccount) => {
-                  accountList.push(newAccount);
-
-                  if (index === accInfo.res_cnt - 1) {
-                    this.setState({ accList: accountList, isAccEmpty: false });
-                  }
-                })
-                .catch(error => notifyError(error.name, error.message));
-            });
-            return;
-          }
-
-          this.setState({ isAccEmpty: true });
-        })
-        .catch((error) => {
-          Alert.alert(
-            '네트워크 문제가 있습니다, 다시 시도해 주세요.',
-            `계좌리스트 조회 실패 -> [${error.name}] ${error.message}`
-          );
-
-          this.setState({ isAccEmpty: true });
-        });
-    });
-  };
-
-  setAccBalance = (obAccessToken, account) => {
-    const fintechUseNum = account.fintech_use_num;
-    const newAccount = account;
-
-    return api
-      .getOBAccBalance(obAccessToken, fintechUseNum)
-      .then((res) => {
-        if (res && res.rsp_code && res.rsp_code === 'A0000') {
-          newAccount.available_amt = res.available_amt;
-        } else {
-          console.log(res);
-        }
-
-        return newAccount;
-      })
-      .catch((error) => {
-        notifyError(
-          '잔액조회 실패',
-          `네트워크 환경 확인 후 다시 시도해 주세요(${error.name}, ${error.message})`
-        );
-        return newAccount;
-      });
-  }
-
-  /**
    * 광고생성폼 유효성검사 메세지 초기화함수
    */
   setInitValErroMSG = () => {
@@ -284,7 +158,6 @@ class AdCreateScreen extends React.Component {
       adPhotoUrlValErrMessage: '',
       adTelNumberValErrMessage: '',
       forMonthsValErrMessage: '',
-      selFinUseNumValErrMessage: '',
       adEquipmentValErrMessage: '',
       adLocalValErrMessage: ''
     });
@@ -332,10 +205,6 @@ class AdCreateScreen extends React.Component {
     });
   };
 
-  onAccListItemPress = (selectedFUN) => {
-    this.setState({ selFinUseNum: selectedFUN });
-  };
-
   /**
    * 광고타입 픽 이벤트 함수
    */
@@ -363,8 +232,7 @@ class AdCreateScreen extends React.Component {
       adEquipment,
       adTelNumber,
       adSido,
-      adGungu,
-      selFinUseNum
+      adGungu
     } = this.state;
     const { navigation, user, userProfile } = this.props;
 
@@ -396,12 +264,10 @@ class AdCreateScreen extends React.Component {
       forMonths,
       photoUrl: serverAdImgUrl,
       telNumber: adTelNumber,
-      fintechUseNum: selFinUseNum,
       equiTarget: adEquipmentTypeData,
       sidoTarget: adSidoTypeData,
       gugunTarget: adGunguTypeData,
-      price: this.getAdPrice(adType),
-      obAccessToken: userProfile.obAccessToken
+      price: this.getAdPrice(adType)
     };
 
     api
@@ -486,8 +352,7 @@ class AdCreateScreen extends React.Component {
       adSubTitle,
       forMonths,
       adPhotoUrl,
-      adTelNumber,
-      selFinUseNum
+      adTelNumber
     } = this.state;
     const { user, userProfile } = this.props;
 
@@ -530,16 +395,6 @@ class AdCreateScreen extends React.Component {
     v = validate('cellPhone', adTelNumber, false);
     if (!v[0]) {
       this.setState({ adTelNumberValErrMessage: v[1] });
-      return false;
-    }
-
-    if (!selFinUseNum) {
-      this.setState({ selFinUseNumValErrMessage: '광고비 이체계좌를 선택해 주세요' });
-      return false;
-    }
-
-    if (!userProfile.obAccessToken) {
-      this.setState({ selFinUseNumValErrMessage: '광고비 이체계좌의 인증토큰을 찾을 수 없습니다' });
       return false;
     }
 
@@ -588,233 +443,10 @@ class AdCreateScreen extends React.Component {
     return true;
   };
 
-  /**
-   * 광고비 결제 요청함수(오픈뱅크 심사용)
-   */
-  withdrawDispatchFee = () => {
-    const { userProfile } = this.props;
-    const { selFinUseNum } = this.state;
-
-    // 지원비 이체
-    api
-      .transferWithdraw(userProfile.obAccessToken, selFinUseNum, 30000, '장비콜 광고비 출금')
-      .then((res) => {
-        if (res && res.rsp_code && res.rsp_code === 'A0000') {
-          this.requestCreaAd();
-          return;
-        }
-        notifyError(
-          '광고비 출금 문제',
-          `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${res.rsp_code}, ${
-            res.rsp_message
-          })`
-        );
-      })
-      .catch((error) => {
-        notifyError(
-          '광고비 출금 문제',
-          `네트워크 환경확인 또는 통장잔액을 확인후 다시 시도해 주세요(${error.name}, ${
-            error.message
-          })`
-        );
-      });
-  };
-
-  /**
-   * 광고타입 렌더링 함수
-   */
-  renderAdTypeList = (type, typeDescription) => {
-    const { bookedAdTypeList } = this.state;
-    if (bookedAdTypeList.includes(type)) {
-      return <Picker.Item label={typeDescription} value={type} />; // color="gray" it is issued when onselect
-    }
-
-    return <Picker.Item label={typeDescription} value={type} />;
-  };
-
   render () {
-    const { navigation, user } = this.props;
-    const {
-      isAccEmpty,
-      isVisibleEquiModal,
-      isVisibleMapAddModal,
-      isVisibleActIndiModal,
-      isVisibleOBAuthModal,
-      accList,
-      selFinUseNum,
-      adType,
-      adTitle,
-      forMonths,
-      adTelNumber,
-      adSubTitle,
-      adPhotoUrl,
-      adEquipment,
-      adSido,
-      adGungu,
-      payErrMessage,
-      adTitleValErrMessage,
-      adSubTitleValErrMessage,
-      forMonthsValErrMessage,
-      adPhotoUrlValErrMessage,
-      adTelNumberValErrMessage,
-      selFinUseNumValErrMessage,
-      adEquipmentValErrMessage,
-      adLocalValErrMessage,
-      imgUploadingMessage
-    } = this.state;
-
-    if (isAccEmpty === undefined) {
+    if (true) {
       return <JBActIndicator title="통장 리스트 불러오는중..." size={35} />;
     }
-
-    if (isAccEmpty) {
-      return (
-        <View style={styles.warningWrap}>
-          <Text style={styles.warningText}>먼저, 홍보비 결제 통장을 등록해 주세요.</Text>
-          <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
-          <OpenBankAuthWebView
-            isVisibleModal={isVisibleOBAuthModal}
-            type="ADD_ACCOUNT"
-            navigation={navigation}
-            completeAction={() => { this.setState({ isVisibleOBAuthModal: false }); this.setOpenBankAccountList(); }}
-            closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
-          />
-        </View>
-      );
-    }
-
-    return (
-      <View style={styles.container}>
-        <Card>
-          <KeyboardAvoidingView>
-            <ScrollView contentContainerStyle={styles.formWrap}>
-              <EquipementModal
-                isVisibleEquiModal={isVisibleEquiModal}
-                closeModal={() => this.setState({ isVisibleEquiModal: false })}
-                selEquipmentStr={adEquipment}
-                completeSelEqui={seledEuipListStr => this.setState({ adEquipment: seledEuipListStr })}
-                nextFocus={() => {}}
-                singleSelectMode
-              />
-              <MapAddWebModal
-                isVisibleMapAddModal={isVisibleMapAddModal}
-                setMapAddModalVisible={(visible) => {
-                  this.setState({ isVisibleMapAddModal: visible });
-                }}
-                saveAddrInfo={(addrData) => {
-                  this.setState({ adSido: addrData.sidoAddr, adGungu: addrData.sigunguAddr });
-                }}
-                nextFocus={() => {}}
-              />
-              <View style={styles.adTypeFormWrap}>
-                <Text style={styles.adTypeTitle}>광고타입*</Text>
-                <Picker
-                  selectedValue={adType}
-                  style={styles.adTypePicker}
-                  onValueChange={itemValue => this.onPickAdType(itemValue)}
-                >
-                  <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
-                  {this.renderAdTypeList(1, '메인광고_첫번째(월 7만원)')}
-                  {this.renderAdTypeList(2, '메인광고_두번째(월 5만원)')}
-                  {this.renderAdTypeList(3, '메인광고_세번째(월 3만원)')}
-                  <Picker.Item
-                    label="장비 타켓광고_첫번째(월 2만원)"
-                    value={ADTYPE_EQUIPMENT_FIRST}
-                  />
-                  <Picker.Item label="지역 타켓광고_첫번째(월 1만원)" value={ADTYPE_LOCAL_FIRST} />
-                </Picker>
-              </View>
-              <JBTextInput
-                title="계약기간"
-                subTitle="(월, 필수)"
-                value={forMonths}
-                onChangeText={text => this.setState({ forMonths: text })}
-                placeholder="몇개월간 홍보하시겠습니까?"
-                keyboardType="numeric"
-              />
-              <JBErrorMessage errorMSG={forMonthsValErrMessage} />
-              <JBTextInput
-                title="광고 타이틀"
-                subTitle="(10자까지, 필수)"
-                value={adTitle}
-                onChangeText={text => this.setState({ adTitle: text })}
-                placeholder="광고상단 문구를 입력하세요(최대 10자)"
-              />
-              <JBErrorMessage errorMSG={adTitleValErrMessage} />
-              <JBTextInput
-                title="광고 슬로건"
-                subTitle="(20자까지, 필수)"
-                value={adSubTitle}
-                onChangeText={text => this.setState({ adSubTitle: text })}
-                placeholder="광고하단 문구를 입력하세요(최대 20자)"
-              />
-              <JBErrorMessage errorMSG={adSubTitleValErrMessage} />
-              <ImagePickInput
-                itemTitle="광고배경 사진"
-                imgUrl={adPhotoUrl}
-                setImageUrl={url => this.setState({ adPhotoUrl: url })}
-              />
-              <JBErrorMessage errorMSG={adPhotoUrlValErrMessage} />
-              <JBTextInput
-                title="전화번호"
-                value={adTelNumber}
-                onChangeText={text => this.setState({ adTelNumber: text })}
-                placeholder="휴대전화 번호입력(숫자만)"
-              />
-              <JBErrorMessage errorMSG={adTelNumberValErrMessage} />
-              {(adType === 11 || adType === 21) && (
-                <JBTextInput
-                  title="타켓 광고(장비)"
-                  value={adEquipment}
-                  onChangeText={text => this.setState({ adEquipment: text })}
-                  onFocus={() => this.setState({ isVisibleEquiModal: true })}
-                  placeholder="타켓광고 장비 선택해 주세요"
-                />
-              )}
-              <JBErrorMessage errorMSG={adEquipmentValErrMessage} />
-              {adType === 21 && (
-                <JBTextInput
-                  title="타켓 광고(지역)"
-                  value={`${adSido}${adGungu}`}
-                  onFocus={() => this.setState({ isVisibleMapAddModal: true })}
-                  placeholder="타켓광고 지역을 선택해 주세요"
-                />
-              )}
-              <JBErrorMessage errorMSG={adLocalValErrMessage} />
-              <View>
-                {isAccEmpty !== undefined && !isAccEmpty && (
-                  <FlatList
-                    data={accList}
-                    extraData={selFinUseNum}
-                    renderItem={item => OBAccount(item.item, selFinUseNum, this.onAccListItemPress)}
-                    keyExtractor={(item, index) => index.toString()}
-                    ItemSeparatorComponent={ListSeparator}
-                  />
-                )}
-                <JBErrorMessage errorMSG={selFinUseNumValErrMessage} />
-                <JBButton title="결제계좌 추가" onPress={this.addOBAccount} size="small" />
-              </View>
-              <View style={styles.botCommWrap}>
-                <JBErrorMessage errorMSG={payErrMessage} />
-                <JBButton title="결제하기" onPress={this.validateCreaAd} size="full" Primary />
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-          <JBActIndicatorModal
-            isVisibleModal={isVisibleActIndiModal}
-            message={imgUploadingMessage}
-            size="large"
-          />
-          <OpenBankAuthWebView
-            isVisibleModal={isVisibleOBAuthModal}
-            type="ADD_ACCOUNT"
-            navigation={navigation}
-            completeAction={() => { this.setState({ isVisibleOBAuthModal: false }); this.setOpenBankAccountList(); }}
-            closeModal={() => this.setState({ isVisibleOBAuthModal: false })}
-          />
-        </Card>
-      </View>
-    );
   }
 }
 

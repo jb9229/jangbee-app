@@ -1,8 +1,9 @@
-import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
-import styled from 'styled-components/native';
-import fonts from 'constants/Fonts';
+
+import React from 'react';
 import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 const Container = styled.View`
   ${props =>
@@ -13,13 +14,13 @@ const Container = styled.View`
     align-items: center;
     margin-bottom: 5px;
   `}
+  margin-top: 15;
 `;
 
 const Title = styled.Text`
   font-family: ${fonts.titleMiddle};
   color: ${colors.titleDark};
   font-size: 15;
-  margin-bottom: 3;
   ${props =>
     props.fill &&
     `
@@ -30,6 +31,7 @@ const Title = styled.Text`
 const TitleWrap = styled.View`
   flex-direction: row;
   align-items: center;
+  margin-bottom: 8;
 `;
 
 const SubTitle = styled.Text`
@@ -54,8 +56,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class JBTextInput extends React.PureComponent {
-  render() {
+export default class JBTextInput extends React.PureComponent
+{
+  render ()
+  {
     const {
       row,
       title,

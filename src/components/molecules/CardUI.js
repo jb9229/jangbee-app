@@ -15,19 +15,21 @@ const Card = Styled.View`
   border-radius: 15;
   margin: 10px;
   
-  ${props => props.Finished
-    && `
+  ${props => props.Finished &&
+    `
     background-color: ${colors.batang};
   `}
 
-  ${props => props.Primary
-    && `
+  ${props => props.Primary &&
+    `
     background-color: ${colors.pointBatang};
   `}
 `;
 
-export default class CardUI extends React.PureComponent {
-  render() {
+export default class CardUI extends React.PureComponent
+{
+  render ()
+  {
     const { Finished, Primary, bgColor } = this.props;
 
     return (

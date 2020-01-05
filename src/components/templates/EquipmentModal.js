@@ -1,18 +1,19 @@
-import React from 'react';
 import {
   Alert,
-  ScrollView,
+  LayoutAnimation,
   Modal,
-  StyleSheet,
-  View,
-  UIManager,
   Platform,
-  LayoutAnimation
+  ScrollView,
+  StyleSheet,
+  UIManager,
+  View
 } from 'react-native';
-import colors from 'constants/Colors';
+
 import CloseButton from 'molecules/CloseButton';
-import JangbeeAdList from 'organisms/JangbeeAdList';
 import ExpandableItem from 'organisms/ExpandableItem';
+import JangbeeAdList from 'organisms/JangbeeAdList';
+import React from 'react';
+import colors from 'constants/Colors';
 
 const styles = StyleSheet.create({
   container: {},
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
 });
 
 export default class EquipementModal extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       listDataSource: EQUIPMENT_CONTENT
@@ -42,7 +43,7 @@ export default class EquipementModal extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const { isVisibleEquiModal } = nextProps;
     const { listDataSource } = this.state;
 
@@ -139,7 +140,7 @@ export default class EquipementModal extends React.Component {
     closeModal();
   };
 
-  render() {
+  render () {
     const {
       isVisibleEquiModal,
       advertisement,
@@ -149,36 +150,34 @@ export default class EquipementModal extends React.Component {
     const { listDataSource, update } = this.state;
 
     return (
-      <View style={styles.container}>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={isVisibleEquiModal}
-          onRequestClose={() => closeModal()}
-        >
-          <View style={styles.cardWrap}>
-            <View style={styles.card}>
-              <CloseButton onClose={() => closeModal()} />
-              {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
-              <ScrollView>
-                {listDataSource.map((group, key) => (
-                  <ExpandableItem
-                    key={group.category_name}
-                    onClickFunction={() => this.updateLayout(key)}
-                    onCatCheck={() => this.updateCheck(key)}
-                    item={group}
-                    completeSel={this.completeSelEqui}
-                    selectSubCate={itemIndex =>
-                      this.selectSubCate(group, key, itemIndex)
-                    }
-                    multiSelect={multiSelect}
-                  />
-                ))}
-              </ScrollView>
-            </View>
+      <Modal
+        animationType="slide"
+        transparent
+        visible={isVisibleEquiModal}
+        onRequestClose={() => closeModal()}
+      >
+        <View style={styles.cardWrap}>
+          <View style={styles.card}>
+            <CloseButton onClose={() => closeModal()} />
+            {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
+            <ScrollView>
+              {listDataSource.map((group, key) => (
+                <ExpandableItem
+                  key={group.category_name}
+                  onClickFunction={() => this.updateLayout(key)}
+                  onCatCheck={() => this.updateCheck(key)}
+                  item={group}
+                  completeSel={this.completeSelEqui}
+                  selectSubCate={itemIndex =>
+                    this.selectSubCate(group, key, itemIndex)
+                  }
+                  multiSelect={multiSelect}
+                />
+              ))}
+            </ScrollView>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
     );
   }
 }

@@ -22,8 +22,8 @@
     "sourceType": "module"
   },
   "rules": {
-    "max-len": ["error", { "code": 100 }],
-    "semi": [2, "always"],
+    "max-len": ["error", { "code": 120 }],
+    "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
     "sort-imports": [
       2,
       {
@@ -33,6 +33,7 @@
       }
     ],
     "@typescript-eslint/no-use-before-define": ["error", { "variables": false }],
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "brace-style": ["error", "allman", { "allowSingleLine": true }]
   }
 }

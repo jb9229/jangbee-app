@@ -1,20 +1,23 @@
-import React from 'react';
 import {
-  Modal, StyleSheet, WebView, View,
+  Modal,
+  StyleSheet,
+  View,
+  WebView
 } from 'react-native';
+
+import React from 'react';
 
 const WEBMSG_ACTION_SAVE = 'SAVE';
 const WEBMSG_ACTION_CACEL = 'CALCEL';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
   },
   mapAddModalWrap: {
     flex: 1,
     backgroundColor: '#FFF',
-    padding: 20,
-  },
+    padding: 20
+  }
 });
 
 export default class MapAddWebModal extends React.PureComponent {
@@ -37,7 +40,7 @@ export default class MapAddWebModal extends React.PureComponent {
     setMapAddModalVisible(false);
   };
 
-  render() {
+  render () {
     const { isVisibleMapAddModal } = this.props;
 
     return (

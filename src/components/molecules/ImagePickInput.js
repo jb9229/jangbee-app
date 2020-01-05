@@ -1,10 +1,12 @@
-import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import styled from 'styled-components/native';
-import fonts from 'constants/Fonts';
-import colors from 'constants/Colors';
+
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import JBIcon from 'atoms/JBIcon';
+import React from 'react';
+import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 const Title = styled.Text`
   font-family: ${fonts.titleMiddle};
@@ -31,11 +33,12 @@ const SubTitle = styled.Text`
 
 const styles = StyleSheet.create({
   itemWrap: {
-    flex: 1
+    marginTop: 15
   },
   titleWrap: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: 8
   },
   urlInput: {},
   urlText: {
@@ -64,8 +67,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class ImagePickInput extends React.Component {
-  pickImage = async () => {
+export default class ImagePickInput extends React.Component
+{
+  pickImage = async () =>
+  {
     const { aspect, setImageUrl } = this.props;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -75,17 +80,20 @@ export default class ImagePickInput extends React.Component {
 
     console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.cancelled)
+    {
       setImageUrl(result.uri);
     }
   };
 
-  removeImg = () => {
+  removeImg = () =>
+  {
     const { setImageUrl } = this.props;
     setImageUrl('');
   };
 
-  render() {
+  render ()
+  {
     const { itemTitle, subTitle, imgUrl, itemWrapStyle } = this.props;
 
     const urlTextStyle = imgUrl ? styles.urlText : styles.placeholder;
