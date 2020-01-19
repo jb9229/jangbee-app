@@ -7,12 +7,10 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import AppNavigator from 'navigation/AppNavigator';
 import { Asset } from 'expo-asset';
 import JBActIndicator from 'molecules/JBActIndicator';
-import { LoginProvider } from 'contexts/LoginProvider';
+import { LoginProvider } from 'src/contexts/LoginProvider';
 import React from 'react';
-import { ThemeProvider } from 'styled-components/native';
-import { ThemeType } from 'src/types';
+import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import colors from 'constants/Colors';
-import { createTheme } from 'src/theme';
 import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
 
@@ -23,34 +21,41 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class App extends React.Component {
+export default class App extends React.Component
+{
   state = {
     isLoadingComplete: false,
     isAppUpdateComplete: false
   };
 
-  componentDidMount () {
+  componentDidMount ()
+  {
     this.checkUpdate();
   }
 
   _loadResourcesAsync = async () =>
     Promise.all(loadAllAssests);
 
-  _handleLoadingError = error => {
+  _handleLoadingError = error =>
+  {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
     console.warn(error);
   };
 
-  _handleFinishLoading = () => {
+  _handleFinishLoading = () =>
+  {
     this.initFirebase();
     this.setState({ isLoadingComplete: true });
   };
 
-  checkUpdate = async () => {
-    try {
+  checkUpdate = async () =>
+  {
+    try
+    {
       const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
+      if (update.isAvailable)
+      {
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
         Updates.reloadFromCache();
@@ -58,22 +63,27 @@ export default class App extends React.Component {
       }
 
       this.setState({ isAppUpdateComplete: true });
-    } catch (e) {
+    }
+    catch (e)
+    {
       this.setState({ isAppUpdateComplete: true });
     }
   };
 
-  initFirebase = () => {
+  initFirebase = () =>
+  {
     firebase.initializeApp(firebaseconfig);
 
     firebase.auth().languageCode = 'ko';
   };
 
-  render () {
+  render ()
+  {
     const { skipLoadingScreen, BLACKLIST_LAUNCH } = this.props;
     const { isLoadingComplete, isAppUpdateComplete } = this.state;
 
-    if (!isLoadingComplete && !skipLoadingScreen) {
+    if (!isLoadingComplete && !skipLoadingScreen)
+    {
       return (
         <AppLoading
           startAsync={this._loadResourcesAsync}
@@ -83,13 +93,14 @@ export default class App extends React.Component {
       );
     }
 
-    if (!isAppUpdateComplete) {
+    if (!isAppUpdateComplete)
+    {
       return <JBActIndicator title="앱 버전 업데이트 체크중..." size={35} />;
     }
 
     return (
       <LoginProvider>
-        <ThemeProvider theme={createTheme(ThemeType.LIGHT)}>
+        <ThemeProvider>
           <View style={styles.container}>
             {Platform.OS === 'ios' ? (
               <StatusBar barStyle="default" />

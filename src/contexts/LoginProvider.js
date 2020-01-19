@@ -1,12 +1,15 @@
-import React from 'react';
+import * as React from 'react';
+
 import { getUserInfo } from 'utils/FirebaseUtils';
 
 const Context = React.createContext();
 
 const { Provider, Consumer: LoginConsumer } = Context;
 
-class LoginProvider extends React.Component {
-  constructor(props) {
+class LoginProvider extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       user: { phoneNumber: '0102376555' },
@@ -25,10 +28,12 @@ class LoginProvider extends React.Component {
     };
 
     this.actions = {
-      setUser: loginUser => {
+      setUser: loginUser =>
+      {
         this.setState({ user: loginUser });
       },
-      setUserType: loginUserType => {
+      setUserType: loginUserType =>
+      {
         this.setState({
           ...this.state,
           userProfile: { ...this.state.userProfile, type: loginUserType }
@@ -40,7 +45,8 @@ class LoginProvider extends React.Component {
         obAccTokenExpDate,
         obAccTokenDiscDate,
         obUserSeqNo
-      ) => {
+      ) =>
+      {
         this.setState({
           ...this.state,
           userProfile: {
@@ -53,7 +59,8 @@ class LoginProvider extends React.Component {
           }
         });
       },
-      setFirmInfo: (equipment, modelYear) => {
+      setFirmInfo: (equipment, modelYear) =>
+      {
         this.setState({
           ...this.state,
           firmInfo: {
@@ -63,9 +70,11 @@ class LoginProvider extends React.Component {
           }
         });
       },
-      refreshUserOBInfo: () => {
+      refreshUserOBInfo: () =>
+      {
         const { user } = this.state;
-        getUserInfo(user.uid).then(data => {
+        getUserInfo(user.uid).then(data =>
+        {
           const refreshUserInfo = data.val();
           this.setState({
             ...this.state,
@@ -83,7 +92,8 @@ class LoginProvider extends React.Component {
     };
   }
 
-  render() {
+  render ()
+  {
     const { children } = this.props;
     const { state, actions } = this;
     const value = { state, actions };
@@ -91,8 +101,10 @@ class LoginProvider extends React.Component {
   }
 }
 
-function withLogin(WrappedComponent) {
-  return function WithLogin(props) {
+function withLogin (WrappedComponent)
+{
+  return function WithLogin (props)
+  {
     return (
       <LoginConsumer>
         {({ state, actions }) => (

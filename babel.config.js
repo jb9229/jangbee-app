@@ -1,4 +1,5 @@
-module.exports = function (api) {
+module.exports = function (api)
+{
   api.cache(true);
   return {
     presets: ['babel-preset-expo', '@babel/preset-typescript'],
@@ -22,7 +23,6 @@ module.exports = function (api) {
           alias: {
             src: './src',
             navigation: './src/navigation',
-            contexts: './src/contexts',
             constants: './src/constants',
             types: './src/types',
             common: './src/common',

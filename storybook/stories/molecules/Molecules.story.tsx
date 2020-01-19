@@ -12,11 +12,12 @@ const SafeZonDecorator = (storyFn) => (
 
 storiesOf('Molecules Component', module)
   .addDecorator(SafeZonDecorator)
-  .add('EditText', () => React.createElement(() => {
+  .add('EditText', () => React.createElement(() =>
+  {
     const [text, setText] = React.useState();
 
     return (
-      <EditText label="제목" text={text} onTextChanged={(text) => setText(text)} />
+      <EditText label="제목" subLabel="(필수, 2자이상)" text={text} onTextChanged={(text) => setText(text)} />
     );
   })
   );

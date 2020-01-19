@@ -1,7 +1,7 @@
-import React from 'react';
-import { View } from 'react-native';
 import { Rating } from 'react-native-elements';
+import React from 'react';
 import Styled from 'styled-components/native';
+import { View } from 'react-native';
 import fonts from 'constants/Fonts';
 import { formatHideTelnumber } from 'utils/StringUtils';
 
@@ -24,7 +24,7 @@ const PhoneText = Styled.Text`
 `;
 
 const DateText = Styled.Text`
-  font-family: ${fonts.NanumGothic};
+  font-family: ${fonts.title};
   margin-left: 7px;
 `;
 
@@ -33,7 +33,8 @@ const CommentText = Styled.Text`
   margin-left: 3px;
 `;
 
-export default function FirmEvaluListItem({ item }) {
+export default function FirmEvaluListItem ({ item })
+{
   return (
     <Container>
       <TopWrap>

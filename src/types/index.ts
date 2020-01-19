@@ -1,7 +1,7 @@
 import { StyleProp, TextStyle } from 'react-native';
 
 import { SFC } from 'react';
-import { number } from 'prop-types';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export interface User {
   uid: string;
@@ -19,13 +19,19 @@ interface IconProps {
 
 export type IconType = SFC<IconProps>;
 
-export enum ThemeType {
-  LIGHT = 'LIGHT',
-  DARK = 'DARK',
-}
-
 // Firm Object Type
 export interface FirmHarmCaseCountData {
   totalCnt: number;
   myCnt: number;
 }
+
+/**
+ * React Navigation Types
+ * */
+type StackParamList = {
+  Default: undefined;
+};
+
+export type DefaultNavigationProps<
+  T extends keyof StackParamList = 'Default'
+> = StackNavigationProp<StackParamList, T>;

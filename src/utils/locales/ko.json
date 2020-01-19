@@ -1,0 +1,5 @@
+{
+  "VALIDATION_NUMBER": "숫자를 입력해 주세요",
+  "VALIDATION_REQUIRED": "필수 입력 값입니다",
+  "VALIDATION_STRING_EXCEED": "입력값이 초과 되었습니다"
+}

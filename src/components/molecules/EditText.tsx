@@ -2,130 +2,126 @@ import * as React from 'react';
 
 import {
   NativeSyntheticEvent,
-  Platform,
   StyleProp,
-  StyleSheet,
-  Text,
   TextStyle,
   ViewStyle
 } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
-import TitleText from 'atoms/TitleText';
-
 // Styled Component
 interface StyledCPorps {
-  theme?: DefaultTheme;
+  theme: DefaultTheme;
   errorText?: string;
   focused?: boolean;
+  disabled?: boolean;
 }
 
 const Container = styled.View`
 `;
-
-const Title = styled(TitleText)`
+const TitleWrap = styled.View`
+  flex-direction: row;
+  align-items: center;
   margin-bottom: 12;
-  color: ${(props: StyledCPorps): string =>
-    props.errorText
-      ? props.theme.ColorError
-      : props.focused
-        ? props.theme.ColorPrimary
-        : props.theme.ColorTextInput};
 `;
-
+const Title = styled.Text`
+  font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};
+  font-size: 16;
+  color: ${(props: StyledCPorps): string => props.disabled ? props.theme.ColorBGGray : props.theme.ColorInputLabel};
+`;
+const SubTitle = styled.Text`
+  font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};;
+  color: ${(props: StyledCPorps): string => props.theme.ColorInputLabel};
+  font-size: 14;
+`;
 const TextInput = styled.TextInput`
-  padding-left: 26;
+  padding-left: 16;
   padding-right: 16;
   padding-top: 16;
   padding-bottom: 16;
   border-width: 1;
   border-radius: 5;
-  border-color: ${({ theme }: StyledCPorps): string => theme.ColorBorderInput};
+  ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorPrimary};` : null}
+  ${(props: StyledCPorps): string | null => props.errorText ? `border-color: ${props.theme.ColorError};` : null}
+  color: ${(props: StyledCPorps): string => props.theme.ColorTextInput};
+`;
+const ErrorText = styled.Text`
+  font-family: Rubik-Regular;
+  font-size: 12;
+  font-weight: 500;
+  margin-top: 5;
+  color: ${(props: StyledCPorps): string => props.theme.ColorError};
 `;
 
-const ErrorUnderline = styled.View`
-  border-width: 0.8;
-  border-color: ${({ theme }: StyledCPorps): string => theme.ColorError};
-`;
-
-const styles = StyleSheet.create({
-  input: Platform.select({
-    ios: {
-      paddingLeft: 5,
-      paddingRight: 5,
-      paddingTop: 15,
-      paddingBottom: 10,
-      fontSize: 15,
-      fontWeight: '500',
-      color: '#2C374E'
-    },
-    android: {
-      paddingLeft: 5,
-      paddingRight: 5,
-      paddingTop: 10,
-      paddingBottom: 8,
-      fontSize: 15,
-      fontWeight: '500',
-      color: '#2C374E'
-    }
-  }),
-  errorText: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginTop: 5,
-    color: '#ff8989'
-  }
-});
-
+export enum KeyboardType {
+  default = 'defalult',
+  number = 'number-pad'
+}
 interface Props {
   parentTestID?: string;
   titleTestID?: string;
   testID?: string;
   errorTestID?: string;
   style?: StyleProp<ViewStyle>;
-  label?: string;
   textStyle?: StyleProp<TextStyle>;
+  label?: string;
+  subLabel?: string;
   errorText?: string;
-  text: any;
+  text: string;
+  keyboardType?: string;
   placeholder?: string;
   secureTextEntry?: boolean;
+  disabled?: boolean;
+  maxLength?: number;
   onSubmitEditing?: (e: NativeSyntheticEvent<any>) => void;
-  onTextChanged?: (text: string | number) => void;
+  onChangeText?: (text: string) => void;
   onFocus?: () => void;
 }
 
-const EditText: React.FC<Props> = (props: Props) => {
+function EditText (props: Props): React.ReactElement
+{
   const [focused, setFocus] = React.useState(false);
+  const [text, setText] = React.useState<string>(props.text);
 
   return (
     <Container testID={props.parentTestID} style={[props.style]}>
-      {props.label ? (
-        <Title testID={props.titleTestID} errorText={props.errorText} focused={focused}>
-          {props.label}
-        </Title>
-      ) : null}
+      <TitleWrap>
+        {!!props.label && (
+          <Title testID={props.titleTestID} errorText={props.errorText} focused={focused} disabled={props.disabled}>
+            {props.label}
+          </Title>
+        )}
+        {!!props.subLabel && <SubTitle>{props.subLabel}</SubTitle>}
+      </TitleWrap>
       <TextInput
         testID={props.testID}
-        style={[styles.input, props.textStyle]}
+        style={[props.textStyle]}
         autoCapitalize={'none'}
+        autoCorrect={false}
+        focused={focused}
         onFocus={(): void => setFocus(true)}
         onBlur={(): void => setFocus(false)}
         onSubmitEditing={props.onSubmitEditing}
         placeholder={props.placeholder}
-        value={props.text}
-        onChangeText={props.onTextChanged}
+        placeholderTextColor="rgb(221,221,221)"
+        value={text}
+        keyboardType={props.keyboardType}
+        onChangeText={(text): void =>
+        {
+          props.onChangeText(text);
+          setText(text);
+        }}
         secureTextEntry={props.secureTextEntry}
+        disabled={props.disabled}
+        maxLength={props.maxLength}
+        errorText={props.errorText}
       ></TextInput>
       {props.errorText ? (
-        <>
-          <ErrorUnderline errorText={props.errorText} focused={focused}/>
-          <Text testID={props.errorTestID} style={styles.errorText}>
-            {props.errorText}
-          </Text>
-        </>
+        <ErrorText testID={props.errorTestID}>
+          {props.errorText}
+        </ErrorText>
       ) : null}
     </Container>
   );
-};
+}
 
 export default EditText;

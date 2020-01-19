@@ -3,7 +3,7 @@ import {
   createStackNavigator
 } from 'react-navigation';
 
-import AdCreateScreen from 'screens/AdCreateScreen';
+import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
 import FirmHarmCaseContainer from 'container/FirmHarmCaseContainer';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';

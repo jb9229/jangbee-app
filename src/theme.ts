@@ -1,32 +1,19 @@
 import { DefaultTheme } from 'styled-components';
-import { ThemeType } from './types';
 
-export interface Theme {
-  ColorPrimary: string;
-  ColorError: string;
-  ColorTextSubtitle: string;
-  ColorTextInput: string;
-  ColorTextError: string;
-  ColorBtnPrimary: string;
-  ColorBtnSecondary: string;
-  ColorBtnSuccess: string;
-  ColorBtnDefault: string;
-  ColorBtnStyle: string;
-  ColorBorderInput: string;
-  ColorBGGray: string;
-  background: string;
-  backgroundDark: string;
-  btnPrimary: string;
-  btnPrimaryFont: string;
-  btnPrimaryLight: string;
-  btnPrimaryLightFont: string;
-  textDisabled: string;
-  btnDisabled: string;
-  fontColor: string;
-  tintColor: string;
+export enum ThemeType {
+  LIGHT = 'LIGHT',
+  DARK = 'DARK',
+}
+
+export type Theme = typeof light & typeof koFont;
+
+export enum LanguageType {
+  KO = 'KOREAN',
+  EN = 'ENGLISH',
 }
 
 const colors = {
+  gray: 'RGB: 130, 182, 237',
   skyBlue: '#069ccd',
   whiteGray: '#f7f6f3',
   dusk: 'rgb(65,77,107)',
@@ -42,66 +29,102 @@ const colors = {
   red: '#FF0000'
 };
 
-const theme = {
-  light: {
-    ColorPrimary: '#ffbb00',
-    colorError: colors.red,
-    ColorTextSubtitle: '#606060',
-    ColorTextInput: '#000000',
-    ColorTextError: colors.red,
-    ColorBtnPrimary: '#ffbb00', // Primary, Secondary, Success, Danger, Warning, Info, Light, Dark, Link
-    ColorBtnSecondary: '#444444',
-    ColorBtnSuccess: '#00b7ee',
-    ColorBtnDefault: '#444444',
-    ColorBtnStyle: 'white',
-    ColorBorderInput: '#000000',
-    ColorBGGray: '#d7d7d7',
-    background: colors.lightBackground,
-    backgroundDark: colors.dodgerBlue,
-    btnPrimary: colors.skyBlue,
-    btnPrimaryFont: 'white',
-    btnPrimaryLight: colors.whiteGray,
-    btnPrimaryLightFont: 'black',
-    textDisabled: '#969696',
-    btnDisabled: 'rgb(224,224,224)',
-    fontColor: 'black',
-    tintColor: '#333333',
-    lineColor: colors.paleGray
-  },
-  dark: {
-    ColorPrimary: '#ffbb00',
-    colorError: colors.red,
-    ColorTextSubtitle: '#606060',
-    ColorTextInput: '#000000',
-    ColorTextError: colors.red,
-    ColorBtnPrimary: '#ffbb00',
-    ColorBtnSecondary: '#444444',
-    ColorBtnSuccess: '#00b7ee',
-    ColorBtnDefault: '#444444',
-    ColorBtnStyle: 'white',
-    ColorBorderInput: '#000000',
-    ColorBGGray: '#d7d7d7',
-    background: colors.darkBackground,
-    backgroundDark: colors.dodgerBlue,
-    btnPrimary: colors.skyBlue,
-    btnPrimaryFont: 'white',
-    btnPrimaryLight: colors.whiteGray,
-    btnPrimaryLightFont: 'black',
-    textDisabled: '#969696',
-    btnDisabled: 'rgb(224,224,224)',
-    fontColor: 'white',
-    tintColor: '#a3a3a3',
-    lineColor: colors.paleGray
-  }
+export const koFont = {
+  FontTitleTop: 'NanumPen',
+  FontTitle: 'NanumGothic',
+  FontMiddleTitle: 'SsangmundongGulimB',
+  FontBatang: 'NanumSquareRoundR',
+  FontButton: 'NanumGothic'
 };
 
-export const createTheme = (type = ThemeType.LIGHT): DefaultTheme => {
-  switch (type) {
-    case ThemeType.LIGHT:
-      return theme.light;
-    case ThemeType.DARK:
-      return theme.dark;
+export const enFont = {
+  FontTitleTop: 'NanumPen',
+  FontTitle: 'NanumGothic',
+  FontMiddleTitle: 'SsangmundongGulimB',
+  FontBatang: 'NanumSquareRoundR',
+  FontButton: 'NanumGothic'
+};
+
+export const light = {
+  ColorPrimary: '#ffbb00',
+  ColorError: colors.red,
+  ColorInputLabel: '#4D4A4A',
+
+  ColorTextSubtitle: '#606060',
+  ColorTextInput: '#000000',
+  ColorTextError: colors.red,
+  ColorBtnPrimary: '#ffbb00', // Primary, Secondary, Success, Danger, Warning, Info, Light, Dark, Link
+  ColorBtnSecondary: '#444444',
+  ColorBtnSuccess: '#00b7ee',
+  ColorBtnDefault: '#444444',
+  ColorBtnStyle: 'white',
+  ColorBorderInput: '#000000',
+  ColorBGGray: '#d7d7d7',
+  background: colors.lightBackground,
+  backgroundDark: colors.dodgerBlue,
+  btnPrimary: colors.skyBlue,
+  btnPrimaryFont: 'white',
+  btnPrimaryLight: colors.whiteGray,
+  btnPrimaryLightFont: 'black',
+  textDisabled: '#969696',
+  btnDisabled: 'rgb(224,224,224)',
+  fontColor: 'black',
+  tintColor: '#333333',
+  lineColor: colors.paleGray
+};
+
+export const dark = {
+  ColorPrimary: '#ffbb00',
+  ColorError: colors.red,
+  ColorInputLabel: '#4D4A4A',
+
+  ColorTextSubtitle: '#606060',
+  ColorTextInput: '#000000',
+  ColorTextError: colors.red,
+  ColorBtnPrimary: '#ffbb00',
+  ColorBtnSecondary: '#444444',
+  ColorBtnSuccess: '#00b7ee',
+  ColorBtnDefault: '#444444',
+  ColorBtnStyle: 'white',
+  ColorBorderInput: '#000000',
+  ColorBGGray: '#d7d7d7',
+  background: colors.darkBackground,
+  backgroundDark: colors.dodgerBlue,
+  btnPrimary: colors.skyBlue,
+  btnPrimaryFont: 'white',
+  btnPrimaryLight: colors.whiteGray,
+  btnPrimaryLightFont: 'black',
+  textDisabled: '#969696',
+  btnDisabled: 'rgb(224,224,224)',
+  fontColor: 'white',
+  tintColor: '#a3a3a3',
+  lineColor: colors.paleGray
+};
+
+export const theme = {
+  light,
+  dark
+};
+
+export const createTheme = (type: ThemeType, language: LanguageType): Partial<Theme> & Partial<DefaultTheme> =>
+{
+  let lan;
+  switch (language)
+  {
+    case LanguageType.EN:
+      lan = koFont;
+      break;
     default:
-      return theme.light;
+      lan = enFont;
+      break;
+  }
+
+  switch (type)
+  {
+    case ThemeType.LIGHT:
+      return { ...lan, ...theme.light };
+    case ThemeType.DARK:
+      return { ...lan, ...theme.dark };
+    default: return { ...lan, ...theme.light };
   }
 };

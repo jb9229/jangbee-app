@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { AdCreateProvider } from 'contexts/AdCreateProvider';
 import CreateAdLayout from 'templates/CreateAdLayout';
 import { JBSERVER_ADBOOKED } from '../../constants/Url';
 import LoadingIndicator from 'molecules/LoadingIndicator';
@@ -20,10 +21,10 @@ const CreateAd: React.FC<Props> = (props) =>
   if (data) { console.log(data) };
 
   return (
-    <>
+    <AdCreateProvider>
       <CreateAdLayout />
-      <LoadingIndicator visible={loading} />
-    </>
+    </AdCreateProvider>
+    // <LoadingIndicator visible={loading} />
   );
 };
 

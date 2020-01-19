@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import createCtx from 'src/context/CreateCtx';
+import { DefaultNavigationProps } from 'src/types';
+import createCtx from 'src/contexts/CreateCtx';
 
 interface Context {
   navigation: DefaultNavigationProps;
@@ -13,9 +14,10 @@ interface Props {
   navigation: DefaultNavigationProps;
 }
 
-const ReviewDetailProvider = (props: Props): React.ReactElement => {
+const TemplateProvider = (props: Props): React.ReactElement =>
+{
   const states = {
-    navigation: props.navigation,
+    navigation: props.navigation
   };
 
   return (
@@ -23,4 +25,4 @@ const ReviewDetailProvider = (props: Props): React.ReactElement => {
   );
 };
 
-export { useCtx as useReviewDetailProvider, ReviewDetailProvider };
+export { useCtx as useTemplateProvider, TemplateProvider };
