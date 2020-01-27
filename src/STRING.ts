@@ -1,20 +1,20 @@
-import * as Localization from 'expo-localization';
+// import * as Localization from 'expo-localization';
 
-import { Picker } from 'react-native';
-import i18n from 'i18n-js';
+import I18n from 'i18n-js';
+import en from 'utils/locales/en.json';
 import ko from 'utils/locales/ko.json';
 
-i18n.fallbacks = true;
-i18n.translations = { ko };
-i18n.locale = Localization.locale;
+I18n.fallbacks = true;
+I18n.translations = { en, ko };
+// I18n.locale = Localization.locale;
 
 const getString = (param: string, mapObj?: object): string =>
 {
   if (mapObj)
   {
-    i18n.t(param, mapObj);
+    I18n.t(param, mapObj);
   }
-  return i18n.t(param);
+  return I18n.t(param);
 };
 
 export default getString;

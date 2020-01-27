@@ -11,7 +11,7 @@ import host.exp.exponent.Constants;
 @DoNotStrip
 public class AppConstants {
 
-  public static final String VERSION_NAME = "2.11.4";
+  public static final String VERSION_NAME = "0.7.6_25_20191117";
   public static String INITIAL_URL = "exp://exp.host/@jb9229/jangbeecall_native";
   public static final String SHELL_APP_SCHEME = "expo.examples.with-webbrowser-redirect";
   public static final String RELEASE_CHANNEL = "default";

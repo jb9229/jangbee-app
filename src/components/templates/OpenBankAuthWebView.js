@@ -1,18 +1,20 @@
-import React from 'react';
+import * as obconfig from '../../../openbank-config';
+
 import {
-  Alert,
   ActivityIndicator,
+  Alert,
   Modal,
   Text,
-  View,
-  WebView
+  View
 } from 'react-native';
-import styled from 'styled-components/native';
-import moment from 'moment';
 import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from 'constants/Url';
-import * as obconfig from '../../../openbank-config';
+
+import React from 'react';
+import { WebView } from 'react-native-webview';
+import moment from 'moment';
+import styled from 'styled-components/native';
 import { updateReAuthInfo } from 'utils/FirebaseUtils';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const TYPE_REAUTH = 'REAUTH';
 const ADD_ACCOUNT = 'ADD_ACCOUNT';
@@ -29,8 +31,10 @@ const Contents = styled.View`
 const NoticeWrap = styled.View`
   background-color: white;
 `;
-class OpenBankAuthWebView extends React.Component {
-  constructor(props) {
+class OpenBankAuthWebView extends React.Component
+{
+  constructor (props)
+  {
     super(props);
 
     this.state = {
@@ -39,7 +43,8 @@ class OpenBankAuthWebView extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     // Test Code I have to know 'HOC Jest Testing'
     // const tokenData = {
     //   access_token: 'test',
@@ -57,11 +62,13 @@ class OpenBankAuthWebView extends React.Component {
    * @param {Array} oriAccList 핀테크이용번호 리스트
    * @param {Array<Object>} accountListInfo 계좌목록정보
    */
-  getOpenbankAccInfo = (oriAccList, accountListInfo) => {
+  getOpenbankAccInfo = (oriAccList, accountListInfo) =>
+  {
     const accList = accountListInfo.res_list;
 
     // validation
-    if (accList.length !== oriAccList.length + 1) {
+    if (accList.length !== oriAccList.length + 1)
+    {
       Alert.alet(
         '유효하지 않은 핀테크이용번호가 존재하여 원통장의 핀테크이용번호를 찾을 수 없습니다, 관리자에게 문의 부탁 드립니다.'
       );
@@ -69,13 +76,16 @@ class OpenBankAuthWebView extends React.Component {
 
     // make FintechUseNum List
     const fintechUseNumList = [];
-    oriAccList.forEach(oriAccount => {
+    oriAccList.forEach(oriAccount =>
+    {
       fintechUseNumList.push(oriAccount.fintechUseNum);
     });
 
-    accList.forEach(accInfo => {
+    accList.forEach(accInfo =>
+    {
       const candidateFUN = accInfo.fintech_use_num;
-      if (!fintechUseNumList.includes(candidateFUN)) {
+      if (!fintechUseNumList.includes(candidateFUN))
+      {
         return accInfo;
       }
     });
@@ -86,12 +96,14 @@ class OpenBankAuthWebView extends React.Component {
   /**
    * 웹뷰 종료 함수
    */
-  closeWebView = () => {
+  closeWebView = () =>
+  {
     const { type, navigation, completeAction } = this.props;
 
     this.setState({ noticeMSG: '곧(10초) 창이 닫힙니다~' });
 
-    setTimeout(() => {
+    setTimeout(() =>
+    {
       completeAction();
     }, 5000);
   };
@@ -99,7 +111,8 @@ class OpenBankAuthWebView extends React.Component {
   /**
    * Webview url 상태변경 이벤트처리 함수(사용자 인증에러 처리, 프로바이더 페이지가 호출되기 전에 에러 처리)
    */
-  handleNavigationStateChange = navState => {
+  handleNavigationStateChange = navState =>
+  {
     // Callback url로 redirect가 되는 것이 아니라 json으로 리턴된다. 그때의 상태를 잡아 에러 처리
   };
 
@@ -107,14 +120,16 @@ class OpenBankAuthWebView extends React.Component {
    * 웹페이지 메세지 처리 함수
    * @param {string} webViewMSG Webview에서 전달된 메세지
    */
-  receiveWebViewMSG = async webViewMSG => {
+  receiveWebViewMSG = async webViewMSG =>
+  {
     const { type, navigation } = this.props;
 
     const webData = JSON.parse(webViewMSG);
     let postData = null;
 
     // 오픈뱅크정보 요청
-    if (webData.type === 'ASK_BANKAPIINFO') {
+    if (webData.type === 'ASK_BANKAPIINFO')
+    {
       const apiData = {
         client_id: obconfig.client_id,
         client_secret: obconfig.client_secret,
@@ -125,13 +140,16 @@ class OpenBankAuthWebView extends React.Component {
     }
 
     // 웹뷰 종료 요청
-    if (webData.type === 'ASK_WEBVIEWCLOSE') {
+    if (webData.type === 'ASK_WEBVIEWCLOSE')
+    {
       navigation.navigate('AdCreate', { action: 'RELOAD' });
     }
 
     // 인증토큰 저장 요청
-    if (webData.type === 'ASK_SAVETOKEN') {
-      if (type === ADD_ACCOUNT) {
+    if (webData.type === 'ASK_SAVETOKEN')
+    {
+      if (type === ADD_ACCOUNT)
+      {
         // TODO user에 자동이체 정보 서버에등록,
       }
 
@@ -140,12 +158,14 @@ class OpenBankAuthWebView extends React.Component {
       this.closeWebView();
     }
 
-    if (postData != null) {
+    if (postData != null)
+    {
       this.webView.postMessage(postData);
     }
   };
 
-  saveOpenBankTokenInfo = async tokenData => {
+  saveOpenBankTokenInfo = async tokenData =>
+  {
     const { navigation, user, refreshUserOBInfo } = this.props;
 
     const expireDate = moment()
@@ -169,7 +189,8 @@ class OpenBankAuthWebView extends React.Component {
       tokenInfo.obAccTokenExpDate,
       tokenInfo.obAccTokenDiscDate,
       tokenInfo.obUserSeqNo,
-      error => {
+      error =>
+      {
         Alert.alert(
           '저장 실패',
           `${error} 오픈뱅크재인증 정보 FB Database 저장에 실패 했습니다`
@@ -182,14 +203,18 @@ class OpenBankAuthWebView extends React.Component {
     return true;
   };
 
-  render() {
+  render ()
+  {
     const { type, navigation, isVisibleModal, closeModal } = this.props;
     const { isWebViewLoadingComplete, noticeMSG } = this.state;
 
     let authUrl;
-    if (type === ADD_ACCOUNT) {
+    if (type === ADD_ACCOUNT)
+    {
       authUrl = OPENBANK_AUTHORIZE2;
-    } else if (type === TYPE_REAUTH) {
+    }
+    else if (type === TYPE_REAUTH)
+    {
       authUrl = OPENBANK_REAUTHORIZE2;
     }
 
@@ -236,7 +261,8 @@ class OpenBankAuthWebView extends React.Component {
         >
           <Contents>
             <WebView
-              ref={view => {
+              ref={view =>
+              {
                 this.webView = view;
               }}
               source={{

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 import * as api from 'api/api';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JangbeeAd from 'molecules/JangbeeAd';

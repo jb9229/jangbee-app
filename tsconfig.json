@@ -20,9 +20,9 @@
       "screens/*": ["src/screens/*"],
       "common/*": ["src/common/*"],
       "constants/*": ["src/constants/*"],
+      "container/*": ["src/container/*"],
       "types/*": ["src/types/*"],
       "navigation": ["src/navigation"],
-      "container": ["src/container"],
       "native_modules": ["src/native_modules"]
     }
   },

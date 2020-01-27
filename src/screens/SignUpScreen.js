@@ -1,12 +1,13 @@
-import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import styled from 'styled-components/native';
-import firebase from 'firebase';
-import colors from 'constants/Colors';
-import fonts from 'constants/Fonts';
-import JBErrorMessage from 'organisms/JBErrorMessage';
-import { withLogin } from 'contexts/LoginProvider';
+
 import JBButton from 'molecules/JBButton';
+import JBErrorMessage from 'organisms/JBErrorMessage';
+import React from 'react';
+import colors from 'constants/Colors';
+import firebase from 'firebase';
+import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -97,8 +98,10 @@ const Notice = styled.Text`
 
 const USER_CLIENT = 1;
 const USER_FIRM = 2;
-class SignUpScreen extends React.Component {
-  constructor(props) {
+class SignUpScreen extends React.Component
+{
+  constructor (props)
+  {
     super(props);
 
     this.state = {
@@ -111,10 +114,12 @@ class SignUpScreen extends React.Component {
   /**
    * Firebase user DB에 사용자 추가정보 저장
    */
-  onSignUp = () => {
+  onSignUp = () =>
+  {
     const { user, completeAuth, setUser, setUserType } = this.props;
     const { userType } = this.state;
-    if (userType === undefined) {
+    if (userType === undefined)
+    {
       this.setState({ errorMessage: '사용자님의 업무를 선택해 주세요.' });
       return;
     }
@@ -126,8 +131,10 @@ class SignUpScreen extends React.Component {
         {
           userType
         },
-        error => {
-          if (error) {
+        error =>
+        {
+          if (error)
+          {
             Alert.alert(
               '저장 실패',
               '사용자타입 FB DB에 저장에 문제가 있습니다, 다시 시도해 주세요.'
@@ -135,30 +142,41 @@ class SignUpScreen extends React.Component {
           }
         }
       )
-      .then(() => {
+      .then(() =>
+      {
         setUser(user);
         setUserType(userType);
 
-        if (userType === 1) {
+        if (userType === 1)
+        {
           completeAuth(true);
-        } else if (userType === 2) {
+        }
+        else if (userType === 2)
+        {
           completeAuth(false);
-        } else {
+        }
+        else
+        {
           Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
           completeAuth(true);
         }
       });
   };
 
-  onChangeUserType = userType => {
-    if (userType === 1) {
+  onChangeUserType = userType =>
+  {
+    if (userType === 1)
+    {
       this.setState({ userType, regiText: '가입 완료하기' });
-    } else if (userType === 2) {
+    }
+    else if (userType === 2)
+    {
       this.setState({ userType, regiText: '장비등록 하러가기' });
     }
   };
 
-  render() {
+  render ()
+  {
     const { userType, errorMessage, regiText } = this.state;
 
     return (

@@ -1,8 +1,11 @@
-import React from 'react';
-import { StyleSheet, Dimensions, View, WebView } from 'react-native';
-import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import * as url from 'constants/Url';
+
+import { Dimensions, StyleSheet, View } from 'react-native';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+
 import JBTerm from 'templates/JBTerm';
+import React from 'react';
+import { WebView } from 'react-native-webview';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 
@@ -25,8 +28,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class JBServiceTerms extends React.Component {
-  constructor(props) {
+export default class JBServiceTerms extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       index: 0,
@@ -37,16 +42,18 @@ export default class JBServiceTerms extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount () {}
 
   /**
    * Tab View 변경함수
    */
-  changeTabView = index => {
+  changeTabView = index =>
+  {
     this.setState({ index });
   };
 
-  render() {
+  render ()
+  {
     const { navigation } = this.props;
 
     const serviceTerms = () => (

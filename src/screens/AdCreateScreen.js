@@ -25,7 +25,7 @@ import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
 import pkg from '../../app.json';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {

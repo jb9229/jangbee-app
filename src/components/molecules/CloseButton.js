@@ -1,17 +1,14 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import styled from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
+import React from 'react';
 import colors from 'constants/Colors';
+import styled from 'styled-components/native';
 
 const Container = styled.View`
   flex-direction: row;
-  ${props =>
-    props.align &&
-    `
-    justify-content: ${props.align};
-    padding-right: 10;
-  `}
+  justify-content: ${(props) => props.align ? props.align : 'flex-end'};
+  padding-top: 10;
+  padding-right: 10;
 `;
 const TouchableHighlight = styled.TouchableHighlight`
   background-color: ${colors.pointBatang};
@@ -25,7 +22,8 @@ const TouchableHighlight = styled.TouchableHighlight`
   elevation: 10;
 `;
 
-export default function CloseButton({ onClose, align }) {
+export default function CloseButton ({ onClose, align })
+{
   return (
     <Container align={align}>
       <TouchableHighlight onPress={onClose}>

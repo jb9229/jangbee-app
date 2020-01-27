@@ -47,12 +47,14 @@ export const enFont = {
 
 export const light = {
   ColorPrimary: '#ffbb00',
+  ColorSecond: '#82b6ed',
   ColorError: colors.red,
   ColorInputLabel: '#4D4A4A',
 
   ColorTextSubtitle: '#606060',
   ColorTextInput: '#000000',
   ColorTextError: colors.red,
+  ColorTextPlaceholder: '#dbdbdb',
   ColorBtnPrimary: '#ffbb00', // Primary, Secondary, Success, Danger, Warning, Info, Light, Dark, Link
   ColorBtnSecondary: '#444444',
   ColorBtnSuccess: '#00b7ee',
@@ -75,12 +77,14 @@ export const light = {
 
 export const dark = {
   ColorPrimary: '#ffbb00',
+  ColorSecond: '#82b6ed',
   ColorError: colors.red,
   ColorInputLabel: '#4D4A4A',
 
   ColorTextSubtitle: '#606060',
   ColorTextInput: '#000000',
   ColorTextError: colors.red,
+  ColorTextPlaceholder: '#dbdbdb',
   ColorBtnPrimary: '#ffbb00',
   ColorBtnSecondary: '#444444',
   ColorBtnSuccess: '#00b7ee',

@@ -3,7 +3,7 @@ import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import firebase from 'firebase';
 import colors from 'constants/Colors';
 import { getUserInfo } from 'utils/FirebaseUtils';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Header } from 'react-navigation';
 import * as api from 'api/api';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 import { notifyError } from 'common/ErrorNotice';
 import EquipementModal from 'templates/EquipmentModal';
 import MapAddWebModal from 'templates/MapAddWebModal';

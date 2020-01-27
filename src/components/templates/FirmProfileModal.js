@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Styled from 'styled-components/native';
 import firebase from 'firebase';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 import * as api from 'api/api';
 import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
 import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';

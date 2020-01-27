@@ -1,4 +1,5 @@
 import React from 'react';
+import { WebView } from 'react-native-webview';
 import styled from 'styled-components/native';
 
 const Container = styled.View`
@@ -8,21 +9,24 @@ const Modal = styled.Modal``;
 const Contents = styled.View`
   flex: 1;
 `;
-const WebView = styled.WebView``;
 
 const KATALK_ASK_URL = 'https://jangbee-inpe21.firebaseapp.com/katalk_ask.html';
 
-export default class KatalkAskWebview extends React.PureComponent {
-  receiveWebViewMSG = async (webViewMSG) => {
+export default class KatalkAskWebview extends React.PureComponent
+{
+  receiveWebViewMSG = async (webViewMSG) =>
+  {
     const webData = JSON.parse(webViewMSG);
     const postData = null;
 
-    if (postData != null) {
+    if (postData != null)
+    {
       this.webView.postMessage(postData);
     }
   };
 
-  render() {
+  render ()
+  {
     const { isVisibleModal, closeModal } = this.props;
     return (
       <Container>
@@ -34,7 +38,8 @@ export default class KatalkAskWebview extends React.PureComponent {
         >
           <Contents>
             <WebView
-              ref={(view) => {
+              ref={(view) =>
+              {
                 this.webView = view;
               }}
               source={{ uri: KATALK_ASK_URL }}
@@ -43,7 +48,7 @@ export default class KatalkAskWebview extends React.PureComponent {
                 height: 600,
                 marginTop: 5,
                 marginLeft: 5,
-                marginRight: 5,
+                marginRight: 5
               }}
               onMessage={event => this.receiveWebViewMSG(event.nativeEvent.data)}
             />

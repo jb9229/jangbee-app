@@ -9,9 +9,9 @@ import {
   View
 } from 'react-native';
 
-import CloseButton from 'molecules/CloseButton';
 import ExpandableItem from 'organisms/ExpandableItem';
 import JangbeeAdList from 'organisms/JangbeeAdList';
+import ModalHeadOrganism from 'molecules/ModalHeadOrganism';
 import React from 'react';
 import colors from 'constants/Colors';
 
@@ -19,43 +19,48 @@ const styles = StyleSheet.create({
   container: {},
   cardWrap: {
     flex: 1,
-    backgroundColor: colors.batangLight,
-    padding: 10
+    backgroundColor: colors.batangLight
   },
   card: {
     flex: 1,
     backgroundColor: colors.cardBatang,
     padding: 15,
-    paddingTop: 5,
     borderRadius: 5
   }
 });
 
-export default class EquipementModal extends React.Component {
-  constructor (props) {
+export default class EquipementModal extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       listDataSource: EQUIPMENT_CONTENT
     };
 
-    if (Platform.OS === 'android') {
+    if (Platform.OS === 'android')
+    {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { isVisibleEquiModal } = nextProps;
     const { listDataSource } = this.state;
 
-    if (isVisibleEquiModal) {
-      listDataSource.forEach(data => {
+    if (isVisibleEquiModal)
+    {
+      listDataSource.forEach(data =>
+      {
         const localData = data;
         localData.isExpanded = false;
       });
     }
   }
 
-  updateLayout = index => {
+  updateLayout = index =>
+  {
     const { listDataSource } = this.state;
 
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -68,7 +73,8 @@ export default class EquipementModal extends React.Component {
     }));
   };
 
-  updateCheck = index => {
+  updateCheck = index =>
+  {
     const { listDataSource } = this.state;
 
     const array = [...listDataSource];
@@ -81,7 +87,8 @@ export default class EquipementModal extends React.Component {
     }));
   };
 
-  updateItemCheck = (catIndex, itemIndex) => {
+  updateItemCheck = (catIndex, itemIndex) =>
+  {
     const { listDataSource } = this.state;
 
     const array = [...listDataSource];
@@ -94,7 +101,8 @@ export default class EquipementModal extends React.Component {
     }));
   };
 
-  completeSelEqui = (item, type) => {
+  completeSelEqui = (item, type) =>
+  {
     const { closeModal, completeSelEqui, multiSelect } = this.props;
 
     const equipment = `${type} ${item.category_name}`;
@@ -102,16 +110,21 @@ export default class EquipementModal extends React.Component {
     closeModal();
   };
 
-  selectSubCate = (group, catIndex, itemIndex) => {
+  selectSubCate = (group, catIndex, itemIndex) =>
+  {
     const { multiSelect } = this.props;
 
-    if (!this.validateSelect(group)) {
+    if (!this.validateSelect(group))
+    {
       return;
     }
 
-    if (multiSelect) {
+    if (multiSelect)
+    {
       this.updateItemCheck(catIndex, itemIndex);
-    } else {
+    }
+    else
+    {
       this.completeSelEqui(group, group.subcategory[itemIndex].val);
     }
   };
@@ -119,8 +132,10 @@ export default class EquipementModal extends React.Component {
   /**
    * 장비선택 유효성검사 함수
    */
-  validateSelect = group => {
-    if (group.isChecked) {
+  validateSelect = group =>
+  {
+    if (group.isChecked)
+    {
       Alert.alert(
         '장비 모델을 선택할 수 없습니다',
         '장비 전체선택을 해제 후, 모델을 선택해 주세요.'
@@ -131,16 +146,19 @@ export default class EquipementModal extends React.Component {
     return true;
   };
 
-  cancel = () => {
+  cancel = () =>
+  {
     const { nextFocus, closeModal } = this.props;
 
-    if (nextFocus) {
+    if (nextFocus)
+    {
       nextFocus();
     }
     closeModal();
   };
 
-  render () {
+  render ()
+  {
     const {
       isVisibleEquiModal,
       advertisement,
@@ -157,8 +175,8 @@ export default class EquipementModal extends React.Component {
         onRequestClose={() => closeModal()}
       >
         <View style={styles.cardWrap}>
+          <ModalHeadOrganism closeModal={() => closeModal()}/>
           <View style={styles.card}>
-            <CloseButton onClose={() => closeModal()} />
             {advertisement ? <JangbeeAdList admob {...this.props} /> : null}
             <ScrollView>
               {listDataSource.map((group, key) => (

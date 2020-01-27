@@ -1,93 +1,52 @@
-import { Alert } from 'react-native';
-import { DefaultNavigationProps } from '../../types';
-import Modal from './OptionModal/Modal';
-import React from 'react';
-import getString from '../../STRINGS';
-import styled from 'styled-components/native';
-import { withNavigation } from 'react-navigation';
+import * as React from 'react';
+
+import styled, { DefaultTheme } from 'styled-components/native';
+
+import { ActivityIndicator } from 'react-native';
+import getString from 'src/STRING';
+
+interface StyledCProps {
+  theme: DefaultTheme;
+}
 
 const Container = styled.View`
-  flex: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   align-items: center;
   justify-content: center;
-`;
-
-const LoadingContainer = styled.View`
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(0,0,0,0.5);
 `;
 
 const Message = styled.Text`
-  font-size: 15;
-  font-family: Rubik-Medium;
+  font-size: 16;
+  margin-top: 20;
   margin-bottom: 20;
-`;
-
-const ActivityIndicator = styled.ActivityIndicator`
+  color: white;
 `;
 
 interface Props {
-  navigation: DefaultNavigationProps;
-  visible: boolean;
-  loadingMSG?: string;
+  loading: boolean;
+  msg?: string;
   size?: number;
-  modal?: boolean;
-  // force close only for modal
-  forceCloseTime?: number; // Default Time is 15000, If you're going to be doing long work, increase the value
-  forceCloseAction?: () => void; // Default Action is 'props.navigation.goBack()'
 }
-
-let forceCloseTimeout: NodeJS.Timeout | undefined;
-const LoadingIndicator: React.FC<Props> = (props) => {
-  React.useEffect((): void => {
-    if (props.modal)
-    {
-      if (props.visible && !forceCloseTimeout) {
-        forceCloseTimeout = setTimeout(() => {
-          if (props.visible) {
-            Alert.alert('Loading Indicator was forced off!', 'It is too long work, please try again');
-            props.forceCloseAction ? props.forceCloseAction() : props.navigation.goBack();
-          }
-        }, props.forceCloseTime || 15000);
-      }
-
-      if (!props.visible && forceCloseTimeout)
-      {
-        clearTimeout(forceCloseTimeout);
-        forceCloseTimeout = undefined;
-      }
-
-      return (): void =>
-      {
-        if (forceCloseTimeout)
-        {
-          clearTimeout(forceCloseTimeout);
-          forceCloseTimeout = undefined;
-        }
-      };
-    }
-  }, [props.visible]);
-
-  if (props.modal && props.visible !== undefined) {
+const LoadingIndicator: React.FC<Props> = (props) =>
+{
+  if (props.loading)
+  {
     return (
-      <Modal
-        loading
-        visible={props.visible}
-        contents={
-          <LoadingContainer>
-            <Message>{props.loadingMSG || getString('LOADING')}</Message>
-            <ActivityIndicator size={props.size || 28} color="#7B57af"/>
-          </LoadingContainer>
-        }
-      />
+      <Container>
+        <ActivityIndicator size={props.size || 50} color="white" />
+        <Message>{props.msg || getString('LOADING')}</Message>
+      </Container>
     );
   }
   return (
-    <Container>
-      <Message>{props.loadingMSG || getString('LOADING')}</Message>
-      <ActivityIndicator size={props.size || 28} color="#7B57af"/>
-    </Container>
+    <>
+    </>
   );
 };
 
-export default withNavigation(LoadingIndicator);
+export default LoadingIndicator;

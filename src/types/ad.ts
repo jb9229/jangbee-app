@@ -26,6 +26,7 @@ export class CreateAdDto
 
 export class CreateAdDtoError
 {
+  type: string;
   title: string;
   subTitle: string;
   local: string;

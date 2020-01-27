@@ -13,7 +13,7 @@ import firebase from 'firebase';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {

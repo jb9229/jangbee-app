@@ -8,6 +8,9 @@ import {
 } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
+import ErrorText from 'src/components/molecules/Text/ErrorText';
+import MiddleTitle from 'src/components/molecules/Text/MiddleTitle';
+
 // Styled Component
 interface StyledCPorps {
   theme: DefaultTheme;
@@ -17,21 +20,7 @@ interface StyledCPorps {
 }
 
 const Container = styled.View`
-`;
-const TitleWrap = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 12;
-`;
-const Title = styled.Text`
-  font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};
-  font-size: 16;
-  color: ${(props: StyledCPorps): string => props.disabled ? props.theme.ColorBGGray : props.theme.ColorInputLabel};
-`;
-const SubTitle = styled.Text`
-  font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};;
-  color: ${(props: StyledCPorps): string => props.theme.ColorInputLabel};
-  font-size: 14;
+  margin-top: 15px;
 `;
 const TextInput = styled.TextInput`
   padding-left: 16;
@@ -40,16 +29,9 @@ const TextInput = styled.TextInput`
   padding-bottom: 16;
   border-width: 1;
   border-radius: 5;
-  ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorPrimary};` : null}
+  ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
   ${(props: StyledCPorps): string | null => props.errorText ? `border-color: ${props.theme.ColorError};` : null}
   color: ${(props: StyledCPorps): string => props.theme.ColorTextInput};
-`;
-const ErrorText = styled.Text`
-  font-family: Rubik-Regular;
-  font-size: 12;
-  font-weight: 500;
-  margin-top: 5;
-  color: ${(props: StyledCPorps): string => props.theme.ColorError};
 `;
 
 export enum KeyboardType {
@@ -84,14 +66,7 @@ function EditText (props: Props): React.ReactElement
 
   return (
     <Container testID={props.parentTestID} style={[props.style]}>
-      <TitleWrap>
-        {!!props.label && (
-          <Title testID={props.titleTestID} errorText={props.errorText} focused={focused} disabled={props.disabled}>
-            {props.label}
-          </Title>
-        )}
-        {!!props.subLabel && <SubTitle>{props.subLabel}</SubTitle>}
-      </TitleWrap>
+      <MiddleTitle label={props.label} subLabel={props.subLabel} errorText={props.errorText} focused={focused} />
       <TextInput
         testID={props.testID}
         style={[props.textStyle]}
@@ -114,12 +89,8 @@ function EditText (props: Props): React.ReactElement
         disabled={props.disabled}
         maxLength={props.maxLength}
         errorText={props.errorText}
-      ></TextInput>
-      {props.errorText ? (
-        <ErrorText testID={props.errorTestID}>
-          {props.errorText}
-        </ErrorText>
-      ) : null}
+      />
+      {!!props.errorText && <ErrorText text={props.errorText} />}
     </Container>
   );
 }

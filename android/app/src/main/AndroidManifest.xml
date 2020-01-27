@@ -15,36 +15,34 @@
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <uses-permission android:name="android.permission.READ_CALL_LOG" />  <!-- form Android P need  Read_CALL_LOG Permission-->
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove" />
-    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" tools:node="remove" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" tools:node="remove" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" tools:node="remove" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" tools:node="remove" />
-    <uses-permission android:name="android.permission.VIBRATE" tools:node="remove" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
-    <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT" tools:node="remove" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" tools:node="remove" />
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" tools:node="remove" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" tools:node="remove" />
-    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" tools:node="remove" />
-    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" tools:node="remove" />
-    <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE" tools:node="remove" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" tools:node="remove" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" tools:node="remove" />
-    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" tools:node="remove" />
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove" />
+<uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
+<uses-permission android:name="android.permission.MANAGE_DOCUMENTS" tools:node="remove" />
+<uses-permission android:name="android.permission.READ_CONTACTS" tools:node="remove" />
+<uses-permission android:name="android.permission.WRITE_CONTACTS" tools:node="remove" />
+<uses-permission android:name="android.permission.READ_CALENDAR" tools:node="remove" />
+<uses-permission android:name="android.permission.WRITE_CALENDAR" tools:node="remove" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
+<uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" tools:node="remove" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />
+<uses-permission android:name="android.permission.USE_FINGERPRINT" tools:node="remove" />
+<uses-permission android:name="android.permission.VIBRATE" tools:node="remove" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove" />
+<uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
+<uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT" tools:node="remove" />
+<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" tools:node="remove" />
+<uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" tools:node="remove" />
+<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" tools:node="remove" />
+<uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" tools:node="remove" />
+<uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" tools:node="remove" />
+<uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE" tools:node="remove" />
+<uses-permission android:name="com.sec.android.provider.badge.permission.READ" tools:node="remove" />
+<uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" tools:node="remove" />
+<uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" tools:node="remove" />
       
 
   <!-- ADD TEST PERMISSIONS HERE -->
@@ -121,31 +119,19 @@
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
     <!-- WHEN_PREPARING_SHELL_REMOVE_FROM_HERE -->
     <!-- ADD DEV SETTINGS HERE -->
+    <!-- BEGIN_SDK_36 -->
+    <activity android:name="abi36_0_0.com.facebook.react.devsupport.DevSettingsActivity"/>
+    <!-- END_SDK_36 -->
+    <!-- BEGIN_SDK_35 -->
+    <activity android:name="abi35_0_0.com.facebook.react.devsupport.DevSettingsActivity"/>
+    <!-- END_SDK_35 -->
+    <!-- BEGIN_SDK_34 -->
+    <activity android:name="abi34_0_0.com.facebook.react.devsupport.DevSettingsActivity"/>
+    <!-- END_SDK_34 -->
     <!-- BEGIN_SDK_33 -->
     <activity android:name="abi33_0_0.com.facebook.react.devsupport.DevSettingsActivity"/>
     <!-- END_SDK_33 -->
-    <!-- BEGIN_SDK_32 -->
-    <activity android:name="abi32_0_0.com.facebook.react.devsupport.DevSettingsActivity"/>
-    <!-- END_SDK_32 -->
-    <!-- BEGIN_SDK_31 -->
-    <activity android:name="abi31_0_0.com.facebook.react.devsupport.DevSettingsActivity"/>
-    <!-- END_SDK_31 -->
     <!-- WHEN_PREPARING_SHELL_REMOVE_TO_HERE -->
-
-    <activity
-      android:name=".ExponentDevActivity"
-      android:exported="true"
-      android:label="@string/dev_activity_name"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.Exponent.Dark"
-      android:windowSoftInputMode="adjustPan">
-    </activity>
-
-    <activity
-      android:name=".oauth.OAuthWebViewActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.Exponent.Light">
-    </activity>
 
     <activity
         android:name="net.openid.appauth.RedirectUriReceiverActivity"
@@ -158,14 +144,6 @@
       </intent-filter>
     </activity>
 
-    <activity
-      android:name=".oauth.OAuthResultActivity">
-    </activity>
-
-    <activity
-      android:name="abi32_0_0.expo.modules.appauth.AppAuthBrowserActivity">
-    </activity>
-
     <!-- START OF STRIPE SCHEMES -->
     <activity
         android:exported="true"
@@ -176,52 +154,67 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="expo.modules.payments.stripe.91af11b2-6204-4b66-a619-07198244ed73" />
+            <data android:scheme="expo.modules.payments.stripe.f0b433a8-2f6e-485b-ac8c-bfb1f2e93add" />
         </intent-filter>
     </activity>
     <!-- Versioned Activity for Stripe -->
-	<activity
-		android:exported="true"
-		android:launchMode="singleTask"
-		android:name="abi33_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
-		android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
-		<intent-filter>
-			<action android:name="android.intent.action.VIEW" />
-	      <category android:name="android.intent.category.DEFAULT" />
-	      <category android:name="android.intent.category.BROWSABLE" />
-	      <data android:scheme="abi33_0_0.expo.modules.payments.stripe" />
-		</intent-filter>
-	</activity>
-	<activity
-		android:exported="true"
-		android:launchMode="singleTask"
-		android:name="abi32_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
-		android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
-		<intent-filter>
-			<action android:name="android.intent.action.VIEW" />
-	      <category android:name="android.intent.category.DEFAULT" />
-	      <category android:name="android.intent.category.BROWSABLE" />
-	      <data android:scheme="abi32_0_0.expo.modules.payments.stripe" />
-		</intent-filter>
-	</activity>
+    <!-- BEGIN_SDK_36 -->
     <activity
-        android:exported="true"
-        android:launchMode="singleTask"
-        android:name="abi31_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="abi31_0_0.expo.modules.payments.stripe" />
-        </intent-filter>
+      android:exported="true"
+      android:launchMode="singleTask"
+      android:name="abi36_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
+      android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="abi36_0_0.expo.modules.payments.stripe" />
+      </intent-filter>
     </activity>
-
+    <!-- END_SDK_36 -->
+		<!-- BEGIN_SDK_35 -->
+		<activity
+			android:exported="true"
+			android:launchMode="singleTask"
+			android:name="abi35_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+					<category android:name="android.intent.category.DEFAULT" />
+					<category android:name="android.intent.category.BROWSABLE" />
+					<data android:scheme="abi35_0_0.expo.modules.payments.stripe" />
+			</intent-filter>
+		</activity>
+		<!-- END_SDK_35 -->
+    <!-- BEGIN_SDK_34 -->
+    <activity
+      android:exported="true"
+      android:launchMode="singleTask"
+      android:name="abi34_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
+      android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="abi34_0_0.expo.modules.payments.stripe" />
+      </intent-filter>
+    </activity>
+    <!-- END_SDK_34 -->
+    <!-- BEGIN_SDK_33 -->
+    <activity
+      android:exported="true"
+      android:launchMode="singleTask"
+      android:name="abi33_0_0.expo.modules.payments.stripe.RedirectUriReceiver"
+      android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="abi33_0_0.expo.modules.payments.stripe" />
+      </intent-filter>
+    </activity>
+    <!-- END_SDK_33 -->
     <!-- END OF STRIPE SCHEMES -->
-
-    <activity
-      android:name=".chrometabs.ChromeTabsManagerActivity">
-    </activity>
 
     <activity
       android:name=".experience.ErrorActivity"
@@ -248,14 +241,9 @@
       android:label="@string/app_name"
       android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-    <activity android:name=".IncommingCallScanActivity" />
-
     <service
       android:name=".ExponentIntentService"
       android:exported="false" />
-
-    <service android:name=".PhoneStateService" />
-    <service android:name=".IncomingCallBLPopupService" />
 
     <!-- Analytics -->
     <receiver
@@ -265,28 +253,6 @@
         <action android:name="com.android.vending.INSTALL_REFERRER" />
       </intent-filter>
     </receiver>
-
-    <!--<receiver-->
-      <!--android:name=".IncomingCallBroadcastReceiver"-->
-      <!--android:enabled="true"-->
-      <!--android:exported="false"-->
-      <!--android:label="IncomingCallBroadcastReceiver">-->
-
-      <!--<intent-filter >-->
-          <!--<action android:name="android.intent.action.PHONE_STATE"/>-->
-      <!--</intent-filter>-->
-    <!--</receiver>-->
-
-      <receiver
-          android:name=".call_detection.BootReceiver"
-          android:enabled="true"
-          android:exported="false"
-          android:label="BootReceiver">
-
-          <intent-filter >
-              <action android:name="android.intent.action.BOOT_COMPLETED"/>
-          </intent-filter>
-      </receiver>
 
     <!--
     This crashes: https://code.google.com/p/analytics-issues/issues/detail?id=667
@@ -302,8 +268,6 @@
         <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
       </intent-filter>
     </receiver>
-
-   <service android:name=".call_detection.CallScanJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true"/>
 
     <service android:name="com.google.android.gms.analytics.AnalyticsService"
              android:enabled="true"
@@ -348,7 +312,6 @@
         <action android:name="com.google.firebase.MESSAGING_EVENT"/>
       </intent-filter>
     </service>
-
     <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"
       android:resource="@drawable/shell_notification_icon" />
@@ -366,10 +329,6 @@
       android:theme="@style/Base.Theme.AppCompat">
     </activity>
 
-      <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
-      <meta-data
-          android:name="com.google.android.gms.ads.APPLICATION_ID"
-          android:value="ca-app-pub-9415708670922576~1783614870"/>
 
     <!-- ADD FABRIC CONFIG HERE -->
     <!-- BEGIN FABRIC CONFIG -->
@@ -382,15 +341,28 @@
     <!-- BEGIN GOOGLE MAPS CONFIG -->
     <meta-data
       android:name="com.google.android.geo.API_KEY"
-      android:value="AIzaSyCPyKmt6in3JwAsogYikNNjor8qgU9stRQ"/>
+      android:value="AIzaSyDh7eDB9snEFSYtf-k0gfxA45HFoR0L--I"/>
     <!-- END GOOGLE MAPS CONFIG -->
+
+    <!-- ADD GOOGLE MOBILE ADS CONFIG HERE -->
+    <!-- BEGIN GOOGLE MOBILE ADS CONFIG -->
+    <meta-data
+      android:name="com.google.android.gms.ads.APPLICATION_ID"
+      android:value="ca-app-pub-3940256099942544~3347511713"/>
+    <meta-data android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT" android:value="true"/>
+    <!-- END GOOGLE MOBILE ADS CONFIG -->
 
     <!-- ADD BRANCH CONFIG HERE -->
 
-    <!-- The Facebook SDK runs FacebookInitProvider on startup and crashes if there isn't an ID here -->
-    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="fb0"/>
+    <!-- ADD FACEBOOK APP ID CONFIG HERE -->
+    <!-- ADD FACEBOOK APP DISPLAY NAME CONFIG HERE -->
+    <!-- Tags below need to be in one line with no whitespace after android:value -->
+    <!-- in order for XDL to be able to replace values in them -->
+    <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled" android:value="false"/>
+    <meta-data android:name="com.facebook.sdk.AutoInitEnabled" android:value="false"/>
+    <meta-data android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled" android:value="false"/>
 
-    <meta-data android:name="standaloneStripeScheme" android:value="91af11b2-6204-4b66-a619-07198244ed73" />
+    <meta-data android:name="standaloneStripeScheme" android:value="f0b433a8-2f6e-485b-ac8c-bfb1f2e93add" />
   </application>
 
 </manifest>

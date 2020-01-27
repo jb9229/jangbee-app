@@ -25,7 +25,7 @@ import MapAddWebModal from 'templates/MapAddWebModal';
 // @flow
 import React from 'react';
 import { notifyError } from 'common/ErrorNotice';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {

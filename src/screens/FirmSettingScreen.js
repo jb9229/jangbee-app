@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import firebase from 'firebase';
 import * as api from 'api/api';
 import { notifyError } from 'common/ErrorNotice';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
 import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
 import DocumentsModal from 'templates/DocumentsModal';

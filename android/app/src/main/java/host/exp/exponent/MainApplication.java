@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import expo.loaders.provider.interfaces.AppLoaderPackagesProviderInterface;
-import host.exp.exponent.call_detection.CallDectionPackage;
 import host.exp.exponent.generated.BasePackageList;
 import okhttp3.OkHttpClient;
 
@@ -30,7 +29,6 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
 
         // Needed for `react-native link`
         // new MainReactPackage()
-            new CallDectionPackage()
     );
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
 import firebase from 'firebase';
 import Styled from 'styled-components/native';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 import JBButton from 'molecules/JBButton';
 import JBTextItem from 'molecules/JBTextItem';
 import Card from 'molecules/CardUI';

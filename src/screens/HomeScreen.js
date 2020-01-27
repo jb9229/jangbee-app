@@ -4,7 +4,7 @@ import { Notifications } from 'expo';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import * as api from 'api/api';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
 import { notifyError } from 'common/ErrorNotice';

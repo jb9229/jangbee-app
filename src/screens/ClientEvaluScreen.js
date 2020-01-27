@@ -16,7 +16,7 @@ import moment from 'moment';
 import { notifyError } from 'common/ErrorNotice';
 import { shareNotExistCEvalu } from 'common/JBCallShare';
 import styled from 'styled-components/native';
-import { withLogin } from 'contexts/LoginProvider';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 class ClientEvaluScreen extends React.Component {
   static navigationOptions = {

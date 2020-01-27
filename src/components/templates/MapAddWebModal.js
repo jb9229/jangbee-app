@@ -1,11 +1,13 @@
+import * as React from 'react';
+
 import {
   Modal,
   StyleSheet,
-  View,
-  WebView
+  View
 } from 'react-native';
 
-import React from 'react';
+import ModalHeadOrganism from '../molecules/ModalHeadOrganism';
+import { WebView } from 'react-native-webview';
 
 const WEBMSG_ACTION_SAVE = 'SAVE';
 const WEBMSG_ACTION_CACEL = 'CALCEL';
@@ -16,32 +18,40 @@ const styles = StyleSheet.create({
   mapAddModalWrap: {
     flex: 1,
     backgroundColor: '#FFF',
-    padding: 20
+    paddingLeft: 10,
+    paddingRight: 10
   }
 });
 
-export default class MapAddWebModal extends React.PureComponent {
-  onMapAddrWebMSG = (mapAddrWebMSG) => {
+export default class MapAddWebModal extends React.PureComponent
+{
+  constructor (props) { super(props) }
+
+  onMapAddrWebMSG = (mapAddrWebMSG) =>
+  {
     const { saveAddrInfo } = this.props;
 
     const webData = JSON.parse(mapAddrWebMSG);
 
-    if (webData.action === WEBMSG_ACTION_SAVE) {
+    if (webData.action === WEBMSG_ACTION_SAVE)
+    {
       saveAddrInfo(webData.data);
     }
 
     this.closeModal();
   };
 
-  closeModal = () => {
+  closeModal = () =>
+  {
     const { setMapAddModalVisible, nextFocus } = this.props;
 
     nextFocus();
     setMapAddModalVisible(false);
   };
 
-  render () {
-    const { isVisibleMapAddModal } = this.props;
+  render ()
+  {
+    const { isVisibleMapAddModal, setMapAddModalVisible } = this.props;
 
     return (
       <View style={styles.container}>
@@ -52,6 +62,7 @@ export default class MapAddWebModal extends React.PureComponent {
           onRequestClose={() => this.closeModal}
         >
           <View style={styles.mapAddModalWrap}>
+            <ModalHeadOrganism closeModal={() => setMapAddModalVisible(false)}/>
             <WebView
               source={{ uri: 'https://jb9229.github.io/postcode/add-map.html' }}
               style={{ marginTop: 20 }}

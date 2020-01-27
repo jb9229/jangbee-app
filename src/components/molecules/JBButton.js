@@ -1,8 +1,8 @@
-import React from 'react';
 import { InteractionManager } from 'react-native';
-import styled from 'styled-components/native';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 const FULL_SIZE = 'full';
 const BIG_SIZE = 'big';
@@ -27,7 +27,7 @@ const Container = styled.View`
   `}
 `;
 
-const TouchableHighlight = styled.TouchableHighlight`
+const TouchableOpacity = styled.TouchableOpacity`
   border-color: ${props =>
     props.borderColor ? props.borderColor : colors.pointDark};
 
@@ -105,30 +105,36 @@ const Text = styled.Text`
     `};
 `;
 
-export default class JBButton extends React.PureComponent {
-  constructor(props) {
+export default class JBButton extends React.PureComponent
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       pressing: false
     };
   }
 
-  preventDoubleTap = () => {
+  preventDoubleTap = () =>
+  {
     const { onPress } = this.props;
     const { pressing } = this.state;
 
-    if (pressing === false) {
+    if (pressing === false)
+    {
       this.setState({ pressing: true });
 
       onPress();
 
-      InteractionManager.runAfterInteractions(() => {
+      InteractionManager.runAfterInteractions(() =>
+      {
         this.setState({ pressing: false });
       });
     }
   };
 
-  render() {
+  render ()
+  {
     const {
       title,
       size,
@@ -144,20 +150,28 @@ export default class JBButton extends React.PureComponent {
     let colorTheme = color;
     let bgColorTheme = bgColor;
 
-    if (Secondary) {
-      if (underline) {
+    if (Secondary)
+    {
+      if (underline)
+      {
         colorTheme = colors.pointDark;
-      } else {
+      }
+      else
+      {
         colorTheme = 'white';
       }
 
       bgColorTheme = colors.pointDark;
     }
 
-    if (Primary) {
-      if (underline) {
+    if (Primary)
+    {
+      if (underline)
+      {
         colorTheme = colors.point2;
-      } else {
+      }
+      else
+      {
         colorTheme = 'white';
       }
 
@@ -166,7 +180,7 @@ export default class JBButton extends React.PureComponent {
 
     return (
       <Container align={align} nonemargin={nonemargin}>
-        <TouchableHighlight
+        <TouchableOpacity
           size={size}
           color={bgColorTheme}
           borderColor={colorTheme}
@@ -180,7 +194,7 @@ export default class JBButton extends React.PureComponent {
           >
             {title}
           </Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </Container>
     );
   }

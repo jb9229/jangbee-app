@@ -17,7 +17,7 @@ storiesOf('Molecules Component', module)
     const [text, setText] = React.useState();
 
     return (
-      <EditText label="제목" subLabel="(필수, 2자이상)" text={text} onTextChanged={(text) => setText(text)} />
+      <EditText label="제목" subLabel="(필수, 2자이상)" text={text} onChangeText={(text) => setText(text)} />
     );
   })
   );
