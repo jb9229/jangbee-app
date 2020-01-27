@@ -1,11 +1,10 @@
 {
-  "mode": "beta",
   "expo": {
     "name": "장비 콜",
     "slug": "jangbeecall_native",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android"
@@ -26,7 +25,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "yes",
+      "publishBundlePath": "ios/----/Supporting/shell-app.bundle",
+      "publishManifestPath": "ios/----/Supporting/shell-app-manifest.json"
     },
     "androidStatusBar": {
       "backgroundColor": "#4D4A4A",
@@ -42,10 +44,15 @@
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"
-      }
+      },
+      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },
     "description": "",
     "isDetached": true,
-    "detach": {}
+    "detach": {
+      "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v2.14.3-sdk36.0.0-00f587c0-b8c9-4b6b-88f6-2ccd4f20dc9c.tar.gz",
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.14.0-sdk36.0.0-fb8689e6-fd42-4b18-b01f-ac2ef3bc8681.tar.gz"
+    }
   }
 }
