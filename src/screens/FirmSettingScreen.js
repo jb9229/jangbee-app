@@ -1,17 +1,19 @@
-import React from 'react';
-import { Alert, Platform, ToastAndroid } from 'react-native';
-import styled from 'styled-components/native';
-import firebase from 'firebase';
 import * as api from 'api/api';
-import { notifyError } from 'common/ErrorNotice';
-import { withLogin } from 'src/contexts/LoginProvider';
+
+import { Alert, Platform, ToastAndroid } from 'react-native';
+
+import AlarmSettingModal from 'templates/AlarmSettingModal';
+import DocumentsModal from 'templates/DocumentsModal';
+import JBIconButton from 'molecules/JBIconButton';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
 import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
-import DocumentsModal from 'templates/DocumentsModal';
-import AlarmSettingModal from 'templates/AlarmSettingModal';
-import JBIconButton from 'molecules/JBIconButton';
+import React from 'react';
 import colors from 'constants/Colors';
+import firebase from 'firebase';
+import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components/native';
 import { validatePresence } from 'utils/Validation';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const Container = styled.View`
   flex: 1;
@@ -36,12 +38,14 @@ const MenueRowWrap = styled.View`
   justify-content: space-around;
 `;
 
-class FirmSettingScreen extends React.Component {
+class FirmSettingScreen extends React.Component
+{
   static navigationOptions = {
     header: null
   };
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleKatalkAskModal: false,
@@ -51,7 +55,8 @@ class FirmSettingScreen extends React.Component {
     };
   }
 
-  confirmDeleteUser = () => {
+  confirmDeleteUser = () =>
+  {
     Alert.alert(
       '탈퇴확인',
       '정말 탈퇴 하시겠습니까? \n탈퇴하시면 즉시 모든 사용하던 데이터가 삭제됩니다.\n\n등록하신 광고가 있다면 이달 잔여기간 만료 후 삭제됩니다.',
@@ -62,7 +67,8 @@ class FirmSettingScreen extends React.Component {
     );
   };
 
-  confirmLogout = () => {
+  confirmLogout = () =>
+  {
     Alert.alert('로그아웃확인', '정말 로그아웃 하시겠습니까?', [
       { text: '로그아웃하기', onPress: () => this.onSignOut() },
       { text: '취소', onPress: () => {} }
@@ -72,20 +78,24 @@ class FirmSettingScreen extends React.Component {
   /**
    * 회원 탈퇴 요청
    */
-  deleteJBData = () => {
+  deleteJBData = () =>
+  {
     const { user } = this.props;
 
     api
       .deleteFirmAccount(user.uid)
-      .then(result => {
-        if (!result) {
+      .then(result =>
+      {
+        if (!result)
+        {
           Alert.alert(
             '회원 탈퇴에 문제가 있습니다',
             '서버 데이터 삭제에 실패 했습니다, 죄송합니다, 관리자에게 문의 부탁 드립니다(응답값: false)'
           );
         }
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '회원 탈퇴에 문제가 있습니다',
           `서버 데이터 삭제에 실패 했습니다, 죄송합니다, 관리자에게 문의 부탁 드립니다(응답: ${
@@ -98,30 +108,37 @@ class FirmSettingScreen extends React.Component {
   /**
    * 회원 탈퇴 요청
    */
-  deleteUser = () => {
+  deleteUser = () =>
+  {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
 
     user
       .delete()
-      .then(() => {
+      .then(() =>
+      {
         firebase
           .database()
           .ref(`users/${user.uid}`)
           .remove()
-          .then(() => {
+          .then(() =>
+          {
             this.deleteJBData();
 
-            if (Platform.OS === 'android') {
+            if (Platform.OS === 'android')
+            {
               ToastAndroid.show(
                 '회원 탈퇴 성공, 감사합니다.',
                 ToastAndroid.SHORT
               );
-            } else {
+            }
+            else
+            {
               Alert.alert('회원 탈퇴 성공, 감사합니다.');
             }
           })
-          .catch(error => {
+          .catch(error =>
+          {
             Alert.alert(
               '회원 탈퇴에 문제가 있습니다',
               `Firebase 데이터 삭제에 실패 했습니다, 관리자에게 문의해 주세요${
@@ -130,7 +147,8 @@ class FirmSettingScreen extends React.Component {
             );
           });
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '인증서버에서 재인증을 요구하고 있습니다',
           `죄송합니다, 인증 유효시간이 오래된경우(자동 로그인) 재로그인 후 탈퇴를 진행부탁 드립니다(${
@@ -147,20 +165,26 @@ class FirmSettingScreen extends React.Component {
   /**
    * 로그아웃 함수
    */
-  onSignOut = async () => {
-    try {
+  onSignOut = async () =>
+  {
+    try
+    {
       await firebase.auth().signOut();
-    } catch (e) {
+    }
+    catch (e)
+    {
       Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
     }
   };
 
-  requestCashback = (fintechUseNum, cashbackAmount) => {
+  requestCashback = (fintechUseNum, cashbackAmount) =>
+  {
     firebase
       .database()
       .ref('openbank/oob/access_token')
       .once('value', data => data)
-      .then(data => {
+      .then(data =>
+      {
         const token = data.val();
         const depositData = this.validateDepositData(
           token,
@@ -168,36 +192,44 @@ class FirmSettingScreen extends React.Component {
           cashbackAmount
         );
 
-        if (!depositData) {
+        if (!depositData)
+        {
           return;
         }
 
         api
           .requestCashback(depositData)
-          .then(result => {
-            if (result) {
+          .then(result =>
+          {
+            if (result)
+            {
               Alert.alert(
                 '캐쉬백 처리 완료',
                 '선택하신 통장으로 캐쉬백처리가 완료 되었습니다'
               );
-            } else {
+            }
+            else
+            {
               Alert.alert(
                 '캐쉬백 처리 실패!',
                 '창을 새로열어, 가용 캐쉬백을 다시 확인해주세요'
               );
             }
           })
-          .catch(error => {
+          .catch(error =>
+          {
             notifyError('캐쉬백 요청에 문제가 있습니다', error.message);
           });
       });
   };
 
-  validateDepositData = (obAccessToken, fintechUseNum, cashbackAmount) => {
+  validateDepositData = (obAccessToken, fintechUseNum, cashbackAmount) =>
+  {
     const { user } = this.props;
 
     let v = validatePresence(user.uid);
-    if (!v[0]) {
+    if (!v[0])
+    {
       Alert.alert(
         '계정값이 유효하지 않습니다',
         `재 로그인 부탁 드립니다: ${v[1]}`
@@ -206,7 +238,8 @@ class FirmSettingScreen extends React.Component {
     }
 
     v = validatePresence(obAccessToken);
-    if (!v[0]) {
+    if (!v[0])
+    {
       Alert.alert(
         '계좌 접근정보가 유효하지 않습니다',
         `재 로그인 부탁 드립니다: ${v[1]}`
@@ -224,7 +257,8 @@ class FirmSettingScreen extends React.Component {
     return depositData;
   };
 
-  render() {
+  render ()
+  {
     const { navigation, user } = this.props;
     const {
       isVisibleKatalkAskModal,
@@ -278,7 +312,8 @@ class FirmSettingScreen extends React.Component {
             <JBIconButton
               title="로그아웃"
               img={require('../../assets/images/icon/sign_out_icon.png')}
-              onPress={() => {
+              onPress={() =>
+              {
                 this.confirmLogout();
               }}
             />
@@ -287,7 +322,8 @@ class FirmSettingScreen extends React.Component {
             <JBIconButton
               title="탈퇴하기"
               img={require('../../assets/images/icon/delete_user_icon.png')}
-              onPress={() => {
+              onPress={() =>
+              {
                 this.confirmDeleteUser();
               }}
             />
@@ -322,4 +358,4 @@ class FirmSettingScreen extends React.Component {
   }
 }
 
-export default withLogin(FirmSettingScreen);
+export default FirmSettingScreen;

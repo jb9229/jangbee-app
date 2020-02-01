@@ -33,8 +33,10 @@ const styles = StyleSheet.create({
   }
 });
 
-class ClientWorkListScreen extends React.Component {
-  constructor(props) {
+class ClientWorkListScreen extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleEstimateModal: false,
@@ -54,15 +56,18 @@ class ClientWorkListScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     // TODO did mount 후에는 setsate 안하게
     this.setOpenWorkListData();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { params } = nextProps.navigation.state;
 
-    if (params && params.refresh) {
+    if (params && params.refresh)
+    {
       this.setOpenWorkListData();
       this.setMatchedWorkListData();
     }
@@ -71,10 +76,12 @@ class ClientWorkListScreen extends React.Component {
   /**
    * Tab View 변경함수
    */
-  changeTabView = index => {
+  changeTabView = index =>
+  {
     const { matchedWorkList } = this.state;
 
-    if (index === 1 && matchedWorkList === undefined) {
+    if (index === 1 && matchedWorkList === undefined)
+    {
       this.setMatchedWorkListData();
     }
 
@@ -84,7 +91,8 @@ class ClientWorkListScreen extends React.Component {
   /**
    * 2시간 지난후 지원자선택 취소 확인함수
    */
-  confirmCancelSelFirm = workId => {
+  confirmCancelSelFirm = workId =>
+  {
     Alert.alert(
       '지원자 선택 취소',
       '해당 업체가 응답이 없습니다, 새로운 지원자를 선택해 주제요',
@@ -98,11 +106,14 @@ class ClientWorkListScreen extends React.Component {
   /**
    * 2시간 지난후 지원자선택 취소 함수
    */
-  calcelSelFirm = workId => {
+  calcelSelFirm = workId =>
+  {
     api
       .cancelSelFirm(workId)
-      .then(resBody => {
-        if (resBody) {
+      .then(resBody =>
+      {
+        if (resBody)
+        {
           this.setOpenWorkListData();
           return;
         }
@@ -124,13 +135,16 @@ class ClientWorkListScreen extends React.Component {
   /**
    * 리스트 데이터 설정함수
    */
-  setOpenWorkListData = () => {
+  setOpenWorkListData = () =>
+  {
     const { user } = this.props;
 
     api
       .getClientOpenWorkList(user.uid)
-      .then(resBody => {
-        if (resBody && resBody.length > 0) {
+      .then(resBody =>
+      {
+        if (resBody && resBody.length > 0)
+        {
           this.setState({
             openWorkList: resBody,
             isOpenWorkListEmpty: false,
@@ -151,13 +165,16 @@ class ClientWorkListScreen extends React.Component {
   /**
    * 매칭된 일감리스트 설정함수
    */
-  setMatchedWorkListData = () => {
+  setMatchedWorkListData = () =>
+  {
     const { user } = this.props;
 
     api
       .getClientMatchedWorkList(user.uid)
-      .then(resBody => {
-        if (resBody && resBody.length > 0) {
+      .then(resBody =>
+      {
+        if (resBody && resBody.length > 0)
+        {
           this.setState({
             matchedWorkList: resBody,
             isMatchedWorkListEmpty: false,
@@ -178,11 +195,14 @@ class ClientWorkListScreen extends React.Component {
   /**
    * 일감내용 수정 요청함수
    */
-  updateWork = updateData => {
+  updateWork = updateData =>
+  {
     api
       .updateWork(updateData)
-      .then(resBody => {
-        if (resBody) {
+      .then(resBody =>
+      {
+        if (resBody)
+        {
           this.setOpenWorkListData();
           return;
         }
@@ -193,7 +213,8 @@ class ClientWorkListScreen extends React.Component {
       .catch(error => notifyError(error.name, error.message));
   };
 
-  render() {
+  render ()
+  {
     const { navigation } = this.props;
     const {
       isVisibleEstimateModal,
@@ -301,4 +322,4 @@ class ClientWorkListScreen extends React.Component {
   }
 }
 
-export default withLogin(ClientWorkListScreen);
+export default ClientWorkListScreen;

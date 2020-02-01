@@ -1,17 +1,19 @@
-import React from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import { withLogin } from 'src/contexts/LoginProvider';
 import * as api from 'api/api';
-import JBActIndicator from 'molecules/JBActIndicator';
-import JangbeeAd from 'molecules/JangbeeAd';
-import JBButton from 'molecules/JBButton';
-import { getAdtypeStr } from 'constants/AdTypeStr';
+
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+
 import AdUpdateModal from 'templates/AdUpdateModal';
+import FirmDetailModal from 'templates/FirmDetailModal';
+import JBActIndicator from 'molecules/JBActIndicator';
+import JBButton from 'molecules/JBButton';
+import JangbeeAd from 'molecules/JangbeeAd';
 import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
-import { notifyError } from 'common/ErrorNotice';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import FirmDetailModal from 'templates/FirmDetailModal';
+import { getAdtypeStr } from 'constants/AdTypeStr';
+import { notifyError } from 'common/ErrorNotice';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -72,12 +74,14 @@ const styles = StyleSheet.create({
   }
 });
 
-class AdScreen extends React.Component {
+class AdScreen extends React.Component
+{
   static navigationOptions = {
     header: null
   };
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleAdUpdateModal: false,
@@ -89,14 +93,17 @@ class AdScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this.setAdList();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { params } = nextProps.navigation.state;
 
-    if (params && params.refresh) {
+    if (params && params.refresh)
+    {
       this.setAdList();
     }
   }
@@ -104,19 +111,24 @@ class AdScreen extends React.Component {
   /**
    * 결제통장 변경 함수
    */
-  changeAdPayAccount = newFintechUseNum => {
+  changeAdPayAccount = newFintechUseNum =>
+  {
     const { user } = this.props;
 
     api
       .updateFinUseNumAd(newFintechUseNum, user.uid)
-      .then(updateResult => {
-        if (updateResult) {
+      .then(updateResult =>
+      {
+        if (updateResult)
+        {
           Alert.alert(
             '결제통장 바꾸기 성공',
             `${newFintechUseNum}결제통장 바꾸기에 성공했습니다.`
           );
           this.setState({ isVisibleFinAccUpdateModal: false });
-        } else {
+        }
+        else
+        {
           Alert.alert(
             '광고 업데이트에 문제가 있습니다',
             'FintechUseNum 업데이트 요청 실패, 재시도해 주세요'
@@ -128,22 +140,28 @@ class AdScreen extends React.Component {
       );
   };
 
-  setAdList = () => {
+  setAdList = () =>
+  {
     const { user } = this.props;
     api
       .getJBAdList(user.uid)
-      .then(listData => {
-        if (listData.length > 0) {
+      .then(listData =>
+      {
+        if (listData.length > 0)
+        {
           this.setState({
             isAdEmpty: false,
             isLoadingAdList: false,
             adList: listData
           });
-        } else {
+        }
+        else
+        {
           this.setState({ isAdEmpty: true, isLoadingAdList: false });
         }
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '업체정보 요청에 문제가 있습니다',
           `다시 시도해 주세요 -> [${error.name}] ${error.message}`
@@ -156,7 +174,8 @@ class AdScreen extends React.Component {
   /**
    * 광고업데이트 요청 함수
    */
-  updateAd = item => {
+  updateAd = item =>
+  {
     this.setState({
       updateAd: item,
       isVisibleAdUpdateModal: true
@@ -166,7 +185,8 @@ class AdScreen extends React.Component {
   /**
    * 광고종료 재 확인 팝업
    */
-  confirmTerminateAd = item => {
+  confirmTerminateAd = item =>
+  {
     Alert.alert(
       '광고 종료',
       `[${getAdtypeStr(item.adType)}] 정말 광고를 종료 하시겠습니까?`,
@@ -184,8 +204,10 @@ class AdScreen extends React.Component {
   /**
    * 광고종료 요청 함수
    */
-  terminateAd = id => {
-    if (!id || id < 1) {
+  terminateAd = id =>
+  {
+    if (!id || id < 1)
+    {
       Alert.alert(
         '유효성검사 에러',
         `[${id}]종료 광고아이디를 찾지 못했습니다, 다시 시도해 주세요`
@@ -251,7 +273,8 @@ class AdScreen extends React.Component {
     </View>
   );
 
-  render() {
+  render ()
+  {
     const { navigation, user } = this.props;
     const {
       isLoadingAdList,
@@ -264,11 +287,13 @@ class AdScreen extends React.Component {
       detailFirmId
     } = this.state;
 
-    if (isLoadingAdList) {
+    if (isLoadingAdList)
+    {
       return <JBActIndicator title="내광고 로딩중.." size={35} />;
     }
 
-    if (isAdEmpty) {
+    if (isAdEmpty)
+    {
       return (
         <View style={styles.adEmptyViewWrap}>
           <View style={styles.emptyWordWrap}>
@@ -302,7 +327,8 @@ class AdScreen extends React.Component {
         <AdUpdateModal
           isVisibleModal={isVisibleAdUpdateModal}
           closeModal={() => this.setState({ isVisibleAdUpdateModal: false })}
-          completeUpdate={() => {
+          completeUpdate={() =>
+          {
             this.setAdList();
             this.setState({ isVisibleAdUpdateModal: false });
           }}
@@ -353,4 +379,4 @@ class AdScreen extends React.Component {
   }
 }
 
-export default withLogin(AdScreen);
+export default AdScreen;

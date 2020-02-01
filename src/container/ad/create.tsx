@@ -2,12 +2,17 @@ import * as React from 'react';
 
 import { AdCreateProvider } from 'src/contexts/AdCreateProvider';
 import CreateAdLayout from 'templates/CreateAdLayout';
-import { withLogin } from 'src/contexts/LoginProvider';
+import { DefaultNavigationProps } from 'src/types';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
-const CreateAd: React.FC = () =>
+interface Props {
+  navigation: DefaultNavigationProps;
+}
+const CreateAd: React.FC<Props> = (props) =>
 {
+  const { user } = useLoginProvider();
   return (
-    <AdCreateProvider>
+    <AdCreateProvider navigation={props.navigation} user={user}>
       <CreateAdLayout />
     </AdCreateProvider>
   );

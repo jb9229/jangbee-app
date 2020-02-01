@@ -123,12 +123,14 @@ const TopCommWrap = styled.View`
   align-items: center;
 `;
 
-class FirmMyInfoScreen extends React.Component {
+class FirmMyInfoScreen extends React.Component
+{
   static navigationOptions = {
     header: null
   };
 
-  constructor (props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       firm: undefined,
@@ -138,33 +140,40 @@ class FirmMyInfoScreen extends React.Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount ()
+  {
     this.setMyFirmInfo();
     this.setFirmEvaluList();
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { params } = nextProps.navigation.state;
 
-    if (params !== undefined && params.refresh !== undefined) {
+    if (params !== undefined && params.refresh !== undefined)
+    {
       this.setMyFirmInfo();
     }
   }
 
-  setMyFirmInfo = () => {
+  setMyFirmInfo = () =>
+  {
     const { user } = this.props;
 
-    if (!user.uid) {
+    if (!user.uid)
+    {
       Alert.alert('유효하지 않은 사용자 입니다');
       return;
     }
 
     api
       .getFirm(user.uid)
-      .then(firm => {
+      .then(firm =>
+      {
         this.setState({ firm, isLoadingComplete: true });
       })
-      .catch(error => {
+      .catch(error =>
+      {
         notifyError(
           '업체정보 요청 문제발생',
           `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
@@ -179,22 +188,27 @@ class FirmMyInfoScreen extends React.Component {
   /**
    * 업체 평가 리스트 설정함수
    */
-  setFirmEvaluList = () => {
+  setFirmEvaluList = () =>
+  {
     const { user } = this.props;
 
-    if (!user.uid) {
+    if (!user.uid)
+    {
       Alert.alert(`[${user.uid}] 유효하지 않은 사용자 입니다`);
       return;
     }
 
     api
       .getFirmEvalu(user.uid)
-      .then(evaluList => {
-        if (evaluList) {
+      .then(evaluList =>
+      {
+        if (evaluList)
+        {
           this.setState({ evaluList });
         }
       })
-      .catch(error => {
+      .catch(error =>
+      {
         notifyError(
           '업체후기 요청 문제발생',
           `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
@@ -204,7 +218,8 @@ class FirmMyInfoScreen extends React.Component {
       });
   };
 
-  registerFirm = () => {
+  registerFirm = () =>
+  {
     const { navigation } = this.props;
 
     navigation.navigate('FirmRegister');
@@ -213,15 +228,20 @@ class FirmMyInfoScreen extends React.Component {
   /**
    * 로그아웃 함수
    */
-  onSignOut = async () => {
-    try {
+  onSignOut = async () =>
+  {
+    try
+    {
       await firebase.auth().signOut();
-    } catch (e) {
+    }
+    catch (e)
+    {
       Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
     }
   };
 
-  render () {
+  render ()
+  {
     const { navigation } = this.props;
 
     const {
@@ -230,11 +250,13 @@ class FirmMyInfoScreen extends React.Component {
       isVisibleKatalkAskModal,
       evaluList
     } = this.state;
-    if (!isLoadingComplete) {
+    if (!isLoadingComplete)
+    {
       return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
     }
 
-    if (!firm) {
+    if (!firm)
+    {
       return (
         <View style={styles.regFirmWrap}>
           <View style={styles.emptyFirmTopWrap}>
@@ -311,4 +333,4 @@ class FirmMyInfoScreen extends React.Component {
   }
 }
 
-export default withLogin(FirmMyInfoScreen);
+export default FirmMyInfoScreen;

@@ -18,7 +18,8 @@ import { shareNotExistCEvalu } from 'common/JBCallShare';
 import styled from 'styled-components/native';
 import { withLogin } from 'src/contexts/LoginProvider';
 
-class ClientEvaluScreen extends React.Component {
+class ClientEvaluScreen extends React.Component
+{
   static navigationOptions = {
     title: '피해사례 고객',
     headerStyle: {
@@ -26,32 +27,42 @@ class ClientEvaluScreen extends React.Component {
     }
   };
 
-  componentDidMount () {
+  componentDidMount ()
+  {
     const { params } = this.props.navigation.state;
 
-    if (params && params.search) {
-      this.setState({ searchArea: 'TEL', searchWord: params.search }, () => {
+    if (params && params.search)
+    {
+      this.setState({ searchArea: 'TEL', searchWord: params.search }, () =>
+      {
         this.searchFilterCliEvalu();
       });
-    } else {
+    }
+    else
+    {
       this.setClinetEvaluList();
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (!nextProps.navigation) {
+  componentWillReceiveProps (nextProps)
+  {
+    if (!nextProps.navigation)
+    {
       return;
     }
     const { params } = nextProps.navigation.state;
 
-    if (params && params.search) {
-      this.setState({ searchArea: 'TEL', searchWord: params.search }, () => {
+    if (params && params.search)
+    {
+      this.setState({ searchArea: 'TEL', searchWord: params.search }, () =>
+      {
         this.searchFilterCliEvalu();
       });
     }
   }
 
-  deleteCliEvalu = id => {
+  deleteCliEvalu = id =>
+  {
     api
       .deleteCliEvalu(id)
       .then(() => this.setClinetEvaluList())
@@ -68,10 +79,12 @@ class ClientEvaluScreen extends React.Component {
    *
    * @param {object} newEvaluLike 공감/비공감 추가할 데이터
    */
-  createClientEvaluLike = newEvaluLike => {
+  createClientEvaluLike = newEvaluLike =>
+  {
     api
       .createClientEvaluLike(newEvaluLike)
-      .then(() => {
+      .then(() =>
+      {
         this.setCliEvaluLikeList(newEvaluLike.evaluId);
       })
       .catch(error =>
@@ -86,7 +99,8 @@ class ClientEvaluScreen extends React.Component {
    * 피해사례 평가 팝업 오픈
    *
    */
-  openCliEvaluLikeModal = (item, isMine) => {
+  openCliEvaluLikeModal = (item, isMine) =>
+  {
     this.setState({
       evaluLikeSelected: item,
       isMineEvaluation: isMine,
@@ -99,10 +113,12 @@ class ClientEvaluScreen extends React.Component {
   /**
    * 피해사례 평가 데이터 설정 함수
    */
-  setCliEvaluLikeList = evaluId => {
+  setCliEvaluLikeList = evaluId =>
+  {
     api
       .getClientEvaluLikeList(evaluId)
-      .then(resBody => {
+      .then(resBody =>
+      {
         this.setState({ evaluLikeList: resBody });
       })
       .catch(error =>
@@ -118,7 +134,8 @@ class ClientEvaluScreen extends React.Component {
    *
    * @param {string} accountId 공감/비공감 삭제할 계정 아이디
    */
-  cancelClientEvaluLike = (evaluation, like) => {
+  cancelClientEvaluLike = (evaluation, like) =>
+  {
     const { user } = this.props;
     api
       .deleteCliEvaluLike(evaluation.id, user.uid, like)
@@ -131,8 +148,10 @@ class ClientEvaluScreen extends React.Component {
       );
   };
 
-  closeEvaluLikeModal = refresh => {
-    if (refresh) {
+  closeEvaluLikeModal = refresh =>
+  {
+    if (refresh)
+    {
       this.setClinetEvaluList();
     }
     this.setState({ isVisibleEvaluLikeModal: false });
@@ -141,16 +160,20 @@ class ClientEvaluScreen extends React.Component {
   /**
    * 내가 등록한 피해사례 요청 함수
    */
-  setMyClinetEvaluList = () => {
+  setMyClinetEvaluList = () =>
+  {
     const { user } = this.props;
     const { page, cliEvaluList } = this.state;
 
     api
       .getClientEvaluList(page, user.uid, true)
-      .then(resBody => {
-        if (resBody && resBody.content) {
+      .then(resBody =>
+      {
+        if (resBody && resBody.content)
+        {
           let notice;
-          if (resBody.content.length === 0) {
+          if (resBody.content.length === 0)
+          {
             notice = '내가 등록한 피해사례가 없습니다.';
             this.setState({
               cliEvaluList: [],
@@ -178,7 +201,8 @@ class ClientEvaluScreen extends React.Component {
 
         this.setState({ isNewestEvaluList: false, notExistCEvalu: false });
       })
-      .catch(ex => {
+      .catch(ex =>
+      {
         notifyError(
           '내가 등록한 피해사례 요청 문제',
           `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
@@ -191,15 +215,19 @@ class ClientEvaluScreen extends React.Component {
   /**
    * 최근 피해사례 요청 함수
    */
-  setClinetEvaluList = () => {
+  setClinetEvaluList = () =>
+  {
     const { user } = this.props;
     const { page, cliEvaluList } = this.state;
     api
       .getClientEvaluList(page, user.uid, false)
-      .then(resBody => {
-        if (resBody && resBody.content) {
+      .then(resBody =>
+      {
+        if (resBody && resBody.content)
+        {
           let notice;
-          if (resBody.content.length === 0) {
+          if (resBody.content.length === 0)
+          {
             notice = '블랙리스트를 조회 또는 추가해 주세요.';
             this.setState({
               cliEvaluList: [],
@@ -234,7 +262,8 @@ class ClientEvaluScreen extends React.Component {
 
         this.setState({ notExistCEvalu: false });
       })
-      .catch(ex => {
+      .catch(ex =>
+      {
         notifyError(
           '최근 피해사례 요청 문제',
           `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
@@ -247,10 +276,12 @@ class ClientEvaluScreen extends React.Component {
   /**
    * 피해사례 필터링 함수
    */
-  searchFilterCliEvalu = () => {
+  searchFilterCliEvalu = () =>
+  {
     const { searchArea, searchWord } = this.state;
 
-    if (!searchWord) {
+    if (!searchWord)
+    {
       this.setState({
         searchNotice: '검색어를 기입해 주세요!'
       });
@@ -259,28 +290,35 @@ class ClientEvaluScreen extends React.Component {
 
     let paramStr;
 
-    if (searchArea === 'CLI_NAME') {
+    if (searchArea === 'CLI_NAME')
+    {
       paramStr = `cliName=${searchWord}`;
     }
 
-    if (searchArea === 'FIRM_NAME') {
+    if (searchArea === 'FIRM_NAME')
+    {
       paramStr = `firmName=${searchWord}`;
     }
 
-    if (searchArea === 'TEL') {
+    if (searchArea === 'TEL')
+    {
       paramStr = `telNumber=${searchWord}`;
     }
 
-    if (searchArea === 'FIRM_NUMBER') {
+    if (searchArea === 'FIRM_NUMBER')
+    {
       paramStr = `firmNumber=${searchWord}`;
     }
 
     api
       .searchClientEvaluList(paramStr)
-      .then(resBody => {
-        if (resBody) {
+      .then(resBody =>
+      {
+        if (resBody)
+        {
           let notice = '';
-          if (resBody.length === 0) {
+          if (resBody.length === 0)
+          {
             notice = `[${searchWord}]는 현재 피해사례에 조회되지 않습니다.`;
             this.setState({
               notExistCEvalu: true,
@@ -296,7 +334,8 @@ class ClientEvaluScreen extends React.Component {
           });
         }
       })
-      .catch(ex => {
+      .catch(ex =>
+      {
         notifyError(
           '피해사례 요청 문제',
           `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
@@ -307,7 +346,8 @@ class ClientEvaluScreen extends React.Component {
   /**
    * 피해사례 업데이트 함수
    */
-  openUpdateCliEvaluForm = item => {
+  openUpdateCliEvaluForm = item =>
+  {
     this.setState({
       updateEvalu: item,
       isVisibleUpdateModal: true
@@ -317,10 +357,12 @@ class ClientEvaluScreen extends React.Component {
   /**
    * 장비업체리스트 페이징 추가 함수
    */
-  handleLoadMore = () => {
+  handleLoadMore = () =>
+  {
     const { page, isLastList, isNewestEvaluList } = this.state;
 
-    if (isLastList) {
+    if (isLastList)
+    {
       return;
     }
 
@@ -328,41 +370,50 @@ class ClientEvaluScreen extends React.Component {
       {
         page: page + 1
       },
-      () => {
-        if (isNewestEvaluList) {
+      () =>
+      {
+        if (isNewestEvaluList)
+        {
           this.setClinetEvaluList();
-        } else {
+        }
+        else
+        {
           this.setMyClinetEvaluList();
         }
       }
     );
   };
 
-  onClickNewestEvaluList = () => {
+  onClickNewestEvaluList = () =>
+  {
     this.setState(
       {
         page: 0,
         isNewestEvaluList: true
       },
-      () => {
+      () =>
+      {
         this.setClinetEvaluList();
       }
     );
   };
 
-  onClickMyEvaluList = () => {
+  onClickMyEvaluList = () =>
+  {
     this.setState(
       {
         page: 0,
         isNewestEvaluList: false
       },
-      () => {
+      () =>
+      {
         this.setMyClinetEvaluList();
       }
     );
   };
 
-  render () {
+  render ()
+  {
     const {
       searchWord,
       searchedWord,
@@ -424,4 +475,4 @@ class ClientEvaluScreen extends React.Component {
   }
 }
 
-export default withLogin(ClientEvaluScreen);
+export default ClientEvaluScreen;

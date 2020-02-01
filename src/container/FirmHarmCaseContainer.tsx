@@ -16,7 +16,8 @@ const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
-function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
+function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement
+{
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
@@ -36,20 +37,25 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   const [mineEvaluation, setMineEvaluation] = React.useState();
   const [detailEvalu, setDetailEvalu] = React.useState();
 
-  React.useEffect(() => {
+  React.useEffect(() =>
+  {
     const { params } = navigation.state;
 
-    if (params && params.search) {
+    if (params && params.search)
+    {
       setSearchArea('TEL');
       setSearchWord(params.search);
       searchFilterCliEvalu(params.search);
-    } else {
+    }
+    else
+    {
       getClientEvaluCount(user.uid, setCountData);
       setClinetEvaluList();
     }
   }, []);
 
-  const deleteCliEvalu = (id) => {
+  const deleteCliEvalu = (id) =>
+  {
     api
       .deleteCliEvalu(id)
       .then(() => setClinetEvaluList())
@@ -64,13 +70,17 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 최근 피해사례 요청 함수
    */
-  const setClinetEvaluList = () => {
+  const setClinetEvaluList = () =>
+  {
     api
       .getClientEvaluList(page, user.uid, false)
-      .then(resBody => {
-        if (resBody && resBody.content) {
+      .then(resBody =>
+      {
+        if (resBody && resBody.content)
+        {
           let notice;
-          if (resBody.content.length === 0) {
+          if (resBody.content.length === 0)
+          {
             notice = '블랙리스트를 조회 또는 추가해 주세요.';
             setCliEvaluList([]);
             setSearchNotice(notice);
@@ -94,7 +104,8 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
           setSearchTime(moment().format('YYYY.MM.DD HH:mm'));
         }
       })
-      .catch(ex => {
+      .catch(ex =>
+      {
         notifyError(
           '최근 피해사례 요청 문제',
           `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
@@ -107,10 +118,12 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
    *
    * @param {object} newEvaluLike 공감/비공감 추가할 데이터
    */
-  const createClientEvaluLike = newEvaluLike => {
+  const createClientEvaluLike = newEvaluLike =>
+  {
     api
       .createClientEvaluLike(newEvaluLike)
-      .then(() => {
+      .then(() =>
+      {
         setCliEvaluLikeList(newEvaluLike.evaluId);
       })
       .catch(error =>
@@ -125,7 +138,8 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
    * 피해사례 평가 팝업 오픈
    *
    */
-  const openCliEvaluLikeModal = (item, isMine) => {
+  const openCliEvaluLikeModal = (item, isMine) =>
+  {
     setEvaluLikeSelected(item);
     setMineEvaluation(isMine);
     setVisibleEvaluLikeModal(true);
@@ -136,10 +150,12 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 피해사례 평가 데이터 설정 함수
    */
-  const setCliEvaluLikeList = evaluId => {
+  const setCliEvaluLikeList = evaluId =>
+  {
     api
       .getClientEvaluLikeList(evaluId)
-      .then(resBody => {
+      .then(resBody =>
+      {
         setEvaluLikeList(resBody);
       })
       .catch(error =>
@@ -155,7 +171,8 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
    *
    * @param {string} accountId 공감/비공감 삭제할 계정 아이디
    */
-  const cancelClientEvaluLike = (evaluation, like) => {
+  const cancelClientEvaluLike = (evaluation, like) =>
+  {
     api
       .deleteCliEvaluLike(evaluation.id, user.uid, like)
       .then(() => setCliEvaluLikeList(evaluation.id))
@@ -167,8 +184,10 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
       );
   };
 
-  const closeEvaluLikeModal = (refresh) => {
-    if (refresh) {
+  const closeEvaluLikeModal = (refresh) =>
+  {
+    if (refresh)
+    {
       setClinetEvaluList();
     }
     setVisibleEvaluLikeModal(false);
@@ -177,13 +196,17 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 내가 등록한 피해사례 요청 함수
    */
-  const setMyClientEvaluList = () => {
+  const setMyClientEvaluList = () =>
+  {
     api
       .getClientEvaluList(page, user.uid, true)
-      .then(resBody => {
-        if (resBody && resBody.content) {
+      .then(resBody =>
+      {
+        if (resBody && resBody.content)
+        {
           let notice;
-          if (resBody.content.length === 0) {
+          if (resBody.content.length === 0)
+          {
             notice = '내가 등록한 피해사례가 없습니다.';
             setCliEvaluList([]);
             setSearchNotice(notice);
@@ -204,7 +227,8 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
 
         setNewestEvaluList(false);
       })
-      .catch(ex => {
+      .catch(ex =>
+      {
         notifyError(
           '내가 등록한 피해사례 요청 문제',
           `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
@@ -215,37 +239,46 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 피해사례 필터링 함수
    */
-  const searchFilterCliEvalu = (searchWord: string): void => {
-    if (!searchWord) {
+  const searchFilterCliEvalu = (searchWord: string): void =>
+  {
+    if (!searchWord)
+    {
       setSearchNotice('검색어를 기입해 주세요!');
       return;
     }
 
     let paramStr;
 
-    if (searchArea === 'CLI_NAME') {
+    if (searchArea === 'CLI_NAME')
+    {
       paramStr = `cliName=${searchWord}`;
     }
 
-    if (searchArea === 'FIRM_NAME') {
+    if (searchArea === 'FIRM_NAME')
+    {
       paramStr = `firmName=${searchWord}`;
     }
 
-    if (searchArea === 'TEL') {
+    if (searchArea === 'TEL')
+    {
       const pNumber = searchWord.split('-').join('');
       paramStr = `telNumber=${pNumber}`;
     }
 
-    if (searchArea === 'FIRM_NUMBER') {
+    if (searchArea === 'FIRM_NUMBER')
+    {
       paramStr = `firmNumber=${searchWord}`;
     }
 
     api
       .searchClientEvaluList(paramStr)
-      .then(resBody => {
-        if (resBody) {
+      .then(resBody =>
+      {
+        if (resBody)
+        {
           let notice = '';
-          if (resBody.length === 0) {
+          if (resBody.length === 0)
+          {
             notice = `[${searchWord}]는 현재 피해사례에 조회되지 않습니다.`;
           }
           setSearchWord(searchWord);
@@ -255,7 +288,8 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
           setLastList(true);
         }
       })
-      .catch(ex => {
+      .catch(ex =>
+      {
         notifyError(
           '피해사례 요청 문제',
           `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
@@ -266,12 +300,14 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 피해사례 업데이트 함수
    */
-  const openUpdateCliEvaluForm = item => {
+  const openUpdateCliEvaluForm = item =>
+  {
     setUpdateEvalu(item);
     setVisibleUpdateModal(true);
   };
 
-  const openDetailModal = (evalu): void => {
+  const openDetailModal = (evalu): void =>
+  {
     setDetailEvalu(evalu);
     setVisibleDetailModal(true);
   };
@@ -279,26 +315,33 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement {
   /**
    * 장비업체리스트 페이징 추가 함수
    */
-  const handleLoadMore = () => {
-    if (lastList) {
+  const handleLoadMore = () =>
+  {
+    if (lastList)
+    {
       return;
     }
     setPage(page + 1);
-    if (newestEvaluList) {
+    if (newestEvaluList)
+    {
       setClinetEvaluList();
-    } else {
+    }
+    else
+    {
       setMyClientEvaluList();
     }
   };
 
-  const onClickNewestEvaluList = () => {
+  const onClickNewestEvaluList = () =>
+  {
     setPage(0);
     setNewestEvaluList(true);
     setCliEvaluList(null);
     setClinetEvaluList();
   };
 
-  const onClickMyEvaluList = () => {
+  const onClickMyEvaluList = () =>
+  {
     setPage(0);
     setNewestEvaluList(false);
     setCliEvaluList(null);
@@ -374,20 +417,24 @@ FirmHarmCaseScreen.navigationOptions = ({ navigation }) => ({
   }
 });
 
-const getClientEvaluCount = (accountId: string, setCountData: (n: string) => void) => {
+const getClientEvaluCount = (accountId: string, setCountData: (n: string) => void) =>
+{
   api
     .getClientEvaluCount(accountId)
-    .then(countData => {
-      if (countData) {
+    .then(countData =>
+    {
+      if (countData)
+      {
         setCountData(countData);
       }
     })
-    .catch(ex => {
+    .catch(ex =>
+    {
       notifyError(
         '피해사례 통계 요청',
         `피해사례 통계 요처에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
       );
     });
-}
+};
 
-export default withLogin(FirmHarmCaseScreen);
+export default FirmHarmCaseScreen;

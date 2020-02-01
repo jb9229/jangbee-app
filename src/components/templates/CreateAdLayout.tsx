@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Alert } from 'react-native';
 import Card from 'molecules/CardUI';
 import EditText from 'molecules/EditText';
 import EquipementModal from 'templates/EquipmentModal';
@@ -10,6 +11,7 @@ import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import MiddleTitle from 'src/components/molecules/Text/MiddleTitle';
 import SelectText from 'src/components/molecules/SelectText';
+import getString from 'src/STRING';
 import styled from 'styled-components/native';
 import { useAdCreateProvider } from 'src/contexts/AdCreateProvider';
 
@@ -51,7 +53,7 @@ const Picker = styled.Picker``;
 const CreateAdLayout: React.FC = () =>
 {
   const {
-    adState, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading,
+    adState, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
     setVisibleEquiModal, setVisibleAddrModal, onSubmit
   } = useAdCreateProvider();
 
@@ -66,7 +68,7 @@ const CreateAdLayout: React.FC = () =>
               <MiddleTitle label="광고타입" subLabel="(필수)" />
               <Picker
                 selectedValue={adState.createAdDto.adType}
-                onValueChange={(itemValue): void => { adState.createAdDto.adType = itemValue; setAdType(itemValue) }}
+                onValueChange={(itemValue): void => { if (checkAdType(bookedAdTypeList, itemValue)) { adState.createAdDto.adType = itemValue; setAdType(itemValue) } }}
               >
                 <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
                 {renderAdTypeList(AdType.MAIN_FIRST, bookedAdTypeList)}
@@ -171,6 +173,7 @@ const CreateAdLayout: React.FC = () =>
         nextFocus={(): void => {}}
       />
       <LoadingIndicator loading={bookedAdLoading} />
+      <LoadingIndicator loading={imgUploading} msg={getString('AD_IMG_UPLOADING')} />
     </Container>
   );
 };
@@ -186,6 +189,21 @@ const renderAdTypeList = (adType: AdType, bookedAdTypeList: Array<number>): Reac
   }
 
   return <Picker.Item label={getAdTypeStr(adType)} value={adType} />;
+};
+
+/**
+ * 광고타입 픽 이벤트 함수
+ */
+const checkAdType = (bookedAdTypeList: Array<number>, pickType: AdType): boolean =>
+{
+  if (pickType !== 11 && pickType !== 21 && bookedAdTypeList.includes(pickType))
+  {
+    Alert.alert('죄송합니다', '이미 계약된 광고 입니다');
+
+    return false;
+  }
+
+  return true;
 };
 
 export default CreateAdLayout;

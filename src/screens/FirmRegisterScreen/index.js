@@ -43,12 +43,14 @@ const styles = StyleSheet.create({
   }
 });
 
-class FirmRegisterScreen extends React.Component {
+class FirmRegisterScreen extends React.Component
+{
   static navigationOptions = {
     title: '업체정보 작성'
   };
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleEquiModal: false,
@@ -92,7 +94,8 @@ class FirmRegisterScreen extends React.Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = () =>
+  {
     const { user } = this.props;
 
     const localPhoneNumber = user.phoneNumber.replace('+82', '0');
@@ -100,7 +103,8 @@ class FirmRegisterScreen extends React.Component {
     this.setState({ phoneNumber: localPhoneNumber });
   };
 
-  createFirm = async () => {
+  createFirm = async () =>
+  {
     const { navigation, user } = this.props;
     const {
       fname,
@@ -126,11 +130,13 @@ class FirmRegisterScreen extends React.Component {
     } = this.state;
     const valResult = this.isValidateSubmit();
 
-    if (!valResult) {
+    if (!valResult)
+    {
       return;
     }
 
-    if (user.uid === null || user.uid === undefined || user.uid === '') {
+    if (user.uid === null || user.uid === undefined || user.uid === '')
+    {
       Alert.alert('요효하지 않은 사용자 입니다, 로그아웃 후 사용해 주세요');
       return;
     }
@@ -176,7 +182,8 @@ class FirmRegisterScreen extends React.Component {
     api
       .createFirm(newFirm)
       .then(() => navigation.navigate('FirmMyInfo', { refresh: 'Register' }))
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '업체등록에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`
@@ -189,7 +196,8 @@ class FirmRegisterScreen extends React.Component {
    *
    * @param {boolean} visible 설정 플래그
    */
-  setEquiSelModalVisible = visible => {
+  setEquiSelModalVisible = visible =>
+  {
     this.setState({ isVisibleEquiModal: visible });
   };
 
@@ -198,14 +206,16 @@ class FirmRegisterScreen extends React.Component {
    *
    * @param {boolean} visible 설정 플래그
    */
-  setMapAddModalVisible = visible => {
+  setMapAddModalVisible = visible =>
+  {
     this.setState({ isVisibleMapAddModal: visible });
   };
 
   /**
    * 웹에서 받은 주소정보 기입 함수
    */
-  saveAddrInfo = addrData => {
+  saveAddrInfo = addrData =>
+  {
     this.setState({
       address: addrData.address,
       sidoAddr: addrData.sidoAddr,
@@ -219,7 +229,8 @@ class FirmRegisterScreen extends React.Component {
    * 유효성검사 에러메세지 초기화 함수
    * (사유: 두번째 유효성검사 실패시, 이전것이 지워져있지 않음)
    */
-  setInitValErroMSG = () => {
+  setInitValErroMSG = () =>
+  {
     this.setState({
       fnameValErrMessage: '',
       phoneNumberValErrMessage: '',
@@ -238,11 +249,13 @@ class FirmRegisterScreen extends React.Component {
     });
   };
 
-  openSelEquipmentModal = () => {
+  openSelEquipmentModal = () =>
+  {
     this.setEquiSelModalVisible(true);
   };
 
-  openMapAddModal = () => {
+  openMapAddModal = () =>
+  {
     this.setMapAddModalVisible(true);
   };
 
@@ -251,7 +264,8 @@ class FirmRegisterScreen extends React.Component {
    *
    * @returns result 유효검사 결과
    */
-  isValidateSubmit = () => {
+  isValidateSubmit = () =>
+  {
     const {
       fname,
       phoneNumber,
@@ -279,21 +293,24 @@ class FirmRegisterScreen extends React.Component {
     this.setInitValErroMSG();
 
     let v = validate('textMax', fname, true, 15);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ fnameValErrMessage: v[1] });
       Alert.alert('[업체명] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('cellPhone', phoneNumber, true);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ phoneNumberValErrMessage: v[1] });
       Alert.alert('[전화번호] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(equiListStr);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ equiListStrValErrMessage: v[1] });
       Alert.alert('[선택 장비] 다시 확인해 주세요!', v[1]);
       this.fnameTextInput.focus();
@@ -301,55 +318,63 @@ class FirmRegisterScreen extends React.Component {
     }
 
     v = validatePresence(modelYear);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ equiListStrValErrMessage: v[1] });
       Alert.alert('[장비 년식] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(address);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: v[1] });
       Alert.alert('[장비 년식] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', addressDetail, false, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressDetailValErrMessage: `[상세주소] ${v[1]}` });
       Alert.alert('[상세주소] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(sidoAddr);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[시도] ${v[1]}` });
       Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(sigunguAddr);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[시군] ${v[1]}` });
       Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(addrLongitude);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[경도] ${v[1]}` });
       Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validatePresence(addrLatitude);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[위도] ${v[1]}` });
       Alert.alert('[주소 선택] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
-    if (!workAlarmSido && !workAlarmSigungu) {
+    if (!workAlarmSido && !workAlarmSigungu)
+    {
       this.setState({
         workAlarmValErrMessage: '일감알람을 받을 지역을 선택해 주세요'
       });
@@ -358,70 +383,80 @@ class FirmRegisterScreen extends React.Component {
     }
 
     v = validate('textMax', workAlarmSido, false, 100);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ workAlarmValErrMessage: v[1] });
       Alert.alert('[일감 알람지역] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', workAlarmSigungu, false, 300);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ workAlarmValErrMessage: v[1] });
       Alert.alert('[일감 알람지역] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', introduction, true, 1000);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ introductionValErrMessage: v[1] });
       Alert.alert('[업체 소개] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', thumbnail, true, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ thumbnailValErrMessage: v[1] });
       Alert.alert('[대표사진] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', photo1, true, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ photo1ValErrMessage: v[1] });
       Alert.alert('[작업사진 1] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', photo2, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ photo2ValErrMessage: v[1] });
       Alert.alert('[작업사진 2] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', photo3, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ photo3ValErrMessage: v[1] });
       Alert.alert('[작업사진 3] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', blog, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ blogValErrMessage: v[1] });
       Alert.alert('[블로그] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', homepage, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ homepageValErrMessage: v[1] });
       Alert.alert('[홈페이지] 다시 확인해 주세요!', v[1]);
       return false;
     }
 
     v = validate('textMax', sns, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ snsValErrMessage: v[1] });
       Alert.alert('[SNS] 다시 확인해 주세요!', v[1]);
       return false;
@@ -430,7 +465,8 @@ class FirmRegisterScreen extends React.Component {
     return true;
   };
 
-  render() {
+  render ()
+  {
     const {
       isVisibleEquiModal,
       isVisibleMapAddModal,
@@ -471,7 +507,8 @@ class FirmRegisterScreen extends React.Component {
 
     const thisYear = new Date().getFullYear();
 
-    const pickerItems = Array.from(Array(30).keys()).map((_, i) => {
+    const pickerItems = Array.from(Array(30).keys()).map((_, i) =>
+    {
       const year = thisYear - i;
       return <Picker.Item label={`${year}`} value={year} key={i} />;
     });
@@ -487,7 +524,8 @@ class FirmRegisterScreen extends React.Component {
                 value={fname}
                 onChangeText={text => this.setState({ fname: text })}
                 placeholder="업체명을 입력해 주세요"
-                refer={input => {
+                refer={input =>
+                {
                   this.fnameTextInput = input;
                 }}
               />
@@ -500,7 +538,8 @@ class FirmRegisterScreen extends React.Component {
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
                 keyboardType="phone-pad"
-                refer={input => {
+                refer={input =>
+                {
                   this.telTextInput = input;
                 }}
               />
@@ -534,7 +573,8 @@ class FirmRegisterScreen extends React.Component {
                 title="업체주소"
                 subTitle="(필수, 장비 검색시 거리계산 기준이됨)"
                 value={address}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.addrTextInput = input;
                 }}
                 onChangeText={text => this.setState({ address: text })}
@@ -546,7 +586,8 @@ class FirmRegisterScreen extends React.Component {
               <JBTextInput
                 title="업체 상세주소"
                 value={addressDetail}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.addrDetTextInput = input;
                 }}
                 onChangeText={text => this.setState({ addressDetail: text })}
@@ -678,4 +719,4 @@ class FirmRegisterScreen extends React.Component {
   }
 }
 
-export default withLogin(FirmRegisterScreen);
+export default FirmRegisterScreen;

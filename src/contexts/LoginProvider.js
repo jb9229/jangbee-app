@@ -107,19 +107,19 @@ function withLogin (WrappedComponent)
   {
     return (
       <LoginConsumer>
-        {({ state, actions }) => (
-          <WrappedComponent
-            user={state.user}
-            userProfile={state.userProfile}
-            firmInfo={state.firmInfo}
-            setUser={actions.setUser}
-            setUserType={actions.setUserType}
-            setOBInfo={actions.setOBInfo}
-            setFirmInfo={actions.setFirmInfo}
-            refreshUserOBInfo={actions.refreshUserOBInfo}
-            {...props}
-          />
-        )}
+        {/* {({ state, actions }) => ( */}
+        <WrappedComponent
+          // user={state.user}
+          // userProfile={state.userProfile}
+          // firmInfo={state.firmInfo}
+          // setUser={actions.setUser}
+          // setUserType={actions.setUserType}
+          // setOBInfo={actions.setOBInfo}
+          // setFirmInfo={actions.setFirmInfo}
+          // refreshUserOBInfo={actions.refreshUserOBInfo}
+          {...props}
+        />
+        {/* )} */}
       </LoginConsumer>
     );
   };

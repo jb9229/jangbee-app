@@ -1,13 +1,18 @@
 import * as React from 'react';
+import * as api from 'src/api/api';
+import * as imageManager from 'common/ImageManager';
 import * as yup from 'yup';
 
 import { CreateAdDto, CreateAdDtoError } from '../types/ad';
 
 import { AdType } from 'src/components/templates/CreateAdLayout';
+import { DefaultNavigationProps } from 'src/types';
 import { JBSERVER_ADBOOKED } from 'constants/Url';
+import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import getString from 'src/STRING';
 import { noticeUserError } from 'src/container/request';
+import { notifyError } from 'common/ErrorNotice';
 import produce from 'immer';
 import useAxios from 'axios-hooks';
 
@@ -18,6 +23,7 @@ interface Context {
   isVisibleEquiModal: boolean; isVisibleAddrModal: boolean;
   bookedAdTypeList: Array<number>;
   bookedAdLoading: boolean;
+  imgUploading: boolean;
 
   setVisibleEquiModal: (flag: boolean) => void; setVisibleAddrModal: (flag: boolean) => void;
   onSubmit: (dto: CreateAdDto) => void;
@@ -104,14 +110,67 @@ const ValidScheme = yup.object({
     })
 });
 
-const onSubmit = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto): void =>
+const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: DefaultNavigationProps, setImgUploading: (flag: boolean) => void) => (dto: CreateAdDto): void =>
 {
-  console.log(dto);
   const createAdError = new CreateAdDtoError();
   ValidScheme.validate(dto, { abortEarly: false })
     .then(() =>
     {
-      // requestCreate(createAdDto);
+      // Equipment Target Ad Validation
+      if (dto.adType === AdType.SEARCH_EQUIPMENT_FIRST)
+      {
+        api
+          .existEuipTarketAd(dto.adEquipment)
+          .then((dupliResult) =>
+          {
+            if (dupliResult === null)
+            {
+              requestCreaAd(dto, user, navigation, setImgUploading);
+            }
+            else
+            {
+              notifyError(
+                '장비 타켓광고 중복검사 실패',
+                `죄송합니다, 해당 ${dto.adSido} ${dto.adGungu}는 [${
+                  dupliResult.endDate
+                }]까지 계약된 광고가 존재 합니다.`
+              );
+            }
+          })
+          .catch((error) =>
+          {
+            noticeUserError('Ad Create Provider', '장비 타켓광고 중복검사 문제', error.message);
+          });
+      }
+      else if (dto.adType === AdType.SEARCH_REGION_FIRST)
+      {
+        // Local Target Ad Validation
+        api
+          .existLocalTarketAd(dto.adEquipment, dto.adSido, dto.adGungu)
+          .then((dupliResult) =>
+          {
+            if (dupliResult === null)
+            {
+              requestCreaAd(dto, user, navigation, setImgUploading);
+            }
+            else
+            {
+              notifyError(
+                '지역 타켓광고 중복 확인 실패',
+                `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`
+              );
+            }
+          })
+          .catch((error) =>
+          {
+            noticeUserError('Ad Create Provider', '지역 타켓광고 중복검사 문제', error.message);
+          });
+      }
+      else
+      {
+        requestCreaAd(dto, user, navigation, setImgUploading);
+      }
+
       // Init Error
       dispatch({
         type: ActionType.FAIL_VALIDATION,
@@ -120,7 +179,6 @@ const onSubmit = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto): void 
     })
     .catch((err) =>
     {
-      console.log(err.errors);
       err.errors.forEach((e: string) =>
       {
         if (e.startsWith('[adType]')) { createAdError.type = (e.replace('[adType]', '')) };
@@ -132,7 +190,6 @@ const onSubmit = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto): void 
         if (e.startsWith('[adSido]')) { createAdError.local = (e.replace('[adSido]', '')) };
         if (e.startsWith('[adGungu]')) { createAdError.local = (e.replace('[adGungu]', '')) };
       });
-      console.log(createAdError);
       dispatch({
         type: ActionType.FAIL_VALIDATION,
         payload: { createAdError }
@@ -140,9 +197,76 @@ const onSubmit = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto): void 
     });
 };
 
+const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNavigationProps, setImgUploading: (flag: boolean) => void) =>
+{
+  // Ad Image Upload
+  let serverAdImgUrl = null;
+  if (dto.adPhotoUrl)
+  {
+    setImgUploading(true);
+    // this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '광고사진 업로드중...' });
+    serverAdImgUrl = await imageManager.uploadImage(dto.adPhotoUrl);
+    setImgUploading(false);
+    // this.setState({ isVisibleActIndiModal: false });
+  }
+
+  const newAd = {
+    adType: dto.adType,
+    accountId: user.uid,
+    title: dto.adTitle,
+    subTitle: dto.adSubTitle,
+    forMonths: dto.forMonths,
+    photoUrl: serverAdImgUrl,
+    telNumber: dto.adTelNumber,
+    equiTarget: dto.adEquipment,
+    sidoTarget: dto.adSido,
+    gugunTarget: dto.adGungu,
+    price: getAdPrice(dto.adType),
+    fintechUseNum: 'temp_fintechusenum', // it will be delete
+    obAccessToken: 'temp_obAccessToken' // it will be delete
+  };
+  console.log(newAd);
+  api
+    .createAd(newAd)
+    .then(() => navigation.navigate('Ad', { refresh: true }))
+    .catch((errorResponse) =>
+    {
+      noticeUserError('Ad Create Provider', '광고생성 실패', errorResponse.message);
+    });
+};
+
+/**
+ * 광고비 요청함수
+ */
+const getAdPrice = (adType): number =>
+{
+  if (adType === AdType.MAIN_FIRST)
+  {
+    return 70000;
+  }
+  if (adType === AdType.MAIN_SECONDE)
+  {
+    return 50000;
+  }
+  if (adType === AdType.MAIN_THIRD)
+  {
+    return 30000;
+  }
+  if (adType === AdType.SEARCH_EQUIPMENT_FIRST)
+  {
+    return 30000;
+  }
+  if (adType === AdType.SEARCH_REGION_FIRST)
+  {
+    return 20000;
+  }
+  return 0;
+};
+
 interface Props {
   children?: React.ReactElement;
-  // navigation: DefaultNavigationProps;
+  navigation: DefaultNavigationProps;
+  user: User;
 }
 
 const AdCreateProvider = (props: Props): React.ReactElement =>
@@ -150,12 +274,14 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   // State
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState<boolean>(false);
   const [isVisibleAddrModal, setVisibleAddrModal] = React.useState<boolean>(false);
+  const [imgUploading, setImgUploading] = React.useState<boolean>(false);
   const [adState, dispatch] = React.useReducer<Reducer>(reducer, initialState);
 
   // Server Data
   const [bookedAdListResponse, refetch] = useAxios(JBSERVER_ADBOOKED);
 
   let bookedAdTypeList = new Array<number>();
+  console.log(bookedAdListResponse);
   if (bookedAdListResponse.data) { bookedAdTypeList = bookedAdListResponse.data };
   const bookedAdLoading = bookedAdListResponse.loading;
 
@@ -167,13 +293,13 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
 
   const actions = {
     setVisibleEquiModal, setVisibleAddrModal,
-    onSubmit: onSubmit(dispatch)
+    onSubmit: onSubmit(dispatch, props.user, props.navigation, setImgUploading)
   };
 
   return (
     <Provider value={{
       adState, ...actions,
-      bookedAdLoading, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList
+      bookedAdLoading, imgUploading, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList
     }}>
       {props.children}
     </Provider>

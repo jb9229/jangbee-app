@@ -1,12 +1,13 @@
-import React from 'react';
 import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
-import firebase from 'firebase';
-import Styled from 'styled-components/native';
-import { withLogin } from 'src/contexts/LoginProvider';
-import JBButton from 'molecules/JBButton';
-import JBTextItem from 'molecules/JBTextItem';
+
 import Card from 'molecules/CardUI';
+import JBButton from 'molecules/JBButton';
 import JBTerm from 'templates/JBTerm';
+import JBTextItem from 'molecules/JBTextItem';
+import React from 'react';
+import Styled from 'styled-components/native';
+import firebase from 'firebase';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const Container = Styled.View`
   flex: 1;
@@ -17,8 +18,10 @@ const TopMenu = Styled.View`
   justify-content: flex-end;
 `;
 
-class ClientMyInfoScreen extends React.PureComponent {
-  confirmDeleteUser = () => {
+class ClientMyInfoScreen extends React.PureComponent
+{
+  confirmDeleteUser = () =>
+  {
     Alert.alert(
       '탈퇴확인',
       '정말 탈퇴 하시겠습니까? 탈퇴하시면 즉시 모든 사용하던 데이터가 삭제됩니다.',
@@ -32,10 +35,14 @@ class ClientMyInfoScreen extends React.PureComponent {
   /**
    * 로그아웃 함수
    */
-  onSignOut = async () => {
-    try {
+  onSignOut = async () =>
+  {
+    try
+    {
       await firebase.auth().signOut();
-    } catch (e) {
+    }
+    catch (e)
+    {
       Alert.alert('로그아웃에 문제가 있습니다, 재 시도해 주세요.');
     }
   };
@@ -43,28 +50,35 @@ class ClientMyInfoScreen extends React.PureComponent {
   /**
    * 회원 탈퇴 요청
    */
-  deleteUser = reAuth => {
+  deleteUser = reAuth =>
+  {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
 
     user
       .delete()
-      .then(() => {
+      .then(() =>
+      {
         firebase
           .database()
           .ref(`users/${user.uid}`)
           .remove()
-          .then(() => {
-            if (Platform.OS === 'android') {
+          .then(() =>
+          {
+            if (Platform.OS === 'android')
+            {
               ToastAndroid.show(
                 '회원 탈퇴 성공, 감사합니다.',
                 ToastAndroid.SHORT
               );
-            } else {
+            }
+            else
+            {
               Alert.alert('회원 탈퇴 성공, 감사합니다.');
             }
           })
-          .catch(error => {
+          .catch(error =>
+          {
             Alert.alert(
               '회원 탈퇴에 문제가 있습니다',
               `Firebase 데이터 삭제에 실패 했습니다, 관리자에게 문의해 주세요${
@@ -73,7 +87,8 @@ class ClientMyInfoScreen extends React.PureComponent {
             );
           });
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '인증서버에서 재인증을 요구하고 있습니다',
           `죄송합니다, 인증 유효시간이 오래된경우(자동 로그인) 재로그인 후 탈퇴를 진행부탁 드립니다(${
@@ -87,7 +102,8 @@ class ClientMyInfoScreen extends React.PureComponent {
       });
   };
 
-  render() {
+  render ()
+  {
     const { user, navigation } = this.props;
 
     return (
@@ -130,4 +146,4 @@ class ClientMyInfoScreen extends React.PureComponent {
   }
 }
 
-export default withLogin(ClientMyInfoScreen);
+export default ClientMyInfoScreen;

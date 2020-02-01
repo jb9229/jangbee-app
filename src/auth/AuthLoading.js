@@ -1,7 +1,8 @@
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+
 import React from 'react';
-import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import firebase from 'firebase';
 import colors from 'constants/Colors';
+import firebase from 'firebase';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { withLogin } from 'src/contexts/LoginProvider';
 
@@ -13,12 +14,15 @@ const styles = StyleSheet.create({
   }
 });
 
-class AuthLoading extends React.Component {
-  componentDidMount() {
+class AuthLoading extends React.Component
+{
+  componentDidMount ()
+  {
     this.checkLogin();
   }
 
-  checkLogin = () => {
+  checkLogin = () =>
+  {
     const {
       setUser,
       setUserType,
@@ -27,12 +31,16 @@ class AuthLoading extends React.Component {
       changeAuthPath
     } = this.props;
 
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        getUserInfo(user.uid).then(data => {
+    firebase.auth().onAuthStateChanged(user =>
+    {
+      if (user)
+      {
+        getUserInfo(user.uid).then(data =>
+        {
           const userInfo = data.val();
 
-          if (!userInfo) {
+          if (!userInfo)
+          {
             changeAuthPath(2, user);
           }
 
@@ -45,9 +53,12 @@ class AuthLoading extends React.Component {
             obUserSeqNo
           } = userInfo;
 
-          if (!userType) {
+          if (!userType)
+          {
             changeAuthPath(2, user);
-          } else {
+          }
+          else
+          {
             setUser(user);
             setUserType(userType);
             setOBInfo(
@@ -59,23 +70,31 @@ class AuthLoading extends React.Component {
             );
 
             // Go to Screeen By User Type
-            if (userType === 1) {
+            if (userType === 1)
+            {
               completeAuth(true);
-            } else if (userType === 2) {
+            }
+            else if (userType === 2)
+            {
               completeAuth(false);
-            } else {
+            }
+            else
+            {
               Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
               completeAuth(true);
             }
           }
         });
-      } else {
+      }
+      else
+      {
         changeAuthPath(3);
       }
     });
   };
 
-  render() {
+  render ()
+  {
     return (
       <View style={styles.container}>
         <Text>Login Checking...</Text>
@@ -85,4 +104,4 @@ class AuthLoading extends React.Component {
   }
 }
 
-export default withLogin(AuthLoading);
+export default AuthLoading;

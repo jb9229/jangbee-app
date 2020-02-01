@@ -300,4 +300,4 @@ class OpenBankAuthWebView extends React.Component
   }
 }
 
-export default withLogin(OpenBankAuthWebView);
+export default OpenBankAuthWebView;

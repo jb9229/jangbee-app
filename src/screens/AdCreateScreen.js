@@ -74,8 +74,10 @@ const ADTYPE_SEARCH_FIRST = 31;
 const ADTYPE_SEARCH_SECONDE = 32;
 const ADTYPE_SEARCH_THIRD = 33;
 
-class AdCreateScreen extends React.Component {
-  constructor (props) {
+class AdCreateScreen extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleEquiModal: false,
@@ -101,57 +103,42 @@ class AdCreateScreen extends React.Component {
     };
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (!nextProps.navigation) { return; }
+  componentWillReceiveProps (nextProps)
+  {
+    if (!nextProps.navigation) { return }
     const { params } = nextProps.navigation.state;
 
-    if (params !== undefined && params.action === 'RELOAD') {
+    if (params !== undefined && params.action === 'RELOAD')
+    {
       this.setAvailableAdType();
     }
   }
 
-  init = () => {
+  init = () =>
+  {
     this.setAvailableAdType();
     this.setFirmInfo();
   }
 
-  setAvailableAdType = () => {
+  setAvailableAdType = () =>
+  {
     api
       .getBookedAdType()
-      .then((typeData) => {
+      .then((typeData) =>
+      {
         this.setState({ bookedAdTypeList: typeData });
       })
-      .catch((error) => {
+      .catch((error) =>
+      {
         notifyError(error.name, error.message);
       });
   };
 
   /**
-   * 광고비 요청함수
-   */
-  getAdPrice = (adType) => {
-    if (adType === ADTYPE_MAIN_FIRST) {
-      return 70000;
-    }
-    if (adType === ADTYPE_MAIN_SECONDE) {
-      return 50000;
-    }
-    if (adType === ADTYPE_MAIN_THIRD) {
-      return 30000;
-    }
-    if (adType === ADTYPE_EQUIPMENT_FIRST) {
-      return 20000;
-    }
-    if (adType === ADTYPE_LOCAL_FIRST) {
-      return 10000;
-    }
-    return 0;
-  };
-
-  /**
    * 광고생성폼 유효성검사 메세지 초기화함수
    */
-  setInitValErroMSG = () => {
+  setInitValErroMSG = () =>
+  {
     this.setState({
       adTitleValErrMessage: '',
       adSubTitleValErrMessage: '',
@@ -166,15 +153,20 @@ class AdCreateScreen extends React.Component {
   /**
    * 초기값 설정을 위한 업체정보 요청 함수
    */
-  setFirmInfo = () => {
+  setFirmInfo = () =>
+  {
     const { user, navigation } = this.props;
 
     api
       .getFirm(user.uid)
-      .then((firm) => {
-        if (firm) {
+      .then((firm) =>
+      {
+        if (firm)
+        {
           this.setDefaultFirmValue(firm);
-        } else {
+        }
+        else
+        {
           Alert.alert(
             '업체 정보가 없습니다.',
             '업체 등록하기를 먼저 진행해 주세요.',
@@ -183,7 +175,8 @@ class AdCreateScreen extends React.Component {
           );
         }
       })
-      .catch((error) => {
+      .catch((error) =>
+      {
         Alert.alert(
           '업체정보 요청에 문제가 있습니다',
           `업체정보 등록을 먼저 해주세요, 또는 다시 시도해 주세요 -> [${error.name}] ${
@@ -196,7 +189,8 @@ class AdCreateScreen extends React.Component {
   /**
    * 업체정보를 광고 초기정보에 설정하는 함수
    */
-  setDefaultFirmValue = (firm) => {
+  setDefaultFirmValue = (firm) =>
+  {
     this.setState({
       adTelNumber: firm.phoneNumber,
       adEquipment: firm.equiListStr,
@@ -208,13 +202,17 @@ class AdCreateScreen extends React.Component {
   /**
    * 광고타입 픽 이벤트 함수
    */
-  onPickAdType = (pickType) => {
+  onPickAdType = (pickType) =>
+  {
     const { bookedAdTypeList } = this.state;
 
-    if (pickType !== 11 && pickType !== 21 && bookedAdTypeList.includes(pickType)) {
+    if (pickType !== 11 && pickType !== 21 && bookedAdTypeList.includes(pickType))
+    {
       Alert.alert('죄송합니다', '이미 계약된 광고 입니다');
       this.setState({ adType: undefined });
-    } else {
+    }
+    else
+    {
       this.setState({ adType: pickType });
     }
   };
@@ -222,7 +220,8 @@ class AdCreateScreen extends React.Component {
   /**
    * 광고생성 요청함수
    */
-  requestCreaAd = async () => {
+  requestCreaAd = async () =>
+  {
     const {
       adType,
       adTitle,
@@ -239,18 +238,21 @@ class AdCreateScreen extends React.Component {
     let adEquipmentTypeData = adEquipment;
     let adSidoTypeData = adSido;
     let adGunguTypeData = adGungu;
-    if (adType !== ADTYPE_EQUIPMENT_FIRST && adType !== ADTYPE_LOCAL_FIRST) {
+    if (adType !== ADTYPE_EQUIPMENT_FIRST && adType !== ADTYPE_LOCAL_FIRST)
+    {
       adEquipmentTypeData = '';
     }
 
-    if (adType !== ADTYPE_LOCAL_FIRST) {
+    if (adType !== ADTYPE_LOCAL_FIRST)
+    {
       adSidoTypeData = '';
       adGunguTypeData = '';
     }
 
     // Ad Image Upload
     let serverAdImgUrl = null;
-    if (adPhotoUrl) {
+    if (adPhotoUrl)
+    {
       this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '광고사진 업로드중...' });
       serverAdImgUrl = await imageManager.uploadImage(adPhotoUrl);
       this.setState({ isVisibleActIndiModal: false });
@@ -273,7 +275,8 @@ class AdCreateScreen extends React.Component {
     api
       .createAd(newAd)
       .then(() => navigation.navigate('Ad', { refresh: true }))
-      .catch((errorResponse) => {
+      .catch((errorResponse) =>
+      {
         Alert.alert('광고생성 실패', errorResponse.message);
       });
   };
@@ -281,28 +284,38 @@ class AdCreateScreen extends React.Component {
   /**
    * 광고생성 유효성검사 함수
    */
-  validateCreaAd = () => {
+  validateCreaAd = () =>
+  {
     const {
       adType, adEquipment, adSido, adGungu
     } = this.state;
 
     // Check Validation Create Ad Form Item
-    if (!this.valiCreAdForm()) {
+    if (!this.valiCreAdForm())
+    {
       return;
     }
 
     // Equipment Target Ad Validation
-    if (adType === ADTYPE_EQUIPMENT_FIRST && this.validateEquipTarAdForm()) {
+    if (adType === ADTYPE_EQUIPMENT_FIRST && this.validateEquipTarAdForm())
+    {
       api
         .existEuipTarketAd(adEquipment)
-        .then((dupliResult) => {
-          if (dupliResult === null) {
-            if (pkg.mode === 'BETA') {
+        .then((dupliResult) =>
+        {
+          if (dupliResult === null)
+          {
+            if (pkg.mode === 'BETA')
+            {
               this.requestCreaAd();
-            } else if (pkg.mode === 'OPENBANK') {
+            }
+            else if (pkg.mode === 'OPENBANK')
+            {
               this.withdrawDispatchFee(); // (오픈뱅크 심사용)
             }
-          } else {
+          }
+          else
+          {
             notifyError(
               '장비 타켓광고 중복검사 실패',
               `죄송합니다, 해당 ${adSido} ${adGungu}는 [${
@@ -311,33 +324,48 @@ class AdCreateScreen extends React.Component {
             );
           }
         })
-        .catch((error) => {
+        .catch((error) =>
+        {
           notifyError('장비 타켓광고 중복검사 문제', error.message);
         });
-    } else if (adType === ADTYPE_LOCAL_FIRST && this.validateLocTarAdForm()) {
+    }
+    else if (adType === ADTYPE_LOCAL_FIRST && this.validateLocTarAdForm())
+    {
       // Local Target Ad Validation
       api
         .existLocalTarketAd(adEquipment, adSido, adGungu)
-        .then((dupliResult) => {
-          if (dupliResult === null) {
-            if (pkg.mode === 'BETA') {
+        .then((dupliResult) =>
+        {
+          if (dupliResult === null)
+          {
+            if (pkg.mode === 'BETA')
+            {
               this.requestCreaAd();
-            } else if (pkg.mode === 'OPENBANK') {
+            }
+            else if (pkg.mode === 'OPENBANK')
+            {
               this.withdrawDispatchFee(); // (오픈뱅크 심사용)
             }
-          } else {
+          }
+          else
+          {
             notifyError(
               '지역 타켓광고 중복 확인 실패',
               `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`
             );
           }
         })
-        .catch((error) => {
+        .catch((error) =>
+        {
           notifyError('지역 타켓광고 중복검사 문제', error.message);
         });
-    } else if (pkg.mode === 'BETA') {
+    }
+    else if (pkg.mode === 'BETA')
+    {
       this.requestCreaAd();
-    } else if (pkg.mode === 'OPENBANK') {
+    }
+    else if (pkg.mode === 'OPENBANK')
+    {
       this.withdrawDispatchFee(); // (오픈뱅크 심사용)
     }
   };
@@ -345,7 +373,8 @@ class AdCreateScreen extends React.Component {
   /**
    * 광고생성 폼 유효성검사 함수
    */
-  valiCreAdForm = () => {
+  valiCreAdForm = () =>
+  {
     const {
       adType,
       adTitle,
@@ -359,41 +388,48 @@ class AdCreateScreen extends React.Component {
     // Validation Error Massage Initialize
     this.setInitValErroMSG();
 
-    if (adType === undefined) {
+    if (adType === undefined)
+    {
       Alert.alert('유효성검사 에러', '광고타입을 선택해 주세요.');
       return false;
     }
-    if (user === undefined || user === null || user.uid === undefined || user.uid === null) {
+    if (user === undefined || user === null || user.uid === undefined || user.uid === null)
+    {
       Alert.alert('유효성검사 에러', '사용자정보를 찾지 못했습니다, 재로그인해 주세요');
       return false;
     }
 
     let v = validate('decimalMin', forMonths, true, 1);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ forMonthsValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', adTitle, true, 15);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adTitleValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', adSubTitle, true, 20);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adSubTitleValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', adPhotoUrl, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adPhotoUrlValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', adTelNumber, false);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adTelNumberValErrMessage: v[1] });
       return false;
     }
@@ -404,11 +440,13 @@ class AdCreateScreen extends React.Component {
   /**
    * 장비 타켓 광고 Validation 체크
    */
-  validateEquipTarAdForm = () => {
+  validateEquipTarAdForm = () =>
+  {
     const { adEquipment } = this.state;
 
     const v = validatePresence(adEquipment);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adEquipmentValErrMessage: v[1] });
       return false;
     }
@@ -419,23 +457,27 @@ class AdCreateScreen extends React.Component {
   /**
    * 지역 타켓 광고 Validation 체크
    */
-  validateLocTarAdForm = () => {
+  validateLocTarAdForm = () =>
+  {
     const { adEquipment, adSido, adGungu } = this.state;
 
     let v = validatePresence(adEquipment);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adEquipmentValErrMessage: v[1] });
       return false;
     }
 
     v = validatePresence(adSido);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adLocalValErrMessage: v[1] });
       return false;
     }
 
     v = validatePresence(adGungu);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ adLocalValErrMessage: v[1] });
       return false;
     }
@@ -443,11 +485,13 @@ class AdCreateScreen extends React.Component {
     return true;
   };
 
-  render () {
-    if (true) {
+  render ()
+  {
+    if (true)
+    {
       return <JBActIndicator title="통장 리스트 불러오는중..." size={35} />;
     }
   }
 }
 
-export default withLogin(AdCreateScreen);
+export default AdCreateScreen;

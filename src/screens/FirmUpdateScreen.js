@@ -50,13 +50,15 @@ const styles = StyleSheet.create({
 
 type Props = {};
 type State = {
-  preThumbnail: string,
-  prePhoto1: string,
-  prePhoto2: string,
-  prePhoto3: string
+  preThumbnail: string;
+  prePhoto1: string;
+  prePhoto2: string;
+  prePhoto3: string;
 };
-class FirmUpdateScreen extends React.Component<Props, State> {
-  constructor(props) {
+class FirmUpdateScreen extends React.Component<Props, State>
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       isLoadingComplete: false,
@@ -102,19 +104,23 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = () =>
+  {
     this.setMyFirmInfo();
   };
 
-  setMyFirmInfo = () => {
+  setMyFirmInfo = () =>
+  {
     const { user } = this.props;
     api
       .getFirm(user.uid)
-      .then(firm => {
+      .then(firm =>
+      {
         this.setUpdateFirmData(firm);
         this.setState({ isLoadingComplete: true });
       })
-      .catch(error => {
+      .catch(error =>
+      {
         this.setState({ isLoadingComplete: true });
         notifyError(
           '내 업체정보 요청에 문제가 있습니다',
@@ -123,7 +129,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       });
   };
 
-  updateFirm = async () => {
+  updateFirm = async () =>
+  {
     const { navigation, user } = this.props;
     const {
       id,
@@ -154,7 +161,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     } = this.state;
     const valResult = this.isValidateSubmit();
 
-    if (!valResult) {
+    if (!valResult)
+    {
       return;
     }
 
@@ -202,10 +210,12 @@ class FirmUpdateScreen extends React.Component<Props, State> {
 
     api
       .updateFirm(updateFirm)
-      .then(() => {
+      .then(() =>
+      {
         navigation.navigate('FirmMyInfo', { refresh: 'update' });
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '업체정보 수정에 문제가 있습니다, 재 시도해 주세요.',
           `[${error.name}] ${error.message}`
@@ -216,19 +226,23 @@ class FirmUpdateScreen extends React.Component<Props, State> {
   /**
    * 업체정보 이미지 업데이트 함수
    */
-  firmImageUpload = async (imgUri, preImg) => {
+  firmImageUpload = async (imgUri, preImg) =>
+  {
     // No change
-    if (imgUri === preImg) {
+    if (imgUri === preImg)
+    {
       return null;
     }
 
     // Current Image Delete and New Image Null
-    if (preImg) {
+    if (preImg)
+    {
       await imageManager.removeImage(preImg);
     }
 
     // Current image null, new image upload
-    if (imgUri) {
+    if (imgUri)
+    {
       const serverImgUrl = await imageManager.uploadImage(imgUri);
 
       return serverImgUrl;
@@ -242,7 +256,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    *
    * @param {boolean} visible 설정 플래그
    */
-  setEquiSelModalVisible = visible => {
+  setEquiSelModalVisible = visible =>
+  {
     this.setState({ isVisibleEquiModal: visible });
   };
 
@@ -251,14 +266,16 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    *
    * @param {boolean} visible 설정 플래그
    */
-  setMapAddModalVisible = visible => {
+  setMapAddModalVisible = visible =>
+  {
     this.setState({ isVisibleMapAddModal: visible });
   };
 
   /**
    * 웹에서 받은 주소정보 기입 함수
    */
-  saveAddrInfo = addrData => {
+  saveAddrInfo = addrData =>
+  {
     this.setState({
       address: addrData.address,
       sidoAddr: addrData.sidoAddr,
@@ -272,7 +289,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    * 유효성검사 에러메세지 초기화 함수
    * (사유: 두번째 유효성검사 실패시, 이전것이 지워져있지 않음)
    */
-  setInitValErroMSG = () => {
+  setInitValErroMSG = () =>
+  {
     this.setState({
       fnameValErrMessage: '',
       phoneNumberValErrMessage: '',
@@ -291,11 +309,13 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     });
   };
 
-  openSelEquipmentModal = () => {
+  openSelEquipmentModal = () =>
+  {
     this.setEquiSelModalVisible(true);
   };
 
-  openMapAddModal = () => {
+  openMapAddModal = () =>
+  {
     this.setMapAddModalVisible(true);
   };
 
@@ -304,7 +324,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
    *
    * @returns result 유효검사 결과
    */
-  isValidateSubmit = () => {
+  isValidateSubmit = () =>
+  {
     const {
       fname,
       phoneNumber,
@@ -332,67 +353,78 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     this.setInitValErroMSG();
 
     let v = validate('textMax', fname, true, 15);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ fnameValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', phoneNumber, true);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ phoneNumberValErrMessage: v[1] });
       return false;
     }
 
     v = validatePresence(equiListStr);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ equiListStrValErrMessage: v[1] });
       this.fnameTextInput.focus();
       return false;
     }
 
     v = validatePresence(modelYear);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ equiListStrValErrMessage: v[1] });
       return false;
     }
 
     v = validatePresence(address);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', addressDetail, false, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressDetailValErrMessage: `[상세주소] ${v[1]}` });
       return false;
     }
 
     v = validatePresence(sidoAddr);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[시도] ${v[1]}` });
       return false;
     }
 
     v = validatePresence(sigunguAddr);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[시군] ${v[1]}` });
       return false;
     }
 
     v = validatePresence(addrLongitude);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[경도] ${v[1]}` });
       return false;
     }
 
     v = validatePresence(addrLatitude);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: `[위도] ${v[1]}` });
       return false;
     }
 
-    if (!workAlarmSido && !workAlarmSigungu) {
+    if (!workAlarmSido && !workAlarmSigungu)
+    {
       this.setState({
         workAlarmValErrMessage: '일감알람을 받을 지역을 선택해 주세요'
       });
@@ -400,61 +432,71 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     }
 
     v = validate('textMax', workAlarmSido, false, 100);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ workAlarmValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', workAlarmSigungu, false, 300);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ workAlarmValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', introduction, true, 1000);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ introductionValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', thumbnail, true, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ thumbnailValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', photo1, true, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ photo1ValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', photo2, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ photo2ValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', photo3, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ photo3ValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', blog, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ blogValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', homepage, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ homepageValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', sns, false, 250);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ snsValErrMessage: v[1] });
       return false;
     }
@@ -462,7 +504,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     return true;
   };
 
-  setUpdateFirmData = firm => {
+  setUpdateFirmData = firm =>
+  {
     this.setState({
       id: firm.id,
       fname: firm.fname,
@@ -492,7 +535,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
     });
   };
 
-  render() {
+  render ()
+  {
     const {
       isLoadingComplete,
       isVisibleEquiModal,
@@ -532,13 +576,15 @@ class FirmUpdateScreen extends React.Component<Props, State> {
       phoneNumberValErrMessage
     } = this.state;
 
-    if (!isLoadingComplete) {
+    if (!isLoadingComplete)
+    {
       return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
     }
 
     const thisYear = new Date().getFullYear();
 
-    const pickerItems = Array.from(Array(30).keys()).map((_, i) => {
+    const pickerItems = Array.from(Array(30).keys()).map((_, i) =>
+    {
       const year = thisYear - i;
       return (
         <Picker.Item label={year.toString()} value={year.toString()} key={i} />
@@ -555,7 +601,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 value={fname}
                 onChangeText={text => this.setState({ fname: text })}
                 placeholder="업체명을 입력해 주세요"
-                refer={input => {
+                refer={input =>
+                {
                   this.fnameTextInput = input;
                 }}
               />
@@ -568,7 +615,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
                 keyboardType="phone-pad"
-                refer={input => {
+                refer={input =>
+                {
                   this.telTextInput = input;
                 }}
               />
@@ -601,7 +649,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
                 title="업체주소"
                 subTitle="(필수, 고객검색시 거리계산 기준이됨)"
                 value={address}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.addrTextInput = input;
                 }}
                 onChangeText={text => this.setState({ address: text })}
@@ -613,7 +662,8 @@ class FirmUpdateScreen extends React.Component<Props, State> {
               <JBTextInput
                 title="업체 상세주소"
                 value={addressDetail}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.addrDetTextInput = input;
                 }}
                 onChangeText={text => this.setState({ addressDetail: text })}
@@ -745,4 +795,4 @@ class FirmUpdateScreen extends React.Component<Props, State> {
   }
 }
 
-export default withLogin(FirmUpdateScreen);
+export default FirmUpdateScreen;

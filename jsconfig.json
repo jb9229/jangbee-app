@@ -35,7 +35,9 @@
     "src/screens/**/*.ts",
     "src/screens/**/*.tsx",
     "src/components/**/*.ts",
-    "src/components/**/*.tsx"
+    "src/components/**/*.tsx",
+    "src/screens/**/*.js",
+    "src/components/**/*.js",
   ],
   "exclude": [
       "node_modules",

@@ -1,28 +1,30 @@
-import React from 'react';
+import * as api from 'api/api';
+
 import {
   Alert,
   DatePickerAndroid,
   KeyboardAvoidingView,
+  Picker,
   Platform,
   ScrollView,
   StyleSheet,
-  Picker,
   View
 } from 'react-native';
-import { Header } from 'react-navigation';
-import * as api from 'api/api';
-import { withLogin } from 'src/contexts/LoginProvider';
-import { notifyError } from 'common/ErrorNotice';
-import EquipementModal from 'templates/EquipmentModal';
-import MapAddWebModal from 'templates/MapAddWebModal';
-import CardUI from 'molecules/CardUI';
-import JBButton from 'molecules/JBButton';
-import JBTextInput from 'molecules/JBTextInput';
-import JBErrorMessage from 'organisms/JBErrorMessage';
 import { validate, validatePresence } from 'utils/Validation';
-import fonts from 'constants/Fonts';
-import colors from 'constants/Colors';
+
+import CardUI from 'molecules/CardUI';
+import EquipementModal from 'templates/EquipmentModal';
+import { Header } from 'react-navigation';
+import JBButton from 'molecules/JBButton';
+import JBErrorMessage from 'organisms/JBErrorMessage';
 import JBPicker from 'molecules/JBPicker';
+import JBTextInput from 'molecules/JBTextInput';
+import MapAddWebModal from 'templates/MapAddWebModal';
+import React from 'react';
+import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
+import { notifyError } from 'common/ErrorNotice';
+import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   Container: {
@@ -98,8 +100,10 @@ const modelYearPItems = new Array(10)
     />
   ));
 
-class WorkRegisterScreen extends React.Component {
-  constructor(props) {
+class WorkRegisterScreen extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleEquiModal: false,
@@ -111,27 +115,33 @@ class WorkRegisterScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     const { params } = this.props.navigation.state;
 
-    if (params && params.firmRegister) {
+    if (params && params.firmRegister)
+    {
       this.setState({ guaranteeTime: '30' });
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { params } = this.props.navigation.state;
 
-    if (params && params.firmRegister) {
+    if (params && params.firmRegister)
+    {
       this.setState({ guaranteeTime: '30' });
     }
   }
 
-  confirmCreateWork = () => {
+  confirmCreateWork = () =>
+  {
     const { firmRegister } = this.props.navigation.state.params;
     const { guaranteeTime } = this.state;
 
-    if (firmRegister) {
+    if (firmRegister)
+    {
       Alert.alert(
         '차주일감 주의사항',
         `차주 일감등록은 선착순 자동매칭(매칭비 지불) 입니다, 설정하신 [${guaranteeTime}]분까지는 일감이 보장되어야 합니다(다른경로로 일감을 넘기시면 안됩니다)\n\n차주일감은 매칭비의 50%를 쿠폰으로 돌려받습니다, 일감지원시 사용가능 합니다.`,
@@ -139,13 +149,16 @@ class WorkRegisterScreen extends React.Component {
           { text: '취소', onPress: () => {} },
           {
             text: '일감등록',
-            onPress: () => {
+            onPress: () =>
+            {
               this.createWork();
             }
           }
         ]
       );
-    } else {
+    }
+    else
+    {
       this.createWork();
     }
   };
@@ -153,22 +166,29 @@ class WorkRegisterScreen extends React.Component {
   /**
    * 일감 등록
    */
-  createWork = () => {
+  createWork = () =>
+  {
     const { navigation } = this.props;
     const { firmRegister } = this.props.navigation.state.params;
 
     const newWork = this.validateWorkForm();
-    if (!newWork) {
+    if (!newWork)
+    {
       return;
     }
 
     api
       .createWork(newWork)
-      .then(resBody => {
-        if (resBody) {
-          if (firmRegister) {
+      .then(resBody =>
+      {
+        if (resBody)
+        {
+          if (firmRegister)
+          {
             navigation.navigate('FirmWorkList', { refresh: true });
-          } else {
+          }
+          else
+          {
             navigation.navigate('WorkList', { refresh: true });
           }
           return;
@@ -182,8 +202,10 @@ class WorkRegisterScreen extends React.Component {
       .catch(error => notifyError(error.name, error.message));
   };
 
-  openStartWorkDatePicker = async () => {
-    try {
+  openStartWorkDatePicker = async () =>
+  {
+    try
+    {
       const now = new Date();
       const { action, year, month, day } = await DatePickerAndroid.open({
         date: now,
@@ -192,10 +214,13 @@ class WorkRegisterScreen extends React.Component {
 
       this.setState({ startDate: `${year}-${month + 1}-${day}` });
 
-      if (action !== DatePickerAndroid.dismissedAction) {
+      if (action !== DatePickerAndroid.dismissedAction)
+      {
         // Selected year, month (0-11), day
       }
-    } catch ({ code, message }) {
+    }
+    catch ({ code, message })
+    {
       notifyError('Cannot open date picker', message);
     }
   };
@@ -203,7 +228,8 @@ class WorkRegisterScreen extends React.Component {
   /**
    * 일감주소 저장함수
    */
-  saveAddrInfo = addrData => {
+  saveAddrInfo = addrData =>
+  {
     this.setState({
       address: addrData.address,
       sidoAddr: addrData.sidoAddr,
@@ -216,7 +242,8 @@ class WorkRegisterScreen extends React.Component {
   /**
    * 일감 데이터 유효성검사 함수
    */
-  validateWorkForm = () => {
+  validateWorkForm = () =>
+  {
     const { firmRegister } = this.props.navigation.state.params;
     const { user } = this.props;
     const {
@@ -249,55 +276,64 @@ class WorkRegisterScreen extends React.Component {
     });
 
     let v = validate('textMax', equipment, true, 25);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ equipmentValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', phoneNumber, true);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ phoneNumberValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', address, true, 100);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', sidoAddr, true, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', sigunguAddr, true, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', addressDetail, true, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ addressDetailValErrMessage: v[1] });
       return false;
     }
 
     v = validatePresence(startDate);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ dateValErrMessage: v[1] });
       return false;
     }
 
     v = validatePresence(period);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ dateValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', detailRequest, true, 500);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ detailRequestValErrMessage: v[1] });
       return false;
     }
@@ -326,7 +362,8 @@ class WorkRegisterScreen extends React.Component {
     return newWork;
   };
 
-  render() {
+  render ()
+  {
     const { firmRegister } = this.props.navigation.state.params;
 
     const {
@@ -364,7 +401,8 @@ class WorkRegisterScreen extends React.Component {
                 onChangeText={text => this.setState({ equipment: text })}
                 placeholder="장비를 선택해 주세요"
                 onFocus={() => this.setState({ isVisibleEquiModal: true })}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.equiTextInput = input;
                 }}
               />
@@ -377,7 +415,8 @@ class WorkRegisterScreen extends React.Component {
                 onChangeText={text => this.setState({ phoneNumber: text })}
                 placeholder="전화번호를 입력해 주세요"
                 keyboardType="phone-pad"
-                refer={input => {
+                refer={input =>
+                {
                   this.telTextInput = input;
                 }}
               />
@@ -387,7 +426,8 @@ class WorkRegisterScreen extends React.Component {
                 title="현장주소"
                 subTitle="(매칭 후 자세히 공개됨, 필수)"
                 value={address}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.addrTextInput = input;
                 }}
                 onChangeText={text => this.setState({ address: text })}
@@ -399,7 +439,8 @@ class WorkRegisterScreen extends React.Component {
                 title="현장위치"
                 subTitle="(현장위치를 짧게 설명해 주세요, 필수)"
                 value={addressDetail}
-                tiRefer={input => {
+                tiRefer={input =>
+                {
                   this.addrDetTextInput = input;
                 }}
                 onChangeText={text => this.setState({ addressDetail: text })}
@@ -411,7 +452,8 @@ class WorkRegisterScreen extends React.Component {
                   title="작업시작일"
                   subTitle="(필수)"
                   value={startDate}
-                  tiRefer={input => {
+                  tiRefer={input =>
+                  {
                     this.startDateTextInput = input;
                   }}
                   onChangeText={text => this.setState({ startDate: text })}
@@ -518,4 +560,4 @@ class WorkRegisterScreen extends React.Component {
   }
 }
 
-export default withLogin(WorkRegisterScreen);
+export default WorkRegisterScreen;

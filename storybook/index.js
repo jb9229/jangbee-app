@@ -2,12 +2,14 @@ import './rn-addons';
 
 import { configure, getStorybookUI } from '@storybook/react-native';
 
-import { AppRegistry } from 'react-native';
+import firebase from 'firebase';
+import firebaseconfig from '../firebaseconfig';
 import { loadAllAssests } from 'src';
 import { loadStories } from './storyLoader';
 import { setupGlobalDecorators } from './global_decorators';
 
-Promise.all(loadAllAssests).then(() => {
+Promise.all(loadAllAssests).then(() =>
+{
   console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
 });
 
@@ -16,8 +18,17 @@ Promise.all(loadAllAssests).then(() => {
  */
 setupGlobalDecorators();
 
+const initFirebase = () =>
+{
+  firebase.initializeApp(firebaseconfig);
+
+  firebase.auth().languageCode = 'ko';
+};
+
 // Stories Dinamic Importing
-configure(() => {
+configure(() =>
+{
+  initFirebase();
   loadStories();
 }, module);
 

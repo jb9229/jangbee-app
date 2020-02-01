@@ -74,6 +74,8 @@ android {
   }
   packagingOptions {
     pickFirst "**"
+    // This line is required to prevent React Native from crash
+    pickFirst '**/libc++_shared.so'
   }
 }
 
@@ -203,7 +205,15 @@ dependencies {
         // from auto-generated BasePackageList.java
       ]
   ])
-  
+
+  implementation 'com.facebook.soloader:soloader:0.6.0+'
+
+  debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+    exclude group:'com.facebook.yoga'
+    exclude group:'com.facebook.flipper', module: 'fbjni'
+    exclude group:'com.facebook.litho', module: 'litho-annotations'
+    exclude group:'com.squareup.okhttp3'
+  }
 }
 
 // This has to be down here for some reason

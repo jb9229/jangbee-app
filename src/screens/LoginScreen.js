@@ -91,8 +91,10 @@ const LogMsg = styled.Text`
 
 const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha_v3.html?appurl=${Linking.makeUrl()}`;
 
-class LoginScreen extends React.PureComponent {
-  constructor (props) {
+class LoginScreen extends React.PureComponent
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       phoneNumber: '',
@@ -104,8 +106,10 @@ class LoginScreen extends React.PureComponent {
     };
   }
 
-  componentDidMount () {
-    const capchaListener = ({ url }) => {
+  componentDidMount ()
+  {
+    const capchaListener = ({ url }) =>
+    {
       let token;
       const tokenEncoded = Linking.parse(url).queryParams.token;
       if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
@@ -116,50 +120,61 @@ class LoginScreen extends React.PureComponent {
     Linking.addEventListener('url', capchaListener);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount ()
+  {
     const { capchaListener } = this.state;
 
     Linking.removeEventListener('url', capchaListener);
   }
 
-  onPhoneChange = phoneNumber => {
+  onPhoneChange = phoneNumber =>
+  {
     this.setState({ phoneNumber });
   };
 
-  onCodeChange = code => {
+  onCodeChange = code =>
+  {
     this.setState({ code });
   };
 
-  onSignIn = async () => {
+  onSignIn = async () =>
+  {
     const { changeAuthPath } = this.props;
     const { confirmationResult, code } = this.state;
 
     // Validation
     const v = validate('decimal', code, true);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ codeValErrMessage: v[1] });
       return;
     }
 
     confirmationResult
       .confirm(code)
-      .then(result => {
+      .then(result =>
+      {
         const { user } = result;
 
         registerForPushNotificationsAsync(user.uid);
         getUserInfo(user.uid)
-          .then(data => {
+          .then(data =>
+          {
             const userInfo = data.val();
-            if (!userInfo) {
+            if (!userInfo)
+            {
               changeAuthPath(2, user);
               return;
             }
 
             const { userType } = userInfo;
 
-            if (!userType) {
+            if (!userType)
+            {
               changeAuthPath(2, user);
-            } else {
+            }
+            else
+            {
               changeAuthPath(1);
             }
           })
@@ -172,20 +187,26 @@ class LoginScreen extends React.PureComponent {
             )
           );
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert('잘못된 인증 코드입니다', error.message);
       });
   };
 
-  onSignOut = () => {
-    try {
+  onSignOut = () =>
+  {
+    try
+    {
       firebase.auth().signOut();
-    } catch (e) {
+    }
+    catch (e)
+    {
       Alert.alert(`로그아웃 요청에 문제가 있습니다, 재시도해 주세요${e}`);
     }
   };
 
-  cancelSignIn = () => {
+  cancelSignIn = () =>
+  {
     this.setState({
       phoneNumber: '',
       confirmationResult: undefined,
@@ -193,10 +214,12 @@ class LoginScreen extends React.PureComponent {
     });
   };
 
-  convertNationalPN = phoneNumber => {
+  convertNationalPN = phoneNumber =>
+  {
     const koreaNationalPhoneNumber = '+82';
 
-    if (phoneNumber === '') {
+    if (phoneNumber === '')
+    {
       return undefined;
     }
     let newPN = phoneNumber.replace(/-/g, ''); // without hyphen
@@ -209,7 +232,8 @@ class LoginScreen extends React.PureComponent {
   /**
    * Validation 에러 메세지 초기화
    */
-  resetValErrMsg = () => {
+  resetValErrMsg = () =>
+  {
     this.setState({
       phoneNumberValErrMessage: '',
       codeValErrMessage: '',
@@ -218,26 +242,30 @@ class LoginScreen extends React.PureComponent {
     });
   };
 
-  onPhoneComplete = async () => {
+  onPhoneComplete = async () =>
+  {
     this.resetValErrMsg();
 
     // Check Captcha
     WebBrowser.openBrowserAsync(captchaUrl);
   };
 
-  setCaptchaListener = async token => {
+  setCaptchaListener = async token =>
+  {
     const { phoneNumber } = this.state;
 
     const pnWithoutHyphen = phoneNumber.replace(/-/g, '');
 
     // Validation
     const v = validate('cellPhone', pnWithoutHyphen, true);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ phoneNumberValErrMessage: v[1] });
       return;
     }
 
-    if (token) {
+    if (token)
+    {
       const nationalPNumber = this.convertNationalPN(pnWithoutHyphen);
 
       // fake firebase.auth.ApplicationVerifier
@@ -246,18 +274,22 @@ class LoginScreen extends React.PureComponent {
         verify: () => Promise.resolve(token)
       };
       this.setState({ logMsg: `Listener Token: ${token}` });
-      try {
+      try
+      {
         const confirmationResult = await firebase
           .auth()
           .signInWithPhoneNumber(nationalPNumber, captchaVerifier);
         this.setState({ confirmationResult });
-      } catch (e) {
+      }
+      catch (e)
+      {
         this.setState({ errorMsg: `Listener Error: ${e.message}` });
       }
     }
   };
 
-  render () {
+  render ()
+  {
     const {
       confirmationResult,
       phoneNumber,
@@ -268,7 +300,8 @@ class LoginScreen extends React.PureComponent {
       errorMsg
     } = this.state;
     let authReadOnly = true;
-    if (!confirmationResult) {
+    if (!confirmationResult)
+    {
       authReadOnly = false;
     }
 
@@ -280,11 +313,13 @@ class LoginScreen extends React.PureComponent {
             style={styles.loginTI}
             value={phoneNumber}
             keyboardType="phone-pad"
-            onChangeText={text => {
+            onChangeText={text =>
+            {
               this.onPhoneChange(text);
             }}
             placeholder="휴대전화 번호입력(숫자만)"
-            onEndEditing={() => {
+            onEndEditing={() =>
+            {
               const formatPN = formatTelnumber(phoneNumber);
               this.setState({ phoneNumber: formatPN });
             }}
@@ -296,7 +331,8 @@ class LoginScreen extends React.PureComponent {
           <TextInput
             style={styles.loginTI}
             value={code}
-            onChangeText={text => {
+            onChangeText={text =>
+            {
               this.onCodeChange(text);
             }}
             keyboardType="numeric"
@@ -334,4 +370,4 @@ class LoginScreen extends React.PureComponent {
   }
 }
 
-export default withLogin(LoginScreen);
+export default LoginScreen;

@@ -1,14 +1,12 @@
 import * as React from 'react';
 
-import { Alert, SafeAreaView, View } from 'react-native';
-import CreateAdLayout, { AdType } from '../../../src/components/templates/CreateAdLayout';
-import { boolean, number, text } from '@storybook/addon-knobs';
-
-import { AdCreateProvider } from 'src/contexts/AdCreateProvider';
-import FirmHarmCaseLayout from '../../../src/components/templates/FirmHarmCaseLayout';
+import CreateAd from 'container/ad/create';
+import { SafeAreaView } from 'react-native';
+import { User } from 'firebase';
 import { storiesOf } from '@storybook/react-native';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
-const SafeZonDecorator = storyFn => (
+const SafeZonDecorator = (storyFn): React.ReactElement => (
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
     {storyFn()}
   </SafeAreaView>
@@ -18,30 +16,19 @@ storiesOf('Layout Components', module)
   .addDecorator(SafeZonDecorator)
   .add('Create Ad Layout', () => React.createElement(() =>
   {
-    const [adType, setAdType] = React.useState<AdType>();
-    const bookedAdList = [1, 2];
+    const { setUser } = useLoginProvider();
+    React.useEffect(() =>
+    {
+      const user: User =
+      {
+        uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
+        phoneNumber: '01052023337', photoURL: '', providerId: ''
+      };
+
+      setUser(user);
+    }, []);
+
     return (
-      <AdCreateProvider>
-        <CreateAdLayout />
-      </AdCreateProvider>
+      <CreateAd />
     );
   }));
-
-const CntBoardData = [
-  {
-    title: '전체글',
-    count: 12345,
-    onClick: i =>
-    {
-      Alert.alert(`action: click${i}`);
-    }
-  },
-  {
-    title: '내글',
-    count: 123,
-    onClick: i =>
-    {
-      Alert.alert(`action: click${i}`);
-    }
-  }
-];
