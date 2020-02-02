@@ -19,19 +19,19 @@ export enum AdType {
   MAIN_FIRST = 1,
   MAIN_SECONDE = 2,
   MAIN_THIRD = 3,
-  SEARCH_EQUIPMENT_FIRST = 4,
-  SEARCH_REGION_FIRST = 5,
+  SEARCH_EQUIPMENT_FIRST = 11,
+  SEARCH_REGION_FIRST = 21,
 }
 
 export const getAdTypeStr = (type: AdType): string =>
 {
   switch (type)
   {
-    case AdType.MAIN_FIRST: return '메인광고_첫번째 (월 7만원)';
-    case AdType.MAIN_SECONDE: return '메인광고_두번째 (월 5만원)';
-    case AdType.MAIN_THIRD: return '메인광고_세번째 (월 3만원)';
-    case AdType.SEARCH_EQUIPMENT_FIRST: return '장비 검색광고 (월 3만원)';
-    case AdType.SEARCH_REGION_FIRST: return '지역 검색광고 (월 2만원)';
+    case AdType.MAIN_FIRST: return '메인광고_첫번째 (월 10만원)';
+    case AdType.MAIN_SECONDE: return '메인광고_두번째 (월 7만원)';
+    case AdType.MAIN_THIRD: return '메인광고_세번째 (월 5만원)';
+    case AdType.SEARCH_EQUIPMENT_FIRST: return '장비 검색광고 (월 7만원)';
+    case AdType.SEARCH_REGION_FIRST: return '지역 검색광고 (월 3만원)';
     default: throw new Error('Unknow Advertisement Type!');
   }
 };

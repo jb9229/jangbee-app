@@ -130,10 +130,10 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
             else
             {
               notifyError(
-                '장비 타켓광고 중복검사 실패',
-                `죄송합니다, 해당 ${dto.adSido} ${dto.adGungu}는 [${
+                '타켓광고 등록 장비 중복됨',
+                `죄송합니다, 이미 ${dto.adEquipment}는 [${
                   dupliResult.endDate
-                }]까지 계약된 광고가 존재 합니다.`
+                }]까지 계약 되었습니다(카톡상담으로 대기 요청해 주세요)`
               );
             }
           })
@@ -156,8 +156,8 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
             else
             {
               notifyError(
-                '지역 타켓광고 중복 확인 실패',
-                `죄송합니다, [${dupliResult.endDate}]까지 계약된 광고가 존재 합니다.`
+                '타켓광고 등록 지역 중복됨',
+                `죄송합니다, [${dupliResult.endDate}]까지 계약된 지역광고가 존재 합니다.`
               );
             }
           })
@@ -168,6 +168,13 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
       }
       else
       {
+        // // TODO Check Endpoint duplicate (refetch and check)
+        // if (pickType !== 11 && pickType !== 21 && bookedAdTypeList.includes(pickType))
+        // {
+        //   Alert.alert('죄송합니다', '이미 계약된 광고 입니다');
+
+        //   return false;
+        // }
         requestCreaAd(dto, user, navigation, setImgUploading);
       }
 
@@ -225,7 +232,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     fintechUseNum: 'temp_fintechusenum', // it will be delete
     obAccessToken: 'temp_obAccessToken' // it will be delete
   };
-  console.log(newAd);
+
   api
     .createAd(newAd)
     .then(() => navigation.navigate('Ad', { refresh: true }))
@@ -242,23 +249,23 @@ const getAdPrice = (adType): number =>
 {
   if (adType === AdType.MAIN_FIRST)
   {
-    return 70000;
+    return 100000;
   }
   if (adType === AdType.MAIN_SECONDE)
   {
-    return 50000;
+    return 70000;
   }
   if (adType === AdType.MAIN_THIRD)
   {
-    return 30000;
+    return 50000;
   }
   if (adType === AdType.SEARCH_EQUIPMENT_FIRST)
   {
-    return 30000;
+    return 70000;
   }
   if (adType === AdType.SEARCH_REGION_FIRST)
   {
-    return 20000;
+    return 30000;
   }
   return 0;
 };
