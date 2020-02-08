@@ -8,6 +8,7 @@ import { CreateAdDto, CreateAdDtoError } from '../types/ad';
 import { AdType } from 'src/components/templates/CreateAdLayout';
 import { DefaultNavigationProps } from 'src/types';
 import { JBSERVER_ADBOOKED } from 'constants/Url';
+import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import getString from 'src/STRING';
@@ -24,6 +25,8 @@ interface Context {
   bookedAdTypeList: Array<number>;
   bookedAdLoading: boolean;
   imgUploading: boolean;
+  visiblePaymentModal: boolean;
+  paymentUrl: string;
 
   setVisibleEquiModal: (flag: boolean) => void; setVisibleAddrModal: (flag: boolean) => void;
   onSubmit: (dto: CreateAdDto) => void;
@@ -110,7 +113,9 @@ const ValidScheme = yup.object({
     })
 });
 
-const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: DefaultNavigationProps, setImgUploading: (flag: boolean) => void) => (dto: CreateAdDto): void =>
+const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: DefaultNavigationProps,
+  setImgUploading: (flag: boolean) => void, setVisiblePaymentModal: (flag: boolean) => void,
+  setPaymentUrl: (url: string) => void) => (dto: CreateAdDto): void =>
 {
   const createAdError = new CreateAdDtoError();
   ValidScheme.validate(dto, { abortEarly: false })
@@ -125,7 +130,7 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
           {
             if (dupliResult === null)
             {
-              requestCreaAd(dto, user, navigation, setImgUploading);
+              requestCreaAd(dto, user, navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl);
             }
             else
             {
@@ -151,7 +156,7 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
           {
             if (dupliResult === null)
             {
-              requestCreaAd(dto, user, navigation, setImgUploading);
+              requestCreaAd(dto, user, navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl);
             }
             else
             {
@@ -175,7 +180,7 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
 
         //   return false;
         // }
-        requestCreaAd(dto, user, navigation, setImgUploading);
+        requestCreaAd(dto, user, navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl);
       }
 
       // Init Error
@@ -204,7 +209,9 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
     });
 };
 
-const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNavigationProps, setImgUploading: (flag: boolean) => void) =>
+const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNavigationProps,
+  setImgUploading: (flag: boolean) => void, setVisiblePaymentModal: (flag: boolean) => void,
+  setPaymentUrl: (url: string) => void): Promise<any> =>
 {
   // Ad Image Upload
   let serverAdImgUrl = null;
@@ -214,9 +221,28 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     // this.setState({ isVisibleActIndiModal: true, imgUploadingMessage: '광고사진 업로드중...' });
     serverAdImgUrl = await imageManager.uploadImage(dto.adPhotoUrl);
     setImgUploading(false);
-    // this.setState({ isVisibleActIndiModal: false });
   }
 
+  const adPrice = getAdPrice(dto.adType);
+
+  // Request AD Fee Payment
+  api
+    .requestAdPayment(adPrice)
+    .then((result: SubscriptionReadyResponse) =>
+    {
+      console.log(result);
+      if (result && result.next_redirect_mobile_url)
+      {
+        setPaymentUrl(result.next_redirect_mobile_url);
+        setVisiblePaymentModal(true);
+      }
+    })
+    .catch((err) =>
+    {
+      noticeUserError('Ad Create Provider', '광고비 결제 요청 실패', err.message);
+    });
+
+  return null;
   const newAd = {
     adType: dto.adType,
     accountId: user.uid,
@@ -228,7 +254,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     equiTarget: dto.adEquipment,
     sidoTarget: dto.adSido,
     gugunTarget: dto.adGungu,
-    price: getAdPrice(dto.adType),
+    price: adPrice,
     fintechUseNum: 'temp_fintechusenum', // it will be delete
     obAccessToken: 'temp_obAccessToken' // it will be delete
   };
@@ -281,6 +307,8 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   // State
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState<boolean>(false);
   const [isVisibleAddrModal, setVisibleAddrModal] = React.useState<boolean>(false);
+  const [visiblePaymentModal, setVisiblePaymentModal] = React.useState(false);
+  const [paymentUrl, setPaymentUrl] = React.useState<string>();
   const [imgUploading, setImgUploading] = React.useState<boolean>(false);
   const [adState, dispatch] = React.useReducer<Reducer>(reducer, initialState);
 
@@ -300,13 +328,14 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
 
   const actions = {
     setVisibleEquiModal, setVisibleAddrModal,
-    onSubmit: onSubmit(dispatch, props.user, props.navigation, setImgUploading)
+    onSubmit: onSubmit(dispatch, props.user, props.navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl)
   };
 
   return (
     <Provider value={{
       adState, ...actions,
-      bookedAdLoading, imgUploading, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList
+      bookedAdLoading, imgUploading, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList,
+      paymentUrl, visiblePaymentModal
     }}>
       {props.children}
     </Provider>

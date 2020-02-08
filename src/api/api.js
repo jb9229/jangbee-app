@@ -14,7 +14,8 @@ import {
 import moment from 'moment';
 
 /** ******************** Jangbee Sever Account  Api List ************************** */
-export function deleteFirmAccount(accountId) {
+export function deleteFirmAccount (accountId)
+{
   return fetch(`${url.JBSERVER_ACCOUNT}?accountId=${accountId}`, {
     method: 'DELETE',
     headers: {}
@@ -22,11 +23,13 @@ export function deleteFirmAccount(accountId) {
 }
 
 /** ******************** Jangbee Sever Firm  Api List ************************** */
-export function getEquipList() {
+export function getEquipList ()
+{
   return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
 }
 
-export function createFirm(newFirm) {
+export function createFirm (newFirm)
+{
   return fetch(url.JBSERVER_FIRM, {
     method: 'POST',
     headers: {
@@ -37,7 +40,8 @@ export function createFirm(newFirm) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getFirm(accountId) {
+export function getFirm (accountId)
+{
   const param = encodeURIComponent(accountId);
   return fetch(`${url.JBSERVER_FIRM}?accountId=${param}`).then(
     handleJBServerJsonResponse
@@ -47,7 +51,8 @@ export function getFirm(accountId) {
 /**
  * 주변 장비업체 검색요청 함수
  */
-export function getNearFirmList(page, equipment, sLongitude, sLatitude) {
+export function getNearFirmList (page, equipment, sLongitude, sLatitude)
+{
   const paramData = {
     equipment,
     longitude: sLongitude,
@@ -72,7 +77,8 @@ export function getNearFirmList(page, equipment, sLongitude, sLatitude) {
 /**
  * 지역 장비업체 검색요청 함수
  */
-export function getLocalFirmList(page, equipment, searSido, searSigungu) {
+export function getLocalFirmList (page, equipment, searSido, searSigungu)
+{
   const paramData = {
     equipment,
     sido: searSido,
@@ -83,9 +89,12 @@ export function getLocalFirmList(page, equipment, searSido, searSigungu) {
 
   let sigunguQuery;
 
-  if (searSigungu) {
+  if (searSigungu)
+  {
     sigunguQuery = `&gungu=${encodeURIComponent(paramData.gungu)}`;
-  } else {
+  }
+  else
+  {
     sigunguQuery = '';
   }
 
@@ -100,7 +109,8 @@ export function getLocalFirmList(page, equipment, searSido, searSigungu) {
   ).then(handleJsonResponse);
 }
 
-export function updateFirm(newFirmData) {
+export function updateFirm (newFirmData)
+{
   return fetch(url.JBSERVER_FIRM, {
     method: 'PUT',
     headers: {
@@ -114,12 +124,14 @@ export function updateFirm(newFirmData) {
 /**
  * 업체가 존재하는 지역정보 조회
  */
-export function getFirmLocalData(equipment) {
+export function getFirmLocalData (equipment)
+{
   const param = encodeURIComponent(equipment);
   return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJsonResponse);
 }
 
-export function uploadImage(uri) {
+export function uploadImage (uri)
+{
   const uriParts = uri.split('.');
   const fileType = uriParts[uriParts.length - 1];
   const nowTime = new Date().getTime();
@@ -144,7 +156,8 @@ export function uploadImage(uri) {
   return fetch(url.IMAGE_STORAGE, options).then(handleTextResponse);
 }
 
-export function removeImage(imgUrl) {
+export function removeImage (imgUrl)
+{
   const index = imgUrl.lastIndexOf('/');
   let fileName = imgUrl.substr(index + 1);
 
@@ -164,7 +177,8 @@ export function removeImage(imgUrl) {
   );
 }
 
-export function getAddrByGpspoint(longitude, latitude) {
+export function getAddrByGpspoint (longitude, latitude)
+{
   const paramData = {
     longitude,
     latitude
@@ -185,7 +199,8 @@ export function getAddrByGpspoint(longitude, latitude) {
 
 /** ******************** Jangbee Sever Ad  Api List ************************** */
 
-export function createAd(newAd) {
+export function createAd (newAd)
+{
   return fetch(url.JBSERVER_AD, {
     method: 'POST',
     headers: {
@@ -198,24 +213,34 @@ export function createAd(newAd) {
 /**
  * 광고 조회
  */
-export function getAd(location, equiTarget, sidoTarget, gugunTarget) {
+export function getAd (location, equiTarget, sidoTarget, gugunTarget)
+{
   let paramUrl = `?adLocation=${location}`;
 
-  if (equiTarget === undefined) {
+  if (equiTarget === undefined)
+  {
     paramUrl += '&equiTarget=';
-  } else {
+  }
+  else
+  {
     paramUrl += `&equiTarget=${encodeURIComponent(equiTarget)}`;
   }
 
-  if (sidoTarget === undefined) {
+  if (sidoTarget === undefined)
+  {
     paramUrl += '&sidoTarget=';
-  } else {
+  }
+  else
+  {
     paramUrl += `&sidoTarget=${encodeURIComponent(sidoTarget)}`;
   }
 
-  if (gugunTarget === undefined) {
+  if (gugunTarget === undefined)
+  {
     paramUrl += '&gugunTarget=';
-  } else {
+  }
+  else
+  {
     paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
   }
 
@@ -225,7 +250,8 @@ export function getAd(location, equiTarget, sidoTarget, gugunTarget) {
 /**
  * 내광고 조회
  */
-export function getJBAdList(accountId) {
+export function getJBAdList (accountId)
+{
   const paramAccountId = encodeURIComponent(accountId);
 
   const paramUrl = `?accountId=${paramAccountId}`;
@@ -233,7 +259,8 @@ export function getJBAdList(accountId) {
   return fetch(`${url.JBSERVER_ADLIST}${paramUrl}`).then(handleJsonResponse);
 }
 
-export function getBookedAdType() {
+export function getBookedAdType ()
+{
   return fetch(`${url.JBSERVER_ADBOOKED}`).then(handleJsonResponse);
 }
 
@@ -242,7 +269,8 @@ export function getBookedAdType() {
  *
  * @param {string} equipment 타켓광고의 장비
  */
-export function existEuipTarketAd(equipment) {
+export function existEuipTarketAd (equipment)
+{
   const paramEquipment = encodeURIComponent(equipment);
   return fetch(
     `${url.JBSERVER_ADTARGET_EQUIPMENT}?equipment=${paramEquipment}`
@@ -254,7 +282,8 @@ export function existEuipTarketAd(equipment) {
  *
  * @param {string} equipment 타켓광고의 장비
  */
-export function existLocalTarketAd(equipment, sido, gungu) {
+export function existLocalTarketAd (equipment, sido, gungu)
+{
   const paramEquipment = encodeURIComponent(equipment);
   const paramSido = encodeURIComponent(sido);
   const paramGungu = encodeURIComponent(gungu);
@@ -269,7 +298,8 @@ export function existLocalTarketAd(equipment, sido, gungu) {
  * 광고 업데이트
  * @param {Object} newAd 업데이트할 광고
  */
-export function updateAd(newAd) {
+export function updateAd (newAd)
+{
   return fetch(url.JBSERVER_AD, {
     method: 'PUT',
     headers: {
@@ -279,7 +309,8 @@ export function updateAd(newAd) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function updateFinUseNumAd(selFinUseNum, accountId) {
+export function updateFinUseNumAd (selFinUseNum, accountId)
+{
   return fetch(url.JBSERVER_AD_UPDATE_FINTECHUSENUM, {
     method: 'PUT',
     headers: {
@@ -293,11 +324,49 @@ export function updateFinUseNumAd(selFinUseNum, accountId) {
  * 광고종료 API 함수
  * @param {long} id 종료한 광고 아이디
  */
-export function terminateAd(id) {
+export function terminateAd (id)
+{
   return fetch(`${url.JBSERVER_AD}?id=${id}`, {
     method: 'DELETE',
     headers: {}
   }).then(handleJBServerJsonResponse);
+}
+
+/**
+ *
+ * @param {*} price AD Price
+ */
+export function requestAdPayment (price)
+{
+  const newAd = {
+    cid: 'TCSUBSCRIP',
+    partner_order_id: 'subscription_order_id_1',
+    partner_user_id: 'subscription_user_id_1',
+    item_name: '광고정기결제',
+    quantity: '1',
+    total_amount: price,
+    tax_free_amount: 0,
+    approval_url: 'https://jb9229.github.io/openBankApiCallback/index.html',
+    fail_url: 'https://jb9229.github.io/openBankApiCallback/index.html',
+    cancel_url: 'https://jb9229.github.io/openBankApiCallback/index.html'
+  };
+
+  const searchParams = Object.keys(newAd).map((key) =>
+  {
+    return encodeURIComponent(key) + '=' + encodeURIComponent(newAd[key]);
+  }).join('&');
+
+  return fetch(`${url.KAKAO_PAYMENT_API}`,
+    {
+      method: 'POST',
+      headers: {
+        // Authorization: `KakaoAK ${kakaoconfig.API_KEY}`,
+        Authorization: 'KakaoAK 9366738358634bcb690992c374583819',
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      },
+      body: searchParams
+    }
+  ).then(handleJBServerJsonResponse);
 }
 
 /** ******************** Client Evaluation Api List ************************** */
@@ -307,7 +376,8 @@ export function terminateAd(id) {
  *
  * @param {object} newEvaluation 신규 블랙리스트
  */
-export function createClientEvaluation(newEvaluation) {
+export function createClientEvaluation (newEvaluation)
+{
   return fetch(url.JBSERVER_CLIENT_EVALU, {
     method: 'POST',
     headers: {
@@ -317,7 +387,8 @@ export function createClientEvaluation(newEvaluation) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getClientEvaluCount(accountId) {
+export function getClientEvaluCount (accountId)
+{
   const param = encodeURIComponent(accountId);
   return fetch(
     `${
@@ -326,7 +397,8 @@ export function getClientEvaluCount(accountId) {
   ).then(handleJBServerJsonResponse);
 }
 
-export function getClientEvaluList(page, accountId, mine) {
+export function getClientEvaluList (page, accountId, mine)
+{
   const param = encodeURIComponent(accountId);
   return fetch(
     `${
@@ -335,13 +407,15 @@ export function getClientEvaluList(page, accountId, mine) {
   ).then(handleJBServerJsonResponse);
 }
 
-export function searchClientEvaluList(paramStr) {
+export function searchClientEvaluList (paramStr)
+{
   return fetch(`${url.JBSERVER_CLIENT_EVALU}?${paramStr}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function existClinetEvaluTelnumber(telNumber) {
+export function existClinetEvaluTelnumber (telNumber)
+{
   return fetch(
     `${url.JBSERVER_CLIENT_EVALU_TELEXIST}?telNumber=${telNumber}`
   ).then(handleJBServerJsonResponse);
@@ -352,7 +426,8 @@ export function existClinetEvaluTelnumber(telNumber) {
  *
  * @param {object} updateEvaluation 업데이트할 블랙리스트 내용(cliName, reason)
  */
-export function updateClientEvaluation(updateEvaluation) {
+export function updateClientEvaluation (updateEvaluation)
+{
   return fetch(url.JBSERVER_CLIENT_EVALU, {
     method: 'PUT',
     headers: {
@@ -366,7 +441,8 @@ export function updateClientEvaluation(updateEvaluation) {
  * 블랙리스트 삭제
  * @param {long} id 삭제할 블랙리스트 아이디
  */
-export function deleteCliEvalu(id) {
+export function deleteCliEvalu (id)
+{
   return fetch(`${url.JBSERVER_CLIENT_EVALU}?id=${id}`, {
     method: 'DELETE',
     headers: {}
@@ -377,7 +453,8 @@ export function deleteCliEvalu(id) {
  * 공감/비공감 추가 API 요청 함수
  * @param {object} newEvaluLike 신규 공감
  */
-export function createClientEvaluLike(newEvaluLike) {
+export function createClientEvaluLike (newEvaluLike)
+{
   return fetch(url.JBSERVER_CLIENT_EVALULIKE, {
     method: 'POST',
     headers: {
@@ -387,13 +464,15 @@ export function createClientEvaluLike(newEvaluLike) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getClientEvaluLikeList(id) {
+export function getClientEvaluLikeList (id)
+{
   return fetch(`${url.JBSERVER_CLIENT_EVALULIKE}?evaluId=${id}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function existEvaluLike(accountId, evaluId) {
+export function existEvaluLike (accountId, evaluId)
+{
   return fetch(
     `${
       url.JBSERVER_CLIENT_EVALULIKE_EXIST
@@ -401,7 +480,8 @@ export function existEvaluLike(accountId, evaluId) {
   ).then(handleJBServerJsonResponse);
 }
 
-export function deleteCliEvaluLike(evaluId, accountId, like) {
+export function deleteCliEvaluLike (evaluId, accountId, like)
+{
   const param = encodeURIComponent(accountId);
   return fetch(
     `${
@@ -416,7 +496,8 @@ export function deleteCliEvaluLike(evaluId, accountId, like) {
 
 /** ******************** Firm Evaluation Api List ************************** */
 
-export function createFirmEvalu(evaluData) {
+export function createFirmEvalu (evaluData)
+{
   return fetch(url.JBSERVER_FIRM_EVALU, {
     method: 'POST',
     headers: {
@@ -426,7 +507,8 @@ export function createFirmEvalu(evaluData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getFirmEvalu(accountId) {
+export function getFirmEvalu (accountId)
+{
   return fetch(`${url.JBSERVER_FIRM_EVALU}?accountId=${accountId}`).then(
     handleJBServerJsonResponse
   );
@@ -434,7 +516,8 @@ export function getFirmEvalu(accountId) {
 
 /** ******************** Work Api List ************************** */
 
-export function createWork(newWork) {
+export function createWork (newWork)
+{
   return fetch(url.JBSERVER_WORK, {
     method: 'POST',
     headers: {
@@ -444,7 +527,8 @@ export function createWork(newWork) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function updateWork(work) {
+export function updateWork (work)
+{
   return fetch(url.JBSERVER_WORK, {
     method: 'PUT',
     headers: {
@@ -454,7 +538,8 @@ export function updateWork(work) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getFirmOpenWorkList(equipment, accountId) {
+export function getFirmOpenWorkList (equipment, accountId)
+{
   const param1 = encodeURIComponent(equipment);
   const param2 = encodeURIComponent(accountId);
   return fetch(
@@ -462,14 +547,16 @@ export function getFirmOpenWorkList(equipment, accountId) {
   ).then(handleJBServerJsonResponse);
 }
 
-export function getClientOpenWorkList(accountId) {
+export function getClientOpenWorkList (accountId)
+{
   const param = encodeURIComponent(accountId);
   return fetch(`${url.JBSERVER_WORK_CLIENT_OPEN}?accountId=${param}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function getFirmMatchedWorkList(equipment, accountId) {
+export function getFirmMatchedWorkList (equipment, accountId)
+{
   const param1 = encodeURIComponent(equipment);
   const param2 = encodeURIComponent(accountId);
   return fetch(
@@ -477,20 +564,23 @@ export function getFirmMatchedWorkList(equipment, accountId) {
   ).then(handleJBServerJsonResponse);
 }
 
-export function getClientMatchedWorkList(accountId) {
+export function getClientMatchedWorkList (accountId)
+{
   const param = encodeURIComponent(accountId);
   return fetch(`${url.JBSERVER_WORK_CLIENT_MATCHED}?accountId=${param}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function getAppliFirmList(workId) {
+export function getAppliFirmList (workId)
+{
   return fetch(`${url.JBSERVER_WORK_APPLICANTS}?workId=${workId}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function applyWork(applyData) {
+export function applyWork (applyData)
+{
   return fetch(url.JBSERVER_WORK_FIRM_APPLY, {
     method: 'PUT',
     headers: {
@@ -500,7 +590,8 @@ export function applyWork(applyData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function applyFirmWork(applyData) {
+export function applyFirmWork (applyData)
+{
   return fetch(url.JBSERVER_FIRMWORK_FIRM_APPLY, {
     method: 'PUT',
     headers: {
@@ -510,7 +601,8 @@ export function applyFirmWork(applyData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function selectAppliFirm(selectData) {
+export function selectAppliFirm (selectData)
+{
   return fetch(url.JBSERVER_WORK_CLIENT_SELECT, {
     method: 'PUT',
     headers: {
@@ -520,7 +612,8 @@ export function selectAppliFirm(selectData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function acceptWork(acceptData) {
+export function acceptWork (acceptData)
+{
   return fetch(url.JBSERVER_WORK_FIRM_ACCEPT, {
     method: 'PUT',
     headers: {
@@ -530,7 +623,8 @@ export function acceptWork(acceptData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function abandonWork(abandonData) {
+export function abandonWork (abandonData)
+{
   return fetch(url.JBSERVER_WORK_FIRM_ABANDON, {
     method: 'PUT',
     headers: {
@@ -540,7 +634,8 @@ export function abandonWork(abandonData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function cancelSelFirm(workId) {
+export function cancelSelFirm (workId)
+{
   const formData = new FormData();
   formData.append('workId', workId);
 
@@ -551,19 +646,22 @@ export function cancelSelFirm(workId) {
 }
 
 /** ******************** Coupon Api List ************************** */
-export function getCoupon(accountId) {
+export function getCoupon (accountId)
+{
   return fetch(`${url.JBSERVER_COUPON}?accountId=${accountId}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function getAvailCashback(accountId) {
+export function getAvailCashback (accountId)
+{
   return fetch(`${url.JBSERVER_CASHBACK}?accountId=${accountId}`).then(
     handleJBServerJsonResponse
   );
 }
 
-export function requestCashback(depositData) {
+export function requestCashback (depositData)
+{
   return fetch(url.JBSERVER_CASHBACK, {
     method: 'POST',
     headers: {
@@ -573,7 +671,8 @@ export function requestCashback(depositData) {
   }).then(handleJBServerJsonResponse);
 }
 
-export function getFirmCountChart(equipment) {
+export function getFirmCountChart (equipment)
+{
   return fetch(`${url.JBSERVER_STAT}?equipment=${equipment}`).then(
     handleJBServerJsonResponse
   );
@@ -585,7 +684,8 @@ export function getFirmCountChart(equipment) {
  * 토큰작성 함수
  * @param {Object} openBankAuthInfo 토큰정보
  */
-function getAccessToken(accessToken) {
+function getAccessToken (accessToken)
+{
   const headerAuth = `Bearer ${accessToken}`;
 
   return headerAuth;
@@ -598,12 +698,13 @@ function getAccessToken(accessToken) {
  * @param {string} isInclCancAccount 해지계좌포함여부 (Y:해지계좌포함, N:해지계좌불포함)
  * @param {string} sort 정렬순서 (D:Descending, A:Ascending)
  */
-export function getOBAccList(
+export function getOBAccList (
   accessTokenInfo,
   userSeqNo,
   isInclCancAccount,
   sort
-) {
+)
+{
   return fetch(
     `${url.OPENBANK_ACCOUNTLIST}?user_seq_no=${encodeURIComponent(
       userSeqNo
@@ -618,7 +719,8 @@ export function getOBAccList(
   ).then(handleOpenBankJsonResponse);
 }
 
-export function getOBAccBalance(accessTokenInfo, fintechUseNum) {
+export function getOBAccBalance (accessTokenInfo, fintechUseNum)
+{
   const tranDTime = moment().format('YYYYMMDDHHmmss');
 
   return fetch(
@@ -638,7 +740,8 @@ export function getOBAccBalance(accessTokenInfo, fintechUseNum) {
  *
  * @param {*} refreshToken refresh 토큰
  */
-export function refreshOpenBankAuthToken(refreshToken) {
+export function refreshOpenBankAuthToken (refreshToken)
+{
   const paramData = {
     client_id: obconfig.client_id,
     client_secret: obconfig.secret,
@@ -663,12 +766,13 @@ export function refreshOpenBankAuthToken(refreshToken) {
   ).then(handleOpenBankJsonResponse);
 }
 
-export function transferWithdraw(
+export function transferWithdraw (
   accessTokenInfo,
   fintechUseNum,
   tranAmt,
   comment
-) {
+)
+{
   const postData = {
     dps_print_content: comment || '장비콜 출금',
     fintech_use_num: fintechUseNum,
@@ -686,13 +790,14 @@ export function transferWithdraw(
   }).then(handleOpenBankJsonResponse);
 }
 
-export function transferDeposit(
+export function transferDeposit (
   accessTokenInfo,
   fintechUseNum,
   tranAmt,
   wdComment,
   comment
-) {
+)
+{
   const postData = {
     wd_pass_phrase: obconfig.WD_PASS_PHRASE,
     wd_print_content: wdComment,

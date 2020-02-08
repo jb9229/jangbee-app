@@ -35,3 +35,16 @@ DerivedData
 # CocoaPods
 ios/Pods
 node_modules
+android/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java
+ios/----.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+ios/----.xcodeproj/project.pbxproj
+android/.project
+ios/----.xcodeproj/project.pbxproj
+ios/Podfile.lock
+android/app/.settings/org.eclipse.buildship.core.prefs
+android/.settings/org.eclipse.buildship.core.prefs
+android/app/.classpath
+android/app/.project
+android/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java
+ios/----.xcodeproj/project.pbxproj
+*.iml

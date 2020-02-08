@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import CreateAd from 'container/ad/create';
+import KakaoPayWebView from 'templates/KakaoPayWebView';
 import { SafeAreaView } from 'react-native';
 import { User } from 'firebase';
 import { storiesOf } from '@storybook/react-native';
@@ -31,4 +32,5 @@ storiesOf('Layout Components', module)
     return (
       <CreateAd />
     );
-  }));
+  }))
+;

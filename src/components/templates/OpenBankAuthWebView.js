@@ -4,8 +4,7 @@ import {
   ActivityIndicator,
   Alert,
   Modal,
-  Text,
-  View
+  Text
 } from 'react-native';
 import { OPENBANK_AUTHORIZE2, OPENBANK_REAUTHORIZE2 } from 'constants/Url';
 

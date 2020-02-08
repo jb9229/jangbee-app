@@ -29,6 +29,7 @@ export default class MapAddWebModal extends React.PureComponent
 
   onMapAddrWebMSG = (mapAddrWebMSG) =>
   {
+    console.log(mapAddrWebMSG);
     const { saveAddrInfo } = this.props;
 
     const webData = JSON.parse(mapAddrWebMSG);
@@ -64,7 +65,7 @@ export default class MapAddWebModal extends React.PureComponent
           <View style={styles.mapAddModalWrap}>
             <ModalHeadOrganism closeModal={() => setMapAddModalVisible(false)}/>
             <WebView
-              source={{ uri: 'https://jb9229.github.io/postcode/add-map.html' }}
+              source={{ uri: 'https://jb9229.github.io/postcode/index_new.html' }}
               style={{ marginTop: 20 }}
               onMessage={event => this.onMapAddrWebMSG(event.nativeEvent.data)}
             />

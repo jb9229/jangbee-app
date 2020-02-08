@@ -7,6 +7,7 @@ import EquipementModal from 'templates/EquipmentModal';
 import ErrorText from 'src/components/molecules/Text/ErrorText';
 import ImagePickInput from 'molecules/ImagePickInput';
 import JBButton from 'molecules/JBButton';
+import KakaoPayWebView from 'src/components/templates/KakaoPayWebView';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import MiddleTitle from 'src/components/molecules/Text/MiddleTitle';
@@ -53,7 +54,8 @@ const Picker = styled.Picker``;
 const CreateAdLayout: React.FC = () =>
 {
   const {
-    adState, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
+    adState, visiblePaymentModal, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
+    paymentUrl,
     setVisibleEquiModal, setVisibleAddrModal, onSubmit
   } = useAdCreateProvider();
 
@@ -171,6 +173,10 @@ const CreateAdLayout: React.FC = () =>
           adState.createAdDto.adGungu = addrData.sigunguAddr;
         }}
         nextFocus={(): void => {}}
+      />
+      <KakaoPayWebView
+        visible={visiblePaymentModal}
+        initUrl={paymentUrl}
       />
       <LoadingIndicator loading={bookedAdLoading} />
       <LoadingIndicator loading={imgUploading} msg={getString('AD_IMG_UPLOADING')} />
