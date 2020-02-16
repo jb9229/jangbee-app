@@ -5,7 +5,6 @@ import {
   DatePickerAndroid,
   KeyboardAvoidingView,
   Picker,
-  Platform,
   ScrollView,
   StyleSheet,
   View
@@ -14,7 +13,6 @@ import { validate, validatePresence } from 'utils/Validation';
 
 import CardUI from 'molecules/CardUI';
 import EquipementModal from 'templates/EquipmentModal';
-import { Header } from 'react-navigation';
 import JBButton from 'molecules/JBButton';
 import JBErrorMessage from 'organisms/JBErrorMessage';
 import JBPicker from 'molecules/JBPicker';
@@ -24,7 +22,6 @@ import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   Container: {

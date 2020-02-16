@@ -348,7 +348,7 @@ export function requestAdPayment (price)
     tax_free_amount: 0,
     approval_url: 'https://jb9229.github.io/openBankApiCallback/index.html',
     fail_url: 'https://jb9229.github.io/openBankApiCallback/index.html',
-    cancel_url: 'https://jb9229.github.io/openBankApiCallback/index.html'
+    cancel_url: url.KAKAO_PAYMENT_CANCELURL
   };
 
   const searchParams = Object.keys(newAd).map((key) =>

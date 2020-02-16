@@ -1,8 +1,10 @@
-import { AsyncStorage, Alert } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+
+import { Alert } from 'react-native';
 import { Linking } from 'expo';
 
-export default async function download(fileUrl, fileName) {
+export default async function download (fileUrl, fileName)
+{
   //   downloadAsync(fileUrl, documentDirectory + fileName)
   //     .then(() => {})
   //     .catch(error => Alert.alert('다운로드 실패!', `카톡상담으로 문제현상 상담하세요: ${error.message}`));

@@ -28,7 +28,7 @@ interface Context {
   visiblePaymentModal: boolean;
   paymentUrl: string;
 
-  setVisibleEquiModal: (flag: boolean) => void; setVisibleAddrModal: (flag: boolean) => void;
+  setVisibleEquiModal: (flag: boolean) => void; setVisibleAddrModal: (flag: boolean) => void; setVisiblePaymentModal: (flag: boolean) => void;
   onSubmit: (dto: CreateAdDto) => void;
 }
 
@@ -234,7 +234,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
       if (result && result.next_redirect_mobile_url)
       {
         setPaymentUrl(result.next_redirect_mobile_url);
-        setVisiblePaymentModal(true);
+        // setVisiblePaymentModal(true);
       }
     })
     .catch((err) =>
@@ -242,7 +242,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
       noticeUserError('Ad Create Provider', '광고비 결제 요청 실패', err.message);
     });
 
-  return null;
+  // return null;
   const newAd = {
     adType: dto.adType,
     accountId: user.uid,
@@ -261,7 +261,11 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
 
   api
     .createAd(newAd)
-    .then(() => navigation.navigate('Ad', { refresh: true }))
+    .then(() =>
+    {
+      setVisiblePaymentModal(true);
+      // navigation.navigate('Ad', { refresh: true });
+    })
     .catch((errorResponse) =>
     {
       noticeUserError('Ad Create Provider', '광고생성 실패', errorResponse.message);
@@ -327,7 +331,7 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
-    setVisibleEquiModal, setVisibleAddrModal,
+    setVisibleEquiModal, setVisibleAddrModal, setVisiblePaymentModal,
     onSubmit: onSubmit(dispatch, props.user, props.navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl)
   };
 

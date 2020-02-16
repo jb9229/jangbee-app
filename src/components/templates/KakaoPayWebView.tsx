@@ -15,6 +15,7 @@ const Contents = styled.View`
 interface Props {
   initUrl: string;
   visible: boolean;
+  close: () => void;
 }
 
 const KakaoPayWebView: React.FC<Props> = (props) =>
@@ -27,7 +28,7 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
         animationType="slide"
         transparent
         visible={props.visible}
-        onRequestClose={(): void => {}}
+        onRequestClose={props.close}
       >
         <Contents>
           <WebView
@@ -49,7 +50,7 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
               marginRight: 5
             }}
             onMessage={event =>
-              this.receiveWebViewMSG(event.nativeEvent.data)
+              receiveWebViewMSG(webView, event.nativeEvent.data, props.close)
             }
           />
         </Contents>
@@ -64,6 +65,26 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
 const handleNavigationStateChange = (navState: any): void =>
 {
   // Callback url로 redirect가 되는 것이 아니라 json으로 리턴된다. 그때의 상태를 잡아 에러 처리
+};
+
+/**
+ * 웹페이지 메세지 처리 함수
+ * @param {string} webViewMSG Webview에서 전달된 메세지
+ */
+const receiveWebViewMSG = async (webView, webViewMSG, close: () => void): Promise<any> =>
+{
+  const webData = JSON.parse(webViewMSG);
+  let postData;
+  // 웹뷰 종료 요청
+  if (webData.type === 'ASK_WEBVIEWCLOSE')
+  {
+    close();
+  }
+
+  if (webView && postData != null)
+  {
+    webView.postMessage(postData);
+  }
 };
 
 export default KakaoPayWebView;

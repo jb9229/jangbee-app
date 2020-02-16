@@ -23,9 +23,13 @@ public class AppConstants {
   static {
     List<Constants.EmbeddedResponse> embeddedResponses = new ArrayList<>();
 
-    // ADD EMBEDDED RESPONSES HERE
-    // START EMBEDDED RESPONSES
-    // END EMBEDDED RESPONSES
+    
+        
+        // ADD EMBEDDED RESPONSES HERE
+        // START EMBEDDED RESPONSES
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@jb9229/jangbeecall_native", "assets://shell-app-manifest.json", "application/json"));
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40jb9229%2Fjangbeecall_native%2F0.7.6_25_20191117%2F79a65c5c1b6fa2dd50a7a1614eb3c34e-36.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+        // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }
 

@@ -1,15 +1,21 @@
-import { AsyncStorage, Alert } from 'react-native';
 import * as api from 'api/api';
+
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import PKey from 'constants/Persistkey';
 
 /**
  * 토큰 정보 앱스토리지에 저장 함수
  * @param {Object} tokenInfo 토큰 정보
  */
-export async function saveOpenBankAuthInfo(tokenInfoStr) {
-  try {
+export async function saveOpenBankAuthInfo (tokenInfoStr)
+{
+  try
+  {
     await AsyncStorage.setItem(PKey.PKEY_OPENBANKAUTHTOKEN, tokenInfoStr);
-  } catch (error) {
+  }
+  catch (error)
+  {
     Alert.alert(error.name, error.message);
     return false;
   }
@@ -22,11 +28,13 @@ export async function saveOpenBankAuthInfo(tokenInfoStr) {
  * @param {string} currentDateTime 현재시간
  * @param {Object} openBankAuthInfo 토큰정보
  */
-export async function reAuthToken(currentDateTime, openBankAuthInfo) {
+export async function reAuthToken (currentDateTime, openBankAuthInfo)
+{
   const refreshTokenExpireTime =
     openBankAuthInfo.expires_in + 1000 * 60 * 60 * 24 * 10;
 
-  if (currentDateTime > refreshTokenExpireTime) {
+  if (currentDateTime > refreshTokenExpireTime)
+  {
     // refresh 토큰 만료시 재인증
 
     return undefined;
@@ -44,13 +52,16 @@ export async function reAuthToken(currentDateTime, openBankAuthInfo) {
 /**
  * 오픈뱅크 접속 토큰정보 요청 함수
  */
-export async function getOpenBankAuthInfo() {
-  try {
+export async function getOpenBankAuthInfo ()
+{
+  try
+  {
     const openBankAuthInfoStr = await AsyncStorage.getItem(
       PKey.PKEY_OPENBANKAUTHTOKEN
     );
 
-    if (openBankAuthInfoStr != null && openBankAuthInfoStr !== '') {
+    if (openBankAuthInfoStr != null && openBankAuthInfoStr !== '')
+    {
       const openBankAuthInfo = JSON.parse(openBankAuthInfoStr);
 
       const acessTokenExpireTime = openBankAuthInfo.expires_in;
@@ -58,7 +69,8 @@ export async function getOpenBankAuthInfo() {
 
       // Console.log(`openBankAuthInfo Time: ${currentDateTime} / ${acessTokenExpireTime}`);
 
-      if (currentDateTime > acessTokenExpireTime) {
+      if (currentDateTime > acessTokenExpireTime)
+      {
         const newOpenBankAuthInfo = reAuthToken(
           currentDateTime,
           openBankAuthInfo
@@ -69,7 +81,9 @@ export async function getOpenBankAuthInfo() {
 
       return openBankAuthInfo;
     }
-  } catch (error) {
+  }
+  catch (error)
+  {
     Alert.alert(
       '예상치 못한 오류입니다',
       `[오픈뱅크 토큰정보 요청] ${error.message}`

@@ -56,7 +56,7 @@ const CreateAdLayout: React.FC = () =>
   const {
     adState, visiblePaymentModal, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
     paymentUrl,
-    setVisibleEquiModal, setVisibleAddrModal, onSubmit
+    setVisibleEquiModal, setVisiblePaymentModal, setVisibleAddrModal, onSubmit
   } = useAdCreateProvider();
 
   const [adType, setAdType] = React.useState<AdType>(adState.createAdDto.adType);
@@ -177,6 +177,7 @@ const CreateAdLayout: React.FC = () =>
       <KakaoPayWebView
         visible={visiblePaymentModal}
         initUrl={paymentUrl}
+        close={(): void => setVisiblePaymentModal(false)}
       />
       <LoadingIndicator loading={bookedAdLoading} />
       <LoadingIndicator loading={imgUploading} msg={getString('AD_IMG_UPLOADING')} />
