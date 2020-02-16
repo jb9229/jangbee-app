@@ -72,9 +72,11 @@ export default class App extends React.Component
 
   initFirebase = () =>
   {
-    firebase.initializeApp(firebaseconfig);
-
-    firebase.auth().languageCode = 'ko';
+    if (!firebase.apps.length)
+    {
+      firebase.initializeApp(firebaseconfig);
+      firebase.auth().languageCode = 'ko';
+    }
   };
 
   render ()

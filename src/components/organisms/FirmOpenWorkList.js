@@ -51,7 +51,7 @@ export default class FirmWorkingList extends React.PureComponent {
             size="small"
           />
         )}
-        {item.workState === 'OPEN' &&
+        {item.workState === '' &&
           !item.applied &&
           item.firmRegister &&
           !item.guarTimeExpire && (

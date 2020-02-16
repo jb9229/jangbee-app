@@ -20,7 +20,10 @@ setupGlobalDecorators();
 
 const initFirebase = () =>
 {
-  firebase.initializeApp(firebaseconfig);
+  if (!firebase.apps.length)
+  {
+    firebase.initializeApp(firebaseconfig);
+  }
 
   firebase.auth().languageCode = 'ko';
 };
