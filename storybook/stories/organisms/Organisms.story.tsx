@@ -5,6 +5,7 @@ import { boolean, text } from '@storybook/addon-knobs';
 
 import CountBoard from 'organisms/CountBoard';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
+import FirmOpenWorkList from 'organisms/FirmOpenWorkList';
 import SettingList from 'organisms/SettingList';
 import { storiesOf } from '@storybook/react-native';
 
@@ -23,7 +24,8 @@ storiesOf('Organisms Components', module)
     <View style={{ width: '90%', aspectRatio: 6 }}>
       <CountBoard
         data={CntBoardData}
-        onClick={i => {
+        onClick={i =>
+        {
           Alert.alert(`action: click${i}`);
         }}
       />
@@ -32,7 +34,39 @@ storiesOf('Organisms Components', module)
   .add('FirmHarmCaseHeader', () => <FirmHarmCaseHeader setMyClinetEvaluList={() => {}}
     onClickNewestEvaluList={() => {}}
     setVisibleCreateModal={(flag: boolean) => {}}
-    searchFilterCliEvalu={() => {}}/>);
+    searchFilterCliEvalu={() => {}}/>
+  )
+  .add('Firm OpenWork List', () => React.createElement(() =>
+  {
+    const { setUser } = useLoginProvider();
+    const user: User =
+    {
+      uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
+      phoneNumber: '01052023337', photoURL: '', providerId: ''
+    };
+
+    React.useEffect(() =>
+    {
+      setUser(user);
+    }, []);
+
+    return (
+      <FirmOpenWorkList
+        isListEmpty={boolean('isEmpty', false)}
+        list={[{ workState: text('Status1(OPEN, SELECTED)', 'OPEN'), applied: false, guarTimeExpire: 30, equipment: '거미 크레인', phoneNumber: '0102222222', startDate: '2020-02-17', endDate: '2020-03-17', period: 2, sidoAddr: '서울 중량구', sigunguAddr: '면목동', detailRequest: '첫날 현장 출입증을 발급 받아야 합니다' },
+          { workState: text('Status2(OPEN, SELECTED)', 'SELECTED'), applied: false, guarTimeExpire: 30, equipment: '카고 크레인', phoneNumber: '0102222222', startDate: '2020-02-17', endDate: '2020-03-17', period: 2, sidoAddr: '서울 중량구', sigunguAddr: '면목동', detailRequest: '첫날 현장 출입증을 발급 받아야 합니다' }]}
+        user={user}
+        navigation={{
+          navigate: (path: string, params: object): void =>
+          { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
+          state: {
+            params: (): void => console.log('navigate() called!')
+          }
+        }}
+      />
+    );
+  }))
+;
 
 const DATA = [
   {
@@ -58,7 +92,8 @@ const DATA = [
         iconName: 'ios-cafe',
         switchOn: false,
         text: '이디야 커피',
-        switchAction: () => {
+        switchAction: () =>
+        {
           action('coffeSettingAction');
         }
       },

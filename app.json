@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "장비 콜",
-    "slug": "jangbeecall_native",
+    "slug": "jangbeecall_payment",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
     "sdkVersion": "36.0.0",

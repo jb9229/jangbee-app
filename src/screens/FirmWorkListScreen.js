@@ -12,7 +12,6 @@ import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const dispatchFee = '20000';
 

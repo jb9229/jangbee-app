@@ -11,11 +11,29 @@ import { setupGlobalDecorators } from './global_decorators';
 Promise.all(loadAllAssests).then(() =>
 {
   console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
-});
+}).catch((err) => { console.log(err) });
+// // Stories Dinamic Importing
+// configure(() =>
+// {
+//   initFirebase();
+//   loadStories();
+// }, module);
 
 /**
  * 전역 데코레이터 추가 설정
  */
+// function wait (msecs)
+// {
+//   const start = new Date().getTime();
+//   let cur = start;
+
+//   while (cur - start < msecs)
+//   {
+//     cur = new Date().getTime();
+//   }
+// }
+
+// wait(1000);
 setupGlobalDecorators();
 
 const initFirebase = () =>
@@ -28,13 +46,22 @@ const initFirebase = () =>
   firebase.auth().languageCode = 'ko';
 };
 
+// async () =>
+// {
+//   await Promise.all(loadAllAssests).then(() =>
+//   {
+//     console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
+//   }).catch((err) => { console.log(err) });
+// };
+
 // Stories Dinamic Importing
 configure(() =>
 {
+  console.log('end loadAllAssets');
   initFirebase();
   loadStories();
 }, module);
-
+console.log('start root ui');
 // Refer to https://github.com/storybookjs/storybook/tree/master/app/react-native#start-command-parameters
 // To find allowed options for getStorybookUI
 const StorybookUIRoot = getStorybookUI({});

@@ -1,13 +1,11 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as kakaoconfig from '../../kakao-config';
 import * as obconfig from '../../openbank-config';
 import * as url from 'constants/Url';
 
 import {
-  handleBadReqJsonResponse,
   handleJBServerJsonResponse,
-  handleJsonResponse,
   handleNoContentResponse,
-  handleOpenBankJsonResponse,
   handleTextResponse
 } from 'utils/Fetch-utils';
 
@@ -25,7 +23,7 @@ export function deleteFirmAccount (accountId)
 /** ******************** Jangbee Sever Firm  Api List ************************** */
 export function getEquipList ()
 {
-  return fetch(url.JBSERVER_EQUILIST).then(handleJsonResponse);
+  return fetch(url.JBSERVER_EQUILIST).then(handleJBServerJsonResponse);
 }
 
 export function createFirm (newFirm)
@@ -71,7 +69,7 @@ export function getNearFirmList (page, equipment, sLongitude, sLatitude)
     )}&page=${encodeURIComponent(paramData.page)}&size=${encodeURIComponent(
       paramData.size
     )}`
-  ).then(handleJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -106,7 +104,7 @@ export function getLocalFirmList (page, equipment, searSido, searSigungu)
     )}${sigunguQuery}&page=${encodeURIComponent(
       paramData.page
     )}&size=${encodeURIComponent(paramData.size)}`
-  ).then(handleJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 export function updateFirm (newFirmData)
@@ -118,7 +116,7 @@ export function updateFirm (newFirmData)
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(newFirmData)
-  }).then(handleJsonResponse);
+  }).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -127,7 +125,7 @@ export function updateFirm (newFirmData)
 export function getFirmLocalData (equipment)
 {
   const param = encodeURIComponent(equipment);
-  return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJsonResponse);
+  return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJBServerJsonResponse);
 }
 
 export function uploadImage (uri)
@@ -194,7 +192,7 @@ export function getAddrByGpspoint (longitude, latitude)
         Authorization: `KakaoAK ${kakaoconfig.API_KEY}`
       }
     }
-  ).then(handleBadReqJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 /** ******************** Jangbee Sever Ad  Api List ************************** */
@@ -244,7 +242,7 @@ export function getAd (location, equiTarget, sidoTarget, gugunTarget)
     paramUrl += `&gugunTarget=${encodeURIComponent(gugunTarget)}`;
   }
 
-  return fetch(`${url.JBSERVER_AD}${paramUrl}`).then(handleJsonResponse);
+  return fetch(`${url.JBSERVER_AD}${paramUrl}`).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -256,12 +254,12 @@ export function getJBAdList (accountId)
 
   const paramUrl = `?accountId=${paramAccountId}`;
 
-  return fetch(`${url.JBSERVER_ADLIST}${paramUrl}`).then(handleJsonResponse);
+  return fetch(`${url.JBSERVER_ADLIST}${paramUrl}`).then(handleJBServerJsonResponse);
 }
 
 export function getBookedAdType ()
 {
-  return fetch(`${url.JBSERVER_ADBOOKED}`).then(handleJsonResponse);
+  return fetch(`${url.JBSERVER_ADBOOKED}`).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -274,7 +272,7 @@ export function existEuipTarketAd (equipment)
   const paramEquipment = encodeURIComponent(equipment);
   return fetch(
     `${url.JBSERVER_ADTARGET_EQUIPMENT}?equipment=${paramEquipment}`
-  ).then(handleJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -291,7 +289,7 @@ export function existLocalTarketAd (equipment, sido, gungu)
     `${
       url.JBSERVER_ADTARGET_LOCAL
     }?equipment=${paramEquipment}&sido=${paramSido}&gungu=${paramGungu}`
-  ).then(handleJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -362,6 +360,43 @@ export function requestAdPayment (price)
       headers: {
         // Authorization: `KakaoAK ${kakaoconfig.API_KEY}`,
         Authorization: 'KakaoAK 9366738358634bcb690992c374583819',
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      },
+      body: searchParams
+    }
+  ).then(handleJBServerJsonResponse);
+}
+
+/**
+ *
+ * @param {*} price AD Price
+ */
+export function requestWorkPayment (authKey: string, uid: string, orderId: string): Promise<any>
+{
+  const newAd = {
+    cid: 'TCSUBSCRIP',
+    partner_order_id: uid,
+    partner_user_id: orderId,
+    item_name: '일감매칭비',
+    quantity: '1',
+    total_amount: 20000,
+    tax_free_amount: 0,
+    approval_url: url.KAKAO_PAYMENT_APPROVALURL,
+    fail_url: url.KAKAO_PAYMENT_FAILURL,
+    cancel_url: url.KAKAO_PAYMENT_CANCELURL
+  };
+
+  const searchParams = Object.keys(newAd).map((key) =>
+  {
+    return encodeURIComponent(key) + '=' + encodeURIComponent(newAd[key]);
+  }).join('&');
+
+  return fetch(`${url.KAKAO_PAYMENT_API}`,
+    {
+      method: 'POST',
+      headers: {
+        // Authorization: `KakaoAK ${kakaoconfig.API_KEY}`,
+        Authorization: authKey,
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
       },
       body: searchParams
@@ -716,7 +751,7 @@ export function getOBAccList (
         Authorization: getAccessToken(accessTokenInfo)
       }
     }
-  ).then(handleOpenBankJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 export function getOBAccBalance (accessTokenInfo, fintechUseNum)
@@ -732,7 +767,7 @@ export function getOBAccBalance (accessTokenInfo, fintechUseNum)
         Authorization: getAccessToken(accessTokenInfo)
       }
     }
-  ).then(handleOpenBankJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 /**
@@ -763,7 +798,7 @@ export function refreshOpenBankAuthToken (refreshToken)
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     }
-  ).then(handleOpenBankJsonResponse);
+  ).then(handleJBServerJsonResponse);
 }
 
 export function transferWithdraw (
@@ -787,7 +822,7 @@ export function transferWithdraw (
       'Content-Type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify(postData)
-  }).then(handleOpenBankJsonResponse);
+  }).then(handleJBServerJsonResponse);
 }
 
 export function transferDeposit (
@@ -819,5 +854,5 @@ export function transferDeposit (
       'Content-Type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify(postData)
-  }).then(handleOpenBankJsonResponse);
+  }).then(handleJBServerJsonResponse);
 }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { AdType } from 'src/container/ad/types';
 import { Alert } from 'react-native';
 import Card from 'molecules/CardUI';
 import EditText from 'molecules/EditText';
@@ -15,14 +16,6 @@ import SelectText from 'src/components/molecules/SelectText';
 import getString from 'src/STRING';
 import styled from 'styled-components/native';
 import { useAdCreateProvider } from 'src/contexts/AdCreateProvider';
-
-export enum AdType {
-  MAIN_FIRST = 1,
-  MAIN_SECONDE = 2,
-  MAIN_THIRD = 3,
-  SEARCH_EQUIPMENT_FIRST = 11,
-  SEARCH_REGION_FIRST = 21,
-}
 
 export const getAdTypeStr = (type: AdType): string =>
 {

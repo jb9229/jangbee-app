@@ -61,9 +61,13 @@ export const light = {
   ColorBtnDefault: '#444444',
   ColorBtnStyle: 'white',
   ColorBorderInput: '#000000',
+
+  ColorBGDarkGray: '#3E3936',
   ColorBGGray: '#d7d7d7',
+  ColorBGLightGray: '#E3DCDC',
   background: colors.lightBackground,
   backgroundDark: colors.dodgerBlue,
+
   btnPrimary: colors.skyBlue,
   btnPrimaryFont: 'white',
   btnPrimaryLight: colors.whiteGray,
@@ -91,7 +95,11 @@ export const dark = {
   ColorBtnDefault: '#444444',
   ColorBtnStyle: 'white',
   ColorBorderInput: '#000000',
+
+  ColorBGDarkGray: '#F7AE43',
   ColorBGGray: '#d7d7d7',
+  ColorBGLightGray: '#E3DCDC',
+
   background: colors.darkBackground,
   backgroundDark: colors.dodgerBlue,
   btnPrimary: colors.skyBlue,

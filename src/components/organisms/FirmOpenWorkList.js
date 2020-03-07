@@ -12,7 +12,8 @@ const CommWrap = Styled.View`
   flexDirection: row;
 `;
 
-export default class FirmWorkingList extends React.PureComponent {
+export default class FirmWorkingList extends React.PureComponent
+{
   /**
    * 리스트 아이템 렌더링 함수
    */
@@ -25,7 +26,8 @@ export default class FirmWorkingList extends React.PureComponent {
     />
   );
 
-  renderCommand = item => {
+  renderCommand = item =>
+  {
     const {
       applyWork,
       applyFirmWork,
@@ -34,7 +36,8 @@ export default class FirmWorkingList extends React.PureComponent {
       accountId
     } = this.props;
 
-    if (item.firmRegister && item.accountId === accountId) {
+    if (item.firmRegister && item.accountId === accountId)
+    {
       return (
         <WorkCommWrap>
           <WorkCommText text="내가올린 일감" />
@@ -55,18 +58,18 @@ export default class FirmWorkingList extends React.PureComponent {
           !item.applied &&
           item.firmRegister &&
           !item.guarTimeExpire && (
-            <JBButton
-              title="차주일감 지원하기(선착순 바로매칭)"
-              onPress={() => applyFirmWork(item)}
-              size="small"
-            />
-          )}
+          <JBButton
+            title="차주일감 지원하기(선착순 바로매칭)"
+            onPress={() => applyFirmWork(item)}
+            size="small"
+          />
+        )}
         {item.workState === 'OPEN' &&
           !item.applied &&
           item.firmRegister &&
           item.guarTimeExpire && (
-            <WorkCommText text="차주일감 매칭시간 만료됨" />
-          )}
+          <WorkCommText text="차주일감 매칭시간 만료됨" />
+        )}
         {item.workState === 'OPEN' && item.applied && (
           <WorkCommText text="지원중.." />
         )}
@@ -90,14 +93,17 @@ export default class FirmWorkingList extends React.PureComponent {
     );
   };
 
-  render() {
-    const { list, isListEmpty, handleRefresh, refreshing } = this.props;
+  render ()
+  {
+    const { list, handleRefresh, refreshing } = this.props;
 
-    if (isListEmpty === undefined) {
+    if (!list)
+    {
       return <JBActIndicator title="정보를 불러오는 중.." size={35} />;
     }
 
-    if (isListEmpty) {
+    if (list.length === 0)
+    {
       return (
         <JBEmptyView
           title="현재 일감 리스트가 비어 있습니다,"

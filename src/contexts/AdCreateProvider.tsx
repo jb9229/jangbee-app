@@ -3,12 +3,11 @@ import * as api from 'src/api/api';
 import * as imageManager from 'common/ImageManager';
 import * as yup from 'yup';
 
+import { AdType, SubscriptionReadyResponse } from 'src/container/ad/types';
 import { CreateAdDto, CreateAdDtoError } from '../types/ad';
 
-import { AdType } from 'src/components/templates/CreateAdLayout';
 import { DefaultNavigationProps } from 'src/types';
 import { JBSERVER_ADBOOKED } from 'constants/Url';
-import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import getString from 'src/STRING';
@@ -320,7 +319,6 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   const [bookedAdListResponse, refetch] = useAxios(JBSERVER_ADBOOKED);
 
   let bookedAdTypeList = new Array<number>();
-  console.log(bookedAdListResponse);
   if (bookedAdListResponse.data) { bookedAdTypeList = bookedAdListResponse.data };
   const bookedAdLoading = bookedAdListResponse.loading;
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { LoginProvider } from 'src/contexts/LoginProvider';
+import { LoginProvider } from 'src/contexts/LoginProvider.tsx';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import { addDecorator } from '@storybook/react-native';
 // import { withKnobs } from '@storybook/addon-ondevice-knobs';
