@@ -4,6 +4,7 @@ import * as url from 'constants/Url';
 
 import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
+import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import useAxios from 'axios-hooks';
@@ -26,7 +27,7 @@ interface Props {
 
 const FirmWorkProvider = (props: Props): React.ReactElement =>
 {
-  const { user, firm, openWorkPaymentModal } = useLoginProvider();
+  const { user, firm, paymentInfo, openWorkPaymentModal } = useLoginProvider();
   const [openWorkList, setOpenWorkList] = React.useState([]);
 
   // Server Data State
@@ -74,46 +75,60 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
   const actions = {
     confirmApplyWork: (workId): void =>
     {
-      Alert.alert(
-        '해당 날짜와 장소에 배차 가능하십니까?',
-        '2019.12월 중순까지 [무료 일감수락쿠폰]을 선택해서 지원해 보세요\n\n지원 후, 장비사용 고객의 선택을 기다려야 합니다\n' +
-        '\n※ 베타버전에도 정식서비스와 똑같이 사용해 볼수 있게, 계좌등록과정을 빼지 않았습니다',
-        [
-          { text: '취소' },
-          { text: '지원하기', onPress: (): void => openWorkPaymentModal() }
-        ]
-      );
+      if (paymentInfo.sid)
+      {
+        Alert.alert(
+          '해당 날짜와 장소에 배차 가능하십니까?',
+          '지원 후, 장비사용고객의 선택알람을 기다려 주세요\n',
+          [
+            { text: '취소' },
+            { text: '지원하기', onPress: (): void => applyWork(workId, user, openWorkListRequest) }
+          ]
+        );
+      }
+      else
+      {
+        Alert.alert(
+          '해당 날짜와 장소에 배차 가능하십니까?',
+          '지원 후, 장비사용고객의 선택알람을 기다려 주세요\n' +
+          '한번 결재정보를 등록하면 앞으로 보다 신속하게 지원 가능합니다(매칭비 2만원)',
+          [
+            { text: '취소' },
+            { text: '우선 지원하기', onPress: (): void => applyWork(workId, user, openWorkListRequest) },
+            { text: '결재정보 등록해놓기', onPress: (): void => openWorkPaymentModal() }
+          ]
+        );
+      }
     },
-    applyWork: (workId): void =>
-    {
-      const { user } = this.props;
-
-      const applyData = {
-        workId,
-        accountId: user.uid
-      };
-
-      api
-        .applyWork(applyData)
-        .then(resBody =>
-        {
-          if (resBody)
-          {
-            this.setOpenWorkListData();
-          }
-        })
-        .catch(error =>
-        {
-          noticeUserError('FimWorkProvider(applywork call api error)', 'Please try again', error.message);
-        });
-    },
-    refetchOpenWorkList (): void { console.log('refetchOpenWorkList'); openWorkPaymentModal() }
+    refetchOpenWorkList (): void { console.log('refetchOpenWorkList'); openWorkListRequest() }
   };
 
   // UI Component
   return (
     <Provider value={{ ...states, ...actions }}>{props.children}</Provider>
   );
+};
+
+const applyWork = (workId: string, user: User, openWorkListRequest: any): void =>
+{
+  const applyData = {
+    workId,
+    accountId: user.uid
+  };
+
+  api
+    .applyWork(applyData)
+    .then(resBody =>
+    {
+      if (resBody)
+      {
+        openWorkListRequest();
+      }
+    })
+    .catch(error =>
+    {
+      noticeUserError('FimWorkProvider(applywork call api error)', 'Please try again', error.message);
+    });
 };
 
 export { useCtx as useFirmWorkProvider, FirmWorkProvider };

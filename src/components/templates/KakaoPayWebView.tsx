@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as React from 'react';
+import * as api from 'api/api';
 
-import { Linking, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
-import { WebViewErrorEvent, WebViewHttpErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 
 import SendIntentAndroid from 'react-native-send-intent';
+import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const Container = styled.View`
 `;
@@ -18,7 +20,7 @@ const Contents = styled.View`
   justify-content: center;
 `;
 
-export class KakaoPaymentInfo
+export class KakaoPaymentReadyInfo
 {
   constructor (authKey: string, url: string, tid: string, uid: string, orderId: string)
   {
@@ -39,7 +41,7 @@ export class KakaoPaymentInfo
 }
 
 interface Props {
-  paymentInfo: KakaoPaymentInfo;
+  paymentInfo: KakaoPaymentReadyInfo;
   visible: boolean;
   close: () => void;
 }
@@ -47,6 +49,7 @@ interface Props {
 const KakaoPayWebView: React.FC<Props> = (props) =>
 {
   let webView;
+  const { setPaymentSubscription } = useLoginProvider();
 
   return (
     <Container>
@@ -66,10 +69,10 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
             source={{
               uri: props.paymentInfo ? props.paymentInfo.nextRedirectMobileUrl : ''
             }}
-            onShouldStartLoadWithRequest={(e) => handleShouldStartLoadWithRequest(e, webView)}
+            onShouldStartLoadWithRequest={(e): void => handleShouldStartLoadWithRequest(e, webView)}
             onNavigationStateChange={handleNavigationStateChange}
-            onLoadStart={() => {}}
-            onLoadEnd={() => {}}
+            onLoadStart={(): void => {}}
+            onLoadEnd={(): void => {}}
             style={{
               width: 380,
               height: 600,
@@ -77,22 +80,11 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
               marginLeft: 5,
               marginRight: 5
             }}
-            onMessage={(event): void => receiveWebViewMSG(webView, event.nativeEvent.data, props.paymentInfo, props.close)}
+            onMessage={(event): void => receiveWebViewMSG(webView, event.nativeEvent.data, props.paymentInfo, setPaymentSubscription, props.close)}
             onError={(err: WebViewErrorEvent): void =>
             {
               console.log('### onError ###');
               console.log(err);
-            }
-            }
-            onHttpError={(syntheticEvent: WebViewHttpErrorEvent): void =>
-            {
-              const { nativeEvent } = syntheticEvent;
-              console.log('### onHttpError ###');
-              console.log(nativeEvent);
-              console.warn(
-                'WebView received error status code: ',
-                nativeEvent.statusCode
-              );
             }}
           />
         </Contents>
@@ -155,7 +147,8 @@ const handleNavigationStateChange = (evt: WebViewNavigation): void =>
  * 웹페이지 메세지 처리 함수
  * @param {string} webViewMSG Webview에서 전달된 메세지
  */
-const receiveWebViewMSG = (webView: any, webViewMSG: any, paymentInfo: KakaoPaymentInfo, close: () => void): void =>
+const receiveWebViewMSG = (webView: any, webViewMSG: any, paymentInfo: KakaoPaymentReadyInfo,
+  setPaymentSubscription: (sid: string) => void, close: () => void): void =>
 {
   const webData = JSON.parse(webViewMSG);
 
@@ -166,12 +159,34 @@ const receiveWebViewMSG = (webView: any, webViewMSG: any, paymentInfo: KakaoPaym
   if (webData.type === 'ASK_WEBVIEWCLOSE')
   {
     close();
+    return;
   }
 
-  // 웹뷰 종료 요청
+  // 결제 최종 승인요청
   if (webData.type === 'ASK_APPROVAL_INFO')
   {
-    webView.postMessage(JSON.stringify(paymentInfo));
+    api
+      .requestWorkPaymentApproval({
+        ...paymentInfo, pgToken: webData.data.pg_token, partnerOrderId: paymentInfo.partner_order_id,
+        partnerUserId: paymentInfo.partner_user_id
+      })
+      .then((result) =>
+      {
+        console.log(result);
+        if (result && result.sid)
+        {
+          setPaymentSubscription(result.sid);
+          close();
+          Alert.alert('결제등록 완료', '일감매칭 결제 정보가 등록되었습니다, 일감지원을 완료해 주세요');
+        }
+        else
+        {
+          Alert.alert('결제등록 실패', '다시 일감매칭 결제정보를 등록해 주세요');
+          close();
+        }
+      });
+
+    return;
   }
 
   if (webView)

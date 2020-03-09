@@ -1,13 +1,14 @@
 import * as React from 'react';
 import * as api from 'api/api';
 
-import KakaoPayWebView, { KakaoPaymentInfo } from 'src/components/templates/KakaoPayWebView';
+import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
 
 import { DefaultNavigationProps } from 'src/types';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
+import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
 
 export class Firm
 {
@@ -38,8 +39,16 @@ interface Context {
   navigation: DefaultNavigationProps;
   user: User;
   firm: Firm;
+  paymentInfo: KakaoPaymentInfo;
   setUser: (user: User) => void;
   setFirm: (firm: Firm) => void;
+  openWorkPaymentModal: () => void;
+  setPaymentSubscription: (sid: string) => void;
+}
+
+class KakaoPaymentInfo
+{
+  sid?: string;
 }
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -53,18 +62,31 @@ const LoginProvider = (props: Props): React.ReactElement =>
 {
   const [user, setUser] = React.useState<User | undefined>();
   const [firm, setFirm] = React.useState<Firm | undefined>();
+  const [paymentInfo] = React.useState<KakaoPaymentInfo>(new KakaoPaymentInfo());
   const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(false);
-  const [paymentInfo, setPaymentInfo] = React.useState<KakaoPaymentInfo>();
+  const [paymentReadyInfo, setPaymentReadyInfo] = React.useState<KakaoPaymentReadyInfo>();
 
   const states = {
     navigation: props.navigation,
     user,
-    firm
+    firm,
+    paymentInfo
   };
 
   const actions = {
     setUser,
     setFirm,
+    setPaymentSubscription: (sid: string): void =>
+    {
+      updatePaymentSubscription(user.uid, sid)
+        .then((result) =>
+        {
+          if (result)
+          {
+            paymentInfo.sid = sid;
+          }
+        });
+    },
     openWorkPaymentModal: (): void =>
     {
       const authKey = 'KakaoAK 9366738358634bcb690992c374583819';
@@ -76,9 +98,10 @@ const LoginProvider = (props: Props): React.ReactElement =>
           const result: SubscriptionReadyResponse = response;
           if (result && result.next_redirect_mobile_url)
           {
-            const paymentInfo = new KakaoPaymentInfo(authKey, result.next_redirect_mobile_url, result.tid, user.uid, orderId);
-            paymentInfo.cid = 'TCSUBSCRIP';
-            setPaymentInfo(paymentInfo);
+            const paymentReadyInfo = new KakaoPaymentReadyInfo(authKey,
+              result.next_redirect_mobile_url, result.tid, user.uid, orderId);
+            paymentReadyInfo.cid = 'TCSUBSCRIP';
+            setPaymentReadyInfo(paymentReadyInfo);
             setVisiblePaymentModal(true);
           }
         })
@@ -94,7 +117,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
       {props.children}
       <KakaoPayWebView
         visible={visiblePaymentModal}
-        paymentInfo={paymentInfo}
+        paymentInfo={paymentReadyInfo}
         close={(): void => setVisiblePaymentModal(false)}
       />
     </Provider>

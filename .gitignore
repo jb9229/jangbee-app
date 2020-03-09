@@ -48,3 +48,4 @@ android/app/.project
 android/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java
 ios/----.xcodeproj/project.pbxproj
 *.iml
+android/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java

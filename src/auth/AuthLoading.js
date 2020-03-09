@@ -4,7 +4,6 @@ import React from 'react';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import { getUserInfo } from 'utils/FirebaseUtils';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,12 +44,8 @@ class AuthLoading extends React.Component
           }
 
           const {
-            userType,
-            obAccessToken,
-            obRefreshToken,
-            obAccTokenExpDate,
-            obAccTokenDiscDate,
-            obUserSeqNo
+            userType
+
           } = userInfo;
 
           if (!userType)

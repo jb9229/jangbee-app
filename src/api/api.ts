@@ -375,8 +375,8 @@ export function requestWorkPayment (authKey: string, uid: string, orderId: strin
 {
   const newAd = {
     cid: 'TCSUBSCRIP',
-    partner_order_id: uid,
-    partner_user_id: orderId,
+    partner_user_id: uid,
+    partner_order_id: orderId,
     item_name: '일감매칭비',
     quantity: '1',
     total_amount: 20000,
@@ -400,6 +400,24 @@ export function requestWorkPayment (authKey: string, uid: string, orderId: strin
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
       },
       body: searchParams
+    }
+  ).then(handleJBServerJsonResponse);
+}
+
+/**
+ *
+ * @param {*} price AD Price
+ */
+export function requestWorkPaymentApproval (params): Promise<any>
+{
+  return fetch(`${url.JBSERVER_PAYMENT_APPROVAL}`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
     }
   ).then(handleJBServerJsonResponse);
 }
