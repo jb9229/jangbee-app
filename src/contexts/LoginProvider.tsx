@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as api from 'api/api';
 
+import { DefaultNavigationProps, UserProfile } from 'src/types';
 import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
 
-import { DefaultNavigationProps } from 'src/types';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
@@ -38,10 +38,12 @@ export class Firm
 interface Context {
   navigation: DefaultNavigationProps;
   user: User;
+  userProfile: UserProfile;
   firm: Firm;
   paymentInfo: KakaoPaymentInfo;
   setUser: (user: User) => void;
   setFirm: (firm: Firm) => void;
+  setUserProfile: (p: UserProfile) => void;
   openWorkPaymentModal: () => void;
   setPaymentSubscription: (sid: string) => void;
 }
@@ -61,6 +63,7 @@ interface Props {
 const LoginProvider = (props: Props): React.ReactElement =>
 {
   const [user, setUser] = React.useState<User | undefined>();
+  const [userProfile, setUserProfile] = React.useState<UserProfile>();
   const [firm, setFirm] = React.useState<Firm | undefined>();
   const [paymentInfo] = React.useState<KakaoPaymentInfo>(new KakaoPaymentInfo());
   const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(false);
@@ -69,6 +72,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
   const states = {
     navigation: props.navigation,
     user,
+    userProfile,
     firm,
     paymentInfo
   };
@@ -76,6 +80,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
   const actions = {
     setUser,
     setFirm,
+    setUserProfile,
     setPaymentSubscription: (sid: string): void =>
     {
       updatePaymentSubscription(user.uid, sid)

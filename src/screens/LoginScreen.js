@@ -15,7 +15,6 @@ import { notifyError } from 'common/ErrorNotice';
 import registerForPushNotificationsAsync from 'common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 import { validate } from 'utils/Validation';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
