@@ -16,14 +16,12 @@ const CommWrap = Styled.View`
 
 interface Props {
   list: Array<object>;
-  handleRefresh: () => void;
-  refreshing: boolean;
 }
 
 const FirmWorkingList: React.FC<Props> = (props) =>
 {
   const { user } = useLoginProvider();
-  const { refetchOpenWorkList, confirmApplyWork } = useFirmWorkProvider();
+  const { refreshing, refetchOpenWorkList, applyWork } = useFirmWorkProvider();
 
   if (!props.list)
   {
@@ -48,19 +46,19 @@ const FirmWorkingList: React.FC<Props> = (props) =>
         (
           <WorkItem
             item={item}
-            renderCommand={(): React.ReactElement => renderCommand(item, user, confirmApplyWork)}
+            renderCommand={(): React.ReactElement => renderCommand(item, user, applyWork)}
             hideAddress
             cardColor="white"
           />
         )}
       keyExtractor={(item, index) => index.toString()}
-      onRefresh={props.handleRefresh}
-      refreshing={props.refreshing}
+      onRefresh={refetchOpenWorkList}
+      refreshing={refreshing}
     />
   );
 };
 
-const renderCommand = (item, user, confirmApplyWork): React.ReactElement =>
+const renderCommand = (item, user, applyWork, acceptWork): React.ReactElement =>
 {
   if (user && item.firmRegister && item.accountId === user.uid)
   {
@@ -76,7 +74,7 @@ const renderCommand = (item, user, confirmApplyWork): React.ReactElement =>
       {item.workState === 'OPEN' && !item.applied && !item.firmRegister && (
         <JBButton
           title="지원하기"
-          onPress={() => confirmApplyWork(item.id)}
+          onPress={(): void => applyWork(item.id)}
           size="small"
         />
       )}
@@ -86,7 +84,7 @@ const renderCommand = (item, user, confirmApplyWork): React.ReactElement =>
         !item.guarTimeExpire && (
         <JBButton
           title="차주일감 지원하기(선착순 바로매칭)"
-          onPress={() => applyFirmWork(item)}
+          onPress={(): void => applyFirmWork(item)}
           size="small"
         />
       )}

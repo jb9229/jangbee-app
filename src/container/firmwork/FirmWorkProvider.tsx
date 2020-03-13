@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as api from 'api/api';
 import * as url from 'constants/Url';
 
+import { acceptWorkRequest, applyWork } from 'src/container/firmwork/actions';
+
 import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
 import { User } from 'firebase';
@@ -14,8 +16,10 @@ interface Context {
   navigation: DefaultNavigationProps;
   openWorkList: Array<object>;
   matchedWorkList: Array<object>;
-  confirmApplyWork: (workId: string) => void;
+  refreshing: boolean;
+  applyWork: (workId: string) => void;
   refetchOpenWorkList: () => void;
+  setRefreshing: () => boolean;
 }
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -27,8 +31,8 @@ interface Props {
 
 const FirmWorkProvider = (props: Props): React.ReactElement =>
 {
-  const { user, firm, paymentInfo, openWorkPaymentModal } = useLoginProvider();
-  const [openWorkList, setOpenWorkList] = React.useState([]);
+  const { user, firm, paymentInfo, openWorkPaymentModal, openCouponModal } = useLoginProvider();
+  const [refreshing, setRefreshing] = React.useState(false);
 
   // Server Data State
   const [openWorkListResponse, openWorkListRequest] = useAxios(`${url.JBSERVER_WORK_FIRM_OPEN}?equipment=${firm?.equiListStr}
@@ -68,12 +72,14 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
   const states = {
     navigation: props.navigation,
     openWorkList: openWorkListResponse && openWorkListResponse.data ? openWorkListResponse.data : [],
+    refreshing,
     matchedWorkList: []
   };
 
   // Init Actions
   const actions = {
-    confirmApplyWork: (workId): void =>
+    setRefreshing,
+    applyWork: (workId: string): void =>
     {
       if (paymentInfo.sid)
       {
@@ -94,41 +100,38 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
           '한번 결재정보를 등록하면 앞으로 보다 신속하게 지원 가능합니다(매칭비 2만원)',
           [
             { text: '취소' },
-            { text: '우선 지원하기', onPress: (): void => applyWork(workId, user, openWorkListRequest) },
-            { text: '결재정보 등록해놓기', onPress: (): void => openWorkPaymentModal() }
+            { text: '지원하기', onPress: (): void => applyWork(workId, user, openWorkListRequest) },
+            { text: '결재등록', onPress: (): void => openWorkPaymentModal(0) }
           ]
         );
       }
     },
-    refetchOpenWorkList (): void { console.log('refetchOpenWorkList'); openWorkListRequest() }
+    acceptWork: (): void =>
+    {
+      if (!paymentInfo || !paymentInfo.sid) { openWorkPaymentModal(20000); return }
+      Alert.alert(
+        '매칭비 자동이체 후, 매칭이 완료 됩니다.',
+        '매칭 후, 매칭된 일감(오른쪽 상단 메뉴)화면에서 꼭! [전화걸기]통해 고객과 최종 협의하세요.',
+        [
+          { text: '포기하기', onPress: (): void => this.abandonWork(workId) },
+          {
+            text: '쿠폰사용하기',
+            onPress: (): void => { openCouponModal() }
+          },
+          {
+            text: '결제하기',
+            onPress: (): void => { acceptWorkRequest(user, false) }
+          }
+        ]
+      );
+    },
+    refetchOpenWorkList (): void { openWorkListRequest() }
   };
 
   // UI Component
   return (
     <Provider value={{ ...states, ...actions }}>{props.children}</Provider>
   );
-};
-
-const applyWork = (workId: string, user: User, openWorkListRequest: any): void =>
-{
-  const applyData = {
-    workId,
-    accountId: user.uid
-  };
-
-  api
-    .applyWork(applyData)
-    .then(resBody =>
-    {
-      if (resBody)
-      {
-        openWorkListRequest();
-      }
-    })
-    .catch(error =>
-    {
-      noticeUserError('FimWorkProvider(applywork call api error)', 'Please try again', error.message);
-    });
 };
 
 export { useCtx as useFirmWorkProvider, FirmWorkProvider };

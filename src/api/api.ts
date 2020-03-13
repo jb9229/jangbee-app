@@ -371,7 +371,7 @@ export function requestAdPayment (price)
  *
  * @param {*} price AD Price
  */
-export function requestWorkPayment (authKey: string, uid: string, orderId: string): Promise<any>
+export function requestWorkPayment (authKey: string, uid: string, orderId: string, price: number): Promise<any>
 {
   const newAd = {
     cid: 'TCSUBSCRIP',
@@ -379,7 +379,7 @@ export function requestWorkPayment (authKey: string, uid: string, orderId: strin
     partner_order_id: orderId,
     item_name: '일감매칭비',
     quantity: '1',
-    total_amount: 20000,
+    total_amount: price,
     tax_free_amount: 0,
     approval_url: url.KAKAO_PAYMENT_APPROVALURL,
     fail_url: url.KAKAO_PAYMENT_FAILURL,

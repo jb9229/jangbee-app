@@ -13,7 +13,6 @@ import WorkUpdateModal from 'templates/WorkUpdateModal';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   Container: {
@@ -241,7 +240,7 @@ class ClientWorkListScreen extends React.Component
         }
         refreshing={openWorkListRefreshing}
         isListEmpty={isOpenWorkListEmpty}
-        selectFirm={workId => navigation.navigate('AppliFirmList', { workId })}
+        selectFirm={(workId) => { navigation.navigate('AppliFirmList', { workId }) }}
         cancelSelFirm={this.confirmCancelSelFirm}
         registerWork={() => navigation.navigate('WorkRegister')}
         editWork={work =>

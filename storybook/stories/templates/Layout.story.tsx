@@ -7,6 +7,7 @@ import { boolean, text } from '@storybook/addon-knobs';
 import CreateAd from 'container/ad/create';
 import FirmWorkListScreen from 'container/firmwork/list';
 import { User } from 'firebase';
+import WorkListScreen from '../../../src/screens/WorkListScreen';
 import WorkRegisterScreen from '../../../src/screens/WorkRegisterScreen';
 import { storiesOf } from '@storybook/react-native';
 
@@ -90,6 +91,33 @@ storiesOf('Layout Components', module)
         navigation={{
           navigate: (path: string, params: object): void =>
           { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
+          state: {
+            params: (): void => console.log('navigate() called!')
+          }
+        }}
+      />
+    );
+  }))
+  .add('ClientWorkListLayout', () => React.createElement(() =>
+  {
+    const { setUser, setFirm } = useLoginProvider();
+    const user: User =
+    {
+      uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
+      phoneNumber: '01052023337', photoURL: '', providerId: ''
+    };
+
+    React.useEffect(() =>
+    {
+      setUser(user);
+    }, []);
+
+    return (
+      <WorkListScreen
+        user={user}
+        navigation={{
+          navigate: (path: string, params: object): void =>
+          { if (path === 'AppliFirmList') { Alert.alert('Move to Apply Firm List') } },
           state: {
             params: (): void => console.log('navigate() called!')
           }

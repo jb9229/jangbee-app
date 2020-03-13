@@ -41,9 +41,10 @@ const initFirebase = () =>
   if (!firebase.apps.length)
   {
     firebase.initializeApp(firebaseconfig);
-  }
+    firebase.auth().languageCode = 'ko';
 
-  firebase.auth().languageCode = 'ko';
+    console.log('firebase.initialized'); // this is quick enough that it works.
+  }
 };
 
 // async () =>

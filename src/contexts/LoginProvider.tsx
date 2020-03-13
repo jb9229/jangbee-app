@@ -4,6 +4,8 @@ import * as api from 'api/api';
 import { DefaultNavigationProps, UserProfile } from 'src/types';
 import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
 
+import { ApplyWorkCallback } from 'src/components/action';
+import CouponSelectModal from 'src/components/templates/CouponSelectModal';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
@@ -44,8 +46,9 @@ interface Context {
   setUser: (user: User) => void;
   setFirm: (firm: Firm) => void;
   setUserProfile: (p: UserProfile) => void;
-  openWorkPaymentModal: () => void;
+  openWorkPaymentModal: (price: number) => void;
   setPaymentSubscription: (sid: string) => void;
+  openCouponModal: () => void;
 }
 
 class KakaoPaymentInfo
@@ -65,9 +68,13 @@ const LoginProvider = (props: Props): React.ReactElement =>
   const [user, setUser] = React.useState<User | undefined>();
   const [userProfile, setUserProfile] = React.useState<UserProfile>();
   const [firm, setFirm] = React.useState<Firm | undefined>();
+  const [couponModalVisible, setCouponModalVisible] = React.useState<boolean>(false);
   const [paymentInfo] = React.useState<KakaoPaymentInfo>(new KakaoPaymentInfo());
   const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(false);
   const [paymentReadyInfo, setPaymentReadyInfo] = React.useState<KakaoPaymentReadyInfo>();
+
+  // data
+  let callbackAction: ApplyWorkCallback | undefined;
 
   const states = {
     navigation: props.navigation,
@@ -92,12 +99,12 @@ const LoginProvider = (props: Props): React.ReactElement =>
           }
         });
     },
-    openWorkPaymentModal: (): void =>
+    openWorkPaymentModal: (price: number): void =>
     {
       const authKey = 'KakaoAK 9366738358634bcb690992c374583819';
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
       api
-        .requestWorkPayment(authKey, user.uid, orderId)
+        .requestWorkPayment(authKey, user.uid, orderId, price)
         .then((response): void =>
         {
           const result: SubscriptionReadyResponse = response;
@@ -114,6 +121,11 @@ const LoginProvider = (props: Props): React.ReactElement =>
         {
           noticeUserError('Ad Create Provider', '정기결제 요청 실패', err.message);
         });
+    },
+    openCouponModal: (applyWorkCallback?: (user: User, useCoupon: boolean) => void): void =>
+    {
+      if (applyWorkCallback) { callbackAction = new ApplyWorkCallback(applyWorkCallback, user) }
+      setCouponModalVisible(true);
     }
   };
 
@@ -124,6 +136,12 @@ const LoginProvider = (props: Props): React.ReactElement =>
         visible={visiblePaymentModal}
         paymentInfo={paymentReadyInfo}
         close={(): void => setVisiblePaymentModal(false)}
+      />
+      <CouponSelectModal
+        user={user}
+        visible={couponModalVisible}
+        closeModal={(): void => setCouponModalVisible(false)}
+        applyCoupon={(): void => { if (callbackAction) { callbackAction.requestCallback() } }}
       />
     </Provider>
   );

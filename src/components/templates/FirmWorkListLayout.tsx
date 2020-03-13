@@ -38,7 +38,7 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
   const { user } = useLoginProvider();
   const {
     openWorkList, matchedWorkList,
-    confirmApplyWork, setOpenWorkListData
+    setOpenWorkListData
   } = useFirmWorkProvider();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -49,8 +49,6 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
   const renderOpenWorkList = (): React.ReactElement => (
     <FirmOpenWorkList
       list={openWorkList}
-      applyWork={confirmApplyWork}
-      applyFirmWork={() => {}}
       acceptWork={() => {}}
       abandonWork={() => {}}
       accountId={user ? user.uid : undefined}

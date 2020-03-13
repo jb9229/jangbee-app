@@ -142,19 +142,30 @@ FirmSettingStack.navigationOptions = {
 const ClientEvaluStack = createStackNavigator({
   ClientEvalu: {
     screen: FirmHarmCaseContainer,
-    navigationOptions: { header: null }
+    navigationOptions:
+    {
+      header: null,
+      tabBarLabel: '피해사례(악덕)',
+      tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+          focused={focused}
+          name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+        />
+      )
+    }
   }
 });
 
-ClientEvaluStack.navigationOptions = {
-  tabBarLabel: '피해사례(악덕)',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  )
-};
+// const ModalStack = createStackNavigator({
+//   CouponSelectModal: {
+//     screen: CouponSelectModalScreen,
+//     navigationOptions:
+//     {
+//       mode: 'modal',
+//       header: null
+//     }
+//   }
+// });
 
 export default createBottomTabNavigator(
   {
@@ -163,6 +174,7 @@ export default createBottomTabNavigator(
     AdStack,
     ClientEvaluStack,
     FirmSettingStack
+    // ModalStack
   },
   {
     tabBarOptions: {
