@@ -3,10 +3,12 @@ import * as React from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import { boolean, text } from '@storybook/addon-knobs';
 
+import AppliFirmList from 'organisms/AppliFirmList';
 import CountBoard from 'organisms/CountBoard';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmOpenWorkList from 'organisms/FirmOpenWorkList';
 import SettingList from 'organisms/SettingList';
+import { User } from 'firebase';
 import { storiesOf } from '@storybook/react-native';
 
 const SafeZonDecorator = storyFn => (
@@ -64,6 +66,31 @@ storiesOf('Organisms Components', module)
           }
         }}
       />
+    );
+  }))
+  .add('차주선택(고객)', () => React.createElement((): React.ReactElement =>
+  {
+    // const { setUser } = useLoginProvider();
+    // const user: User =
+    // {
+    //   uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
+    //   phoneNumber: '01052023337', photoURL: '', providerId: ''
+    // };
+
+    // React.useEffect(() =>
+    // {
+    //   setUser(user);
+    // }, []);
+
+    const navigation =
+    {
+      navigate: (path: string, params: object): void =>
+      { if (path === 'WorkList') { Alert.alert('배차 요청 성공!', '차주일감 화면에서 확인하세요') } },
+      getParam: (param: string): string => { return '5' }
+    };
+
+    return (
+      <AppliFirmList workId="5" navigation={navigation}/>
     );
   }))
 ;

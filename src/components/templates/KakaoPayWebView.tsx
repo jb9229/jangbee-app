@@ -9,7 +9,6 @@ import SendIntentAndroid from 'react-native-send-intent';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const Container = styled.View`
 `;
@@ -44,12 +43,12 @@ interface Props {
   paymentInfo: KakaoPaymentReadyInfo;
   visible: boolean;
   close: () => void;
+  setPaymentSubscription: (sid: string) => void;
 }
 
 const KakaoPayWebView: React.FC<Props> = (props) =>
 {
   let webView;
-  const { setPaymentSubscription } = useLoginProvider();
 
   return (
     <Container>
@@ -69,7 +68,7 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
             source={{
               uri: props.paymentInfo ? props.paymentInfo.nextRedirectMobileUrl : ''
             }}
-            onShouldStartLoadWithRequest={(e): void => handleShouldStartLoadWithRequest(e, webView)}
+            onShouldStartLoadWithRequest={(e): boolean => handleShouldStartLoadWithRequest(e)}
             onNavigationStateChange={handleNavigationStateChange}
             onLoadStart={(): void => {}}
             onLoadEnd={(): void => {}}
@@ -80,7 +79,7 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
               marginLeft: 5,
               marginRight: 5
             }}
-            onMessage={(event): void => receiveWebViewMSG(webView, event.nativeEvent.data, props.paymentInfo, setPaymentSubscription, props.close)}
+            onMessage={(event): void => receiveWebViewMSG(webView, event.nativeEvent.data, props.paymentInfo, props.setPaymentSubscription, props.close)}
             onError={(err: WebViewErrorEvent): void =>
             {
               console.log('### onError ###');
@@ -96,7 +95,7 @@ const KakaoPayWebView: React.FC<Props> = (props) =>
 /**
  * Webview url 상태변경 이벤트처리 함수(사용자 인증에러 처리, 프로바이더 페이지가 호출되기 전에 에러 처리)
  */
-const handleShouldStartLoadWithRequest = (evt: any, webView): boolean =>
+const handleShouldStartLoadWithRequest = (evt: any): boolean =>
 {
   if (evt.url.startsWith('http://') || evt.url.startsWith('https://') || evt.url.startsWith('about:blank'))
   {
@@ -106,6 +105,7 @@ const handleShouldStartLoadWithRequest = (evt: any, webView): boolean =>
   // webView.goBack();
   if (Platform.OS === 'android')
   {
+    // SendIntentAndroid.openChromeIntent(evt.url)
     SendIntentAndroid.openAppWithUri(evt.url)
       .then(isOpened =>
       {
@@ -119,6 +119,7 @@ const handleShouldStartLoadWithRequest = (evt: any, webView): boolean =>
         console.log('### openAppWithUri error ###');
         console.log(err);
       });
+    // IntentLauncher.startActivityAsync(evt.url);
   }
   else
   {

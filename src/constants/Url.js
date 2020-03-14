@@ -35,7 +35,7 @@ module.exports = {
   JBSERVER_WORK_FIRM_ACCEPT: `${SERVER_URL}works/firm/accept`,
   JBSERVER_WORK_FIRM_ABANDON: `${SERVER_URL}works/firm/abandon`,
   JBSERVER_WORK_APPLICANTS: `${SERVER_URL}works/applicants`,
-  JBSERVER_PAYMENT_APPROVAL: 'http://192.168.0.7:8080/api/v1/payment/approval',
+  JBSERVER_PAYMENT_APPROVAL: `${SERVER_URL}payment/approval`,
   JBSERVER_FIRMWORK_FIRM_APPLY: `${SERVER_URL}firm_works/firm/apply`,
   JBSERVER_COUPON: `${SERVER_URL}coupon`,
   JBSERVER_CASHBACK: `${SERVER_URL}cashback`,

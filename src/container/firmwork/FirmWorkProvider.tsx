@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as api from 'api/api';
 import * as url from 'constants/Url';
 
-import { acceptWorkRequest, applyWork } from 'src/container/firmwork/actions';
+import { abandonWork, acceptWorkRequest, applyWork } from 'src/container/firmwork/actions';
 
 import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
@@ -18,8 +18,9 @@ interface Context {
   matchedWorkList: Array<object>;
   refreshing: boolean;
   applyWork: (workId: string) => void;
+  acceptWork: (workId: string) => void;
+  abandonWork: (workId: string) => void;
   refetchOpenWorkList: () => void;
-  setRefreshing: () => boolean;
 }
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -106,14 +107,29 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         );
       }
     },
-    acceptWork: (): void =>
+    acceptWork: (workId: string): void =>
     {
-      if (!paymentInfo || !paymentInfo.sid) { openWorkPaymentModal(20000); return }
+      if (!paymentInfo || !paymentInfo.sid)
+      {
+        Alert.alert(
+          '자동결제정보 없음 (일감비 2만원)',
+          '\n자동결제등록을 추천합니다 (특히, 선착순 매칭시)',
+          [
+            { text: '포기하기', onPress: (): void => this.abandonWork(workId) },
+            {
+              text: '자동이체 등록해놓기',
+              onPress: (): void => { openWorkPaymentModal(20000) }
+            }
+          ],
+          { cancelable: true }
+        );
+        return;
+      }
       Alert.alert(
         '매칭비 자동이체 후, 매칭이 완료 됩니다.',
         '매칭 후, 매칭된 일감(오른쪽 상단 메뉴)화면에서 꼭! [전화걸기]통해 고객과 최종 협의하세요.',
         [
-          { text: '포기하기', onPress: (): void => this.abandonWork(workId) },
+          { text: '포기하기', onPress: (): void => abandonWork(user, workId, openWorkListRequest) },
           {
             text: '쿠폰사용하기',
             onPress: (): void => { openCouponModal() }
@@ -121,6 +137,19 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
           {
             text: '결제하기',
             onPress: (): void => { acceptWorkRequest(user, false) }
+          }
+        ]
+      );
+    },
+    abandonWork: (workId: string): void =>
+    {
+      Alert.alert(
+        '확인창',
+        '정말 포기 하시겠습니까?',
+        [
+          { text: '포기하기', onPress: (): void => abandonWork(user, workId, openWorkListRequest) },
+          {
+            text: '취소'
           }
         ]
       );

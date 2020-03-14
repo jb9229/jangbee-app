@@ -3,15 +3,18 @@ import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
 import JBEmptyView from 'organisms/JBEmptyView';
 import React from 'react';
-import Styled from 'styled-components/native';
 import WorkCommText from 'molecules/WorkCommTextUI';
 import WorkCommWrap from 'molecules/WorkCommWrapUI';
 import WorkItem from 'organisms/WorkItem';
+import styled from 'styled-components/native';
 import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
 import { useLoginProvider } from 'src/contexts/LoginProvider';
 
-const CommWrap = Styled.View`
+const CommWrap = styled.View`
   flexDirection: row;
+`;
+const OpenWorkList = styled(FlatList)`
+  flex: 1;
 `;
 
 interface Props {
@@ -21,7 +24,7 @@ interface Props {
 const FirmWorkingList: React.FC<Props> = (props) =>
 {
   const { user } = useLoginProvider();
-  const { refreshing, refetchOpenWorkList, applyWork } = useFirmWorkProvider();
+  const { refreshing, refetchOpenWorkList, applyWork, acceptWork, abandonWork } = useFirmWorkProvider();
 
   if (!props.list)
   {
@@ -40,13 +43,13 @@ const FirmWorkingList: React.FC<Props> = (props) =>
   }
 
   return (
-    <FlatList
+    <OpenWorkList
       data={props.list}
       renderItem={({ item }): React.ReactElement =>
         (
           <WorkItem
             item={item}
-            renderCommand={(): React.ReactElement => renderCommand(item, user, applyWork)}
+            renderCommand={(): React.ReactElement => renderCommand(item, user, applyWork, acceptWork, abandonWork)}
             hideAddress
             cardColor="white"
           />
@@ -58,7 +61,7 @@ const FirmWorkingList: React.FC<Props> = (props) =>
   );
 };
 
-const renderCommand = (item, user, applyWork, acceptWork): React.ReactElement =>
+const renderCommand = (item, user, applyWork, acceptWork, abandonWork): React.ReactElement =>
 {
   if (user && item.firmRegister && item.accountId === user.uid)
   {
@@ -101,13 +104,13 @@ const renderCommand = (item, user, applyWork, acceptWork): React.ReactElement =>
         <CommWrap>
           <JBButton
             title="포기하기"
-            onPress={() => abandonWork(item.id)}
+            onPress={(): void => abandonWork(item.id)}
             size="small"
             Secondary
           />
           <JBButton
             title="수락하기"
-            onPress={() => acceptWork(item.id)}
+            onPress={(): void => acceptWork(item.id)}
             size="small"
             Primary
           />

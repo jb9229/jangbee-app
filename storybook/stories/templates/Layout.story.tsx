@@ -19,7 +19,7 @@ const SafeZonDecorator = (storyFn): React.ReactElement => (
 
 storiesOf('Layout Components', module)
   .addDecorator(SafeZonDecorator)
-  .add('Create Ad Layout', () => React.createElement(() =>
+  .add('광고등록', () => React.createElement(() =>
   {
     const { setUser } = useLoginProvider();
     React.useEffect(() =>
@@ -37,7 +37,7 @@ storiesOf('Layout Components', module)
       <CreateAd />
     );
   }))
-  .add('Register Work', () => React.createElement(() =>
+  .add('일감등록', () => React.createElement(() =>
   {
     const { setUser } = useLoginProvider();
     const user: User =
@@ -64,7 +64,7 @@ storiesOf('Layout Components', module)
       />
     );
   }))
-  .add('FirmWorkListLayout', () => React.createElement(() =>
+  .add('차주일감', () => React.createElement(() =>
   {
     const { setUser, setFirm } = useLoginProvider();
     const user: User =
@@ -98,7 +98,7 @@ storiesOf('Layout Components', module)
       />
     );
   }))
-  .add('ClientWorkListLayout', () => React.createElement(() =>
+  .add('고객일감', () => React.createElement(() =>
   {
     const { setUser, setFirm } = useLoginProvider();
     const user: User =
@@ -117,7 +117,7 @@ storiesOf('Layout Components', module)
         user={user}
         navigation={{
           navigate: (path: string, params: object): void =>
-          { if (path === 'AppliFirmList') { Alert.alert('Move to Apply Firm List') } },
+          { if (path === 'AppliFirmList') { Alert.alert('차주선택(고객) 스토리에서 해주세요!') } },
           state: {
             params: (): void => console.log('navigate() called!')
           }

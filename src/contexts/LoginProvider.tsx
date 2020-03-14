@@ -47,7 +47,6 @@ interface Context {
   setFirm: (firm: Firm) => void;
   setUserProfile: (p: UserProfile) => void;
   openWorkPaymentModal: (price: number) => void;
-  setPaymentSubscription: (sid: string) => void;
   openCouponModal: () => void;
 }
 
@@ -88,17 +87,6 @@ const LoginProvider = (props: Props): React.ReactElement =>
     setUser,
     setFirm,
     setUserProfile,
-    setPaymentSubscription: (sid: string): void =>
-    {
-      updatePaymentSubscription(user.uid, sid)
-        .then((result) =>
-        {
-          if (result)
-          {
-            paymentInfo.sid = sid;
-          }
-        });
-    },
     openWorkPaymentModal: (price: number): void =>
     {
       const authKey = 'KakaoAK 9366738358634bcb690992c374583819';
@@ -136,6 +124,17 @@ const LoginProvider = (props: Props): React.ReactElement =>
         visible={visiblePaymentModal}
         paymentInfo={paymentReadyInfo}
         close={(): void => setVisiblePaymentModal(false)}
+        setPaymentSubscription={(sid: string): void =>
+        {
+          updatePaymentSubscription(user.uid, sid)
+            .then((result) =>
+            {
+              if (result)
+              {
+                paymentInfo.sid = sid;
+              }
+            });
+        }}
       />
       <CouponSelectModal
         user={user}

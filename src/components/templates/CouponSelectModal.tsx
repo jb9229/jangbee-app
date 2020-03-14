@@ -13,9 +13,6 @@ import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 22
-  },
   bgWrap: {
     flex: 1,
     alignItems: 'center',
@@ -31,10 +28,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   }
 });
-
-const Container = styled.View`
-  flex: 1;
-`;
 
 interface Props {
   visible: boolean;
@@ -74,43 +67,41 @@ const CouponSelectModal: React.FC<Props> = (props) =>
   };
 
   return (
-    <Container>
-      <Modal
-        animationType="slide"
-        transparent
-        visible={props.visible}
-        onRequestClose={(): void => props.closeModal()}
-      >
-        <View style={styles.bgWrap}>
-          <View style={styles.contentsWrap}>
-            <CloseButton onClose={(): void => props.closeModal()} />
+    <Modal
+      animationType="slide"
+      transparent
+      visible={props.visible}
+      onRequestClose={(): void => props.closeModal()}
+    >
+      <View style={styles.bgWrap}>
+        <View style={styles.contentsWrap}>
+          <CloseButton onClose={(): void => props.closeModal()} />
 
-            <View style={styles.couponListWrap}>
-              {!couponCnt && (
-                <JBText text="일감수락쿠폰 미보유(차주일감 등록시 추가됨)" />
-              )}
-              {couponCnt === 1 && (
-                <JBText text="일감수락쿠폰 1개보유(2개이상 시 사용가능)" />
-              )}
-              {couponCnt >= 2 && (
-                <Coupon
-                  name="일감수락 쿠폰"
-                  count={couponCnt}
-                  selected={selectedCoupon}
-                  onPress={(selected): void => setSelectedCoupon(selected)}
-                />
-              )}
-            </View>
-            <JBButton
-              title={getString('button.COUPON_APPLY')}
-              onPress={(): void => props.applyCoupon()}
-              size="full"
-              Primary
-            />
+          <View style={styles.couponListWrap}>
+            {!couponCnt && (
+              <JBText text="일감수락쿠폰 미보유(차주일감 등록시 추가됨)" />
+            )}
+            {couponCnt === 1 && (
+              <JBText text="일감수락쿠폰 1개보유(2개이상 시 사용가능)" />
+            )}
+            {couponCnt >= 2 && (
+              <Coupon
+                name="일감수락 쿠폰"
+                count={couponCnt}
+                selected={selectedCoupon}
+                onPress={(selected): void => setSelectedCoupon(selected)}
+              />
+            )}
           </View>
+          <JBButton
+            title={getString('button.COUPON_APPLY')}
+            onPress={(): void => props.applyCoupon()}
+            size="full"
+            Primary
+          />
         </View>
-      </Modal>
-    </Container>
+      </View>
+    </Modal>
   );
 };
 
