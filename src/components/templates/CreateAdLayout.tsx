@@ -47,9 +47,8 @@ const Picker = styled.Picker``;
 const CreateAdLayout: React.FC = () =>
 {
   const {
-    adState, visiblePaymentModal, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
-    paymentUrl,
-    setVisibleEquiModal, setVisiblePaymentModal, setVisibleAddrModal, onSubmit
+    adState, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
+    setVisibleEquiModal, setVisibleAddrModal, onSubmit
   } = useAdCreateProvider();
 
   const [adType, setAdType] = React.useState<AdType>(adState.createAdDto.adType);
@@ -166,11 +165,6 @@ const CreateAdLayout: React.FC = () =>
           adState.createAdDto.adGungu = addrData.sigunguAddr;
         }}
         nextFocus={(): void => {}}
-      />
-      <KakaoPayWebView
-        visible={visiblePaymentModal}
-        initUrl={paymentUrl}
-        close={(): void => setVisiblePaymentModal(false)}
       />
       <LoadingIndicator loading={bookedAdLoading} />
       <LoadingIndicator loading={imgUploading} msg={getString('AD_IMG_UPLOADING')} />

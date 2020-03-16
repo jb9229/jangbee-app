@@ -334,72 +334,23 @@ export function terminateAd (id)
  *
  * @param {*} price AD Price
  */
-export function requestAdPayment (price)
+export function requestPaymentReady (itemName: string, uid: string, orderId: string, price: number): Promise<any>
 {
-  const newAd = {
-    cid: 'TCSUBSCRIP',
-    partner_order_id: 'subscription_order_id_1',
-    partner_user_id: 'subscription_user_id_1',
-    item_name: '광고정기결제',
-    quantity: '1',
-    total_amount: price,
-    tax_free_amount: 0,
-    approval_url: 'https://jb9229.github.io/openBankApiCallback/index.html',
-    fail_url: 'https://jb9229.github.io/openBankApiCallback/index.html',
-    cancel_url: url.KAKAO_PAYMENT_CANCELURL
+  const newReady = {
+    partnerUserId: uid,
+    partnerOrderId: orderId,
+    itemName: itemName,
+    totalAmount: price
   };
 
-  const searchParams = Object.keys(newAd).map((key) =>
-  {
-    return encodeURIComponent(key) + '=' + encodeURIComponent(newAd[key]);
-  }).join('&');
-
-  return fetch(`${url.KAKAO_PAYMENT_API}`,
+  return fetch(`${url.JBSERVER_PAYMENT_READY}`,
     {
       method: 'POST',
       headers: {
-        // Authorization: `KakaoAK ${kakaoconfig.API_KEY}`,
-        Authorization: 'KakaoAK 9366738358634bcb690992c374583819',
-        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: searchParams
-    }
-  ).then(handleJBServerJsonResponse);
-}
-
-/**
- *
- * @param {*} price AD Price
- */
-export function requestWorkPayment (authKey: string, uid: string, orderId: string, price: number): Promise<any>
-{
-  const newAd = {
-    cid: 'TCSUBSCRIP',
-    partner_user_id: uid,
-    partner_order_id: orderId,
-    item_name: '일감매칭비',
-    quantity: '1',
-    total_amount: price,
-    tax_free_amount: 0,
-    approval_url: url.KAKAO_PAYMENT_APPROVALURL,
-    fail_url: url.KAKAO_PAYMENT_FAILURL,
-    cancel_url: url.KAKAO_PAYMENT_CANCELURL
-  };
-
-  const searchParams = Object.keys(newAd).map((key) =>
-  {
-    return encodeURIComponent(key) + '=' + encodeURIComponent(newAd[key]);
-  }).join('&');
-
-  return fetch(`${url.KAKAO_PAYMENT_API}`,
-    {
-      method: 'POST',
-      headers: {
-        // Authorization: `KakaoAK ${kakaoconfig.API_KEY}`,
-        Authorization: authKey,
-        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-      },
-      body: searchParams
+      body: JSON.stringify(newReady)
     }
   ).then(handleJBServerJsonResponse);
 }

@@ -24,31 +24,11 @@ const RootNavigator: React.FC<Props> = (props) =>
   const [authPath, setAuthPath] = React.useState(AUTHPATH_AUTHING);
   const [authData, setAuthData] = React.useState();
 
-  const completeAuth = (isClient): void =>
-  {
-    AppContainer = createAppContainer(
-      createSwitchNavigator(
-        {
-          // You could add another route here for authentication.
-          // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-          Main: isClient ? MainTabNavigator : FirmTabNavigator
-        },
-        {
-          mode: 'modal',
-          headerMode: 'none',
-          initialRouteName: 'Main'
-        }
-      )
-    );
-
-    setAuthPath(AUTHPATH_COMPLETE);
-  };
-
   if (authPath === AUTHPATH_AUTHING)
   {
     return (
       <AuthLoading
-        completeAuth={this.completeAuth}
+        completeAuth={(isClient: boolean): void => completeAuth(isClient, setAuthPath)}
         changeAuthPath={(path, data): void => { setAuthPath(path); setAuthData(data) }}
         setUser={setUser}
         setUserProfile={setUserProfile}
@@ -58,19 +38,39 @@ const RootNavigator: React.FC<Props> = (props) =>
 
   if (authPath === AUTHPATH_SIGNUP)
   {
-    return <SignUpScreen user={authData} completeAuth={completeAuth} />;
+    return <SignUpScreen user={authData} completeAuth={(isClient: boolean): void => completeAuth(isClient, setAuthPath)} setUser={setUser} setUserProfile={setUserProfile} />;
   }
 
   if (authPath === AUTHPATH_LOGIN)
   {
     return (
       <LoginScreen
-        changeAuthPath={(path, data): void => { setAuthPath(path); setAuthData(data) }}
+        changeAuthPath={(path: number, data: object): void => { setAuthPath(path); setAuthData(data) }}
       />
     );
   }
 
   return <AppContainer screenProps={{ blListNumber: props.blListNumber }} />;
+};
+
+const completeAuth = (isClient: boolean, setAuthPath: (path: number) => void): void =>
+{
+  AppContainer = createAppContainer(
+    createSwitchNavigator(
+      {
+        // You could add another route here for authentication.
+        // Read more at https://reactnavigation.org/docs/en/auth-flow.html
+        Main: isClient ? MainTabNavigator : FirmTabNavigator
+      },
+      {
+        mode: 'modal',
+        headerMode: 'none',
+        initialRouteName: 'Main'
+      }
+    )
+  );
+
+  setAuthPath(AUTHPATH_COMPLETE);
 };
 
 export default RootNavigator;

@@ -49,3 +49,10 @@ android/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java
 ios/----.xcodeproj/project.pbxproj
 *.iml
 android/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java
+android/.DS_Store
+android/app/.DS_Store
+android/app/beta/release/app-beta-release.aab
+android/app/prod/release/app-prod-release.aab
+android/app/prod/release/app-prod-release.apk
+android/app/src/beta/google-services.json
+ios/----/Supporting/shell-app.bundle

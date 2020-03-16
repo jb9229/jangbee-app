@@ -7,7 +7,7 @@ import JBTextItem from 'molecules/JBTextItem';
 import React from 'react';
 import Styled from 'styled-components/native';
 import firebase from 'firebase';
-import { withLogin } from 'src/contexts/LoginProvider';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const Container = Styled.View`
   flex: 1;
@@ -18,15 +18,16 @@ const TopMenu = Styled.View`
   justify-content: flex-end;
 `;
 
-class ClientMyInfoScreen extends React.PureComponent
+const ClientMyInfoScreen = () =>
 {
-  confirmDeleteUser = () =>
+  const { user } = useLoginProvider();
+  const confirmDeleteUser = () =>
   {
     Alert.alert(
       '탈퇴확인',
       '정말 탈퇴 하시겠습니까? 탈퇴하시면 즉시 모든 사용하던 데이터가 삭제됩니다.',
       [
-        { text: '탈퇴하기', onPress: () => this.deleteUser(false) },
+        { text: '탈퇴하기', onPress: () => deleteUser(false) },
         { text: '취소', onPress: () => {} }
       ]
     );
@@ -35,7 +36,7 @@ class ClientMyInfoScreen extends React.PureComponent
   /**
    * 로그아웃 함수
    */
-  onSignOut = async () =>
+  const onSignOut = async () =>
   {
     try
     {
@@ -50,7 +51,7 @@ class ClientMyInfoScreen extends React.PureComponent
   /**
    * 회원 탈퇴 요청
    */
-  deleteUser = reAuth =>
+  const deleteUser = reAuth =>
   {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
@@ -95,55 +96,50 @@ class ClientMyInfoScreen extends React.PureComponent
             error.message
           })`,
           [
-            { text: '로그 아웃', onPress: () => this.onSignOut() },
+            { text: '로그 아웃', onPress: () => onSignOut() },
             { text: '취소', onPress: () => {} }
           ]
         );
       });
   };
 
-  render ()
-  {
-    const { user, navigation } = this.props;
-
-    return (
-      <Container>
-        <Card>
-          <TopMenu>
-            <JBButton
-              title="탈퇴하기"
-              onPress={() => this.confirmDeleteUser()}
-              size="small"
-              underline
-              align="right"
-              Secondary
-            />
-            <JBButton
-              title="로그아웃"
-              onPress={() => this.onSignOut()}
-              size="small"
-              underline
-              align="right"
-              Secondary
-            />
-          </TopMenu>
-          <JBTextItem
-            title="전화번호"
-            value={user.phoneNumber}
-            align="center"
-            row
-          />
+  return (
+    <Container>
+      <Card>
+        <TopMenu>
           <JBButton
-            title="장비콜 메일 문의하기"
-            onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
-            size="full"
+            title="탈퇴하기"
+            onPress={() => confirmDeleteUser()}
+            size="small"
+            underline
+            align="right"
             Secondary
           />
-          <JBTerm />
-        </Card>
-      </Container>
-    );
-  }
-}
+          <JBButton
+            title="로그아웃"
+            onPress={() => onSignOut()}
+            size="small"
+            underline
+            align="right"
+            Secondary
+          />
+        </TopMenu>
+        <JBTextItem
+          title="전화번호"
+          value={user.phoneNumber}
+          align="center"
+          row
+        />
+        <JBButton
+          title="장비콜 메일 문의하기"
+          onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
+          size="full"
+          Secondary
+        />
+        <JBTerm />
+      </Card>
+    </Container>
+  );
+};
 
 export default ClientMyInfoScreen;

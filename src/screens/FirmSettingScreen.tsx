@@ -3,6 +3,7 @@ import * as api from 'api/api';
 import { Alert, Platform, ToastAndroid } from 'react-native';
 
 import AlarmSettingModal from 'templates/AlarmSettingModal';
+import { DefaultNavigationProps } from 'src/types';
 import DocumentsModal from 'templates/DocumentsModal';
 import JBIconButton from 'molecules/JBIconButton';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
@@ -12,8 +13,8 @@ import colors from 'constants/Colors';
 import firebase from 'firebase';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 import { validatePresence } from 'utils/Validation';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const Container = styled.View`
   flex: 1;
@@ -38,39 +39,34 @@ const MenueRowWrap = styled.View`
   justify-content: space-around;
 `;
 
-class FirmSettingScreen extends React.Component
+interface Props {
+  navigation: DefaultNavigationProps;
+}
+
+const FirmSettingScreen: React.FC<Props> = (props) =>
 {
-  static navigationOptions = {
-    header: null
-  };
+  const { user } = useLoginProvider();
+  const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState(false);
+  const [isOBSelVisibleModal, setOBSelVisibleModal] = React.useState(false);
+  const [isVisibleDocModal, setVisibleDocModal] = React.useState(false);
+  const [isVisibleAlarmSettingModal, setVisibleAlarmSettingModal] = React.useState(false);
 
-  constructor (props)
-  {
-    super(props);
-    this.state = {
-      isVisibleKatalkAskModal: false,
-      isOBSelVisibleModal: false,
-      isVisibleDocModal: false,
-      isVisibleAlarmSettingModal: false
-    };
-  }
-
-  confirmDeleteUser = () =>
+  const confirmDeleteUser = () =>
   {
     Alert.alert(
       '탈퇴확인',
       '정말 탈퇴 하시겠습니까? \n탈퇴하시면 즉시 모든 사용하던 데이터가 삭제됩니다.\n\n등록하신 광고가 있다면 이달 잔여기간 만료 후 삭제됩니다.',
       [
-        { text: '탈퇴하기', onPress: () => this.deleteUser() },
+        { text: '탈퇴하기', onPress: () => deleteUser() },
         { text: '취소', onPress: () => {} }
       ]
     );
   };
 
-  confirmLogout = () =>
+  const confirmLogout = () =>
   {
     Alert.alert('로그아웃확인', '정말 로그아웃 하시겠습니까?', [
-      { text: '로그아웃하기', onPress: () => this.onSignOut() },
+      { text: '로그아웃하기', onPress: () => onSignOut() },
       { text: '취소', onPress: () => {} }
     ]);
   };
@@ -78,10 +74,8 @@ class FirmSettingScreen extends React.Component
   /**
    * 회원 탈퇴 요청
    */
-  deleteJBData = () =>
+  const deleteJBData = () =>
   {
-    const { user } = this.props;
-
     api
       .deleteFirmAccount(user.uid)
       .then(result =>
@@ -108,7 +102,7 @@ class FirmSettingScreen extends React.Component
   /**
    * 회원 탈퇴 요청
    */
-  deleteUser = () =>
+  const deleteUser = () =>
   {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
@@ -155,8 +149,8 @@ class FirmSettingScreen extends React.Component
             error.message
           })`,
           [
-            { text: '로그 아웃', onPress: () => this.onSignOut() },
-            { text: '취소', onPress: () => {} }
+            { text: '로그 아웃', onPress: () => onSignOut() },
+            { text: '취소' }
           ]
         );
       });
@@ -165,7 +159,7 @@ class FirmSettingScreen extends React.Component
   /**
    * 로그아웃 함수
    */
-  onSignOut = async () =>
+  const onSignOut = async () =>
   {
     try
     {
@@ -177,7 +171,7 @@ class FirmSettingScreen extends React.Component
     }
   };
 
-  requestCashback = (fintechUseNum, cashbackAmount) =>
+  const requestCashback = (fintechUseNum, cashbackAmount) =>
   {
     firebase
       .database()
@@ -186,11 +180,7 @@ class FirmSettingScreen extends React.Component
       .then(data =>
       {
         const token = data.val();
-        const depositData = this.validateDepositData(
-          token,
-          fintechUseNum,
-          cashbackAmount
-        );
+        const depositData = validateDepositData(token, fintechUseNum, cashbackAmount);
 
         if (!depositData)
         {
@@ -223,7 +213,7 @@ class FirmSettingScreen extends React.Component
       });
   };
 
-  validateDepositData = (obAccessToken, fintechUseNum, cashbackAmount) =>
+  const validateDepositData = (obAccessToken, fintechUseNum, cashbackAmount) =>
   {
     const { user } = this.props;
 
@@ -257,105 +247,85 @@ class FirmSettingScreen extends React.Component
     return depositData;
   };
 
-  render ()
-  {
-    const { navigation, user } = this.props;
-    const {
-      isVisibleKatalkAskModal,
-      isOBSelVisibleModal,
-      isVisibleDocModal,
-      isVisibleAlarmSettingModal
-    } = this.state;
-    return (
-      <Container>
-        <Top>
-          <TopMenu />
-        </Top>
-        <MenuWrap>
-          <MenueRowWrap>
-            <JBIconButton
-              title="내장비 등록정보"
-              img={require('../../assets/images/icon/edit_equipinfo_icon.png')}
-              onPress={() => navigation.navigate('FirmMyInfo')}
-            />
-            <JBIconButton
-              title="자료실"
-              img={require('../../assets/images/icon/doc_equipment_icon.png')}
-              onPress={() => this.setState({ isVisibleDocModal: true })}
-            />
-          </MenueRowWrap>
-          <MenueRowWrap>
-            <JBIconButton
-              title="카톡상담하기"
-              img={{
-                uri:
-                  'https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png'
-              }}
-              onPress={() => this.setState({ isVisibleKatalkAskModal: true })}
-              imgWith={100}
-              imgHeight={10}
-            />
-            <JBIconButton
-              title="알람 설정"
-              img={require('../../assets/images/icon/alarm_icon.png')}
-              onPress={() =>
-                this.setState({ isVisibleAlarmSettingModal: true })
-              }
-            />
-          </MenueRowWrap>
-          <MenueRowWrap>
-            <JBIconButton
-              title="캐쉬백"
-              img={require('../../assets/images/icon/cashback_icon.png')}
-              onPress={() => this.setState({ isOBSelVisibleModal: true })}
-            />
-            <JBIconButton
-              title="로그아웃"
-              img={require('../../assets/images/icon/sign_out_icon.png')}
-              onPress={() =>
-              {
-                this.confirmLogout();
-              }}
-            />
-          </MenueRowWrap>
-          <MenueRowWrap>
-            <JBIconButton
-              title="탈퇴하기"
-              img={require('../../assets/images/icon/delete_user_icon.png')}
-              onPress={() =>
-              {
-                this.confirmDeleteUser();
-              }}
-            />
-          </MenueRowWrap>
-        </MenuWrap>
-        <KatalkAskWebview
-          isVisibleModal={isVisibleKatalkAskModal}
-          closeModal={() => this.setState({ isVisibleKatalkAskModal: false })}
-        />
-        <OpenBankAccSelectModal
-          accountId={user.uid}
-          isVisibleModal={isOBSelVisibleModal}
-          navigation={navigation}
-          completeSelect={this.requestCashback}
-          closeModal={() => this.setState({ isOBSelVisibleModal: false })}
-          reauthAfterAction={() => this.setState({ isOBSelVisibleModal: true })}
-          actionName="캐쉬백 요청하기"
-          mode="CASHBACK_MODE"
-        />
-        <DocumentsModal
-          isVisibleModal={isVisibleDocModal}
-          closeModal={() => this.setState({ isVisibleDocModal: false })}
-        />
-        <AlarmSettingModal
-          isVisibleModal={isVisibleAlarmSettingModal}
-          closeModal={() =>
-            this.setState({ isVisibleAlarmSettingModal: false })
-          }
-        />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <Top>
+        <TopMenu />
+      </Top>
+      <MenuWrap>
+        <MenueRowWrap>
+          <JBIconButton
+            title="내장비 등록정보"
+            img={require('../../assets/images/icon/edit_equipinfo_icon.png')}
+            onPress={(): void => { props.navigation.navigate('FirmMyInfo') }}
+          />
+          <JBIconButton
+            title="자료실"
+            img={require('../../assets/images/icon/doc_equipment_icon.png')}
+            onPress={(): void => { setVisibleDocModal(true) }}
+          />
+        </MenueRowWrap>
+        <MenueRowWrap>
+          <JBIconButton
+            title="카톡상담하기"
+            img={{
+              uri:
+                'https://developers.kakao.com/assets/img/about/logos/plusfriend/consult_small_yellow_pc.png'
+            }}
+            onPress={(): void => { setVisibleKatalkAskModal(true) }}
+            imgWith={100}
+            imgHeight={10}
+          />
+          <JBIconButton
+            title="알람 설정"
+            img={require('../../assets/images/icon/alarm_icon.png')}
+            onPress={(): void => { setVisibleAlarmSettingModal(true) }}
+          />
+        </MenueRowWrap>
+        <MenueRowWrap>
+          <JBIconButton
+            title="캐쉬백"
+            img={require('../../assets/images/icon/cashback_icon.png')}
+            onPress={(): void => { setOBSelVisibleModal(true) }}
+          />
+          <JBIconButton
+            title="로그아웃"
+            img={require('../../assets/images/icon/sign_out_icon.png')}
+            onPress={(): void => { confirmLogout() }}
+          />
+        </MenueRowWrap>
+        <MenueRowWrap>
+          <JBIconButton
+            title="탈퇴하기"
+            img={require('../../assets/images/icon/delete_user_icon.png')}
+            onPress={(): void => { confirmDeleteUser() }}
+          />
+        </MenueRowWrap>
+      </MenuWrap>
+      <KatalkAskWebview
+        isVisibleModal={isVisibleKatalkAskModal}
+        closeModal={(): void => { setVisibleKatalkAskModal(false) }}
+      />
+      <OpenBankAccSelectModal
+        accountId={user.uid}
+        isVisibleModal={isOBSelVisibleModal}
+        navigation={props.navigation}
+        completeSelect={requestCashback}
+        closeModal={(): void => { setOBSelVisibleModal(false) }}
+        reauthAfterAction={(): void => { setOBSelVisibleModal(true) }}
+        actionName="캐쉬백 요청하기"
+        mode="CASHBACK_MODE"
+      />
+      <DocumentsModal
+        isVisibleModal={isVisibleDocModal}
+        closeModal={(): void => { setVisibleDocModal(false) }}
+      />
+      <AlarmSettingModal
+        isVisibleModal={isVisibleAlarmSettingModal}
+        closeModal={(): void => { setVisibleAlarmSettingModal(false) }}
+      />
+    </Container>
+  );
+};
 
 export default FirmSettingScreen;

@@ -4,20 +4,25 @@ import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
+import { DefaultNavigationProps } from 'src/types';
 import FirmHarmCaseLayout from '../components/templates/FirmHarmCaseLayout';
 import React from 'react';
 import moment from 'moment';
 import { notifyError } from 'common/ErrorNotice';
 import { shareNotExistCEvalu } from 'common/JBCallShare';
 import styled from 'styled-components/native';
-import { withLogin } from 'src/contexts/LoginProvider';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
-function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement
+interface Props {
+  navigation: DefaultNavigationProps;
+}
+function FirmHarmCaseScreen (props): React.ReactElement
 {
+  const { user } = useLoginProvider();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
@@ -39,7 +44,7 @@ function FirmHarmCaseScreen ({ navigation, user }): React.ReactElement
 
   React.useEffect(() =>
   {
-    const { params } = navigation.state;
+    const { params } = props.navigation.state;
 
     if (params && params.search)
     {

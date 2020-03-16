@@ -76,10 +76,12 @@ const CHART_COLORS = [
   '143,160,143,'
 ];
 
-export default class FirmCntChart extends React.Component {
+export default class FirmCntChart extends React.Component
+{
   _isMounted = false;
 
-  constructor (props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       firmCntChartModels: [],
@@ -87,16 +89,19 @@ export default class FirmCntChart extends React.Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount ()
+  {
     this._isMounted = true;
     this.setFirmCountChart('크레인');
   }
 
-  componentWillUnmount () {
+  componentWillUnmount ()
+  {
     this._isMounted = false;
   }
 
-  changeChart = (equipment) => {
+  changeChart = (equipment) =>
+  {
     this.setFirmCountChart(equipment);
     this.setState({ selectedChartEqui: equipment });
   };
@@ -104,22 +109,29 @@ export default class FirmCntChart extends React.Component {
   /**
    * 지역별 각장비모델 등록갯수 데이터요청 함수
    */
-  setFirmCountChart = equipment => {
-    if (!equipment) {
+  setFirmCountChart = equipment =>
+  {
+    if (!equipment)
+    {
       return;
     }
 
     api
       .getFirmCountChart(equipment)
-      .then(firmCNTData => {
-        if (!this._isMounted) {
+      .then(firmCNTData =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
-        if (firmCNTData) {
+        if (firmCNTData)
+        {
           const modelList = [];
-
-          const chartDataSets = firmCNTData.map((chartInfo, index) => {
+          console.log('***** getFirmCountChart ******');
+          console.log(firmCNTData);
+          const chartDataSets = firmCNTData.map((chartInfo, index) =>
+          {
             modelList.push(chartInfo.model);
 
             return {
@@ -156,15 +168,19 @@ export default class FirmCntChart extends React.Component {
             firmCntChartData: chartData,
             firmCntChartModels: modelList
           });
-        } else {
+        }
+        else
+        {
           Alert.alert(
             '유효하지 않은 차트데이터 입니다',
             `응답 내용: ${firmCNTData}`
           );
         }
       })
-      .catch(error => {
-        if (!this._isMounted) {
+      .catch(error =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -175,7 +191,8 @@ export default class FirmCntChart extends React.Component {
       });
   };
 
-  render () {
+  render ()
+  {
     const {
       firmCntChartData,
       selectedChartEqui,

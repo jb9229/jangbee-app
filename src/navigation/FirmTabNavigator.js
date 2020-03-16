@@ -10,7 +10,7 @@ import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
 import FirmRegisterScreen from 'screens/FirmRegisterScreen';
 import FirmSettingScreen from 'screens/FirmSettingScreen';
 import FirmUpdateScreen from 'screens/FirmUpdateScreen';
-import FirmWorkListScreen from 'screens/FirmWorkListScreen';
+import FirmWorkListScreen from 'container/firmwork/list';
 import HomeScreen from 'screens/HomeScreen';
 import JBServiceTerms from 'screens/JBServiceTerms';
 import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
@@ -144,17 +144,21 @@ const ClientEvaluStack = createStackNavigator({
     screen: FirmHarmCaseContainer,
     navigationOptions:
     {
-      header: null,
-      tabBarLabel: '피해사례(악덕)',
-      tabBarIcon: ({ focused }) => (
-        <TabBarIcon
-          focused={focused}
-          name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-        />
-      )
+      header: null
     }
   }
 });
+
+ClientEvaluStack.navigationOptions = {
+  header: null,
+  tabBarLabel: '피해사례',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+    />
+  )
+};
 
 // const ModalStack = createStackNavigator({
 //   CouponSelectModal: {

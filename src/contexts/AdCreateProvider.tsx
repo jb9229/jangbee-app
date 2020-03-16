@@ -15,6 +15,7 @@ import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import produce from 'immer';
 import useAxios from 'axios-hooks';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const [useCtx, Provider] = createCtx<Context>();
 
@@ -24,10 +25,8 @@ interface Context {
   bookedAdTypeList: Array<number>;
   bookedAdLoading: boolean;
   imgUploading: boolean;
-  visiblePaymentModal: boolean;
-  paymentUrl: string;
 
-  setVisibleEquiModal: (flag: boolean) => void; setVisibleAddrModal: (flag: boolean) => void; setVisiblePaymentModal: (flag: boolean) => void;
+  setVisibleEquiModal: (flag: boolean) => void; setVisibleAddrModal: (flag: boolean) => void;
   onSubmit: (dto: CreateAdDto) => void;
 }
 
@@ -112,9 +111,8 @@ const ValidScheme = yup.object({
     })
 });
 
-const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: DefaultNavigationProps,
-  setImgUploading: (flag: boolean) => void, setVisiblePaymentModal: (flag: boolean) => void,
-  setPaymentUrl: (url: string) => void) => (dto: CreateAdDto): void =>
+const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation: DefaultNavigationProps,
+  setImgUploading: (flag: boolean) => void) => (dto: CreateAdDto): void =>
 {
   const createAdError = new CreateAdDtoError();
   ValidScheme.validate(dto, { abortEarly: false })
@@ -129,7 +127,7 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
           {
             if (dupliResult === null)
             {
-              requestCreaAd(dto, user, navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl);
+              requestCreaAd(dto, user, navigation, setImgUploading);
             }
             else
             {
@@ -155,7 +153,7 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
           {
             if (dupliResult === null)
             {
-              requestCreaAd(dto, user, navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl);
+              requestCreaAd(dto, user, navigation, setImgUploading);
             }
             else
             {
@@ -172,14 +170,7 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
       }
       else
       {
-        // // TODO Check Endpoint duplicate (refetch and check)
-        // if (pickType !== 11 && pickType !== 21 && bookedAdTypeList.includes(pickType))
-        // {
-        //   Alert.alert('죄송합니다', '이미 계약된 광고 입니다');
-
-        //   return false;
-        // }
-        requestCreaAd(dto, user, navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl);
+        requestCreaAd(dto, user, navigation, setImgUploading);
       }
 
       // Init Error
@@ -209,9 +200,9 @@ const onSubmit = (dispatch: React.Dispatch<Action>, user: User, navigation: Defa
 };
 
 const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNavigationProps,
-  setImgUploading: (flag: boolean) => void, setVisiblePaymentModal: (flag: boolean) => void,
-  setPaymentUrl: (url: string) => void): Promise<any> =>
+  setImgUploading: (flag: boolean) => void): Promise<any> =>
 {
+  console.log('=== requestCreaAd ===');
   // Ad Image Upload
   let serverAdImgUrl = null;
   if (dto.adPhotoUrl)
@@ -223,23 +214,6 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
   }
 
   const adPrice = getAdPrice(dto.adType);
-
-  // Request AD Fee Payment
-  api
-    .requestAdPayment(adPrice)
-    .then((result: SubscriptionReadyResponse) =>
-    {
-      console.log(result);
-      if (result && result.next_redirect_mobile_url)
-      {
-        setPaymentUrl(result.next_redirect_mobile_url);
-        // setVisiblePaymentModal(true);
-      }
-    })
-    .catch((err) =>
-    {
-      noticeUserError('Ad Create Provider', '광고비 결제 요청 실패', err.message);
-    });
 
   // return null;
   const newAd = {
@@ -262,8 +236,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     .createAd(newAd)
     .then(() =>
     {
-      setVisiblePaymentModal(true);
-      // navigation.navigate('Ad', { refresh: true });
+      navigation.navigate('Ad', { refresh: true });
     })
     .catch((errorResponse) =>
     {
@@ -302,18 +275,24 @@ const getAdPrice = (adType): number =>
 interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
-  user: User;
 }
 
 const AdCreateProvider = (props: Props): React.ReactElement =>
 {
+  const { user, userProfile, openAdPaymentModal } = useLoginProvider();
   // State
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState<boolean>(false);
   const [isVisibleAddrModal, setVisibleAddrModal] = React.useState<boolean>(false);
-  const [visiblePaymentModal, setVisiblePaymentModal] = React.useState(false);
-  const [paymentUrl, setPaymentUrl] = React.useState<string>();
   const [imgUploading, setImgUploading] = React.useState<boolean>(false);
   const [adState, dispatch] = React.useReducer<Reducer>(reducer, initialState);
+
+  // React.useEffect(() =>
+  // {
+  //   if (bookedAdListResponse && refetch)
+  //   {
+  //     refetch();
+  //   }
+  // }, [props.navigation.state]);
 
   // Server Data
   const [bookedAdListResponse, refetch] = useAxios(JBSERVER_ADBOOKED);
@@ -329,15 +308,23 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
-    setVisibleEquiModal, setVisibleAddrModal, setVisiblePaymentModal,
-    onSubmit: onSubmit(dispatch, props.user, props.navigation, setImgUploading, setVisiblePaymentModal, setPaymentUrl)
+    setVisibleEquiModal, setVisibleAddrModal,
+    onSubmit: (adDto: CreateAdDto): void =>
+    {
+      if (!userProfile.sid)
+      {
+        openAdPaymentModal(getAdPrice(adState.createAdDto.adType));
+        return;
+      }
+      console.log('>>> adCreateAction..');
+      adCreateAction(dispatch, user, props.navigation, setImgUploading)(adDto);
+    }
   };
 
   return (
     <Provider value={{
       adState, ...actions,
-      bookedAdLoading, imgUploading, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList,
-      paymentUrl, visiblePaymentModal
+      bookedAdLoading, imgUploading, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList
     }}>
       {props.children}
     </Provider>

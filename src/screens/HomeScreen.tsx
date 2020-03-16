@@ -181,8 +181,8 @@ const HomeScreen: React.FC<Props> = (props) =>
   return (
     <Container>
       <JangbeeAdList adLocation={adLocation.main} navigation={props.navigation} />
-      <GPSSearchScreen {...this.props} />
-      <FirmCntChart />
+      <GPSSearchScreen {...props} />
+      {/* <FirmCntChart /> */}
       <JBTerm />
     </Container>
   );

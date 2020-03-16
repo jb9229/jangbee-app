@@ -32,11 +32,12 @@ android {
     applicationId 'com.kan.jangbeecall'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 20
-    versionName '0.7.6_25_20191117'
+    versionCode 38
+    versionName '0.8.0_38_20200315'
 
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    resValue "string", "app_name", "장비 콜"
     // Deprecated. Used by net.openid:appauth
     manifestPlaceholders = [
         'appAuthRedirectScheme': 'host.exp.exponent'
@@ -76,6 +77,17 @@ android {
     pickFirst "**"
     // This line is required to prevent React Native from crash
     pickFirst '**/libc++_shared.so'
+  }
+  flavorDimensions 'api'
+  productFlavors {
+    beta {
+      dimension = 'api'
+      applicationIdSuffix = '.beta'
+      resValue "string", "app_name", "장비 콜(Beta)"
+    }
+    prod {
+      dimension = 'api'
+    }
   }
 }
 
@@ -186,7 +198,7 @@ dependencies {
 
   
   api 'org.webkit:android-jsc:r245459' // needs to be before react-native
-  api 'com.facebook.react:react-native:33.0.0'
+  api 'com.facebook.react:react-native:36.0.0'
   
 
 

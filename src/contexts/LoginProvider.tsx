@@ -47,6 +47,7 @@ interface Context {
   setFirm: (firm: Firm) => void;
   setUserProfile: (p: UserProfile) => void;
   openWorkPaymentModal: (price: number) => void;
+  openAdPaymentModal: (price: number) => void;
   openCouponModal: () => void;
 }
 
@@ -89,25 +90,42 @@ const LoginProvider = (props: Props): React.ReactElement =>
     setUserProfile,
     openWorkPaymentModal: (price: number): void =>
     {
-      const authKey = 'KakaoAK 9366738358634bcb690992c374583819';
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
       api
-        .requestWorkPayment(authKey, user.uid, orderId, price)
+        .requestPaymentReady('일감매칭비', user.uid, orderId, price)
         .then((response): void =>
         {
           const result: SubscriptionReadyResponse = response;
           if (result && result.next_redirect_mobile_url)
           {
-            const paymentReadyInfo = new KakaoPaymentReadyInfo(authKey,
-              result.next_redirect_mobile_url, result.tid, user.uid, orderId);
-            paymentReadyInfo.cid = 'TCSUBSCRIP';
+            const paymentReadyInfo = new KakaoPaymentReadyInfo(result.next_redirect_mobile_url, result.tid, user.uid, orderId);
             setPaymentReadyInfo(paymentReadyInfo);
             setVisiblePaymentModal(true);
           }
         })
         .catch((err) =>
         {
-          noticeUserError('Ad Create Provider', '정기결제 요청 실패', err.message);
+          noticeUserError('Ad Create Provider', '정기결제 요청 실패', err?.message);
+        });
+    },
+    openAdPaymentModal: (price: number): void =>
+    {
+      const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
+      api
+        .requestPaymentReady('광고정기결제', user.uid, orderId, price)
+        .then((response): void =>
+        {
+          const result: SubscriptionReadyResponse = response;
+          if (result && result.next_redirect_mobile_url)
+          {
+            const paymentReadyInfo = new KakaoPaymentReadyInfo(result.next_redirect_mobile_url, result.tid, user.uid, orderId);
+            setPaymentReadyInfo(paymentReadyInfo);
+            setVisiblePaymentModal(true);
+          }
+        })
+        .catch((err) =>
+        {
+          noticeUserError('Ad Create Provider', '정기결제 요청 실패', err?.message);
         });
     },
     openCouponModal: (applyWorkCallback?: (user: User, useCoupon: boolean) => void): void =>

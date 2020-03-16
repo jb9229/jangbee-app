@@ -21,22 +21,18 @@ const Contents = styled.View`
 
 export class KakaoPaymentReadyInfo
 {
-  constructor (authKey: string, url: string, tid: string, uid: string, orderId: string)
+  constructor (url: string, tid: string, uid: string, orderId: string)
   {
-    this.authKey = authKey;
     this.nextRedirectMobileUrl = url;
     this.tid = tid;
     this.partner_user_id = uid;
     this.partner_order_id = orderId;
   }
 
-  authKey: string;
   nextRedirectMobileUrl: string;
   tid: string;
   partner_user_id: string;
   partner_order_id: string;
-  cid?: string;
-  cid_secret = 'temp_cid_secret';
 }
 
 interface Props {
@@ -105,8 +101,8 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
   // webView.goBack();
   if (Platform.OS === 'android')
   {
-    // SendIntentAndroid.openChromeIntent(evt.url)
-    SendIntentAndroid.openAppWithUri(evt.url)
+    // SendIntentAndroid.openAppWithUri(evt.url)
+    SendIntentAndroid.openChromeIntent(evt.url)
       .then(isOpened =>
       {
         if (!isOpened)
@@ -119,7 +115,6 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
         console.log('### openAppWithUri error ###');
         console.log(err);
       });
-    // IntentLauncher.startActivityAsync(evt.url);
   }
   else
   {
@@ -139,8 +134,6 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
  */
 const handleNavigationStateChange = (evt: WebViewNavigation): void =>
 {
-  console.log('handleNavigationStateChange');
-
   // Callback url로 redirect가 되는 것이 아니라 json으로 리턴된다. 그때의 상태를 잡아 에러 처리
 };
 
@@ -168,7 +161,7 @@ const receiveWebViewMSG = (webView: any, webViewMSG: any, paymentInfo: KakaoPaym
   {
     api
       .requestWorkPaymentApproval({
-        ...paymentInfo, pgToken: webData.data.pg_token, partnerOrderId: paymentInfo.partner_order_id,
+        tid: paymentInfo.tid, pgToken: webData.data.pg_token, partnerOrderId: paymentInfo.partner_order_id,
         partnerUserId: paymentInfo.partner_user_id
       })
       .then((result) =>

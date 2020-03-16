@@ -7,7 +7,6 @@ import colors from 'constants/Colors';
 import firebase from 'firebase';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -116,7 +115,7 @@ class SignUpScreen extends React.Component
    */
   onSignUp = () =>
   {
-    const { user, completeAuth, setUser, setUserType } = this.props;
+    const { user, completeAuth, setUser, setUserProfile } = this.props;
     const { userType } = this.state;
     if (userType === undefined)
     {
@@ -145,7 +144,7 @@ class SignUpScreen extends React.Component
       .then(() =>
       {
         setUser(user);
-        setUserType(userType);
+        setUserProfile({ userType: userType, sid: undefined });
 
         if (userType === 1)
         {

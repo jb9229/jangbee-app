@@ -5,6 +5,7 @@ import React from 'react';
 import { UserProfile } from 'src/types';
 import colors from 'constants/Colors';
 import { getUserInfo } from 'utils/FirebaseUtils';
+import { noticeUserError } from 'src/container/request';
 
 const styles = StyleSheet.create({
   container: {
@@ -41,42 +42,43 @@ const checkLogin = (props: Props): void =>
   {
     if (user)
     {
-      getUserInfo(user.uid).then(data =>
-      {
-        const userInfo = data.val();
-
-        if (!userInfo)
+      getUserInfo(user.uid)
+        .then(data =>
         {
-          props.changeAuthPath(2, user);
-        }
-
-        const { userType } = userInfo;
-
-        if (!userType)
-        {
-          props.changeAuthPath(2, user);
-        }
-        else
-        {
-          props.setUser(user);
-          props.setUserProfile(userInfo);
-
-          // Go to Screeen By User Type
-          if (userType === 1)
+          const userInfo = data.val();
+          if (!userInfo)
           {
-            props.completeAuth(true);
+            props.changeAuthPath(2, user);
           }
-          else if (userType === 2)
+
+          const { userType } = userInfo;
+
+          if (!userType)
           {
-            props.completeAuth(false);
+            props.changeAuthPath(2, user);
           }
           else
           {
-            Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
-            props.completeAuth(true);
+            props.setUser(user);
+            props.setUserProfile(userInfo);
+
+            // Go to Screeen By User Type
+            if (userType === 1)
+            {
+              props.completeAuth(true);
+            }
+            else if (userType === 2)
+            {
+              props.completeAuth(false);
+            }
+            else
+            {
+              Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
+              props.completeAuth(true);
+            }
           }
-        }
-      });
+        })
+        .catch((error) => { noticeUserError('AuthLoadingError(firbase getUserInfo)', '문제발생으로 다시 시도해 주세요', error.message) });
     }
     else
     {

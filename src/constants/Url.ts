@@ -1,7 +1,6 @@
 // const SERVER_URL = 'http://10.1.0.121/api/v1/';
-// const SERVER_URL = 'http://192.168.0.4/api/v1/';
-const SERVER_URL =
-  'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+// const SERVER_URL = 'http://192.168.0.7:8080/api/v1/';
+const SERVER_URL = 'http://jangbeecall.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 
 module.exports = {
@@ -35,16 +34,13 @@ module.exports = {
   JBSERVER_WORK_FIRM_ACCEPT: `${SERVER_URL}works/firm/accept`,
   JBSERVER_WORK_FIRM_ABANDON: `${SERVER_URL}works/firm/abandon`,
   JBSERVER_WORK_APPLICANTS: `${SERVER_URL}works/applicants`,
+  JBSERVER_PAYMENT_READY: `${SERVER_URL}payment/ready`,
   JBSERVER_PAYMENT_APPROVAL: `${SERVER_URL}payment/approval`,
   JBSERVER_FIRMWORK_FIRM_APPLY: `${SERVER_URL}firm_works/firm/apply`,
   JBSERVER_COUPON: `${SERVER_URL}coupon`,
   JBSERVER_CASHBACK: `${SERVER_URL}cashback`,
   JBSERVER_STAT: `${SERVER_URL}stat`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
-  KAKAO_PAYMENT_API: 'https://kapi.kakao.com/v1/payment/ready',
-  KAKAO_PAYMENT_APPROVALURL: 'https://jb9229.github.io/kakao-payment-callback/approval',
-  KAKAO_PAYMENT_FAILURL: 'https://jb9229.github.io/kakao-payment-callback/fail',
-  KAKAO_PAYMENT_CANCELURL: 'https://jb9229.github.io/kakao-payment-callback/cancel',
   OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,
   OPENBANK_REAUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize_account2`,
   OPENBANK_TOKEN: `${OPENBANK_URL}/oauth/2.0/token`,

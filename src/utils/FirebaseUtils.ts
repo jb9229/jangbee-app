@@ -45,7 +45,8 @@ export function updatePaymentSubscription (uid: string, sid: string): Promise<an
       },
       (error): void =>
       {
-        noticeUserError('Firebase Update Fail(updatePaymentSubscription)', '접속이 원활하지 않습니다, 재시도 해주세요', error.message);
+        console.log(error);
+        noticeUserError('Firebase Update Fail(updatePaymentSubscription)', '접속이 원활하지 않습니다, 재시도 해주세요', error?.message);
       }
     );
 }
