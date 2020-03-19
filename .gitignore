@@ -56,3 +56,6 @@ android/app/prod/release/app-prod-release.aab
 android/app/prod/release/app-prod-release.apk
 android/app/src/beta/google-services.json
 ios/----/Supporting/shell-app.bundle
+android/app/beta/release/app-beta-release.apk
+android/app/src/main/assets/shell-app.bundle
+ios/----/Supporting/shell-app.bundle

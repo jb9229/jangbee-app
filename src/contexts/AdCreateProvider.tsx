@@ -81,7 +81,8 @@ const ValidScheme = yup.object({
   adType: yup.string().required(`[adType]${getString('VALIDATION_REQUIRED')}`),
   forMonths: yup.number()
     .required(`[forMonths]${getString('VALIDATION_REQUIRED')}`)
-    .min(1, `[forMonths]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
+    .min(1, `[forMonths]${getString('VALIDATION_NUMBER_INVALID')}(1 ~ 12)`)
+    .max(12, `[forMonths]${getString('VALIDATION_NUMBER_INVALID')}(1 ~ 12)`),
   adTitle: yup.string()
     .required(`[adTitle]${getString('VALIDATION_REQUIRED')}`)
     .min(1, `[adTitle]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
@@ -111,11 +112,10 @@ const ValidScheme = yup.object({
     })
 });
 
-const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation: DefaultNavigationProps,
-  setImgUploading: (flag: boolean) => void) => (dto: CreateAdDto): void =>
+const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto): Promise<boolean> =>
 {
   const createAdError = new CreateAdDtoError();
-  ValidScheme.validate(dto, { abortEarly: false })
+  return ValidScheme.validate(dto, { abortEarly: false })
     .then(() =>
     {
       // Equipment Target Ad Validation
@@ -127,7 +127,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation
           {
             if (dupliResult === null)
             {
-              requestCreaAd(dto, user, navigation, setImgUploading);
+              return true;
             }
             else
             {
@@ -137,11 +137,13 @@ const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation
                   dupliResult.endDate
                 }]까지 계약 되었습니다(카톡상담으로 대기 요청해 주세요)`
               );
+              return false;
             }
           })
           .catch((error) =>
           {
             noticeUserError('Ad Create Provider', '장비 타켓광고 중복검사 문제', error.message);
+            return false;
           });
       }
       else if (dto.adType === AdType.SEARCH_REGION_FIRST)
@@ -153,7 +155,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation
           {
             if (dupliResult === null)
             {
-              requestCreaAd(dto, user, navigation, setImgUploading);
+              return true;
             }
             else
             {
@@ -161,16 +163,14 @@ const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation
                 '타켓광고 등록 지역 중복됨',
                 `죄송합니다, [${dupliResult.endDate}]까지 계약된 지역광고가 존재 합니다.`
               );
+              return false;
             }
           })
           .catch((error) =>
           {
             noticeUserError('Ad Create Provider', '지역 타켓광고 중복검사 문제', error.message);
+            return false;
           });
-      }
-      else
-      {
-        requestCreaAd(dto, user, navigation, setImgUploading);
       }
 
       // Init Error
@@ -178,6 +178,8 @@ const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation
         type: ActionType.FAIL_VALIDATION,
         payload: { createAdError }
       });
+
+      return true;
     })
     .catch((err) =>
     {
@@ -196,6 +198,8 @@ const adCreateAction = (dispatch: React.Dispatch<Action>, user: User, navigation
         type: ActionType.FAIL_VALIDATION,
         payload: { createAdError }
       });
+
+      return false;
     });
 };
 
@@ -311,13 +315,20 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
     setVisibleEquiModal, setVisibleAddrModal,
     onSubmit: (adDto: CreateAdDto): void =>
     {
-      if (!userProfile.sid)
-      {
-        openAdPaymentModal(getAdPrice(adState.createAdDto.adType));
-        return;
-      }
       console.log('>>> adCreateAction..');
-      adCreateAction(dispatch, user, props.navigation, setImgUploading)(adDto);
+      adCreateAction(dispatch)(adDto)
+        .then((result) =>
+        {
+          if (result)
+          {
+            if (!userProfile.sid)
+            {
+              openAdPaymentModal(getAdPrice(adState.createAdDto.adType));
+              return;
+            }
+            requestCreaAd(adDto, user, props.navigation, setImgUploading);
+          }
+        });
     }
   };
 

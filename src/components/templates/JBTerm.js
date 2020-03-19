@@ -1,12 +1,13 @@
+import * as url from 'constants/Url';
+
+import JBButton from 'molecules/JBButton';
 import React from 'react';
-import styled from 'styled-components/native';
-import pkg from 'app.json';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import JBButton from 'molecules/JBButton';
-import * as url from 'constants/Url';
 import { openLinkUrl } from 'utils/LinkUtil';
+import pkg from 'app.json';
 import { shareJBCall } from 'common/JBCallShare';
+import styled from 'styled-components/native';
 
 const Container = styled.View`
   padding: 8px;
@@ -56,7 +57,8 @@ const TelText = styled.Text`
   margin: 2px;
 `;
 
-export default function renderJBTerm({ bg }) {
+export default function renderJBTerm ({ bg })
+{
   return (
     <Container bg={bg}>
       <Row>
@@ -95,7 +97,7 @@ export default function renderJBTerm({ bg }) {
       </Row>
       <Row>
         <Column>
-          <Title>대표님:</Title>
+          <Title>대표:</Title>
           <TelHO onPress={() => openLinkUrl('tel:010-8755-7407')}>
             <TelText>010-8755-7407</TelText>
           </TelHO>
@@ -115,6 +117,14 @@ export default function renderJBTerm({ bg }) {
         <Column>
           <Title>Version: </Title>
           <Text>{`${pkg.mode}_${pkg.expo.version}`}</Text>
+        </Column>
+        <Column>
+          <JBButton
+            title="이용 안내"
+            size="small"
+            underline
+            onPress={() => openLinkUrl(url.TERM_USEINFO)}
+          />
         </Column>
       </Row>
       <Row>

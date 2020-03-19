@@ -1,12 +1,10 @@
 import * as React from 'react';
-import * as api from 'api/api';
 import * as url from 'constants/Url';
 
 import { abandonWork, acceptWorkRequest, applyWork } from 'src/container/firmwork/actions';
 
 import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
-import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import useAxios from 'axios-hooks';
@@ -17,10 +15,12 @@ interface Context {
   openWorkList: Array<object>;
   matchedWorkList: Array<object>;
   refreshing: boolean;
+  matchedRefreshing: boolean;
   applyWork: (workId: string) => void;
   acceptWork: (workId: string) => void;
   abandonWork: (workId: string) => void;
   refetchOpenWorkList: () => void;
+  refetchMatchedWorkList: () => void;
 }
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -34,10 +34,13 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
 {
   const { user, firm, paymentInfo, openWorkPaymentModal, openCouponModal } = useLoginProvider();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [matchedRefreshing, setMatchedRefreshing] = React.useState(false);
 
   // Server Data State
-  const [openWorkListResponse, openWorkListRequest] = useAxios(`${url.JBSERVER_WORK_FIRM_OPEN}?equipment=${firm?.equiListStr}
-    &accountId=${user?.uid}`);
+  const [openWorkListResponse, openWorkListRequest] = useAxios(`${url.JBSERVER_WORK_FIRM_OPEN}?equipment=${firm?.equiListStr}` +
+    `&accountId=${user?.uid}`);
+  const [matchedWorkListResponse, matchedWorkListRequest] = useAxios(`${url.JBSERVER_WORK_FIRM_MATCHED}?` +
+    `equipment=${firm?.equiListStr}&accountId=${user?.uid}`);
 
   // Didmount/Unmount
   React.useEffect(() =>
@@ -68,13 +71,17 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
   {
     noticeUserError('Firm Work Provider(getFirmOpenWorkList)', '접속이 원활하지 않습니다, 재시도 해주세요', openWorkListResponse.error.message);
   }
-  console.log(openWorkListResponse?.data);
+  if (matchedWorkListResponse.error)
+  {
+    noticeUserError('FirmWorkProvider(getFirmMatchedWorkList)', '접속이 원활하지 않습니다, 재시도 해주세요', matchedWorkListResponse.error.message);
+  }
+
   // Init States
   const states = {
     navigation: props.navigation,
     openWorkList: openWorkListResponse && openWorkListResponse.data ? openWorkListResponse.data : [],
-    refreshing,
-    matchedWorkList: []
+    refreshing, matchedRefreshing,
+    matchedWorkList: matchedWorkListResponse && matchedWorkListResponse.data ? matchedWorkListResponse.data : []
   };
 
   // Init Actions
@@ -154,7 +161,8 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         ]
       );
     },
-    refetchOpenWorkList (): void { openWorkListRequest() }
+    refetchOpenWorkList: (): void => { openWorkListRequest() },
+    refetchMatchedWorkList: (): void => { matchedWorkListRequest() }
   };
 
   // UI Component

@@ -144,6 +144,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
         close={(): void => setVisiblePaymentModal(false)}
         setPaymentSubscription={(sid: string): void =>
         {
+          setUserProfile({ ...userProfile, sid: sid });
           updatePaymentSubscription(user.uid, sid)
             .then((result) =>
             {
@@ -151,7 +152,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
               {
                 paymentInfo.sid = sid;
               }
-            });
+            }).catch((error) => console.log(error));
         }}
       />
       <CouponSelectModal

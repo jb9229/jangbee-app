@@ -22,7 +22,6 @@ import JBTextInput from 'molecules/JBTextInput';
 import LocalSelModal from 'templates/LocalSelModal';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import React from 'react';
-import { withLogin } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {

@@ -11,7 +11,7 @@ import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
 import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const CommWrap = styled.View`
-  flexDirection: row;
+  flex-direction: row;
 `;
 const OpenWorkList = styled(FlatList)`
   flex: 1;

@@ -1,4 +1,5 @@
 {
+  "mode": "Beta",
   "expo": {
     "name": "장비 콜",
     "slug": "jangbeecall_payment",
@@ -9,7 +10,7 @@
       "ios",
       "android"
     ],
-    "version": "0.7.6_25_20191117",
+    "version": "0.8.1_20200320",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",

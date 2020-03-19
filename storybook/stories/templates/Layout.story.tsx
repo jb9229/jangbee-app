@@ -39,7 +39,7 @@ storiesOf('Layout Components', module)
   }))
   .add('일감등록', () => React.createElement(() =>
   {
-    const { setUser } = useLoginProvider();
+    const { setUser, setUserProfile } = useLoginProvider();
     const user: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
@@ -49,6 +49,7 @@ storiesOf('Layout Components', module)
     React.useEffect(() =>
     {
       setUser(user);
+      setUserProfile({ userType: 2, sid: undefined });
     }, []);
 
     return (

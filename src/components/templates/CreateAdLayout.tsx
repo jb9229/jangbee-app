@@ -78,7 +78,7 @@ const CreateAdLayout: React.FC = () =>
             </AdTypeWrap>
             <EditText
               label="계약기간"
-              subLabel="(월, 필수)"
+              subLabel="(최대 12개월, 필수)"
               text={`${adState.createAdDto.forMonths}`}
               onChangeText={(text: string): void =>
               {

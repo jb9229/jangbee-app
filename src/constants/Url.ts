@@ -50,7 +50,8 @@ module.exports = {
   OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
   OPENBANK_DEPOSIT: `${OPENBANK_URL}/v1.0/transfer/deposit`,
   TERM_SERVICE: 'https://jangbee-inpe21.firebaseapp.com/serviceTerms.html',
-  TERM_SECURITY: 'https://jangbee-inpe21.firebaseapp.com/privacy.html'
+  TERM_SECURITY: 'https://jangbee-inpe21.firebaseapp.com/privacy.html',
+  TERM_USEINFO: 'https://jangbee-inpe21.firebaseapp.com/UseInfomation.html'
 };
 
 // 수신이 원활하지 않습니다.

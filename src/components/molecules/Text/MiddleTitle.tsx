@@ -21,11 +21,10 @@ const Title = styled.Text`
     ? props.theme.ColorSecond : props.theme.ColorInputLabel};
 `;
 const SubTitle = styled.Text`
-  font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};;
+  font-family: ${(props: StyledCPorps): string => props.theme.FontTitle};;
   font-size: 14;
   font-weight: 100;
-  color: ${(props: StyledCPorps): string | null => props.focused
-    ? props.theme.ColorSecond : props.theme.ColorInputLabel};
+  color: ${(props: StyledCPorps): string | null => props.theme.ColorTextSubtitle};
 `;
 
 interface Props {

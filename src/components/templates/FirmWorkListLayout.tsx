@@ -36,10 +36,7 @@ interface Props {
 const FirmWorkListLayout: React.FC<Props> = (props) =>
 {
   const { user } = useLoginProvider();
-  const {
-    openWorkList, matchedWorkList,
-    setOpenWorkListData
-  } = useFirmWorkProvider();
+  const { openWorkList, matchedWorkList } = useFirmWorkProvider();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'first', title: '진행중인 일감' },
@@ -63,8 +60,6 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
           this.setMatchedWorkListData()
         )
       }
-      // refreshing={matchedWorkListRefreshing}
-      // isListEmpty={isMatchedWorkListEmpty}
     />
   );
 
