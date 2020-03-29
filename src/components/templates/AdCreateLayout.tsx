@@ -8,7 +8,6 @@ import EquipementModal from 'templates/EquipmentModal';
 import ErrorText from 'src/components/molecules/Text/ErrorText';
 import ImagePickInput from 'molecules/ImagePickInput';
 import JBButton from 'molecules/JBButton';
-import KakaoPayWebView from 'src/components/templates/KakaoPayWebView';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import MiddleTitle from 'src/components/molecules/Text/MiddleTitle';
@@ -44,7 +43,7 @@ const ScrollView = styled.ScrollView.attrs({
 const AdTypeWrap = styled.View``;
 const Picker = styled.Picker``;
 
-const CreateAdLayout: React.FC = () =>
+const AdCreateLayout: React.FC = () =>
 {
   const {
     adState, isVisibleEquiModal, isVisibleAddrModal, bookedAdTypeList, bookedAdLoading, imgUploading,
@@ -200,4 +199,4 @@ const checkAdType = (bookedAdTypeList: Array<number>, pickType: AdType): boolean
   return true;
 };
 
-export default CreateAdLayout;
+export default AdCreateLayout;

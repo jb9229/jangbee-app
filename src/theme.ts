@@ -51,10 +51,13 @@ export const light = {
   ColorError: colors.red,
   ColorInputLabel: '#4D4A4A',
 
+  // Text Color
   ColorTextSubtitle: '#606060',
   ColorTextInput: '#000000',
   ColorTextError: colors.red,
   ColorTextPlaceholder: '#dbdbdb',
+  ColorTextplaceholderDark: '#8c8c8c',
+
   ColorBtnPrimary: '#ffbb00', // Primary, Secondary, Success, Danger, Warning, Info, Light, Dark, Link
   ColorBtnSecondary: '#444444',
   ColorBtnSuccess: '#00b7ee',
@@ -62,9 +65,12 @@ export const light = {
   ColorBtnStyle: 'white',
   ColorBorderInput: '#000000',
 
+  // Background Color
   ColorBGDarkGray: '#3E3936',
   ColorBGGray: '#d7d7d7',
   ColorBGLightGray: '#E3DCDC',
+  ColorBGYellowBatang: '#FDEFDB',
+  ColorBGYellowBatangLight: '#fef4e7',
   background: colors.lightBackground,
   backgroundDark: colors.dodgerBlue,
 
@@ -85,10 +91,13 @@ export const dark = {
   ColorError: colors.red,
   ColorInputLabel: '#4D4A4A',
 
+  // Text Color
   ColorTextSubtitle: '#606060',
   ColorTextInput: '#000000',
   ColorTextError: colors.red,
   ColorTextPlaceholder: '#dbdbdb',
+  ColorTextplaceholderDark: '#8c8c8c',
+
   ColorBtnPrimary: '#ffbb00',
   ColorBtnSecondary: '#444444',
   ColorBtnSuccess: '#00b7ee',
@@ -96,9 +105,12 @@ export const dark = {
   ColorBtnStyle: 'white',
   ColorBorderInput: '#000000',
 
+  // Background Color
   ColorBGDarkGray: '#F7AE43',
   ColorBGGray: '#d7d7d7',
   ColorBGLightGray: '#E3DCDC',
+  ColorBGYellowBatang: '#FDEFDB',
+  ColorBGYellowBatangLight: '#fef4e7',
 
   background: colors.darkBackground,
   backgroundDark: colors.dodgerBlue,

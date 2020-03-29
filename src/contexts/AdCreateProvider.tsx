@@ -8,6 +8,7 @@ import { CreateAdDto, CreateAdDtoError } from '../types/ad';
 
 import { DefaultNavigationProps } from 'src/types';
 import { JBSERVER_ADBOOKED } from 'constants/Url';
+import { PHONENUMBER_REGULAR_EXPRESSION } from 'src/container/firm/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import getString from 'src/STRING';
@@ -75,8 +76,6 @@ const reducer: Reducer = (state = initialState, action) =>
   });
 };
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
 const ValidScheme = yup.object({
   adType: yup.string().required(`[adType]${getString('VALIDATION_REQUIRED')}`),
   forMonths: yup.number()
@@ -91,7 +90,7 @@ const ValidScheme = yup.object({
     .min(1, `[adSubTitle]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
   adTelNumber: yup.string()
     .required(`[adTelNumber]${getString('VALIDATION_REQUIRED')}`)
-    .matches(phoneRegExp, `[adTelNumber]${getString('VALIDATION_NUMBER_INVALID')}`),
+    .matches(PHONENUMBER_REGULAR_EXPRESSION, `[adTelNumber]${getString('VALIDATION_NUMBER_INVALID')}`),
   adEquipment: yup.string()
     .when('adType', {
       is: (val) => val == AdType.SEARCH_EQUIPMENT_FIRST || val == AdType.SEARCH_REGION_FIRST,

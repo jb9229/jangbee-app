@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { KeyboardAvoidingView, Picker, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Picker, ScrollView, TextInput } from 'react-native';
 
 import Card from 'molecules/CardUI';
 import EditText from 'src/components/molecules/EditText';
@@ -11,6 +11,7 @@ import JBPicker from 'molecules/JBPicker';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import LocalSelModal from 'templates/LocalSelModal';
 import MapAddWebModal from 'templates/MapAddWebModal';
+import { MapAddress } from 'src/types';
 import SelectText from 'src/components/molecules/SelectText';
 import styled from 'styled-components/native';
 import { useFirmRegisterProvider } from 'src/container/firm/FirmRegisterProvider';
@@ -27,14 +28,15 @@ const Footer = styled.View``;
 
 const FirmRegisterLayout: React.FC = () =>
 {
-  const { firmDto, errorData } = useFirmRegisterProvider();
+  const addrDetailComp = React.useRef<TextInput>();
+  const { loading, firmDto, errorData, onClickCreate } = useFirmRegisterProvider();
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState(false);
   const [isVisibleMapAddModal, setVisibleMapAddModal] = React.useState(false);
   const [isVisibleLocalModal, setVisibleLocalModal] = React.useState(false);
 
   return (
     <Container>
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
         <Scroll>
           <Card bgColor="white">
             <EditText
@@ -61,14 +63,15 @@ const FirmRegisterLayout: React.FC = () =>
                 label="보유 장비"
                 subLabel="(필수)"
                 text={firmDto.equiListStr}
+                style={{ flex: 1 }}
                 onPress={(): void => setVisibleEquiModal(true)}
                 placeholder="보유장비를 선택해 주세요"
                 errorText={errorData.equiListStr}
               />
 
               <JBPicker
-                label="년식"
-                subLabel="(필수)"
+                title="년식"
+                subTitle="(필수)"
                 items={pickerItems}
                 selectedValue={firmDto.modelYear}
                 onValueChange={(itemValue): void => { firmDto.modelYear = itemValue }}
@@ -78,7 +81,7 @@ const FirmRegisterLayout: React.FC = () =>
 
             <SelectText
               label="업체주소"
-              subLabel="(필수, 장비 검색시 거리계산 기준이됨)"
+              subLabel="(필수, 검색 시 거리계산 기준)"
               text={firmDto.address}
               onPress={(): void => setVisibleMapAddModal(true)}
               placeholder="주소를 검색해주세요"
@@ -86,6 +89,7 @@ const FirmRegisterLayout: React.FC = () =>
             />
 
             <EditText
+              ref={addrDetailComp}
               label="업체 상세주소"
               text={firmDto.addressDetail}
               onChangeText={(text): void => { firmDto.addressDetail = text }}
@@ -95,7 +99,7 @@ const FirmRegisterLayout: React.FC = () =>
             <SelectText
               label="일감알람 받을지역"
               subLabel="(필수)"
-              text={`${firmDto.workAlarmSido}${firmDto.workAlarmSigungu}`}
+              text={firmDto.workAlarmSido || firmDto.workAlarmSigungu ? `${firmDto.workAlarmSido}${firmDto.workAlarmSigungu}` : ''}
               onPress={(): void => setVisibleLocalModal(true)}
               placeholder="일감알람 받을 지역을 선택해 주세요."
               errorText={errorData.workAlarm}
@@ -168,7 +172,7 @@ const FirmRegisterLayout: React.FC = () =>
           <Footer>
             <JBButton
               title="업체등록하기"
-              onPress={(): void => this.createFirm()}
+              onPress={(): void => createFirm()}
               size="full"
               Primary
             />
@@ -180,15 +184,20 @@ const FirmRegisterLayout: React.FC = () =>
         closeModal={(): void => { setVisibleEquiModal(false) }}
         selEquipmentStr={firmDto.equiListStr}
         completeSelEqui={(seledEuipListStr): void => { firmDto.equiListStr = seledEuipListStr }}
-        nextFocus={(): void => this.addrTextInput.focus()}
       />
       <MapAddWebModal
         isVisibleMapAddModal={isVisibleMapAddModal}
         setMapAddModalVisible={(flag: boolean): void => { setVisibleMapAddModal(flag) }}
-        saveAddrInfo={this.saveAddrInfo}
-        nextFocus={(): void => this.addrDetTextInput.focus()}
+        saveAddrInfo={(addrData: MapAddress): void =>
+        {
+          firmDto.sidoAddr = addrData.sidoAddr;
+          firmDto.sigunguAddr = addrData.sigunguAddr;
+          firmDto.address = addrData.address;
+        }
+        }
+        nextFocus={(): void => { addrDetailComp.current.focus() }}
       />
-      <LoadingIndicator loading={true} />
+      <LoadingIndicator loading={loading} />
       <LocalSelModal
         isVisibleModal={isVisibleLocalModal}
         closeModal={(): void => setVisibleLocalModal(false)}

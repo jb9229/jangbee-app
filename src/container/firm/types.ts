@@ -2,12 +2,29 @@ import * as yup from 'yup';
 
 import getString from 'src/STRING';
 
-export const ValidScheme = yup.object({
-  adType: yup.string()
-    .required(`[comment]${getString('VALIDATION_REQUIRED')}`)
-    .min(2, `[comment]${getString('VALIDATION_STRING_EXCEED')}(2~1000 자)`)
-    .max(1000, `[comment]${getString('VALIDATION_STRING_EXCEED')}(2~1000 자)`),
-  forMonths: yup.number()
+export const PHONENUMBER_REGULAR_EXPRESSION =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+export const FirmCreateValidScheme = yup.object({
+  fname: yup.string().required(`[fname]${getString('VALIDATION_REQUIRED')}`),
+  phoneNumber: yup.string()
+    .required(`[phoneNumber]${getString('VALIDATION_REQUIRED')}`)
+    .matches(PHONENUMBER_REGULAR_EXPRESSION, `[phoneNumber]${getString('VALIDATION_NUMBER_INVALID')}`),
+  equiListStr: yup.string()
+    .required(`[equiListStr]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[equiListStr]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
+  modelYear: yup.number()
+    .required(`[modelYear]${getString('VALIDATION_REQUIRED')}`)
+    .min(1991, `[modelYear]${getString('VALIDATION_NUMBER_INVALID')}(1991 ~ )`),
+  address: yup.string()
+    .required(`[address]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[address]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
+  introduction: yup.string()
+    .required(`[introduction]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[introduction]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
+  photo1: yup.string()
+    .required(`[photo1]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[photo1]${getString('VALIDATION_NUMBER_INVALID')}`)
 });
 
 export class FirmCreateDto
@@ -39,7 +56,7 @@ export class FirmCreateErrorData
   fname: string;
   phoneNumber: string;
   equiListStr: string;
-  modelYear: number;
+  modelYear: string;
   address: string;
   addressDetail: string;
   sidoAddr: string;

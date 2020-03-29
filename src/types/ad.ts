@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { AdType } from '../components/templates/CreateAdLayout';
+import { AdType } from '../components/templates/AdCreateLayout';
 import getString from 'src/STRING';
 
 export const ValidScheme = yup.object({

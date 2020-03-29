@@ -9,7 +9,8 @@ import fonts from 'constants/Fonts';
 
 const styles = StyleSheet.create({
   itemWrap: {
-    marginTop: 15
+    marginTop: 15,
+    paddingTop: 10
   },
   titleWrap: {
     flexDirection: 'row',

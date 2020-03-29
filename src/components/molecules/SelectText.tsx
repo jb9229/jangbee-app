@@ -21,12 +21,14 @@ interface StyledCPorps {
 
 const Container = styled.View`
   margin-top: 15px;
+  padding-top: 10px;
 `;
 const TextTO = styled.TouchableOpacity`
   padding-left: 16;
   padding-right: 16;
   padding-top: 21;
   padding-bottom: 21;
+  background-color: ${(props: StyledCPorps): string => props.theme.ColorBGYellowBatangLight};
   border-width: 1;
   border-radius: 5;
   ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
@@ -35,7 +37,7 @@ const TextTO = styled.TouchableOpacity`
 `;
 const Placeholder = styled.Text`
   font-size: 14;
-  color: ${(props: StyledCPorps): string => props.theme.ColorTextPlaceholder};
+  color: ${(props: StyledCPorps): string => props.theme.ColorTextplaceholderDark};
 `;
 const Text = styled.Text`
   font-size: 14;
@@ -51,13 +53,14 @@ interface Props {
   text: string;
   placeholder?: string;
   errorText?: string;
+  style?: ViewStyle;
   onPress: () => void;
 }
 
 function SelectText (props: Props): React.ReactElement
 {
   return (
-    <Container>
+    <Container style={props.style}>
       <MiddleTitle label={props.label} subLabel={props.subLabel} />
       <TextTO onPress={props.onPress} errorText={props.errorText}>
         {props.text ? <Text>{props.text}</Text>

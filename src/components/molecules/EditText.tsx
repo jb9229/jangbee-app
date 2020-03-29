@@ -21,6 +21,7 @@ interface StyledCPorps {
 
 const Container = styled.View`
   margin-top: 15px;
+  padding-top: 10px;
 `;
 const TextInput = styled.TextInput`
   padding-left: 16;
@@ -43,8 +44,11 @@ interface Props {
   titleTestID?: string;
   testID?: string;
   errorTestID?: string;
+
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+
+  ref?: any;
   label?: string;
   subLabel?: string;
   errorText?: string;
@@ -59,7 +63,7 @@ interface Props {
   onFocus?: () => void;
 }
 
-function EditText (props: Props): React.ReactElement
+const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) =>
 {
   const [focused, setFocus] = React.useState(false);
   const [text, setText] = React.useState<string>(props.text);
@@ -68,6 +72,7 @@ function EditText (props: Props): React.ReactElement
     <Container testID={props.parentTestID} style={[props.style]}>
       <MiddleTitle label={props.label} subLabel={props.subLabel} errorText={props.errorText} focused={focused} />
       <TextInput
+        ref={ref}
         testID={props.testID}
         style={[props.textStyle]}
         autoCapitalize={'none'}
@@ -93,6 +98,6 @@ function EditText (props: Props): React.ReactElement
       {!!props.errorText && <ErrorText text={props.errorText} />}
     </Container>
   );
-}
+};
 
-export default EditText;
+export default React.forwardRef(EditText);

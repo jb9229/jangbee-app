@@ -27,6 +27,14 @@ interface IconProps {
   children?: never;
 }
 
+export interface MapAddress {
+  address: string;
+  sidoAddr: string;
+  sigunguAddr: string;
+  addrLongitude: string;
+  addrLatitude: string;
+}
+
 export type IconType = SFC<IconProps>;
 
 // Firm Object Type

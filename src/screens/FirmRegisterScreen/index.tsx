@@ -44,11 +44,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const initialState: State = {
-  createAdDto: new CreateAdDto(),
-  createAdError: new CreateAdDtoError()
-};
-
 interface Props {
   navigation: DefaultNavigationProps;
 }
@@ -421,4 +416,6 @@ const FirmRegisterScreen = (props) =>
     return true;
   };
 
+  return (<Container></Container>);
+};
 export default FirmRegisterScreen;
