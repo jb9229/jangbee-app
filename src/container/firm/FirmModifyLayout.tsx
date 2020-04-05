@@ -14,7 +14,7 @@ import MapAddWebModal from 'templates/MapAddWebModal';
 import { MapAddress } from 'src/types';
 import SelectText from 'src/components/molecules/SelectText';
 import styled from 'styled-components/native';
-import { useFirmRegisterProvider } from 'src/container/firm/FirmRegisterProvider';
+import { useFirmModifyProvider } from 'src/container/firm/FirmModifyProvider';
 
 const Container = styled.View`
   flex: 1;
@@ -29,7 +29,7 @@ const Footer = styled.View``;
 const FirmRegisterLayout: React.FC = () =>
 {
   const addrDetailComp = React.useRef<TextInput>();
-  const { loading, firmDto, errorData, onClickCreate } = useFirmRegisterProvider();
+  const { loading, firm, firmDto, errorData, onClickUpdate } = useFirmModifyProvider();
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState(false);
   const [isVisibleMapAddModal, setVisibleMapAddModal] = React.useState(false);
   const [isVisibleLocalModal, setVisibleLocalModal] = React.useState(false);
@@ -42,16 +42,17 @@ const FirmRegisterLayout: React.FC = () =>
             <EditText
               label="업체명"
               subLabel="(필수)"
-              text={firmDto.fname}
+              text={firm?.fname}
               onChangeText={(text): void => { firmDto.fname = text }}
               placeholder="업체명을 입력해 주세요"
               errorText={errorData.fname}
             />
 
             <EditText
+              unchangeable={true}
               label="전화번호"
               subLabel="(필수)"
-              text={firmDto.phoneNumber}
+              text={firm?.phoneNumber}
               onChangeText={(text): void => { firmDto.phoneNumber = text }}
               placeholder="전화번호를 입력해 주세요"
               keyboardType="phone-pad"
@@ -62,7 +63,7 @@ const FirmRegisterLayout: React.FC = () =>
               <SelectText
                 label="보유 장비"
                 subLabel="(필수)"
-                text={firmDto.equiListStr}
+                text={firm?.equiListStr}
                 style={{ flex: 1 }}
                 onPress={(): void => setVisibleEquiModal(true)}
                 placeholder="보유장비를 선택해 주세요"
@@ -73,8 +74,8 @@ const FirmRegisterLayout: React.FC = () =>
                 title="년식"
                 subTitle="(필수)"
                 items={pickerItems}
-                selectedValue={firmDto.modelYear}
-                onValueChange={(itemValue): void => { firmDto.modelYear = itemValue }}
+                selectedValue={firm ? Number.parseInt(firm.modelYear) : 0}
+                onValueChange={(itemValue): void => { firmDto.modelYear = Number.parseInt(itemValue) }}
                 size={110}
                 errorText={errorData.modelYear}
               />
@@ -83,7 +84,7 @@ const FirmRegisterLayout: React.FC = () =>
             <SelectText
               label="업체주소"
               subLabel="(필수, 검색 시 거리계산 기준)"
-              text={firmDto.address}
+              text={firm?.address}
               onPress={(): void => setVisibleMapAddModal(true)}
               placeholder="주소를 검색해주세요"
               errorText={errorData.address}
@@ -92,7 +93,7 @@ const FirmRegisterLayout: React.FC = () =>
             <EditText
               ref={addrDetailComp}
               label="업체 상세주소"
-              text={firmDto.addressDetail}
+              text={firm?.addressDetail}
               onChangeText={(text): void => { firmDto.addressDetail = text }}
               placeholder="혹시 추가로 위치설명이 필요하면 기입해주세요"
               errorText={errorData.addressDetail}
@@ -100,7 +101,7 @@ const FirmRegisterLayout: React.FC = () =>
             <SelectText
               label="일감알람 받을지역"
               subLabel="(필수)"
-              text={firmDto.workAlarmSido || firmDto.workAlarmSigungu ? `${firmDto.workAlarmSido}${firmDto.workAlarmSigungu}` : ''}
+              text={firm?.workAlarmSido || firm?.workAlarmSigungu ? `${firm?.workAlarmSido}${firm?.workAlarmSigungu}` : ''}
               onPress={(): void => setVisibleLocalModal(true)}
               placeholder="일감알람 받을 지역을 선택해 주세요."
               errorText={errorData.workAlarm}
@@ -109,7 +110,7 @@ const FirmRegisterLayout: React.FC = () =>
             <EditText
               label="업체 소개"
               subLabel="(필수)"
-              text={firmDto.introduction}
+              text={firm?.introduction}
               onChangeText={(text): void => { firmDto.introduction = text }}
               placeholder="업체 소개를 해 주세요"
               multiline
@@ -120,7 +121,7 @@ const FirmRegisterLayout: React.FC = () =>
             <ImagePickInput
               itemTitle="대표사진"
               subTitle="(필수)"
-              imgUrl={firmDto.thumbnail}
+              imgUrl={firm?.thumbnail}
               aspect={[1, 1]}
               setImageUrl={(url): void => { firmDto.thumbnail = url }}
               errorText={errorData.thumbnail}
@@ -129,7 +130,7 @@ const FirmRegisterLayout: React.FC = () =>
             <ImagePickInput
               itemTitle="작업사진1"
               subTitle="(필수)"
-              imgUrl={firmDto.photo1}
+              imgUrl={firm?.photo1}
               setImageUrl={(url): void => { firmDto.photo1 = url }}
               errorText={errorData.photo1}
             />
@@ -137,35 +138,35 @@ const FirmRegisterLayout: React.FC = () =>
             <ImagePickInput
               itemTitle="작업사진2"
               subTitle="(여러장 올려야 좋아요)"
-              imgUrl={firmDto.photo2}
+              imgUrl={firm?.photo2}
               setImageUrl={(url): void => { firmDto.photo2 = url }}
               errorText={errorData.photo2}
             />
 
             <ImagePickInput
               itemTitle="작업사진3"
-              imgUrl={firmDto.photo3}
+              imgUrl={firm?.photo3}
               setImageUrl={(url): void => { firmDto.photo3 = url }}
               errorText={errorData.photo3}
             />
 
             <EditText
               label="블로그"
-              text={firmDto.blog}
+              text={firm?.blog}
               onChangeText={(text): void => { firmDto.blog = text }}
               placeholder="블로그 주소를 입력해 주세요"
             />
 
             <EditText
               label="SNG"
-              text={firmDto.sns}
+              text={firm?.sns}
               onChangeText={(text): void => { firmDto.sns = text }}
               placeholder="SNS 주소를(또는 카카오톡 친구추가) 입력해 주세요"
             />
 
             <EditText
               label="홈페이지"
-              text={firmDto.homepage}
+              text={firm?.homepage}
               onChangeText={(text): void => { firmDto.homepage = text }}
               placeholder="홈페이지 주소를 입력해 주세요"
             />
@@ -174,7 +175,7 @@ const FirmRegisterLayout: React.FC = () =>
           <Footer>
             <JBButton
               title="업체등록하기"
-              onPress={(): void => onClickCreate()}
+              onPress={(): void => onClickUpdate()}
               size="full"
               Primary
             />

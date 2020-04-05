@@ -107,7 +107,7 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
       {
         if (!isOpened)
         {
-          noticeUserError('외부 앱 실행에 실패했습니다', '외부 앱 실행에 실패했습니다', `evt.url is: ${evt.url}`);
+          noticeUserError('외부 앱 실행에 실패했습니다', `evt.url is: ${evt.url}`, '외부 앱 실행에 실패했습니다');
         }
       })
       .catch(err =>
@@ -120,7 +120,7 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
   {
     Linking.openURL(evt.url).catch(err =>
     {
-      noticeUserError('외부 앱 실행에 실패했습니다', '외부 앱 실행에 실패했습니다', `evt.url is: ${err.message}`);
+      noticeUserError('외부 앱 실행에 실패했습니다', `evt.url is: ${err.message}`, '외부 앱 실행에 실패했습니다');
     });
   }
 

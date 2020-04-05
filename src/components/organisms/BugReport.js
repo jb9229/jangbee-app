@@ -1,6 +1,7 @@
-import React from 'react';
 import { Linking, StyleSheet, Text, View } from 'react-native';
+
 import JBButton from 'molecules/JBButton';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 
@@ -28,7 +29,7 @@ export default class BugReport extends React.PureComponent {
         </Text>
         <JBButton
           title="메일로 의견보내기"
-          onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
+          onPress={() => Linking.openURL('mailto:support@jangbeecall.kr')}
           size="small"
         />
       </View>

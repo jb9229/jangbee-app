@@ -49,6 +49,7 @@ export const light = {
   ColorPrimary: '#ffbb00',
   ColorSecond: '#82b6ed',
   ColorError: colors.red,
+  ColorInvariable: colors.paleGray,
   ColorInputLabel: '#4D4A4A',
 
   // Text Color

@@ -141,7 +141,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
           })
           .catch((error) =>
           {
-            noticeUserError('Ad Create Provider', '장비 타켓광고 중복검사 문제', error.message);
+            noticeUserError('Ad Create Provider', error.message, '장비 타켓광고 중복검사 문제');
             return false;
           });
       }
@@ -167,7 +167,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
           })
           .catch((error) =>
           {
-            noticeUserError('Ad Create Provider', '지역 타켓광고 중복검사 문제', error.message);
+            noticeUserError('Ad Create Provider', error.message, '지역 타켓광고 중복검사 문제');
             return false;
           });
       }
@@ -243,7 +243,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     })
     .catch((errorResponse) =>
     {
-      noticeUserError('Ad Create Provider', '광고생성 실패', errorResponse.message);
+      noticeUserError('Ad Create Provider', errorResponse.message, '광고생성 실패');
     });
 };
 
@@ -307,7 +307,7 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   // Error Notice
   if (bookedAdListResponse.error)
   {
-    noticeUserError('Create Ad Error!', 'Create Ad Error!', bookedAdListResponse.error.message);
+    noticeUserError('Create Ad Error!', bookedAdListResponse.error.message, 'Create Ad Error!');
   };
 
   const actions = {
@@ -320,11 +320,11 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
         {
           if (result)
           {
-            if (!userProfile.sid)
-            {
-              openAdPaymentModal(getAdPrice(adState.createAdDto.adType));
-              return;
-            }
+            // if (!userProfile.sid)
+            // {
+            //   openAdPaymentModal(getAdPrice(adState.createAdDto.adType));
+            //   return;
+            // }
             requestCreaAd(adDto, user, props.navigation, setImgUploading);
           }
         });

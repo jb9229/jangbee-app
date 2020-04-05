@@ -16,7 +16,7 @@ interface StyledCPorps {
   theme: DefaultTheme;
   errorText?: string;
   focused?: boolean;
-  disabled?: boolean;
+  unchangeable?: boolean;
 }
 
 const Container = styled.View`
@@ -32,6 +32,7 @@ const TextInput = styled.TextInput`
   border-radius: 5;
   ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
   ${(props: StyledCPorps): string | null => props.errorText ? `border-color: ${props.theme.ColorError};` : null}
+  ${(props: StyledCPorps): string | null => props.unchangeable ? `border-color: ${props.theme.ColorInvariable};` : null}
   color: ${(props: StyledCPorps): string => props.theme.ColorTextInput};
 `;
 
@@ -56,7 +57,7 @@ interface Props {
   keyboardType?: string;
   placeholder?: string;
   secureTextEntry?: boolean;
-  disabled?: boolean;
+  unchangeable?: boolean;
   maxLength?: number;
   onSubmitEditing?: (e: NativeSyntheticEvent<any>) => void;
   onChangeText?: (text: string) => void;
@@ -68,9 +69,16 @@ const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) 
   const [focused, setFocus] = React.useState(false);
   const [text, setText] = React.useState<string>(props.text);
 
+  React.useEffect(() =>
+  {
+    setText(props.text);
+  }, [props.text]);
+
   return (
     <Container testID={props.parentTestID} style={[props.style]}>
-      <MiddleTitle label={props.label} subLabel={props.subLabel} errorText={props.errorText} focused={focused} />
+      <MiddleTitle label={props.label} subLabel={props.subLabel} errorText={props.errorText}
+        focused={focused}
+        unchangeable={props.unchangeable} />
       <TextInput
         ref={ref}
         testID={props.testID}
@@ -91,7 +99,8 @@ const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) 
           setText(text);
         }}
         secureTextEntry={props.secureTextEntry}
-        disabled={props.disabled}
+        editable={!props.unchangeable}
+        unchangeable={props.unchangeable}
         maxLength={props.maxLength}
         errorText={props.errorText}
       />

@@ -69,11 +69,11 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
   // Error Handling Of Server API Call
   if (openWorkListResponse.error)
   {
-    noticeUserError('Firm Work Provider(getFirmOpenWorkList)', '접속이 원활하지 않습니다, 재시도 해주세요', openWorkListResponse.error.message);
+    noticeUserError('Firm Work Provider(getFirmOpenWorkList)', openWorkListResponse.error.message);
   }
   if (matchedWorkListResponse.error)
   {
-    noticeUserError('FirmWorkProvider(getFirmMatchedWorkList)', '접속이 원활하지 않습니다, 재시도 해주세요', matchedWorkListResponse.error.message);
+    noticeUserError('FirmWorkProvider(getFirmMatchedWorkList)', matchedWorkListResponse.error.message);
   }
 
   // Init States

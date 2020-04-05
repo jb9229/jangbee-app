@@ -67,7 +67,6 @@ android {
       minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       consumerProguardFiles 'proguard-rules.pro'
-      signingConfig signingConfigs.release
     }
   }
   lintOptions {
@@ -84,9 +83,11 @@ android {
       dimension = 'api'
       applicationIdSuffix = '.beta'
       resValue "string", "app_name", "장비 콜(Beta)"
+      signingConfig signingConfigs.debug
     }
     prod {
       dimension = 'api'
+      signingConfig signingConfigs.release
     }
   }
 }

@@ -22,6 +22,9 @@ export const FirmCreateValidScheme = yup.object({
   introduction: yup.string()
     .required(`[introduction]${getString('VALIDATION_REQUIRED')}`)
     .min(1, `[introduction]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
+  thumbnail: yup.string()
+    .required(`[thumbnail]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[thumbnail]${getString('VALIDATION_NUMBER_INVALID')}`),
   photo1: yup.string()
     .required(`[photo1]${getString('VALIDATION_REQUIRED')}`)
     .min(1, `[photo1]${getString('VALIDATION_NUMBER_INVALID')}`)
@@ -49,10 +52,37 @@ export class FirmCreateDto
   blog: string;
   homepage: string;
   sns: string;
+  uploadedThumbnailUrl: string;
+  uploadedPhoto1Url: string;
+  uploadedPhoto2Url: string;
+  uploadedPhoto3Url: string;
 }
 
 export class FirmCreateErrorData
 {
+  constructor ()
+  {
+    this.fname = '';
+    this.phoneNumber = '';
+    this.equiListStr = '';
+    this.modelYear = '';
+    this.address = '';
+    this.addressDetail = '';
+    this.sidoAddr = '';
+    this.sigunguAddr = '';
+    this.addrLongitude = '';
+    this.addrLatitude = '';
+    this.workAlarm = '';
+    this.introduction = '';
+    this.thumbnail = '';
+    this.photo1 = '';
+    this.photo2 = '';
+    this.photo3 = '';
+    this.blog = '';
+    this.homepage = '';
+    this.sns = '';
+  }
+
   fname: string;
   phoneNumber: string;
   equiListStr: string;
@@ -72,4 +102,4 @@ export class FirmCreateErrorData
   blog: string;
   homepage: string;
   sns: string;
-}
+};

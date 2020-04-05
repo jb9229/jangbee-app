@@ -1,18 +1,22 @@
 import * as React from 'react';
+import * as url from 'constants/Url';
 
+import { Firm, useLoginProvider } from 'src/contexts/LoginProvider';
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
 import { requestAddFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
 
 import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import useAxios from 'axios-hooks';
 
 interface Context {
   navigation: DefaultNavigationProps;
+  loading: boolean;
+  firm: Firm | undefined;
   firmDto: FirmCreateDto;
   errorData: FirmCreateErrorData;
-  onClickCreate: () => void;
+  onClickUpdate: () => void;
 }
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -22,7 +26,7 @@ interface Props {
   navigation: DefaultNavigationProps;
 }
 
-const FirmRegisterProvider = (props: Props): React.ReactElement =>
+const FirmModifyProvider = (props: Props): React.ReactElement =>
 {
   // States
   const { user, firm, popLoading } = useLoginProvider();
@@ -30,41 +34,27 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
   const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(new FirmCreateErrorData());
 
   // Server Data State
+  const [firmResponse, firmRequest] = useAxios(`${url.JBSERVER_FIRM}?accountId=${user?.uid}`);
 
   // Didmount/Unmount
   React.useEffect(() =>
   {
   }, [firm]);
-
+  console.log('>>> firmResponse.data', firmResponse.data);
   // Init States
   const states = {
+    loading: firmResponse.loading,
     navigation: props.navigation,
+    firm: firmResponse.data || undefined,
     firmDto,
     errorData
   };
 
   // Init Actions
   const actions = {
-    onClickCreate: (): void =>
+    onClickUpdate: (): void =>
     {
-      console.log('>>>> onClickCreate');
-      validateCreatFirmDto(firmDto)
-        .then((result) =>
-        {
-          if (result === true)
-          {
-            uploadImage(firmDto, popLoading)
-              .then((result) =>
-              {
-                requestAddFirm(user.uid, firmDto)
-                  .then((result) => { if (result) { props.navigation.navigate('FirmMyInfo', { refresh: 'Register' }) } })
-                  .catch((err): void => { noticeUserError('FirmRegisterProvider(requestAddFirm -> error)', err?.message) });
-              })
-              .catch((err) => { noticeUserError('FirmRegisterProvider(uploadImage -> error)', err?.message) });
-          }
-          else if (result instanceof FirmCreateErrorData) { setErrorData(result) }
-        })
-        .catch((err) => { noticeUserError('FirmRegisterProvider(validateCreatFirmDto -> error)', err?.message) });
+      console.log(firmDto);
     }
   };
 
@@ -74,4 +64,4 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
   );
 };
 
-export { useCtx as useFirmRegisterProvider, FirmRegisterProvider };
+export { useCtx as useFirmModifyProvider, FirmModifyProvider };

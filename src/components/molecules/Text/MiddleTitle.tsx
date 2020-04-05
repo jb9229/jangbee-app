@@ -6,7 +6,7 @@ interface StyledCPorps {
   theme: DefaultTheme;
   errorText?: string;
   focused?: boolean;
-  disabled?: boolean;
+  unchangeable?: boolean;
 }
 
 const TitleWrap = styled.View`
@@ -17,8 +17,10 @@ const TitleWrap = styled.View`
 const Title = styled.Text`
   font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};
   font-size: 18;
-  color: ${(props: StyledCPorps): string | null => props.focused
-    ? props.theme.ColorSecond : props.theme.ColorInputLabel};
+  color: ${(props: StyledCPorps): string | null =>
+    props.unchangeable ? props.theme.ColorInvariable : props.focused
+      ? props.theme.ColorSecond : props.theme.ColorInputLabel};
+
 `;
 const SubTitle = styled.Text`
   font-family: ${(props: StyledCPorps): string => props.theme.FontTitle};;
@@ -32,13 +34,14 @@ interface Props {
   subLabel?: string;
   errorText?: string;
   focused?: boolean;
+  unchangeable?: boolean;
 }
 const MiddleTitle: React.FC<Props> = (props) =>
 {
   return (
     <TitleWrap>
       {!!props.label && (
-        <Title errorText={props.errorText} focused={props.focused}>
+        <Title errorText={props.errorText} focused={props.focused} unchangeable={props.unchangeable}>
           {props.label}
         </Title>
       )}

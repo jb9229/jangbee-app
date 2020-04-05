@@ -78,7 +78,7 @@ const checkLogin = (props: Props): void =>
             }
           }
         })
-        .catch((error) => { noticeUserError('AuthLoadingError(firbase getUserInfo)', '문제발생으로 다시 시도해 주세요', error.message) });
+        .catch((error) => { noticeUserError('AuthLoadingError(firbase getUserInfo)', error.message) });
     }
     else
     {

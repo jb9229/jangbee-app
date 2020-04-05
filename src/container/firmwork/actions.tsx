@@ -21,7 +21,7 @@ export const applyWork = (workId: string, user: User, openWorkListRequest: any):
         openWorkListRequest();
       }
     })
-    .catch(error => { noticeUserError('FimWorkAction(applywork api call error)', 'Please try again', error.message) });
+    .catch(error => { noticeUserError('FimWorkAction(applywork api call error)', error.message) });
 };
 
 /**
@@ -56,7 +56,7 @@ export const acceptWorkRequest = (user: User, couponSelected: boolean): void =>
 
       this.setOpenWorkListData();
     })
-    .catch((error) => { noticeUserError('FimWorkAction(acceptWork api call error)', 'Please try again', error.message) });
+    .catch((error) => { noticeUserError('FimWorkAction(acceptWork api call error)', error.message) });
 };
 
 /**
@@ -78,7 +78,7 @@ export const abandonWork = (user: User, workId: string, openWorkListRequest: any
         openWorkListRequest();
       }
     })
-    .catch((error) => { noticeUserError('FimWorkAction(abandonWork api call error)', 'Please try again', error.message) });
+    .catch((error) => { noticeUserError('FimWorkAction(abandonWork api call error)', error.message) });
 };
 
 export enum ActionType {}

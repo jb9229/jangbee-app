@@ -81,7 +81,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("host.exp.exponent.ReactNativeFlipper"); // <--- use your own namespace, same as before!
+        Class<?> aClass = Class.forName("ReactNativeFlipper"); // <--- use your own namespace, same as before!
         aClass.getMethod("initializeFlipper", Context.class, ReactInstanceManager.class).invoke(null, context, reactInstanceManager);
       } catch (ClassNotFoundException e) {
         e.printStackTrace();

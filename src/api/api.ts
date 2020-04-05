@@ -138,10 +138,10 @@ export function uploadImage (uri)
 
   formData.append('img', {
     uri,
-    name: `jangbee_photo_+${nowTime}.${fileType}`,
-    type: `image/${fileType}`
+    name: `jangbee_photo_${nowTime}.${fileType}`,
+    type: 'image/jpg'
   });
-
+  console.log('>>> formData', formData);
   const options = {
     method: 'POST',
     body: formData,

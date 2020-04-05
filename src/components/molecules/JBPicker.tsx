@@ -1,23 +1,31 @@
 import { Picker, PickerItem, StyleSheet } from 'react-native';
 import { number, string } from 'yup';
+import styled, { DefaultTheme } from 'styled-components/native';
 
+import ErrorText from 'src/components/molecules/Text/ErrorText';
 import MiddleTitle from 'molecules/Text/MiddleTitle';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import styled from 'styled-components/native';
 
 interface StyleProps {
+  theme: DefaultTheme;
   size?: number;
+  error?: boolean;
 }
 
 const Container = styled.View`
   margin-top: 15px;
   padding-top: 10px;
-  width: ${(props: StyleProps) => props.size ? props.size : 'transparent'};
+  width: ${(props: StyleProps): number | string => props.size ? props.size : 'transparent'};
 `;
 
-const PickerWrap = styled.View``;
+const PickerWrap = styled.View`
+  border-width: ${(props: StyleProps): number => props.error ? 1 : 0};
+  border-color: ${(props: StyleProps): string => props.theme.ColorError};
+  border-radius: 5;
+  padding: 5px 0px;
+`;
 
 const styles = StyleSheet.create({
   itemTitle: {
@@ -32,7 +40,7 @@ const styles = StyleSheet.create({
 interface Props {
   title: string;
   subTitle: string;
-  selectedValue: string;
+  selectedValue: number;
   items: Array<PickerItem>;
   onValueChange: (value: string) => void;
   size: number;
@@ -41,12 +49,17 @@ interface Props {
 }
 const JBPicker: React.FC<Props> = (props) =>
 {
-  const [selectedValue, setSelectedValue] = React.useState();
+  React.useEffect(() =>
+  {
+    setSelectedValue(props.selectedValue);
+  }, [props.selectedValue]);
+
+  const [selectedValue, setSelectedValue] = React.useState(props.selectedValue);
 
   return (
     <Container size={props.size}>
       <MiddleTitle label={props.title} subLabel={props.subTitle} errorText={props.errorText} />
-      <PickerWrap>
+      <PickerWrap error={!!props.errorText}>
         <Picker
           selectedValue={selectedValue}
           style={styles.itemPicker}
@@ -57,6 +70,7 @@ const JBPicker: React.FC<Props> = (props) =>
           {props.items}
         </Picker>
       </PickerWrap>
+      <ErrorText text={props.errorText}/>
     </Container>
   );
 };

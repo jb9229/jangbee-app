@@ -55,6 +55,28 @@ const initFirebase = () =>
 //   }).catch((err) => { console.log(err) });
 // };
 
+// import { Updates } from 'expo';
+// checkUpdate = async () =>
+// {
+//   try
+//   {
+//     const update = await Updates.checkForUpdateAsync();
+//     if (update.isAvailable)
+//     {
+//       await Updates.fetchUpdateAsync();
+//       // ... notify user of update ...
+//       Updates.reloadFromCache();
+//       this.setState({ isAppUpdateComplete: true });
+//     }
+
+//     this.setState({ isAppUpdateComplete: true });
+//   }
+//   catch (e)
+//   {
+//     this.setState({ isAppUpdateComplete: true });
+//   }
+// };
+
 // Stories Dinamic Importing
 configure(() =>
 {

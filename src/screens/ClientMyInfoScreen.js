@@ -132,7 +132,7 @@ const ClientMyInfoScreen = () =>
         />
         <JBButton
           title="장비콜 메일 문의하기"
-          onPress={() => Linking.openURL('mailto:support@jangbeecall.com')}
+          onPress={() => Linking.openURL('mailto:support@jangbeecall.kr')}
           size="full"
           Secondary
         />

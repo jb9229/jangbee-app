@@ -21,7 +21,6 @@ import MapAddWebModal from 'templates/MapAddWebModal';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 
 const styles = StyleSheet.create({

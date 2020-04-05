@@ -40,6 +40,7 @@ export async function handleJBServerJsonResponse (res): Promise<any>
  */
 export function handleTextResponse (res)
 {
+  console.log('>>>> res', res);
   if (res.ok)
   {
     if (res.status === 204)
@@ -50,7 +51,7 @@ export function handleTextResponse (res)
 
     return res.text().then(responseText => responseText);
   }
-
+  console.log('>>>> res', res);
   throw new CmException(res.status, `${res.url}`);
 }
 

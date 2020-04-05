@@ -2,11 +2,28 @@ import * as ImagePicker from 'expo-image-picker';
 import * as React from 'react';
 
 import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import styled, { DefaultTheme } from 'styled-components/native';
 
+import ErrorText from 'src/components/molecules/Text/ErrorText';
 import JBIcon from 'atoms/JBIcon';
 import MiddleTitle from 'molecules/Text/MiddleTitle';
 import fonts from 'constants/Fonts';
 
+interface StyleProps {
+  theme?: DefaultTheme;
+  existUrl?: boolean;
+  error?: boolean;
+}
+const UrlTextTO = styled.TouchableOpacity`
+  padding-bottom: 5;
+  border-bottom-width: 1;
+  border-color: ${(props: StyleProps): string => props.error ? props.theme.ColorTextError : '#7A7373'};
+`;
+const UrlText = styled.Text`
+  font-family: ${fonts.batang};
+  font-size: 20;
+  color: ${(props: StyleProps): string => props.existUrl ? 'black' : 'gray'};
+`;
 const styles = StyleSheet.create({
   itemWrap: {
     marginTop: 15,
@@ -18,19 +35,6 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   urlInput: {},
-  urlText: {
-    fontFamily: fonts.batang,
-    fontSize: 20,
-    borderBottomWidth: 1,
-    borderColor: '#7A7373'
-  },
-  placeholder: {
-    color: 'gray',
-    fontFamily: fonts.batang,
-    fontSize: 20,
-    borderBottomWidth: 1,
-    borderColor: '#7A7373'
-  },
   imgWrap: {
     flexDirection: 'row'
   },
@@ -55,8 +59,13 @@ interface Props {
 }
 const ImagePickInput: React.FC<Props> = (props) =>
 {
+  React.useEffect(() =>
+  {
+    setImageUrl(props.imgUrl);
+  }, [props.imgUrl]);
+
   const [imgUrl, setImageUrl] = React.useState(props.imgUrl);
-  const urlTextStyle = imgUrl ? styles.urlText : styles.placeholder;
+
   return (
     <View style={styles.itemWrap}>
       <View style={styles.titleWrap}>
@@ -67,19 +76,20 @@ const ImagePickInput: React.FC<Props> = (props) =>
       </View>
 
       {!imgUrl ? (
-        <TouchableOpacity
+        <UrlTextTO
           onPress={() => pickImage(props.aspect, setImageUrl, props.setImageUrl)}
-          style={styles.urlInput}
+          error={!!props.errorText}
         >
-          <Text style={urlTextStyle} ellipsizeMode="tail" numberOfLines={1}>
+          <UrlText ellipsizeMode="tail" numberOfLines={1}>
             사진을 선택해 주세요
-          </Text>
-        </TouchableOpacity>
+          </UrlText>
+        </UrlTextTO>
       ) : (
         <View style={styles.imgWrap}>
           <Image style={styles.image} source={{ uri: imgUrl }} />
         </View>
       )}
+      {!!props.errorText && <ErrorText text={props.errorText} />}
     </View>
   );
 };
