@@ -54,7 +54,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickUpdate: (): void =>
     {
-      console.log(firmDto);
+      console.log('>> firmDto', firmDto);
     }
   };
 
