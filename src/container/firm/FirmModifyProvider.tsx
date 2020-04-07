@@ -3,7 +3,7 @@ import * as url from 'constants/Url';
 
 import { Firm, useLoginProvider } from 'src/contexts/LoginProvider';
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
-import { requestAddFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
+import { requestModifyFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
 
 import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
@@ -54,7 +54,23 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickUpdate: (): void =>
     {
-      console.log('>> firmDto', firmDto);
+      validateCreatFirmDto(firmDto)
+        .then((result) =>
+        {
+          if (result === true)
+          {
+            uploadImage(firmDto, popLoading)
+              .then((result) =>
+              {
+                requestModifyFirm(user.uid, firmResponse.data.id, firmDto)
+                  .then((result) => { if (result) { props.navigation.navigate('FirmMyInfo', { refresh: 'update' }) } })
+                  .catch((err): void => { noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message) });
+              })
+              .catch((err) => { noticeUserError('FirmModifyProvider(uploadImage -> error)', err?.message) });
+          }
+          else if (result instanceof FirmCreateErrorData) { setErrorData(result) }
+        })
+        .catch((err) => { noticeUserError('FirmModifyProvider(validateModifyFirmDto -> error)', err?.message) });
     }
   };
 

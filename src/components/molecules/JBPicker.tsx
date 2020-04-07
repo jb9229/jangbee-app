@@ -52,6 +52,7 @@ const JBPicker: React.FC<Props> = (props) =>
   React.useEffect(() =>
   {
     setSelectedValue(props.selectedValue);
+    props.onValueChange('' + props.selectedValue);
   }, [props.selectedValue]);
 
   const [selectedValue, setSelectedValue] = React.useState(props.selectedValue);

@@ -10,15 +10,12 @@ export const validateCreatFirmDto = (dto: FirmCreateDto): Promise<boolean | Firm
 {
   const errorData = new FirmCreateErrorData();
   let result = true;
-  console.log('>>>> validateCreatFirmDto dto');
-  console.log(dto);
+
   if (!dto.workAlarmSido && !dto.workAlarmSigungu) { errorData.workAlarm = getString('VALIDATION_REQUIRED'); result = false }
   return FirmCreateValidScheme.validate(dto, { abortEarly: false })
     .then(() => { return result || errorData })
     .catch((err) =>
     {
-      console.log('>>>> validateCreatFirmDto.errors');
-      console.log(err);
       err.errors.forEach((e: string) =>
       {
         if (e.startsWith('[fname]')) { errorData.fname = (e.replace('[fname]', '')) };
@@ -40,19 +37,47 @@ export const uploadImage = async (dto: FirmCreateDto, popLoading): Promise<void>
   let uploaded = false;
   if (dto.thumbnail)
   {
-    popLoading(true, '대표사진 업로드중...'); uploaded = true; dto.uploadedThumbnailUrl = await imageManager.uploadImage(dto.thumbnail);
+    if (dto.thumbnail.startsWith('http'))
+    {
+      dto.uploadedThumbnailUrl = dto.thumbnail;
+    }
+    else
+    {
+      popLoading(true, '대표사진 업로드중...'); uploaded = true; dto.uploadedThumbnailUrl = await imageManager.uploadImage(dto.thumbnail);
+    }
   }
   if (dto.photo1)
   {
-    popLoading(true, '작업사진1 업로드중...'); uploaded = true; dto.uploadedPhoto1Url = await imageManager.uploadImage(dto.photo1);
+    if (dto.photo1.startsWith('http'))
+    {
+      dto.uploadedPhoto1Url = dto.photo1;
+    }
+    else
+    {
+      popLoading(true, '작업사진1 업로드중...'); uploaded = true; dto.uploadedPhoto1Url = await imageManager.uploadImage(dto.photo1);
+    }
   }
   if (dto.photo2)
   {
-    popLoading(true, '작업사진2 업로드중...'); uploaded = true; dto.uploadedPhoto2Url = await imageManager.uploadImage(dto.photo2);
+    if (dto.photo2.startsWith('http'))
+    {
+      dto.uploadedPhoto2Url = dto.photo2;
+    }
+    else
+    {
+      popLoading(true, '작업사진2 업로드중...'); uploaded = true; dto.uploadedPhoto2Url = await imageManager.uploadImage(dto.photo2);
+    }
   }
   if (dto.photo3)
   {
-    popLoading(true, '작업사진3 업로드중...'); uploaded = true; dto.uploadedPhoto3Url = await imageManager.uploadImage(dto.photo3);
+    if (dto.photo3.startsWith('http'))
+    {
+      dto.uploadedPhoto3Url = dto.photo3;
+    }
+    else
+    {
+      popLoading(true, '작업사진3 업로드중...'); uploaded = true; dto.uploadedPhoto3Url = await imageManager.uploadImage(dto.photo3);
+    }
   }
 
   if (uploaded) { popLoading(false) }
@@ -83,6 +108,37 @@ export const requestAddFirm = (uid: string, dto: FirmCreateDto): Promise<boolean
     homepage: dto.homepage,
     sns: dto.sns
   };
-  console.log('>>> newFirm', newFirm);
+
   return api.createFirm(newFirm);
+};
+
+export const requestModifyFirm = (uid: string, firmId: string, dto: FirmCreateDto): Promise<boolean> =>
+{
+  const updateFirm = {
+    id: firmId,
+    accountId: uid,
+    fname: dto.fname,
+    phoneNumber: dto.phoneNumber,
+    equiListStr: dto.equiListStr,
+    modelYear: dto.modelYear,
+    address: dto.address,
+    addressDetail: dto.addressDetail,
+    sidoAddr: dto.sidoAddr,
+    sigunguAddr: dto.sigunguAddr,
+    addrLongitude: dto.addrLongitude,
+    addrLatitude: dto.addrLatitude,
+    workAlarmSido: dto.workAlarmSido,
+    workAlarmSigungu: dto.workAlarmSigungu,
+    introduction: dto.introduction,
+    thumbnail: dto.uploadedThumbnailUrl,
+    photo1: dto.uploadedPhoto1Url,
+    photo2: dto.uploadedPhoto2Url,
+    photo3: dto.uploadedPhoto3Url,
+    blog: dto.blog,
+    homepage: dto.homepage,
+    sns: dto.sns
+
+  };
+
+  return api.updateFirm(updateFirm);
 };

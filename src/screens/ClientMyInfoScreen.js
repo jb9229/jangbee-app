@@ -136,7 +136,6 @@ const ClientMyInfoScreen = () =>
           size="full"
           Secondary
         />
-        <JBTerm />
       </Card>
     </Container>
   );

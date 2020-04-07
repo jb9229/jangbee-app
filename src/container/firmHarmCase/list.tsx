@@ -5,7 +5,7 @@ import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
 import { DefaultNavigationProps } from 'src/types';
-import FirmHarmCaseLayout from '../components/templates/FirmHarmCaseLayout';
+import FirmHarmCaseLayout from '../../components/templates/FirmHarmCaseLayout';
 import React from 'react';
 import moment from 'moment';
 import { notifyError } from 'common/ErrorNotice';
@@ -20,7 +20,7 @@ const Container = styled.SafeAreaView`
 interface Props {
   navigation: DefaultNavigationProps;
 }
-function FirmHarmCaseScreen (props): React.ReactElement
+function FirmHarmCaseContainer (props): React.ReactElement
 {
   const { user } = useLoginProvider();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
@@ -415,7 +415,7 @@ function FirmHarmCaseScreen (props): React.ReactElement
   );
 }
 
-FirmHarmCaseScreen.navigationOptions = ({ navigation }) => ({
+FirmHarmCaseContainer.navigationOptions = ({ navigation }) => ({
   title: '피해사례 고객',
   headerStyle: {
     marginTop: -28
@@ -442,4 +442,4 @@ const getClientEvaluCount = (accountId: string, setCountData: (n: string) => voi
     });
 };
 
-export default FirmHarmCaseScreen;
+export default FirmHarmCaseContainer;

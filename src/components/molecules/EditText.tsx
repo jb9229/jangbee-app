@@ -72,6 +72,7 @@ const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) 
   React.useEffect(() =>
   {
     setText(props.text);
+    props.onChangeText(props.text);
   }, [props.text]);
 
   return (

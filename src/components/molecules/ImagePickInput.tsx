@@ -62,6 +62,7 @@ const ImagePickInput: React.FC<Props> = (props) =>
   React.useEffect(() =>
   {
     setImageUrl(props.imgUrl);
+    props.setImageUrl(props.imgUrl);
   }, [props.imgUrl]);
 
   const [imgUrl, setImageUrl] = React.useState(props.imgUrl);

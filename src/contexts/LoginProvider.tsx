@@ -26,7 +26,8 @@ export class Firm
   address: string;
   addressDetail: string;
   sidoAddr: string;
-  addrLogitude: string;
+  sigunguAddr: string;
+  addrLongitude: string;
   addrLatitude: string;
   workAlarmSido: string;
   workAlarmSigungu: string;

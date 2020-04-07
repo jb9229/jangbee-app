@@ -47,7 +47,6 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickCreate: (): void =>
     {
-      console.log('>>>> onClickCreate');
       validateCreatFirmDto(firmDto)
         .then((result) =>
         {

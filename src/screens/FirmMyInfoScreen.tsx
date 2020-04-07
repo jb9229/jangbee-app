@@ -3,6 +3,7 @@ import * as api from 'api/api';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CloseButton from 'molecules/CloseButton';
+import { DefaultNavigationProps } from 'src/types';
 import FirmInfoItem from 'organisms/FirmInfoItem';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
@@ -13,7 +14,7 @@ import firebase from 'firebase';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
-import { withLogin } from 'src/contexts/LoginProvider';
+import { useLoginProvider } from 'src/contexts/LoginProvider';
 
 const styles = StyleSheet.create({
   container: {
@@ -123,43 +124,25 @@ const TopCommWrap = styled.View`
   align-items: center;
 `;
 
-class FirmMyInfoScreen extends React.Component
+interface Props {
+  navigation: DefaultNavigationProps;
+}
+const FirmMyInfoScreen: React.FC<Props> = (props) =>
 {
-  static navigationOptions = {
-    header: null
-  };
+  const { user } = useLoginProvider();
+  const [firm, setFirm] = React.useState();
+  const [isLoadingComplete, setLoadingComplete] = React.useState<boolean>(false);
+  const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState<boolean>(false);
+  const [evaluList, setEvaluList] = React.useState();
 
-  constructor (props)
+  React.useEffect(() =>
   {
-    super(props);
-    this.state = {
-      firm: undefined,
-      isLoadingComplete: false,
-      isVisibleKatalkAskModal: false,
-      evaluList: []
-    };
-  }
+    setMyFirmInfo();
+    setFirmEvaluList();
+  }, [props.navigation.state]);
 
-  componentDidMount ()
+  const setMyFirmInfo = (): void =>
   {
-    this.setMyFirmInfo();
-    this.setFirmEvaluList();
-  }
-
-  componentWillReceiveProps (nextProps)
-  {
-    const { params } = nextProps.navigation.state;
-
-    if (params !== undefined && params.refresh !== undefined)
-    {
-      this.setMyFirmInfo();
-    }
-  }
-
-  setMyFirmInfo = () =>
-  {
-    const { user } = this.props;
-
     if (!user.uid)
     {
       Alert.alert('유효하지 않은 사용자 입니다');
@@ -170,7 +153,8 @@ class FirmMyInfoScreen extends React.Component
       .getFirm(user.uid)
       .then(firm =>
       {
-        this.setState({ firm, isLoadingComplete: true });
+        setFirm(firm);
+        setLoadingComplete(true);
       })
       .catch(error =>
       {
@@ -181,17 +165,15 @@ class FirmMyInfoScreen extends React.Component
           }] ${error.message}`,
           this.setMyFirmInfo
         );
-        this.setState({ isLoadingComplete: true });
+        setLoadingComplete(true);
       });
   };
 
   /**
    * 업체 평가 리스트 설정함수
    */
-  setFirmEvaluList = () =>
+  const setFirmEvaluList = (): void =>
   {
-    const { user } = this.props;
-
     if (!user.uid)
     {
       Alert.alert(`[${user.uid}] 유효하지 않은 사용자 입니다`);
@@ -204,7 +186,7 @@ class FirmMyInfoScreen extends React.Component
       {
         if (evaluList)
         {
-          this.setState({ evaluList });
+          setEvaluList(evaluList);
         }
       })
       .catch(error =>
@@ -218,17 +200,15 @@ class FirmMyInfoScreen extends React.Component
       });
   };
 
-  registerFirm = () =>
+  const registerFirm = (): void =>
   {
-    const { navigation } = this.props;
-
-    navigation.navigate('FirmRegister');
+    props.navigation.navigate('FirmRegister');
   };
 
   /**
    * 로그아웃 함수
    */
-  onSignOut = async () =>
+  const onSignOut = async (): Promise<void> =>
   {
     try
     {
@@ -240,97 +220,86 @@ class FirmMyInfoScreen extends React.Component
     }
   };
 
-  render ()
+  if (!isLoadingComplete)
   {
-    const { navigation } = this.props;
+    return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
+  }
 
-    const {
-      firm,
-      isLoadingComplete,
-      isVisibleKatalkAskModal,
-      evaluList
-    } = this.state;
-    if (!isLoadingComplete)
-    {
-      return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
-    }
-
-    if (!firm)
-    {
-      return (
-        <View style={styles.regFirmWrap}>
-          <View style={styles.emptyFirmTopWrap}>
-            <JBButton
-              title="로그아웃"
-              onPress={() => this.onSignOut()}
-              size="small"
-              underline
-              Secondary
-              align="right"
-            />
-            <JBButton
-              title="이용약관 및 회사정보"
-              onPress={() => navigation.navigate('ServiceTerms')}
-              size="small"
-              underline
-              Secondary
-              align="right"
-            />
-          </View>
-          <View style={styles.regFirmWordingWrap}>
-            <Text style={styles.regFirmNotice}>+</Text>
-            <Text style={styles.regFirmNotice}>
-              고객이 장비업체를 찾고 있습니다.
-            </Text>
-            <Text style={styles.regFirmNotice}>
-              무료등록 기회를 놓치지 마세요
-            </Text>
-            <Text style={styles.regFirmNotice}>
-              작성 중 어려운점이있으면 지금 바로 연락주세요
-            </Text>
-            <CommWrap>
-              <JBButton
-                title="카톡 상담"
-                onPress={() => this.setState({ isVisibleKatalkAskModal: true })}
-                align="center"
-                Primary
-              />
-              <JBButton
-                title="내 장비 등록하기"
-                onPress={() => this.registerFirm()}
-                align="center"
-                Secondary
-              />
-            </CommWrap>
-          </View>
-          <KatalkAskWebview
-            isVisibleModal={isVisibleKatalkAskModal}
-            closeModal={() => this.setState({ isVisibleKatalkAskModal: false })}
+  if (!firm)
+  {
+    return (
+      <View style={styles.regFirmWrap}>
+        <View style={styles.emptyFirmTopWrap}>
+          <JBButton
+            title="로그아웃"
+            onPress={() => onSignOut()}
+            size="small"
+            underline
+            Secondary
+            align="right"
+          />
+          <JBButton
+            title="이용약관 및 회사정보"
+            onPress={() => props.navigation.navigate('ServiceTerms')}
+            size="small"
+            underline
+            Secondary
+            align="right"
           />
         </View>
-      );
-    }
-
-    return (
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrViewWrap}>
-          <FirmInfoItem firm={firm} evaluList={evaluList} />
-        </ScrollView>
-        <View style={styles.titleWrap}>
-          <Text style={styles.fnameText}>{firm.fname}</Text>
-          <TopCommWrap>
-            <CloseButton onClose={() => navigation.goBack()} />
-          </TopCommWrap>
+        <View style={styles.regFirmWordingWrap}>
+          <Text style={styles.regFirmNotice}>+</Text>
+          <Text style={styles.regFirmNotice}>
+            고객이 장비업체를 찾고 있습니다.
+          </Text>
+          <Text style={styles.regFirmNotice}>
+            무료등록 기회를 놓치지 마세요
+          </Text>
+          <Text style={styles.regFirmNotice}>
+            작성 중 어려운점이있으면 지금 바로 연락주세요
+          </Text>
+          <CommWrap>
+            <JBButton
+              title="카톡 상담"
+              onPress={() => setVisibleKatalkAskModal(true)}
+              align="center"
+              Primary
+            />
+            <JBButton
+              title="내 장비 등록하기"
+              onPress={() => registerFirm()}
+              align="center"
+              Secondary
+            />
+          </CommWrap>
         </View>
-        <JBButton
-          title="내장비 정보수정하기"
-          onPress={() => navigation.navigate('FirmUpdate')}
-          size="full"
-          Primary
+        <KatalkAskWebview
+          isVisibleModal={isVisibleKatalkAskModal}
+          closeModal={() => setVisibleKatalkAskModal(false)}
         />
       </View>
     );
   }
-}
+
+  return (
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrViewWrap}>
+        <FirmInfoItem firm={firm} evaluList={evaluList} />
+      </ScrollView>
+      <View style={styles.titleWrap}>
+        <Text style={styles.fnameText}>{firm?.fname}</Text>
+        <TopCommWrap>
+          <CloseButton onClose={() => props.navigation.goBack()} />
+        </TopCommWrap>
+      </View>
+      <JBButton
+        title="내장비 정보수정하기"
+        onPress={() => props.navigation.navigate('FirmUpdate')}
+        size="full"
+        Primary
+      />
+    </View>
+  );
+};
 
 export default FirmMyInfoScreen;

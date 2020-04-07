@@ -5,7 +5,7 @@ import {
 
 import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
-import FirmHarmCaseContainer from 'container/FirmHarmCaseContainer';
+import FirmHarmCaseContainer from 'container/firmHarmCase/list';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
 import FirmRegisterScreen from 'screens/FirmRegisterScreen';
 import FirmSettingScreen from 'screens/FirmSettingScreen';

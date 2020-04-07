@@ -34,6 +34,21 @@ const FirmRegisterLayout: React.FC = () =>
   const [isVisibleMapAddModal, setVisibleMapAddModal] = React.useState(false);
   const [isVisibleLocalModal, setVisibleLocalModal] = React.useState(false);
 
+  React.useEffect(() =>
+  {
+    if (firm)
+    {
+      firmDto.equiListStr = firm.equiListStr;
+      firmDto.sidoAddr = firm.sidoAddr;
+      firmDto.sigunguAddr = firm.sigunguAddr;
+      firmDto.address = firm.address;
+      firmDto.addrLatitude = firm.addrLatitude;
+      firmDto.addrLongitude = firm.addrLongitude;
+      firmDto.workAlarmSido = firm.workAlarmSido;
+      firmDto.workAlarmSigungu = firm.workAlarmSigungu;
+    }
+  }, [firm]);
+
   return (
     <Container>
       <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>

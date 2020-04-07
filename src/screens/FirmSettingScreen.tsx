@@ -279,14 +279,14 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
           <JBIconButton
             title="알람 설정"
             img={require('../../assets/images/icon/alarm_icon.png')}
-            onPress={(): void => { setVisibleAlarmSettingModal(true) }}
+            onPress={(): void => { Alert.alert('알림', '수신전화 피해사례조회 알람기능 추가 하겠습니다!'); return; setVisibleAlarmSettingModal(true) }}
           />
         </MenueRowWrap>
         <MenueRowWrap>
           <JBIconButton
             title="캐쉬백"
             img={require('../../assets/images/icon/cashback_icon.png')}
-            onPress={(): void => { setOBSelVisibleModal(true) }}
+            onPress={(): void => { Alert.alert('알림', '매월 정산(계좌이체) 기능을 추가하겠습니다!'); return; setOBSelVisibleModal(true) }}
           />
           <JBIconButton
             title="로그아웃"
