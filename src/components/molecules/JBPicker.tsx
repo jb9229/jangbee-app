@@ -1,9 +1,10 @@
-import { Picker, PickerItem, StyleSheet } from 'react-native';
+import { Picker, StyleSheet } from 'react-native';
 import { number, string } from 'yup';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ErrorText from 'src/components/molecules/Text/ErrorText';
 import MiddleTitle from 'molecules/Text/MiddleTitle';
+import { PickerItem } from 'src/types';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
@@ -17,7 +18,7 @@ interface StyleProps {
 const Container = styled.View`
   margin-top: 15px;
   padding-top: 10px;
-  width: ${(props: StyleProps): number | string => props.size ? props.size : 'transparent'};
+  width: ${(props: StyleProps): number | string => props.size ? props.size : 'auto'};
 `;
 
 const PickerWrap = styled.View`
@@ -39,20 +40,20 @@ const styles = StyleSheet.create({
 
 interface Props {
   title: string;
-  subTitle: string;
-  selectedValue: number;
+  subTitle?: string;
+  selectedValue: number | string;
   items: Array<PickerItem>;
-  onValueChange: (value: string) => void;
-  size: number;
-  selectLabel: string;
-  errorText: string;
+  onValueChange: (value: string | number) => void;
+  size?: number;
+  selectLabel?: string;
+  errorText?: string;
 }
 const JBPicker: React.FC<Props> = (props) =>
 {
   React.useEffect(() =>
   {
     setSelectedValue(props.selectedValue);
-    props.onValueChange('' + props.selectedValue);
+    props.onValueChange(props.selectedValue);
   }, [props.selectedValue]);
 
   const [selectedValue, setSelectedValue] = React.useState(props.selectedValue);
@@ -68,7 +69,7 @@ const JBPicker: React.FC<Props> = (props) =>
           mode="dropdown"
         >
           <Picker.Item label={props.selectLabel || '선택'} value="" key={-1} />
-          {props.items}
+          {props.items.map((item) => <Picker.Item key={item.key} label={item.label} value={item.value} />)}
         </Picker>
       </PickerWrap>
       <ErrorText text={props.errorText}/>

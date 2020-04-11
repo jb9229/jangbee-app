@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { KeyboardAvoidingView, Picker, ScrollView, TextInput } from 'react-native';
+import { MapAddress, PickerItem } from 'src/types';
 
 import Card from 'molecules/CardUI';
 import EditText from 'src/components/molecules/EditText';
@@ -11,7 +12,6 @@ import JBPicker from 'molecules/JBPicker';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import LocalSelModal from 'templates/LocalSelModal';
 import MapAddWebModal from 'templates/MapAddWebModal';
-import { MapAddress } from 'src/types';
 import SelectText from 'src/components/molecules/SelectText';
 import styled from 'styled-components/native';
 import { useFirmRegisterProvider } from 'src/container/firm/FirmRegisterProvider';
@@ -224,7 +224,7 @@ const thisYear = new Date().getFullYear();
 const pickerItems = Array.from(Array(30).keys()).map((_, i) =>
 {
   const year = thisYear - i;
-  return <Picker.Item label={`${year}`} value={year} key={i} />;
+  return new PickerItem(`${year}`, year, i);
 });
 
 export default FirmRegisterLayout;

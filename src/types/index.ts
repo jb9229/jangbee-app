@@ -35,6 +35,20 @@ export interface MapAddress {
   addrLatitude: string;
 }
 
+export class PickerItem
+{
+  constructor (label: string, value: any, key: any)
+  {
+    this.label = label;
+    this.value = value;
+    this.key = key;
+  }
+
+  key: string;
+  label: string;
+  value: string;
+}
+
 export type IconType = SFC<IconProps>;
 
 // Firm Object Type

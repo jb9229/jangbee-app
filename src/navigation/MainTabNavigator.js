@@ -1,17 +1,17 @@
-import React from 'react';
-import { Platform } from 'react-native';
 import {
-  createStackNavigator,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createStackNavigator
 } from 'react-navigation';
 
-import TabBarIcon from 'atoms/TabBarIcon';
-import HomeScreen from 'screens/HomeScreen';
-import ClientMyInfoScreen from 'screens/ClientMyInfoScreen';
-import WorkListScreen from 'screens/WorkListScreen';
-import WorkRegisterScreen from 'screens/WorkRegisterScreen';
 import AppliFirmList from 'organisms/AppliFirmList';
+import ClientMyInfoScreen from 'screens/ClientMyInfoScreen';
+import HomeScreen from 'screens/HomeScreen';
 import JBServiceTerms from 'screens/JBServiceTerms';
+import { Platform } from 'react-native';
+import React from 'react';
+import TabBarIcon from 'atoms/TabBarIcon';
+import WorkListScreen from 'screens/WorkListScreen';
+import WorkRegisterScreen from 'container/work/register';
 import colors from 'constants/Colors';
 
 const ClientHomeStack = createStackNavigator({

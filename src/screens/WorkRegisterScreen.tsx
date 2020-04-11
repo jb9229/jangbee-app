@@ -476,7 +476,7 @@ const WorkRegisterScreen: React.FC<Props> = (props) =>
 
             <JBButton
               title="일감 등록완료"
-              onPress={(): void => confirmCreateWork()}
+              onPress={(): void => confirmCreateWork(isFirmRegister, workDto.guaranteeTime, onClickCreate)}
               size="full"
               Secondary
             />

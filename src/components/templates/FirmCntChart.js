@@ -1,6 +1,6 @@
 import * as api from 'api/api';
 
-import { Alert, Picker, ScrollView } from 'react-native';
+import { Alert, Picker, PickerItem, ScrollView } from 'react-native';
 
 import JBPicker from 'molecules/JBPicker';
 import { LineChart } from 'react-native-chart-kit';
@@ -53,9 +53,7 @@ const chartConfig = {
   strokeWidth: 2 // optional, default 3
 };
 
-const sidoEquiPickerItems = ['크레인', '카고크레인', '굴착기', '스카이'].map(
-  lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />
-);
+const sidoEquiPickerItems = ['크레인', '카고크레인', '굴착기', '스카이'].map(lin => new PickerItem(`${lin}`, lin, lin));
 
 const CHART_COLORS = [
   '255, 102, 102,',

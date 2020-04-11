@@ -8,7 +8,7 @@ import CreateAd from 'container/ad/create';
 import FirmWorkListScreen from 'container/firmwork/list';
 import { User } from 'firebase';
 import WorkListScreen from '../../../src/screens/WorkListScreen';
-import WorkRegisterScreen from '../../../src/screens/WorkRegisterScreen';
+import WorkRegisterScreen from '../../../src/container/work/register';
 import { storiesOf } from '@storybook/react-native';
 
 const SafeZonDecorator = (storyFn): React.ReactElement => (
@@ -58,6 +58,7 @@ storiesOf('Layout Components', module)
         navigation={{
           navigate: (path: string, params: object): void =>
           { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
+          getParam: () => { return false },
           state: {
             params: (): void => console.log('navigate() called!')
           }
