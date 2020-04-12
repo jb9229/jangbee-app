@@ -11,7 +11,7 @@ import styled from 'styled-components/native';
 
 const ChartWrap = styled.View`
   flex: 1;
-  height: 305;
+  height: 395;
 `;
 
 const ChartTopWrap = styled.View`
@@ -36,6 +36,7 @@ const ChartLegendListWrap = styled.View`
 const ChartLegend = styled.View`
   padding: 5px;
   margin-right: 5;
+  height: 30;
   ${props =>
     props.color &&
     `

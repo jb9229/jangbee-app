@@ -195,18 +195,18 @@ export default class GPSSearchScreen extends React.Component
    */
   getLocation = async () =>
   {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    const { status } = await Permissions.askAsync(Permissions.LOCATION).catch((err) => console.log(err));
     if (status !== 'granted')
     {
       Alert.alert('위치정보 접근이 허용되지 않았습니다.');
       return undefined;
     }
 
-    const location = await Location.getCurrentPositionAsync({});
+    const location = await Location.getCurrentPositionAsync({}).catch((err) => console.log(err));
 
     this.setState({
-      searLongitude: location.coords.longitude,
-      searLatitude: location.coords.latitude
+      searLongitude: location?.coords.longitude,
+      searLatitude: location?.coords.latitude
     });
 
     // Text Code Deajeon Railway Station

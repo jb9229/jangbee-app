@@ -7,11 +7,11 @@ import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates
 import { ApplyWorkCallback } from 'src/components/action';
 import CouponSelectModal from 'src/components/templates/CouponSelectModal';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
+import { Provider } from 'src/contexts/LoginContext';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
 import { noticeUserError } from 'src/container/request';
 import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
-import { Provider } from 'src/contexts/LoginContext';
 
 export class Firm
 {
@@ -89,7 +89,7 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
-    setUser: {},
+    setUser: (user) => {},
     setFirm,
     setUserProfile,
     openWorkPaymentModal: (price: number): void =>

@@ -2,8 +2,8 @@ import * as api from 'api/api';
 
 import { Alert, DeviceEventEmitter, Platform } from 'react-native';
 import { DefaultNavigationProps, UserProfile, UserType } from 'src/types';
-import { Firm, useLoginContext } from 'src/provider/LoginProvider';
 
+import { Firm } from 'src/provider/LoginProvider';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JBTerm from 'templates/JBTerm';
@@ -15,6 +15,7 @@ import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.ScrollView`
   background-color: ${colors.batangLight};

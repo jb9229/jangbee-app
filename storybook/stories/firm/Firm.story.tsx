@@ -6,6 +6,7 @@ import { boolean, text } from '@storybook/addon-knobs';
 
 import FirmModifyScreen from 'src/container/firm/modify';
 import FirmRegisterScreen from '../../../src/container/firm/create';
+import HomeScreen from 'src/screens/HomeScreen';
 import ImagePickInput from 'molecules/ImagePickInput';
 import JBButton from 'molecules/JBButton';
 import LoadingIndicator from 'molecules/LoadingIndicator';
@@ -21,6 +22,21 @@ const SafeZonDecorator = (storyFn): React.ReactElement => (
 
 storiesOf('업체', module)
   .addDecorator(SafeZonDecorator)
+  .add('홈', () => React.createElement(() =>
+  {
+    return (
+      <HomeScreen
+        navigation={{
+          navigate: (path: string, params: object): void =>
+          { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
+          state: {
+            params: (): void => console.log('navigate() called!')
+          },
+          addListener: () => {}
+        }}
+      />
+    );
+  }))
   .add('등록', () => React.createElement(() =>
   {
     const { setUser, setUserProfile } = useLoginContext();

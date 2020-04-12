@@ -6,7 +6,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading } from 'expo';
 import AppNavigator from 'navigation/AppNavigator';
 import JBActIndicator from 'molecules/JBActIndicator';
-import { LoginProvider } from 'src/provider/LoginProvider';
+import { LoginProvider } from 'src/contexts/LoginContext';
 import React from 'react';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import colors from 'constants/Colors';
