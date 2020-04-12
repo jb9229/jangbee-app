@@ -5,7 +5,6 @@
     "slug": "jangbeecall_beta",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android"

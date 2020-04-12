@@ -7,7 +7,7 @@ import org.unimodules.core.interfaces.Package;
 import java.util.Arrays;
 import java.util.List;
 
-import expo.loaders.provider.interfaces.AppLoaderPackagesProviderInterface;
+import org.unimodules.apploader.AppLoaderPackagesProviderInterface;
 import host.exp.exponent.generated.BasePackageList;
 import okhttp3.OkHttpClient;
 import com.facebook.react.ReactInstanceManager; // <---- add this import
