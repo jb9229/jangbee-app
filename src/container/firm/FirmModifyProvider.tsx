@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as url from 'constants/Url';
 
-import { Firm, useLoginProvider } from 'src/contexts/LoginProvider';
+import { Firm, useLoginContext } from 'src/provider/LoginProvider';
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
 import { requestModifyFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
 
@@ -29,7 +29,7 @@ interface Props {
 const FirmModifyProvider = (props: Props): React.ReactElement =>
 {
   // States
-  const { user, firm, popLoading } = useLoginProvider();
+  const { user, firm, popLoading } = useLoginContext();
   const [firmDto, setFirmDto] = React.useState(new FirmCreateDto());
   const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(new FirmCreateErrorData());
 

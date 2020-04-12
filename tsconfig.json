@@ -28,7 +28,7 @@
     }
   },
   "include": [
-    "src/**/*",
+    "src/**/*", "storybook/**/*",
   ],
   "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
   "jest": {

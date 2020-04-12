@@ -14,7 +14,7 @@ import WorkUpdateModal from 'templates/WorkUpdateModal';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   Container: {
@@ -39,7 +39,7 @@ interface Props {
 }
 const ClientWorkListScreen: React.FC<Props> = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const [isVisibleEstimateModal, setVisibleEstimateModal] = React.useState(false);
   const [isVisibleEditWorkModal, setVisibleEditWorkModal] = React.useState(false);
   const [isVisibleDetailModal, setVisibleDetailModal] = React.useState(false);

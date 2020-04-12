@@ -13,7 +13,7 @@ import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { getAdtypeStr } from 'constants/AdTypeStr';
 import { notifyError } from 'common/ErrorNotice';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,7 +79,7 @@ interface Props {
 }
 const AdScreen: React.FC<Props> = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const [isVisibleAdUpdateModal, setVisibleAdUpdateModal] = React.useState(false);
   const [isVisibleDetailModal, setVisibleDetailModal] = React.useState(false);
   const [isLoadingAdList, setLoadingAdList] = React.useState(true);

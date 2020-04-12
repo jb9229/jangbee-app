@@ -9,7 +9,7 @@ import FirmMatchedWorkList from 'organisms/FirmMatchedWorkList';
 import FirmOpenWorkList from 'organisms/FirmOpenWorkList.tsx';
 import JBButton from 'molecules/JBButton';
 import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface StyledCProps {
   theme: DefaultTheme;
@@ -35,7 +35,7 @@ interface Props {
 }
 const FirmWorkListLayout: React.FC<Props> = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const { openWorkList, matchedWorkList } = useFirmWorkProvider();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([

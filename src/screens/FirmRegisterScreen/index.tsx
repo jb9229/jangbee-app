@@ -23,7 +23,7 @@ import JBTextInput from 'molecules/JBTextInput';
 import LocalSelModal from 'templates/LocalSelModal';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import React from 'react';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +50,7 @@ interface Props {
 
 const FirmRegisterScreen = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState(false);
   const [isVisibleMapAddModal, setVisibleMapAddModal] = React.useState(false);
   const [isVisibleActIndiModal, setVisibleActIndiModal] = React.useState(false);

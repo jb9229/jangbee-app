@@ -15,13 +15,10 @@ import {
 import JBButton from 'molecules/JBButton';
 import JBIcon from 'atoms/JBIcon';
 import JBTerm from 'templates/JBTerm';
-import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
-import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
 // @flow
 import React from 'react';
 import Styled from 'styled-components/native';
-import firebase from 'firebase';
-import { withLogin } from 'src/contexts/LoginProvider';
+import * as firebase from 'firebase';
 
 const styles = StyleSheet.create({
   container: {

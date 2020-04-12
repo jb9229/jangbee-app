@@ -2,12 +2,11 @@ import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
 
 import Card from 'molecules/CardUI';
 import JBButton from 'molecules/JBButton';
-import JBTerm from 'templates/JBTerm';
 import JBTextItem from 'molecules/JBTextItem';
 import React from 'react';
 import Styled from 'styled-components/native';
 import firebase from 'firebase';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = Styled.View`
   flex: 1;
@@ -20,7 +19,7 @@ const TopMenu = Styled.View`
 
 const ClientMyInfoScreen = () =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const confirmDeleteUser = () =>
   {
     Alert.alert(

@@ -3,7 +3,7 @@ import 'isomorphic-fetch';
 import renderer from 'react-test-renderer';
 import NavigationTestUtils from 'react-navigation/NavigationTestUtils';
 import AdCreateScreen from 'screens/AdCreateScreen';
-import { LoginProvider } from 'src/contexts/LoginProvider';
+import { LoginProvider } from 'src/contexts/LoginContext';
 import JBActIndicator from 'molecules/JBActIndicator';
 
 describe('test', () => {

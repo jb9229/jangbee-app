@@ -9,10 +9,9 @@ import CouponSelectModal from 'src/components/templates/CouponSelectModal';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
-import { boolean } from 'yup';
-import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
+import { Provider } from 'src/contexts/LoginContext';
 
 export class Firm
 {
@@ -53,36 +52,18 @@ class LoadingModalData
   msg: string;
 }
 
-interface Context {
-  navigation: DefaultNavigationProps;
-  user: User;
-  userProfile: UserProfile;
-  firm: Firm;
-  paymentInfo: KakaoPaymentInfo;
-  setUser: (user: User) => void;
-  setFirm: (firm: Firm) => void;
-  setUserProfile: (p: UserProfile) => void;
-  openWorkPaymentModal: (price: number) => void;
-  openAdPaymentModal: (price: number) => void;
-  openCouponModal: () => void;
-  popLoading: (loadingFlag: boolean, msg?: string) => void;
-}
-
-class KakaoPaymentInfo
+export class KakaoPaymentInfo
 {
   sid?: string;
 }
-
-const [useCtx, Provider] = createCtx<Context>();
 
 interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
 }
 
-const LoginProvider = (props: Props): React.ReactElement =>
+const LoginStorybookProvider = (props: Props): React.ReactElement =>
 {
-  const [user, setUser] = React.useState<User | undefined>();
   const [userProfile, setUserProfile] = React.useState<UserProfile>();
   const [firm, setFirm] = React.useState<Firm | undefined>();
   const [couponModalVisible, setCouponModalVisible] = React.useState<boolean>(false);
@@ -94,6 +75,11 @@ const LoginProvider = (props: Props): React.ReactElement =>
   // data
   let callbackAction: ApplyWorkCallback | undefined;
 
+  const user = {
+    uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
+    phoneNumber: '01052023337', photoURL: '', providerId: ''
+  };
+
   const states = {
     navigation: props.navigation,
     user,
@@ -103,7 +89,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
-    setUser,
+    setUser: {},
     setFirm,
     setUserProfile,
     openWorkPaymentModal: (price: number): void =>
@@ -190,4 +176,4 @@ const LoginProvider = (props: Props): React.ReactElement =>
   );
 };
 
-export { useCtx as useLoginProvider, LoginProvider };
+export default LoginStorybookProvider;

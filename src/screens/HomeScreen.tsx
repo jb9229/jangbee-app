@@ -2,7 +2,7 @@ import * as api from 'api/api';
 
 import { Alert, DeviceEventEmitter, Platform } from 'react-native';
 import { DefaultNavigationProps, UserProfile, UserType } from 'src/types';
-import { Firm, useLoginProvider } from 'src/contexts/LoginProvider';
+import { Firm, useLoginContext } from 'src/provider/LoginProvider';
 
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
@@ -26,7 +26,7 @@ interface Props {
 }
 const HomeScreen: React.FC<Props> = (props) =>
 {
-  const { user, userProfile, setFirm } = useLoginProvider();
+  const { user, userProfile, setFirm } = useLoginContext();
   let _notificationSubscription;
 
   React.useEffect(() =>

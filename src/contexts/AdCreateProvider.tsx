@@ -16,7 +16,7 @@ import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import produce from 'immer';
 import useAxios from 'axios-hooks';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const [useCtx, Provider] = createCtx<Context>();
 
@@ -282,7 +282,7 @@ interface Props {
 
 const AdCreateProvider = (props: Props): React.ReactElement =>
 {
-  const { user, userProfile, openAdPaymentModal } = useLoginProvider();
+  const { user, userProfile, openAdPaymentModal } = useLoginContext();
   // State
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState<boolean>(false);
   const [isVisibleAddrModal, setVisibleAddrModal] = React.useState<boolean>(false);

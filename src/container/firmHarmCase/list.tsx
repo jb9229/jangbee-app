@@ -11,7 +11,7 @@ import moment from 'moment';
 import { notifyError } from 'common/ErrorNotice';
 import { shareNotExistCEvalu } from 'common/JBCallShare';
 import styled from 'styled-components/native';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -22,7 +22,7 @@ interface Props {
 }
 function FirmHarmCaseContainer (props): React.ReactElement
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
@@ -54,7 +54,7 @@ function FirmHarmCaseContainer (props): React.ReactElement
     }
     else
     {
-      getClientEvaluCount(user.uid, setCountData);
+      getClientEvaluCount(user?.uid, setCountData);
       setClinetEvaluList();
     }
   }, []);

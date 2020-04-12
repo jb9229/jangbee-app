@@ -14,7 +14,7 @@ import firebase from 'firebase';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -129,7 +129,7 @@ interface Props {
 }
 const FirmMyInfoScreen: React.FC<Props> = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const [firm, setFirm] = React.useState();
   const [isLoadingComplete, setLoadingComplete] = React.useState<boolean>(false);
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState<boolean>(false);

@@ -7,13 +7,12 @@ import { DefaultNavigationProps } from 'src/types';
 import DocumentsModal from 'templates/DocumentsModal';
 import JBIconButton from 'molecules/JBIconButton';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
-import OpenBankAccSelectModal from 'templates/OpenBankAccSelectModal';
 import React from 'react';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 import { validatePresence } from 'utils/Validation';
 
 const Container = styled.View`
@@ -45,7 +44,7 @@ interface Props {
 
 const FirmSettingScreen: React.FC<Props> = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState(false);
   const [isOBSelVisibleModal, setOBSelVisibleModal] = React.useState(false);
   const [isVisibleDocModal, setVisibleDocModal] = React.useState(false);
@@ -305,16 +304,6 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
       <KatalkAskWebview
         isVisibleModal={isVisibleKatalkAskModal}
         closeModal={(): void => { setVisibleKatalkAskModal(false) }}
-      />
-      <OpenBankAccSelectModal
-        accountId={user.uid}
-        isVisibleModal={isOBSelVisibleModal}
-        navigation={props.navigation}
-        completeSelect={requestCashback}
-        closeModal={(): void => { setOBSelVisibleModal(false) }}
-        reauthAfterAction={(): void => { setOBSelVisibleModal(true) }}
-        actionName="캐쉬백 요청하기"
-        mode="CASHBACK_MODE"
       />
       <DocumentsModal
         isVisibleModal={isVisibleDocModal}

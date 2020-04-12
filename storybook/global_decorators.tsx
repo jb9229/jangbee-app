@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import { LoginProvider } from 'src/contexts/LoginProvider.tsx';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import { addDecorator } from '@storybook/react-native';
 // import { withKnobs } from '@storybook/addon-ondevice-knobs';
 import { withKnobs } from '@storybook/addon-knobs';
+import LoginStorybookProvider from './provider/LoginStorybookProvider';
 
 const ThemeProviderDecorator = (storyFn) => (
   <ThemeProvider>{storyFn()}</ThemeProvider>
 );
 
 const LoginProviderDecorator = (storyFn) => (
-  <LoginProvider>{storyFn()}</LoginProvider>
+  <LoginStorybookProvider>{storyFn()}</LoginStorybookProvider>
 );
 
 export const setupGlobalDecorators = () =>

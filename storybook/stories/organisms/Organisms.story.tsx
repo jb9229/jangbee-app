@@ -40,7 +40,7 @@ storiesOf('Organisms Components', module)
   )
   .add('Firm OpenWork List', () => React.createElement(() =>
   {
-    const { setUser } = useLoginProvider();
+    const { setUser } = useLoginContext();
     const user: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
@@ -70,7 +70,7 @@ storiesOf('Organisms Components', module)
   }))
   .add('차주선택(고객)', () => React.createElement((): React.ReactElement =>
   {
-    // const { setUser } = useLoginProvider();
+    // const { setUser } = useLoginContext();
     // const user: User =
     // {
     //   uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,

@@ -8,7 +8,7 @@ import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import useAxios from 'axios-hooks';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface Context {
   navigation: DefaultNavigationProps;
@@ -32,7 +32,7 @@ interface Props {
 
 const FirmWorkProvider = (props: Props): React.ReactElement =>
 {
-  const { user, firm, paymentInfo, openWorkPaymentModal, openCouponModal } = useLoginProvider();
+  const { user, firm, paymentInfo, openWorkPaymentModal, openCouponModal } = useLoginContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [matchedRefreshing, setMatchedRefreshing] = React.useState(false);
 

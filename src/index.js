@@ -1,13 +1,12 @@
 import * as Font from 'expo-font';
-import * as Icon from '@expo/vector-icons';
+import * as Updates from 'expo-updates';
 
-import { AppLoading, Updates } from 'expo';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 
+import { AppLoading } from 'expo';
 import AppNavigator from 'navigation/AppNavigator';
-import { Asset } from 'expo-asset';
 import JBActIndicator from 'molecules/JBActIndicator';
-import { LoginProvider } from 'src/contexts/LoginProvider';
+import { LoginProvider } from 'src/provider/LoginProvider';
 import React from 'react';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import colors from 'constants/Colors';

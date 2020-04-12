@@ -1,10 +1,9 @@
 import * as React from 'react';
 
 import { Alert, SafeAreaView } from 'react-native';
-import { Firm, useLoginProvider } from 'src/contexts/LoginProvider';
+import { Firm, useLoginContext } from 'src/provider/LoginProvider';
 import { boolean, text } from '@storybook/addon-knobs';
 
-import CreateAd from 'container/ad/create';
 import FirmWorkListScreen from 'container/firmwork/list';
 import { User } from 'firebase';
 import WorkListScreen from '../../../src/screens/WorkListScreen';
@@ -17,29 +16,11 @@ const SafeZonDecorator = (storyFn): React.ReactElement => (
   </SafeAreaView>
 );
 
-storiesOf('Layout Components', module)
+storiesOf('일감', module)
   .addDecorator(SafeZonDecorator)
-  .add('광고등록', () => React.createElement(() =>
-  {
-    const { setUser } = useLoginProvider();
-    React.useEffect(() =>
-    {
-      const user: User =
-      {
-        uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
-        phoneNumber: '01052023337', photoURL: '', providerId: ''
-      };
-
-      setUser(user);
-    }, []);
-
-    return (
-      <CreateAd />
-    );
-  }))
   .add('일감등록', () => React.createElement(() =>
   {
-    const { setUser, setUserProfile } = useLoginProvider();
+    const { setUser, setUserProfile } = useLoginContext();
     const user: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
@@ -68,7 +49,7 @@ storiesOf('Layout Components', module)
   }))
   .add('차주일감', () => React.createElement(() =>
   {
-    const { setUser, setFirm } = useLoginProvider();
+    const { setUser, setFirm } = useLoginContext();
     const user: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
@@ -102,7 +83,7 @@ storiesOf('Layout Components', module)
   }))
   .add('고객일감', () => React.createElement(() =>
   {
-    const { setUser, setFirm } = useLoginProvider();
+    const { setUser, setFirm } = useLoginContext();
     const user: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,

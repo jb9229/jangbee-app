@@ -13,7 +13,6 @@ import FirmUpdateScreen from 'container/firm/modify';
 import FirmWorkListScreen from 'container/firmwork/list';
 import HomeScreen from 'screens/HomeScreen';
 import JBServiceTerms from 'screens/JBServiceTerms';
-import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
 import { Platform } from 'react-native';
 import React from 'react';
 import TabBarIcon from 'atoms/TabBarIcon';
@@ -108,10 +107,6 @@ const AdStack = createStackNavigator({
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
     }
-  },
-  OpenBankAuth: {
-    screen: OpenBankAuthWebView,
-    navigationOptions: { header: null }
   }
 });
 

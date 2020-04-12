@@ -6,7 +6,7 @@ import { requestAddWork, validateRegisterWorkDto } from 'src/container/work/acti
 import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface Context {
   navigation: DefaultNavigationProps;
@@ -27,7 +27,7 @@ const WorkRegisterProvider = (props: Props): React.ReactElement =>
 {
   // States
   const isFirmRegister = props.navigation.getParam('firmRegister', false);
-  const { user, firm, popLoading } = useLoginProvider();
+  const { user, firm, popLoading } = useLoginContext();
   const [workDto, setWorkDto] = React.useState(new WorkCreateDto());
   const [errorData, setErrorData] = React.useState<WorkCreateErrorData>(new WorkCreateErrorData());
 

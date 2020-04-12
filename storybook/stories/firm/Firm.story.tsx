@@ -11,7 +11,7 @@ import JBButton from 'molecules/JBButton';
 import LoadingIndicator from 'molecules/LoadingIndicator';
 import { User } from 'firebase';
 import { storiesOf } from '@storybook/react-native';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const SafeZonDecorator = (storyFn): React.ReactElement => (
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -23,7 +23,7 @@ storiesOf('업체', module)
   .addDecorator(SafeZonDecorator)
   .add('등록', () => React.createElement(() =>
   {
-    const { setUser, setUserProfile } = useLoginProvider();
+    const { setUser, setUserProfile } = useLoginContext();
     const user: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
@@ -50,7 +50,7 @@ storiesOf('업체', module)
   }))
   .add('수정', () => React.createElement(() =>
   {
-    const { user, setUser, setUserProfile } = useLoginProvider();
+    const { user, setUser, setUserProfile } = useLoginContext();
     const storyUser: User =
     {
       uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,

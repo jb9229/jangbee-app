@@ -8,7 +8,7 @@ import WorkCommWrap from 'molecules/WorkCommWrapUI';
 import WorkItem from 'organisms/WorkItem';
 import styled from 'styled-components/native';
 import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const CommWrap = styled.View`
   flex-direction: row;
@@ -23,7 +23,7 @@ interface Props {
 
 const FirmWorkingList: React.FC<Props> = (props) =>
 {
-  const { user } = useLoginProvider();
+  const { user } = useLoginContext();
   const { refreshing, refetchOpenWorkList, applyWork, acceptWork, abandonWork } = useFirmWorkProvider();
 
   if (!props.list)

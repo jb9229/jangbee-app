@@ -6,7 +6,7 @@ import LoginScreen from 'screens/LoginScreen';
 import MainTabNavigator from './MainTabNavigator';
 import React from 'react';
 import SignUpScreen from 'screens/SignUpScreen';
-import { useLoginProvider } from 'src/contexts/LoginProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 let AppContainer;
 
@@ -20,7 +20,7 @@ interface Props {
 }
 const RootNavigator: React.FC<Props> = (props) =>
 {
-  const { setUser, setUserProfile } = useLoginProvider();
+  const { setUser, setUserProfile } = useLoginContext();
   const [authPath, setAuthPath] = React.useState(AUTHPATH_AUTHING);
   const [authData, setAuthData] = React.useState();
 
