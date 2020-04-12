@@ -1,5 +1,4 @@
 import { Picker, StyleSheet } from 'react-native';
-import { number, string } from 'yup';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ErrorText from 'src/components/molecules/Text/ErrorText';
@@ -69,7 +68,7 @@ const JBPicker: React.FC<Props> = (props) =>
           mode="dropdown"
         >
           <Picker.Item label={props.selectLabel || '선택'} value="" key={-1} />
-          {props.items.map((item) => <Picker.Item key={item.key} label={item.label} value={item.value} />)}
+          {!!props.items && props.items.map((item) => <Picker.Item key={item.key} label={item.label} value={item.value} />)}
         </Picker>
       </PickerWrap>
       <ErrorText text={props.errorText}/>

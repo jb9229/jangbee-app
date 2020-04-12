@@ -7,9 +7,9 @@ import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
 import FirmHarmCaseContainer from 'container/firmHarmCase/list';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
-import FirmRegisterScreen from 'screens/FirmRegisterScreen';
+import FirmRegisterScreen from 'container/firm/create';
 import FirmSettingScreen from 'screens/FirmSettingScreen';
-import FirmUpdateScreen from 'screens/FirmUpdateScreen';
+import FirmUpdateScreen from 'container/firm/modify';
 import FirmWorkListScreen from 'container/firmwork/list';
 import HomeScreen from 'screens/HomeScreen';
 import JBServiceTerms from 'screens/JBServiceTerms';
@@ -17,7 +17,7 @@ import OpenBankAuthWebView from 'templates/OpenBankAuthWebView';
 import { Platform } from 'react-native';
 import React from 'react';
 import TabBarIcon from 'atoms/TabBarIcon';
-import WorkRegisterScreen from 'screens/WorkRegisterScreen';
+import WorkRegisterScreen from 'container/work/register';
 import colors from 'constants/Colors';
 
 const FirmWorkStack = createStackNavigator({

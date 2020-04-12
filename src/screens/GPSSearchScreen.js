@@ -20,6 +20,7 @@ import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
 import JBIcon from 'atoms/JBIcon';
 import JBSelectBox from 'organisms/JBSelectBox';
+import { PickerItem } from 'src/types';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
@@ -112,7 +113,8 @@ const ScrollImage = styled.Image`
   height: 22;
 `;
 
-export default class GPSSearchScreen extends React.Component {
+export default class GPSSearchScreen extends React.Component
+{
   _didFocusSubscription;
 
   _willBlurSubscription;
@@ -123,7 +125,8 @@ export default class GPSSearchScreen extends React.Component {
 
   _isMounted = false;
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       isVisibleSearResultModal: false,
@@ -147,7 +150,8 @@ export default class GPSSearchScreen extends React.Component {
     );
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     const { navigation } = this.props;
 
     this._isMounted = true;
@@ -160,7 +164,8 @@ export default class GPSSearchScreen extends React.Component {
     );
   }
 
-  componentWillUnmount() {
+  componentWillUnmount ()
+  {
     this._isMounted = false;
     this._didFocusSubscription && this._didFocusSubscription.remove();
     this._willBlurSubscription && this._willBlurSubscription.remove();
@@ -169,7 +174,8 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * 내주변/지역 검색 모드변경 함수
    */
-  changeSearMode = isLocalMode => {
+  changeSearMode = isLocalMode =>
+  {
     const { isSearchViewMode } = this.state;
 
     this.setState({
@@ -178,7 +184,8 @@ export default class GPSSearchScreen extends React.Component {
       searGungu: '전체'
     });
 
-    if (!isSearchViewMode) {
+    if (!isSearchViewMode)
+    {
       this.setSearchViewMode(true);
     }
   };
@@ -186,9 +193,11 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * GPS정보수신 함수
    */
-  getLocation = async () => {
+  getLocation = async () =>
+  {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
+    if (status !== 'granted')
+    {
       Alert.alert('위치정보 접근이 허용되지 않았습니다.');
       return undefined;
     }
@@ -209,11 +218,15 @@ export default class GPSSearchScreen extends React.Component {
     return location;
   };
 
-  handleBackPress = () => {
+  handleBackPress = () =>
+  {
     const { isSearchViewMode } = this.state;
-    if (!isSearchViewMode) {
+    if (!isSearchViewMode)
+    {
       this.setState({ isSearchViewMode: true });
-    } else {
+    }
+    else
+    {
       Alert.alert('장비콜 종료', '정말 종료 하시겠습니까?', [
         { text: '아니요', onPress: () => {}, style: 'cancel' },
         { text: '종료', onPress: () => BackHandler.exitApp() }
@@ -225,25 +238,33 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * GPS 좌표을 활용한 주소설정
    */
-  setLocAddress = (logitude, latitude) => {
+  setLocAddress = (logitude, latitude) =>
+  {
     api
       .getAddrByGpspoint(logitude, latitude)
-      .then(addrInfo => {
-        if (!this._isMounted) {
+      .then(addrInfo =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
-        if (addrInfo) {
-          if (addrInfo.code === -2) {
+        if (addrInfo)
+        {
+          if (addrInfo.code === -2)
+          {
             this.setState({
               currLocation: addrInfo.msg
             });
-          } else if (addrInfo.documents[0]) {
+          }
+          else if (addrInfo.documents[0])
+          {
             const address = addrInfo.documents[0]; // region_type: H(행정동, documents[1]) or B(법정동, documents[0])
             const addressName = address.address_name;
             const sido = address.region_1depth_name;
             let gungu = address.region_2depth_name;
-            if (!gungu) {
+            if (!gungu)
+            {
               gungu = address.region_3depth_name;
             }
 
@@ -252,7 +273,9 @@ export default class GPSSearchScreen extends React.Component {
               searSido: sido,
               searGungu: gungu
             });
-          } else {
+          }
+          else
+          {
             Alert.alert(
               '유효하지 않은 좌표주소 입니다',
               `응답 내용: ${addrInfo}`
@@ -260,8 +283,10 @@ export default class GPSSearchScreen extends React.Component {
           }
         }
       })
-      .catch(error => {
-        if (!this._isMounted) {
+      .catch(error =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -275,10 +300,12 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * 검색화면/광고화면 전환 함수
    */
-  setSearchViewMode = flag => {
+  setSearchViewMode = flag =>
+  {
     const { isSearchViewMode } = this.state;
 
-    if (flag !== isSearchViewMode) {
+    if (flag !== isSearchViewMode)
+    {
       this.setState({ isSearchViewMode: flag });
     }
   };
@@ -286,7 +313,8 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * 지역장비 검색 유효성 검사 함수
    */
-  validateSearNearFirm = () => {
+  validateSearNearFirm = () =>
+  {
     const {
       searEquipment,
       searEquiModel,
@@ -297,13 +325,15 @@ export default class GPSSearchScreen extends React.Component {
     this.setState({ validationMessage: '' });
 
     let v = validatePresence(searEquipment);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ validationMessage: '검색할 장비명을 선택해 주세요' });
       return false;
     }
 
     v = validatePresence(searEquiModel);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({
         validationMessage: '검색할 장비명 모델을 선택해 주세요'
       });
@@ -311,7 +341,8 @@ export default class GPSSearchScreen extends React.Component {
     }
 
     v = validatePresence(searLongitude);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({
         validationMessage:
           '위치정보가 아직 수신되지 않았습니다, 조금만 기다려 주시거나 위치정보 새로고침을 눌러 주세요.'
@@ -320,7 +351,8 @@ export default class GPSSearchScreen extends React.Component {
     }
 
     v = validatePresence(searLatitude);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({
         validationMessage:
           '위치정보가 아직 수신되지 않았습니다, 조금만 기다려 주시거나 위치정보 새로고침을 눌러 주세요.'
@@ -334,25 +366,29 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * 지역장비 검색 유효성 검사 함수
    */
-  validateSearLocFirm = () => {
+  validateSearLocFirm = () =>
+  {
     const { searEquipment, searEquiModel, searSido, searGungu } = this.state;
 
     this.setState({ validationMessage: '' });
 
     let v = validatePresence(searEquipment);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ validationMessage: '검색할 장비명을 선택해 주세요' });
       return false;
     }
 
     v = validatePresence(searEquiModel);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ validationMessage: '검색할 장비모델을 선택해 주세요' });
       return false;
     }
 
     v = validatePresence(searSido);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ validationMessage: '검색할 지역(시도) 선택해 주세요' });
       return false;
     }
@@ -363,15 +399,18 @@ export default class GPSSearchScreen extends React.Component {
   /**
    * 사용자 위치설정 함수
    */
-  setLocationInfo = async () => {
+  setLocationInfo = async () =>
+  {
     const location = await this.getLocation();
 
-    if (location) {
+    if (location)
+    {
       this.setLocAddress(location.coords.longitude, location.coords.latitude);
     }
   };
 
-  render() {
+  render ()
+  {
     const { navigation } = this.props;
     const {
       isVisibleSearResultModal,
@@ -387,7 +426,8 @@ export default class GPSSearchScreen extends React.Component {
       searLatitude
     } = this.state;
 
-    if (!isComponentMountComplete) {
+    if (!isComponentMountComplete)
+    {
       return <JBActIndicator title="위치정보를 불러오는 중..." size={35} />;
     }
 
@@ -553,10 +593,8 @@ EQUIPMENT_ITEM['크레인'] = [
   '700톤',
   '800톤',
   '1200톤'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
-EQUIPMENT_ITEM['카고크레인'] = ['5톤', '11톤', '18톤', '25톤'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
+].map(lin => new PickerItem(`${lin}`, lin, lin));
+EQUIPMENT_ITEM['카고크레인'] = ['5톤', '11톤', '18톤', '25톤'].map(lin => new PickerItem(`${lin}`, lin, lin));
 EQUIPMENT_ITEM['굴착기'] = [
   '미니',
   '02W',
@@ -566,7 +604,7 @@ EQUIPMENT_ITEM['굴착기'] = [
   '02LC',
   '04LC',
   '06LC'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 EQUIPMENT_ITEM['스카이'] = [
   '1톤',
   '1.2톤',
@@ -579,7 +617,7 @@ EQUIPMENT_ITEM['스카이'] = [
   '58m',
   '60m',
   '75m'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 EQUIPMENT_ITEM['지게차'] = [
   '2톤',
   '2.5톤',
@@ -593,16 +631,8 @@ EQUIPMENT_ITEM['지게차'] = [
   '15톤',
   '18톤',
   '25톤'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
-EQUIPMENT_ITEM['사다리차'] = ['사다리차'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
-EQUIPMENT_ITEM['하이랜더'] = ['하이랜더'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
-EQUIPMENT_ITEM['불도저'] = ['불도저'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
-EQUIPMENT_ITEM['거미크레인'] = ['2톤', '3톤'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
+].map(lin => new PickerItem(`${lin}`, lin, lin));
+EQUIPMENT_ITEM['사다리차'] = ['사다리차'].map(lin => new PickerItem(`${lin}`, lin, lin));
+EQUIPMENT_ITEM['하이랜더'] = ['하이랜더'].map(lin => new PickerItem(`${lin}`, lin, lin));
+EQUIPMENT_ITEM['불도저'] = ['불도저'].map(lin => new PickerItem(`${lin}`, lin, lin));
+EQUIPMENT_ITEM['거미크레인'] = ['2톤', '3톤'].map(lin => new PickerItem(`${lin}`, lin, lin));

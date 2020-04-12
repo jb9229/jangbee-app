@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import I18n from 'i18n-js';
-import { Picker } from 'react-native';
+import { PickerItem } from 'src/types';
 import en from 'utils/locales/en.json';
 import ko from 'utils/locales/ko.json';
 
@@ -68,7 +68,7 @@ LOCAL_ITEM['서울'] = [
   '종로구',
   '중구',
   '중량구'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['부산'] = [
   '강서구',
   '금정구',
@@ -85,7 +85,7 @@ LOCAL_ITEM['부산'] = [
   '영도구',
   '중구',
   '해운대구'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['경기'] = [
   '가평군',
   '고양시',
@@ -118,7 +118,7 @@ LOCAL_ITEM['경기'] = [
   '포천시',
   '하남시',
   '화성시'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['인천'] = [
   '강화군',
   '계양군',
@@ -130,7 +130,7 @@ LOCAL_ITEM['인천'] = [
   '연수구',
   '옹진군',
   '중구'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['세종특별자치시'] = [
   '가람동',
   '고운동',
@@ -156,19 +156,11 @@ LOCAL_ITEM['세종특별자치시'] = [
   '조치원읍',
   '종촌동',
   '한솔동'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
-LOCAL_ITEM['대전'] = ['대덕구', '동구', '서구', '유성구', '중구'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
-LOCAL_ITEM['광주'] = ['광산구', '남구', '동구', '북구', '서구'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
-LOCAL_ITEM['대구'] = ['남구', '달서구', '달성군', '동구', '북구', '서구', '수성구', '중구'].map(
-  lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />
-);
-LOCAL_ITEM['울산'] = ['남구', '동구', '북구', '울주군', '중구'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
+].map(lin => new PickerItem(`${lin}`, lin, lin));
+LOCAL_ITEM['대전'] = ['대덕구', '동구', '서구', '유성구', '중구'].map(lin => new PickerItem(`${lin}`, lin, lin));
+LOCAL_ITEM['광주'] = ['광산구', '남구', '동구', '북구', '서구'].map(lin => new PickerItem(`${lin}`, lin, lin));
+LOCAL_ITEM['대구'] = ['남구', '달서구', '달성군', '동구', '북구', '서구', '수성구', '중구'].map(lin => new PickerItem(`${lin}`, lin, lin));
+LOCAL_ITEM['울산'] = ['남구', '동구', '북구', '울주군', '중구'].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['강원'] = [
   '강릉시',
   '고성군',
@@ -188,7 +180,7 @@ LOCAL_ITEM['강원'] = [
   '홍천군',
   '화천군',
   '횡성군'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['충북'] = [
   '괴산군',
   '단양군',
@@ -201,7 +193,7 @@ LOCAL_ITEM['충북'] = [
   '진천군',
   '청주시',
   '충주시'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['충남'] = [
   '계룡시',
   '공주시',
@@ -218,7 +210,7 @@ LOCAL_ITEM['충남'] = [
   '청양군',
   '태안군',
   '홍성군'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['전북'] = [
   '고창군',
   '군산시',
@@ -234,7 +226,7 @@ LOCAL_ITEM['전북'] = [
   '전주시',
   '정읍시',
   '진안군'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['전남'] = [
   '강진군',
   '고흥군',
@@ -258,7 +250,7 @@ LOCAL_ITEM['전남'] = [
   '함평군',
   '해남군',
   '화순군'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['경북'] = [
   '경산시',
   '경주시',
@@ -283,7 +275,7 @@ LOCAL_ITEM['경북'] = [
   '청송군',
   '칠곡군',
   '포항시'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
+].map(lin => new PickerItem(`${lin}`, lin, lin));
 LOCAL_ITEM['경남'] = [
   '거제시',
   '거창군',
@@ -303,7 +295,5 @@ LOCAL_ITEM['경남'] = [
   '함안군',
   '함양군',
   '합천군'
-].map(lin => <Picker.Item key={lin} label={`${lin}`} value={lin} />);
-LOCAL_ITEM['제주특별자치도'] = ['서귀포시', '제주시'].map(lin => (
-  <Picker.Item key={lin} label={`${lin}`} value={lin} />
-));
+].map(lin => new PickerItem(`${lin}`, lin, lin));
+LOCAL_ITEM['제주특별자치도'] = ['서귀포시', '제주시'].map(lin => new PickerItem(`${lin}`, lin, lin));

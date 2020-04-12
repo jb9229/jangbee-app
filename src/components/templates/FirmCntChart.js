@@ -1,9 +1,10 @@
 import * as api from 'api/api';
 
-import { Alert, Picker, PickerItem, ScrollView } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 
 import JBPicker from 'molecules/JBPicker';
 import { LineChart } from 'react-native-chart-kit';
+import { PickerItem } from 'src/types';
 import React from 'react';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
