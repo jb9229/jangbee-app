@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import styled, { DefaultTheme } from 'styled-components/native';
+
 import ActivityIndicator from 'atoms/ActivityIndicator';
 import CliEvaluItem from 'organisms/CliEvaluItem';
 import { FirmHarmCaseCountData } from 'src/types';
@@ -8,8 +10,11 @@ import { FlatList } from 'react-native';
 import JBButton from 'molecules/JBButton';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import colors from 'constants/Colors';
-import styled from 'styled-components/native';
+import getString from 'src/STRING';
 
+interface StyleProps {
+  theme: DefaultTheme;
+}
 const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${colors.batangLight};
@@ -21,6 +26,10 @@ const LoadingContainer = styled.SafeAreaView`
 const NotExitButWrap = styled.View`
   flex: 1;
   justify-content: center;
+`;
+const NoticeEmptyList = styled.Text`
+  font-family: ${(props: StyleProps): string => props.theme.FontBatang};
+  text-align: center;
 `;
 
 interface Props {
@@ -47,8 +56,10 @@ interface Props {
   openCliEvaluLikeModal: () => void;
 }
 
-export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
-  if (!props.list) {
+export default function FirmHarmCaseLayout (props: Props): React.ReactElement
+{
+  if (!props.list)
+  {
     return (
       <LoadingContainer>
         <ActivityIndicator />
@@ -56,7 +67,8 @@ export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
     );
   }
 
-  if (props.list.length === 0) {
+  if (props.list.length === 0)
+  {
     return (
       <Container>
         <FirmHarmCaseHeader
@@ -71,12 +83,14 @@ export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
           setVisibleCreateModal={props.setVisibleCreateModal}
           searchFilterCliEvalu={props.searchFilterCliEvalu}/>
         <NotExitButWrap>
-          <JBButton
-            title={`'${props.searchWord}' 피해사례 없음 공유`}
-            onPress={(): void => props.shareNotExistCEvalu(props.searchArea, props.searchWord, props.searchTime)}
-            align="center"
-            Secondary
-          />
+          {props.searchWord ? (
+            <JBButton
+              title={`'${props.searchWord}' 피해사례 없음 공유`}
+              onPress={(): void => props.shareNotExistCEvalu(props.searchArea, props.searchWord, props.searchTime)}
+              align="center"
+              Secondary
+            />
+          ) : (<NoticeEmptyList>{getString('firmHarmCase.NOTICE_EMPTY_LIST')}</NoticeEmptyList>)}
         </NotExitButWrap>
       </Container>
     );
@@ -98,7 +112,7 @@ export default function FirmHarmCaseLayout (props: Props): React.ReactElement {
 
       <FlatList
         data={props.list}
-        renderItem={({item}) => renderCliEvaluItem(item, props)}
+        renderItem={({ item }) => renderCliEvaluItem(item, props)}
         keyExtractor={(item, index) => index.toString()}
         last={props.isLastList}
         onEndReached={props.handleLoadMore}
@@ -121,7 +135,8 @@ FirmHarmCaseLayout.defaultProps = {
 /**
  * 피해사례 아이템 UI 렌더링 함수
  */
-const renderCliEvaluItem = (item, props) => {
+const renderCliEvaluItem = (item, props) =>
+{
   return (
     <CliEvaluItem
       item={item}
@@ -129,7 +144,7 @@ const renderCliEvaluItem = (item, props) => {
       updateCliEvalu={props.openUpdateCliEvaluForm}
       deleteCliEvalu={props.deleteCliEvalu}
       openCliEvaluLikeModal={props.openCliEvaluLikeModal}
-      openDetailModal={evalu =>props.openDetailModal(evalu)}
+      openDetailModal={evalu => props.openDetailModal(evalu)}
       searchTime={props.searchTime}
     />
   );

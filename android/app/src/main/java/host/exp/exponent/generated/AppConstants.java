@@ -47,11 +47,12 @@ public class AppConstants {
         
         
         
-        // ADD EMBEDDED RESPONSES HERE
-        // START EMBEDDED RESPONSES
-        embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@jb9229/jangbeecall_beta", "assets://shell-app-manifest.json", "application/json"));
-        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40jb9229%2Fjangbeecall_beta%2F0.8.1_20200320%2F0b24111a4be8147b2a278cfed2d34306-36.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
-        // END EMBEDDED RESPONSES
+        
+      // ADD EMBEDDED RESPONSES HERE
+      // START EMBEDDED RESPONSES
+      embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@jb9229/jangbeecall_storybook", "assets://shell-app-manifest.json", "application/json"));
+      embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40jb9229%2Fjangbeecall_storybook%2F0.8.1_20200320%2F65a1e47fa0a8b2bfc5ca3c06c4f27342-37.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+      // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }
 

@@ -9,7 +9,11 @@
   "VALIDATION_REQUIRED": "필수 입력 값입니다",
   "VALIDATION_STRING_EXCEED": "입력값이 초과 되었습니다",
   "VALIDATION_NUMBER_INVALID": "입력값이 유효하지 않습니다",
+  "VALIDATION_PHONENUMBER": "전화번호가 유효하지 않습니다",
   "button": {
     "COUPON_APPLY": "쿠폰 적용하기"
+  },
+  "firmHarmCase": {
+    "NOTICE_EMPTY_LIST": "최근 등록된 피해사례가 업습니다."
   }
 }

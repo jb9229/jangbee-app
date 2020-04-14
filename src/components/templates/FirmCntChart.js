@@ -128,8 +128,6 @@ export default class FirmCntChart extends React.Component
         if (firmCNTData)
         {
           const modelList = [];
-          console.log('***** getFirmCountChart ******');
-          console.log(firmCNTData);
           const chartDataSets = firmCNTData.map((chartInfo, index) =>
           {
             modelList.push(chartInfo.model);

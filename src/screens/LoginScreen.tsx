@@ -1,61 +1,62 @@
-import * as WebBrowser from 'expo-web-browser';
+import * as React from 'react';
+import * as firebase from 'firebase/app';
 
 import { Alert, StyleSheet, View } from 'react-native';
+import {
+  FirebaseAuthApplicationVerifier,
+  FirebaseRecaptchaVerifierModal
+} from 'expo-firebase-recaptcha';
+import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import JBButton from 'molecules/JBButton';
 import JBErrorMessage from 'organisms/JBErrorMessage';
-import { Linking } from 'expo';
-import React from 'react';
+import { WebView } from 'react-native-webview';
 import colors from 'constants/Colors';
-import firebase from 'firebase';
 import fonts from 'constants/Fonts';
-import { formatTelnumber } from 'utils/StringUtils';
+import getString from 'src/STRING';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { notifyError } from 'common/ErrorNotice';
 import registerForPushNotificationsAsync from 'common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 import { validate } from 'utils/Validation';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    borderWidth: 1
-  },
-  modalWrap: {
-    flex: 1,
-    borderWidth: 1,
-    justifyContent: 'center'
-  },
-  itemWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20
-  },
-  commWrap: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginRight: 20
-  },
-  titleDisable: {
-    width: 300,
-    fontFamily: fonts.titleMiddle,
-    fontSize: 22,
-    color: 'gray',
-    marginTop: 20
-  },
-  commText: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    fontFamily: fonts.titleTop
-  },
-  accTypePicker: {
-    width: 265,
-    height: 20
-  },
-  accTypePickerItem: {}
-});
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+`;
+const ModalWrap = styled.View`
+  flex: 1;
+  border-width: 1;
+  justify-content: center;
+`;
+const ItemWrap = styled.View`
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20;
+`;
+// const CommWrap = styled.View`
+//   margin-top: 10;
+//   flex-direction: row;
+//   justify-content: flex-end;
+//   margin-right: 20;
+// `;
+const TitleDisable = styled.View`
+  width: 300;
+  font-family: ${fonts.titleMiddle};
+  font-size: 22;
+  color: gray;
+  margin-top: 20;
+`;
+const CommText = styled.View`
+  font-size: 25;
+  font-weight: bold;
+  font-family: ${fonts.titleTop};
+`;
+const AccTypePicker = styled.View`
+  width: 265;
+  height: 20;
+`;
+const AccTypePickerItem = styled.View``;
 
 const CommWrap = styled.View`
   flex-direction: row;
@@ -79,64 +80,39 @@ const Title = styled.Text`
     color: ${colors.point2};
   `}
 `;
-
+const WebViewWrap = styled.View`
+  height: 400;
+`;
+const StyleWebView = styled(WebView)`
+`;
 const ErrorMsg = styled.Text`
   color: red;
 `;
+const ConfirmRuleWrap = styled.View``;
+const RuleContents = styled.View``;
+const ConfirmWrap = styled.View``;
+const ConfirmCheckWrap = styled.View``;
+const ConfirmCheck = styled.Text``;
+const TotalConfirmCheck = styled.Text``;
+const RuleTitle = styled.Text``;
+const ConfirmCheckTitle = styled.Text``;
+const ConfirmCheckViewBtn = styled.Text``;
 
-const LogMsg = styled.Text`
-  color: blue;
-`;
+const captchaUrl = 'https://jangbee-inpe21.firebaseapp.com/captcha_v3.html';
 
-const captchaUrl = `https://jangbee-inpe21.firebaseapp.com/captcha_v3.html?appurl=${Linking.makeUrl()}`;
-
-class LoginScreen extends React.PureComponent
+const LoginScreen: React.FC = () =>
 {
-  constructor (props)
-  {
-    super(props);
-    this.state = {
-      phoneNumber: '',
-      confirmationResult: undefined,
-      code: '',
-      capchaListener: undefined,
-      phoneNumberValErrMessage: '',
-      codeValErrMessage: ''
-    };
-  }
+  let recaptchaVerifier: FirebaseAuthApplicationVerifier;
+  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [completeSetPhoneNumber, setCompleteSetPhoneNumber] = React.useState(false);
+  const [confirmationResult, setConfirmationResult] = React.useState();
+  const [verificationId, setVerificationId] = React.useState('');
+  const [verificationCode, setVerificationCode] = React.useState<string>();
+  const [capchaListener, setCapchaListener] = React.useState('');
+  const [phoneNumberValErrMessage, setPhoneNumberValErrMessage] = React.useState('');
+  const [codeValErrMessage, setCodeValErrMessage] = React.useState('');
 
-  componentDidMount ()
-  {
-    const capchaListener = ({ url }) =>
-    {
-      let token;
-      const tokenEncoded = Linking.parse(url).queryParams.token;
-      if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
-      this.setCaptchaListener(token);
-    };
-
-    this.setState({ capchaListener });
-    Linking.addEventListener('url', capchaListener);
-  }
-
-  componentWillUnmount ()
-  {
-    const { capchaListener } = this.state;
-
-    Linking.removeEventListener('url', capchaListener);
-  }
-
-  onPhoneChange = phoneNumber =>
-  {
-    this.setState({ phoneNumber });
-  };
-
-  onCodeChange = code =>
-  {
-    this.setState({ code });
-  };
-
-  onSignIn = async () =>
+  const onSignIn = async () =>
   {
     const { changeAuthPath } = this.props;
     const { confirmationResult, code } = this.state;
@@ -192,19 +168,7 @@ class LoginScreen extends React.PureComponent
       });
   };
 
-  onSignOut = () =>
-  {
-    try
-    {
-      firebase.auth().signOut();
-    }
-    catch (e)
-    {
-      Alert.alert(`로그아웃 요청에 문제가 있습니다, 재시도해 주세요${e}`);
-    }
-  };
-
-  cancelSignIn = () =>
+  const cancelSignIn = () =>
   {
     this.setState({
       phoneNumber: '',
@@ -213,7 +177,7 @@ class LoginScreen extends React.PureComponent
     });
   };
 
-  convertNationalPN = phoneNumber =>
+  const convertNationalPN = phoneNumber =>
   {
     const koreaNationalPhoneNumber = '+82';
 
@@ -231,25 +195,18 @@ class LoginScreen extends React.PureComponent
   /**
    * Validation 에러 메세지 초기화
    */
-  resetValErrMsg = () =>
+  const resetValErrMsg = () =>
   {
-    this.setState({
-      phoneNumberValErrMessage: '',
-      codeValErrMessage: '',
-      logMsg: '',
-      errorMsg: ''
-    });
+    setPhoneNumberValErrMessage('');
+    setCodeValErrMessage('');
   };
 
-  onPhoneComplete = async () =>
+  const onPhoneComplete = async () =>
   {
-    this.resetValErrMsg();
-
-    // Check Captcha
-    WebBrowser.openBrowserAsync(captchaUrl);
+    resetValErrMsg();
   };
 
-  setCaptchaListener = async token =>
+  const setCaptchaListener = async token =>
   {
     const { phoneNumber } = this.state;
 
@@ -265,14 +222,13 @@ class LoginScreen extends React.PureComponent
 
     if (token)
     {
-      const nationalPNumber = this.convertNationalPN(pnWithoutHyphen);
+      const nationalPNumber = convertNationalPN(pnWithoutHyphen);
 
       // fake firebase.auth.ApplicationVerifier
       const captchaVerifier = {
         type: 'recaptcha',
         verify: () => Promise.resolve(token)
       };
-      this.setState({ logMsg: `Listener Token: ${token}` });
       try
       {
         const confirmationResult = await firebase
@@ -287,86 +243,123 @@ class LoginScreen extends React.PureComponent
     }
   };
 
-  render ()
+  const onPressConfirmVerificationCode = async () =>
   {
-    const {
-      confirmationResult,
-      phoneNumber,
-      code,
-      phoneNumberValErrMessage,
-      codeValErrMessage,
-      logMsg,
-      errorMsg
-    } = this.state;
-    let authReadOnly = true;
-    if (!confirmationResult)
-    {
-      authReadOnly = false;
-    }
-
-    return (
-      <View style={styles.container}>
-        <View style={styles.itemWrap}>
-          <Title fill={!!phoneNumber}>핸드폰번호: </Title>
-          <TextInput
-            style={styles.loginTI}
-            value={phoneNumber}
-            keyboardType="phone-pad"
-            onChangeText={text =>
-            {
-              this.onPhoneChange(text);
-            }}
-            placeholder="휴대전화 번호입력(숫자만)"
-            onEndEditing={() =>
-            {
-              const formatPN = formatTelnumber(phoneNumber);
-              this.setState({ phoneNumber: formatPN });
-            }}
-            onSubmitEditing={() => this.onPhoneComplete()}
-            editable={!authReadOnly}
-          />
-          <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
-          <Title fill={!!code}>인증코드: </Title>
-          <TextInput
-            style={styles.loginTI}
-            value={code}
-            onChangeText={text =>
-            {
-              this.onCodeChange(text);
-            }}
-            keyboardType="numeric"
-            placeholder="SMS 인증코드 입력"
-            editable={authReadOnly}
-          />
-          <JBErrorMessage errorMSG={codeValErrMessage} />
-        </View>
-
-        <View style={styles.commWrap}>
-          {!confirmationResult ? (
-            <JBButton
-              title="전화번호 인증하기"
-              onPress={() => this.onPhoneComplete()}
-            />
-          ) : (
-            <CommWrap>
-              <JBButton title="취소" onPress={() => this.cancelSignIn()} />
-              <JBButton
-                title="로그인하기"
-                onPress={() => this.onSignIn()}
-                Primary
-              />
-            </CommWrap>
-          )}
-        </View>
-        {phoneNumber === '010-5202-3337' || phoneNumber === '010-8755-7407' ? (
-          <View>
-            <LogMsg>{logMsg}</LogMsg>
-            <ErrorMsg>{errorMsg}</ErrorMsg>
-          </View>
-        ) : null}
-      </View>
+    const { verificationId, verificationCode } = this.state;
+    const credential = firebase.auth.PhoneAuthProvider.credential(
+      verificationId,
+      verificationCode
     );
+    const authResult = await firebase.auth().signInWithCredential(credential);
+  };
+
+  const onPressSendVerificationCode = async () =>
+  {
+    const phoneProvider = new firebase.auth.PhoneAuthProvider();
+    const verificationId = await phoneProvider.verifyPhoneNumber(
+      phoneNumber,
+      recaptchaVerifier
+    );
+    setVerificationId(verificationId);
+  };
+
+  let authReadOnly = true;
+  if (!confirmationResult)
+  {
+    authReadOnly = false;
   }
-}
+
+  return (
+    <Container>
+      <ItemWrap>
+        <Title fill={!!phoneNumber}>핸드폰번호: </Title>
+        <TextInput
+          value={phoneNumber}
+          keyboardType="phone-pad"
+          onChangeText={text =>
+          {
+            setPhoneNumber(text);
+            if (!text) { setCompleteSetPhoneNumber(false) }
+            if (isPhoneNumberFormat(text)) { setCompleteSetPhoneNumber(true); setPhoneNumberValErrMessage('') }
+          }}
+          placeholder="휴대전화 번호입력(숫자만)"
+          onEndEditing={() =>
+          {
+            const formatPN = formatTelnumber(phoneNumber);
+            if (isPhoneNumberFormat(phoneNumber)) { setCompleteSetPhoneNumber(true); setPhoneNumberValErrMessage('') }
+            else { setPhoneNumberValErrMessage(getString('VALIDATION_PHONENUMBER')) }
+          }}
+          onSubmitEditing={() => onPhoneComplete()}
+          editable={!authReadOnly}
+        />
+        <JBErrorMessage errorMSG={phoneNumberValErrMessage} />
+        <Title fill={!!code}>인증코드: </Title>
+        <TextInput
+          value={verificationCode}
+          onChangeText={text =>
+          {
+            onCodeChange(text);
+          }}
+          keyboardType="numeric"
+          placeholder="SMS 인증코드 입력"
+          editable={authReadOnly}
+        />
+        <JBErrorMessage errorMSG={codeValErrMessage} />
+      </ItemWrap>
+
+      <CommWrap>
+        {!confirmationResult ? (
+          <JBButton
+            title="전화번호 인증하기"
+            onPress={(): void => onPhoneComplete()}
+          />
+        ) : (
+          <CommWrap>
+            <JBButton title="취소" onPress={(): void => cancelSignIn()} />
+            <JBButton
+              title="로그인하기"
+              onPress={(): void => onSignIn()}
+              Primary
+            />
+          </CommWrap>
+        )}
+      </CommWrap>
+      {completeSetPhoneNumber && (
+        <>
+          <FirebaseRecaptchaVerifierModal
+            ref={ref => recaptchaVerifier = ref}
+            firebaseConfig={firebase.app().options} />
+          <ConfirmRuleWrap>
+            <RuleTitle>이용약관 동의</RuleTitle>
+            <RuleContents>
+              <TotalConfirmCheck>전체동의</TotalConfirmCheck>
+              <ConfirmWrap>
+                <ConfirmCheckWrap>
+                  <ConfirmCheck>*</ConfirmCheck>
+                  <ConfirmCheckTitle>Google 전화번호 인증(전화번호 변경전, 탈퇴필수)</ConfirmCheckTitle>
+                </ConfirmCheckWrap>
+                <ConfirmCheckViewBtn>내용 보기</ConfirmCheckViewBtn>
+              </ConfirmWrap>
+              <ConfirmWrap>
+                <ConfirmCheckWrap>
+                  <ConfirmCheck>*</ConfirmCheck>
+                  <ConfirmCheckTitle>서비스 이용약관</ConfirmCheckTitle>
+                </ConfirmCheckWrap>
+                <ConfirmCheckViewBtn>내용 보기</ConfirmCheckViewBtn>
+              </ConfirmWrap>
+              <ConfirmWrap>
+                <ConfirmCheckWrap>
+                  <ConfirmCheck>*</ConfirmCheck>
+                  <ConfirmCheckTitle>개인 정보처리방침</ConfirmCheckTitle>
+                </ConfirmCheckWrap>
+                <ConfirmCheckViewBtn>내용 보기</ConfirmCheckViewBtn>
+              </ConfirmWrap>
+            </RuleContents>
+          </ConfirmRuleWrap>
+        </>
+      )}
+    </Container>
+  );
+};
 
 export default LoginScreen;

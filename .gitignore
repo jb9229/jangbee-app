@@ -59,3 +59,7 @@ ios/----/Supporting/shell-app.bundle
 android/app/beta/release/app-beta-release.apk
 android/app/src/main/assets/shell-app.bundle
 ios/----/Supporting/shell-app.bundle
+android/app/src/main/assets/shell-app.bundle
+android/app/src/main/assets/shell-app-manifest.json
+ios/----/Supporting/shell-app-manifest.json
+ios/----/Supporting/shell-app.bundle
