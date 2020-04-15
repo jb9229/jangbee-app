@@ -71,6 +71,7 @@ const TouchableOpacity = styled.TouchableOpacity`
     background-color: transparent;
     border-width: 0;
   `};
+  elevation: 2;
 `;
 
 const Text = styled.Text`

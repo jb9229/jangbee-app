@@ -7,9 +7,12 @@ import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates
 import { ApplyWorkCallback } from 'src/components/action';
 import CouponSelectModal from 'src/components/templates/CouponSelectModal';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
+import ModalTemplate from 'src/components/templates/ModalTemplate';
 import { Provider } from 'src/contexts/LoginContext';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
+import WebView from 'react-native-webview';
+import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
 import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
 
@@ -71,6 +74,7 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
   const [paymentReadyInfo, setPaymentReadyInfo] = React.useState<KakaoPaymentReadyInfo>();
   const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(false);
   const [loadingModalData, setLoadingModalData] = React.useState<LoadingModalData>(new LoadingModalData(false, ''));
+  const [webViewModal, setWebViewModal] = React.useState({ visible: false, url: undefined });
 
   // data
   let callbackAction: ApplyWorkCallback | undefined;
@@ -92,6 +96,7 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
     setUser: (user) => {},
     setFirm,
     setUserProfile,
+    setWebViewModal,
     openWorkPaymentModal: (price: number): void =>
     {
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
@@ -164,7 +169,21 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
             }).catch((error) => console.log(error));
         }}
       />
-
+      <ModalTemplate
+        visible={webViewModal.visible}
+        setVisible={(flag): void => setWebViewModal({ ...webViewModal, visible: flag })}
+        contents={
+          <WebView
+            source={{ uri: webViewModal.url }}
+            style={{ flex: 1 }}
+            onError={(err: WebViewErrorEvent): void =>
+            {
+              console.log('>>> WebView onError:', err);
+            }}
+          />
+        }
+        full
+      />
       <CouponSelectModal
         user={user}
         visible={couponModalVisible}

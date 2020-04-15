@@ -11,30 +11,32 @@ export function formatTelnumber (number)
 {
   if (number)
   {
-    if (!number.startsWith('02'))
+    const checkNumber = number.replace(/-/g, ''); // without hyphen
+
+    if (!checkNumber.startsWith('02'))
     {
-      if (number.length === 10)
+      if (checkNumber.length === 10)
       {
-        return `${number.substring(0, 3)}-${number.substring(3, 6)}-${number.substring(6, 10)}`;
+        return `${checkNumber.substring(0, 3)}-${checkNumber.substring(3, 6)}-${checkNumber.substring(6, 10)}`;
       }
-      if (number.length === 11)
+      if (checkNumber.length === 11)
       {
-        return `${number.substring(0, 3)}-${number.substring(3, 7)}-${number.substring(7, 11)}`;
+        return `${checkNumber.substring(0, 3)}-${checkNumber.substring(3, 7)}-${checkNumber.substring(7, 11)}`;
       }
     }
     else
     {
-      if (number.length === 9)
+      if (checkNumber.length === 9)
       {
-        return `${number.substring(0, 2)}-${number.substring(2, 5)}-${number.substring(5, 9)}`;
+        return `${checkNumber.substring(0, 2)}-${checkNumber.substring(2, 5)}-${checkNumber.substring(5, 9)}`;
       }
-      if (number.length === 10)
+      if (checkNumber.length === 10)
       {
-        return `${number.substring(0, 2)}-${number.substring(2, 6)}-${number.substring(6, 10)}`;
+        return `${checkNumber.substring(0, 2)}-${checkNumber.substring(2, 6)}-${checkNumber.substring(6, 10)}`;
       }
     }
 
-    return number;
+    return checkNumber;
   }
 
   return '-';
@@ -57,7 +59,7 @@ export function formatHideTelnumber (number)
     return number;
   }
 
-  return '-';
+  return '';
 }
 
 export function ellipsisStr (str, number)

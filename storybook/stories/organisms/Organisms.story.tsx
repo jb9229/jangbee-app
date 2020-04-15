@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import { boolean, text } from '@storybook/addon-knobs';
 
+import AgreementTerms from 'src/components/organisms/AgreementTerms';
 import AppliFirmList from 'organisms/AppliFirmList';
 import CountBoard from 'organisms/CountBoard';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
@@ -70,18 +71,6 @@ storiesOf('Organisms Components', module)
   }))
   .add('차주선택(고객)', () => React.createElement((): React.ReactElement =>
   {
-    // const { setUser } = useLoginContext();
-    // const user: User =
-    // {
-    //   uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
-    //   phoneNumber: '01052023337', photoURL: '', providerId: ''
-    // };
-
-    // React.useEffect(() =>
-    // {
-    //   setUser(user);
-    // }, []);
-
     const navigation =
     {
       navigate: (path: string, params: object): void =>
@@ -91,6 +80,12 @@ storiesOf('Organisms Components', module)
 
     return (
       <AppliFirmList workId="5" navigation={navigation}/>
+    );
+  }))
+  .add('이용약관 동의', () => React.createElement((): React.ReactElement =>
+  {
+    return (
+      <AgreementTerms onChange={(flag): void => Alert.alert(`전체동의: ${flag}`)} />
     );
   }))
 ;
