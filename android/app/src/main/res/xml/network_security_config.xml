@@ -6,6 +6,6 @@
         <domain includeSubdomains="true">127.0.0.1</domain>
         <domain includeSubdomains="true">192.168.0.6</domain>
         <domain includeSubdomains="true">192.168.0.7</domain>
-        <domain includeSubdomains="true">jangbeecall.ap-northeast-2.elasticbeanstalk.com</domain>
+        <domain includeSubdomains="true">jangbeecallapi.ap-northeast-2.elasticbeanstalk.com</domain>
     </domain-config>
 </network-security-config>

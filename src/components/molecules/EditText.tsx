@@ -53,7 +53,7 @@ interface Props {
   label?: string;
   subLabel?: string;
   errorText?: string;
-  text: string;
+  text?: string;
   keyboardType?: string;
   placeholder?: string;
   secureTextEntry?: boolean;

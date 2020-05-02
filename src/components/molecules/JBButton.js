@@ -58,20 +58,22 @@ const TouchableOpacity = styled.TouchableOpacity`
     `
     padding: 15px 30px;
     border-radius: 3;
+    elevation: 2;
   `};
   ${props =>
     props.size === SMALL_SIZE &&
     `
     padding: 10px 10px;
     border-radius: 3;
+    elevation: 2;
   `};
   ${props =>
     props.underline &&
     `
     background-color: transparent;
     border-width: 0;
+    elevation: 0;
   `};
-  elevation: 2;
 `;
 
 const Text = styled.Text`

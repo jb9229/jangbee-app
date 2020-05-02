@@ -47,13 +47,19 @@ const AgreementTerms: React.FC<Props> = (props) =>
   const [agreePhoneAuth, setAgreePhoneAuth] = React.useState(false);
   const [agreeUseTerm, setAgreeUseTerm] = React.useState(false);
   const [agreePrivateTerm, setAgreePrivateTerm] = React.useState(false);
+  const [agreeTerms, setAgreeTerms] = React.useState(false);
 
   React.useMemo(() =>
   {
     console.log(agreePhoneAuth, agreeUseTerm, agreePrivateTerm);
-    if (agreePhoneAuth && agreeUseTerm && agreePrivateTerm) { props.onChange(true); return true }
-    if (!agreePhoneAuth && !agreeUseTerm && !agreePrivateTerm) { props.onChange(false); return true }
+    if (agreePhoneAuth && agreeUseTerm && agreePrivateTerm) { setAgreeTerms(true) }
+    if (!agreePhoneAuth || !agreeUseTerm || !agreePrivateTerm) { setAgreeTerms(false) }
   }, [agreePhoneAuth, agreeUseTerm, agreePrivateTerm]);
+
+  React.useMemo(() =>
+  {
+    props.onChange(agreeTerms);
+  }, [agreeTerms]);
 
   return (
     <Container>
@@ -64,8 +70,14 @@ const AgreementTerms: React.FC<Props> = (props) =>
         <ConfirmCheckWrap>
           <ConfirmCheck
             title='전체동의'
-            checked={agreePhoneAuth && agreeUseTerm && agreePrivateTerm}
-            onPress={(): void => { setAgreePhoneAuth(true); setAgreeUseTerm(true); setAgreePrivateTerm(true) }}
+            checked={agreeTerms}
+            onPress={(): void =>
+            {
+              setAgreeTerms(!agreeTerms);
+              setAgreePhoneAuth(!agreeTerms);
+              setAgreeUseTerm(!agreeTerms);
+              setAgreePrivateTerm(!agreeTerms);
+            }}
             iconRight
             right
           />
@@ -75,7 +87,7 @@ const AgreementTerms: React.FC<Props> = (props) =>
             <ConfirmCheck
               title='Google 전화번호 인증(전화번호 변경전, 탈퇴필수)'
               checked={agreePhoneAuth}
-              onPress={(): void => setAgreePhoneAuth(!agreePhoneAuth)}
+              onPress={(): void => { setAgreePhoneAuth(!agreePhoneAuth) }}
             />
           </ConfirmCheckWrap>
           <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: TERM_URL_PHONEAUTH })}>

@@ -8,19 +8,13 @@ import {
 import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import AgreementTerms from 'src/components/organisms/AgreementTerms';
-import { Alert } from 'react-native';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'molecules/JBButton';
-import JBErrorMessage from 'organisms/JBErrorMessage';
-import { WebView } from 'react-native-webview';
-import colors from 'constants/Colors';
-import fonts from 'constants/Fonts';
 import getString from 'src/STRING';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { notifyError } from 'common/ErrorNotice';
 import registerForPushNotificationsAsync from 'common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
-import { validate } from 'utils/Validation';
 
 const Container = styled.View`
   flex: 1;
@@ -37,95 +31,61 @@ const CommWrap = styled.View`
   justify-content: flex-end;
 `;
 
-const TextInput = styled.TextInput`
-  font-family: ${fonts.batang};
-  width: 300;
-  font-size: 24;
-`;
+interface Props {
+  changeAuthPath: (path: number, data?: any) => void;
+}
 
-const Title = styled.Text`
-  width: 300;
-  font-family: ${fonts.titleMiddle};
-  font-size: 22;
-  margin-top: 20;
-  ${props =>
-    props.fill &&
-    `
-    color: ${colors.point2};
-  `}
-`;
-
-const captchaUrl = 'https://jangbee-inpe21.firebaseapp.com/captcha_v3.html';
-
-const LoginScreen: React.FC = () =>
+const LoginScreen: React.FC<Props> = (props) =>
 {
   let recaptchaVerifier: FirebaseAuthApplicationVerifier;
+  let verificationCode: string;
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [isValidPhoneNumber, setValidPhoneNumber] = React.useState(false);
   const [verificationId, setVerificationId] = React.useState('');
-  const [verificationCode, setVerificationCode] = React.useState<string>();
   const [phoneNumberValErrMessage, setPhoneNumberValErrMessage] = React.useState('');
   const [codeValErrMessage, setCodeValErrMessage] = React.useState('');
   const [agreeTerms, setAgreeTerms] = React.useState(false);
 
-  const onSignIn = async () =>
+  const onSignIn = (user) =>
   {
-    const { changeAuthPath } = this.props;
-    const { code } = this.state;
+    registerForPushNotificationsAsync(user.uid);
+    getUserInfo(user.uid)
+      .then(data =>
+      {
+        const userInfo = data.val();
+        if (!userInfo)
+        {
+          props.changeAuthPath(2, user);
+          return;
+        }
 
-    // Validation
-    const v = validate('decimal', code, true);
-    if (!v[0])
-    {
-      this.setState({ codeValErrMessage: v[1] });
-    }
+        const { userType } = userInfo;
 
-    // confirmationResult
-    //   .confirm(code)
-    //   .then(result =>
-    //   {
-    //     const { user } = result;
-
-    //     registerForPushNotificationsAsync(user.uid);
-    //     getUserInfo(user.uid)
-    //       .then(data =>
-    //       {
-    //         const userInfo = data.val();
-    //         if (!userInfo)
-    //         {
-    //           changeAuthPath(2, user);
-    //           return;
-    //         }
-
-    //         const { userType } = userInfo;
-
-    //         if (!userType)
-    //         {
-    //           changeAuthPath(2, user);
-    //         }
-    //         else
-    //         {
-    //           changeAuthPath(1);
-    //         }
-    //       })
-    //       .catch(error =>
-    //         notifyError(
-    //           'FB 사용자 정보 요청 실패',
-    //           `사용자 정보 요청에 문제가 있습니다, 다시 시도해 주세요(${
-    //             error.message
-    //           })`
-    //         )
-    //       );
-    //   })
-    //   .catch(error =>
-    //   {
-    //     Alert.alert('잘못된 인증 코드입니다', error.message);
-    //   });
+        if (!userType)
+        {
+          props.changeAuthPath(2, user);
+        }
+        else
+        {
+          props.changeAuthPath(1);
+        }
+      })
+      .catch(error =>
+        notifyError(
+          'FB 사용자 정보 요청 실패',
+          `사용자 정보 요청에 문제가 있습니다, 다시 시도해 주세요(${
+            error.message
+          })`
+        )
+      );
   };
 
   const cancelSignIn = () =>
   {
     setPhoneNumber('');
+    setValidPhoneNumber(false);
+    setVerificationId('');
+    setAgreeTerms(false);
   };
 
   const convertNationalPN = (phoneNumber): string =>
@@ -159,12 +119,21 @@ const LoginScreen: React.FC = () =>
 
   const onPressConfirmVerificationCode = async () =>
   {
-    const { verificationId, verificationCode } = this.state;
     const credential = firebase.auth.PhoneAuthProvider.credential(
       verificationId,
       verificationCode
     );
     const authResult = await firebase.auth().signInWithCredential(credential);
+
+    if (authResult?.user?.uid)
+    {
+      onSignIn(authResult.user);
+    }
+    else
+    {
+      setCodeValErrMessage('인증코드가 올바르지 않습니다');
+    }
+    console.log('>>> authResult: ', authResult);
   };
 
   const onPressSendVerificationCode = async () =>
@@ -206,15 +175,14 @@ const LoginScreen: React.FC = () =>
             if (!isPhoneNumberFormat(phoneNumber)) { setPhoneNumberValErrMessage(getString('VALIDATION_PHONENUMBER')) }
           }}
           onSubmitEditing={() => onPhoneComplete()}
-          editable={!verificationId}
+          unchangeable={verificationId}
           errorText={phoneNumberValErrMessage}
         />
         {!!verificationId && (
           <>
             <EditText
               label="인증코드"
-              text={verificationCode}
-              onChangeText={(text) => {}}
+              onChangeText={(text): void => { verificationCode = text }}
               keyboardType="numeric"
               placeholder="SMS 인증코드 입력"
               errorText={codeValErrMessage}
@@ -225,19 +193,19 @@ const LoginScreen: React.FC = () =>
 
       <CommWrap>
         {!verificationId ? (
-          !!isValidPhoneNumber && (
+          agreeTerms && !!isValidPhoneNumber && (
             <JBButton
               title="전화번호 인증하기"
-              onPress={(): void => onPressSendVerificationCode()}
+              onPress={(): Promise<void> => onPressSendVerificationCode()}
               Secondary
             />
           )
         ) : (
           <CommWrap>
-            <JBButton title="취소" onPress={(): void => cancelSignIn()} />
+            <JBButton title="취소" onPress={(): void => cancelSignIn()} Secondary/>
             <JBButton
               title="로그인하기"
-              onPress={(): void => onSignIn()}
+              onPress={(): Promise<void> => onPressConfirmVerificationCode()}
               Primary
             />
           </CommWrap>
@@ -246,7 +214,8 @@ const LoginScreen: React.FC = () =>
       {isValidPhoneNumber && !verificationId && (
         <>
           <FirebaseRecaptchaVerifierModal
-            ref={ref => recaptchaVerifier = ref}
+            title="'로봇이 아닙니다' 클릭해 주세요"
+            ref={(ref) => { recaptchaVerifier = ref }}
             firebaseConfig={firebase.app().options}
           />
           <AgreementTerms onChange={setAgreeTerms} />

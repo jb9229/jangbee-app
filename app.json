@@ -2,7 +2,7 @@
   "mode": "Beta",
   "expo": {
     "name": "장비 콜",
-    "slug": "jangbeecall_storybook",
+    "slug": "jangbeecall_beta_storybook",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
     "platforms": [
