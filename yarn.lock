@@ -10819,6 +10819,11 @@ mkdirp@0.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
+moment@^2.22.2:
+  version "2.25.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.1.tgz#1cb546dca1eccdd607c9324747842200b683465d"
+  integrity sha512-nRKMf9wDS4Fkyd0C9LXh2FFXinD+iwbJ5p/lh3CHitW9kZbRbJ8hCruiadiIXZVbeAqKZzqcTvHnK3mRhFjb6w==
+
 moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
@@ -12729,6 +12734,13 @@ react-native-color-picker@^0.4.0:
   dependencies:
     prop-types "^15.5.10"
     tinycolor2 "^1.4.1"
+
+react-native-easy-chat-ui@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/react-native-easy-chat-ui/-/react-native-easy-chat-ui-0.4.6.tgz#22adbf186a2c72901c300dc117843b3e14b3a476"
+  integrity sha512-aAWQDbV3FBfcYMuCD8iZ5HoNW5KFvIESRMZ0dD5QgMj0XA0ifO2qGXLk/ZEnQKCMCKn/2CjMlhxStTcJJxTtSw==
+  dependencies:
+    moment "^2.22.2"
 
 react-native-elements@^1.1.0:
   version "1.2.7"

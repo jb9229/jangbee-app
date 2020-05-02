@@ -2,11 +2,11 @@ import * as api from 'api/api';
 
 import { FlatList, Picker, StyleSheet, Text, View } from 'react-native';
 
-import CliEvaluItem from 'organisms/CliEvaluItem';
 import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
+import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import JBButton from 'molecules/JBButton';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import React from 'react';
