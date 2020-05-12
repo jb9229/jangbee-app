@@ -63,3 +63,9 @@ android/app/src/main/assets/shell-app.bundle
 android/app/src/main/assets/shell-app-manifest.json
 ios/----/Supporting/shell-app-manifest.json
 ios/----/Supporting/shell-app.bundle
+android/app/src/main/assets/shell-app-manifest.json
+android/app/src/main/assets/shell-app.bundle
+android/app/src/main/java/host/exp/exponent/generated/AppConstants.java
+.DS_Store
+android/app/src/main/assets/shell-app-manifest.json
+android/app/src/main/assets/shell-app.bundle
