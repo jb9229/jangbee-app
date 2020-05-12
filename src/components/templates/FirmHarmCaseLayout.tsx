@@ -1,17 +1,19 @@
 import * as React from 'react';
 
+import { KeyboardAvoidingView, View } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
+import { ChatScreen } from 'react-native-easy-chat-ui';
 import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
-import { FlatList } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
 import JBButton from 'molecules/JBButton';
-import JangbeeAdList from 'organisms/JangbeeAdList';
+import Swiper from 'react-native-swiper';
 import colors from 'constants/Colors';
 import getString from 'src/STRING';
 import { shareNotExistCEvalu } from 'common/JBCallShare';
@@ -29,21 +31,12 @@ const LoadingContainer = styled.SafeAreaView`
   justify-content: center;
 `;
 const NotExitButWrap = styled.View`
-  flex: 1;
+  height: 80;
   justify-content: center;
 `;
 const NoticeEmptyList = styled.Text`
   font-family: ${(props: StyleProps): string => props.theme.FontBatang};
   text-align: center;
-`;
-const HarmCaseList = styled(FlatList).attrs(() => ({
-  contentContainerStyle: {
-    width: '100%',
-    height: 250,
-    backgroundColor: 'blue'
-  }
-}))`
-background-color: red;
 `;
 
 export default function FirmHarmCaseLayout (): React.ReactElement
@@ -56,7 +49,6 @@ export default function FirmHarmCaseLayout (): React.ReactElement
     searchNotice,
     countData,
     cliEvaluList,
-    handleLoadMore,
     setSearchArea,
     setSearchWord,
     onClickMyEvaluList,
@@ -70,7 +62,8 @@ export default function FirmHarmCaseLayout (): React.ReactElement
     evaluLikeSelected, evaluLikeList, createClientEvaluLike, cancelClientEvaluLike, mineEvaluation,
     visibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
     setVisibleCreateModal, setVisibleUpdateModal, setVisibleDetailModal, closeEvaluLikeModal,
-    setClinetEvaluList
+    setClinetEvaluList,
+    chatMessge, senChatMessage
   } = useFirmHarmCaseContext();
 
   /**
@@ -116,21 +109,31 @@ export default function FirmHarmCaseLayout (): React.ReactElement
             />
           ) : (<NoticeEmptyList>{getString('firmHarmCase.NOTICE_EMPTY_LIST')}</NoticeEmptyList>)}
         </NotExitButWrap>) : (
-          <HarmCaseList
-            data={cliEvaluList}
-            horizontal={true}
-            renderItem={({ item }) => renderCliEvaluItem(item)}
-            keyExtractor={(item, index) => index.toString()}
-            last={false}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={2}
-          />)}
-      <JangbeeAdList
+          <View style={{ height: 240 }}>
+            <Swiper showsPagination={false} paginationStyle={{ backgroundColor: 'blue' }} showsButtons={true}>
+              {cliEvaluList.map((item) => renderCliEvaluItem(item))}
+            </Swiper>
+          </View>
+        )}
+      {!!chatMessge && (
+        <KeyboardAvoidingView style={{ flex: 1 }}>
+          <GiftedChat
+            messages={chatMessge}
+            onSend={(messages) => { senChatMessage(messages) }}
+            user={{
+              _id: 1
+            }}
+            placeholder="입력해 주세요.."
+            dateFormat="l"
+          />
+        </KeyboardAvoidingView>
+      )}
+      {/* <JangbeeAdList
         admob
         admobUnitID="ca-app-pub-9415708670922576/2793380882"
         admonSize="fullBanner"
         admonHeight="60"
-      />
+      /> */}
       <ClientEvaluCreateModal
         isVisibleModal={visibleCreateModal}
         accountId={user.uid}

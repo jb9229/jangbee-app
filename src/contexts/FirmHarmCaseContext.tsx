@@ -14,6 +14,7 @@ interface Context {
   updateEvalu: any; detailEvalu: any; searchTime: string;
   evaluLikeSelected: boolean; evaluLikeList: Array<string>; mineEvaluation: (flag: boolean) => void;
   visibleCreateModal: boolean; visibleUpdateModal: boolean; visibleDetailModal: boolean; visibleEvaluLikeModal: boolean;
+  chatMessge: Array<object>;
   createClientEvaluLike: (newEvaluLike: string) => void; cancelClientEvaluLike: (evaluation: string, like: boolean) => void;
   setVisibleCreateModal: (flag: boolean) => void; setVisibleUpdateModal: (flag: boolean) => void;
   setVisibleDetailModal: (flag: boolean) => void; closeEvaluLikeModal: (flag: boolean) => void;
@@ -28,6 +29,7 @@ interface Context {
   openDetailModal: (evalu) => void;
   deleteCliEvalu: (id: string) => void;
   openCliEvaluLikeModal: (item, isMine) => void;
+  senChatMessage: (meesage: object) => void;
 }
 
 export interface Evaluation {

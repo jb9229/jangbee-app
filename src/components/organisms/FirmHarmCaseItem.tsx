@@ -14,7 +14,7 @@ interface StyleProps {
   mine?: boolean;
 }
 const Container = styled.View`
-  min-width: 400;
+  min-width: 200;
   margin: 10px;
   background-color: ${colors.pointBatang};
 `;

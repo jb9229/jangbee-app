@@ -52,6 +52,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
   const [mineEvaluation, setMineEvaluation] = React.useState();
   const [detailEvalu, setDetailEvalu] = React.useState();
+  const [chatMessge, setChatMessge] = React.useState(InitChatMessage);
 
   // Init States
   const states = {
@@ -59,7 +60,8 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     cliEvaluList, countData,
     visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
     updateEvalu, detailEvalu, searchTime,
-    evaluLikeSelected, evaluLikeList
+    evaluLikeSelected, evaluLikeList,
+    chatMessge
   };
 
   // Init Actions
@@ -338,6 +340,15 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
             `피해사례 통계 요처에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
           );
         });
+    },
+    senChatMessage: (message: string) =>
+    {
+      console.log('>>> message', message);
+      const newChatMessage = message.concat(
+        states.chatMessge
+      );
+      console.log('>>> newChatMessage', newChatMessage);
+      setChatMessge(newChatMessage);
     }
   };
 
@@ -348,3 +359,36 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
 };
 
 export default FirmHarmCaseProvider;
+
+const InitChatMessage = [
+  {
+    _id: 1,
+    text: '저도 피해봤습니다',
+    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 20, 0)),
+    user: {
+      _id: 2,
+      name: 'React Native',
+      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1559951300248.jpg'
+    }
+  },
+  {
+    _id: 2,
+    text: '우리함께 힘을 합처봐요',
+    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 30, 0)),
+    user: {
+      _id: 1,
+      name: 'React Native',
+      avatar: 'https://placeimg.com/140/140/any'
+    }
+  },
+  {
+    _id: 3,
+    text: '두줄로 글써보자 \n 그래그래',
+    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 20, 0)),
+    user: {
+      _id: 2,
+      name: 'React Native',
+      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1561127267339.jpg'
+    }
+  }
+];

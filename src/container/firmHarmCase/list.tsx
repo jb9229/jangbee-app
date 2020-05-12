@@ -10,7 +10,7 @@ interface Props {
 function FirmHarmCaseContainer (props): React.ReactElement
 {
   return (
-    <FirmHarmCaseProvider>
+    <FirmHarmCaseProvider navigation={props.navigation}>
       <FirmHarmCaseLayout />
     </FirmHarmCaseProvider>
   );

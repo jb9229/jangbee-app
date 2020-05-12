@@ -41,13 +41,13 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
     user, searchWord, searchNotice, searchArea,
     cliEvaluList: [
       {
-        accountId: 'test_accountId', reason: 'temp_reason',
+        accountId: 'test_accountId', reason: '돈 줄 생각이 없음',
         local: '지역', likeCount: 4, unlikeCount: 5, firmName: '업체명',
         cliName: '평가하는 고객', telNumber: '0101111111',
         telNumber2: '0101111111', telNumber3: '0101111111'
       },
       {
-        accountId: 'test_accountId', reason: 'temp_reason',
+        accountId: 'test_accountId', reason: '또다른 피해자가 없어야함',
         local: '지역', likeCount: 4, unlikeCount: 5, firmName: '업체명',
         cliName: '평가하는 고객', telNumber: '0101111111',
         telNumber2: '0101111111', telNumber3: '0101111111'
@@ -56,7 +56,85 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
     countData,
     visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
     updateEvalu, detailEvalu, searchTime,
-    evaluLikeSelected, evaluLikeList
+    evaluLikeSelected, evaluLikeList,
+    chatMessge: [
+      {
+        id: '1',
+        type: 'text',
+        content: 'hello world',
+        targetId: '12345678',
+        chatInfo: {
+          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          id: '12345678',
+          nickName: 'Test'
+        },
+        renderTime: true,
+        sendStatus: 0,
+        time: '1542006036549'
+      },
+      {
+        id: '2',
+        type: 'text',
+        content: 'hi/{se}',
+        targetId: '12345678',
+        chatInfo: {
+          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          id: '12345678',
+          nickName: 'Test'
+        },
+        renderTime: true,
+        sendStatus: 0,
+        time: '1542106036549'
+      },
+      {
+        id: '3',
+        type: 'image',
+        content: {
+          uri: 'https://upload-images.jianshu.io/upload_images/11942126-044bd33212dcbfb8.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240',
+          width: 100,
+          height: 80
+        },
+        targetId: '12345678',
+        chatInfo: {
+          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          id: '12345678',
+          nickName: 'Test'
+        },
+        renderTime: false,
+        sendStatus: 0,
+        time: '1542106037000'
+      },
+      {
+        id: '4',
+        type: 'text',
+        content: '좋아!/{weixiao}',
+        targetId: '88886666',
+        chatInfo: {
+          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          id: '12345678'
+        },
+        renderTime: true,
+        sendStatus: 1,
+        time: '1542177036549'
+      },
+      {
+        id: '5',
+        type: 'voice',
+        content: {
+          uri: 'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
+          length: 10
+        },
+        targetId: '12345678',
+        chatInfo: {
+          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          id: '12345678',
+          nickName: 'Test'
+        },
+        renderTime: true,
+        sendStatus: 1,
+        time: '1542260667161'
+      }
+    ]
   };
 
   // Init Actions
@@ -113,6 +191,20 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
     },
     getClientEvaluCount: (accountId: string, setCountData: (n: string) => void) =>
     {
+    },
+    senChatMessage: (message: string) =>
+    {
+      states.chatMessge.concat(
+        {
+          _id: states.chatMessge.length + 1,
+          text: message,
+          createdAt: new Date(),
+          user: {
+            _id: 1,
+            name: '나'
+          }
+        }
+      );
     }
   };
 
