@@ -1,8 +1,8 @@
 {
   "prettier.singleQuote": true,
-  "eslint.autoFixOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
   },
   // "react-native-storybooks.host": "192.168.43.135",
   // "react-native-storybooks.port": 7007

@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "0.8.8_20200528_2",
+    "version": "0.8.8_20200530_1405",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
@@ -24,6 +24,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "Kan",
+            "project": "jangbeecall",
+            "authToken": "b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398",
+            "url": "your sentry url here" // OPTIONAL- only necessary when self-hosting Sentry
+          }
+        }
+      ]
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "yes",

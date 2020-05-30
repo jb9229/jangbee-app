@@ -1,39 +1,30 @@
 import './rn-addons';
 
+import * as Sentry from 'sentry-expo';
+import * as Updates from 'expo-updates';
+
+/* global __DEV__ */
 import { configure, getStorybookUI } from '@storybook/react-native';
 
+import Constants from 'expo-constants';
 import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
 import { loadAllAssests } from 'src';
 import { loadStories } from './storyLoader';
 import { setupGlobalDecorators } from './global_decorators';
 
+Sentry.setRelease(Constants.manifest.revisionId);
+Sentry.init({
+  dsn: 'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
+  enableInExpoDevelopment: true,
+  debug: true
+});
+
 Promise.all(loadAllAssests).then(() =>
 {
   console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
 }).catch((err) => { console.log(err) });
-// // Stories Dinamic Importing
-// configure(() =>
-// {
-//   initFirebase();
-//   loadStories();
-// }, module);
 
-/**
- * 전역 데코레이터 추가 설정
- */
-// function wait (msecs)
-// {
-//   const start = new Date().getTime();
-//   let cur = start;
-
-//   while (cur - start < msecs)
-//   {
-//     cur = new Date().getTime();
-//   }
-// }
-
-// wait(1000);
 setupGlobalDecorators();
 
 const initFirebase = () =>
@@ -47,35 +38,26 @@ const initFirebase = () =>
   }
 };
 
-// async () =>
-// {
-//   await Promise.all(loadAllAssests).then(() =>
-//   {
-//     console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
-//   }).catch((err) => { console.log(err) });
-// };
-
-// import { Updates } from 'expo';
-// checkUpdate = async () =>
-// {
-//   try
-//   {
-//     const update = await Updates.checkForUpdateAsync();
-//     if (update.isAvailable)
-//     {
-//       await Updates.fetchUpdateAsync();
-//       // ... notify user of update ...
-//       Updates.reloadFromCache();
-//       this.setState({ isAppUpdateComplete: true });
-//     }
-
-//     this.setState({ isAppUpdateComplete: true });
-//   }
-//   catch (e)
-//   {
-//     this.setState({ isAppUpdateComplete: true });
-//   }
-// };
+const checkUpdate = async () =>
+{
+  if (!__DEV__)
+  {
+    try
+    {
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable)
+      {
+        await Updates.fetchUpdateAsync();
+        // ... notify user of update ...
+        Updates.reloadAsync();
+      }
+    }
+    catch (e)
+    {
+      console.error(e);
+    }
+  }
+};
 
 // Stories Dinamic Importing
 configure(() =>
@@ -83,6 +65,7 @@ configure(() =>
   console.log('end loadAllAssets');
   initFirebase();
   loadStories();
+  checkUpdate();
 }, module);
 console.log('start root ui');
 // Refer to https://github.com/storybookjs/storybook/tree/master/app/react-native#start-command-parameters

@@ -1,19 +1,14 @@
-import * as api from 'api/api';
-
 import { Alert, DeviceEventEmitter, Platform } from 'react-native';
-import { DefaultNavigationProps, UserProfile, UserType } from 'src/types';
 
-import { Firm } from 'src/provider/LoginProvider';
+import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JBTerm from 'templates/JBTerm';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import { Notifications } from 'expo';
 import React from 'react';
-import { User } from 'firebase';
 import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
-import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
