@@ -2,10 +2,16 @@ import * as React from 'react';
 import * as api from 'api/api';
 
 import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
+import { useMutation, useQuery, useSubscription } from '@apollo/client';
 
+import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
+import { Alert } from 'react-native';
+import { FIRM_CHATMESSAGE } from 'src/api/queries';
+import { FIRM_NEWCHAT } from 'src/api/subscribe';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { getClientEvaluCount } from 'src/container/firmHarmCase/action';
 import moment from 'moment';
+import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
@@ -31,9 +37,23 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       getClientEvaluCount(user?.uid, setCountData);
       setClinetEvaluList();
     }
+
+    // subscription
+    subscribeToMore({
+      document: FIRM_NEWCHAT, updateQuery: (prev, { subscriptionData }) =>
+      {
+        console.log('>>> prev.firmChatMessage:', prev.firmChatMessage);
+        console.log('>>> subscriptionData:', subscriptionData.data);
+        if (!subscriptionData.data) return prev.firmChatMessage;
+        const newFeedItem = subscriptionData.data.firmNewChat;
+        return Object.assign({}, prev, {
+          firmChatMessage: [newFeedItem, ...prev.firmChatMessage]
+        });
+      }
+    });
   }, []);
 
-  const { user } = useLoginContext();
+  const { user, firm } = useLoginContext();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
@@ -52,17 +72,29 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
   const [mineEvaluation, setMineEvaluation] = React.useState();
   const [detailEvalu, setDetailEvalu] = React.useState();
-  const [chatMessge, setChatMessge] = React.useState(InitChatMessage);
+  const [chatMessge, setChatMessge] = React.useState([]);
 
-  // Init States
-  const states = {
-    user, searchWord, searchNotice, searchArea,
-    cliEvaluList, countData,
-    visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
-    updateEvalu, detailEvalu, searchTime,
-    evaluLikeSelected, evaluLikeList,
-    chatMessge
-  };
+  // Server api call
+  const { subscribeToMore, ...chatMessagesResponse } = useQuery(FIRM_CHATMESSAGE, {
+    onCompleted: (data) =>
+    {
+      if (data) { setChatMessge(data?.firmChatMessage) }
+      else { noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq onCompleted)', 'no data!!') }
+    }
+  });
+  // const subscribeResponse = useSubscription(FIRM_NEWCHAT, {
+  //   onSubscriptionData: (data) =>
+  //   {
+  //     console.log('>>> subscribeResponse data firmNewChat: ', subscribeResponse?.data?.firmNewChat);
+  //     if (subscribeResponse?.data?.firmNewChat) (setChatMessge(chatMessge.concat([subscribeResponse.data.firmNewChat])));
+  //   }
+  // });
+  const [addFirmChatMessageReq, addFirmChatMessageRsp] = useMutation(ADD_FIRMCHAT_MESSAGE, {
+    onError: (err) =>
+    {
+      noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq result)', err?.message);
+    }
+  });
 
   // Init Actions
   const setClinetEvaluList = () =>
@@ -222,6 +254,16 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       });
   };
 
+  // Init States
+  const states = {
+    user, firm, searchWord, searchNotice, searchArea,
+    cliEvaluList, countData,
+    visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
+    updateEvalu, detailEvalu, searchTime,
+    evaluLikeSelected, evaluLikeList,
+    chatMessge: chatMessagesResponse?.data?.firmChatMessage || []
+  };
+
   const actions = {
     deleteCliEvalu: (id: string): void =>
     {
@@ -341,14 +383,22 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
           );
         });
     },
-    senChatMessage: (message: string) =>
+    senChatMessage: (message: object) =>
     {
-      console.log('>>> message', message);
-      const newChatMessage = message.concat(
-        states.chatMessge
-      );
-      console.log('>>> newChatMessage', newChatMessage);
-      setChatMessge(newChatMessage);
+      if (!firm) { Alert.alert('장비등록 정보없음!!', '장비등록을 먼저 해 주세요~~'); return }
+
+      const newMessage = {
+        ...message[0],
+        createdAt: new Date().getTime(),
+        user: {
+          _id: firm.accountId,
+          name: firm.fname,
+          avatar: firm.thumbnail
+        }
+      };
+
+      console.log('>>> newMessage', newMessage);
+      addFirmChatMessageReq({ variables: { message: newMessage } });
     }
   };
 
@@ -359,36 +409,3 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
 };
 
 export default FirmHarmCaseProvider;
-
-const InitChatMessage = [
-  {
-    _id: 1,
-    text: '저도 피해봤습니다',
-    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 20, 0)),
-    user: {
-      _id: 2,
-      name: 'React Native',
-      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1559951300248.jpg'
-    }
-  },
-  {
-    _id: 2,
-    text: '우리함께 힘을 합처봐요',
-    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 30, 0)),
-    user: {
-      _id: 1,
-      name: 'React Native',
-      avatar: 'https://placeimg.com/140/140/any'
-    }
-  },
-  {
-    _id: 3,
-    text: '두줄로 글써보자 \n 그래그래',
-    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 20, 0)),
-    user: {
-      _id: 2,
-      name: 'React Native',
-      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1561127267339.jpg'
-    }
-  }
-];

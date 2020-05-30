@@ -6,6 +6,33 @@ import { FirmCreateDto, FirmCreateErrorData, FirmCreateValidScheme } from 'src/c
 import getString from 'src/STRING';
 
 // Actions
+export const convertFirmDto = (uid: string, dto: FirmCreateDto): object =>
+{
+  console.log('>>> convertFirmDto : ', dto);
+  return {
+    account_id: uid,
+    fname: dto.fname,
+    thumbnail: dto.thumbnail,
+    phoneNumber: dto.phoneNumber,
+    equiListStr: dto.equiListStr,
+    modelYear: dto.modelYear,
+    address: dto.address,
+    addressDetail: dto.addressDetail,
+    sidoAddr: dto.sidoAddr,
+    sigunguAddr: dto.sigunguAddr,
+    addrLongitude: Number.parseFloat(dto.addrLongitude),
+    addrLatitude: Number.parseFloat(dto.addrLatitude),
+    workAlarmSido: dto.workAlarmSido,
+    workAlarmSigungu: dto.workAlarmSigungu,
+    introduction: dto.introduction,
+    photo1: dto.photo1,
+    photo2: dto.photo2,
+    photo3: dto.photo3,
+    blog: dto.blog,
+    homepage: dto.homepage,
+    sns: dto.sns
+  };
+};
 export const validateCreatFirmDto = (dto: FirmCreateDto): Promise<boolean | FirmCreateErrorData> =>
 {
   const errorData = new FirmCreateErrorData();
@@ -137,8 +164,35 @@ export const requestModifyFirm = (uid: string, firmId: string, dto: FirmCreateDt
     blog: dto.blog,
     homepage: dto.homepage,
     sns: dto.sns
-
   };
 
   return api.updateFirm(updateFirm);
+};
+
+export const getUpdateFirmDto = (dto: FirmCreateDto): FirmCreateDto =>
+{
+  const updateFirm = {
+    fname: dto.fname,
+    phoneNumber: dto.phoneNumber,
+    equiListStr: dto.equiListStr,
+    modelYear: dto.modelYear,
+    address: dto.address,
+    addressDetail: dto.addressDetail,
+    sidoAddr: dto.sidoAddr,
+    sigunguAddr: dto.sigunguAddr,
+    addrLongitude: dto.addrLongitude,
+    addrLatitude: dto.addrLatitude,
+    workAlarmSido: dto.workAlarmSido,
+    workAlarmSigungu: dto.workAlarmSigungu,
+    introduction: dto.introduction,
+    thumbnail: dto.uploadedThumbnailUrl,
+    photo1: dto.uploadedPhoto1Url,
+    photo2: dto.uploadedPhoto2Url,
+    photo3: dto.uploadedPhoto3Url,
+    blog: dto.blog,
+    homepage: dto.homepage,
+    sns: dto.sns
+  };
+
+  return updateFirm;
 };

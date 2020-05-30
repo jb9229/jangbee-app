@@ -32,8 +32,8 @@ android {
     applicationId 'com.kan.jangbeecall'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 38
-    versionName '0.8.0_38_20200315'
+    versionCode 40
+    versionName '0.9.0_20200526'
 
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -56,6 +56,12 @@ android {
       storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
       keyAlias System.getenv("ANDROID_KEY_ALIAS")
       keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+    }
+    beta {
+      storeFile file('/Users/kosac/Private/Project/JangbeeCall/source/jangbee-app/beta-release-key.keystore')
+      storePassword 'wlsqja83'
+      keyAlias = 'beta-release-alias'
+      keyPassword 'wlsqja83'
     }
   }
   buildTypes {
@@ -83,11 +89,13 @@ android {
       dimension = 'api'
       applicationIdSuffix = '.beta'
       resValue "string", "app_name", "장비 콜(Beta)"
-      signingConfig signingConfigs.debug
+      applicationId = 'com.kan.jangbeecall'
+      signingConfig signingConfigs.beta
     }
     prod {
       dimension = 'api'
       signingConfig signingConfigs.release
+      applicationId = 'com.kan.jangbeecall'
     }
   }
 }

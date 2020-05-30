@@ -222,3 +222,36 @@ export const FirmHarmCaseObj =
     local: '지역', likeCount: 4, unlikeCount: 5, firmName: '업체명',
     cliName: '평가하는 고객', telNumber: '0101111111'
   };
+
+const InitChatMessage = [
+  {
+    _id: 1,
+    text: '저도 피해봤습니다',
+    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 20, 0)),
+    user: {
+      _id: 2,
+      name: 'React Native',
+      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1559951300248.jpg'
+    }
+  },
+  {
+    _id: 2,
+    text: '우리함께 힘을 합처봐요',
+    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 30, 0)),
+    user: {
+      _id: 1,
+      name: 'React Native',
+      avatar: 'https://placeimg.com/140/140/any'
+    }
+  },
+  {
+    _id: 3,
+    text: '두줄로 글써보자 \n 그래그래',
+    createdAt: new Date(Date.UTC(2020, 3, 2, 17, 20, 0)),
+    user: {
+      _id: 2,
+      name: 'React Native',
+      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1561127267339.jpg'
+    }
+  }
+];

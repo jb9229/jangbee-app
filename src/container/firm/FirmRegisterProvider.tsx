@@ -1,12 +1,14 @@
 import * as React from 'react';
 
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
-import { requestAddFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
+import { convertFirmDto, requestAddFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
 
+import { CREATE_FIRM } from 'src/api/mutations';
 import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { useMutation } from '@apollo/client';
 
 interface Context {
   navigation: DefaultNavigationProps;
@@ -25,9 +27,29 @@ interface Props {
 const FirmRegisterProvider = (props: Props): React.ReactElement =>
 {
   // States
-  const { user, firm, popLoading } = useLoginContext();
+  const { user, firm, popLoading, refetchFirm } = useLoginContext();
   const [firmDto, setFirmDto] = React.useState(new FirmCreateDto());
   const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(new FirmCreateErrorData());
+  const [createFirmRequest, createFirmResponse] = useMutation(CREATE_FIRM, {
+    onCompleted: (data) =>
+    {
+      if (data && data.createFirm)
+      {
+        requestAddFirm(user.uid, firmDto)
+          .then((result) => { console.log('>>> jb requestAddFirm result:', result); if (result) { refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'Register' }) } })
+          .catch((err): void => { noticeUserError('FirmRegisterProvider(requestAddFirm -> error)', err?.message) });
+      }
+      else
+      {
+        noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onCompleted)', data?.createFirm);
+      }
+    },
+    onError: (err) =>
+    {
+      console.error(err);
+      noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onError)', err?.message);
+    }
+  });
 
   // Server Data State
 
@@ -47,21 +69,23 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickCreate: (): void =>
     {
+      console.log('>>> onClickCreate~~');
       validateCreatFirmDto(firmDto)
-        .then((result) =>
+        .then((validResult) =>
         {
-          if (result === true)
+          console.log('>>> validateCreatFirmDto result: ', validResult);
+          if (validResult === true)
           {
             uploadImage(firmDto, popLoading)
-              .then((result) =>
+              .then((uploadResult) =>
               {
-                requestAddFirm(user.uid, firmDto)
-                  .then((result) => { if (result) { props.navigation.navigate('FirmMyInfo', { refresh: 'Register' }) } })
-                  .catch((err): void => { noticeUserError('FirmRegisterProvider(requestAddFirm -> error)', err?.message) });
+                console.log('>>> uploadImage result: ', uploadResult);
+                const newFirmDto = convertFirmDto(user.uid, firmDto);
+                createFirmRequest({ variables: { newFirm: newFirmDto } });
               })
               .catch((err) => { noticeUserError('FirmRegisterProvider(uploadImage -> error)', err?.message) });
           }
-          else if (result instanceof FirmCreateErrorData) { setErrorData(result) }
+          else if (validResult instanceof FirmCreateErrorData) { setErrorData(validResult) }
         })
         .catch((err) => { noticeUserError('FirmRegisterProvider(validateCreatFirmDto -> error)', err?.message) });
     }

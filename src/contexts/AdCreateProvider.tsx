@@ -124,7 +124,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
           .existEuipTarketAd(dto.adEquipment)
           .then((dupliResult) =>
           {
-            if (dupliResult === null)
+            if (dupliResult)
             {
               return true;
             }
@@ -205,7 +205,6 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
 const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNavigationProps,
   setImgUploading: (flag: boolean) => void): Promise<any> =>
 {
-  console.log('=== requestCreaAd ===');
   // Ad Image Upload
   let serverAdImgUrl = null;
   if (dto.adPhotoUrl)
@@ -231,10 +230,10 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     sidoTarget: dto.adSido,
     gugunTarget: dto.adGungu,
     price: adPrice,
-    fintechUseNum: 'temp_fintechusenum', // it will be delete
-    obAccessToken: 'temp_obAccessToken' // it will be delete
+    // paymentSid: dto.paymentSid
+    paymentSid: 'S2763608410635040214'
   };
-
+  console.log('>>> newAd:', newAd);
   api
     .createAd(newAd)
     .then(() =>
@@ -254,23 +253,28 @@ const getAdPrice = (adType): number =>
 {
   if (adType === AdType.MAIN_FIRST)
   {
-    return 100000;
+    // return 100000;
+    return 100;
   }
   if (adType === AdType.MAIN_SECONDE)
   {
-    return 70000;
+    // return 70000;
+    return 100;
   }
   if (adType === AdType.MAIN_THIRD)
   {
-    return 50000;
+    // return 50000;
+    return 100;
   }
   if (adType === AdType.SEARCH_EQUIPMENT_FIRST)
   {
-    return 70000;
+    // return 70000;
+    return 100;
   }
   if (adType === AdType.SEARCH_REGION_FIRST)
   {
-    return 30000;
+    // return 30000;
+    return 100;
   }
   return 0;
 };
@@ -311,7 +315,8 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
-    setVisibleEquiModal, setVisibleAddrModal,
+    setVisibleEquiModal,
+    setVisibleAddrModal,
     onSubmit: (adDto: CreateAdDto): void =>
     {
       console.log('>>> adCreateAction..');
@@ -320,11 +325,13 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
         {
           if (result)
           {
-            // if (!userProfile.sid)
-            // {
-            //   openAdPaymentModal(getAdPrice(adState.createAdDto.adType));
-            //   return;
-            // }
+            if (!userProfile.sid)
+            {
+              console.log('>>> userProfile.sid:', userProfile.sid);
+              openAdPaymentModal(getAdPrice(adState.createAdDto.adType), requestCreaAd, [adDto, user, props.navigation, setImgUploading]);
+              return;
+            }
+            adDto.paymentSid = userProfile.sid;
             requestCreaAd(adDto, user, props.navigation, setImgUploading);
           }
         });

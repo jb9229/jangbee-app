@@ -171,11 +171,11 @@ const receiveWebViewMSG = (webView: any, webViewMSG: any, paymentInfo: KakaoPaym
         {
           setPaymentSubscription(result.sid);
           close();
-          Alert.alert('결제등록 완료', '일감매칭 결제 정보가 등록되었습니다, 일감지원을 완료해 주세요');
+          Alert.alert('결제등록 완료', '결제 정보가 등록되었습니다');
         }
         else
         {
-          Alert.alert('결제등록 실패', '다시 일감매칭 결제정보를 등록해 주세요');
+          Alert.alert('결제등록 실패!', '다시 결제정보를 등록해 주세요');
           close();
         }
       });

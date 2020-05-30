@@ -1,16 +1,15 @@
 import firebase from 'firebase';
-import { noticeUserError } from 'src/container/request';
 
-export function getUserInfo (uid): Promise<any>
+export function getUserInfo (uid): Promise<firebase.database.DataSnapshot>
 {
   return firebase
     .database()
     .ref(`users/${uid}`)
-    .once('value', data => data);
+    .once('value', data => { console.log('firebase getuserinfo data: ', data); return data });
 }
 
 export function updateReAuthInfo (uid, accessToken, refreshToken, accTokenExpDate,
-  accTokenDiscDate, userSeqNo, errorCallbackFunc): Promise<any>
+  accTokenDiscDate, userSeqNo, errorCallbackFunc): Promise<void>
 {
   return firebase
     .database()
@@ -33,9 +32,9 @@ export function updateReAuthInfo (uid, accessToken, refreshToken, accTokenExpDat
     );
 }
 
-export function updatePaymentSubscription (uid: string, sid: string): Promise<any>
+export function updatePaymentSubscription (uid: string, sid: string): Promise<void>
 {
-  if (!uid || !sid) { return new Promise((resolve): void => { resolve(false) }) }
+  if (!uid || !sid) { return new Promise((resolve): void => { resolve() }) }
   return firebase
     .database()
     .ref(`users/${uid}`)
@@ -43,10 +42,13 @@ export function updatePaymentSubscription (uid: string, sid: string): Promise<an
       {
         sid: sid
       },
-      (error): void =>
+      (error: Error | null): void =>
       {
-        console.log(error);
-        noticeUserError('Firebase Update Fail(updatePaymentSubscription)', error?.message);
+        if (error)
+        {
+          console.error(error);
+          throw error;
+        }
       }
     );
 }

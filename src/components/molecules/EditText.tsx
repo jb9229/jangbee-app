@@ -59,6 +59,8 @@ interface Props {
   secureTextEntry?: boolean;
   unchangeable?: boolean;
   maxLength?: number;
+  multiline?: boolean;
+  numberOfLines?: number;
   onSubmitEditing?: (e: NativeSyntheticEvent<any>) => void;
   onChangeText?: (text: string) => void;
   onFocus?: () => void;
@@ -86,6 +88,8 @@ const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) 
         style={[props.textStyle]}
         autoCapitalize={'none'}
         autoCorrect={false}
+        multiline={props.multiline}
+        numberOfLines={props.numberOfLines}
         focused={focused}
         onFocus={(): void => setFocus(true)}
         onBlur={(): void => setFocus(false)}

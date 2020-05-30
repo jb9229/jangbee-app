@@ -1,6 +1,6 @@
 import * as api from 'api/api';
 
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
 import AdUpdateModal from 'templates/AdUpdateModal';
 import { DefaultNavigationProps } from 'src/types';
@@ -14,6 +14,7 @@ import fonts from 'constants/Fonts';
 import { getAdtypeStr } from 'constants/AdTypeStr';
 import { notifyError } from 'common/ErrorNotice';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { wait } from 'src/utils/TimeUtils';
 
 const styles = StyleSheet.create({
   container: {
@@ -87,6 +88,16 @@ const AdScreen: React.FC<Props> = (props) =>
   const [adList, setAdList] = React.useState(null);
   const [detailFirmId, setDetailFirmId] = React.useState(null);
   const [updateAd, setUpdateAd] = React.useState();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() =>
+  {
+    setRefreshing(true);
+
+    requestAdList();
+
+    wait(1000).then(() => setRefreshing(false));
+  }, [refreshing]);
 
   React.useEffect(() =>
   {
@@ -277,6 +288,10 @@ const AdScreen: React.FC<Props> = (props) =>
         data={adList}
         renderItem={(item): React.ReactElement => renderAdListItem(item)}
         keyExtractor={(item, index): string => index.toString()}
+        refreshing={refreshing}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
       {isAdEmpty ? (
         <JBButton

@@ -27,15 +27,19 @@ interface Props {
 }
 const HomeScreen: React.FC<Props> = (props) =>
 {
-  const { user, userProfile, setFirm } = useLoginContext();
+  const { refetchFirm } = useLoginContext();
   let _notificationSubscription;
 
   React.useEffect(() =>
   {
-    addNotificationListener();
-    setUserFirmInfo(props.navigation, user, userProfile, setFirm);
-    runListener();
-    checkBLListLoading();
+    (async () =>
+    {
+      addNotificationListener();
+      runListener();
+      checkBLListLoading();
+      const firm = await refetchFirm();
+      if (!firm) { setTimeout(() => { props.navigation.navigate('FirmRegister') }, 500) }
+    })();
 
     return (): void => { _notificationSubscription.remove() };
   }, []);
@@ -187,55 +191,6 @@ const HomeScreen: React.FC<Props> = (props) =>
       <JBTerm />
     </Container>
   );
-};
-
-/**
- * 장비기사인경우 장비정보 설정함수
- */
-const setUserFirmInfo = (navigation: DefaultNavigationProps, user: User, userProfile: UserProfile,
-  setFirm: (firm: Firm) => void): void =>
-{
-  if (!user.uid || !userProfile || userProfile.userType !== UserType.FIRM)
-  {
-    return;
-  }
-
-  api
-    .getFirm(user.uid)
-    .then(firm =>
-    {
-      if (firm)
-      {
-        setFirm(firm);
-      }
-      else
-      {
-        Alert.alert(
-          '장비등록 정보가 없습니다.',
-          '장비등록을 먼저 해 주세요.',
-          [{ text: '확인' }],
-          { cancelable: false }
-        );
-
-        setTimeout(() =>
-        {
-          navigation.navigate('FirmRegister');
-        }, 500);
-      }
-    })
-    .catch(error =>
-    {
-      notifyError(
-        '업체정보 확인중 문제발생',
-        `업체정보를 불러오는 도중 문제가 발생했습니다, 다시 시도해 주세요 -> [${
-          error.name
-        }] ${error.message}`,
-        [
-          { text: '취소' },
-          { text: '업체정보 요청하기', onPress: (): void => setUserFirmInfo(navigation, user, userProfile, setFirm) }
-        ]
-      );
-    });
 };
 
 export default HomeScreen;

@@ -34,6 +34,7 @@ const Container = styled.View`
 `;
 const KeyboardAvoidingView = styled.KeyboardAvoidingView.attrs({
   contentContainerStyle: {
+    flex: 1
   }
 })`flex: 1;`;
 const ScrollView = styled.ScrollView.attrs({
@@ -54,7 +55,7 @@ const AdCreateLayout: React.FC = () =>
 
   return (
     <Container>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150}>
         <Card>
           <ScrollView>
             <AdTypeWrap>

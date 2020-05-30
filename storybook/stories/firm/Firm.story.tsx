@@ -95,7 +95,7 @@ storiesOf('업체', module)
   .add('이미지 업로드', () => React.createElement(() =>
   {
     const [img, setImg] = React.useState();
-    const [uploadedImg, setIUploadedImg] = React.useState();
+    const [uploadedImg, setIUploadedImg] = React.useState<string>('unknow image url...');
     return (
       <>
         <ImagePickInput

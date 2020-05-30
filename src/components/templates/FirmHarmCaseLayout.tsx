@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { KeyboardAvoidingView, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
-import { ChatScreen } from 'react-native-easy-chat-ui';
 import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
@@ -41,19 +40,32 @@ const NoticeEmptyList = styled.Text`
 
 export default function FirmHarmCaseLayout (): React.ReactElement
 {
+  React.useEffect(() =>
+  {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    // cleanup function
+    return () =>
+    {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
+  const _keyboardDidShow = () =>
+  {
+    setChatMode(true);
+  };
+
+  const _keyboardDidHide = () =>
+  {
+    setChatMode(false);
+  };
+
   const {
-    user,
-    searchArea,
-    searchWord,
-    searchTime,
-    searchNotice,
-    countData,
-    cliEvaluList,
-    setSearchArea,
-    setSearchWord,
-    onClickMyEvaluList,
-    onClickNewestEvaluList,
-    searchFilterCliEvalu,
+    user, firm, searchArea, searchWord, searchTime, searchNotice, countData, cliEvaluList,
+    setSearchArea, setSearchWord, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
     deleteCliEvalu,
@@ -65,7 +77,7 @@ export default function FirmHarmCaseLayout (): React.ReactElement
     setClinetEvaluList,
     chatMessge, senChatMessage
   } = useFirmHarmCaseContext();
-
+  const [chatMode, setChatMode] = React.useState(false);
   /**
    * 피해사례 아이템 UI 렌더링 함수
    */
@@ -84,21 +96,39 @@ export default function FirmHarmCaseLayout (): React.ReactElement
     );
   };
 
+  // if (chatMode)
+  // {
+  //   return (<Container>
+  //     <KeyboardAvoidingView style={{ flex: 1 }}>
+  //       <GiftedChat
+  //         messages={chatMessge}
+  //         onSend={(messages) => { senChatMessage(messages) }}
+  //         user={{
+  //           _id: firm?.accountId
+  //         }}
+  //         placeholder="입력해 주세요.."
+  //         dateFormat="l"
+  //       />
+  //     </KeyboardAvoidingView>
+  //   </Container>);
+  // }
+
   return (
     <Container>
-      <FirmHarmCaseHeader
-        searchArea={searchArea}
-        searchWord={searchWord}
-        searchNotice={searchNotice}
-        countData={countData}
-        setSearchArea={setSearchArea}
-        setSearchWord={setSearchWord}
-        onClickMyEvaluList={onClickMyEvaluList}
-        onClickNewestEvaluList={onClickNewestEvaluList}
-        setVisibleCreateModal={setVisibleCreateModal}
-        searchFilterCliEvalu={searchFilterCliEvalu}/>
-
-      {!cliEvaluList ? <ActivityIndicator /> : cliEvaluList.length === 0
+      {!chatMode && (
+        <FirmHarmCaseHeader
+          searchArea={searchArea}
+          searchWord={searchWord}
+          searchNotice={searchNotice}
+          countData={countData}
+          setSearchArea={setSearchArea}
+          setSearchWord={setSearchWord}
+          onClickMyEvaluList={onClickMyEvaluList}
+          onClickNewestEvaluList={onClickNewestEvaluList}
+          setVisibleCreateModal={setVisibleCreateModal}
+          searchFilterCliEvalu={searchFilterCliEvalu}/>
+      )}
+      {!chatMode && (!cliEvaluList ? <ActivityIndicator /> : cliEvaluList.length === 0
         ? (<NotExitButWrap>
           {searchWord ? (
             <JBButton
@@ -114,14 +144,14 @@ export default function FirmHarmCaseLayout (): React.ReactElement
               {cliEvaluList.map((item) => renderCliEvaluItem(item))}
             </Swiper>
           </View>
-        )}
+        ))}
       {!!chatMessge && (
         <KeyboardAvoidingView style={{ flex: 1 }}>
           <GiftedChat
             messages={chatMessge}
             onSend={(messages) => { senChatMessage(messages) }}
             user={{
-              _id: 1
+              _id: firm?.accountId
             }}
             placeholder="입력해 주세요.."
             dateFormat="l"

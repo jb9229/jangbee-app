@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { KeyboardAvoidingView, Picker, ScrollView, TextInput } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native';
 import { MapAddress, PickerItem } from 'src/types';
 
 import Card from 'molecules/CardUI';
@@ -19,12 +19,17 @@ import { useFirmRegisterProvider } from 'src/container/firm/FirmRegisterProvider
 const Container = styled.View`
   flex: 1;
 `;
-const Scroll = styled(ScrollView)`
+const Scroll = styled(ScrollView).attrs(() => ({
+  contentContainerStyle: {
+  }
+}))`
 `;
 const EquipWrap = styled.View`
   flex-direction: row;
 `;
-const Footer = styled.View``;
+const Footer = styled.View`
+  height: 100;
+`;
 
 const FirmRegisterLayout: React.FC = () =>
 {
@@ -36,7 +41,7 @@ const FirmRegisterLayout: React.FC = () =>
 
   return (
     <Container>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150} style={{ flex: 1 }}>
         <Scroll>
           <Card bgColor="white">
             <EditText
@@ -170,17 +175,16 @@ const FirmRegisterLayout: React.FC = () =>
               placeholder="홈페이지 주소를 입력해 주세요"
             />
           </Card>
-
-          <Footer>
-            <JBButton
-              title="업체등록하기"
-              onPress={(): void => onClickCreate()}
-              size="full"
-              Primary
-            />
-          </Footer>
         </Scroll>
       </KeyboardAvoidingView>
+
+      <JBButton
+        title="등록하기"
+        onPress={(): void => onClickCreate()}
+        size="full"
+        Primary
+      />
+
       <EquipementModal
         isVisibleEquiModal={isVisibleEquiModal}
         closeModal={(): void => { setVisibleEquiModal(false) }}

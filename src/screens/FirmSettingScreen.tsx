@@ -3,6 +3,7 @@ import * as api from 'api/api';
 import { Alert, Platform, ToastAndroid } from 'react-native';
 
 import AlarmSettingModal from 'templates/AlarmSettingModal';
+import { DELETE_FIRM } from 'src/api/mutations';
 import { DefaultNavigationProps } from 'src/types';
 import DocumentsModal from 'templates/DocumentsModal';
 import JBIconButton from 'molecules/JBIconButton';
@@ -10,9 +11,11 @@ import KatalkAskWebview from 'templates/KatalkAskWebview';
 import React from 'react';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
+import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { useMutation } from '@apollo/client';
 import { validatePresence } from 'utils/Validation';
 
 const Container = styled.View`
@@ -49,15 +52,42 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
   const [isOBSelVisibleModal, setOBSelVisibleModal] = React.useState(false);
   const [isVisibleDocModal, setVisibleDocModal] = React.useState(false);
   const [isVisibleAlarmSettingModal, setVisibleAlarmSettingModal] = React.useState(false);
+  const [deletFirmRequest] = useMutation(DELETE_FIRM, {
+    onCompleted: (data) =>
+    {
+      if (data && data.deleteFirm)
+      {
+        if (Platform.OS === 'android')
+        {
+          ToastAndroid.show(
+            '회원 탈퇴 성공, 감사했습니다~~',
+            ToastAndroid.SHORT
+          );
+        }
+        else
+        {
+          Alert.alert('회원 탈퇴 성공, 감사했습니다~~');
+        }
+      }
+      else
+      {
+        noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', data?.updateFirm);
+      }
+    },
+    onError: (err) =>
+    {
+      noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message);
+    }
+  });
 
-  const confirmDeleteUser = () =>
+  const confirmDeleteUser = (): void =>
   {
     Alert.alert(
       '탈퇴확인',
       '정말 탈퇴 하시겠습니까? \n탈퇴하시면 즉시 모든 사용하던 데이터가 삭제됩니다.\n\n등록하신 광고가 있다면 이달 잔여기간 만료 후 삭제됩니다.',
       [
-        { text: '탈퇴하기', onPress: () => deleteUser() },
-        { text: '취소', onPress: () => {} }
+        { text: '탈퇴하기', onPress: (): void => deleteUser() },
+        { text: '취소' }
       ]
     );
   };
@@ -79,12 +109,17 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
       .deleteFirmAccount(user.uid)
       .then(result =>
       {
+        console.log('>>> JBSeerver deleteFirmAccount response: ', result);
         if (!result)
         {
           Alert.alert(
             '회원 탈퇴에 문제가 있습니다',
             '서버 데이터 삭제에 실패 했습니다, 죄송합니다, 관리자에게 문의 부탁 드립니다(응답값: false)'
           );
+        }
+        else
+        {
+          deletFirmRequest({ variables: { account_id: user.uid } });
         }
       })
       .catch(error =>
@@ -101,7 +136,7 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
   /**
    * 회원 탈퇴 요청
    */
-  const deleteUser = () =>
+  const deleteUser = (): void =>
   {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
@@ -116,19 +151,7 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
           .remove()
           .then(() =>
           {
-            this.deleteJBData();
-
-            if (Platform.OS === 'android')
-            {
-              ToastAndroid.show(
-                '회원 탈퇴 성공, 감사합니다.',
-                ToastAndroid.SHORT
-              );
-            }
-            else
-            {
-              Alert.alert('회원 탈퇴 성공, 감사합니다.');
-            }
+            deleteJBData();
           })
           .catch(error =>
           {

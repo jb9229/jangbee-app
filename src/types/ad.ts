@@ -22,6 +22,7 @@ export class CreateAdDto
   adSido: string;
   adGungu: string;
   adEquipment: string;
+  paymentSid: string;
 }
 
 export class CreateAdDtoError

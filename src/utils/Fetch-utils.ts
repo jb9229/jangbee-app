@@ -12,7 +12,7 @@ export async function handleJBServerJsonResponse (res): Promise<any>
     if (res.status === 204)
     {
       // NO_CONTENTS
-      return true;
+      return false;
     }
 
     return res.json();

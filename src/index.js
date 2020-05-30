@@ -3,12 +3,14 @@ import * as Updates from 'expo-updates';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 
+import { ApolloProvider } from '@apollo/client';
 import { AppLoading } from 'expo';
 import AppNavigator from 'navigation/AppNavigator';
 import JBActIndicator from 'molecules/JBActIndicator';
 import LoginProvider from 'src/provider/LoginProvider';
 import React from 'react';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
+import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
@@ -102,18 +104,20 @@ export default class App extends React.Component
     return (
       <LoginProvider>
         <ThemeProvider>
-          <View style={styles.container}>
-            {Platform.OS === 'ios' ? (
-              <StatusBar barStyle="default" />
-            ) : (
-              <StatusBar
-                backgroundColor={colors.batangDark}
-                currentHeight={32}
-                barStyle="default"
-              />
-            )}
-            <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
-          </View>
+          <ApolloProvider client={apolloClient}>
+            <View style={styles.container}>
+              {Platform.OS === 'ios' ? (
+                <StatusBar barStyle="default" />
+              ) : (
+                <StatusBar
+                  backgroundColor={colors.batangDark}
+                  currentHeight={32}
+                  barStyle="default"
+                />
+              )}
+              <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
+            </View>
+          </ApolloProvider>
         </ThemeProvider>
       </LoginProvider>
     );

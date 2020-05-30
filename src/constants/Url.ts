@@ -1,7 +1,10 @@
 // const SERVER_URL = 'http://10.1.0.121/api/v1/';
+// const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:8080/api/v1/';
 const SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
+export const NODE_SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
+export const NODE_SERVER_WEBSOCKET_URL = 'ws://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
 
 module.exports = {
   IMAGE_STORAGE: `${SERVER_URL}common/image`,

@@ -15,6 +15,7 @@ import MapAddWebModal from 'templates/MapAddWebModal';
 import SelectText from 'src/components/molecules/SelectText';
 import styled from 'styled-components/native';
 import { useFirmModifyProvider } from 'src/container/firm/FirmModifyProvider';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.View`
   flex: 1;
@@ -24,12 +25,12 @@ const Scroll = styled(ScrollView)`
 const EquipWrap = styled.View`
   flex-direction: row;
 `;
-const Footer = styled.View``;
 
 const FirmRegisterLayout: React.FC = () =>
 {
   const addrDetailComp = React.useRef<TextInput>();
-  const { loading, firm, firmDto, errorData, onClickUpdate } = useFirmModifyProvider();
+  const { loading, firmDto, errorData, onClickUpdate } = useFirmModifyProvider();
+  const { firm } = useLoginContext();
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState(false);
   const [isVisibleMapAddModal, setVisibleMapAddModal] = React.useState(false);
   const [isVisibleLocalModal, setVisibleLocalModal] = React.useState(false);
@@ -51,7 +52,7 @@ const FirmRegisterLayout: React.FC = () =>
 
   return (
     <Container>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150} style={{ flex: 1 }}>
         <Scroll>
           <Card bgColor="white">
             <EditText
@@ -186,17 +187,14 @@ const FirmRegisterLayout: React.FC = () =>
               placeholder="홈페이지 주소를 입력해 주세요"
             />
           </Card>
-
-          <Footer>
-            <JBButton
-              title="업체등록하기"
-              onPress={(): void => onClickUpdate()}
-              size="full"
-              Primary
-            />
-          </Footer>
         </Scroll>
       </KeyboardAvoidingView>
+      <JBButton
+        title="수정하기"
+        onPress={(): void => onClickUpdate()}
+        size="full"
+        Primary
+      />
       <EquipementModal
         isVisibleEquiModal={isVisibleEquiModal}
         closeModal={(): void => { setVisibleEquiModal(false) }}

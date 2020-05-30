@@ -285,6 +285,12 @@ const FirmMyInfoScreen: React.FC<Props> = (props) =>
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrViewWrap}>
         <FirmInfoItem firm={firm} evaluList={evaluList} />
+        <JBButton
+          title="수정하기"
+          onPress={(): void => props.navigation.navigate('FirmUpdate')}
+          size="full"
+          Primary
+        />
       </ScrollView>
       <View style={styles.titleWrap}>
         <Text style={styles.fnameText}>{firm?.fname}</Text>
@@ -292,12 +298,6 @@ const FirmMyInfoScreen: React.FC<Props> = (props) =>
           <CloseButton onClose={() => props.navigation.goBack()} />
         </TopCommWrap>
       </View>
-      <JBButton
-        title="내장비 정보수정하기"
-        onPress={() => props.navigation.navigate('FirmUpdate')}
-        size="full"
-        Primary
-      />
     </View>
   );
 };
