@@ -59,7 +59,7 @@ export default class App extends React.Component
       {
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
-        Updates.reloadFromCache();
+        Updates.reloadAsync();
         this.setState({ isAppUpdateComplete: true });
       }
 
