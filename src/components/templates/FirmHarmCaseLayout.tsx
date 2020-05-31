@@ -1,17 +1,19 @@
 import * as React from 'react';
 
-import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
-import styled, { DefaultTheme } from 'styled-components/native';
+import { Keyboard, KeyboardAvoidingView, Platform, View } from 'react-native';
+import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
 import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
+import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import { GiftedChat } from 'react-native-gifted-chat';
 import JBButton from 'molecules/JBButton';
+import { MaterialIcons } from '@expo/vector-icons';
 import Swiper from 'react-native-swiper';
 import colors from 'constants/Colors';
 import getString from 'src/STRING';
@@ -25,10 +27,6 @@ const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${colors.batangLight};
 `;
-const LoadingContainer = styled.SafeAreaView`
-  flex: 1;
-  justify-content: center;
-`;
 const NotExitButWrap = styled.View`
   height: 80;
   justify-content: center;
@@ -38,7 +36,10 @@ const NoticeEmptyList = styled.Text`
   text-align: center;
 `;
 
-export default function FirmHarmCaseLayout (): React.ReactElement
+interface Props{
+  theme: DefaultTheme;
+}
+const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
   React.useEffect(() =>
   {
@@ -64,7 +65,7 @@ export default function FirmHarmCaseLayout (): React.ReactElement
   };
 
   const {
-    user, firm, searchArea, searchWord, searchTime, searchNotice, countData, cliEvaluList,
+    user, firm, searchArea, searchWord, searchTime, searchNotice, countData, cliEvaluList, evaluListType,
     setSearchArea, setSearchWord, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
@@ -96,23 +97,6 @@ export default function FirmHarmCaseLayout (): React.ReactElement
     );
   };
 
-  // if (chatMode)
-  // {
-  //   return (<Container>
-  //     <KeyboardAvoidingView style={{ flex: 1 }}>
-  //       <GiftedChat
-  //         messages={chatMessge}
-  //         onSend={(messages) => { senChatMessage(messages) }}
-  //         user={{
-  //           _id: firm?.accountId
-  //         }}
-  //         placeholder="입력해 주세요.."
-  //         dateFormat="l"
-  //       />
-  //     </KeyboardAvoidingView>
-  //   </Container>);
-  // }
-
   return (
     <Container>
       {!chatMode && (
@@ -121,6 +105,7 @@ export default function FirmHarmCaseLayout (): React.ReactElement
           searchWord={searchWord}
           searchNotice={searchNotice}
           countData={countData}
+          evaluListType={evaluListType}
           setSearchArea={setSearchArea}
           setSearchWord={setSearchWord}
           onClickMyEvaluList={onClickMyEvaluList}
@@ -128,7 +113,7 @@ export default function FirmHarmCaseLayout (): React.ReactElement
           setVisibleCreateModal={setVisibleCreateModal}
           searchFilterCliEvalu={searchFilterCliEvalu}/>
       )}
-      {!chatMode && (!cliEvaluList ? <ActivityIndicator /> : cliEvaluList.length === 0
+      {!chatMode && evaluListType !== EvaluListType.NONE && (!cliEvaluList ? <ActivityIndicator /> : cliEvaluList.length === 0
         ? (<NotExitButWrap>
           {searchWord ? (
             <JBButton
@@ -139,14 +124,15 @@ export default function FirmHarmCaseLayout (): React.ReactElement
             />
           ) : (<NoticeEmptyList>{getString('firmHarmCase.NOTICE_EMPTY_LIST')}</NoticeEmptyList>)}
         </NotExitButWrap>) : (
-          <View style={{ height: 240 }}>
-            <Swiper showsPagination={false} paginationStyle={{ backgroundColor: 'blue' }} showsButtons={true}>
-              {cliEvaluList.map((item) => renderCliEvaluItem(item))}
-            </Swiper>
-          </View>
+          <Swiper showsPagination={false} showsButtons={true}
+            prevButton={<MaterialIcons name="navigate-before" size={30} color={props.theme.ColorBtnPrimary} />}
+            nextButton={<MaterialIcons name="navigate-next" size={30} color={props.theme.ColorBtnPrimary} />}
+          >
+            {cliEvaluList.map((item) => renderCliEvaluItem(item))}
+          </Swiper>
         ))}
       {!!chatMessge && (
-        <KeyboardAvoidingView style={{ flex: 1 }}>
+        <View style={{ flex: 1, height: 200 }}>
           <GiftedChat
             messages={chatMessge}
             onSend={(messages) => { senChatMessage(messages) }}
@@ -155,8 +141,13 @@ export default function FirmHarmCaseLayout (): React.ReactElement
             }}
             placeholder="입력해 주세요.."
             dateFormat="l"
+            renderUsernameOnMessage={true}
+            style={{ backgroundColor: 'red' }}
           />
-        </KeyboardAvoidingView>
+          {
+            Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />
+          }
+        </View>
       )}
       {/* <JangbeeAdList
         admob
@@ -197,8 +188,10 @@ export default function FirmHarmCaseLayout (): React.ReactElement
       />
     </Container>
   );
-}
+};
 
 FirmHarmCaseLayout.defaultProps = {
   isLoading: true
 };
+
+export default withTheme(FirmHarmCaseLayout);

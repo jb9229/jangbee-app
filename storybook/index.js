@@ -1,24 +1,15 @@
 import './rn-addons';
 
-import * as Sentry from 'sentry-expo';
 import * as Updates from 'expo-updates';
 
 /* global __DEV__ */
 import { configure, getStorybookUI } from '@storybook/react-native';
 
-import Constants from 'expo-constants';
 import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
 import { loadAllAssests } from 'src';
 import { loadStories } from './storyLoader';
 import { setupGlobalDecorators } from './global_decorators';
-
-Sentry.setRelease(Constants.manifest.revisionId);
-Sentry.init({
-  dsn: 'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
-  enableInExpoDevelopment: true,
-  debug: true
-});
 
 Promise.all(loadAllAssests).then(() =>
 {

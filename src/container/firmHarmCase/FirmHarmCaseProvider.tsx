@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as api from 'api/api';
 
 import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
 import { Alert } from 'react-native';
@@ -12,9 +12,11 @@ import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { getClientEvaluCount } from 'src/container/firmHarmCase/action';
 import moment from 'moment';
 import { noticeUserError } from 'src/container/request';
-import { notifyError } from 'common/ErrorNotice';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
+export enum EvaluListType {
+  NONE, MINE, LATEST
+}
 interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
@@ -70,7 +72,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const [countData, setCountData] = React.useState<FirmHarmCaseCountData>();
   const [updateEvalu, setUpdateEvalu] = React.useState();
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
-  const [mineEvaluation, setMineEvaluation] = React.useState();
+  const [evaluListType, setEvaluListType] = React.useState(EvaluListType.LATEST);
   const [detailEvalu, setDetailEvalu] = React.useState();
   const [chatMessge, setChatMessge] = React.useState([]);
 
@@ -82,13 +84,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       else { noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq onCompleted)', 'no data!!') }
     }
   });
-  // const subscribeResponse = useSubscription(FIRM_NEWCHAT, {
-  //   onSubscriptionData: (data) =>
-  //   {
-  //     console.log('>>> subscribeResponse data firmNewChat: ', subscribeResponse?.data?.firmNewChat);
-  //     if (subscribeResponse?.data?.firmNewChat) (setChatMessge(chatMessge.concat([subscribeResponse.data.firmNewChat])));
-  //   }
-  // });
   const [addFirmChatMessageReq, addFirmChatMessageRsp] = useMutation(ADD_FIRMCHAT_MESSAGE, {
     onError: (err) =>
     {
@@ -112,6 +107,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
             setCliEvaluList([]);
             setSearchNotice(notice);
             setLastList(resBody.last);
+            setEvaluListType(EvaluListType.LATEST);
             setNewestEvaluList(true);
 
             return;
@@ -124,6 +120,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
           setLastList(resBody.last);
           setSearchNotice(notice);
           setNewestEvaluList(true);
+          setEvaluListType(EvaluListType.LATEST);
           setCliEvaluList(
             page === 0
               ? resBody.content
@@ -133,7 +130,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       })
       .catch(ex =>
       {
-        notifyError(
+        noticeUserError(
           '최근 피해사례 요청 문제',
           `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
         );
@@ -147,9 +144,10 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       .then(resBody =>
       {
         setEvaluLikeList(resBody);
+        setEvaluListType(EvaluListType.LATEST);
       })
       .catch(error =>
-        notifyError(
+        noticeUserError(
           '피해사례 공감 조회 문제',
           `공감 조회에 문제가 있습니다, 다시 시도해 주세요(${error.message})`
         )
@@ -170,6 +168,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
             notice = '내가 등록한 피해사례가 없습니다.';
             setCliEvaluList([]);
             setSearchNotice(notice);
+            setEvaluListType(EvaluListType.MINE);
             setLastList(resBody.last);
             return;
           }
@@ -181,6 +180,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
               : [...cliEvaluList, ...resBody.content]);
           setSearchNotice(notice);
           setLastList(resBody.last);
+          setEvaluListType(EvaluListType.MINE);
           setSearchTime(moment().format('YYYY.MM.DD HH:mm'));
           return;
         }
@@ -189,7 +189,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       })
       .catch(ex =>
       {
-        notifyError(
+        noticeUserError(
           '내가 등록한 피해사례 요청 문제',
           `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
         );
@@ -247,16 +247,24 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       })
       .catch(ex =>
       {
-        notifyError(
+        noticeUserError(
           '피해사례 요청 문제',
           `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
         );
       });
   };
 
+  const hideEvaluList = (): void =>
+  {
+    setEvaluListType(EvaluListType.NONE);
+    setPage(0);
+    setNewestEvaluList(false);
+    setCliEvaluList(null);
+  };
+
   // Init States
   const states = {
-    user, firm, searchWord, searchNotice, searchArea,
+    user, firm, searchWord, searchNotice, searchArea, evaluListType,
     cliEvaluList, countData,
     visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
     updateEvalu, detailEvalu, searchTime,
@@ -271,7 +279,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         .deleteCliEvalu(id)
         .then(() => setClinetEvaluList())
         .catch(error =>
-          notifyError(
+          noticeUserError(
             '피해사례 삭제 문제',
             `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`
           )
@@ -287,7 +295,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
           setCliEvaluLikeList(newEvaluLike.evaluId);
         })
         .catch(error =>
-          notifyError(
+          noticeUserError(
             '공감/비공감 요청 문제',
             `요청에 문제가 있습니다, 다시 시도해 주세요${error.message}`
           )
@@ -296,7 +304,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     openCliEvaluLikeModal: (item, isMine) =>
     {
       setEvaluLikeSelected(item);
-      setMineEvaluation(isMine);
       setVisibleEvaluLikeModal(true);
 
       setCliEvaluLikeList(item.id);
@@ -308,7 +315,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         .deleteCliEvaluLike(evaluation.id, user.uid, like)
         .then(() => setCliEvaluLikeList(evaluation.id))
         .catch(error =>
-          notifyError(
+          noticeUserError(
             '공감/비공감 취소 문제',
             `피해사례 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`
           )
@@ -336,6 +343,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     },
     onClickMyEvaluList: () =>
     {
+      if (evaluListType === EvaluListType.MINE) { hideEvaluList(); return }
       setPage(0);
       setNewestEvaluList(false);
       setCliEvaluList(null);
@@ -359,6 +367,8 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     },
     onClickNewestEvaluList: () =>
     {
+      if (evaluListType === EvaluListType.LATEST) { hideEvaluList(); return }
+
       setPage(0);
       setNewestEvaluList(true);
       setCliEvaluList(null);
@@ -377,7 +387,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         })
         .catch(ex =>
         {
-          notifyError(
+          noticeUserError(
             '피해사례 통계 요청',
             `피해사례 통계 요처에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
           );

@@ -1,15 +1,13 @@
 import * as React from 'react';
 import * as firebase from 'firebase/app';
 
-import {
-  FirebaseAuthApplicationVerifier,
-  FirebaseRecaptchaVerifierModal
-} from 'expo-firebase-recaptcha';
+import { FirebaseAuthApplicationVerifier, FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import AgreementTerms from 'src/components/organisms/AgreementTerms';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'molecules/JBButton';
+import { StyleKeyboardAvoidingView } from 'src/CommonStyle';
 import getString from 'src/STRING';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { notifyError } from 'common/ErrorNotice';
@@ -18,6 +16,9 @@ import styled from 'styled-components/native';
 
 const Container = styled.View`
   flex: 1;
+  justify-content: center;
+`;
+const KeyboardAvoidingView = styled(StyleKeyboardAvoidingView)`
   justify-content: center;
 `;
 const ItemWrap = styled.View`
@@ -52,6 +53,7 @@ const LoginScreen: React.FC<Props> = (props) =>
     getUserInfo(user.uid)
       .then(data =>
       {
+        console.log('>>> getUserInfo~~');
         const userInfo = data.val();
         if (!userInfo)
         {
@@ -119,12 +121,13 @@ const LoginScreen: React.FC<Props> = (props) =>
 
   const onPressConfirmVerificationCode = async () =>
   {
+    console.log('>>> onPressConfirmVerificationCode~~');
     const credential = firebase.auth.PhoneAuthProvider.credential(
       verificationId,
       verificationCode
     );
     const authResult = await firebase.auth().signInWithCredential(credential);
-
+    console.log('>>> authResult:');
     if (authResult?.user?.uid)
     {
       onSignIn(authResult.user);
@@ -148,79 +151,81 @@ const LoginScreen: React.FC<Props> = (props) =>
 
   return (
     <Container>
-      <ItemWrap>
-        <EditText
-          label="핸드폰 번호"
-          subLabel="(숫자만)"
-          text={phoneNumber}
-          keyboardType="phone-pad"
-          onChangeText={(text): void =>
-          {
-            if (isPhoneNumberFormat(text))
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150} style={{ flex: 1 }}>
+        <ItemWrap>
+          <EditText
+            label="핸드폰 번호"
+            subLabel="(숫자만)"
+            text={phoneNumber}
+            keyboardType="phone-pad"
+            onChangeText={(text): void =>
             {
-              const formatPN = formatTelnumber(text);
-              setPhoneNumber(formatPN);
-              setValidPhoneNumber(true);
-              setPhoneNumberValErrMessage('');
-            }
-            else
+              if (isPhoneNumberFormat(text))
+              {
+                const formatPN = formatTelnumber(text);
+                setPhoneNumber(formatPN);
+                setValidPhoneNumber(true);
+                setPhoneNumberValErrMessage('');
+              }
+              else
+              {
+                setValidPhoneNumber(false);
+                if (text) { setPhoneNumber(text.replace(/-/g, '')) }
+              }
+            }}
+            placeholder="숫자만 입력해 주세요(0101234567)"
+            onEndEditing={(): void =>
             {
-              setValidPhoneNumber(false);
-              if (text) { setPhoneNumber(text.replace(/-/g, '')) }
-            }
-          }}
-          placeholder="숫자만 입력해 주세요(0101234567)"
-          onEndEditing={(): void =>
-          {
-            if (!isPhoneNumberFormat(phoneNumber)) { setPhoneNumberValErrMessage(getString('VALIDATION_PHONENUMBER')) }
-          }}
-          onSubmitEditing={() => onPhoneComplete()}
-          unchangeable={verificationId}
-          errorText={phoneNumberValErrMessage}
-        />
-        {!!verificationId && (
+              if (!isPhoneNumberFormat(phoneNumber)) { setPhoneNumberValErrMessage(getString('VALIDATION_PHONENUMBER')) }
+            }}
+            onSubmitEditing={() => onPhoneComplete()}
+            unchangeable={verificationId}
+            errorText={phoneNumberValErrMessage}
+          />
+          {!!verificationId && (
+            <>
+              <EditText
+                label="인증코드"
+                onChangeText={(text): void => { verificationCode = text }}
+                keyboardType="numeric"
+                placeholder="SMS 인증코드 입력"
+                errorText={codeValErrMessage}
+              />
+            </>
+          )}
+        </ItemWrap>
+
+        <CommWrap>
+          {!verificationId ? (
+            agreeTerms && !!isValidPhoneNumber && (
+              <JBButton
+                title="전화번호 인증하기"
+                onPress={(): Promise<void> => onPressSendVerificationCode()}
+                Secondary
+              />
+            )
+          ) : (
+            <CommWrap>
+              <JBButton title="취소" onPress={(): void => cancelSignIn()} Secondary/>
+              <JBButton
+                title="로그인하기"
+                onPress={(): Promise<void> => onPressConfirmVerificationCode()}
+                Primary
+              />
+            </CommWrap>
+          )}
+        </CommWrap>
+        {isValidPhoneNumber && !verificationId && (
           <>
-            <EditText
-              label="인증코드"
-              onChangeText={(text): void => { verificationCode = text }}
-              keyboardType="numeric"
-              placeholder="SMS 인증코드 입력"
-              errorText={codeValErrMessage}
+            <FirebaseRecaptchaVerifierModal
+              title="'로봇이 아닙니다' 클릭해 주세요"
+              ref={(ref) => { recaptchaVerifier = ref }}
+              firebaseConfig={firebase.app().options}
             />
+            <AgreementTerms onChange={setAgreeTerms} />
           </>
         )}
-      </ItemWrap>
-
-      <CommWrap>
-        {!verificationId ? (
-          agreeTerms && !!isValidPhoneNumber && (
-            <JBButton
-              title="전화번호 인증하기"
-              onPress={(): Promise<void> => onPressSendVerificationCode()}
-              Secondary
-            />
-          )
-        ) : (
-          <CommWrap>
-            <JBButton title="취소" onPress={(): void => cancelSignIn()} Secondary/>
-            <JBButton
-              title="로그인하기"
-              onPress={(): Promise<void> => onPressConfirmVerificationCode()}
-              Primary
-            />
-          </CommWrap>
-        )}
-      </CommWrap>
-      {isValidPhoneNumber && !verificationId && (
-        <>
-          <FirebaseRecaptchaVerifierModal
-            title="'로봇이 아닙니다' 클릭해 주세요"
-            ref={(ref) => { recaptchaVerifier = ref }}
-            firebaseConfig={firebase.app().options}
-          />
-          <AgreementTerms onChange={setAgreeTerms} />
-        </>
-      )}
+      </KeyboardAvoidingView>
     </Container>
   );
 };

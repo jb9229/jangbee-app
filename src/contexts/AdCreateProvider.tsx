@@ -3,9 +3,9 @@ import * as api from 'src/api/api';
 import * as imageManager from 'common/ImageManager';
 import * as yup from 'yup';
 
-import { AdType, SubscriptionReadyResponse } from 'src/container/ad/types';
 import { CreateAdDto, CreateAdDtoError } from '../types/ad';
 
+import { AdType } from 'src/container/ad/types';
 import { DefaultNavigationProps } from 'src/types';
 import { JBSERVER_ADBOOKED } from 'constants/Url';
 import { PHONENUMBER_REGULAR_EXPRESSION } from 'src/container/firm/types';
@@ -230,8 +230,8 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     sidoTarget: dto.adSido,
     gugunTarget: dto.adGungu,
     price: adPrice,
-    // paymentSid: dto.paymentSid
-    paymentSid: 'S2763608410635040214'
+    paymentSid: dto.paymentSid
+    // paymentSid: 'S2763608410635040214'
   };
   console.log('>>> newAd:', newAd);
   api
@@ -349,3 +349,4 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useAdCreateProvider, AdCreateProvider };
+

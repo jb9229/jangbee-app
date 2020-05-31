@@ -1,16 +1,17 @@
-import React from 'react';
+import * as api from 'api/api';
+
 import { KeyboardAvoidingView, Modal, ScrollView } from 'react-native';
-import styled from 'styled-components/native';
+
 import CloseButton from 'molecules/CloseButton';
 import JBButton from 'molecules/JBButton';
-import JBTextInput from 'molecules/JBTextInput';
 import JBErrorMessage from 'organisms/JBErrorMessage';
-import * as api from 'api/api';
-import { validate } from 'utils/Validation';
+import JBTextInput from 'molecules/JBTextInput';
+import React from 'react';
 import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components/native';
+import { validate } from 'utils/Validation';
 
 const Container = styled.View`
-  flex: 1;
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
@@ -30,22 +31,27 @@ const ContentsView = styled.View`
   `}
 `;
 
-export default class ClientEvaluUpdateModal extends React.Component {
+export default class ClientEvaluUpdateModal extends React.Component
+{
   _isMounted = false;
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {};
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this._isMounted = true;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { updateEvalu } = nextProps;
 
-    if (updateEvalu) {
+    if (updateEvalu)
+    {
       this.setState({
         id: updateEvalu.id,
         cliName: updateEvalu.cliName,
@@ -62,26 +68,31 @@ export default class ClientEvaluUpdateModal extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount ()
+  {
     this._isMounted = false;
   }
 
   /**
    * 모달 액션 완료 함수
    */
-  completeAction = () => {
+  completeAction = () =>
+  {
     const { closeModal, completeAction } = this.props;
 
     const updateData = this.validateForm();
 
-    if (!updateData) {
+    if (!updateData)
+    {
       return;
     }
 
     api
       .updateClientEvaluation(updateData)
-      .then(resBody => {
-        if (!this._isMounted) {
+      .then(resBody =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -101,7 +112,8 @@ export default class ClientEvaluUpdateModal extends React.Component {
   /**
    * 유효성 검사 함수
    */
-  validateForm = () => {
+  validateForm = () =>
+  {
     const {
       id,
       cliName,
@@ -131,30 +143,35 @@ export default class ClientEvaluUpdateModal extends React.Component {
     });
 
     let v = validate('textMax', cliName, false, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ cliNameValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', firmName, false, 12);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ firmNameValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', telNumber2, false);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ telNumber2ValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', telNumber3, false);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ telNumber3ValErrMessage: v[1] });
       return false;
     }
 
-    if (firmNumber && (firmNumber.length !== 12 && firmNumber.length !== 10)) {
+    if (firmNumber && (firmNumber.length !== 12 && firmNumber.length !== 10))
+    {
       this.setState({
         firmNumberValErrMessage: '사업자번호가 유효하지 않습니다.'
       });
@@ -162,31 +179,36 @@ export default class ClientEvaluUpdateModal extends React.Component {
     }
 
     v = validate('textMax', equipment, false, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ equipmentValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', local, false, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ localValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', amount, false, 45);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ amountValErrMessage: v[1] });
       return false;
     }
 
     v = validate('cellPhone', regiTelNumber, false);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ regiTelNumberValErrMessage: v[1] });
       return false;
     }
 
     v = validate('textMax', reason, true, 1000);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ reasonValErrMessage: v[1] });
       return false;
     }
@@ -208,7 +230,8 @@ export default class ClientEvaluUpdateModal extends React.Component {
     return updateData;
   };
 
-  render() {
+  render ()
+  {
     const { isVisibleModal, closeModal } = this.props;
     const {
       cliName,

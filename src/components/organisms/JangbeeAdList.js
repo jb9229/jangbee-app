@@ -1,26 +1,26 @@
-import React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { AdMobBanner } from 'expo-ads-admob';
-import styled from 'styled-components/native';
-import Swiper from 'react-native-swiper';
-import JBActIndicator from 'molecules/JBActIndicator';
-import BugReport from 'organisms/BugReport';
 import * as api from 'api/api';
-import JangbeeAd from 'molecules/JangbeeAd';
+
+import { Alert, StyleSheet, View } from 'react-native';
+
+import { AdMobBanner } from 'expo-ads-admob';
+import BugReport from 'organisms/BugReport';
 import FirmDetailModal from 'templates/FirmDetailModal';
+import JBActIndicator from 'molecules/JBActIndicator';
+import JangbeeAd from 'molecules/JangbeeAd';
+import React from 'react';
+import Swiper from 'react-native-swiper';
+import styled from 'styled-components/native';
 
 const styles = StyleSheet.create({
   container: {
     height: 200
   },
   wrapper: {
-    flex: 1
   },
   slide: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white'
+    alignItems: 'center'
   }
 });
 
@@ -30,10 +30,12 @@ const AdMobContainer = styled.View`
   justify-content: center;
 `;
 
-export default class JangbeeAdList extends React.Component {
+export default class JangbeeAdList extends React.Component
+{
   _isMounted = false;
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       adList: undefined,
@@ -41,7 +43,8 @@ export default class JangbeeAdList extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this._isMounted = true;
 
     const {
@@ -52,12 +55,14 @@ export default class JangbeeAdList extends React.Component {
       admob
     } = this.props;
 
-    if (!admob) {
+    if (!admob)
+    {
       this.setAdList(adLocation, euqiTarget, sidoTarget, gugunTarget);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const {
       admob,
       adLocation,
@@ -66,12 +71,14 @@ export default class JangbeeAdList extends React.Component {
       gugunTarget
     } = this.props;
 
-    if (!admob && nextProps.adLocation !== adLocation) {
+    if (!admob && nextProps.adLocation !== adLocation)
+    {
       this.setAdList(nextProps.adLocation, euqiTarget, sidoTarget, gugunTarget);
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount ()
+  {
     this._isMounted = false;
   }
 
@@ -80,22 +87,28 @@ export default class JangbeeAdList extends React.Component {
    * @param adLocation 광고위치(MAIN, LOCAL, EQUIPMENT)
    * @param euqiTarket 타켓 광고할 선택장비
    */
-  setAdList = (adLocation, euqiTarget, sidoTarget, gugunTarget) => {
+  setAdList = (adLocation, euqiTarget, sidoTarget, gugunTarget) =>
+  {
     api
       .getAd(adLocation, euqiTarget, sidoTarget, gugunTarget)
-      .then(jsonRes => {
-        if (!this._isMounted) {
+      .then(jsonRes =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
-        if (jsonRes != null && jsonRes.length === 0) {
+        if (jsonRes != null && jsonRes.length === 0)
+        {
           this.setState({ isEmptyAdlist: true });
           return;
         }
         this.setState({ isEmptyAdlist: false, adList: jsonRes });
       })
-      .catch(error => {
-        if (!this._isMounted) {
+      .catch(error =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -112,7 +125,8 @@ export default class JangbeeAdList extends React.Component {
    */
   renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
 
-  render() {
+  render ()
+  {
     const { admob, admobUnitID, admonSize, admonHeight } = this.props;
     const {
       adList,
@@ -121,7 +135,8 @@ export default class JangbeeAdList extends React.Component {
       detailFirmId
     } = this.state;
 
-    if (admob || isEmptyAdlist) {
+    if (admob || isEmptyAdlist)
+    {
       const unitID = admobUnitID || 'ca-app-pub-9415708670922576/6931111723';
 
       const bannerSize = admonSize || 'largeBanner';
@@ -137,7 +152,8 @@ export default class JangbeeAdList extends React.Component {
       );
     }
 
-    if (adList === undefined) {
+    if (adList === undefined)
+    {
       return (
         <View style={styles.container}>
           <JBActIndicator title="광고 불러오는중..." size="large" />
@@ -145,10 +161,11 @@ export default class JangbeeAdList extends React.Component {
       );
     }
 
-    if (adList === null) {
+    if (adList === null)
+    {
       return <BugReport title="광고 요청에 실패 했습니다" />;
     }
-
+    console.log('>>> adList: ', adList);
     const adViewList = adList.map((ad, index) => (
       <View style={styles.slide} key={index}>
         <JangbeeAd
@@ -172,10 +189,11 @@ export default class JangbeeAdList extends React.Component {
         />
         <Swiper
           style={styles.wrapper}
-          autoplay
+          autoplay={true}
           autoplayTimeout={3.5}
           dotStyle={{ marginBottom: 0 }}
           activeDotStyle={{ marginBottom: 0 }}
+          // onIndexChanged={() => Alert.alert('chan')}
         >
           {adViewList}
         </Swiper>

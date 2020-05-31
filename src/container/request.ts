@@ -1,3 +1,5 @@
+import * as Sentry from 'sentry-expo';
+
 import { Alert, Clipboard } from 'react-native';
 
 import getString from 'src/STRING';
@@ -9,4 +11,6 @@ export const noticeUserError = (location: string, errMsg: string, title?: string
       { text: 'Copy', onPress: (): void => { Clipboard.setString('Location: ' + location + '\n\n ' + errMsg) } },
       { text: 'Ok' }
     ]);
+
+  Sentry.captureMessage(`Location: [${title}]` + location + '\n\n ' + errMsg);
 };

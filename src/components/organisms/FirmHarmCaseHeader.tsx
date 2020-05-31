@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Picker, StyleSheet } from 'react-native';
 
+import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import { FirmHarmCaseCountData } from 'types';
 import JBButton from 'molecules/JBButton';
 import { SearchBar } from 'react-native-elements';
@@ -84,6 +85,7 @@ interface Props {
   searchWord: string;
   searchNotice: string;
   countData: FirmHarmCaseCountData;
+  evaluListType: EvaluListType;
   setSearchArea: (a: string) => void;
   setSearchWord: (w: string) => void;
   onClickMyEvaluList: () => void;
@@ -92,7 +94,8 @@ interface Props {
   searchFilterCliEvalu: (searchWord: string) => void;
 }
 
-export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
+export default function FirmHarmCaseHeader (props: Props): React.ReactElement
+{
   const [searchPlaceholder, setSearchPlaceholder] = React.useState('전화번호 입력(- 없이)');
 
   return (
@@ -118,16 +121,16 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
             onPress={props.onClickMyEvaluList}
             size="small"
             align="right"
-            bgColor={colors.batangDark}
-            color={colors.pointDark}
+            bgColor={props.evaluListType === EvaluListType.MINE ? colors.pointDark : colors.batangDark}
+            color={props.evaluListType === EvaluListType.MINE ? colors.batangDark : colors.pointDark}
           />
           <JBButton
             title="최근"
             onPress={props.onClickNewestEvaluList}
             size="small"
             align="right"
-            bgColor={colors.batangDark}
-            color={colors.pointDark}
+            bgColor={props.evaluListType === EvaluListType.LATEST ? colors.pointDark : colors.batangDark}
+            color={props.evaluListType === EvaluListType.LATEST ? colors.batangDark : colors.pointDark}
           />
           <JBButton
             title="추가"
@@ -169,21 +172,26 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement {
   );
 }
 
-const onSearchAreaChange = (itemValue, setSearchArea, setSearchPlaceholder): void => {
+const onSearchAreaChange = (itemValue, setSearchArea, setSearchPlaceholder): void =>
+{
   setSearchArea(itemValue);
-  if (itemValue === 'TEL') {
+  if (itemValue === 'TEL')
+  {
     setSearchPlaceholder('전화번호 입력(- 없이)');
     return;
   }
-  if (itemValue === 'FIRM_NUMBER') {
+  if (itemValue === 'FIRM_NUMBER')
+  {
     setSearchPlaceholder('사업자번호 입력(- 포함)');
     return;
   }
-  if (itemValue === 'FIRM_NAME') {
+  if (itemValue === 'FIRM_NAME')
+  {
     setSearchPlaceholder('업체명 입력');
     return;
   }
-  if (itemValue === 'CLI_NAME') {
+  if (itemValue === 'CLI_NAME')
+  {
     setSearchPlaceholder('고객명 입력');
   }
 };

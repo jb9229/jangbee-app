@@ -15,8 +15,10 @@ interface StyleProps {
 }
 const Container = styled.View`
   min-width: 200;
+  height: 235;
   margin: 10px;
   background-color: ${colors.pointBatang};
+  border-radius: 4;
 `;
 const TopWrap = styled.View`
   flex-direction: row;

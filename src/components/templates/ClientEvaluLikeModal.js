@@ -1,19 +1,20 @@
-import React from 'react';
-import { Alert, FlatList, Modal, StyleSheet, TextInput } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import styled from 'styled-components/native';
 import * as api from 'api/api';
+
+import { Alert, FlatList, Modal, StyleSheet, TextInput } from 'react-native';
+
 import CloseButton from 'molecules/CloseButton';
 import JBButton from 'molecules/JBButton';
-import JBTextItem from 'molecules/JBTextItem';
-import ListSeparator from 'molecules/ListSeparator';
 import JBErrorMessage from 'organisms/JBErrorMessage';
-import { notifyError } from 'common/ErrorNotice';
+import JBTextItem from 'molecules/JBTextItem';
+import { ListItem } from 'react-native-elements';
+import ListSeparator from 'molecules/ListSeparator';
+import React from 'react';
 import colors from 'constants/Colors';
+import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components/native';
 import { validate } from 'utils/Validation';
 
 const Container = styled.View`
-  flex: 1;
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
@@ -45,8 +46,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class ClientEvaluLikeModal extends React.Component {
-  constructor(props) {
+export default class ClientEvaluLikeModal extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {
       evaluatedLike: false,
@@ -56,8 +59,10 @@ export default class ClientEvaluLikeModal extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps !== null && nextProps.evaluLikeList) {
+  componentWillReceiveProps (nextProps)
+  {
+    if (nextProps !== null && nextProps.evaluLikeList)
+    {
       this.setState({ reason: '' });
       this.checkMyOpinion(nextProps.evaluLikeList);
     }
@@ -66,18 +71,21 @@ export default class ClientEvaluLikeModal extends React.Component {
   /**
    * 블랙르스트 공감/비공감 취소
    */
-  evaluateClinet = isLike => {
+  evaluateClinet = isLike =>
+  {
     const { accountId, evaluation, createClientEvaluLike } = this.props;
     const { evaluatedLike, evaluatedUnlike, reason } = this.state;
 
-    if (isLike && evaluatedUnlike) {
+    if (isLike && evaluatedUnlike)
+    {
       Alert.alert(
         '이미 비공감을 하셨습니다',
         '비공감 취소 후 공감으로 변경해 주세요.'
       );
       return;
     }
-    if (!isLike && evaluatedLike) {
+    if (!isLike && evaluatedLike)
+    {
       Alert.alert(
         '이미 공감을 하셨습니다',
         '공감 취소 후 비공감으로 변경해 주세요.'
@@ -86,17 +94,22 @@ export default class ClientEvaluLikeModal extends React.Component {
     }
 
     const v = validate('textMax', reason, true, 500);
-    if (!v[0]) {
+    if (!v[0])
+    {
       this.setState({ validateErrMessage: v[1] });
       return;
     }
 
     api
       .existEvaluLike(accountId, evaluation.id)
-      .then(resBody => {
-        if (resBody) {
+      .then(resBody =>
+      {
+        if (resBody)
+        {
           Alert.alert('중복 문제', '이미 공감/비공감을 하셨습니다.');
-        } else {
+        }
+        else
+        {
           const newEvaluLike = {
             accountId,
             evaluId: evaluation.id,
@@ -120,7 +133,8 @@ export default class ClientEvaluLikeModal extends React.Component {
   /**
    * 블랙르스트 공감/비공감 취소
    */
-  cancelEvaluLike = like => {
+  cancelEvaluLike = like =>
+  {
     const { evaluation, cancelClientEvaluLike } = this.props;
 
     Alert.alert('공감/비공감 취소 확인', '정말 취소 하시겠습니까?', [
@@ -129,12 +143,15 @@ export default class ClientEvaluLikeModal extends React.Component {
     ]);
   };
 
-  checkMyOpinion = evaluLikeList => {
+  checkMyOpinion = evaluLikeList =>
+  {
     const { accountId } = this.props;
 
     this.setState({ evaluatedLike: undefined });
-    evaluLikeList.forEach(evalu => {
-      if (evalu.accountId === accountId) {
+    evaluLikeList.forEach(evalu =>
+    {
+      if (evalu.accountId === accountId)
+      {
         this.setState({ evaluatedLike: evalu.evaluLike, reason: evalu.reason });
       }
     });
@@ -143,7 +160,8 @@ export default class ClientEvaluLikeModal extends React.Component {
   /**
    * 유효성 검사 함수
    */
-  validateForm = () => {
+  validateForm = () =>
+  {
     // Validation Error Massage Initialize
     this.setState({
       validateErrMessage: ''
@@ -152,7 +170,8 @@ export default class ClientEvaluLikeModal extends React.Component {
     // Check Duplicate Like
   };
 
-  renderCliEvaluHeader = () => {
+  renderCliEvaluHeader = () =>
+  {
     const { evaluation } = this.props;
 
     return (
@@ -167,14 +186,17 @@ export default class ClientEvaluLikeModal extends React.Component {
   /**
    * 블랙리스트 공감 리스트 아이템 렌더링 함수
    */
-  renderEvaluLikeItem = ({ item }) => {
+  renderEvaluLikeItem = ({ item }) =>
+  {
     const { accountId } = this.props;
 
-    if (item.accountId === accountId) {
+    if (item.accountId === accountId)
+    {
       // TODO MY LIKE
     }
 
-    if (item.evaluLike) {
+    if (item.evaluLike)
+    {
       return (
         <ListItem
           subtitle={item.reason}
@@ -191,7 +213,8 @@ export default class ClientEvaluLikeModal extends React.Component {
     );
   };
 
-  render() {
+  render ()
+  {
     const { isVisibleModal, evaluLikeList, closeModal, isMine } = this.props;
     const {
       validateErrMessage,

@@ -1,17 +1,17 @@
-import React from 'react';
 import { Alert, Modal, Share } from 'react-native';
-import { SMS } from 'expo';
-import styled from 'styled-components/native';
-import { shareClientEvalu } from 'common/JBCallShare';
+import { convertHyphen, formatTelnumber } from 'utils/StringUtils';
+
 import CloseButton from 'molecules/CloseButton';
+import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
 import JBTextItem from 'molecules/JBTextItem';
-import JBActIndicator from 'molecules/JBActIndicator';
-import { convertHyphen, formatTelnumber } from 'utils/StringUtils';
+import React from 'react';
+import { SMS } from 'expo';
 import { formatNumber } from 'utils/NumberUtils';
+import { shareClientEvalu } from 'common/JBCallShare';
+import styled from 'styled-components/native';
 
 const Container = styled.ScrollView`
-  flex: 1;
   background-color: white;
   padding: 10px;
 `;
@@ -22,26 +22,32 @@ const CommandWrap = styled.View`
   margin-top: 40px;
 `;
 
-export default class ClientEvaluDetailModal extends React.Component {
-  constructor(props) {
+export default class ClientEvaluDetailModal extends React.Component
+{
+  constructor (props)
+  {
     super(props);
     this.state = {};
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     const { detailEvalu } = nextProps;
 
-    if (detailEvalu) {
+    if (detailEvalu)
+    {
       this.setState({ evalu: detailEvalu });
     }
   }
 
-  noticeRegi = async () => {
+  noticeRegi = async () =>
+  {
     const { closeModal } = this.props;
     const { evalu } = this.state;
 
     const isAvailable = await SMS.isAvailableAsync();
-    if (isAvailable) {
+    if (isAvailable)
+    {
       const { result } = await SMS.sendSMSAsync(
         [evalu.regiTelNumber],
         `작성하신 [${formatTelnumber(
@@ -49,9 +55,12 @@ export default class ClientEvaluDetailModal extends React.Component {
         )}] 불량 거래처에대해 행적을 신고 합니다.`
       );
 
-      if (result) {
+      if (result)
+      {
         closeModal();
-      } else {
+      }
+      else
+      {
         Alert.alert(
           'SMS 전송불가',
           `해당 디바이스에서 SMS 자동 전송이 불가 합니다. [${
@@ -59,7 +68,9 @@ export default class ClientEvaluDetailModal extends React.Component {
           }] 해당 번호로 불량업체에 대한 행적을 알려주세요`
         );
       }
-    } else {
+    }
+    else
+    {
       Alert.alert(
         'SMS 전송불가',
         `해당 디바이스에서 SMS 자동 전송이 불가 합니다. [${
@@ -69,34 +80,46 @@ export default class ClientEvaluDetailModal extends React.Component {
     }
   };
 
-  shareClientEvalu = async () => {
+  shareClientEvalu = async () =>
+  {
     const { closeModal, searchTime } = this.props;
     const { evalu } = this.state;
 
-    try {
+    try
+    {
       const result = shareClientEvalu(evalu, searchTime);
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
+      if (result.action === Share.sharedAction)
+      {
+        if (result.activityType)
+        {
           // shared with activity type of result.activityType
           closeModal();
-        } else {
+        }
+        else
+        {
           closeModal();
         }
-      } else if (result.action === Share.dismissedAction) {
+      }
+      else if (result.action === Share.dismissedAction)
+      {
         // dismissed
         Alert.alert(Share.dismissedAction);
       }
-    } catch (error) {
+    }
+    catch (error)
+    {
       Alert.alert(error.message);
     }
   };
 
-  render() {
+  render ()
+  {
     const { isVisibleModal, closeModal } = this.props;
     const { evalu } = this.state;
 
-    if (!evalu) {
+    if (!evalu)
+    {
       return (
         <Modal
           animationType="slide"

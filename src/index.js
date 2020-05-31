@@ -1,4 +1,5 @@
 import * as Font from 'expo-font';
+import * as Sentry from 'sentry-expo';
 import * as Updates from 'expo-updates';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
@@ -6,6 +7,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import { AppLoading } from 'expo';
 import AppNavigator from 'navigation/AppNavigator';
+import Constants from 'expo-constants';
 import JBActIndicator from 'molecules/JBActIndicator';
 import LoginProvider from 'src/provider/LoginProvider';
 import React from 'react';
@@ -20,6 +22,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   }
+});
+
+Sentry.setRelease(Constants.manifest.revisionId);
+Sentry.init({
+  dsn: 'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
+  enableInExpoDevelopment: false,
+  debug: true
 });
 
 export default class App extends React.Component

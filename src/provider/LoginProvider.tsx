@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as api from 'api/api';
 
-import { DefaultNavigationProps, UserProfile } from 'src/types';
 import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
 
 import { ApplyWorkCallback } from 'src/components/action';
@@ -12,6 +11,7 @@ import ModalTemplate from 'src/components/templates/ModalTemplate';
 import { Provider } from 'src/contexts/LoginContext';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
+import { UserProfile } from 'src/types';
 import WebView from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
@@ -169,6 +169,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
             .then(() =>
             {
               console.log('success updatePaymentSubscription~~');
+              console.log('>>> Callbacker.arguments: ', Callbacker.arguments);
               paymentInfo.sid = sid;
               Callbacker.trigger(CALLBACKER_AD_PAYMENT);
               console.log('success call callbacker~~', Callbacker);

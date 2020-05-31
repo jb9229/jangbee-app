@@ -1,5 +1,6 @@
 import { DefaultNavigationProps, FirmHarmCaseCountData, User, UserProfile } from 'src/types';
 
+import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import { Firm } from 'src/provider/LoginProvider';
 import createCtx from 'src/contexts/CreateCtx';
 
@@ -15,6 +16,7 @@ interface Context {
   evaluLikeSelected: boolean; evaluLikeList: Array<string>; mineEvaluation: (flag: boolean) => void;
   visibleCreateModal: boolean; visibleUpdateModal: boolean; visibleDetailModal: boolean; visibleEvaluLikeModal: boolean;
   chatMessge: Array<object>;
+  evaluListType: EvaluListType;
   createClientEvaluLike: (newEvaluLike: string) => void; cancelClientEvaluLike: (evaluation: string, like: boolean) => void;
   setVisibleCreateModal: (flag: boolean) => void; setVisibleUpdateModal: (flag: boolean) => void;
   setVisibleDetailModal: (flag: boolean) => void; closeEvaluLikeModal: (flag: boolean) => void;
@@ -52,3 +54,4 @@ export interface Evaluation {
 // }
 
 export { useCtx as useFirmHarmCaseContext, Provider };
+

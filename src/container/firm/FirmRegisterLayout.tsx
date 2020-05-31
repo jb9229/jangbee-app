@@ -19,7 +19,7 @@ import { useFirmRegisterProvider } from 'src/container/firm/FirmRegisterProvider
 const Container = styled.View`
   flex: 1;
 `;
-const Scroll = styled(ScrollView).attrs(() => ({
+export const Scroll = styled(ScrollView).attrs(() => ({
   contentContainerStyle: {
   }
 }))`

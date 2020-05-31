@@ -1,15 +1,9 @@
-import React from 'react';
-import {
-  Alert,
-  ImageBackground,
-  Linking,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-import Styled from 'styled-components/native';
-import JBIcon from 'atoms/JBIcon';
+import { Alert, ImageBackground, Linking, StyleSheet, Text, View } from 'react-native';
+
 import AdImage from 'molecules/AdImage';
+import JBIcon from 'atoms/JBIcon';
+import React from 'react';
+import Styled from 'styled-components/native';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 
@@ -36,7 +30,10 @@ const styles = StyleSheet.create({
   titleText: {
     color: 'white',
     fontSize: 21,
-    fontFamily: fonts.titleMiddle
+    fontFamily: fonts.titleMiddle,
+    textShadowColor: 'black',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 10
   },
   bottomWrap: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
@@ -76,8 +73,10 @@ const TelIconWrap = Styled.View`
   padding-right: 5;
 `;
 
-function telAdvertiser(phoneNumber) {
-  if (!phoneNumber) {
+function telAdvertiser (phoneNumber)
+{
+  if (!phoneNumber)
+  {
     Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`);
     return;
   }
