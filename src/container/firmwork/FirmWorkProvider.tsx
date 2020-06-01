@@ -60,11 +60,10 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         { cancelable: false }
       );
     }
-    else
-    {
 
-    }
-  }, [firm]);
+    const refresh = props.navigation.getParam('refresh', undefined);
+    if (refresh) { matchedWorkListRequest() }
+  }, [firm, props.navigation.state]);
 
   // Error Handling Of Server API Call
   if (openWorkListResponse.error)
@@ -172,3 +171,4 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useFirmWorkProvider, FirmWorkProvider };
+

@@ -1,12 +1,4 @@
-import {
-  Alert,
-  DatePickerAndroid,
-  KeyboardAvoidingView,
-  Picker,
-  ScrollView,
-  StyleSheet,
-  View
-} from 'react-native';
+import { Alert, DatePickerAndroid, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 
 import CardUI from 'molecules/CardUI';
 import EditText from 'src/components/molecules/EditText';
@@ -21,6 +13,7 @@ import { WorkCreateDto } from 'src/container/work/types';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
+import styled from 'styled-components/native';
 import { useWorkRegisterProvider } from 'src/container/work/WorkRegisterProvider';
 
 const styles = StyleSheet.create({
@@ -79,12 +72,16 @@ const thisYear = new Date().getFullYear();
 const modelYearPItems = new Array(10)
   .fill(0)
   .map((_, i) => new PickerItem(`${thisYear - i}년이상`, `${thisYear - i}`, thisYear - i));
+const PeriodPicker = styled(JBPicker)`
+  width: 100;
+`;
 
 const WorkRegisterLayout: React.FC = () =>
 {
   const { isFirmRegister, loading, workDto, errorData, onClickCreate } = useWorkRegisterProvider();
   const [isVisibleEquiModal, setVisibleEquiModal] = React.useState(false);
   const [isVisibleMapAddModal, setVisibleMapAddModal] = React.useState(false);
+  const [startDateStr, setStartDateStr] = React.useState(workDto.startDate);
 
   return (
     <View style={styles.Container}>
@@ -131,23 +128,23 @@ const WorkRegisterLayout: React.FC = () =>
                 subLabel="(필수)"
                 style={{ flex: 1, marginRight: 10 }}
                 text={workDto.startDate}
-                onPress={(): void => { openStartWorkDatePicker(workDto) }}
+                onPress={(): void => { openStartWorkDatePicker(workDto, setStartDateStr) }}
                 placeholder="시작일을 선택 하세요"
                 errorText={errorData.startDate}
               />
-              <JBPicker
+              <PeriodPicker
                 title="기간"
-                selectedValue={workDto.period}
+                selectedValue={startDateStr}
                 onValueChange={(itemValue: number): void => { workDto.period = itemValue }}
                 items={dayPickItems}
-                size={200}
                 errorText={errorData.period}
+                size={140}
               />
             </View>
             {isFirmRegister && (
               <JBPicker
                 title="최대 일감보장시간"
-                subTitle="(일감 넘기지않고 기다릴 수 있는 시간)"
+                subTitle="(일감 넘기지않고 기다릴 시간)"
                 selectedValue={workDto.guaranteeTime}
                 onValueChange={(itemValue: number): void => { workDto.guaranteeTime = itemValue }}
                 items={guarMinPItems}
@@ -156,6 +153,7 @@ const WorkRegisterLayout: React.FC = () =>
 
             <EditText
               label="작업 세부사항"
+              subLabel="(필수)"
               text={workDto.detailRequest}
               onChangeText={(text): void => { workDto.detailRequest = text }}
               placeholder="작업 세부사항 및 요청사항을 입력하세요."
@@ -226,7 +224,7 @@ const WorkRegisterLayout: React.FC = () =>
 /**
   * 일감 등록
 */
-const openStartWorkDatePicker = async (workDto: WorkCreateDto) =>
+const openStartWorkDatePicker = async (workDto: WorkCreateDto, setStartDateStr: (dateStr) => void): void =>
 {
   try
   {
@@ -237,6 +235,7 @@ const openStartWorkDatePicker = async (workDto: WorkCreateDto) =>
     });
 
     workDto.startDate = `${year}-${month + 1}-${day}`;
+    setStartDateStr(`${year}-${month + 1}-${day}`);
 
     if (action !== DatePickerAndroid.dismissedAction)
     {

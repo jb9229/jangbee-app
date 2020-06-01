@@ -1,14 +1,16 @@
-import React from 'react';
-import { Alert, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as api from 'api/api';
-import fonts from 'constants/Fonts';
-import colors from 'constants/Colors';
-import JBButton from 'molecules/JBButton';
-import FirmInfoItem from 'organisms/FirmInfoItem';
-import { notifyError } from 'common/ErrorNotice';
-import callLink from 'common/CallLink';
+
+import { Alert, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+
 import CloseButton from 'molecules/CloseButton';
+import FirmInfoItem from 'organisms/FirmInfoItem';
 import JBActIndicator from 'molecules/JBActIndicator';
+import JBButton from 'molecules/JBButton';
+import React from 'react';
+import callLink from 'common/CallLink';
+import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
+import { notifyError } from 'common/ErrorNotice';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   },
   scrViewWrap: {
-    marginTop: 39,
+    marginTop: 45,
     paddingBottom: 39
   },
   frimTopItemWrap: {
@@ -85,7 +87,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class FirmMyInfoScreen extends React.Component {
+export default class FirmMyInfoScreen extends React.Component
+{
   static navigationOptions = () => ({
     title: '장비 업체정보',
     headerStyle: {
@@ -93,7 +96,8 @@ export default class FirmMyInfoScreen extends React.Component {
     }
   });
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       isLoadingComplete: false,
@@ -102,25 +106,31 @@ export default class FirmMyInfoScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this.init(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps)
+  {
     this.init(nextProps);
   }
 
-  init = props => {
+  init = props =>
+  {
     const { isVisibleModal, accountId } = props;
 
-    if (isVisibleModal && accountId) {
+    if (isVisibleModal && accountId)
+    {
       this.setMyFirmInfo(accountId);
       this.setFirmEvaluList(accountId);
     }
   };
 
-  setMyFirmInfo = accountId => {
-    if (!accountId) {
+  setMyFirmInfo = accountId =>
+  {
+    if (!accountId)
+    {
       Alert.alert(`[${accountId}] 유효하지 않은 사용자 입니다`);
       return;
     }
@@ -128,12 +138,15 @@ export default class FirmMyInfoScreen extends React.Component {
     this.setState({ isLoadingComplete: false });
     api
       .getFirm(accountId)
-      .then(firm => {
-        if (firm) {
+      .then(firm =>
+      {
+        if (firm)
+        {
           this.setState({ firm, isLoadingComplete: true });
         }
       })
-      .catch(error => {
+      .catch(error =>
+      {
         Alert.alert(
           '업체정보 요청 문제발생',
           `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
@@ -147,20 +160,25 @@ export default class FirmMyInfoScreen extends React.Component {
   /**
    * 업체 평가 리스트 설정함수
    */
-  setFirmEvaluList = accountId => {
-    if (!accountId) {
+  setFirmEvaluList = accountId =>
+  {
+    if (!accountId)
+    {
       Alert.alert(`[${accountId}] 유효하지 않은 사용자 입니다`);
       return;
     }
 
     api
       .getFirmEvalu(accountId)
-      .then(evaluList => {
-        if (evaluList) {
+      .then(evaluList =>
+      {
+        if (evaluList)
+        {
           this.setState({ evaluList });
         }
       })
-      .catch(error => {
+      .catch(error =>
+      {
         notifyError(
           '업체후기 요청 문제발생',
           `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
@@ -170,11 +188,13 @@ export default class FirmMyInfoScreen extends React.Component {
       });
   };
 
-  render() {
+  render ()
+  {
     const { isVisibleModal, closeModal, hideCallButton } = this.props;
     const { firm, isLoadingComplete, evaluList } = this.state;
 
-    if (!isLoadingComplete) {
+    if (!isLoadingComplete)
+    {
       return (
         <Modal
           animationType="slide"
@@ -187,7 +207,8 @@ export default class FirmMyInfoScreen extends React.Component {
       );
     }
 
-    if (firm === undefined) {
+    if (firm === undefined)
+    {
       return (
         <Modal
           animationType="slide"

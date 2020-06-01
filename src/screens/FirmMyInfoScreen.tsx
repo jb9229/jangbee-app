@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   },
   scrViewWrap: {
-    marginTop: 40,
+    marginTop: 45,
     paddingBottom: 40
   },
   cardWrap: {
@@ -284,7 +284,7 @@ const FirmMyInfoScreen: React.FC<Props> = (props) =>
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrViewWrap}>
-        <FirmInfoItem firm={firm} evaluList={evaluList} />
+        <FirmInfoItem firm={firm} evaluList={evaluList} showPhonumber={true} />
         <JBButton
           title="수정하기"
           onPress={(): void => props.navigation.navigate('FirmUpdate')}

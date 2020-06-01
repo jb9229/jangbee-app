@@ -1,23 +1,15 @@
-import React from 'react';
-import {
-  Alert,
-  FlatList,
-  Image,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View
-} from 'react-native';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
-import { Rating } from 'react-native-elements';
+import { Alert, FlatList, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+
+import Card from 'molecules/CardUI';
+import FirmEvaluListItem from 'organisms/FirmEvaluListItem';
+import FirmImageItem from 'molecules/FirmImageItem';
 import JBTextItem from 'molecules/JBTextItem';
 import ListSeparator from 'molecules/ListSeparator';
-import Card from 'molecules/CardUI';
-import FirmImageItem from 'molecules/FirmImageItem';
+import { Rating } from 'react-native-elements';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import FirmEvaluListItem from 'organisms/FirmEvaluListItem';
 
 const styles = StyleSheet.create({
   frimTopItemWrap: {
@@ -76,13 +68,16 @@ const styles = StyleSheet.create({
 /**
  * 업체 블로그/홈페이지/SNS링크 열기
  */
-function openLinkUrl(url) {
-  if (url === null || url === '') {
+function openLinkUrl (url)
+{
+  if (url === null || url === '')
+  {
     return;
   }
 
   let urlStr = url;
-  if (!url.startsWith('http')) {
+  if (!url.startsWith('http'))
+  {
     urlStr = `http://${urlStr}`;
   }
 
@@ -91,7 +86,8 @@ function openLinkUrl(url) {
   );
 }
 
-export default function FirmInfoItem({ firm, evaluList }) {
+const FirmInfoItem: React.FC = ({ firm, evaluList, showPhonumber }) =>
+{
   return (
     <View>
       <Card bgColor="white">
@@ -146,12 +142,14 @@ export default function FirmInfoItem({ firm, evaluList }) {
           </View>
         </View>
 
+        {showPhonumber && (<JBTextItem title="전화번호" value={firm.phoneNumber} revColor />)}
         <JBTextItem
           title="주소"
           value={`${firm.address}\n${firm.addressDetail}`}
           revColor
         />
         <JBTextItem title="업체소개" value={firm.introduction} revColor />
+        <JBTextItem title="작업지역" value={firm.workAlarmSido} revColor />
       </Card>
       <Card Primary>
         <FirmImageItem title="작업사진1" value={firm.photo1} />
@@ -162,7 +160,7 @@ export default function FirmInfoItem({ firm, evaluList }) {
         <Card bgColor="white">
           <FlatList
             data={evaluList}
-            renderItem={item => <FirmEvaluListItem item={item.item} />}
+            renderItem={(item) => <FirmEvaluListItem item={item.item} />}
             ListEmptyComponent={() => <Text>후기없음</Text>}
             keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={ListSeparator}
@@ -171,4 +169,6 @@ export default function FirmInfoItem({ firm, evaluList }) {
       )}
     </View>
   );
-}
+};
+
+export default FirmInfoItem;
