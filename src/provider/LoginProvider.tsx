@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as api from 'api/api';
 
 import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
+import { User, UserProfile } from 'src/types';
 
 import { ApplyWorkCallback } from 'src/components/action';
 import { Callbacker } from 'src/utils/Callbacker';
@@ -10,8 +11,6 @@ import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import ModalTemplate from 'src/components/templates/ModalTemplate';
 import { Provider } from 'src/contexts/LoginContext';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
-import { User } from 'firebase';
-import { UserProfile } from 'src/types';
 import WebView from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
@@ -19,6 +18,7 @@ import { updateFirmInfo } from 'src/container/login/action';
 import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
 
 const CALLBACKER_AD_PAYMENT = 'CALLBACKER_AD_PAYMENT';
+const CALLBACKER_WORK_PAYMENT = 'CALLBACKER_WORK_PAYMENT';
 export class Firm
 {
   id: string;
@@ -95,7 +95,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
     setFirm,
     setUserProfile,
     setWebViewModal,
-    openWorkPaymentModal: (price: number): void =>
+    openWorkPaymentModal: (price: number, callbackFn, callbackArgs: Array<any>): void =>
     {
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
       api
@@ -108,14 +108,16 @@ const LoginProvider = (props: Props): React.ReactElement =>
             const paymentReadyInfo = new KakaoPaymentReadyInfo(result.next_redirect_mobile_url, result.tid, user.uid, orderId);
             setPaymentReadyInfo(paymentReadyInfo);
             setVisiblePaymentModal(true);
+
+            if (callbackFn) { Callbacker.add(CALLBACKER_WORK_PAYMENT, callbackFn, callbackArgs) }
           }
         })
         .catch((err) =>
         {
-          noticeUserError('Ad Create Provider', err?.message, '정기결제 요청 실패');
+          noticeUserError('Ad Create Provider[정기결제 요청 실패]', err?.message, user);
         });
     },
-    openAdPaymentModal: (price: number, callbackFn, callbackArgs): void =>
+    openAdPaymentModal: (price: number, callbackFn, callbackArgs: Array<any>): void =>
     {
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
       api
@@ -134,12 +136,12 @@ const LoginProvider = (props: Props): React.ReactElement =>
           }
           else
           {
-            noticeUserError('LoginProvider(requestPaymentReady result invalid)', response, '정기준비 요청 실패');
+            noticeUserError('LoginProvider(requestPaymentReady result invalid, 정기준비 요청 실패)', response, user);
           }
         })
         .catch((err) =>
         {
-          noticeUserError('Ad Create Provider', err?.message, '정기결제 요청 실패');
+          noticeUserError('Ad Create Provider(정기결제 요청 실패)', err?.message, user);
         });
     },
     openCouponModal: (applyWorkCallback?: (user: User, useCoupon: boolean) => void): void =>
@@ -172,6 +174,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
               console.log('>>> Callbacker.arguments: ', Callbacker.arguments);
               paymentInfo.sid = sid;
               Callbacker.trigger(CALLBACKER_AD_PAYMENT);
+              Callbacker.trigger(CALLBACKER_WORK_PAYMENT, sid);
               console.log('success call callbacker~~', Callbacker);
             }).catch((error) => { noticeUserError('Firebase Update Fail(updatePaymentSubscription)', error?.message) });
         }}

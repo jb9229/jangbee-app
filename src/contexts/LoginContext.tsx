@@ -15,11 +15,12 @@ interface Context {
   setFirm: (firm: Firm) => void;
   setUserProfile: (p: UserProfile) => void;
   setWebViewModal: (url: string) => void;
-  openWorkPaymentModal: (price: number) => void;
-  openAdPaymentModal: (price: number, callbackFn, callbackArg: Array<any>) => void;
+  openWorkPaymentModal: (price: number, callbackFn?: any, callbackArg?: Array<any>) => void;
+  openAdPaymentModal: (price: number, callbackFn?: any, callbackArg?: Array<any>) => void;
   openCouponModal: () => void;
   popLoading: (loadingFlag: boolean, msg?: string) => void;
   refetchFirm: () => Promise<Firm | null>;
 }
 
 export { useCtx as useLoginContext, Provider };
+

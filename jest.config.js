@@ -16,10 +16,12 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   moduleNameMapper: {
     '^atoms/(.*)$': '<rootDir>/src/components/atoms/$1',
+    '^api/(.*)$': '<rootDir>/src/api/$1',
     '^molecules/(.*)$': '<rootDir>/src/components/molecules/$1',
     '^organisms/(.*)$': '<rootDir>/src/components/organisms/$1',
     '^container/(.*)$': '<rootDir>/src/container/$1',
     '^constants/(.*)$': '<rootDir>/src/constants/$1',
+    '^common/(.*)$': '<rootDir>/src/common/$1',
     '^templates/(.*)$': '<rootDir>/src/components/templates/$1',
     '^src/(.*)$': '<rootDir>/src/$1',
     '^utils/(.*)$': '<rootDir>/src/utils/$1',

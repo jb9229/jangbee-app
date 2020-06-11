@@ -36,8 +36,7 @@ interface Props {
 const FirmWorkListLayout: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
-  const { openWorkList, matchedWorkList } = useFirmWorkProvider();
-  const [index, setIndex] = React.useState(0);
+  const { openWorkList, matchedWorkList, tabIndex, setTabIndex } = useFirmWorkProvider();
   const [routes] = React.useState([
     { key: 'first', title: '진행중인 일감' },
     { key: 'second', title: '매칭된 일감' }
@@ -66,12 +65,12 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
   return (
     <Container>
       <FirmListTabView
-        navigationState={{ index, routes }}
+        navigationState={{ index: tabIndex, routes }}
         renderScene={SceneMap({
           first: renderOpenWorkList,
           second: renderMatchedWorkList
         })}
-        onIndexChange={setIndex}
+        onIndexChange={setTabIndex}
         initialLayout={{ width: Dimensions.get('window').width }}
         renderTabBar={(props): React.ReactElement => (
           <FirmListTabBar

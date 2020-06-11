@@ -149,7 +149,7 @@ const FirmInfoItem: React.FC = ({ firm, evaluList, showPhonumber }) =>
           revColor
         />
         <JBTextItem title="업체소개" value={firm.introduction} revColor />
-        <JBTextItem title="작업지역" value={firm.workAlarmSido} revColor />
+        <JBTextItem title="작업지역" value={`${firm.workAlarmSido}${firm.workAlarmSigungu}`} revColor />
       </Card>
       <Card Primary>
         <FirmImageItem title="작업사진1" value={firm.photo1} />

@@ -96,6 +96,7 @@ interface Props {
 
 export default function FirmHarmCaseHeader (props: Props): React.ReactElement
 {
+  const [searchWord, setSearchWord] = React.useState(props.searchWord);
   const [searchPlaceholder, setSearchPlaceholder] = React.useState('전화번호 입력(- 없이)');
 
   return (
@@ -143,15 +144,15 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement
         </CommandWrap>
       </HeaderTopWrap>
       <SearchBar
-        value={props.searchWord}
+        value={searchWord}
         placeholder={searchPlaceholder}
         containerStyle={styles.containerSearchBar}
         inputStyle={styles.inputSearchBar}
         lightTheme
         round
-        onChangeText={(text): void => props.setSearchWord(text)}
-        searchIcon={{ onPress: props.searchFilterCliEvalu }}
-        onSubmitEditing={props.searchFilterCliEvalu}
+        onChangeText={(text): void => setSearchWord(text)}
+        searchIcon={{ onPress: (): void => props.searchFilterCliEvalu(searchWord) }}
+        onSubmitEditing={(): void => props.searchFilterCliEvalu(searchWord)}
         autoCorrect={false}
       />
       <SearchNoticeWrap>

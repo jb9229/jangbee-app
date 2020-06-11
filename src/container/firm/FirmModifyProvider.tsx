@@ -3,15 +3,14 @@ import * as url from 'constants/Url';
 
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
 import { getUpdateFirmDto, requestModifyFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
-import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { DefaultNavigationProps } from 'src/types';
-import { Firm } from 'src/provider/LoginProvider';
 import { UPDATE_FIRM } from 'src/api/mutations';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import useAxios from 'axios-hooks';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { useMutation } from '@apollo/client';
 
 interface Context {
   navigation: DefaultNavigationProps;
@@ -44,16 +43,16 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
       {
         requestModifyFirm(user.uid, firmResponse.data.id, firmDto)
           .then((result) => { if (result) { refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'update' }) } })
-          .catch((err): void => { noticeUserError('FirmModifyProvider(requestModifyFirmAtOldServer -> error)', err?.message) });
+          .catch((err): void => { noticeUserError('FirmModifyProvider(requestModifyFirmAtOldServer -> error)', err?.message, user) });
       }
       else
       {
-        noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', data?.updateFirm);
+        noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', data?.updateFirm, user);
       }
     },
     onError: (err) =>
     {
-      noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message);
+      noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message, user);
     }
   });
 
@@ -84,11 +83,11 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
               {
                 modifyFirmRequest({ variables: { account_id: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
               })
-              .catch((err) => { noticeUserError('FirmModifyProvider(uploadImage -> error)', err?.message) });
+              .catch((err) => { noticeUserError('FirmModifyProvider(uploadImage -> error)', err?.message, user) });
           }
           else if (result instanceof FirmCreateErrorData) { setErrorData(result) }
         })
-        .catch((err) => { noticeUserError('FirmModifyProvider(validateModifyFirmDto -> error)', err?.message) });
+        .catch((err) => { noticeUserError('FirmModifyProvider(validateModifyFirmDto -> error)', err?.message, user) });
     }
   };
 
@@ -99,3 +98,4 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useFirmModifyProvider, FirmModifyProvider };
+

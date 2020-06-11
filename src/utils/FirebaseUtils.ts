@@ -5,7 +5,7 @@ export function getUserInfo (uid): Promise<firebase.database.DataSnapshot>
   return firebase
     .database()
     .ref(`users/${uid}`)
-    .once('value', data => { console.log('firebase getuserinfo data: ', data); return data });
+    .once('value', data => { return data });
 }
 
 export function updateReAuthInfo (uid, accessToken, refreshToken, accTokenExpDate,

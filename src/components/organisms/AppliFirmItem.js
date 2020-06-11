@@ -1,24 +1,19 @@
+import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View
-} from 'react-native';
 import Styled from 'styled-components/native';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import JBButton from 'molecules/JBButton';
 
 const Container = Styled.View`
   flex-direction: row;
   justify-content: space-between;
-  padding: 5px 10px;
+  padding: 5px 0px;
   ${props =>
     props.selected &&
     `
-    background-color: ${colors.point}
+    background-color: ${colors.point};
+    border-radius: 4;
   `}
 `;
 
@@ -30,7 +25,8 @@ const styles = StyleSheet.create({
     margin: 3
   },
   centerWrap: {
-    flex: 3
+    flex: 3,
+    marginLeft: 15
   },
   fnameText: {
     fontSize: 16,
@@ -61,12 +57,15 @@ const styles = StyleSheet.create({
   }
 });
 
-function calDistance(dis) {
-  if (!dis) {
+function calDistance (dis)
+{
+  if (!dis)
+  {
     return '';
   }
 
-  if (dis < 1000) {
+  if (dis < 1000)
+  {
     return `${dis}m`;
   }
 

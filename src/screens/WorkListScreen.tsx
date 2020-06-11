@@ -13,7 +13,7 @@ import JBButton from 'molecules/JBButton';
 import WorkUpdateModal from 'templates/WorkUpdateModal';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import { notifyError } from 'common/ErrorNotice';
+import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
@@ -108,13 +108,13 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
           return;
         }
 
-        notifyError(
+        noticeUserError(
           '지원자 선택취소 문제발생',
           '지원자 선택 취소를 다시 시도해 주세요'
         );
         setOpenWorkListData();
       })
-      .catch(error => notifyError(error.name, error.message));
+      .catch(error => noticeUserError(error.name, error.message, user));
   };
 
   /**
@@ -143,7 +143,7 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
         setOpenWorkListEmpty(true);
         setOpenWorkListRefreshing(false);
       })
-      .catch(error => notifyError(error.name, error.message));
+      .catch(error => noticeUserError(error.name, error.message, user));
   };
 
   /**
@@ -167,7 +167,7 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
         setMatchedWorkListEmpty(true);
         setMatchedWorkListRefreshing(false);
       })
-      .catch(error => notifyError(error.name, error.message));
+      .catch(error => noticeUserError(error.name, error.message, user));
   };
 
   /**
@@ -185,10 +185,10 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
           return;
         }
 
-        notifyError('일감수정 문제 발생', '일감 수정을 다시 시도해 주세요');
+        noticeUserError('일감수정 문제 발생', '일감 수정을 다시 시도해 주세요', user);
         setOpenWorkListData();
       })
-      .catch(error => notifyError(error.name, error.message));
+      .catch(error => noticeUserError(error.name, error.message, user));
   };
 
   const renderOpenWorkList = (): React.ReactElement => (
@@ -198,7 +198,7 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
       refreshing={openWorkListRefreshing}
       isListEmpty={isOpenWorkListEmpty}
       selectFirm={(workId): void => { props.navigation.navigate('AppliFirmList', { workId }) }}
-      cancelSelFirm={this.confirmCancelSelFirm}
+      cancelSelFirm={confirmCancelSelFirm}
       registerWork={(): void => props.navigation.navigate('WorkRegister')}
       editWork={(work): void => { setEditWork(work); setVisibleEditWorkModal(true) }}
     />
@@ -207,11 +207,11 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   const renderMatchedWorkList = (): React.ReactElement => (
     <ClientMatchedWorkList
       list={matchedWorkList}
-      handleRefresh={() => { setMatchedWorkListRefreshing(true); setMatchedWorkListData() }}
+      handleRefresh={(): void => { setMatchedWorkListRefreshing(true); setMatchedWorkListData() }}
       refreshing={matchedWorkListRefreshing}
       isListEmpty={isMatchedWorkListEmpty}
-      estimateFirm={workId => { setVisibleEstimateModal(true); setEstiWorkId(workId) }}
-      openMatchedFirmInfo={(matchedAccId) =>
+      estimateFirm={(workId): void => { setVisibleEstimateModal(true); setEstiWorkId(workId) }}
+      openMatchedFirmInfo={(matchedAccId): void =>
       {
         setMatchedfirmAccId(matchedAccId);
         setVisibleDetailModal(true);
@@ -229,7 +229,7 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
       />
       <WorkUpdateModal
         editWork={editWork}
-        completeAction={this.updateWork}
+        completeAction={updateWork}
         isVisibleModal={isVisibleEditWorkModal}
         closeModal={(): void => setVisibleEditWorkModal(false)}
       />

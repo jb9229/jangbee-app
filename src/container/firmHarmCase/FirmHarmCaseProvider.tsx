@@ -81,13 +81,13 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     onCompleted: (data) =>
     {
       if (data) { setChatMessge(data?.firmChatMessage) }
-      else { noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq onCompleted)', 'no data!!') }
+      else { noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq onCompleted)', 'no data!!', user) }
     }
   });
   const [addFirmChatMessageReq, addFirmChatMessageRsp] = useMutation(ADD_FIRMCHAT_MESSAGE, {
     onError: (err) =>
     {
-      noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq result)', err?.message);
+      noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq result)', err?.message, user);
     }
   });
 
@@ -132,7 +132,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       {
         noticeUserError(
           '최근 피해사례 요청 문제',
-          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
+          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
         );
       });
   };
@@ -149,7 +149,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       .catch(error =>
         noticeUserError(
           '피해사례 공감 조회 문제',
-          `공감 조회에 문제가 있습니다, 다시 시도해 주세요(${error.message})`
+          `공감 조회에 문제가 있습니다, 다시 시도해 주세요(${error.message})`, user
         )
       );
   };
@@ -191,46 +191,28 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       {
         noticeUserError(
           '내가 등록한 피해사례 요청 문제',
-          `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
+          `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
         );
       });
   };
 
   const searchFilterCliEvalu = (searchWord: string): void =>
   {
+    console.log('>>> searchFilterCliEvalu~~');
     if (!searchWord)
     {
       setSearchNotice('검색어를 기입해 주세요!');
       return;
     }
 
-    let paramStr;
-
-    if (searchArea === 'CLI_NAME')
-    {
-      paramStr = `cliName=${searchWord}`;
-    }
-
-    if (searchArea === 'FIRM_NAME')
-    {
-      paramStr = `firmName=${searchWord}`;
-    }
-
-    if (searchArea === 'TEL')
-    {
-      const pNumber = searchWord.split('-').join('');
-      paramStr = `telNumber=${pNumber}`;
-    }
-
-    if (searchArea === 'FIRM_NUMBER')
-    {
-      paramStr = `firmNumber=${searchWord}`;
-    }
+    const pNumber = searchWord.split('-').join('');
+    const paramStr = `searchWord=${pNumber}`;
 
     api
       .searchClientEvaluList(paramStr)
       .then(resBody =>
       {
+        console.log('>>> searchFilterCliEvalu resBody: ', resBody);
         if (resBody)
         {
           let notice = '';
@@ -249,7 +231,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       {
         noticeUserError(
           '피해사례 요청 문제',
-          `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
+          `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
         );
       });
   };
@@ -266,10 +248,11 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const states = {
     user, firm, searchWord, searchNotice, searchArea, evaluListType,
     cliEvaluList, countData,
+    chatMessge: chatMessagesResponse?.data?.firmChatMessage || [],
+    setSearchWord,
     visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
     updateEvalu, detailEvalu, searchTime,
-    evaluLikeSelected, evaluLikeList,
-    chatMessge: chatMessagesResponse?.data?.firmChatMessage || []
+    evaluLikeSelected, evaluLikeList
   };
 
   const actions = {
@@ -281,10 +264,11 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         .catch(error =>
           noticeUserError(
             '피해사례 삭제 문제',
-            `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`
+            `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`, user
           )
         );
     },
+    setSearchArea,
     setClinetEvaluList,
     createClientEvaluLike: (newEvaluLike) =>
     {
@@ -297,7 +281,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         .catch(error =>
           noticeUserError(
             '공감/비공감 요청 문제',
-            `요청에 문제가 있습니다, 다시 시도해 주세요${error.message}`
+            `요청에 문제가 있습니다, 다시 시도해 주세요${error.message}`, user
           )
         );
     },
@@ -317,7 +301,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         .catch(error =>
           noticeUserError(
             '공감/비공감 취소 문제',
-            `피해사례 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`
+            `피해사례 공감/비공감 취소 요청에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`, user
           )
         );
     },
@@ -330,7 +314,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       setVisibleEvaluLikeModal(false);
     },
     setMyClientEvaluList,
-    searchFilterCliEvalu,
+    searchFilterCliEvalu: (word: string): void => searchFilterCliEvalu(word),
     openUpdateCliEvaluForm: (item) =>
     {
       setUpdateEvalu(item);
@@ -389,7 +373,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         {
           noticeUserError(
             '피해사례 통계 요청',
-            `피해사례 통계 요처에 문제가 있습니다, 다시 시도해 주세요${ex.message}`
+            `피해사례 통계 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
           );
         });
     },

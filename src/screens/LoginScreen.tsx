@@ -151,7 +151,7 @@ const LoginScreen: React.FC<Props> = (props) =>
 
   return (
     <Container>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150} style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150}>
         <ItemWrap>
           <EditText
             label="핸드폰 번호"

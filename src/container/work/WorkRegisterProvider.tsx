@@ -71,9 +71,9 @@ const WorkRegisterProvider = (props: Props): React.ReactElement =>
                 }
               }
             })
-            .catch((err): void => { noticeUserError('WorkRegisterProvider(requestAddWork -> error)', err?.message) });
+            .catch((err): void => { noticeUserError('WorkRegisterProvider(requestAddWork -> error)', err?.message, user) });
         })
-        .catch((err) => { noticeUserError('WorkRegisterProvider(validateRegisterWorkDto -> error)', err?.message) });
+        .catch((err) => { noticeUserError('WorkRegisterProvider(validateRegisterWorkDto -> error)', err?.message, user) });
     }
   };
 
@@ -84,3 +84,4 @@ const WorkRegisterProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useWorkRegisterProvider, WorkRegisterProvider };
+

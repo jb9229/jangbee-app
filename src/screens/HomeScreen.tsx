@@ -1,5 +1,8 @@
+import * as Permissions from 'expo-permissions';
+
 import { Alert, DeviceEventEmitter, Platform } from 'react-native';
 
+import Constants from 'expo-constants';
 import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
@@ -40,17 +43,41 @@ const HomeScreen: React.FC<Props> = (props) =>
   }, []);
 
   // android permissions are given on install
-  const addNotificationListener = (): void =>
+  const addNotificationListener = async (): Promise<void> =>
   {
-    _notificationSubscription = Notifications.addListener(_handleNotification);
+    if (Constants.isDevice)
+    {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted')
+      {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted')
+      {
+        alert(`알림 설정이 거부되어 있습니다: finalStatus is ${finalStatus}`);
+        return;
+      }
+      const token = await Notifications.getExpoPushTokenAsync();
+      console.log('>>> noti token', token);
+    }
+    else
+    {
+      alert('Must use physical device for Push Notifications');
+    }
 
     if (Platform.OS === 'android')
     {
       Notifications.createChannelAndroidAsync('jbcall-messages', {
         name: 'JBCall Messages',
-        sound: true
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250]
       });
     }
+
+    _notificationSubscription = Notifications.addListener(_handleNotification);
   };
 
   const _handleNotification = (notification): void =>

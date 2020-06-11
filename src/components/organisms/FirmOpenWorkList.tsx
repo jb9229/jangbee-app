@@ -24,7 +24,7 @@ interface Props {
 const FirmWorkingList: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
-  const { refreshing, refetchOpenWorkList, applyWork, acceptWork, abandonWork } = useFirmWorkProvider();
+  const { refreshing, refetchOpenWorkList, applyWork, applyFirmWork, acceptWork, abandonWork } = useFirmWorkProvider();
 
   if (!props.list)
   {
@@ -49,7 +49,7 @@ const FirmWorkingList: React.FC<Props> = (props) =>
         (
           <WorkItem
             item={item}
-            renderCommand={(): React.ReactElement => renderCommand(item, user, applyWork, acceptWork, abandonWork)}
+            renderCommand={(): React.ReactElement => renderCommand(item, user, applyWork, applyFirmWork, acceptWork, abandonWork)}
             hideAddress
             cardColor="white"
           />
@@ -61,7 +61,7 @@ const FirmWorkingList: React.FC<Props> = (props) =>
   );
 };
 
-const renderCommand = (item, user, applyWork, acceptWork, abandonWork): React.ReactElement =>
+const renderCommand = (item, user, applyWork, applyFirmWork, acceptWork, abandonWork): React.ReactElement =>
 {
   if (user && item.firmRegister && item.accountId === user.uid)
   {
@@ -71,7 +71,6 @@ const renderCommand = (item, user, applyWork, acceptWork, abandonWork): React.Re
       </WorkCommWrap>
     );
   }
-
   return (
     <WorkCommWrap>
       {item.workState === 'OPEN' && !item.applied && !item.firmRegister && (
@@ -81,7 +80,7 @@ const renderCommand = (item, user, applyWork, acceptWork, abandonWork): React.Re
           size="small"
         />
       )}
-      {item.workState === '' &&
+      {item.workState === 'OPEN' &&
         !item.applied &&
         item.firmRegister &&
         !item.guarTimeExpire && (
@@ -98,7 +97,7 @@ const renderCommand = (item, user, applyWork, acceptWork, abandonWork): React.Re
         <WorkCommText text="차주일감 매칭시간 만료됨" />
       )}
       {item.workState === 'OPEN' && item.applied && (
-        <WorkCommText text="지원중.." />
+        <WorkCommText text="매칭중.." />
       )}
       {item.workState === 'SELECTED' && (
         <CommWrap>

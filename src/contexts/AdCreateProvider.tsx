@@ -13,7 +13,6 @@ import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import getString from 'src/STRING';
 import { noticeUserError } from 'src/container/request';
-import { notifyError } from 'common/ErrorNotice';
 import produce from 'immer';
 import useAxios from 'axios-hooks';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -130,7 +129,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
             }
             else
             {
-              notifyError(
+              noticeUserError(
                 '타켓광고 등록 장비 중복됨',
                 `죄송합니다, 이미 ${dto.adEquipment}는 [${
                   dupliResult.endDate
@@ -141,7 +140,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
           })
           .catch((error) =>
           {
-            noticeUserError('Ad Create Provider', error.message, '장비 타켓광고 중복검사 문제');
+            noticeUserError('Ad Create Provider', error.message);
             return false;
           });
       }
@@ -158,7 +157,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
             }
             else
             {
-              notifyError(
+              noticeUserError(
                 '타켓광고 등록 지역 중복됨',
                 `죄송합니다, [${dupliResult.endDate}]까지 계약된 지역광고가 존재 합니다.`
               );
@@ -167,7 +166,7 @@ const adCreateAction = (dispatch: React.Dispatch<Action>) => (dto: CreateAdDto):
           })
           .catch((error) =>
           {
-            noticeUserError('Ad Create Provider', error.message, '지역 타켓광고 중복검사 문제');
+            noticeUserError('Ad Create Provider', error.message);
             return false;
           });
       }
@@ -242,7 +241,7 @@ const requestCreaAd = async (dto: CreateAdDto, user: User, navigation: DefaultNa
     })
     .catch((errorResponse) =>
     {
-      noticeUserError('Ad Create Provider', errorResponse.message, '광고생성 실패');
+      noticeUserError('Ad Create Provider[광고생성 실패]', errorResponse.message);
     });
 };
 
@@ -253,28 +252,23 @@ const getAdPrice = (adType): number =>
 {
   if (adType === AdType.MAIN_FIRST)
   {
-    // return 100000;
-    return 100;
+    return 100000;
   }
   if (adType === AdType.MAIN_SECONDE)
   {
-    // return 70000;
-    return 100;
+    return 70000;
   }
   if (adType === AdType.MAIN_THIRD)
   {
-    // return 50000;
-    return 100;
+    return 50000;
   }
   if (adType === AdType.SEARCH_EQUIPMENT_FIRST)
   {
-    // return 70000;
-    return 100;
+    return 70000;
   }
   if (adType === AdType.SEARCH_REGION_FIRST)
   {
-    // return 30000;
-    return 100;
+    return 30000;
   }
   return 0;
 };
@@ -311,7 +305,7 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   // Error Notice
   if (bookedAdListResponse.error)
   {
-    noticeUserError('Create Ad Error!', bookedAdListResponse.error.message, 'Create Ad Error!');
+    noticeUserError('Create Ad Error!', bookedAdListResponse.error.message, user);
   };
 
   const actions = {

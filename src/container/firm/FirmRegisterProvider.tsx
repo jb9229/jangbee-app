@@ -37,17 +37,17 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
       {
         requestAddFirm(user.uid, firmDto)
           .then((result) => { console.log('>>> jb requestAddFirm result:', result); if (result) { refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'Register' }) } })
-          .catch((err): void => { noticeUserError('FirmRegisterProvider(requestAddFirm -> error)', err?.message) });
+          .catch((err): void => { noticeUserError('FirmRegisterProvider(requestAddFirm -> error)', err?.message, user) });
       }
       else
       {
-        noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onCompleted)', data?.createFirm);
+        noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onCompleted)', data?.createFirm, user);
       }
     },
     onError: (err) =>
     {
       console.error(err);
-      noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onError)', err?.message);
+      noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onError)', err, user);
     }
   });
 
@@ -83,11 +83,11 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
                 const newFirmDto = convertFirmDto(user.uid, firmDto);
                 createFirmRequest({ variables: { newFirm: newFirmDto } });
               })
-              .catch((err) => { noticeUserError('FirmRegisterProvider(uploadImage -> error)', err?.message) });
+              .catch((err) => { noticeUserError('FirmRegisterProvider(uploadImage -> error)', err?.message, user) });
           }
           else if (validResult instanceof FirmCreateErrorData) { setErrorData(validResult) }
         })
-        .catch((err) => { noticeUserError('FirmRegisterProvider(validateCreatFirmDto -> error)', err?.message) });
+        .catch((err) => { noticeUserError('FirmRegisterProvider(validateCreatFirmDto -> error)', err?.message, user) });
     }
   };
 
@@ -98,3 +98,4 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useFirmRegisterProvider, FirmRegisterProvider };
+

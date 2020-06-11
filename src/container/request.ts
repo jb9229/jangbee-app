@@ -1,16 +1,9 @@
 import * as Sentry from 'sentry-expo';
 
-import { Alert, Clipboard } from 'react-native';
+import { User } from 'src/types';
 
-import getString from 'src/STRING';
-
-export const noticeUserError = (location: string, errMsg: string, title?: string): void =>
+export const noticeUserError = (location: string, error: any, user?: User): void =>
 {
-  Alert.alert(title || getString('USER_ERROR_TITLENOTICE'), getString('USER_ERROR_NOTICE'),
-    [
-      { text: 'Copy', onPress: (): void => { Clipboard.setString('Location: ' + location + '\n\n ' + errMsg) } },
-      { text: 'Ok' }
-    ]);
-
-  Sentry.captureMessage(`Location: [${title}]` + location + '\n\n ' + errMsg);
+  Sentry.captureMessage(`Location: ${location}\n\n Error Message: ${error?.message}\nn User: ${user?.uid}`);
+  error && Sentry.captureException(error);
 };

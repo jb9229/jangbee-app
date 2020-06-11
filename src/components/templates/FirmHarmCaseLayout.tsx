@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Keyboard, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
@@ -41,29 +41,6 @@ interface Props{
 }
 const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
-  React.useEffect(() =>
-  {
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-
-    // cleanup function
-    return () =>
-    {
-      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-    };
-  }, []);
-
-  const _keyboardDidShow = () =>
-  {
-    setChatMode(true);
-  };
-
-  const _keyboardDidHide = () =>
-  {
-    setChatMode(false);
-  };
-
   const {
     user, firm, searchArea, searchWord, searchTime, searchNotice, countData, cliEvaluList, evaluListType,
     setSearchArea, setSearchWord, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,

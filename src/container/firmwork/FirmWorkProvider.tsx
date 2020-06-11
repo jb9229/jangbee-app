@@ -1,7 +1,8 @@
 import * as React from 'react';
+import * as jangbeeConfig from '../../../jbcallconfig.json';
 import * as url from 'constants/Url';
 
-import { abandonWork, acceptWorkRequest, applyWork } from 'src/container/firmwork/actions';
+import { abandonWork, acceptWorkRequest, applyFirmWork, applyWork } from 'src/container/firmwork/actions';
 
 import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
@@ -16,11 +17,14 @@ interface Context {
   matchedWorkList: Array<object>;
   refreshing: boolean;
   matchedRefreshing: boolean;
+  tabIndex: number;
   applyWork: (workId: string) => void;
+  applyFirmWork: (workId: string) => void;
   acceptWork: (workId: string) => void;
   abandonWork: (workId: string) => void;
   refetchOpenWorkList: () => void;
   refetchMatchedWorkList: () => void;
+  setTabIndex: (i: number) => void;
 }
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -32,9 +36,10 @@ interface Props {
 
 const FirmWorkProvider = (props: Props): React.ReactElement =>
 {
-  const { user, firm, paymentInfo, openWorkPaymentModal, openCouponModal } = useLoginContext();
+  const { user, firm, userProfile, openWorkPaymentModal, openCouponModal } = useLoginContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [matchedRefreshing, setMatchedRefreshing] = React.useState(false);
+  const [tabIndex, setTabIndex] = React.useState(0);
 
   // Server Data State
   const [openWorkListResponse, openWorkListRequest] = useAxios(`${url.JBSERVER_WORK_FIRM_OPEN}?equipment=${firm?.equiListStr}` +
@@ -62,33 +67,65 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
     }
 
     const refresh = props.navigation.getParam('refresh', undefined);
-    if (refresh) { matchedWorkListRequest() }
+    if (refresh) { openWorkListRequest(); matchedWorkListRequest() }
   }, [firm, props.navigation.state]);
 
   // Error Handling Of Server API Call
   if (openWorkListResponse.error)
   {
-    noticeUserError('Firm Work Provider(getFirmOpenWorkList)', openWorkListResponse.error.message);
+    noticeUserError('Firm Work Provider(getFirmOpenWorkList)', openWorkListResponse.error.message, user);
   }
   if (matchedWorkListResponse.error)
   {
-    noticeUserError('FirmWorkProvider(getFirmMatchedWorkList)', matchedWorkListResponse.error.message);
+    noticeUserError('FirmWorkProvider(getFirmMatchedWorkList)', matchedWorkListResponse.error.message, user);
   }
 
-  // Init States
+  // State Action
+  const successApply = (): void =>
+  {
+    // TODO 차주일감 성공하면, 매칭된 일감으로 탭 변경
+    openWorkListRequest();
+    matchedWorkListRequest();
+    setTabIndex(1);
+  };
+
+  const failApply = (): void =>
+  {
+    openWorkListRequest();
+  };
+
+  const successAcceptWork = (): void =>
+  {
+    openWorkListRequest();
+    matchedWorkListRequest();
+    setTabIndex(1);
+  };
+
+  const failAcceptWork = (): void =>
+  {
+    Alert.alert(
+      '배차하기 문제',
+      '배차되지 않았습니다, 통장잔고 확인요청, 배차요청 3시간이 지났는지 리스트 리프레쉬 후 확인해 주세요'
+    );
+
+    openWorkListRequest();
+  };
+
+  // Consumer States
   const states = {
-    navigation: props.navigation,
+    navigation: props.navigation, tabIndex,
     openWorkList: openWorkListResponse && openWorkListResponse.data ? openWorkListResponse.data : [],
     refreshing, matchedRefreshing,
     matchedWorkList: matchedWorkListResponse && matchedWorkListResponse.data ? matchedWorkListResponse.data : []
   };
 
-  // Init Actions
+  // Consumer Actions
   const actions = {
+    setTabIndex,
     setRefreshing,
     applyWork: (workId: string): void =>
     {
-      if (paymentInfo.sid)
+      if (userProfile.sid)
       {
         Alert.alert(
           '해당 날짜와 장소에 배차 가능하십니까?',
@@ -104,18 +141,60 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         Alert.alert(
           '해당 날짜와 장소에 배차 가능하십니까?',
           '지원 후, 장비사용고객의 선택알람을 기다려 주세요\n' +
-          '한번 결재정보를 등록하면 앞으로 보다 신속하게 지원 가능합니다(매칭비 2만원)',
+          `한번 결재정보를 등록하면 앞으로 보다 신속하게 지원 가능합니다(매칭비 ${jangbeeConfig.workMatchingFee}만원)`,
           [
             { text: '취소' },
             { text: '지원하기', onPress: (): void => applyWork(workId, user, openWorkListRequest) },
-            { text: '결재등록', onPress: (): void => openWorkPaymentModal(0) }
+            { text: '결재등록', onPress: (): void => openWorkPaymentModal(jangbeeConfig.workMatchingFee, applyWork, [workId, user, openWorkListRequest]) }
+          ]
+        );
+      }
+    },
+    applyFirmWork: (work: any): void =>
+    {
+      // '다른 차주가 올린 일감은, 선착순으로 한 업체만 매칭비 결재와 동시에 바로 매칭됩니다.',
+      if (firm && work.modelYear && work.modelYearLimit < firm.modelYear)
+      {
+        Alert.alert('죄송합니다, 지원할 수 없는 일감입니다', `${work.modelYearLimit}년식이상을 요청한 일감으로 지원할 수 없습니다(보유장비: ${firm.modelYear}년식)`);
+
+        return;
+      }
+      console.log('>>> userProfile', userProfile);
+      // 유효한 SID가 있는 경우
+      if (userProfile.sid)
+      {
+        Alert.alert(
+          '확인창',
+          '정말로 해당 날짜와 장소에 배차 가능하십니까?',
+          [
+            { text: '취소' },
+            {
+              text: '지원하기', onPress: (): void =>
+              {
+                applyFirmWork(user.uid, work, userProfile.sid, false)
+                  .then((res) => res ? successApply() : failApply())
+                  .catch((error) => noticeUserError('FirmWorkAction[Apply]', `${error.name},${error.message}`, user));
+              }
+            }
+          ]
+        );
+      }
+      // SID가 없어 발급 받아야 하는 경우
+      else
+      {
+        Alert.alert(
+          '등록된 결재정보가 없습니다',
+          '먼저 최초 한번 결재정보를 등록 해주세요[100원]\n 최초 결재계좌로 차후 선착순 매칭이 됩니다(결재 잔액부족시 우선순위에 밀림)',
+          [
+            { text: '취소' },
+            { text: '등록하기', onPress: (): void => openWorkPaymentModal(jangbeeConfig.workMatchingFee, applyFirmWork, [user.uid, work, userProfile.sid, false]) }
           ]
         );
       }
     },
     acceptWork: (workId: string): void =>
     {
-      if (!paymentInfo || !paymentInfo.sid)
+      if (!userProfile || !userProfile.sid)
       {
         Alert.alert(
           '자동결제정보 없음 (일감비 2만원)',
@@ -124,7 +203,7 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
             { text: '포기하기', onPress: (): void => this.abandonWork(workId) },
             {
               text: '자동이체 등록해놓기',
-              onPress: (): void => { openWorkPaymentModal(20000) }
+              onPress: (): void => { openWorkPaymentModal(jangbeeConfig.workMatchingFee) }
             }
           ],
           { cancelable: true }
@@ -136,13 +215,18 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         '매칭 후, 매칭된 일감(오른쪽 상단 메뉴)화면에서 꼭! [전화걸기]통해 고객과 최종 협의하세요.',
         [
           { text: '포기하기', onPress: (): void => abandonWork(user, workId, openWorkListRequest) },
-          {
-            text: '쿠폰사용하기',
-            onPress: (): void => { openCouponModal() }
-          },
+          // {
+          //   text: '쿠폰사용하기',
+          //   onPress: (): void => { openCouponModal() }
+          // },
           {
             text: '결제하기',
-            onPress: (): void => { acceptWorkRequest(user, false) }
+            onPress: (): void =>
+            {
+              acceptWorkRequest(workId, user, false, userProfile.sid)
+                .then((res) => res ? successAcceptWork() : failAcceptWork())
+                .catch((error) => noticeUserError('FimWorkAction(acceptWork api call error)', error.message, user));
+            }
           }
         ]
       );

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import * as React from 'react';
+/* eslint-disable @typescript-eslint/camelcase */
 import * as api from 'api/api';
 
 import { Alert, Linking, Platform } from 'react-native';
@@ -107,20 +107,20 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
       {
         if (!isOpened)
         {
-          noticeUserError('외부 앱 실행에 실패했습니다', `evt.url is: ${evt.url}`, '외부 앱 실행에 실패했습니다');
+          noticeUserError('외부 앱 실행에 실패했습니다[SendIntentAndroid.openChromeIntent]', `evt.url is: ${evt.url}`);
         }
       })
       .catch(err =>
       {
         console.log('### openAppWithUri error ###');
-        console.log(err);
+        console.error(err);
       });
   }
   else
   {
     Linking.openURL(evt.url).catch(err =>
     {
-      noticeUserError('외부 앱 실행에 실패했습니다', `evt.url is: ${err.message}`, '외부 앱 실행에 실패했습니다');
+      noticeUserError('외부 앱 실행에 실패했습니다[Linking.openURL]', `evt.url is: ${err.message}`);
     });
   }
 
@@ -147,7 +147,7 @@ const receiveWebViewMSG = (webView: any, webViewMSG: any, paymentInfo: KakaoPaym
   const webData = JSON.parse(webViewMSG);
 
   console.log('### Received Web Data ####');
-  console.log(webData);
+  (webData);
 
   // 웹뷰 종료 요청
   if (webData.type === 'ASK_WEBVIEWCLOSE')

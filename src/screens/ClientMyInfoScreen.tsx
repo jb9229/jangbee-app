@@ -3,6 +3,7 @@ import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
 import Card from 'molecules/CardUI';
 import JBButton from 'molecules/JBButton';
 import JBTextItem from 'molecules/JBTextItem';
+import KatalkAskWebview from 'templates/KatalkAskWebview';
 import React from 'react';
 import Styled from 'styled-components/native';
 import firebase from 'firebase';
@@ -20,6 +21,8 @@ const TopMenu = Styled.View`
 const ClientMyInfoScreen = () =>
 {
   const { user } = useLoginContext();
+  const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState<boolean>(false);
+
   const confirmDeleteUser = () =>
   {
     Alert.alert(
@@ -130,12 +133,22 @@ const ClientMyInfoScreen = () =>
           row
         />
         <JBButton
-          title="장비콜 메일 문의하기"
-          onPress={() => Linking.openURL('mailto:support@jangbeecall.kr')}
+          title="카톡 상담"
+          onPress={() => setVisibleKatalkAskModal(true)}
           size="full"
           Secondary
         />
+        <JBButton
+          title="장비콜 메일 문의하기"
+          onPress={() => Linking.openURL('mailto:support@jangbeecall.kr')}
+          size="full"
+          Primary
+        />
       </Card>
+      <KatalkAskWebview
+        isVisibleModal={isVisibleKatalkAskModal}
+        closeModal={() => setVisibleKatalkAskModal(false)}
+      />
     </Container>
   );
 };

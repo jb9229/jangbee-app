@@ -52,6 +52,7 @@ const checkLogin = (props: Props): void =>
           if (!userInfo)
           {
             props.changeAuthPath(2, user);
+            return;
           }
 
           const { userType } = userInfo;

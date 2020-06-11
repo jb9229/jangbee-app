@@ -114,7 +114,7 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
         })
         .catch((err) =>
         {
-          noticeUserError('Ad Create Provider', err?.message, '정기결제 요청 실패');
+          noticeUserError('Ad Create Provider[정기결제 요청 실패]', err?.message, user);
         });
     },
     openAdPaymentModal: (price: number): void =>
@@ -134,7 +134,7 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
         })
         .catch((err) =>
         {
-          noticeUserError('Ad Create Provider', err?.message, '정기결제 요청 실패');
+          noticeUserError('Ad Create Provider[정기결제 요청 실패]', err?.message, user);
         });
     },
     openCouponModal: (applyWorkCallback?: (user: User, useCoupon: boolean) => void): void =>

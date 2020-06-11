@@ -26,7 +26,7 @@ export class Callbacker
     events[eventName] = handlers;
   }
 
-  static trigger (eventName: string): void
+  static trigger (eventName: string, addArg?: any): void
   {
     const handlers = events[eventName];
 
@@ -34,7 +34,10 @@ export class Callbacker
 
     handlers.forEach((callbackdata) =>
     {
-      callbackdata.callback(...callbackdata.callbackArgument);
+      const argList = callbackdata.callbackArgument;
+      const reSetArguments = new Array<any>();
+      if (addArg) { argList.forEach((arg) => arg === undefined ? reSetArguments.push(addArg) : reSetArguments.push(arg)) }
+      callbackdata.callback(...reSetArguments);
       console.log('before delete event:', events[eventName]);
       delete events[eventName];
       console.log('after delete event:', events[eventName]);

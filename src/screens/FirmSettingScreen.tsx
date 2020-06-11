@@ -71,12 +71,12 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
       }
       else
       {
-        noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', data?.updateFirm);
+        noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', data?.updateFirm, user);
       }
     },
     onError: (err) =>
     {
-      noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message);
+      noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message, user);
     }
   });
 

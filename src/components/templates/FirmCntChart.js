@@ -214,11 +214,11 @@ export default class FirmCntChart extends React.Component
             size={137}
           />
         </ChartTopWrap>
-        <ScrollView horizontal>
+        <ScrollView horizontal persistentScrollbar={true} >
           <ChartLegendListWrap>{chartFirmmodelList}</ChartLegendListWrap>
         </ScrollView>
         {firmCntChartData && (
-          <ScrollView horizontal>
+          <ScrollView horizontal persistentScrollbar={true}>
             <LineChart
               data={firmCntChartData}
               width={900}

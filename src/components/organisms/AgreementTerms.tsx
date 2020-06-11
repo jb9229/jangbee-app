@@ -51,7 +51,6 @@ const AgreementTerms: React.FC<Props> = (props) =>
 
   React.useMemo(() =>
   {
-    console.log(agreePhoneAuth, agreeUseTerm, agreePrivateTerm);
     if (agreePhoneAuth && agreeUseTerm && agreePrivateTerm) { setAgreeTerms(true) }
     if (!agreePhoneAuth || !agreeUseTerm || !agreePrivateTerm) { setAgreeTerms(false) }
   }, [agreePhoneAuth, agreeUseTerm, agreePrivateTerm]);

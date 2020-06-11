@@ -32,8 +32,8 @@ android {
     applicationId 'com.kan.jangbeecall'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 40
-    versionName '0.9.0_20200526'
+    versionCode 41
+    versionName '1.0.0_20200607'
 
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

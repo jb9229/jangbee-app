@@ -265,9 +265,9 @@ const confirmCreateWork = (isFirmRegister: boolean, guaranteeTime: number, onCli
   if (isFirmRegister)
   {
     Alert.alert(
-      '차주일감 주의사항',
-      `차주 일감등록은 선착순 자동매칭(매칭비 지불) 입니다, 설정하신 [${guaranteeTime}]분까지는 일감이 보장되어야 합니다` +
-      '(다른경로로 일감을 넘기시면 안됩니다)\n\n차주일감은 매칭비의 50%를 쿠폰으로 돌려받습니다, 일감지원시 사용가능 합니다.',
+      '주의사항',
+      `다른 차주가 매칭비를 지불하고 선착순으로 자동매칭됩니다, [${guaranteeTime}]분까지는 일감이 보장(다른경로로 일감을 넘기시면 안됩니다!!)` +
+      '\n\n차주일감은 매칭비의 50%를 돌려받습니다(캐쉬백/다른일감 지원시 사용가능)',
       [
         { text: '취소' },
         {

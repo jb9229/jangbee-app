@@ -65,7 +65,6 @@ const TouchableOpacity = styled.TouchableOpacity`
     `
     padding: 10px 10px;
     border-radius: 3;
-    elevation: 2;
   `};
   ${props =>
     props.underline &&
