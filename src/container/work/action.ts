@@ -1,4 +1,4 @@
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { WorkCreateDto, WorkCreateErrorData, WorkCreateValidScheme } from 'src/container/work/types';
 

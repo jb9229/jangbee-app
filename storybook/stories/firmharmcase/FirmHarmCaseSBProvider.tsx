@@ -1,12 +1,8 @@
 import * as React from 'react';
-import * as api from 'api/api';
 
 import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
 
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
-import { getClientEvaluCount } from 'src/container/firmHarmCase/action';
-import moment from 'moment';
-import { notifyError } from 'common/ErrorNotice';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface Props {

@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as React from 'react';
 
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ErrorText from 'src/components/molecules/Text/ErrorText';
@@ -98,7 +98,7 @@ const ImagePickInput: React.FC<Props> = (props) =>
 const pickImage = async (aspect: [number, number], setLocalImageUrl: (url: string) => void, setImageUrl: (url: string) => void) =>
 {
   const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
     allowsEditing: true,
     aspect: aspect || undefined
   });

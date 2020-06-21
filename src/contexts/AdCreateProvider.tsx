@@ -7,13 +7,13 @@ import { CreateAdDto, CreateAdDtoError } from '../types/ad';
 
 import { AdType } from 'src/container/ad/types';
 import { DefaultNavigationProps } from 'src/types';
-import { JBSERVER_ADBOOKED } from 'constants/Url';
 import { PHONENUMBER_REGULAR_EXPRESSION } from 'src/container/firm/types';
 import { User } from 'firebase';
 import createCtx from 'src/contexts/CreateCtx';
 import getString from 'src/STRING';
 import { noticeUserError } from 'src/container/request';
 import produce from 'immer';
+import url from 'src/constants/Url';
 import useAxios from 'axios-hooks';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
@@ -296,7 +296,7 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
   // }, [props.navigation.state]);
 
   // Server Data
-  const [bookedAdListResponse, refetch] = useAxios(JBSERVER_ADBOOKED);
+  const [bookedAdListResponse, refetch] = useAxios(url.JBSERVER_ADBOOKED);
 
   let bookedAdTypeList = new Array<number>();
   if (bookedAdListResponse.data) { bookedAdTypeList = bookedAdListResponse.data };
@@ -343,4 +343,3 @@ const AdCreateProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useAdCreateProvider, AdCreateProvider };
-

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
 import { useMutation, useQuery } from '@apollo/client';
@@ -15,7 +15,7 @@ import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
 export enum EvaluListType {
-  NONE, MINE, LATEST
+  NONE, MINE, LATEST, SEARCH // NONE: chatmode
 }
 interface Props {
   children?: React.ReactElement;
@@ -198,7 +198,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
 
   const searchFilterCliEvalu = (searchWord: string): void =>
   {
-    console.log('>>> searchFilterCliEvalu~~');
     if (!searchWord)
     {
       setSearchNotice('검색어를 기입해 주세요!');
@@ -212,9 +211,9 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       .searchClientEvaluList(paramStr)
       .then(resBody =>
       {
-        console.log('>>> searchFilterCliEvalu resBody: ', resBody);
         if (resBody)
         {
+          setEvaluListType(EvaluListType.SEARCH);
           let notice = '';
           if (resBody.length === 0)
           {
@@ -328,6 +327,8 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     onClickMyEvaluList: () =>
     {
       if (evaluListType === EvaluListType.MINE) { hideEvaluList(); return }
+
+      setSearchWord('');
       setPage(0);
       setNewestEvaluList(false);
       setCliEvaluList(null);
@@ -353,6 +354,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     {
       if (evaluListType === EvaluListType.LATEST) { hideEvaluList(); return }
 
+      setSearchWord('');
       setPage(0);
       setNewestEvaluList(true);
       setCliEvaluList(null);

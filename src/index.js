@@ -24,12 +24,16 @@ const styles = StyleSheet.create({
   }
 });
 
-Sentry.setRelease(Constants.manifest.revisionId);
-Sentry.init({
-  dsn: 'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
-  enableInExpoDevelopment: false,
-  debug: true
-});
+if (Platform.OS !== 'web')
+{
+  Sentry.setRelease(Constants.manifest.revisionId);
+
+  Sentry.init({
+    dsn: 'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
+    enableInExpoDevelopment: false,
+    debug: true
+  });
+}
 
 export default class App extends React.Component
 {

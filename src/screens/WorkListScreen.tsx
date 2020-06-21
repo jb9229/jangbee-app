@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { Alert, Dimensions, StyleSheet, View } from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';

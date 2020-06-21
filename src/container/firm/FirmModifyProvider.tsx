@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as url from 'constants/Url';
 
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
 import { getUpdateFirmDto, requestModifyFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
@@ -8,6 +7,7 @@ import { DefaultNavigationProps } from 'src/types';
 import { UPDATE_FIRM } from 'src/api/mutations';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
+import url from 'src/constants/Url';
 import useAxios from 'axios-hooks';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useMutation } from '@apollo/client';
@@ -79,8 +79,10 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
           if (result === true)
           {
             uploadImage(firmDto, popLoading)
-              .then((result) =>
+              .then((uploadResult) =>
               {
+                if (!uploadResult) { noticeUserError('Firm Modify Image Upload Error', `uploadResult is ${uploadResult}`); return }
+
                 modifyFirmRequest({ variables: { account_id: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
               })
               .catch((err) => { noticeUserError('FirmModifyProvider(uploadImage -> error)', err?.message, user) });
@@ -98,4 +100,3 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useFirmModifyProvider, FirmModifyProvider };
-

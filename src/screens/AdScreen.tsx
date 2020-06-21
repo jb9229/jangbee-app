@@ -1,4 +1,4 @@
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 

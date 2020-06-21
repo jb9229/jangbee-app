@@ -1,11 +1,10 @@
 import * as React from 'react';
 
-import { Picker, StyleSheet } from 'react-native';
-
 import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import { FirmHarmCaseCountData } from 'types';
 import JBButton from 'molecules/JBButton';
 import { SearchBar } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
@@ -25,17 +24,13 @@ const HeaderWrap = styled.View`
 `;
 const HeaderTopWrap = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 const PickerArrowWrap = styled.View`
   justify-content: center;
   position: absolute;
   top: 15;
   left: 117;
-`;
-const CommandWrap = styled.View`
-  flex-direction: row;
-  margin-right: 3;
 `;
 const SearchNoticeWrap = styled.View`
   padding-top: 5;
@@ -97,55 +92,42 @@ interface Props {
 export default function FirmHarmCaseHeader (props: Props): React.ReactElement
 {
   const [searchWord, setSearchWord] = React.useState(props.searchWord);
-  const [searchPlaceholder, setSearchPlaceholder] = React.useState('전화번호 입력(- 없이)');
 
+  React.useEffect(() =>
+  {
+    setSearchWord(props.searchWord);
+  }, [props.searchWord]);
   return (
     <HeaderWrap>
       <HeaderTopWrap>
-        <Picker
-          selectedValue={props.searchArea}
-          style={styles.searchPicker}
-          onValueChange={(val): void =>
-            onSearchAreaChange(val, props.setSearchArea, setSearchPlaceholder)}
-        >
-          <Picker.Item label="전화번호 검색" value="TEL" />
-          <Picker.Item label="사업자번호 검색" value="FIRM_NUMBER" />
-          <Picker.Item label="업체명 검색" value="FIRM_NAME" />
-          <Picker.Item label="고객명 검색" value="CLI_NAME" />
-        </Picker>
-        <PickerArrowWrap>
-          <PickerArrow>&#9660;</PickerArrow>
-        </PickerArrowWrap>
-        <CommandWrap>
-          <JBButton
-            title="내 사례"
-            onPress={props.onClickMyEvaluList}
-            size="small"
-            align="right"
-            bgColor={props.evaluListType === EvaluListType.MINE ? colors.pointDark : colors.batangDark}
-            color={props.evaluListType === EvaluListType.MINE ? colors.batangDark : colors.pointDark}
-          />
-          <JBButton
-            title="최근"
-            onPress={props.onClickNewestEvaluList}
-            size="small"
-            align="right"
-            bgColor={props.evaluListType === EvaluListType.LATEST ? colors.pointDark : colors.batangDark}
-            color={props.evaluListType === EvaluListType.LATEST ? colors.batangDark : colors.pointDark}
-          />
-          <JBButton
-            title="추가"
-            onPress={(): void => props.setVisibleCreateModal(true)}
-            size="small"
-            align="right"
-            bgColor={colors.batangDark}
-            color={colors.pointDark}
-          />
-        </CommandWrap>
+        <JBButton
+          title="내 사례"
+          onPress={props.onClickMyEvaluList}
+          size="small"
+          align="right"
+          bgColor={props.evaluListType === EvaluListType.MINE ? colors.pointDark : colors.batangDark}
+          color={props.evaluListType === EvaluListType.MINE ? colors.batangDark : colors.pointDark}
+        />
+        <JBButton
+          title="최근"
+          onPress={props.onClickNewestEvaluList}
+          size="small"
+          align="right"
+          bgColor={props.evaluListType === EvaluListType.LATEST ? colors.pointDark : colors.batangDark}
+          color={props.evaluListType === EvaluListType.LATEST ? colors.batangDark : colors.pointDark}
+        />
+        <JBButton
+          title="추가"
+          onPress={(): void => props.setVisibleCreateModal(true)}
+          size="small"
+          align="right"
+          bgColor={colors.batangDark}
+          color={colors.pointDark}
+        />
       </HeaderTopWrap>
       <SearchBar
         value={searchWord}
-        placeholder={searchPlaceholder}
+        placeholder="전화번호 | 업체(자)명 | 사업자번호"
         containerStyle={styles.containerSearchBar}
         inputStyle={styles.inputSearchBar}
         lightTheme

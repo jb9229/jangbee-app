@@ -1,5 +1,3 @@
-import * as url from 'constants/Url';
-
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 
@@ -8,6 +6,7 @@ import React from 'react';
 import { WebView } from 'react-native-webview';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import url from 'constants/Url';
 
 const styles = StyleSheet.create({
   Container: {

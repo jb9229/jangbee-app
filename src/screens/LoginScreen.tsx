@@ -5,6 +5,7 @@ import { FirebaseAuthApplicationVerifier, FirebaseRecaptchaVerifierModal } from 
 import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import AgreementTerms from 'src/components/organisms/AgreementTerms';
+import { Alert } from 'react-native';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'molecules/JBButton';
 import { StyleKeyboardAvoidingView } from 'src/CommonStyle';
@@ -126,7 +127,12 @@ const LoginScreen: React.FC<Props> = (props) =>
       verificationId,
       verificationCode
     );
-    const authResult = await firebase.auth().signInWithCredential(credential);
+    const authResult = await firebase.auth().signInWithCredential(credential)
+      .catch(() =>
+      {
+        Alert.alert('인증번호가 유효하지 않습니다!', `인증번호를 다시 확인해 주세요(${verificationCode})`);
+      });
+
     console.log('>>> authResult:');
     if (authResult?.user?.uid)
     {

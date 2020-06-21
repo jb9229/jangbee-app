@@ -1,4 +1,4 @@
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { User } from 'src/types';
 import { noticeUserError } from 'src/container/request';

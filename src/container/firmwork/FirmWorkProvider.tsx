@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as jangbeeConfig from '../../../jbcallconfig.json';
-import * as url from 'constants/Url';
 
 import { abandonWork, acceptWorkRequest, applyFirmWork, applyWork } from 'src/container/firmwork/actions';
 
@@ -8,6 +7,7 @@ import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
+import url from 'src/constants/Url';
 import useAxios from 'axios-hooks';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
@@ -255,4 +255,3 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useFirmWorkProvider, FirmWorkProvider };
-

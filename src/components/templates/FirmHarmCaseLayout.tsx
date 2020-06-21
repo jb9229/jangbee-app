@@ -90,29 +90,32 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
           setVisibleCreateModal={setVisibleCreateModal}
           searchFilterCliEvalu={searchFilterCliEvalu}/>
       )}
-      {!chatMode && evaluListType !== EvaluListType.NONE && (!cliEvaluList ? <ActivityIndicator /> : cliEvaluList.length === 0
-        ? (<NotExitButWrap>
-          {searchWord ? (
-            <JBButton
-              title={`'${searchWord}' 피해사례 없음 공유`}
-              onPress={(): void => shareNotExistCEvalu(searchArea, searchWord, searchTime)}
-              align="center"
-              Secondary
-            />
-          ) : (<NoticeEmptyList>{getString('firmHarmCase.NOTICE_EMPTY_LIST')}</NoticeEmptyList>)}
-        </NotExitButWrap>) : (
-          <Swiper showsPagination={false} showsButtons={true}
-            prevButton={<MaterialIcons name="navigate-before" size={30} color={props.theme.ColorBtnPrimary} />}
-            nextButton={<MaterialIcons name="navigate-next" size={30} color={props.theme.ColorBtnPrimary} />}
-          >
-            {cliEvaluList.map((item) => renderCliEvaluItem(item))}
-          </Swiper>
-        ))}
+      {!chatMode && evaluListType !== EvaluListType.NONE && (!cliEvaluList
+        ? <ActivityIndicator /> : cliEvaluList.length === 0
+          ? (
+            <NotExitButWrap>
+              {searchWord ? (
+                <JBButton
+                  title={`'${searchWord}' 피해사례 없음 공유`}
+                  onPress={(): void => shareNotExistCEvalu(searchArea, searchWord, searchTime)}
+                  align="center"
+                  Secondary
+                />
+              ) : (<NoticeEmptyList>{getString('firmHarmCase.NOTICE_EMPTY_LIST')}</NoticeEmptyList>)}
+            </NotExitButWrap>
+          ) : (
+            <Swiper showsPagination={true} showsButtons={true}
+              prevButton={<MaterialIcons name="navigate-before" size={30} color={props.theme.ColorBtnPrimary} />}
+              nextButton={<MaterialIcons name="navigate-next" size={30} color={props.theme.ColorBtnPrimary} />}
+            >
+              {cliEvaluList.map((item) => renderCliEvaluItem(item))}
+            </Swiper>
+          ))}
       {!!chatMessge && (
         <View style={{ flex: 1, height: 200 }}>
           <GiftedChat
             messages={chatMessge}
-            onSend={(messages) => { senChatMessage(messages) }}
+            onSend={(messages): void => { senChatMessage(messages) }}
             user={{
               _id: firm?.accountId
             }}

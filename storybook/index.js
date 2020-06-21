@@ -5,7 +5,6 @@ import * as Updates from 'expo-updates';
 /* global __DEV__ */
 import { configure, getStorybookUI } from '@storybook/react-native';
 
-import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
 import { loadAllAssests } from 'src';
 import { loadStories } from './storyLoader';

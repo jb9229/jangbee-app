@@ -103,11 +103,11 @@ const FirmRegisterLayout: React.FC = () =>
               errorText={errorData.addressDetail}
             />
             <SelectText
-              label="일감알람 받을지역"
+              label="일감알림 받을지역"
               subLabel="(필수)"
               text={firmDto.workAlarmSido || firmDto.workAlarmSigungu ? `${firmDto.workAlarmSido}${firmDto.workAlarmSigungu}` : ''}
               onPress={(): void => setVisibleLocalModal(true)}
-              placeholder="일감알람 받을 지역을 선택해 주세요."
+              placeholder="일감알림 받을 지역을 선택해 주세요."
               errorText={errorData.workAlarm}
             />
 
@@ -216,7 +216,7 @@ const FirmRegisterLayout: React.FC = () =>
         }}
         nextFocus={(): void => {}}
         multiSelect
-        actionName="일감알람 지역선택 완료"
+        actionName="일감알림 지역선택 완료"
         isCatSelectable
       />
     </Container>

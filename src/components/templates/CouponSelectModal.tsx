@@ -1,4 +1,4 @@
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { Modal, StyleSheet, View } from 'react-native';
 
@@ -10,7 +10,6 @@ import React from 'react';
 import { User } from 'firebase';
 import getString from 'src/STRING';
 import { notifyError } from 'common/ErrorNotice';
-import styled from 'styled-components/native';
 
 const styles = StyleSheet.create({
   bgWrap: {

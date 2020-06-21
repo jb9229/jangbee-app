@@ -79,7 +79,8 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
             uploadImage(firmDto, popLoading)
               .then((uploadResult) =>
               {
-                console.log('>>> uploadImage result: ', uploadResult);
+                if (!uploadResult) { noticeUserError('Firm Register Image Upload Error', `uploadResult is ${uploadResult}`); return }
+
                 const newFirmDto = convertFirmDto(user.uid, firmDto);
                 createFirmRequest({ variables: { newFirm: newFirmDto } });
               })
@@ -98,4 +99,3 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
 };
 
 export { useCtx as useFirmRegisterProvider, FirmRegisterProvider };
-

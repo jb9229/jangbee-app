@@ -1,5 +1,3 @@
-import * as url from 'constants/Url';
-
 import JBButton from 'molecules/JBButton';
 import React from 'react';
 import colors from 'constants/Colors';
@@ -8,6 +6,7 @@ import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
 import { shareJBCall } from 'common/JBCallShare';
 import styled from 'styled-components/native';
+import url from 'constants/Url';
 
 const Container = styled.View`
   padding: 8px;

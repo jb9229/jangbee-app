@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import * as kakaoconfig from '../../kakao-config';
 import * as obconfig from '../../openbank-config';
-import * as url from 'constants/Url';
 
 import {
   handleJBServerJsonResponse,
@@ -9,8 +7,9 @@ import {
   handleTextResponse
 } from 'utils/Fetch-utils';
 
-import { Alert } from 'react-native';
 import moment from 'moment';
+/* eslint-disable @typescript-eslint/camelcase */
+import url from 'src/constants/Url';
 
 /** ******************** Jangbee Sever Account  Api List ************************** */
 export function deleteFirmAccount (accountId)

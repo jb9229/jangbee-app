@@ -7,9 +7,10 @@
     "scheme": "expo.examples.with-webbrowser-redirect",
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "web"
     ],
-    "version": "1.0.0_200610_4",
+    "version": "1.0.0_200621_3",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
@@ -49,6 +50,7 @@
     },
     "android": {
       "package": "com.kan.jangbeecall",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "READ_PHONE_STATE"

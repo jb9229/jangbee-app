@@ -1,12 +1,12 @@
 // const SERVER_URL = 'http://10.1.0.121/api/v1/';
-const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
+// const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:8080/api/v1/';
-// const SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
+const SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 export const NODE_SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
 export const NODE_SERVER_WEBSOCKET_URL = 'ws://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
 
-module.exports = {
+const url = {
   IMAGE_STORAGE: `${SERVER_URL}common/image`,
   JBSERVER_ACCOUNT: `${SERVER_URL}account`,
   JBSERVER_EQUILIST: `${SERVER_URL}equipment/list`,
@@ -56,6 +56,8 @@ module.exports = {
   TERM_SECURITY: 'https://jangbee-inpe21.firebaseapp.com/privacy.html',
   TERM_USEINFO: 'https://jangbee-inpe21.firebaseapp.com/UseInfomation.html'
 };
+
+export default url;
 
 // 수신이 원활하지 않습니다.
 // 장비 광고 먼저 등록하는 업체가 선점(서두르세요, 나중에 등록하고 싶어도 못함, 자리 한정)

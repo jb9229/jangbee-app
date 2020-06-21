@@ -1,6 +1,6 @@
 import * as React from 'react';
 /* eslint-disable @typescript-eslint/camelcase */
-import * as api from 'api/api';
+import * as api from 'src/api/api';
 
 import { Alert, Linking, Platform } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
