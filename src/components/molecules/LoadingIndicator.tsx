@@ -34,7 +34,29 @@ interface Props {
 }
 const LoadingIndicator: React.FC<Props> = (props) =>
 {
-  if (props.loading)
+  const [showLoading, setShowLoading] = React.useState(props.loading);
+  const [forceCloseTimeout, setForceCloseTimeout] = React.useState();
+
+  React.useEffect(() =>
+  {
+    if (props.loading)
+    {
+      setShowLoading(true);
+      const timer = setTimeout(() =>
+      {
+        alert('실패!');
+        setShowLoading(false);
+      }, 10000);
+
+      setForceCloseTimeout(timer);
+    }
+    else
+    {
+      setShowLoading(false);
+      if (forceCloseTimeout) { clearTimeout(forceCloseTimeout) }
+    }
+  }, [props.loading]);
+  if (showLoading)
   {
     return (
       <Container>

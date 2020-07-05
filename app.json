@@ -1,8 +1,8 @@
 {
-  "mode": "Prod",
+  "mode": "Beta",
   "expo": {
     "name": "장비 콜",
-    "slug": "jangbeecall",
+    "slug": "jangbeecall_beta",
     "privacy": "public",
     "scheme": "expo.examples.with-webbrowser-redirect",
     "platforms": [
@@ -10,7 +10,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.0_200623",
+    "version": "1.0.0_200706",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
