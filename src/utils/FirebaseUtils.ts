@@ -1,4 +1,6 @@
+import { UserAssets } from 'src/types';
 import firebase from 'firebase';
+import { noticeUserError } from 'src/container/request';
 
 export function getUserInfo (uid): Promise<firebase.database.DataSnapshot>
 {
@@ -7,6 +9,22 @@ export function getUserInfo (uid): Promise<firebase.database.DataSnapshot>
     .ref(`users/${uid}`)
     .once('value', data => { return data });
 }
+
+export const updateUserAssets = (uid: string, assetData: UserAssets): Promise<void> =>
+{
+  return firebase
+    .database()
+    .ref(`users/${uid}/assets`)
+    .update(assetData,
+      error =>
+      {
+        if (error)
+        {
+          noticeUserError('사용자타입 FB DB에 저장에 문제가 있습니다, 다시 시도해 주세요.', `Error: ${error}`);
+        }
+      }
+    );
+};
 
 export function updateReAuthInfo (uid, accessToken, refreshToken, accTokenExpDate,
   accTokenDiscDate, userSeqNo, errorCallbackFunc): Promise<void>

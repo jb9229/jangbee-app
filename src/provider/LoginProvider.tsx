@@ -2,7 +2,8 @@ import * as React from 'react';
 import * as api from 'src/api/api';
 
 import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
-import { User, UserProfile } from 'src/types';
+import { User, UserAssets, UserProfile } from 'src/types';
+import { getUserInfo, updatePaymentSubscription, updateUserAssets } from 'src/utils/FirebaseUtils';
 
 import { ApplyWorkCallback } from 'src/components/action';
 import { Callbacker } from 'src/utils/Callbacker';
@@ -15,7 +16,6 @@ import WebView from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
 import { updateFirmInfo } from 'src/container/login/action';
-import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
 
 const CALLBACKER_AD_PAYMENT = 'CALLBACKER_AD_PAYMENT';
 const CALLBACKER_WORK_PAYMENT = 'CALLBACKER_WORK_PAYMENT';
@@ -95,9 +95,9 @@ const LoginProvider = (props: Props): React.ReactElement =>
     setFirm,
     setUserProfile,
     setWebViewModal,
-    saveUserProfile: (): void =>
+    saveUserProfileAssets: (assetData: UserAssets): Promise<void> =>
     {
-
+      return updateUserAssets(user.uid, assetData);
     },
     openWorkPaymentModal: (price: number, callbackFn, callbackArgs: Array<any>): void =>
     {
@@ -157,7 +157,18 @@ const LoginProvider = (props: Props): React.ReactElement =>
     {
       setLoadingModalData(new LoadingModalData(loading, msg));
     },
-    refetchFirm: (): Promise<Firm | null> => updateFirmInfo(user, userProfile, setFirm)
+    refetchFirm: (): Promise<Firm | null> => updateFirmInfo(user, userProfile, setFirm),
+    refetchUserProfile: (): Promise<UserProfile> =>
+    {
+      return getUserInfo(user.uid).then((data) =>
+      {
+        const userInfo = data.val();
+
+        if (userInfo) { setUserProfile(userInfo) }
+
+        return userInfo;
+      });
+    }
   };
 
   return (

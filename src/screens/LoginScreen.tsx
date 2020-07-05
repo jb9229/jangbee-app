@@ -11,7 +11,7 @@ import JBButton from 'molecules/JBButton';
 import { StyleKeyboardAvoidingView } from 'src/CommonStyle';
 import getString from 'src/STRING';
 import { getUserInfo } from 'utils/FirebaseUtils';
-import { notifyError } from 'common/ErrorNotice';
+import { noticeUserError } from 'src/container/request';
 import registerForPushNotificationsAsync from 'common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 
@@ -74,7 +74,7 @@ const LoginScreen: React.FC<Props> = (props) =>
         }
       })
       .catch(error =>
-        notifyError(
+        noticeUserError(
           'FB 사용자 정보 요청 실패',
           `사용자 정보 요청에 문제가 있습니다, 다시 시도해 주세요(${
             error.message

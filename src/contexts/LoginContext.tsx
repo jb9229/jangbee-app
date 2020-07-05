@@ -1,4 +1,4 @@
-import { DefaultNavigationProps, User, UserProfile } from 'src/types';
+import { DefaultNavigationProps, User, UserAssets, UserProfile } from 'src/types';
 import { Firm, KakaoPaymentInfo } from 'src/provider/LoginProvider';
 
 import createCtx from 'src/contexts/CreateCtx';
@@ -13,14 +13,14 @@ interface Context {
   paymentInfo: KakaoPaymentInfo;
   setUser: (user: User) => void;
   setFirm: (firm: Firm) => void;
-  setUserProfile: (p: UserProfile) => void;
+  saveUserProfileAssets: (assetData: UserAssets) => Promise<void>;
   setWebViewModal: (url: string) => void;
   openWorkPaymentModal: (price: number, callbackFn?: any, callbackArg?: Array<any>) => void;
   openAdPaymentModal: (price: number, callbackFn?: any, callbackArg?: Array<any>) => void;
   openCouponModal: () => void;
   popLoading: (loadingFlag: boolean, msg?: string) => void;
   refetchFirm: () => Promise<Firm | null>;
+  refetchUserProfile: () => Promise<UserProfile>;
 }
 
 export { useCtx as useLoginContext, Provider };
-

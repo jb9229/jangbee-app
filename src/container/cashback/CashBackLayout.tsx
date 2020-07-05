@@ -1,17 +1,17 @@
-import * as React from 'react';
-
 import { CashBack, CashBackCrtDto, CashBackCrtError, ScreenMode } from 'container/cashback/type';
+import * as React from 'react';
 import { FlatList, KeyboardAvoidingView, ScrollView, StyleProp, ViewStyle } from 'react-native';
-
 import CardUI from 'src/components/molecules/CardUI';
-import CashBackListItem from 'src/container/cashback/CashBackListItem';
-import { DefaultStyledProps } from 'src/theme';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'src/components/molecules/JBButton';
 import JBPicker from 'src/components/molecules/JBPicker';
+import CashBackListItem from 'src/container/cashback/CashBackListItem';
+import { DefaultStyledProps } from 'src/theme';
 import { PickerItem } from 'src/types';
 import { numberWithCommas } from 'src/utils/NumberUtils';
 import styled from 'styled-components/native';
+
+
 
 const Container = styled.View`
   flex: 1;
@@ -105,7 +105,8 @@ const CashBackLayout: React.FC<Props> = (props) =>
                     props.crtDto.amountStr = text;
                   }}
                 />
-                <EditText label="계좌번호" keyboardType="decimal-pad"
+                <EditText label="계좌번호" subLabel="(숫자만)"
+                  keyboardType="decimal-pad"
                   errorText={props.crtError.accountNumber}
                   onChangeText={(text): void =>
                   {

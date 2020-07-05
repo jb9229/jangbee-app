@@ -17,7 +17,7 @@ interface Props {
 const CashBackContainer: React.FC<Props> = () =>
 {
   // stats
-  const { user, userProfile, popLoading } = useLoginContext();
+  const { user, userProfile, popLoading, saveUserProfileAssets, refetchUserProfile } = useLoginContext();
   const [crtDto, setCrtDto] = React.useState(new CashBackCrtDto(user.uid));
   const [crtError, setCrtError] = React.useState(new CashBackCrtError());
   const [screenMode, setScreenMode] = React.useState(ScreenMode.LIST);
@@ -27,11 +27,27 @@ const CashBackContainer: React.FC<Props> = () =>
   const [registerReq, registerRes] = useMutation(CASHBACK_CREATE, {
     onCompleted: (data) =>
     {
+      refetchUserProfile();
+      setCrtDto(new CashBackCrtDto(user.uid));
       setScreenMode(ScreenMode.LIST);
-      cashbacksRes.refetch();
+      if (cashbacksRes.called)
+      {
+        cashbacksRes.refetch();
+      }
+      popLoading(false);
     },
     onError: (error) =>
     {
+      const updateAssets = {
+        ...userProfile.assets,
+        balance: userProfile.assets.balance + crtDto.amount
+      };
+      saveUserProfileAssets(updateAssets)
+        .then((res) =>
+        {
+          refetchUserProfile();
+        });
+      popLoading(false);
       noticeUserError('CashBackContainer -> registerReq -> error', error);
     }
   });
@@ -45,14 +61,23 @@ const CashBackContainer: React.FC<Props> = () =>
       cashbacks={cashbacksRes?.data?.cashbacks || []}
       onSubmitRegister={(): void =>
       {
-        popLoading(true, '캐쉬백 신청중...');
-
         const validResult = validateCrtDto(crtDto, userProfile?.assets?.balance || 0);
         if (validResult.result)
         {
+          popLoading(true, '캐쉬백 신청중...');
           console.log('>>> registerReq~~');
-          console.log('>>> crtDto: ', { ...crtDto, accountNumber: `${crtDto.accountNumber}` });
-          registerReq({ variables: { crtDto: { ...crtDto, accountNumber: `${crtDto.accountNumber}` } } });
+          const updateAssets = {
+            ...userProfile.assets,
+            balance: userProfile.assets.balance - crtDto.amount
+          };
+          saveUserProfileAssets(updateAssets)
+            .then((res) =>
+            {
+              console.log('>>> save user profile res: ', res);
+              delete crtDto.amountStr;
+              console.log('>>> crtDto: ', { ...crtDto, accountNumber: `${crtDto.accountNumber}` });
+              registerReq({ variables: { crtDto: { ...crtDto, accountNumber: `${crtDto.accountNumber}` } } });
+            });
         }
 
         setCrtError(validResult.error);
