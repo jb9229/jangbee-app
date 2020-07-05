@@ -74,3 +74,4 @@ google-services.json
 android/app/google-services.json
 android/app/src/dev/google-services.json
 *.keystore
+android/app/src/beta/google-services_pre.json

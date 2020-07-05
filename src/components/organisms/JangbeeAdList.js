@@ -165,7 +165,7 @@ export default class JangbeeAdList extends React.Component
     {
       return <BugReport title="광고 요청에 실패 했습니다" />;
     }
-    console.log('>>> adList: ', adList);
+
     const adViewList = adList.map((ad, index) => (
       <View style={styles.slide} key={index}>
         <JangbeeAd

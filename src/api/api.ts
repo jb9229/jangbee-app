@@ -8,6 +8,7 @@ import {
 } from 'utils/Fetch-utils';
 
 import moment from 'moment';
+import { noticeUserError } from 'src/container/request';
 /* eslint-disable @typescript-eslint/camelcase */
 import url from 'src/constants/Url';
 
@@ -151,7 +152,9 @@ export function uploadImage (uri)
     }
   };
 
-  return fetch(url.IMAGE_STORAGE, options).then(handleTextResponse);
+  return fetch(url.IMAGE_STORAGE, options)
+    .then(handleTextResponse)
+    .catch((error) => noticeUserError('api -> uploadImage -> error: ', `error: ${error}`));
 }
 
 export function removeImage (imgUrl)

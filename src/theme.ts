@@ -1,4 +1,8 @@
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from 'styled-components/native';
+
+export interface DefaultStyledProps {
+  theme: DefaultTheme;
+}
 
 export enum ThemeType {
   LIGHT = 'LIGHT',

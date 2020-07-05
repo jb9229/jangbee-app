@@ -1,9 +1,10 @@
+import { StyleProp, ViewStyle } from 'react-native';
+
 import React from 'react';
 import Styled from 'styled-components/native';
 import colors from 'constants/Colors';
 
 const Container = Styled.View`
-  flex: 1;
   background-color: ${colors.cardBatang};
 `;
 
@@ -26,18 +27,21 @@ const Card = Styled.View`
   `}
 `;
 
-export default class CardUI extends React.PureComponent
-{
-  render ()
-  {
-    const { Finished, Primary, bgColor } = this.props;
-
-    return (
-      <Container ref={c => (this._root = c)} {...this.props}>
-        <Card Finished={Finished} Primary={Primary} bgColor={bgColor}>
-          {this.props.children}
-        </Card>
-      </Container>
-    );
-  }
+interface Props {
+  Finished?: boolean;
+  Primary?: boolean;
+  bgColor?: string;
+  wrapperStyle?: StyleProp<ViewStyle>;
 }
+const CardUI: React.FC<Props> = (props) =>
+{
+  return (
+    <Container {...props} style={props.wrapperStyle}>
+      <Card Finished={props.Finished} Primary={props.Primary} bgColor={props.bgColor}>
+        {props.children}
+      </Card>
+    </Container>
+  );
+};
+
+export default CardUI;

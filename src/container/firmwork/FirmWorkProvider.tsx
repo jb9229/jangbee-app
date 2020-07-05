@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as jangbeeConfig from '../../../jbcallconfig.json';
 
+import { DefaultNavigationProps, Work } from 'src/types';
 import { abandonWork, acceptWorkRequest, applyFirmWork, applyWork } from 'src/container/firmwork/actions';
 
 import { Alert } from 'react-native';
-import { DefaultNavigationProps } from 'src/types';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import url from 'src/constants/Url';
@@ -20,7 +20,7 @@ interface Context {
   tabIndex: number;
   applyWork: (workId: string) => void;
   applyFirmWork: (workId: string) => void;
-  acceptWork: (workId: string) => void;
+  acceptWork: (work: object) => void;
   abandonWork: (workId: string) => void;
   refetchOpenWorkList: () => void;
   refetchMatchedWorkList: () => void;
@@ -81,9 +81,11 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
   }
 
   // State Action
-  const successApply = (): void =>
+  const successApply = (work: Work): void =>
   {
-    // TODO 차주일감 성공하면, 매칭된 일감으로 탭 변경
+    // 매칭비 고객에게 입금
+    const clientAccountId = work.accountId;
+
     openWorkListRequest();
     matchedWorkListRequest();
     setTabIndex(1);
@@ -96,6 +98,8 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
 
   const successAcceptWork = (): void =>
   {
+    // @TODO 자산 올려주기
+
     openWorkListRequest();
     matchedWorkListRequest();
     setTabIndex(1);
@@ -150,10 +154,11 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         );
       }
     },
-    applyFirmWork: (work: any): void =>
+    applyFirmWork: (work: Work): void =>
     {
+      console.log('>>> applyfirmwork: ', work);
       // '다른 차주가 올린 일감은, 선착순으로 한 업체만 매칭비 결재와 동시에 바로 매칭됩니다.',
-      if (firm && work.modelYear && work.modelYearLimit < firm.modelYear)
+      if (firm && work.modelYearLimit && firm.modelYear && work.modelYearLimit <= firm.modelYear)
       {
         Alert.alert('죄송합니다, 지원할 수 없는 일감입니다', `${work.modelYearLimit}년식이상을 요청한 일감으로 지원할 수 없습니다(보유장비: ${firm.modelYear}년식)`);
 
@@ -165,7 +170,7 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
       {
         Alert.alert(
           '확인창',
-          '정말로 해당 날짜와 장소에 배차 가능하십니까?',
+          `해당 날짜와 장소에 배차 가능하십니까?\n\n매칭비 ${jangbeeConfig.workMatchingFee}원이 결재됩니다.`,
           [
             { text: '취소' },
             {
@@ -192,15 +197,16 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         );
       }
     },
-    acceptWork: (workId: string): void =>
+    acceptWork: (work: object): void =>
     {
+      console.log('>>> work:', work);
       if (!userProfile || !userProfile.sid)
       {
         Alert.alert(
           '자동결제정보 없음 (일감비 2만원)',
           '\n자동결제등록을 추천합니다 (특히, 선착순 매칭시)',
           [
-            { text: '포기하기', onPress: (): void => this.abandonWork(workId) },
+            { text: '포기하기', onPress: (): void => this.abandonWork(work.id) },
             {
               text: '자동이체 등록해놓기',
               onPress: (): void => { openWorkPaymentModal(jangbeeConfig.workMatchingFee) }
@@ -214,7 +220,7 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
         '매칭비 자동이체 후, 매칭이 완료 됩니다.',
         '매칭 후, 매칭된 일감(오른쪽 상단 메뉴)화면에서 꼭! [전화걸기]통해 고객과 최종 협의하세요.',
         [
-          { text: '포기하기', onPress: (): void => abandonWork(user, workId, openWorkListRequest) },
+          { text: '포기하기', onPress: (): void => abandonWork(user, work.id, openWorkListRequest) },
           // {
           //   text: '쿠폰사용하기',
           //   onPress: (): void => { openCouponModal() }
@@ -223,7 +229,7 @@ const FirmWorkProvider = (props: Props): React.ReactElement =>
             text: '결제하기',
             onPress: (): void =>
             {
-              acceptWorkRequest(workId, user, false, userProfile.sid)
+              acceptWorkRequest(work.id, user, false, userProfile.sid)
                 .then((res) => res ? successAcceptWork() : failAcceptWork())
                 .catch((error) => noticeUserError('FimWorkAction(acceptWork api call error)', error.message, user));
             }

@@ -18,6 +18,11 @@ export interface User {
 export interface UserProfile {
   userType: UserType;
   sid?: string;
+  assets?: UserAssets;
+}
+
+export interface UserAssets {
+  balance?: number;
 }
 
 interface IconProps {
@@ -55,6 +60,38 @@ export type IconType = SFC<IconProps>;
 export interface FirmHarmCaseCountData {
   totalCnt: number;
   myCnt: number;
+}
+
+/// /////////////////////////////////////////
+/// ////// Work Type //////
+/// /////////////////////////////////////////
+export interface Work {
+  accountId: string;
+  addrLatitude: number;
+  addrLongitude: number;
+  address: string;
+  addressDetail: string;
+  applicantCount: number;
+  applied: boolean;
+  careerLimit: number;
+  detailRequest: string;
+  endDate: string;
+  equipment: string;
+  firmEstimated: string;
+  firmRegister: boolean;
+  guarTimeExpire: boolean;
+  id: number;
+  licenseLimit: string | null;
+  matchedAccId: string | null;
+  modelYearLimit: number;
+  nondestLimit: string | null;
+  overAcceptTime: boolean;
+  period: number;
+  selectNoticeTime: string | null;
+  sidoAddr: string;
+  sigunguAddr: string;
+  startDate: string;
+  workState: string;
 }
 
 /**

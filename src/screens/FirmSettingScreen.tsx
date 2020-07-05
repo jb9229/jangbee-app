@@ -308,7 +308,7 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
           <JBIconButton
             title="캐쉬백"
             img={require('../../assets/images/icon/cashback_icon.png')}
-            onPress={(): void => { Alert.alert('알림', '매월 정산(계좌이체) 기능을 추가하겠습니다!'); return; setOBSelVisibleModal(true) }}
+            onPress={(): void => { props.navigation.navigate('Cashback') }}
           />
           <JBIconButton
             title="로그아웃"

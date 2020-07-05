@@ -98,7 +98,7 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement
     setSearchWord(props.searchWord);
   }, [props.searchWord]);
   return (
-    <HeaderWrap>
+    <HeaderWrap removeClippedSubviews={false}>
       <HeaderTopWrap>
         <JBButton
           title="내 사례"

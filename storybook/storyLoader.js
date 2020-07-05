@@ -6,6 +6,7 @@
 function loadStories() {
 	require('./stories/Welcom.story');
 	require('./stories/ad/Ad.story');
+	require('./stories/cashback/CashBack.story');
 	require('./stories/firm/Firm.story');
 	require('./stories/firmharmcase/FirmHarmCase.story');
 	require('./stories/molecules/Molecules.story');
@@ -17,6 +18,7 @@ function loadStories() {
 const stories = [
 	'./stories/Welcom.story',
 	'./stories/ad/Ad.story',
+	'./stories/cashback/CashBack.story',
 	'./stories/firm/Firm.story',
 	'./stories/firmharmcase/FirmHarmCase.story',
 	'./stories/molecules/Molecules.story',

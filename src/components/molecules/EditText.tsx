@@ -1,8 +1,10 @@
 import * as React from 'react';
 
 import {
+  KeyboardTypeOptions,
   NativeSyntheticEvent,
   StyleProp,
+  TextInputProps,
   TextStyle,
   ViewStyle
 } from 'react-native';
@@ -53,8 +55,8 @@ interface Props {
   label?: string;
   subLabel?: string;
   errorText?: string;
-  text?: string;
-  keyboardType?: string;
+  text?: TextInputProps['value'];
+  keyboardType?: KeyboardTypeOptions;
   placeholder?: string;
   secureTextEntry?: boolean;
   unchangeable?: boolean;

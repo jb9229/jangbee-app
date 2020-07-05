@@ -38,6 +38,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     {
       getClientEvaluCount(user?.uid, setCountData);
       setClinetEvaluList();
+      setSearchWord('');
     }
 
     // subscription
@@ -65,7 +66,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const [lastList, setLastList] = React.useState(false);
   const [newestEvaluList, setNewestEvaluList] = React.useState(false);
   const [evaluLikeList, setEvaluLikeList] = React.useState([]);
-  const [searchWord, setSearchWord] = React.useState('');
+  const [searchWord, setSearchWord] = React.useState('temp');
   const [searchArea, setSearchArea] = React.useState('TEL');
   const [searchTime, setSearchTime] = React.useState('');
   const [searchNotice, setSearchNotice] = React.useState('');

@@ -1,14 +1,12 @@
 import * as React from 'react';
 
-import { boolean, text } from '@storybook/addon-knobs';
-
 import CreateAd from 'container/ad/create';
 import { SafeAreaView } from 'react-native';
 import { User } from 'firebase';
 import { storiesOf } from '@storybook/react-native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
-const SafeZonDecorator = (storyFn): React.ReactElement => (
+export const SafeZonDecorator = (storyFn): React.ReactElement => (
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
     {storyFn()}
   </SafeAreaView>

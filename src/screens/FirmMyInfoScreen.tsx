@@ -12,6 +12,7 @@ import React from 'react';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import fonts from 'constants/Fonts';
+import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -191,8 +192,7 @@ const FirmMyInfoScreen: React.FC<Props> = (props) =>
       })
       .catch(error =>
       {
-        notifyError(
-          '업체후기 요청 문제발생',
+        noticeUserError('업체후기 요청 문제발생',
           `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
             error.name
           }] ${error.message}`

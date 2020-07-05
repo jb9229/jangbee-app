@@ -1,13 +1,15 @@
-import React from 'react';
+import * as api from 'api/api';
+
 import { Alert, Modal } from 'react-native';
-import styled from 'styled-components/native';
-import CloseButton from 'molecules/CloseButton';
+
 import Card from 'molecules/CardUI';
+import CloseButton from 'molecules/CloseButton';
 import FirmSearList from 'organisms/FirmSearList';
 import JangbeeAdList from 'organisms/JangbeeAdList';
+import React from 'react';
 import adLocation from 'constants/AdLocation';
-import * as api from 'api/api';
 import colors from 'constants/Colors';
+import styled from 'styled-components/native';
 
 const Container = styled.View`
   flex: 1;
@@ -29,11 +31,18 @@ const CloseView = styled.View`
   top: 0;
   left: 0;
 `;
+const ItemWrapper = styled(Card).attrs(() => ({
+  wrapperStyle: {
+    flex: 1
+  }
+}))``;
 
-export default class FirmSearListModal extends React.Component {
+export default class FirmSearListModal extends React.Component
+{
   _isMounted = false;
 
-  constructor(props) {
+  constructor (props)
+  {
     super(props);
     this.state = {
       searchedFirmList: null,
@@ -44,24 +53,32 @@ export default class FirmSearListModal extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     this._isMounted = true;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.isVisibleModal) {
+  componentWillReceiveProps (nextProps)
+  {
+    if (nextProps && nextProps.isVisibleModal)
+    {
       this.setState({ page: 0 }, () => this.search(nextProps.isLocalSearch));
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount ()
+  {
     this._isMounted = false;
   }
 
-  search = isLocalSearch => {
-    if (isLocalSearch) {
+  search = isLocalSearch =>
+  {
+    if (isLocalSearch)
+    {
       this.searchLocJangbee();
-    } else {
+    }
+    else
+    {
       this.searchNearJangbee();
     }
   };
@@ -69,7 +86,8 @@ export default class FirmSearListModal extends React.Component {
   /**
    * 주변 장비업체 검색 요청함수
    */
-  searchNearJangbee = () => {
+  searchNearJangbee = () =>
+  {
     const {
       searEquipment,
       searEquiModel,
@@ -82,8 +100,10 @@ export default class FirmSearListModal extends React.Component {
 
     api
       .getNearFirmList(page, searchStr, searLongitude, searLatitude)
-      .then(res => {
-        if (!this._isMounted) {
+      .then(res =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -95,8 +115,10 @@ export default class FirmSearListModal extends React.Component {
           refreshing: false
         });
       })
-      .catch(error => {
-        if (!this._isMounted) {
+      .catch(error =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -113,7 +135,8 @@ export default class FirmSearListModal extends React.Component {
   /**
    * 지역 장비업체 검색 함수
    */
-  searchLocJangbee = () => {
+  searchLocJangbee = () =>
+  {
     const { searEquipment, searEquiModel, searSido, searGungu } = this.props;
     const { page, searchedFirmList } = this.state;
 
@@ -121,14 +144,17 @@ export default class FirmSearListModal extends React.Component {
 
     let searGunguStr = searGungu;
 
-    if (searGungu === '전체') {
+    if (searGungu === '전체')
+    {
       searGunguStr = '';
     }
 
     api
       .getLocalFirmList(page, searchStr, searSido, searGunguStr)
-      .then(res => {
-        if (!this._isMounted) {
+      .then(res =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -140,8 +166,10 @@ export default class FirmSearListModal extends React.Component {
           refreshing: false
         });
       })
-      .catch(error => {
-        if (!this._isMounted) {
+      .catch(error =>
+      {
+        if (!this._isMounted)
+        {
           return;
         }
 
@@ -156,7 +184,8 @@ export default class FirmSearListModal extends React.Component {
   /**
    * 모달 액션 완료 함수
    */
-  completeAction = () => {
+  completeAction = () =>
+  {
     const { closeModal } = this.props;
 
     closeModal();
@@ -165,11 +194,13 @@ export default class FirmSearListModal extends React.Component {
   /**
    * 장비업체리스트 페이징 추가 함수
    */
-  handleLoadMore = () => {
+  handleLoadMore = () =>
+  {
     const { page, isLastList } = this.state;
     const { isLocalSearch } = this.props;
 
-    if (isLastList) {
+    if (isLastList)
+    {
       return;
     }
 
@@ -177,7 +208,8 @@ export default class FirmSearListModal extends React.Component {
       {
         page: page + 1
       },
-      () => {
+      () =>
+      {
         this.search(isLocalSearch);
       }
     );
@@ -186,7 +218,8 @@ export default class FirmSearListModal extends React.Component {
   /**
    * 장비업체리스트 새로고침 함수
    */
-  handleRefresh = () => {
+  handleRefresh = () =>
+  {
     const { isLocalSearch } = this.props;
 
     this.setState(
@@ -194,13 +227,15 @@ export default class FirmSearListModal extends React.Component {
         page: 0,
         refreshing: true
       },
-      () => {
+      () =>
+      {
         this.search(isLocalSearch);
       }
     );
   };
 
-  render() {
+  render ()
+  {
     const {
       isVisibleModal,
       closeModal,
@@ -239,7 +274,7 @@ export default class FirmSearListModal extends React.Component {
               navigation={navigation}
             />
           </TopWrap>
-          <Card>
+          <ItemWrapper>
             <SearchResultWrap>
               <FirmSearList
                 data={searchedFirmList}
@@ -255,7 +290,7 @@ export default class FirmSearListModal extends React.Component {
                 {...this.props}
               />
             </SearchResultWrap>
-          </Card>
+          </ItemWrapper>
         </Container>
       </Modal>
     );

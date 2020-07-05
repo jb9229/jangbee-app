@@ -5,6 +5,7 @@ import {
 
 import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
+import CashBackContainer from 'src/container/cashback';
 import FirmHarmCaseContainer from 'container/firmHarmCase/list';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
 import FirmRegisterScreen from 'container/firm/create';
@@ -69,6 +70,15 @@ const FirmSettingStack = createStackNavigator({
       title: '약관 및 회사정보',
       headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
+    }
+  },
+  Cashback: {
+    screen: CashBackContainer,
+    navigationOptions:
+    {
+      mode: 'modal',
+      headerStyle: { marginTop: -28 },
+      title: '보유 자산'
     }
   }
 });
@@ -154,17 +164,6 @@ ClientEvaluStack.navigationOptions = {
     />
   )
 };
-
-// const ModalStack = createStackNavigator({
-//   CouponSelectModal: {
-//     screen: CouponSelectModalScreen,
-//     navigationOptions:
-//     {
-//       mode: 'modal',
-//       header: null
-//     }
-//   }
-// });
 
 export default createBottomTabNavigator(
   {

@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@apollo/client@^3.0.0-beta.23", "@apollo/client@^3.0.0-beta.44":
+"@apollo/client@^3.0.0-beta.23":
   version "3.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.0.0-beta.44.tgz#79c6083dc2fe81725ad64398bc78e641ed1c1d84"
   integrity sha512-udNiabIYs9WLHWvj2j6tlsaWPNhgMZsHrZyBTKOh+69fLpmZZ4Vv4mepWq/3WCzyHoWa3n3FPi/ajNljkO/Olg==
@@ -12,6 +12,21 @@
     fast-json-stable-stringify "^2.0.0"
     graphql-tag "^2.10.2"
     optimism "^0.11.5"
+    symbol-observable "^1.2.0"
+    ts-invariant "^0.4.4"
+    tslib "^1.10.0"
+    zen-observable "^0.8.14"
+
+"@apollo/client@^3.0.0-rc.10":
+  version "3.0.0-rc.10"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.0.0-rc.10.tgz#5af7efd98166657f0446e4a3185af69ef12709c9"
+  integrity sha512-iE7w3HS3iVLVfENaZBGqlQrUEWQa7ZwhNfXzaYuxMVgnbzT9MCkklq/xWHy8xsuaK3rgHOlTN3AyTF+InV5xpQ==
+  dependencies:
+    "@types/zen-observable" "^0.8.0"
+    "@wry/equality" "^0.1.9"
+    fast-json-stable-stringify "^2.0.0"
+    graphql-tag "^2.10.2"
+    optimism "^0.12.1"
     symbol-observable "^1.2.0"
     ts-invariant "^0.4.4"
     tslib "^1.10.0"
@@ -3229,7 +3244,7 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
-"@wry/context@^0.5.0":
+"@wry/context@^0.5.0", "@wry/context@^0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@wry/context/-/context-0.5.2.tgz#f2a5d5ab9227343aa74c81e06533c1ef84598ec7"
   integrity sha512-B/JLuRZ/vbEKHRUiGj6xiMojST1kHhu4WcreLfNN7q9DqQFrb97cWgf/kiYsPSUCAMVN0HzfFc8XjJdzgZzfjw==
@@ -11910,6 +11925,13 @@ optimism@^0.11.5:
   dependencies:
     "@wry/context" "^0.5.0"
 
+optimism@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.12.1.tgz#933f9467b9aef0e601655adb9638f893e486ad02"
+  integrity sha512-t8I7HM1dw0SECitBYAqFOVHoBAHEQBTeKjIL9y9ImHzAVkdyPK4ifTgM4VJRDtTUY4r/u5Eqxs4XcGPHaoPkeQ==
+  dependencies:
+    "@wry/context" "^0.5.2"
+
 optimist@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
@@ -13166,7 +13188,7 @@ react-native-communications@2.2.1:
   resolved "https://registry.yarnpkg.com/react-native-communications/-/react-native-communications-2.2.1.tgz#7883b56b20a002eeb790c113f8616ea8692ca795"
   integrity sha1-eIO1ayCgAu63kMET+GFuqGksp5U=
 
-react-native-elements@^1.1.0:
+react-native-elements@1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-1.2.7.tgz#1eca2db715c41722aeb67aea62bd2a4621adb134"
   integrity sha512-0S+0R1cbItl15i64qrkWnyMztwpw60d0SUsZGVDKRAMf0Jvq9Clgyh/MzxJx2sr42mbedQP1sg5Et4fZM7Fp1w==
@@ -13303,9 +13325,9 @@ react-native-simple-markdown@^1.1.0:
     simple-markdown "git://github.com/CharlesMangwa/simple-markdown.git"
 
 react-native-status-bar-height@^2.2.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.4.0.tgz#de8cee4bb733a196167210d2d0bc1fa10acba3e3"
-  integrity sha512-pWvZFlyIHiuxLugLioq97vXiaGSovFXEyxt76wQtbq0gxv4dGXMPqYow46UmpwOgeJpBhqL1E0EKxnfJRrFz5w==
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.5.0.tgz#bc0fb85230603850aab9667ee8111a62954de90c"
+  integrity sha512-sYBCPYA/NapBSHkdm/IVL4ID3LLlIuLqINi2FBDyMkc2BU9pfSGOtkz9yfxoK39mYJuTrlTOQ7mManARUsYDSA==
 
 react-native-storybook-loader@^1.8.0:
   version "1.8.1"

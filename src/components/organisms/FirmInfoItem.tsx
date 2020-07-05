@@ -10,9 +10,19 @@ import { Rating } from 'react-native-elements';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
+
+const Container = styled.View` flex: 1; `;
+
+const StyledCard = styled(Card).attrs(() => ({
+  wrapperStyle: {
+    flex: 1
+  }
+}))``;
 
 const styles = StyleSheet.create({
   frimTopItemWrap: {
+    height: 100,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
@@ -89,8 +99,8 @@ function openLinkUrl (url)
 const FirmInfoItem: React.FC = ({ firm, evaluList, showPhonumber }) =>
 {
   return (
-    <View>
-      <Card bgColor="white">
+    <Container>
+      <StyledCard bgColor="white">
         <View style={styles.frimTopItemWrap}>
           <View style={styles.topLeftWrap}>
             <View style={styles.firmLinkWrap}>
@@ -150,14 +160,14 @@ const FirmInfoItem: React.FC = ({ firm, evaluList, showPhonumber }) =>
         />
         <JBTextItem title="업체소개" value={firm.introduction} revColor />
         <JBTextItem title="작업지역" value={`${firm.workAlarmSido}${firm.workAlarmSigungu}`} revColor />
-      </Card>
-      <Card Primary>
+      </StyledCard>
+      <StyledCard Primary>
         <FirmImageItem title="작업사진1" value={firm.photo1} />
         <FirmImageItem title="작업사진2" value={firm.photo2} />
         <FirmImageItem title="작업사진3" value={firm.photo3} />
-      </Card>
+      </StyledCard>
       {evaluList && (
-        <Card bgColor="white">
+        <StyledCard bgColor="white">
           <FlatList
             data={evaluList}
             renderItem={(item) => <FirmEvaluListItem item={item.item} />}
@@ -165,9 +175,9 @@ const FirmInfoItem: React.FC = ({ firm, evaluList, showPhonumber }) =>
             keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={ListSeparator}
           />
-        </Card>
+        </StyledCard>
       )}
-    </View>
+    </Container>
   );
 };
 

@@ -17,21 +17,17 @@ const OpenWorkList = styled(FlatList)`
   flex: 1;
 `;
 
-interface Props {
-  list: Array<object>;
-}
-
-const FirmWorkingList: React.FC<Props> = (props) =>
+const FirmWorkingList: React.FC = () =>
 {
   const { user } = useLoginContext();
-  const { refreshing, refetchOpenWorkList, applyWork, applyFirmWork, acceptWork, abandonWork } = useFirmWorkProvider();
+  const { refreshing, openWorkList, refetchOpenWorkList, applyWork, applyFirmWork, acceptWork, abandonWork } = useFirmWorkProvider();
 
-  if (!props.list)
+  if (!openWorkList)
   {
     return <JBActIndicator title="정보를 불러오는 중.." size={35} />;
   }
 
-  if (props.list.length === 0)
+  if (openWorkList.length === 0)
   {
     return (
       <JBEmptyView
@@ -44,7 +40,7 @@ const FirmWorkingList: React.FC<Props> = (props) =>
 
   return (
     <OpenWorkList
-      data={props.list}
+      data={openWorkList}
       renderItem={({ item }): React.ReactElement =>
         (
           <WorkItem
@@ -109,7 +105,7 @@ const renderCommand = (item, user, applyWork, applyFirmWork, acceptWork, abandon
           />
           <JBButton
             title="수락하기"
-            onPress={(): void => acceptWork(item.id)}
+            onPress={(): void => acceptWork(item)}
             size="small"
             Primary
           />

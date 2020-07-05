@@ -36,7 +36,7 @@ interface Props {
 const FirmWorkListLayout: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
-  const { openWorkList, matchedWorkList, tabIndex, setTabIndex } = useFirmWorkProvider();
+  const { matchedWorkList, tabIndex, setTabIndex } = useFirmWorkProvider();
   const [routes] = React.useState([
     { key: 'first', title: '진행중인 일감' },
     { key: 'second', title: '매칭된 일감' }
@@ -44,9 +44,6 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
 
   const renderOpenWorkList = (): React.ReactElement => (
     <FirmOpenWorkList
-      list={openWorkList}
-      acceptWork={() => {}}
-      abandonWork={() => {}}
       accountId={user ? user.uid : undefined}
     />
   );

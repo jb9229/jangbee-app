@@ -5,13 +5,12 @@ import { WebSocketLink } from '@apollo/link-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
-console.log('>>> NODE_SERVER_WEBSOCKET_URL: ', NODE_SERVER_WEBSOCKET_URL);
 const httpLink = new HttpLink({
-  uri: 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql'
+  uri: NODE_SERVER_URL
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql',
+  uri: NODE_SERVER_WEBSOCKET_URL,
   options: {
     reconnect: true
   }

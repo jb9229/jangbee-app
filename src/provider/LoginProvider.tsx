@@ -27,7 +27,7 @@ export class Firm
   equiListStr: string;
   thumbnail: string;
   phoneNumber: string;
-  modelYear: string;
+  modelYear: number;
   address: string;
   addressDetail: string;
   sidoAddr: string;
@@ -95,6 +95,10 @@ const LoginProvider = (props: Props): React.ReactElement =>
     setFirm,
     setUserProfile,
     setWebViewModal,
+    saveUserProfile: (): void =>
+    {
+
+    },
     openWorkPaymentModal: (price: number, callbackFn, callbackArgs: Array<any>): void =>
     {
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;

@@ -13,3 +13,18 @@ export const FIRM_CHATMESSAGE = gql`
     }
   }
 }`;
+
+/*
+* Cashback queries
+*/
+export const CASHBACKS = gql`
+  query Cashbacks($accountId: String!) {
+  cashbacks(accountId: $accountId) {
+    _id
+    accountId
+    bank
+    amount
+    accountNumber
+    accountHolder
+  }
+}`;

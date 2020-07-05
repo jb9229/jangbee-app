@@ -28,3 +28,11 @@ export const ADD_FIRMCHAT_MESSAGE = gql`
     }
   }
 `;
+
+export const CASHBACK_CREATE = gql`
+  mutation CreateCashback($crtDto: CashbackCrtDto) {
+    createCashback(crtDto: $crtDto) {
+      _id
+    }
+  }
+`;
