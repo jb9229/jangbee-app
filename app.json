@@ -49,6 +49,7 @@
       "bundleIdentifier": "com.kan.jangbeecall"
     },
     "android": {
+      "useNextNotificationsApi": true,
       "package": "com.kan.jangbeecall",
       "googleServicesFile": "./google-services.json",
       "config": {

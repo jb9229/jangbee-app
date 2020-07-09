@@ -8,7 +8,7 @@ import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
-import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
+import { EvaluListType } from 'src/container/firmHarmCase/type';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import { GiftedChat } from 'react-native-gifted-chat';

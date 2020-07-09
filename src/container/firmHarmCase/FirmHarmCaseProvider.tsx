@@ -6,6 +6,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
 import { Alert } from 'react-native';
+import { EvaluListType } from 'src/container/firmHarmCase/type';
 import { FIRM_CHATMESSAGE } from 'src/api/queries';
 import { FIRM_NEWCHAT } from 'src/api/subscribe';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
@@ -14,9 +15,6 @@ import moment from 'moment';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
-export enum EvaluListType {
-  NONE, MINE, LATEST, SEARCH // NONE: chatmode
-}
 interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;

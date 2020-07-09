@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
+import { EvaluListType } from 'src/container/firmHarmCase/type';
 import { FirmHarmCaseCountData } from 'types';
 import JBButton from 'molecules/JBButton';
 import { SearchBar } from 'react-native-elements';

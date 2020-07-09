@@ -1,17 +1,16 @@
-import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
+import * as React from 'react';
 
 import { Alert, DeviceEventEmitter, Platform } from 'react-native';
 
-import Constants from 'expo-constants';
 import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JBTerm from 'templates/JBTerm';
 import JangbeeAdList from 'organisms/JangbeeAdList';
-import { Notifications } from 'expo';
-import React from 'react';
 import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
+import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
@@ -25,9 +24,7 @@ interface Props {
 }
 const HomeScreen: React.FC<Props> = (props) =>
 {
-  const { refetchFirm } = useLoginContext();
-  let _notificationSubscription;
-
+  const { refetchFirm, user } = useLoginContext();
   React.useEffect(() =>
   {
     (async () =>
@@ -39,52 +36,39 @@ const HomeScreen: React.FC<Props> = (props) =>
       if (!firm) { setTimeout(() => { props.navigation.navigate('FirmRegister') }, 500) }
     })();
 
-    return (): void => { _notificationSubscription.remove() };
+    return (): void => { Notifications.removeAllNotificationListeners() };
   }, []);
 
   // android permissions are given on install
   const addNotificationListener = async (): Promise<void> =>
   {
-    if (Constants.isDevice)
-    {
-      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted')
-      {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted')
-      {
-        alert(`알림 설정이 거부되어 있습니다: finalStatus is ${finalStatus}`);
-        return;
-      }
-      const token = await Notifications.getExpoPushTokenAsync();
-      console.log('>>> noti token', token);
-    }
-    else
-    {
-      alert('Must use physical device for Push Notifications');
-    }
+    // Temp code for 사용자 옛날 토큰 빨리 업그레이드 위해
+    registerForPushNotificationsAsync(user.uid);
 
     if (Platform.OS === 'android')
     {
-      Notifications.createChannelAndroidAsync('jbcall-messages', {
+      Notifications.setNotificationChannelAsync('jbcall-messages', {
         name: 'JBCall Messages',
-        sound: true,
-        priority: 'max',
-        vibrate: [0, 250, 250, 250]
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#F7AE43',
+        sound: 'sound1.wav'
       });
     }
 
-    _notificationSubscription = Notifications.addListener(_handleNotification);
+    Notifications.addNotificationReceivedListener(_handleNotification);
+
+    // Notifications.addNotificationResponseReceivedListener(response =>
+    // {
+    //   console.log('', response);
+    // });
   };
 
   const _handleNotification = (notification): void =>
   {
     if (notification && notification.data)
     {
-      Notifications.setBadgeNumberAsync(1);
+      Notifications.setBadgeCountAsync(1);
       // TODO Notice 확인 시, Notice 알람 제거
 
       if (notification.data.notice === 'NOTI_WORK_REGISTER')
@@ -122,7 +106,7 @@ const HomeScreen: React.FC<Props> = (props) =>
         noticeCommonNavigation(
           notification,
           '피해사례(악덕) 조회하기',
-          () => props.props.navigation.navigate('ClientEvalu')
+          () => props.navigation.navigate('ClientEvalu')
         );
       }
       else

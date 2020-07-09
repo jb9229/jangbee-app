@@ -1,8 +1,7 @@
 import { DefaultNavigationProps } from 'src/types';
-import FirmHarmCaseLayout from '../../components/templates/FirmHarmCaseLayout';
+import FirmHarmCaseLayout from 'src/components/templates/FirmHarmCaseLayout';
 import FirmHarmCaseProvider from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import React from 'react';
-import styled from 'styled-components/native';
 
 interface Props {
   navigation: DefaultNavigationProps;
