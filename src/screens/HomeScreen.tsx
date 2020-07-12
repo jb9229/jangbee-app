@@ -51,8 +51,7 @@ const HomeScreen: React.FC<Props> = (props) =>
         name: 'JBCall Messages',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#F7AE43',
-        sound: 'sound1.wav'
+        lightColor: '#F7AE43'
       });
     }
 
@@ -68,7 +67,7 @@ const HomeScreen: React.FC<Props> = (props) =>
   {
     if (notification && notification.data)
     {
-      Notifications.setBadgeCountAsync(1);
+      Notifications.setBadgeCountAsync(0);
       // TODO Notice 확인 시, Notice 알람 제거
 
       if (notification.data.notice === 'NOTI_WORK_REGISTER')

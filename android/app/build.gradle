@@ -32,8 +32,8 @@ android {
     applicationId 'com.kan.jangbeecall'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 48
-    versionName '1.0.0_20200624'
+    versionCode 49
+    versionName '1.1.0_20200712'
 
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -52,7 +52,7 @@ android {
       storeFile file('../debug.keystore')
     }
     release {
-      storeFile file(System.getenv("ANDROID_KEYSTORE_PATH") ?: "prod-release-key.jks")
+      storeFile file(System.getenv("ANDROID_KEYSTORE_PATH") ?: "prod-release-key.keystore")
       storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
       keyAlias System.getenv("ANDROID_KEY_ALIAS")
       keyPassword System.getenv("ANDROID_KEY_PASSWORD")

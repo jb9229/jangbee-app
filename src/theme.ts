@@ -33,24 +33,37 @@ const colors = {
   red: '#FF0000'
 };
 
+/**
+ * fontSize:
+ * 13: 바탕
+ * 15: 기본
+ * 17: 기본
+ * 19: 타이틀
+ * 21: 대 타이틀
+ * */
 export const koFont = {
   FontTitleTop: 'NanumPen',
-  FontTitle: 'NanumGothic',
+  FontTitle: 'NanumBarunGothic',
   FontMiddleTitle: 'SsangmundongGulimB',
   FontBatang: 'NanumSquareRoundR',
-  FontButton: 'NanumGothic'
+  FontButton: 'NanumBarunGothic'
 };
 
 export const enFont = {
   FontTitleTop: 'NanumPen',
-  FontTitle: 'NanumGothic',
+  FontTitle: 'NanumBarunGothic',
   FontMiddleTitle: 'SsangmundongGulimB',
   FontBatang: 'NanumSquareRoundR',
-  FontButton: 'NanumGothic'
+  FontButton: 'NanumBarunGothic'
 };
 
 export const light = {
+  // Theme Color
   ColorPrimary: '#ffbb00',
+  ColorBatangDark: '#175AA8',
+  ColorBatang: '#82b6ed',
+  ColorBatangLight: '#D3E5F9',
+  ColorBatangWhite: '#ECF5FF',
   ColorSecond: '#82b6ed',
   ColorError: colors.red,
   ColorInvariable: colors.paleGray,
@@ -68,7 +81,6 @@ export const light = {
   ColorBtnSuccess: '#00b7ee',
   ColorBtnDefault: '#444444',
   ColorBtnStyle: 'white',
-  ColorBorderInput: '#000000',
 
   // Background Color
   ColorBGDarkGray: '#3E3936',
@@ -78,6 +90,9 @@ export const light = {
   ColorBGYellowBatangLight: '#fef4e7',
   background: colors.lightBackground,
   backgroundDark: colors.dodgerBlue,
+
+  // Border
+  ColorBorderList: '#E3DCDC',
 
   btnPrimary: colors.skyBlue,
   btnPrimaryFont: 'white',
@@ -91,7 +106,12 @@ export const light = {
 };
 
 export const dark = {
+  // Theme Color
   ColorPrimary: '#ffbb00',
+  ColorBatangDark: '#175AA8',
+  ColorBatang: '#82b6ed',
+  ColorBatangLight: '#D3E5F9',
+  ColorBatangWhite: '#ECF5FF',
   ColorSecond: '#82b6ed',
   ColorError: colors.red,
   ColorInputLabel: '#4D4A4A',
@@ -108,7 +128,6 @@ export const dark = {
   ColorBtnSuccess: '#00b7ee',
   ColorBtnDefault: '#444444',
   ColorBtnStyle: 'white',
-  ColorBorderInput: '#000000',
 
   // Background Color
   ColorBGDarkGray: '#F7AE43',
@@ -116,6 +135,9 @@ export const dark = {
   ColorBGLightGray: '#E3DCDC',
   ColorBGYellowBatang: '#FDEFDB',
   ColorBGYellowBatangLight: '#fef4e7',
+
+  // Border
+  ColorBorderList: '#E3DCDC',
 
   background: colors.darkBackground,
   backgroundDark: colors.dodgerBlue,

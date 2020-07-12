@@ -1,7 +1,4 @@
-import * as FileSystem from 'expo-file-system';
-
-import { Alert } from 'react-native';
-import { Linking } from 'expo';
+import * as Linking from 'expo-linking';
 
 export default async function download (fileUrl, fileName)
 {

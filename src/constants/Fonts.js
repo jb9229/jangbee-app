@@ -1,7 +1,7 @@
 export default {
   titleTop: 'NanumPen', // 손글씨
-  title: 'NanumGothic',
+  title: 'NanumBarunGothic',
   titleMiddle: 'SsangmundongGulimB', // yang-rounded
   batang: 'NanumSquareRoundR',
-  button: 'NanumGothic'
+  button: 'NanumBarunGothic'
 };

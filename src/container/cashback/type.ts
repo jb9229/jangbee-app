@@ -5,6 +5,11 @@ export enum ScreenMode {
   LIST, REGISTER
 }
 
+export enum CashBackStatus {
+  ENROLL = 'ENROLL',
+  PAID = 'PAID'
+}
+
 /*******************
  * interface
  ******************/
@@ -16,6 +21,7 @@ export interface CashBack
   amount: number | undefined;
   accountNumber: number | undefined;
   accountHolder: string | undefined;
+  status?: CashBackStatus;
 }
 
 /*******************

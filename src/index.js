@@ -1,11 +1,11 @@
 import * as Font from 'expo-font';
 import * as Sentry from 'sentry-expo';
+import * as SplashScreen from 'expo-splash-screen';
 import * as Updates from 'expo-updates';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 
 import { ApolloProvider } from '@apollo/client';
-import { AppLoading } from 'expo';
 import AppNavigator from 'navigation/AppNavigator';
 import Constants from 'expo-constants';
 import JBActIndicator from 'molecules/JBActIndicator';
@@ -42,26 +42,55 @@ export default class App extends React.Component
     isAppUpdateComplete: false
   };
 
-  componentDidMount ()
+  // componentDidMount ()
+  // {
+  //   this.checkUpdate();
+  // }
+  async componentDidMount ()
   {
-    this.checkUpdate();
+    // Prevent native splash screen from autohiding
+    try
+    {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    catch (e)
+    {
+      console.warn(e);
+    }
+    this.prepareResources();
   }
+
+  /**
+   * Method that serves to load resources and make API calls
+   */
+  prepareResources = async () =>
+  {
+    // await performAPICalls();
+    this.initFirebase();
+    await this._loadResourcesAsync();
+    await this.checkUpdate();
+
+    this.setState({ isLoadingComplete: true }, async () =>
+    {
+      await SplashScreen.hideAsync();
+    });
+  };
 
   _loadResourcesAsync = async () =>
     Promise.all(loadAllAssests);
 
-  _handleLoadingError = error =>
-  {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error);
-  };
+  // _handleLoadingError = error =>
+  // {
+  //   // In this case, you might want to report the error to your error
+  //   // reporting service, for example Sentry
+  //   console.warn(error);
+  // };
 
-  _handleFinishLoading = () =>
-  {
-    this.initFirebase();
-    this.setState({ isLoadingComplete: true });
-  };
+  // _handleFinishLoading = () =>
+  // {
+  //   this.initFirebase();
+  //   this.setState({ isLoadingComplete: true });
+  // };
 
   checkUpdate = async () =>
   {
@@ -101,11 +130,7 @@ export default class App extends React.Component
     if (!isLoadingComplete && !skipLoadingScreen)
     {
       return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
+        null
       );
     }
 
@@ -149,7 +174,7 @@ export const loadAllAssests = [
     // to remove this if you are not using it in your app
     SsangmundongGulimB: require('../assets/fonts/Typo_SsangmundongGulimB.ttf'),
     NanumSquareRoundR: require('../assets/fonts/NanumSquareRoundR.ttf'),
-    NanumGothic: require('../assets/fonts/NanumGothic.ttf'),
+    NanumBarunGothic: require('../assets/fonts/NanumBarunGothic.ttf'),
     NanumPen: require('../assets/fonts/NanumPen.ttf')
   })
 ];

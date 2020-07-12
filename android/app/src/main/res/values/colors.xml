@@ -11,4 +11,6 @@
   <color name="colorLight">#F6F6F7</color>
   <color name="splashBackground">#4D4A4A</color>
   <color name="iconBackground">#FFFFFF</color>
+  <color name="notification_icon_color">#F7AE43</color>
+  <color name="notification_largeicon_color">#82b6ed</color>
 </resources>

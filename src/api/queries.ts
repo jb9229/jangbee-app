@@ -26,5 +26,6 @@ export const CASHBACKS = gql`
     amount
     accountNumber
     accountHolder
+    status
   }
 }`;

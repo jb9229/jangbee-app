@@ -319,12 +319,6 @@
         <action android:name="com.google.firebase.MESSAGING_EVENT"/>
       </intent-filter>
     </service>
-    <meta-data
-      android:name="com.google.firebase.messaging.default_notification_icon"
-      android:resource="@drawable/shell_notification_icon" />
-    <meta-data
-      android:name="com.google.firebase.messaging.default_notification_color"
-      android:resource="@color/colorAccent" />
     <service
       android:name=".fcm.FcmRegistrationIntentService"
       android:exported="false">
@@ -370,6 +364,20 @@
     <meta-data android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled" android:value="false"/>
 
     <meta-data android:name="standaloneStripeScheme" android:value="f0b433a8-2f6e-485b-ac8c-bfb1f2e93add" />
+
+    <!-- EXPO NOTIFICATION CUSTOM ICON-->
+    <meta-data
+      android:name="expo.modules.notifications.default_notification_icon"
+      android:resource="@drawable/ic_stat_notifications" />
+    <meta-data
+      android:name="expo.modules.notifications.large_notification_icon"
+      android:resource="@drawable/ic_stat_notifications" />
+    <meta-data
+      android:name="expo.modules.notifications.default_notification_color"
+      android:resource="@color/notification_icon_color" />
+    <meta-data
+      android:name="expo.modules.notifications.large_notification_color"
+      android:resource="@color/notification_largeicon_color" />
   </application>
 
 </manifest>

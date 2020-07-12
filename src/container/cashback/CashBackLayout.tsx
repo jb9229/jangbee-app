@@ -1,17 +1,18 @@
-import { CashBack, CashBackCrtDto, CashBackCrtError, ScreenMode } from 'container/cashback/type';
 import * as React from 'react';
+
+import { CashBack, CashBackCrtDto, CashBackCrtError, ScreenMode } from 'container/cashback/type';
 import { FlatList, KeyboardAvoidingView, ScrollView, StyleProp, ViewStyle } from 'react-native';
+import styled, { DefaultTheme, withTheme } from 'styled-components/native';
+
 import CardUI from 'src/components/molecules/CardUI';
+import CashBackListItem from 'src/container/cashback/CashBackListItem';
+import { DefaultStyledProps } from 'src/theme';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'src/components/molecules/JBButton';
 import JBPicker from 'src/components/molecules/JBPicker';
-import CashBackListItem from 'src/container/cashback/CashBackListItem';
-import { DefaultStyledProps } from 'src/theme';
 import { PickerItem } from 'src/types';
+import UnderLineButton from 'src/components/molecules/UnderLineButton';
 import { numberWithCommas } from 'src/utils/NumberUtils';
-import styled from 'styled-components/native';
-
-
 
 const Container = styled.View`
   flex: 1;
@@ -23,7 +24,8 @@ const Header = styled.View`
 `;
 const CommandWrap = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  padding: 10px;
 `;
 const AssetCard = styled(CardUI).attrs(() => ({
   wrapperStyle: {
@@ -53,10 +55,20 @@ const CashBackCard = styled(CardUI).attrs(() => ({
   }
 }))`
 `;
-const CashbackList = styled(FlatList)`
-`;
+const CashbackList = styled(FlatList).attrs((props) => ({
+  contentContainerStyle: {
+    marginLeft: 15,
+    marginRight: 15,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    backgroundColor: props.theme.ColorBatangWhite,
+    borderRadius: 5
+  }
+}))``;
 
 interface Props {
+  theme: DefaultTheme;
   crtDto: CashBackCrtDto;
   crtError: CashBackCrtError;
   screenMode: ScreenMode;
@@ -84,8 +96,14 @@ const CashBackLayout: React.FC<Props> = (props) =>
               <Money>{`${numberWithCommas(props.assetMoney)}`}</Money><MoneyUnit>원</MoneyUnit>
             </MoneyWrap>
             <CommandWrap>
-              <JBButton title="신청 리스트" onPress={(): void => props.setScreenMode(ScreenMode.LIST)} underline />
-              <JBButton title="캐쉬백 신청" onPress={(): void => props.setScreenMode(ScreenMode.REGISTER)} underline />
+              <UnderLineButton text="신청 리스트"
+                onPress={(): void => props.setScreenMode(ScreenMode.LIST)}
+                lineColor={props.screenMode === ScreenMode.LIST ? props.theme.ColorBtnPrimary : undefined}
+              />
+              <UnderLineButton text="캐쉬백 신청"
+                onPress={(): void => props.setScreenMode(ScreenMode.REGISTER)}
+                lineColor={props.screenMode === ScreenMode.REGISTER ? props.theme.ColorBtnPrimary : undefined}
+              />
             </CommandWrap>
           </AssetCard>
 
@@ -134,4 +152,4 @@ const CashBackLayout: React.FC<Props> = (props) =>
   );
 };
 
-export default CashBackLayout;
+export default withTheme(CashBackLayout);

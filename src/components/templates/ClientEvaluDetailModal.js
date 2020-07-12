@@ -1,3 +1,5 @@
+import * as SMS from 'expo-sms';
+
 import { Alert, Modal, Share } from 'react-native';
 import { convertHyphen, formatTelnumber } from 'utils/StringUtils';
 
@@ -6,7 +8,6 @@ import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
 import JBTextItem from 'molecules/JBTextItem';
 import React from 'react';
-import { SMS } from 'expo';
 import { formatNumber } from 'utils/NumberUtils';
 import { shareClientEvalu } from 'common/JBCallShare';
 import styled from 'styled-components/native';
