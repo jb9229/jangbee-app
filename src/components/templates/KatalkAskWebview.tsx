@@ -1,7 +1,7 @@
 import { Dimensions, Linking, Platform } from 'react-native';
 
 import React from 'react';
-import SendIntentAndroid from 'react-native-send-intent';
+// import SendIntentAndroid from 'react-native-send-intent';
 import { WebView } from 'react-native-webview';
 import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
@@ -76,19 +76,19 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
   if (Platform.OS === 'android')
   {
     // SendIntentAndroid.openAppWithUri(evt.url)
-    SendIntentAndroid.openChromeIntent(evt.url)
-      .then(isOpened =>
-      {
-        if (!isOpened)
-        {
-          noticeUserError('KatalAskWebview[SendIntentAndroid.openChromeIntent]', `evt.url is: ${evt.url}`);
-        }
-      })
-      .catch(err =>
-      {
-        console.log('### openAppWithUri error ###');
-        console.log(err);
-      });
+    // SendIntentAndroid.openChromeIntent(evt.url)
+    //   .then(isOpened =>
+    //   {
+    //     if (!isOpened)
+    //     {
+    //       noticeUserError('KatalAskWebview[SendIntentAndroid.openChromeIntent]', `evt.url is: ${evt.url}`);
+    //     }
+    //   })
+    //   .catch(err =>
+    //   {
+    //     console.log('### openAppWithUri error ###');
+    //     console.log(err);
+    //   });
   }
   else
   {

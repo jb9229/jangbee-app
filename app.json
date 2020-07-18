@@ -4,7 +4,6 @@
     "name": "장비 콜",
     "slug": "jangbeecall",
     "privacy": "public",
-    "scheme": "expo.examples.with-webbrowser-redirect",
     "platforms": [
       "ios",
       "android",
@@ -38,38 +37,15 @@
         }
       ]
     },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "yes",
-      "publishBundlePath": "ios/----/Supporting/shell-app.bundle",
-      "publishManifestPath": "ios/----/Supporting/shell-app-manifest.json"
+    "description": "",
+    "isDetached": true,
+    "android": {
+      "package": "com.kan.jangbeecall",
+      "useNextNotificationsApi": true
     },
-    "androidStatusBar": {
-      "backgroundColor": "#4D4A4A",
+    "ios": {
       "bundleIdentifier": "com.kan.jangbeecall"
     },
-    "android": {
-      "useNextNotificationsApi": true,
-      "package": "com.kan.jangbeecall",
-      "googleServicesFile": "./google-services.json",
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyA4h25H62Sp9XSMfEy4x9RBc1AaAAH5bSY"
-        }
-      },
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "READ_PHONE_STATE"
-      ],
-      "versionCode": 20,
-      "splash": {
-        "backgroundColor": "#4D4A4A",
-        "resizeMode": "cover"
-      },
-      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
-      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
-    },
-    "description": "",
-    "isDetached": true
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
