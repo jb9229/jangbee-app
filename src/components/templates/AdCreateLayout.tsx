@@ -41,6 +41,11 @@ const ScrollView = styled.ScrollView.attrs({
   contentContainerStyle: {
   }
 })`flex: 1;`;
+const StyleCard = styled(Card).attrs(() => ({
+  wrapperStyle: {
+    flex: 1
+  }
+}))``;
 const AdTypeWrap = styled.View``;
 const Picker = styled.Picker``;
 
@@ -56,7 +61,7 @@ const AdCreateLayout: React.FC = () =>
   return (
     <Container>
       <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150}>
-        <Card>
+        <StyleCard>
           <ScrollView>
             <AdTypeWrap>
               <MiddleTitle label="광고타입" subLabel="(필수)" />
@@ -137,7 +142,7 @@ const AdCreateLayout: React.FC = () =>
               />
             )}
           </ScrollView>
-        </Card>
+        </StyleCard>
       </KeyboardAvoidingView>
       <JBButton
         title="내장비 홍보하기"
