@@ -1,3 +1,5 @@
+import 'expo-asset';
+
 import * as Font from 'expo-font';
 import * as Sentry from 'sentry-expo';
 import * as SplashScreen from 'expo-splash-screen';
@@ -15,6 +17,7 @@ import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
+import styled from 'styled-components/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,6 +25,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   }
 });
+
+const SplashImage = styled.Image`
+`;
+const SplashWrap = styled.View`
+  flex: 1;
+  background-color: #4D4A4A;
+`;
 
 if (Platform.OS !== 'web')
 {
@@ -128,14 +138,12 @@ export default class App extends React.Component
 
     if (!isLoadingComplete && !skipLoadingScreen)
     {
-      return (
-        null
-      );
+      return null;
     }
 
     if (!isAppUpdateComplete)
     {
-      return <JBActIndicator title="앱 버전 업데이트 체크중..." size={35} />;
+      return <SplashWrap><JBActIndicator title="앱 버전 업데이트 체크중..." size={35} /></SplashWrap>;
     }
 
     return (

@@ -5,13 +5,14 @@
   "expo": {
     "name": "장비 콜",
     "slug": "jangbeecall",
+    "sdkVersion": "38.0.0",
     "privacy": "public",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.1.0_200713",
+    "version": "1.1.0_200717",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
@@ -33,8 +34,7 @@
           "config": {
             "organization": "Kan",
             "project": "jangbeecall",
-            "authToken": "b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398",
-            "url": "your sentry url here // OPTIONAL- only necessary when self-hosting Sentry"
+            "authToken": "b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398"
           }
         }
       ]
@@ -43,7 +43,17 @@
     "isDetached": true,
     "android": {
       "package": "com.kan.jangbeecall",
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json",
+      "splash": {
+        "backgroundColor": "#4D4A4A",
+        "resizeMode": "cover"
+      },
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyA4h25H62Sp9XSMfEy4x9RBc1AaAAH5bSY"
+        }
+      }
     },
     "ios": {
       "bundleIdentifier": "com.kan.jangbeecall"

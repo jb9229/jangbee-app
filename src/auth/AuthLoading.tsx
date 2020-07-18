@@ -40,14 +40,12 @@ const checkLogin = (props: Props): void =>
 {
   firebase.auth().onAuthStateChanged(user =>
   {
-    console.log('>>> checklogin user: ', user);
     if (user)
     {
       console.log('>>> checklogin uid: ', user.uid);
       getUserInfo(user.uid)
         .then(data =>
         {
-          console.log('>>> checklogin data: ', data);
           const userInfo = data.val();
           if (!userInfo)
           {

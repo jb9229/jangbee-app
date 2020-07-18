@@ -134,8 +134,8 @@ android {
         applicationId 'com.kan.jangbeecall'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.1.0_200713"
+        versionCode 52
+        versionName "1.1.0_200716_2"
     }
     splits {
         abi {

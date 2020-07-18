@@ -57,50 +57,58 @@ const HomeScreen: React.FC<Props> = (props) =>
 
     Notifications.addNotificationReceivedListener(_handleNotification);
 
-    // Notifications.addNotificationResponseReceivedListener(response =>
-    // {
-    //   console.log('', response);
-    // });
+    Notifications.getPresentedNotificationsAsync()
+      .then((responseArr) => {
+        console.log('>>> PresentedNotifications: ', responseArr);
+        responseArr.forEach((response) => {
+          if (response?.request?.identifier)
+          {
+            _handleNotification(response);
+            Notifications.dismissNotificationAsync(response?.request?.identifier);
+          }
+        })
+      })
   };
 
-  const _handleNotification = (notification): void =>
+  const _handleNotification = (response): void =>
   {
-    if (notification && notification.data)
+    if (response?.request?.content)
     {
-      Notifications.setBadgeCountAsync(0);
+      const notification = response.request.content;
+      // Notifications.setBadgeCountAsync(0);
       // TODO Notice 확인 시, Notice 알람 제거
 
-      if (notification.data.notice === 'NOTI_WORK_REGISTER')
+      if (notification.data?.notice === 'NOTI_WORK_REGISTER')
       {
         noticeCommonNavigation(notification, '일감 지원하기', () =>
           props.navigation.navigate('FirmWorkList', { refresh: true })
         );
       }
-      else if (notification.data.notice === 'NOTI_WORK_ADD_REGISTER')
+      else if (notification.data?.notice === 'NOTI_WORK_ADD_REGISTER')
       {
         noticeCommonNavigation(notification, '지원자 확인하기', () =>
           props.navigation.navigate('WorkList', { refresh: true })
         );
       }
-      else if (notification.data.notice === 'NOTI_WORK_SELECTED')
+      else if (notification.data?.notice === 'NOTI_WORK_SELECTED')
       {
         noticeCommonNavigation(notification, '배차 수락하러가기', () =>
           props.navigation.navigate('FirmWorkList', { refresh: true })
         );
       }
-      else if (notification.data.notice === 'NOTI_WORK_ABANDON')
+      else if (notification.data?.notice === 'NOTI_WORK_ABANDON')
       {
         noticeCommonNavigation(notification, '배차 다시 요청하기', () =>
           props.navigation.navigate('WorkList', { refresh: true })
         );
       }
-      else if (notification.data.notice === 'NOTI_WORK_CLOSED')
+      else if (notification.data?.notice === 'NOTI_WORK_CLOSED')
       {
         noticeCommonNavigation(notification, '업체 평가하기', () =>
           props.navigation.navigate('WorkList', { refresh: true })
         );
       }
-      else if (notification.data.notice === 'NOTI_CEVALU_REGISTER')
+      else if (notification.data?.notice === 'NOTI_CEVALU_REGISTER')
       {
         noticeCommonNavigation(
           notification,
@@ -115,17 +123,18 @@ const HomeScreen: React.FC<Props> = (props) =>
     }
     else
     {
+      console.log('=== notification:', response)
       Alert.alert(
         '유효하지 않은 알람입니다',
-        `내용: ${notification}`,
+        `내용: ${response}`,
         [
           {
             text: '확인',
             onPress: (): void =>
             {
-              Notifications.dismissNotificationAsync(
-                notification.notificationId
-              );
+              // Notifications.dismissNotificationAsync(
+              //   notification.notificationId
+              // );
             }
           }
         ],
@@ -146,9 +155,9 @@ const HomeScreen: React.FC<Props> = (props) =>
             text: '취소',
             onPress: () =>
             {
-              Notifications.dismissNotificationAsync(
-                notification.notificationId
-              );
+              // Notifications.dismissNotificationAsync(
+              //   notification.notificationId
+              // );
             },
             style: 'cancel'
           },
@@ -156,9 +165,9 @@ const HomeScreen: React.FC<Props> = (props) =>
             text: actionName,
             onPress: () =>
             {
-              Notifications.dismissNotificationAsync(
-                notification.notificationId
-              );
+              // Notifications.dismissNotificationAsync(
+              //   notification.notificationId
+              // );
               action();
             }
           }
