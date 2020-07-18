@@ -33,7 +33,7 @@ const SplashWrap = styled.View`
   background-color: #4D4A4A;
 `;
 
-if (Platform.OS !== 'web')
+if (Platform.OS !== 'web' && !__DEV__)
 {
   // Sentry.setRelease(Constants.manifest.revisionId);
 
@@ -75,14 +75,14 @@ export default class App extends React.Component
   prepareResources = async () =>
   {
     // await performAPICalls();
-    this.initFirebase();
-    await this._loadResourcesAsync();
-    await this.checkUpdate();
-
-    this.setState({ isLoadingComplete: true }, async () =>
+    this.setState({ ...this.state, isLoadingComplete: true }, async () =>
     {
       await SplashScreen.hideAsync();
     });
+
+    await this.checkUpdate();
+    this.initFirebase();
+    await this._loadResourcesAsync();
   };
 
   _loadResourcesAsync = async () =>
@@ -108,17 +108,18 @@ export default class App extends React.Component
       const update = await Updates.checkForUpdateAsync();
       if (update.isAvailable)
       {
+        console.log('=== update available:', update)
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
-        Updates.reloadAsync();
-        this.setState({ isAppUpdateComplete: true });
+        await Updates.reloadAsync();
+        this.setState({ ...this.state, isAppUpdateComplete: true });
       }
 
-      this.setState({ isAppUpdateComplete: true });
+      this.setState({ ...this.state, isAppUpdateComplete: true });
     }
     catch (e)
     {
-      this.setState({ isAppUpdateComplete: true });
+      this.setState({ ...this.state, isAppUpdateComplete: true });
     }
   };
 

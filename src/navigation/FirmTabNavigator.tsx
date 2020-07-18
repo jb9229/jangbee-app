@@ -29,7 +29,7 @@ const FirmWorkStack = createStackNavigator({
     screen: WorkRegisterScreen,
     navigationOptions: {
       title: '일감 등록하기',
-      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerStyle: { backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
     }
   }
@@ -52,7 +52,7 @@ const FirmSettingStack = createStackNavigator({
     screen: FirmRegisterScreen,
     navigationOptions: {
       title: '내 장비 등록',
-      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerStyle: { backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
     }
   },
@@ -60,7 +60,7 @@ const FirmSettingStack = createStackNavigator({
     screen: FirmUpdateScreen,
     navigationOptions: {
       title: '내 장비 수정',
-      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerStyle: { backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
     }
   },
@@ -68,7 +68,7 @@ const FirmSettingStack = createStackNavigator({
     screen: JBServiceTerms,
     navigationOptions: {
       title: '약관 및 회사정보',
-      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerStyle: { backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
     }
   },
@@ -77,7 +77,6 @@ const FirmSettingStack = createStackNavigator({
     navigationOptions:
     {
       mode: 'modal',
-      headerStyle: { marginTop: -28 },
       title: '보유 자산'
     }
   }
@@ -104,8 +103,7 @@ const AdStack = createStackNavigator({
       title: '내광고 리스트',
       headerStyle: {
         backgroundColor: colors.point3_other2,
-        elevation: 10,
-        marginTop: -28
+        elevation: 10
       },
       headerTintColor: '#fff'
     }
@@ -114,7 +112,7 @@ const AdStack = createStackNavigator({
     screen: AdCreateScreen,
     navigationOptions: {
       title: '내장비 홍보하기',
-      headerStyle: { marginTop: -28, backgroundColor: colors.point3_other2 },
+      headerStyle: { backgroundColor: colors.point3_other2 },
       headerTintColor: '#fff'
     }
   }

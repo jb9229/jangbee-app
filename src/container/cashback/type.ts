@@ -2,7 +2,7 @@
  * ENUM
  ******************/
 export enum ScreenMode {
-  LIST, REGISTER
+  DEFAULT, LIST, REGISTER
 }
 
 export enum CashBackStatus {

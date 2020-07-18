@@ -5,10 +5,10 @@ import * as api from 'api/api';
 import {
   Alert,
   BackHandler,
-  Picker,
   StyleSheet,
   Switch,
   Text,
+  ToastAndroid,
   View
 } from 'react-native';
 import { LOCAL_CATEGORY, LOCAL_ITEM } from 'src/STRING';
@@ -140,7 +140,10 @@ export default class GPSSearchScreen extends React.Component
       searGungu: '전체',
       isListLoading: undefined,
       isLastList: false,
-      validationMessage: ''
+      validationMessage: '',
+      backButtonCondition: {
+        isDoubleClick: false
+      }
     };
 
     this._didFocusSubscription = props.navigation.addListener(
@@ -220,18 +223,35 @@ export default class GPSSearchScreen extends React.Component
 
   handleBackPress = () =>
   {
-    const { isSearchViewMode } = this.state;
-    if (!isSearchViewMode)
+    const { backButtonCondition } = this.state;
+    // if (!isSearchViewMode)
+    // {
+    //   this.setState({ isSearchViewMode: true });
+    // }
+    // else
+    // {
+    //   Alert.alert('장비콜 종료', '정말 종료 하시겠습니까?', [
+    //     { text: '아니요', onPress: () => {}, style: 'cancel' },
+    //     { text: '종료', onPress: () => BackHandler.exitApp() }
+    //   ]);
+    // }
+
+    if (backButtonCondition.isDoubleClick)
     {
-      this.setState({ isSearchViewMode: true });
+        console.log('>> BackHandler.exitApp~~')
+        BackHandler.exitApp();
+    } else {
+        ToastAndroid.show("한번 더 누리시면 앱이 종료됩니다!", ToastAndroid.SHORT);
+
+        backButtonCondition.isDoubleClick = true;
+
+        setTimeout(() => {
+            backButtonCondition.isDoubleClick = false;
+        }, 3000);
+
+        return true;
     }
-    else
-    {
-      Alert.alert('장비콜 종료', '정말 종료 하시겠습니까?', [
-        { text: '아니요', onPress: () => {}, style: 'cancel' },
-        { text: '종료', onPress: () => BackHandler.exitApp() }
-      ]);
-    }
+
     return true;
   };
 

@@ -28,9 +28,8 @@ interface Props {
 }
 const UnderLineButton: React.FC<Props> = (props) =>
 {
-  console.log(props.lineColor);
   return (
-    <Container style={props.wrapperStyle} onPress={props.onPress}>
+    <Container style={props.wrapperStyle} onPress={props.onPress} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
       <UnderLineText>{props.text}</UnderLineText>
       <UnderLine lineColor={props.lineColor} />
     </Container>

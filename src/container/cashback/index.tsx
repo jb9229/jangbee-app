@@ -20,7 +20,7 @@ const CashBackContainer: React.FC<Props> = () =>
   const { user, userProfile, popLoading, saveUserProfileAssets, refetchUserProfile } = useLoginContext();
   const [crtDto, setCrtDto] = React.useState(new CashBackCrtDto(user.uid));
   const [crtError, setCrtError] = React.useState(new CashBackCrtError());
-  const [screenMode, setScreenMode] = React.useState(ScreenMode.LIST);
+  const [screenMode, setScreenMode] = React.useState(ScreenMode.DEFAULT);
 
   // Server request data
   const cashbacksRes = useQuery(CASHBACKS, { variables: { accountId: user.uid }, fetchPolicy: 'cache-and-network' });

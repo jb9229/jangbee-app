@@ -97,11 +97,11 @@ const CashBackLayout: React.FC<Props> = (props) =>
             </MoneyWrap>
             <CommandWrap>
               <UnderLineButton text="신청 리스트"
-                onPress={(): void => props.setScreenMode(ScreenMode.LIST)}
+                onPress={(): void => props.setScreenMode(props.screenMode === ScreenMode.LIST ? ScreenMode.DEFAULT : ScreenMode.LIST)}
                 lineColor={props.screenMode === ScreenMode.LIST ? props.theme.ColorBtnPrimary : undefined}
               />
               <UnderLineButton text="캐쉬백 신청"
-                onPress={(): void => props.setScreenMode(ScreenMode.REGISTER)}
+                onPress={(): void => props.setScreenMode(props.screenMode === ScreenMode.REGISTER ? ScreenMode.DEFAULT : ScreenMode.REGISTER)}
                 lineColor={props.screenMode === ScreenMode.REGISTER ? props.theme.ColorBtnPrimary : undefined}
               />
             </CommandWrap>

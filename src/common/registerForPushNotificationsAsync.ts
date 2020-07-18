@@ -27,11 +27,11 @@ export default async function registerForPushNotificationsAsync (uid): Promise<v
       alert('알림 권한 획득 실패, 장비 콜 알림을 받을 수 없습니다(카톡상담 문의 필요)');
       return;
     }
-    console.log('>>> Constants.manifest: ', Constants.manifest)
-    console.log('>>> Updates.manifest: ', Updates.manifest)
+    // console.log('>>> Constants.manifest: ', Constants.manifest)
+    // console.log('>>> Updates.manifest: ', Updates.manifest)
     // Get the token that uniquely identifies this device
     const token = (await Notifications.getExpoPushTokenAsync({experienceId: '@jb9229/jangbeecall'})).data;
-console.log('>>> notification token: ', token)
+    console.log('=== notification token: ', token)
     // Save Expo Push Token at DB
     await firebase
       .database()
