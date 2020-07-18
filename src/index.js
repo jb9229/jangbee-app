@@ -75,6 +75,7 @@ export default class App extends React.Component
   prepareResources = async () =>
   {
     // await performAPICalls();
+    await this._loadResourcesAsync();
     this.setState({ ...this.state, isLoadingComplete: true }, async () =>
     {
       await SplashScreen.hideAsync();
@@ -82,7 +83,6 @@ export default class App extends React.Component
 
     await this.checkUpdate();
     this.initFirebase();
-    await this._loadResourcesAsync();
   };
 
   _loadResourcesAsync = async () =>

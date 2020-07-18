@@ -5,14 +5,17 @@ import * as api from 'src/api/api';
 import { Alert, Linking, Platform } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 
-// import SendIntentAndroid from 'react-native-send-intent';
+import SendIntentAndroid from 'react-native-send-intent';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
 
 const Container = styled.View`
 `;
-const Modal = styled.Modal``;
+const Modal = styled.Modal`
+  flex: 1;
+  background-color: red;
+`;
 const Contents = styled.View`
   flex: 1;
   align-items: center;
@@ -102,19 +105,20 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
   if (Platform.OS === 'android')
   {
     // SendIntentAndroid.openAppWithUri(evt.url)
-    // SendIntentAndroid.openChromeIntent(evt.url)
-    //   .then(isOpened =>
-    //   {
-    //     if (!isOpened)
-    //     {
-    //       noticeUserError('외부 앱 실행에 실패했습니다[SendIntentAndroid.openChromeIntent]', `evt.url is: ${evt.url}`);
-    //     }
-    //   })
-    //   .catch(err =>
-    //   {
-    //     console.log('### openAppWithUri error ###');
-    //     console.error(err);
-    //   });
+    SendIntentAndroid.openChromeIntent(evt.url)
+    // Linking.sendIntent(evt.url)
+      .then(isOpened =>
+      {
+        if (!isOpened)
+        {
+          noticeUserError('외부 앱 실행에 실패했습니다[SendIntentAndroid.openChromeIntent]', `evt.url is: ${evt.url}`);
+        }
+      })
+      .catch(err =>
+      {
+        console.log('### openAppWithUri error ###');
+        console.error(err);
+      });
   }
   else
   {

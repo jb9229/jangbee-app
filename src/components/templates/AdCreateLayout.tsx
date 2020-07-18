@@ -119,6 +119,7 @@ const AdCreateLayout: React.FC = () =>
             <EditText
               label="전화번호"
               text={adState.createAdDto.adTelNumber}
+              keyboardType="decimal-pad"
               onChangeText={(text): void => { adState.createAdDto.adTelNumber = text }}
               placeholder="휴대전화 번호입력(숫자만)"
               errorText={adState.createAdError.telNumber}
