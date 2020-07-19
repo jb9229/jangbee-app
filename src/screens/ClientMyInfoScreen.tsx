@@ -5,18 +5,23 @@ import JBButton from 'molecules/JBButton';
 import JBTextItem from 'molecules/JBTextItem';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
 import React from 'react';
-import Styled from 'styled-components/native';
 import firebase from 'firebase';
+import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
-const Container = Styled.View`
+const Container = styled.View`
   flex: 1;
 `;
 
-const TopMenu = Styled.View`
+const TopMenu = styled.View`
   flex-direction: row;
   justify-content: flex-end;
 `;
+const StyledCard = styled(Card).attrs(() => ({
+  wrapperStyle: {
+    flex: 1
+  }
+}))``;
 
 const ClientMyInfoScreen = () =>
 {
@@ -107,7 +112,7 @@ const ClientMyInfoScreen = () =>
 
   return (
     <Container>
-      <Card>
+      <StyledCard>
         <TopMenu>
           <JBButton
             title="탈퇴하기"
@@ -144,7 +149,7 @@ const ClientMyInfoScreen = () =>
           size="full"
           Primary
         />
-      </Card>
+      </StyledCard>
       <KatalkAskWebview
         isVisibleModal={isVisibleKatalkAskModal}
         closeModal={() => setVisibleKatalkAskModal(false)}

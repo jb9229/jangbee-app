@@ -16,10 +16,7 @@ function FirmHarmCaseContainer (props): React.ReactElement
 }
 
 FirmHarmCaseContainer.navigationOptions = ({ navigation }) => ({
-  title: '피해사례 고객',
-  headerStyle: {
-    marginTop: -28
-  }
+  title: '피해사례 고객'
 });
 
 export default FirmHarmCaseContainer;

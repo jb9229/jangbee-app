@@ -90,10 +90,7 @@ const styles = StyleSheet.create({
 export default class FirmMyInfoScreen extends React.Component
 {
   static navigationOptions = () => ({
-    title: '장비 업체정보',
-    headerStyle: {
-      marginTop: -28
-    }
+    title: '장비 업체정보'
   });
 
   constructor (props)

@@ -33,15 +33,13 @@ const FirmWorkListStack = createStackNavigator({
   WorkRegister: {
     screen: WorkRegisterScreen,
     navigationOptions: {
-      title: '일감 등록하기',
-      headerStyle: { marginTop: -28 }
+      title: '일감 등록하기'
     }
   },
   AppliFirmList: {
     screen: AppliFirmList,
     navigationOptions: {
-      title: '지원업체 리스트',
-      headerStyle: { marginTop: -28 }
+      title: '지원업체 리스트'
     }
   }
 });
@@ -56,13 +54,12 @@ FirmWorkListStack.navigationOptions = {
 const ClientInfoStack = createStackNavigator({
   ClientInfo: {
     screen: ClientMyInfoScreen,
-    navigationOptions: { title: '사용자 정보', headerStyle: { marginTop: -28 } }
+    navigationOptions: { title: '사용자 정보' }
   },
   ServiceTerms: {
     screen: JBServiceTerms,
     navigationOptions: {
-      title: '약관 및 회사정보',
-      headerStyle: { marginTop: -28 }
+      title: '약관 및 회사정보'
     }
   }
 });

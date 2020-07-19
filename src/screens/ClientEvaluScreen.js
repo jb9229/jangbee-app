@@ -21,10 +21,7 @@ import { withLogin } from 'src/contexts/LoginContext';
 class ClientEvaluScreen extends React.Component
 {
   static navigationOptions = {
-    title: '피해사례 고객',
-    headerStyle: {
-      marginTop: -28
-    }
+    title: '피해사례 고객'
   };
 
   componentDidMount ()
