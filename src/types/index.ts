@@ -94,6 +94,11 @@ export interface Work {
   workState: string;
 }
 
+export interface WebViewModalData {
+  visible: boolean;
+  url: string;
+}
+
 /**
  * React Navigation Types
  * */

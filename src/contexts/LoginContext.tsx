@@ -1,4 +1,4 @@
-import { DefaultNavigationProps, User, UserAssets, UserProfile } from 'src/types';
+import { DefaultNavigationProps, User, UserAssets, UserProfile, WebViewModalData } from 'src/types';
 import { Firm, KakaoPaymentInfo } from 'src/provider/LoginProvider';
 
 import createCtx from 'src/contexts/CreateCtx';
@@ -14,7 +14,7 @@ interface Context {
   setUser: (user: User) => void;
   setFirm: (firm: Firm) => void;
   saveUserProfileAssets: (assetData: UserAssets) => Promise<void>;
-  setWebViewModal: (url: string) => void;
+  setWebViewModal: (modalData: WebViewModalData) => void;
   openWorkPaymentModal: (price: number, callbackFn?: any, callbackArg?: Array<any>) => void;
   openAdPaymentModal: (price: number, callbackFn?: any, callbackArg?: Array<any>) => void;
   openCouponModal: () => void;

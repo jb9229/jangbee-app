@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as api from 'src/api/api';
 
 import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
-import { User, UserAssets, UserProfile } from 'src/types';
+import { User, UserAssets, UserProfile, WebViewModalData } from 'src/types';
 import { getUserInfo, updatePaymentSubscription, updateUserAssets } from 'src/utils/FirebaseUtils';
 
 import { ApplyWorkCallback } from 'src/components/action';
@@ -77,7 +77,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
   const [paymentReadyInfo, setPaymentReadyInfo] = React.useState<KakaoPaymentReadyInfo>();
   const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(false);
   const [loadingModalData, setLoadingModalData] = React.useState<LoadingModalData>(new LoadingModalData(false, ''));
-  const [webViewModal, setWebViewModal] = React.useState({ visible: false, url: undefined });
+  const [webViewModal, setWebViewModal] = React.useState<WebViewModalData>({ visible: false, url: undefined });
 
   // data
   let callbackAction: ApplyWorkCallback | undefined;

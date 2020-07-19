@@ -54,9 +54,10 @@ const url = {
   OPENBANK_USERINFO: `${OPENBANK_URL}/v1.0/user/me`,
   OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
   OPENBANK_DEPOSIT: `${OPENBANK_URL}/v1.0/transfer/deposit`,
-  TERM_SERVICE: 'https://jangbee-inpe21.firebaseapp.com/serviceTerms.html',
-  TERM_SECURITY: 'https://jangbee-inpe21.firebaseapp.com/privacy.html',
-  TERM_USEINFO: 'https://jangbee-inpe21.firebaseapp.com/UseInfomation.html'
+  TERM_SERVICE: 'https://jb9229.github.io/jangbeecall-doc/serviceTerms.html',
+  TERM_SECURITY: 'https://jb9229.github.io/jangbeecall-doc/privacy.html',
+  TERM_USEINFO: 'https://jb9229.github.io/jangbeecall-doc/UseInfomation.html',
+  KATALK_ASK_URL: 'https://jb9229.github.io/jangbeecall-doc/katalk_ask.html'
 };
 
 export default url;

@@ -3,6 +3,7 @@ import * as React from 'react';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import { CheckBox } from 'react-native-elements';
+import url from 'constants/Url';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface StyleProps {
@@ -33,10 +34,6 @@ const ShowTermTO = styled.TouchableOpacity``;
 const ShowTermTOText = styled.Text`
   text-decoration-line: underline;
 `;
-
-const TERM_URL_PHONEAUTH = 'https://jangbee-inpe21.firebaseapp.com/phoneAuthTerm.html';
-const TERM_URL_SERVICE = 'https://jangbee-inpe21.firebaseapp.com/serviceTerms.html';
-const TERM_URL_PRIVACY = 'https://jangbee-inpe21.firebaseapp.com/privacy.html';
 
 interface Props {
   onChange: (agreement: boolean) => void;
@@ -89,7 +86,7 @@ const AgreementTerms: React.FC<Props> = (props) =>
               onPress={(): void => { setAgreePhoneAuth(!agreePhoneAuth) }}
             />
           </ConfirmCheckWrap>
-          <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: TERM_URL_PHONEAUTH })}>
+          <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: url.TERM_URL_PHONEAUTH })}>
             <ShowTermTOText>내용 보기</ShowTermTOText>
           </ShowTermTO>
         </ConfirmWrap>
@@ -101,7 +98,7 @@ const AgreementTerms: React.FC<Props> = (props) =>
               onPress={(): void => setAgreeUseTerm(!agreeUseTerm)}
             />
           </ConfirmCheckWrap>
-          <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: TERM_URL_SERVICE })}>
+          <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: url.TERM_URL_SERVICE })}>
             <ShowTermTOText>내용 보기</ShowTermTOText>
           </ShowTermTO>
         </ConfirmWrap>
@@ -113,7 +110,7 @@ const AgreementTerms: React.FC<Props> = (props) =>
               onPress={(): void => setAgreePrivateTerm(!agreePrivateTerm)}
             />
           </ConfirmCheckWrap>
-          <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: TERM_URL_PRIVACY })}>
+          <ShowTermTO onPress={(): void => setWebViewModal({ visible: true, url: url.TERM_URL_PRIVACY })}>
             <ShowTermTOText>내용 보기</ShowTermTOText>
           </ShowTermTO>
         </ConfirmWrap>

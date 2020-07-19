@@ -5,6 +5,7 @@ import React from 'react';
 import { WebView } from 'react-native-webview';
 import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
+import url from 'constants/Url';
 
 const Container = styled.View`
 `;
@@ -13,7 +14,6 @@ const Contents = styled.View`
   flex: 1;
 `;
 
-const KATALK_ASK_URL = 'https://jangbee-inpe21.firebaseapp.com/katalk_ask.html';
 
 export default class KatalkAskWebview extends React.PureComponent
 {
@@ -48,7 +48,7 @@ export default class KatalkAskWebview extends React.PureComponent
               }}
               originWhitelist={['*']}
               onShouldStartLoadWithRequest={(e): boolean => handleShouldStartLoadWithRequest(e)}
-              source={{ uri: KATALK_ASK_URL }}
+              source={{ uri: url.KATALK_ASK_URL }}
               style={{
                 width: width,
                 height: height
