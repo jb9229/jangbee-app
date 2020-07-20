@@ -209,3 +209,4 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+.firebase/hosting.d2ViLWJ1aWxk.cache

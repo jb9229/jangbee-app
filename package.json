@@ -8,7 +8,9 @@
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "storybook": "start-storybook -p 7007 & adb reverse tcp:7007 tcp:7007",
     "prestorybook": "rnstl",
-    "postinstall": "jetify"
+    "postinstall": "jetify",
+    "predeploy": "expo build:web",
+    "deploy-hosting": "npm run predeploy && firebase deploy --only hosting"
   },
   "jest": {
     "preset": "jest-expo"
