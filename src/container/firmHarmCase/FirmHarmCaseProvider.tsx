@@ -244,7 +244,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
 
   // Init States
   const states = {
-    user, firm, searchWord, searchNotice, searchArea, evaluListType,
+    navigation: props.navigation, user, firm, searchWord, searchNotice, searchArea, evaluListType,
     cliEvaluList, countData,
     chatMessge: chatMessagesResponse?.data?.firmChatMessage || [],
     setSearchWord,

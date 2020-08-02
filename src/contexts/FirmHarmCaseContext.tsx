@@ -46,6 +46,7 @@ export interface Evaluation {
   telNumber: string;
   telNumber2: string;
   telNumber3: string;
+  searchTime: string;
 }
 
 // export class CliEvaluation {

@@ -172,6 +172,16 @@ android {
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
     }
+    flavorDimensions 'mode'
+    productFlavors {
+        dev {
+            dimension = 'mode'
+            applicationIdSuffix = '.dev'
+            versionCode = 1
+            versionNameSuffix = '.-1'
+            resValue "string", "app_name", "장비 콜(Dev)"
+        }
+    }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->

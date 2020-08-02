@@ -7,6 +7,7 @@ import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
 import CashBackContainer from 'src/container/cashback';
 import FirmHarmCaseContainer from 'container/firmHarmCase/list';
+import FirmHarmCaseSearchContainer from 'container/firmHarmCase/search';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
 import FirmRegisterScreen from 'container/firm/create';
 import FirmSettingScreen from 'screens/FirmSettingScreen';
@@ -149,6 +150,18 @@ const ClientEvaluStack = createStackNavigator({
     {
       header: null
     }
+  },
+  FirmHarmCaseSearch: {
+    screen: FirmHarmCaseSearchContainer,
+    navigationOptions:
+    {
+      title: '피해사례 조회',
+      headerStyle: {
+        // backgroundColor: colors.point3_other2,
+        elevation: 10
+      },
+      headerTintColor: '#fff'
+    }
   }
 });
 
@@ -165,10 +178,10 @@ ClientEvaluStack.navigationOptions = {
 
 export default createBottomTabNavigator(
   {
-    HomeStack,
+    ClientEvaluStack,
     FirmWorkStack,
     AdStack,
-    ClientEvaluStack,
+    HomeStack,
     FirmSettingStack
     // ModalStack
   },

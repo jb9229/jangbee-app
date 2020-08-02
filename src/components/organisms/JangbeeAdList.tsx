@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
 });
 
 const AdMobContainer = styled.View`
+  width: 90%;
   height: ${props => (props.height ? props.height : '120')};
-  align-items: center;
   justify-content: center;
 `;
 

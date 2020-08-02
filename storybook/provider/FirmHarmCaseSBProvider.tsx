@@ -26,7 +26,7 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
   const [searchArea, setSearchArea] = React.useState('TEL');
   const [searchTime, setSearchTime] = React.useState('');
   const [searchNotice, setSearchNotice] = React.useState('');
-  const [countData, setCountData] = React.useState<FirmHarmCaseCountData>();
+  const [countData, setCountData] = React.useState<FirmHarmCaseCountData>({ totalCnt: 100, myCnt: 30 });
   const [updateEvalu, setUpdateEvalu] = React.useState();
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
   const [mineEvaluation, setMineEvaluation] = React.useState();
@@ -60,7 +60,7 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         content: 'hello world',
         targetId: '12345678',
         chatInfo: {
-          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
           nickName: 'Test'
         },
@@ -74,7 +74,7 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         content: 'hi/{se}',
         targetId: '12345678',
         chatInfo: {
-          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
           nickName: 'Test'
         },
@@ -92,7 +92,7 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         },
         targetId: '12345678',
         chatInfo: {
-          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
           nickName: 'Test'
         },
@@ -106,7 +106,7 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         content: '좋아!/{weixiao}',
         targetId: '88886666',
         chatInfo: {
-          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678'
         },
         renderTime: true,
@@ -122,7 +122,7 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         },
         targetId: '12345678',
         chatInfo: {
-          avatar: require('../../../assets/icons/chat/defaultAvatar.png'),
+          avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
           nickName: 'Test'
         },

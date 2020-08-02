@@ -13,7 +13,10 @@ import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import { GiftedChat } from 'react-native-gifted-chat';
 import JBButton from 'molecules/JBButton';
+import JangbeeAdList from '../organisms/JangbeeAdList';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { SearchBar } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import colors from 'constants/Colors';
 import getString from 'src/STRING';
@@ -25,8 +28,30 @@ interface StyleProps {
 }
 const Container = styled.SafeAreaView`
   flex: 1;
-  background-color: ${colors.batangLight};
+  /* background-color: ${colors.batangLight}; */
 `;
+const Header = styled.View`
+`;
+const Contents = styled.View`
+  flex: 1;
+  justify-content: center;
+`;
+
+// SearchWrap
+const SearchWrap = styled.View`
+  border-width: 1;
+  padding: 10px;
+  margin: 10px;
+`;
+const SearchTO = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+`;
+const SearchText = styled.Text`
+  font-size: 24;
+  margin-left: 15;
+`;
+
 const NotExitButWrap = styled.View`
   height: 80;
   justify-content: center;
@@ -42,7 +67,7 @@ interface Props{
 const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
   const {
-    user, firm, searchArea, searchWord, searchTime, searchNotice, countData, cliEvaluList, evaluListType,
+    navigation, user, searchArea, searchWord, searchTime, searchNotice, countData, evaluListType,
     setSearchArea, setSearchWord, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
@@ -76,7 +101,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 
   return (
     <Container>
-      {!chatMode && (
+      <Header>
         <FirmHarmCaseHeader
           searchArea={searchArea}
           searchWord={searchWord}
@@ -89,46 +114,15 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
           onClickNewestEvaluList={onClickNewestEvaluList}
           setVisibleCreateModal={setVisibleCreateModal}
           searchFilterCliEvalu={searchFilterCliEvalu}/>
-      )}
-      {!chatMode && evaluListType !== EvaluListType.NONE && (!cliEvaluList
-        ? <ActivityIndicator /> : cliEvaluList.length === 0
-          ? (
-            <NotExitButWrap>
-              {searchWord ? (
-                <JBButton
-                  title={`'${searchWord}' 피해사례 없음 공유`}
-                  onPress={(): void => shareNotExistCEvalu(searchArea, searchWord, searchTime)}
-                  align="center"
-                  Secondary
-                />
-              ) : (<NoticeEmptyList>{getString('firmHarmCase.NOTICE_EMPTY_LIST')}</NoticeEmptyList>)}
-            </NotExitButWrap>
-          ) : (
-            <Swiper showsPagination={true} showsButtons={true}
-              prevButton={<MaterialIcons name="navigate-before" size={30} color={props.theme.ColorBtnPrimary} />}
-              nextButton={<MaterialIcons name="navigate-next" size={30} color={props.theme.ColorBtnPrimary} />}
-            >
-              {cliEvaluList.map((item) => renderCliEvaluItem(item))}
-            </Swiper>
-          ))}
-      {!!chatMessge && (
-        <View style={{ flex: 1, height: 200 }}>
-          <GiftedChat
-            messages={chatMessge}
-            onSend={(messages): void => { senChatMessage(messages) }}
-            user={{
-              _id: firm?.accountId
-            }}
-            placeholder="입력해 주세요.."
-            dateFormat="l"
-            renderUsernameOnMessage={true}
-            style={{ backgroundColor: 'red' }}
-          />
-          {
-            Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />
-          }
-        </View>
-      )}
+        </Header>
+        <Contents>
+          <SearchWrap>
+            <SearchTO onPress={() => navigation.navigate("FirmHarmCaseSearch")}>
+              <MaterialCommunityIcons name="account-search" size={34} color="black" />
+              <SearchText>피해사례를 조회해 드릴게요</SearchText>
+            </SearchTO>
+          </SearchWrap>
+        </Contents>
       {/* <JangbeeAdList
         admob
         admobUnitID="ca-app-pub-9415708670922576/2793380882"

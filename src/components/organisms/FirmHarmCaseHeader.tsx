@@ -125,18 +125,6 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement
           color={colors.pointDark}
         />
       </HeaderTopWrap>
-      <SearchBar
-        value={searchWord}
-        placeholder="전화번호 | 업체(자)명 | 사업자번호"
-        containerStyle={styles.containerSearchBar}
-        inputStyle={styles.inputSearchBar}
-        lightTheme
-        round
-        onChangeText={(text): void => setSearchWord(text)}
-        searchIcon={{ onPress: (): void => props.searchFilterCliEvalu(searchWord) }}
-        onSubmitEditing={(): void => props.searchFilterCliEvalu(searchWord)}
-        autoCorrect={false}
-      />
       <SearchNoticeWrap>
         <SearchNoticeText>{props.searchNotice}</SearchNoticeText>
         <SearchCountWrap>
