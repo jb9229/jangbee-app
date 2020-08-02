@@ -22,8 +22,8 @@ interface Context {
   setVisibleDetailModal: (flag: boolean) => void; closeEvaluLikeModal: (flag: boolean) => void;
   setClinetEvaluList: () => void;
   handleLoadMore: () => void;
-  setSearchArea: (area: string) => void;
-  setSearchWord: (word: string) => void;
+  onClickSearch: () => void;
+  onClickAddFirmHarmCase: () => void;
   onClickMyEvaluList: () => void;
   onClickNewestEvaluList: () => void;
   searchFilterCliEvalu: (search: string) => void;

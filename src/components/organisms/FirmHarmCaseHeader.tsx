@@ -1,13 +1,12 @@
 import * as React from 'react';
 
+import styled, { DefaultTheme, withTheme } from 'styled-components/native';
+
 import { EvaluListType } from 'src/container/firmHarmCase/type';
-import { FirmHarmCaseCountData } from 'types';
-import JBButton from 'molecules/JBButton';
-import { SearchBar } from 'react-native-elements';
-import { StyleSheet } from 'react-native';
+import { FirmHarmCaseCountData } from 'types/index';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import styled from 'styled-components/native';
 
 const HeaderWrap = styled.View`
   margin-top: 10;
@@ -17,63 +16,44 @@ const HeaderWrap = styled.View`
   padding-right: 3;
   padding-left: 3;
   padding-bottom: 3;
-  background-color: ${colors.batangDark};
-  elevation: 14;
-  border-radius: 10;
-  border-width: 1;
 `;
 const HeaderTopWrap = styled.View`
   flex-direction: row;
   justify-content: flex-end;
 `;
-const PickerArrowWrap = styled.View`
-  justify-content: center;
-  position: absolute;
-  top: 15;
-  left: 117;
-`;
 const SearchNoticeWrap = styled.View`
-  padding-top: 5;
-  padding-right: 5;
-  padding-left: 5;
+  padding: 10px;
   justify-content: space-between;
-  align-items: center;
+  background-color: ${colors.batangDark};
+  elevation: 14;
+  border-radius: 8;
 `;
 const SearchCountWrap = styled.View`
   flex-direction: row;
+  justify-content: center;
+  margin-top: 14;
 `;
 const SearchNoticeText = styled.Text`
   color: ${colors.pointDark};
   font-family: ${fonts.batang};
   justify-content: center;
-  font-size: 13;
+  font-size: 18;
   margin-bottom: 8;
 `;
 
 const PickerArrow = styled.Text`
   color: ${colors.pointDark};
 `;
-
-const styles = StyleSheet.create({
-  searchPicker: {
-    width: 167,
-    color: colors.point,
-    backgroundColor: 'transparent',
-    margin: 0,
-    padding: 0
-  },
-  containerSearchBar: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    backgroundColor: colors.batangDark,
-    borderTopColor: colors.batangDark,
-    borderBottomColor: colors.batangDark
-  },
-  inputSearchBar: {
-    fontSize: 16,
-    paddingLeft: 3
-  }
-});
+const SearchTO = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  /* background-color: ${(props): string => props.theme.ColorBGLightGray}; */
+`;
+const SearchText = styled.Text`
+  font-size: 21;
+  margin-left: 15;
+  color: ${(props) => props.theme.ColorPrimaryDark};
+`;
 
 interface Props {
   searchArea: string;
@@ -81,15 +61,15 @@ interface Props {
   searchNotice: string;
   countData: FirmHarmCaseCountData;
   evaluListType: EvaluListType;
-  setSearchArea: (a: string) => void;
-  setSearchWord: (w: string) => void;
+  onClickSearch: () => void;
   onClickMyEvaluList: () => void;
   onClickNewestEvaluList: () => void;
   setVisibleCreateModal: (flag: boolean) => void;
   searchFilterCliEvalu: (searchWord: string) => void;
+  theme: DefaultTheme;
 }
 
-export default function FirmHarmCaseHeader (props: Props): React.ReactElement
+const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
 {
   const [searchWord, setSearchWord] = React.useState(props.searchWord);
 
@@ -99,70 +79,25 @@ export default function FirmHarmCaseHeader (props: Props): React.ReactElement
   }, [props.searchWord]);
   return (
     <HeaderWrap removeClippedSubviews={false}>
-      <HeaderTopWrap>
-        <JBButton
-          title="내 사례"
-          onPress={props.onClickMyEvaluList}
-          size="small"
-          align="right"
-          bgColor={props.evaluListType === EvaluListType.MINE ? colors.pointDark : colors.batangDark}
-          color={props.evaluListType === EvaluListType.MINE ? colors.batangDark : colors.pointDark}
-        />
-        <JBButton
-          title="최근"
-          onPress={props.onClickNewestEvaluList}
-          size="small"
-          align="right"
-          bgColor={props.evaluListType === EvaluListType.LATEST ? colors.pointDark : colors.batangDark}
-          color={props.evaluListType === EvaluListType.LATEST ? colors.batangDark : colors.pointDark}
-        />
-        <JBButton
-          title="추가"
-          onPress={(): void => props.setVisibleCreateModal(true)}
-          size="small"
-          align="right"
-          bgColor={colors.batangDark}
-          color={colors.pointDark}
-        />
-      </HeaderTopWrap>
       <SearchNoticeWrap>
-        <SearchNoticeText>{props.searchNotice}</SearchNoticeText>
-        <SearchCountWrap>
-          <SearchNoticeText>
-            {`전체글: ${props.countData ? props.countData.totalCnt : '-'}`}
-          </SearchNoticeText>
-          <SearchNoticeText>
-            {'  |  '}
-          </SearchNoticeText>
-          <SearchNoticeText>
-            {`내글: ${props.countData ? props.countData.myCnt : '-'}`}
-          </SearchNoticeText>
-        </SearchCountWrap>
+        <SearchTO onPress={props.onClickSearch}>
+          <MaterialCommunityIcons name="account-search" size={34} color={props.theme.ColorPrimaryDark} />
+          <SearchText>피해사례를 조회해 드릴게요.</SearchText>
+        </SearchTO>
       </SearchNoticeWrap>
+      <SearchCountWrap>
+        <SearchNoticeText>
+          {`전체글: ${props.countData ? props.countData.totalCnt : '-'}`}
+        </SearchNoticeText>
+        <SearchNoticeText>
+          {'  |  '}
+        </SearchNoticeText>
+        <SearchNoticeText>
+          {`내글: ${props.countData ? props.countData.myCnt : '-'}`}
+        </SearchNoticeText>
+      </SearchCountWrap>
     </HeaderWrap>
   );
 }
 
-const onSearchAreaChange = (itemValue, setSearchArea, setSearchPlaceholder): void =>
-{
-  setSearchArea(itemValue);
-  if (itemValue === 'TEL')
-  {
-    setSearchPlaceholder('전화번호 입력(- 없이)');
-    return;
-  }
-  if (itemValue === 'FIRM_NUMBER')
-  {
-    setSearchPlaceholder('사업자번호 입력(- 포함)');
-    return;
-  }
-  if (itemValue === 'FIRM_NAME')
-  {
-    setSearchPlaceholder('업체명 입력');
-    return;
-  }
-  if (itemValue === 'CLI_NAME')
-  {
-    setSearchPlaceholder('고객명 입력');
-  }
-};
+export default withTheme(FirmHarmCaseHeader);

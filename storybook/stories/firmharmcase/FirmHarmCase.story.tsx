@@ -19,19 +19,19 @@ const SafeZonDecorator = (storyFn): React.ReactElement => (
   </SafeAreaView>
 );
 
+const navigation = {
+  navigate: (path: string, params: object): void =>
+  { if (path === 'WorkList') { alert('Success Story, Registry Work') } },
+  getParam: () => { return false },
+  state: {
+    params: (): void => console.log('navigate() called!')
+  }
+};
+
 storiesOf('업체 피해사례', module)
   .addDecorator(SafeZonDecorator)
   .add('홈', () => React.createElement(() =>
   {
-    const navigation = {
-      navigate: (path: string, params: object): void =>
-      { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
-      getParam: () => { return false },
-      state: {
-        params: (): void => console.log('navigate() called!')
-      }
-    };
-
     return (
       <FirmHarmCaseSBProvider navigation={navigation}>
         <FirmHarmCaseLayout />
@@ -41,7 +41,7 @@ storiesOf('업체 피해사례', module)
   .add('조회', () => React.createElement((): React.ReactElement =>
   {
     return (
-      <FirmHarmCaseSearchSBProvider>
+      <FirmHarmCaseSearchSBProvider navigation={navigation}>
         <FirmHarmCaseSearchLayout/>
       </FirmHarmCaseSearchSBProvider>
     );

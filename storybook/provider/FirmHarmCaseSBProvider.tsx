@@ -151,6 +151,12 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
+    onClickSearch: () => {
+      alert('화면 이동: 업체 피해사례 -> 조회')
+    },
+    onClickAddFirmHarmCase: () => {
+      alert('화면 이동: 업체 피해사례 -> 등록(미구현)')
+    },
     deleteCliEvalu: (id: string) =>
     {
     },

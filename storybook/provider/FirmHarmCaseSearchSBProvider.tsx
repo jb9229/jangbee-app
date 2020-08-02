@@ -84,4 +84,9 @@ const sbHarmCaseList = [
   }
 ];
 
+const sbCallHistory = [
+  {rawType: 0, type: 'INCOMING', dateTime: 'FSKESLF', timestamp: '0101111111', name: '', duration: 123, phoneNumber: '0102345678' },
+  {rawType: 0, type: 'INCOMING', dateTime: 'FSKESLF', timestamp: '0102222222', name: '', duration: 123, phoneNumber: '0102345678' }
+]
+
 export default FirmHarmCaseSearchSBProvider;

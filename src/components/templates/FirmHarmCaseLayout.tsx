@@ -14,8 +14,8 @@ import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import { GiftedChat } from 'react-native-gifted-chat';
 import JBButton from 'molecules/JBButton';
 import JangbeeAdList from '../organisms/JangbeeAdList';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import RoundButton from '../atoms/button/RoundButton';
 import { SearchBar } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import colors from 'constants/Colors';
@@ -28,9 +28,14 @@ interface StyleProps {
 }
 const Container = styled.SafeAreaView`
   flex: 1;
-  /* background-color: ${colors.batangLight}; */
+  background-color: ${colors.batangLight};
 `;
 const Header = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 20;
+  margin-right: 20;
+  margin-top: 40;
 `;
 const Contents = styled.View`
   flex: 1;
@@ -39,17 +44,9 @@ const Contents = styled.View`
 
 // SearchWrap
 const SearchWrap = styled.View`
-  border-width: 1;
-  padding: 10px;
   margin: 10px;
-`;
-const SearchTO = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-`;
-const SearchText = styled.Text`
-  font-size: 24;
-  margin-left: 15;
+  background-color: ${(props): string => props.theme.ColorBGDarkGray};
+  border-radius: 8;
 `;
 
 const NotExitButWrap = styled.View`
@@ -60,6 +57,12 @@ const NoticeEmptyList = styled.Text`
   font-family: ${(props: StyleProps): string => props.theme.FontBatang};
   text-align: center;
 `;
+const HelloWrap = styled.View``;
+const HelloText = styled.Text`
+ font-family: ${(props) => props.theme.FontTitleTop};
+ font-size: 23;
+`;
+
 
 interface Props{
   theme: DefaultTheme;
@@ -68,7 +71,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
   const {
     navigation, user, searchArea, searchWord, searchTime, searchNotice, countData, evaluListType,
-    setSearchArea, setSearchWord, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
+    onClickSearch, onClickAddFirmHarmCase, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
     deleteCliEvalu,
@@ -102,27 +105,31 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
   return (
     <Container>
       <Header>
+        <HelloWrap>
+          <HelloText>안녕하세요.</HelloText>
+          <HelloText>미수금이 발생 했나요?</HelloText>
+        </HelloWrap>
+        <RoundButton text="피해사례 등록하기" onClick={onClickAddFirmHarmCase} />
+      </Header>
+      <Contents>
         <FirmHarmCaseHeader
           searchArea={searchArea}
           searchWord={searchWord}
           searchNotice={searchNotice}
           countData={countData}
           evaluListType={evaluListType}
-          setSearchArea={setSearchArea}
-          setSearchWord={setSearchWord}
+          onClickSearch={onClickSearch}
           onClickMyEvaluList={onClickMyEvaluList}
           onClickNewestEvaluList={onClickNewestEvaluList}
           setVisibleCreateModal={setVisibleCreateModal}
           searchFilterCliEvalu={searchFilterCliEvalu}/>
-        </Header>
-        <Contents>
-          <SearchWrap>
-            <SearchTO onPress={() => navigation.navigate("FirmHarmCaseSearch")}>
-              <MaterialCommunityIcons name="account-search" size={34} color="black" />
-              <SearchText>피해사례를 조회해 드릴게요</SearchText>
-            </SearchTO>
-          </SearchWrap>
-        </Contents>
+        <SearchWrap>
+          {/* <SearchTO onPress={() => navigation.navigate("FirmHarmCaseSearch")}>
+            <MaterialCommunityIcons name="account-search" size={34} color="black" />
+            <SearchText>피해사례를 조회해 드릴게요.</SearchText>
+          </SearchTO> */}
+        </SearchWrap>
+      </Contents>
       {/* <JangbeeAdList
         admob
         admobUnitID="ca-app-pub-9415708670922576/2793380882"

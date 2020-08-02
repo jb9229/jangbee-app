@@ -60,6 +60,7 @@ export const enFont = {
 export const light = {
   // Theme Color
   ColorPrimary: '#ffbb00',
+  ColorPrimaryDark: 'rgb(247, 174, 67)', // #F7AE43
   ColorBatangDark: '#175AA8',
   ColorBatang: '#82b6ed',
   ColorBatangLight: '#D3E5F9',
@@ -85,7 +86,7 @@ export const light = {
   // Background Color
   ColorBGDarkGray: '#3E3936',
   ColorBGGray: '#d7d7d7',
-  ColorBGLightGray: '#E3DCDC',
+  ColorBGLightGray: 'rgb(245, 245, 245)', // #f5f5f5
   ColorBGYellowBatang: '#FDEFDB',
   ColorBGYellowBatangLight: '#fef4e7',
   background: colors.lightBackground,
@@ -110,6 +111,7 @@ export const light = {
 export const dark = {
   // Theme Color
   ColorPrimary: '#ffbb00',
+  ColorPrimaryDark: 'rgb(247, 174, 67)', // #F7AE43
   ColorBatangDark: '#175AA8',
   ColorBatang: '#82b6ed',
   ColorBatangLight: '#D3E5F9',

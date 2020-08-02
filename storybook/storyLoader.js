@@ -9,7 +9,6 @@ function loadStories() {
 	require('./stories/cashback/CashBack.story');
 	require('./stories/firm/Firm.story');
 	require('./stories/firmharmcase/FirmHarmCase.story');
-	require('./stories/firmharmcase/FirmHarmCaseSearch.story');
 	require('./stories/molecules/Molecules.story');
 	require('./stories/organisms/Organisms.story');
 	require('./stories/user/User.story');
@@ -22,7 +21,6 @@ const stories = [
 	'./stories/cashback/CashBack.story',
 	'./stories/firm/Firm.story',
 	'./stories/firmharmcase/FirmHarmCase.story',
-	'./stories/firmharmcase/FirmHarmCaseSearch.story',
 	'./stories/molecules/Molecules.story',
 	'./stories/organisms/Organisms.story',
 	'./stories/user/User.story',
