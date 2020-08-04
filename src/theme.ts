@@ -84,6 +84,7 @@ export const light = {
   ColorBtnStyle: 'white',
 
   // Background Color
+  ColorBGBlack: 'rgb(62, 57, 54)', // #3E3936
   ColorBGDarkGray: '#3E3936',
   ColorBGGray: '#d7d7d7',
   ColorBGLightGray: 'rgb(245, 245, 245)', // #f5f5f5
@@ -134,7 +135,8 @@ export const dark = {
   ColorBtnStyle: 'white',
 
   // Background Color
-  ColorBGDarkGray: '#F7AE43',
+  ColorBGBlack: 'rgb(62, 57, 54)', // #3E3936
+  ColorBGDarkGray: '#3E3936',
   ColorBGGray: '#d7d7d7',
   ColorBGLightGray: '#E3DCDC',
   ColorBGYellowBatang: '#FDEFDB',

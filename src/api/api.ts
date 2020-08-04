@@ -416,7 +416,7 @@ export function getClientEvaluList (page, accountId, mine)
 
 export function searchClientEvaluList (paramStr)
 {
-  return fetch(`${url.JBSERVER_CLIENT_EVALU}?${paramStr}`).then(
+  return fetch(`${url.JBSERVER_CLIENT_EVALU}?searchWord=${paramStr}`).then(
     handleJBServerJsonResponse
   );
 }

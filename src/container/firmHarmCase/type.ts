@@ -35,3 +35,60 @@ export interface HarmCase {
   telNumber3: string;
   searchTime: string;
 }
+
+export class FirmHarmCaseCreateDto {
+  constructor() {
+    this.reason = '';
+    this.local = '';
+    this.firmName = '';
+    this.firmNumber = '';
+    this.cliName = '';
+    this.telNumber = '';
+    this.telNumber2 = '';
+    this.telNumber3 = '';
+    this.searchTime = '';
+    this.equipment = '';
+    this.regiTelNumber = '';
+    this.amount = 0;
+  }
+  reason: string;
+  local: string;
+  firmName: string;
+  firmNumber: string;
+  cliName: string;
+  telNumber: string;
+  telNumber2: string;
+  telNumber3: string;
+  searchTime: string;
+  equipment: string;
+  regiTelNumber: string;
+  amount: number;
+}
+
+export class FirmHarmCaseCreateErrorDto {
+  constructor() {
+    this.reason = '';
+    this.local = '';
+    this.firmName = '';
+    this.firmNumber = '';
+    this.cliName = '';
+    this.telNumber = '';
+    this.telNumber2 = '';
+    this.telNumber3 = '';
+    this.searchTime = '';
+    this.equipment = '';
+    this.regiTelNumber = '';
+  }
+
+  reason: string;
+  local: string;
+  firmName: string;
+  firmNumber: string;
+  cliName: string;
+  telNumber: string;
+  telNumber2: string;
+  telNumber3: string;
+  searchTime: string;
+  equipment: string;
+  regiTelNumber: string;
+}

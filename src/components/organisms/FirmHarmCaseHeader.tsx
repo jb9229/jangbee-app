@@ -56,27 +56,13 @@ const SearchText = styled.Text`
 `;
 
 interface Props {
-  searchArea: string;
-  searchWord: string;
-  searchNotice: string;
-  countData: FirmHarmCaseCountData;
-  evaluListType: EvaluListType;
-  onClickSearch: () => void;
-  onClickMyEvaluList: () => void;
-  onClickNewestEvaluList: () => void;
-  setVisibleCreateModal: (flag: boolean) => void;
-  searchFilterCliEvalu: (searchWord: string) => void;
   theme: DefaultTheme;
+  countData: FirmHarmCaseCountData;
+  onClickSearch: () => void;
 }
 
 const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
 {
-  const [searchWord, setSearchWord] = React.useState(props.searchWord);
-
-  React.useEffect(() =>
-  {
-    setSearchWord(props.searchWord);
-  }, [props.searchWord]);
   return (
     <HeaderWrap removeClippedSubviews={false}>
       <SearchNoticeWrap>

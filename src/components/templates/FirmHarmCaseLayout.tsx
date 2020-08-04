@@ -4,7 +4,7 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
-import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
+import ClientEvaluCreateModal from 'src/components/templates/FirmHarmCaseCreateLayout';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
@@ -34,7 +34,7 @@ const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-left: 20;
-  margin-right: 20;
+  margin-right: 10;
   margin-top: 40;
 `;
 const Contents = styled.View`
@@ -62,7 +62,22 @@ const HelloText = styled.Text`
  font-family: ${(props) => props.theme.FontTitleTop};
  font-size: 23;
 `;
-
+const HelloTextWrap = styled.View`
+  flex-direction: row;
+`;
+const HelloPointText = styled.Text`
+  font-family: ${(props) => props.theme.FontTitleTop};
+  font-size: 23;
+  color: ${(props) => props.theme.ColorPrimaryDark};
+`;
+const FirmHarmCaseAddBtn = styled(RoundButton).attrs(() => ({
+  wrapperStyle: {
+    height: 40,
+    borderRadius: 50,
+    paddingLeft: 5,
+    paddingRight: 5
+  }
+}))``;
 
 interface Props{
   theme: DefaultTheme;
@@ -70,7 +85,7 @@ interface Props{
 const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
   const {
-    navigation, user, searchArea, searchWord, searchTime, searchNotice, countData, evaluListType,
+    navigation, user, searchArea, searchTime, searchNotice, countData, evaluListType,
     onClickSearch, onClickAddFirmHarmCase, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
@@ -107,14 +122,17 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
       <Header>
         <HelloWrap>
           <HelloText>안녕하세요.</HelloText>
-          <HelloText>미수금이 발생 했나요?</HelloText>
+          <HelloTextWrap>
+          <HelloText>장비대금</HelloText>
+            <HelloPointText> 체불이 </HelloPointText>
+            <HelloText>발생 했나요?</HelloText>
+          </HelloTextWrap>
         </HelloWrap>
-        <RoundButton text="피해사례 등록하기" onClick={onClickAddFirmHarmCase} />
+        <FirmHarmCaseAddBtn text="피해사례 등록하기" onClick={onClickAddFirmHarmCase} />
       </Header>
       <Contents>
         <FirmHarmCaseHeader
           searchArea={searchArea}
-          searchWord={searchWord}
           searchNotice={searchNotice}
           countData={countData}
           evaluListType={evaluListType}
@@ -169,10 +187,6 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
       />
     </Container>
   );
-};
-
-FirmHarmCaseLayout.defaultProps = {
-  isLoading: true
 };
 
 export default withTheme(FirmHarmCaseLayout);

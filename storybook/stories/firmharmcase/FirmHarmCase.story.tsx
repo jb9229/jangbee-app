@@ -5,10 +5,10 @@ import { SafeAreaView, View } from 'react-native';
 import { boolean, text } from '@storybook/addon-knobs';
 
 import { Evaluation } from 'src/contexts/FirmHarmCaseContext';
+import FirmHarmCaseCreateLayout from 'src/components/templates/FirmHarmCaseCreateLayout';
+import FirmHarmCaseCreateSBProvider from 'storybook/provider/FirmHarmCaseCreateSBProvider';
 import FirmHarmCaseItem from 'src/components/organisms/FirmHarmCaseItem';
 import FirmHarmCaseLayout from 'src/components/templates/FirmHarmCaseLayout';
-import FirmHarmCaseList from 'container/firmHarmCase/list';
-import FirmHarmCaseProvider from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import FirmHarmCaseSearchLayout from 'src/components/templates/FirmHarmCaseSearchLayout';
 import FirmHarmCaseSearchSBProvider from 'storybook/provider/FirmHarmCaseSearchSBProvider';
 import { storiesOf } from '@storybook/react-native';
@@ -44,6 +44,14 @@ storiesOf('업체 피해사례', module)
       <FirmHarmCaseSearchSBProvider navigation={navigation}>
         <FirmHarmCaseSearchLayout/>
       </FirmHarmCaseSearchSBProvider>
+    );
+  }))
+  .add('등록', () => React.createElement((): React.ReactElement =>
+  {
+    return (
+      <FirmHarmCaseCreateSBProvider navigation={navigation}>
+        <FirmHarmCaseCreateLayout />
+      </FirmHarmCaseCreateSBProvider>
     );
   }))
   .add('사례 아이템', () => (

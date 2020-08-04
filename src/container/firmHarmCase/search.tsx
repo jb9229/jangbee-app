@@ -14,6 +14,10 @@ interface Props {
 }
 const FirmHarmCaseSearchContainer: React.FC<Props> = (props) =>
 {
+  // static navigationOptions = () => ({
+  //   title: '장비 업체정보'
+  // });
+
   return (
     <FirmHarmCaseSearchProvider navigation={props.navigation}>
       <FirmHarmCaseSearchLayout />

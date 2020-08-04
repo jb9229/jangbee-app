@@ -128,7 +128,10 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
             <SearchWord>{searchWord}</SearchWord>
             <SeachCancelBtn iconDelete={true} onClick={() => onCancelSearch()} />
           </SearchInfoWrap>
-          <FirmHarmCaseSearchResult harmCaseList={harmCaseList} />
+          <FirmHarmCaseSearchResult
+            harmCaseList={harmCaseList}
+            searchWord={searchWord}
+          />
         </SearchResultWrap>
       )}
     </Container>

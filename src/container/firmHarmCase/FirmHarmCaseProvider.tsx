@@ -394,6 +394,12 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
 
       console.log('>>> newMessage', newMessage);
       addFirmChatMessageReq({ variables: { message: newMessage } });
+    },
+    onClickSearch: () => {
+      props.navigation.navigate('FirmHarmCaseSearch')
+    },
+    onClickAddFirmHarmCase: () => {
+      props.navigation.navigate('FirmHarmCaseCreate')
     }
   };
 

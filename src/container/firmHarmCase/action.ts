@@ -21,3 +21,10 @@ export const getClientEvaluCount = (accountId: string, setCountData: (n: string)
       );
     });
 };
+
+export const searchFirmHarmCase = (searchWord: string): Promise<Array<object>> =>
+  {
+    return api
+      .searchClientEvaluList(searchWord);
+  };
+
