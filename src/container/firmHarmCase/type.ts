@@ -41,7 +41,6 @@ export class FirmHarmCaseCreateDto {
     this.reason = '';
     this.local = '';
     this.firmName = '';
-    this.firmNumber = '';
     this.cliName = '';
     this.telNumber = '';
     this.telNumber2 = '';
@@ -54,7 +53,7 @@ export class FirmHarmCaseCreateDto {
   reason: string;
   local: string;
   firmName: string;
-  firmNumber: string;
+  firmNumber: string | undefined;
   cliName: string;
   telNumber: string;
   telNumber2: string;
@@ -78,6 +77,7 @@ export class FirmHarmCaseCreateErrorDto {
     this.searchTime = '';
     this.equipment = '';
     this.regiTelNumber = '';
+    this.amount = '';
   }
 
   reason: string;
@@ -91,4 +91,5 @@ export class FirmHarmCaseCreateErrorDto {
   searchTime: string;
   equipment: string;
   regiTelNumber: string;
+  amount: string;
 }

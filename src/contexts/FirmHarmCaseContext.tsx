@@ -12,9 +12,9 @@ interface Context {
   searchArea: string; searchWord: string; searchNotice: string;
   countData: FirmHarmCaseCountData;
   cliEvaluList: Array<object>;
-  updateEvalu: any; detailEvalu: any; searchTime: string;
+  updateEvalu: any;   searchTime: string;
   evaluLikeSelected: boolean; evaluLikeList: Array<string>; mineEvaluation: (flag: boolean) => void;
-  visibleCreateModal: boolean; visibleUpdateModal: boolean; visibleDetailModal: boolean; visibleEvaluLikeModal: boolean;
+  visibleCreateModal: boolean;
   chatMessge: Array<object>;
   evaluListType: EvaluListType;
   createClientEvaluLike: (newEvaluLike: string) => void; cancelClientEvaluLike: (evaluation: string, like: boolean) => void;

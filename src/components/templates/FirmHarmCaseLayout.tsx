@@ -5,9 +5,6 @@ import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
 import ActivityIndicator from 'atoms/ActivityIndicator';
 import ClientEvaluCreateModal from 'src/components/templates/FirmHarmCaseCreateLayout';
-import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
-import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
-import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
 import { EvaluListType } from 'src/container/firmHarmCase/type';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
@@ -72,10 +69,12 @@ const HelloPointText = styled.Text`
 `;
 const FirmHarmCaseAddBtn = styled(RoundButton).attrs(() => ({
   wrapperStyle: {
-    height: 40,
+    height: 50,
     borderRadius: 50,
     paddingLeft: 5,
-    paddingRight: 5
+    paddingRight: 5,
+    paddingTop: 11,
+    paddingBottom: 11
   }
 }))``;
 
@@ -91,9 +90,9 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
     openDetailModal,
     deleteCliEvalu,
     openCliEvaluLikeModal,
-    updateEvalu, detailEvalu,
+    updateEvalu,
     evaluLikeSelected, evaluLikeList, createClientEvaluLike, cancelClientEvaluLike, mineEvaluation,
-    visibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
+    visibleCreateModal,
     setVisibleCreateModal, setVisibleUpdateModal, setVisibleDetailModal, closeEvaluLikeModal,
     setClinetEvaluList,
     chatMessge, senChatMessage
@@ -154,37 +153,6 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
         admonSize="fullBanner"
         admonHeight="60"
       /> */}
-      <ClientEvaluCreateModal
-        isVisibleModal={visibleCreateModal}
-        accountId={user.uid}
-        closeModal={() => setVisibleCreateModal(false)}
-        completeAction={() => setClinetEvaluList()}
-        size="full"
-      />
-      <ClientEvaluUpdateModal
-        updateEvalu={updateEvalu}
-        isVisibleModal={visibleUpdateModal}
-        closeModal={() => setVisibleUpdateModal(false)}
-        completeAction={() => setClinetEvaluList()}
-      />
-      <ClientEvaluDetailModal
-        isVisibleModal={visibleDetailModal}
-        detailEvalu={detailEvalu}
-        closeModal={() => setVisibleDetailModal(false)}
-        completeAction={() => {}}
-        size="full"
-        searchTime={searchTime}
-      />
-      <ClientEvaluLikeModal
-        isVisibleModal={visibleEvaluLikeModal}
-        accountId={user.uid}
-        evaluation={evaluLikeSelected}
-        evaluLikeList={evaluLikeList}
-        createClientEvaluLike={createClientEvaluLike}
-        cancelClientEvaluLike={cancelClientEvaluLike}
-        closeModal={refresh => closeEvaluLikeModal(refresh)}
-        isMine={mineEvaluation}
-      />
     </Container>
   );
 };

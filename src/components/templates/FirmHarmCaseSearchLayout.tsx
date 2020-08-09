@@ -2,6 +2,9 @@ import * as React from 'react';
 
 import { NativeSyntheticEvent, StyleProp, TextInput, TextInputEndEditingEventData, ViewStyle } from 'react-native';
 
+import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
+import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
+import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
 import { DefaultStyledProps } from 'src/theme';
 import FirmHarmCaseItem from '../organisms/FirmHarmCaseItem';
 import FirmHarmCaseSearchResult from '../organisms/FirmHarmCaseSearchResult';
@@ -50,7 +53,7 @@ const CallHistoryPhoneNumber = styled.Text``;
 const SearchResultWrap = styled.View``;
 const SearchWrap = styled.View``;
 const SearchTextInput = styled.TextInput`
-  padding-top: 5;
+  padding-top: 15;
   padding-left: 5;
   padding-bottom: 10;
   font-size: 18;
@@ -89,8 +92,9 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
     searchTextInputRef.current.focus();
   },[])
   const {
-    searched, callHistory, harmCaseList, searchWord,
-    onSelectCallHistory, onCancelSearch, onSearchWordEndEditing,
+    searched, callHistory, harmCaseList, searchWord, searchTime, detailEvalu,
+    visibleDetailModal,
+    onSelectCallHistory, onCancelSearch, onSearchWordEndEditing, closeFirmHarmCaseDetailModal, openDetailModal
   } = useFirmHarmCaseSearchContext();
 
   return (
@@ -131,9 +135,34 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
           <FirmHarmCaseSearchResult
             harmCaseList={harmCaseList}
             searchWord={searchWord}
+            searchTime={searchTime}
           />
         </SearchResultWrap>
       )}
+      <ClientEvaluDetailModal
+        isVisibleModal={visibleDetailModal}
+        detailEvalu={detailEvalu}
+        closeModal={() => closeFirmHarmCaseDetailModal()}
+        completeAction={() => {}}
+        size="full"
+        searchTime={searchTime}
+      />
+      {/* <ClientEvaluUpdateModal
+        updateEvalu={updateEvalu}
+        isVisibleModal={visibleUpdateModal}
+        closeModal={() => setVisibleUpdateModal(false)}
+        completeAction={() => setClinetEvaluList()}
+      /> */}
+      {/* <ClientEvaluLikeModal
+        isVisibleModal={visibleEvaluLikeModal}
+        accountId={user.uid}
+        evaluation={evaluLikeSelected}
+        evaluLikeList={evaluLikeList}
+        createClientEvaluLike={createClientEvaluLike}
+        cancelClientEvaluLike={cancelClientEvaluLike}
+        closeModal={refresh => closeEvaluLikeModal(refresh)}
+        isMine={mineEvaluation}
+      /> */}
     </Container>
   );
 };

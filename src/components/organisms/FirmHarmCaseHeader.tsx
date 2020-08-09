@@ -40,7 +40,16 @@ const SearchNoticeText = styled.Text`
   font-size: 18;
   margin-bottom: 8;
 `;
-
+const MyHarmCaseCount = styled.Text`
+  color: ${colors.pointDark};
+  font-family: ${fonts.batang};
+  justify-content: center;
+  font-size: 18;
+  margin-bottom: 8;
+  text-decoration-line: underline;
+`;
+const MyHarmCaseCountWrap = styled.TouchableOpacity`
+`;
 const PickerArrow = styled.Text`
   color: ${colors.pointDark};
 `;
@@ -59,6 +68,7 @@ interface Props {
   theme: DefaultTheme;
   countData: FirmHarmCaseCountData;
   onClickSearch: () => void;
+  onClickMyEvaluList: () => void;
 }
 
 const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
@@ -78,9 +88,14 @@ const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
         <SearchNoticeText>
           {'  |  '}
         </SearchNoticeText>
-        <SearchNoticeText>
-          {`내글: ${props.countData ? props.countData.myCnt : '-'}`}
-        </SearchNoticeText>
+        <MyHarmCaseCountWrap
+          onPress={props.onClickMyEvaluList}
+          hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}
+        >
+          <MyHarmCaseCount>
+            {`내글: ${props.countData ? props.countData.myCnt : '-'}`}
+          </MyHarmCaseCount>
+        </MyHarmCaseCountWrap>
       </SearchCountWrap>
     </HeaderWrap>
   );

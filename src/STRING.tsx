@@ -41,6 +41,27 @@ export const LOCAL_CATEGORY = [
   '경남',
   '제주특별자치도'
 ];
+
+export const LOCAL_CATEGORY_ALL = [
+  '전국',
+  '서울',
+  '부산',
+  '경기',
+  '인천',
+  '세종특별자치시',
+  '대전',
+  '광주',
+  '대구',
+  '울산',
+  '강원',
+  '충북',
+  '충남',
+  '전북',
+  '전남',
+  '경북',
+  '경남',
+  '제주특별자치도'
+];
 export const LOCAL_ITEM = [];
 LOCAL_ITEM['서울'] = [
   '강남구',

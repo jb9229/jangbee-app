@@ -1,10 +1,10 @@
 import { KeyboardAvoidingView, Modal, ScrollView } from 'react-native';
-import { LOCAL_CATEGORY, LOCAL_ITEM } from 'src/STRING';
+import { LOCAL_CATEGORY, LOCAL_CATEGORY_ALL, LOCAL_ITEM } from 'src/STRING';
 
 import Card from 'molecules/CardUI';
 import EditText from '../molecules/EditText';
 import JBButton from 'molecules/JBButton';
-import JBSelectBox from 'organisms/JBSelectBox';
+import JBSelectBox from 'src/components/organisms/JBSelectBox';
 import React from 'react';
 import styled from 'styled-components/native';
 import { useFirmHarmCaseCreateContext } from 'src/contexts/FirmHarmCaseCreateContext';
@@ -40,6 +40,36 @@ const FirmHarmCaseCreateLayout: React.FC = () => {
               />
 
               <EditText
+                label="사유"
+                text={createDto.reason}
+                onChangeText={text => { createDto.reason = text }}
+                placeholder="블랙리스트 사유를 기입해 주세요"
+                numberOfLines={5}
+                multiline
+                errorText={createErrorDto.reason}
+              />
+
+              <EditText
+                label="작성자 연락처"
+                subLabel="(옵션)"
+                text={createDto.regiTelNumber}
+                onChangeText={text => { createDto.regiTelNumber = text }}
+                placeholder="타업체가 행적을 신고 해 줍니다."
+                keyboardType="phone-pad"
+                errorText={createErrorDto.regiTelNumber}
+              />
+              
+              <EditText
+                label="금액"
+                subLabel="(옵션)"
+                text={createDto.amount}
+                onChangeText={text => { if(text) { const num = Number.parseInt(text); if(num && !isNaN(num)) { createDto.amount = num } } }}
+                placeholder="피해금액이 얼마입니까?"
+                keyboardType="numeric"
+                errorText={createErrorDto.amount}
+              />
+
+              <EditText
                 label="고객명"
                 subLabel="(옵션)"
                 text={createDto.cliName}
@@ -55,6 +85,42 @@ const FirmHarmCaseCreateLayout: React.FC = () => {
                 onChangeText={text => { createDto.firmName = text }}
                 placeholder="업체명을 기입해 주세요"
                 errorText={createErrorDto.firmName}
+              />
+              <EditText
+                label="사업자번호"
+                subLabel="(옵션)"
+                text={createDto.firmNumber}
+                onChangeText={text => { if (!text) { createDto.firmNumber = undefined } else { createDto.firmNumber = text } }}
+                placeholder="사업자번호를 기입해 주세요"
+                keyboardType="numeric"
+                errorText={createErrorDto.firmNumber}
+              />
+
+              <EditText
+                label="장비"
+                subLabel="(옵션)"
+                text={createDto.equipment}
+                onChangeText={text => { createDto.equipment = text }}
+                placeholder="어떤 장비의 피해사례 입니까?"
+                errorText={createErrorDto.equipment}
+              />
+
+              {/* <EditText
+                label="지역"
+                text={createDto.local}
+                onChangeText={text => { createDto.local = text }}
+                placeholder="어느 지역 피해사례 입니까?"
+                editable={false}
+                row
+              /> */}
+              <JBSelectBox
+                title="지역"
+                subLabel="(옵션)"
+                categoryList={LOCAL_CATEGORY_ALL}
+                itemList={LOCAL_ITEM}
+                selectCategory={sido => { console.log('sido: ', sido); createDto.local = sido }}
+                selectItem={(sido, sigungu) => { console.log('sido item: ', sido); createDto.local = `${sido} ${sigungu}` }}
+                itemPicker="전체"
               />
 
               <EditText
@@ -77,75 +143,11 @@ const FirmHarmCaseCreateLayout: React.FC = () => {
                 errorText={createErrorDto.telNumber3}
               />
 
-              <EditText
-                label="사업자번호"
-                subLabel="(옵션)"
-                text={createDto.firmNumber}
-                onChangeText={text => { createDto.firmNumber = text }}
-                placeholder="사업자번호를 기입해 주세요"
-                keyboardType="numeric"
-                errorText={createErrorDto.firmNumber}
-              />
-
-              <EditText
-                label="장비"
-                subLabel="(옵션)"
-                text={createDto.equipment}
-                onChangeText={text => { createDto.local = text }}
-                placeholder="어떤 장비의 피해사례 입니까?"
-                errorText={createErrorDto.equipment}
-              />
-
-              <EditText
-                label="지역"
-                text={createDto.local}
-                onChangeText={text => { createDto.local = text }}
-                placeholder="어느 지역 피해사례 입니까?"
-                editable={false}
-                row
-              />
-              <JBSelectBox
-                categoryList={LOCAL_CATEGORY}
-                itemList={LOCAL_ITEM}
-                selectedCat={createDto.searSido}
-                selectedItem={createDto.searGungu}
-                selectCategory={sido => { createDto.searSido = sido; createDto.searGungu = ''; createDto.local = sido }}
-                selectItem={(sido, sigungu) => { createDto.searSido = sido; createDto.searGungu = sigungu; createDto.local = `${sido} ${sigungu}` }}
-                itemPicker="전체"
-              />
-
-              <EditText
-                label="금액"
-                text={createDto.amount}
-                onChangeText={text => { if(text) { const num = Number.parseInt(text); if(num && !isNaN(num)) { createDto.amount = num } } }}
-                placeholder="피해금액이 얼마입니까?"
-                keyboardType="numeric"
-                errorText={createErrorDto.amount}
-              />
-
-              <EditText
-                label="작성자 연락처"
-                text={createDto.regiTelNumber}
-                onChangeText={text => { createDto.regiTelNumber = text }}
-                placeholder="타업체가 행적을 신고해 줄 수 있습니다."
-                keyboardType="phone-pad"
-                errorText={createErrorDto.regiTelNumber}
-              />
-
-              <EditText
-                label="사유"
-                text={createDto.reason}
-                onChangeText={text => { createDto.reason = text }}
-                placeholder="블랙리스트 사유를 기입해 주세요"
-                numberOfLines={5}
-                multiline
-                errorText={createErrorDto.reason}
-              />
             </ContentsView>
           </Card>
         </ScrollView>
         <JBButton
-          title="피해사례 추가하기"
+          title="피해사례 등록하기"
           onPress={onClickAdd}
           size="full"
           Secondary

@@ -1,7 +1,8 @@
+import * as React from 'react';
+
 import { DefaultNavigationProps } from 'src/types';
 import FirmHarmCaseLayout from 'src/components/templates/FirmHarmCaseLayout';
 import FirmHarmCaseProvider from 'src/container/firmHarmCase/FirmHarmCaseProvider';
-import React from 'react';
 
 interface Props {
   navigation: DefaultNavigationProps;

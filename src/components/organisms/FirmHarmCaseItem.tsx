@@ -7,7 +7,7 @@ import JBTextItem from 'molecules/JBTextItem';
 import React from 'react';
 import colors from 'constants/Colors';
 import { formatTelnumber } from 'utils/StringUtils';
-import { shareClientEvalu } from 'common/JBCallShare';
+import { shareClientEvalu } from 'src/container/firmHarmCase/searchAction';
 import styled from 'styled-components/native';
 
 interface StyleProps {
@@ -76,11 +76,11 @@ function confirmDeleteCE (item, deleteCliEvalu)
 interface Props {
   item: Evaluation;
   accountId: string;
+  searchTime: string;
   updateCliEvalu: (item: Evaluation) => void;
   deleteCliEvalu: (id: string) => void;
   openCliEvaluLikeModal: (item: Evaluation, mine: boolean) => void;
   openDetailModal: (item: Evaluation) => void;
-  searchTime: string;
 }
 const FirmHarmCaseItem: React.FC<Props> = (props) =>
 {
@@ -127,7 +127,7 @@ const FirmHarmCaseItem: React.FC<Props> = (props) =>
           />
           <Icon.AntDesign name="right" size={16} color={colors.pointDark} />
         </TopLeftWrap>
-        <LikeWrap>
+        {/* <LikeWrap>
           <JBButton
             title={`공감: ${props.item.likeCount}, 비공감: ${props.item.unlikeCount}`}
             onPress={() =>
@@ -138,7 +138,7 @@ const FirmHarmCaseItem: React.FC<Props> = (props) =>
             Primary
           />
           <Icon.AntDesign name="right" size={16} color={colors.point2} />
-        </LikeWrap>
+        </LikeWrap> */}
       </TopWrap>
       <ContentsWrap>
         <JBTextItem title="전화번호" value={telStr} small row ellipsis={20} />

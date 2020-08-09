@@ -21,7 +21,7 @@ const FirmHarmCaseCreateSBProvider = (props: Props): React.ReactElement =>
   };
   const actions = {
     onClickAdd() {
-
+      alert('피해사례 추가 액션')
     }
   };
   // UI Component

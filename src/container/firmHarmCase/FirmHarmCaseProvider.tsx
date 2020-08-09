@@ -57,7 +57,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const { user, firm } = useLoginContext();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
-  const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
   const [visibleEvaluLikeModal, setVisibleEvaluLikeModal] = React.useState(false);
   const [cliEvaluList, setCliEvaluList] = React.useState(null);
   const [page, setPage] = React.useState(0);
@@ -72,7 +71,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const [updateEvalu, setUpdateEvalu] = React.useState();
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
   const [evaluListType, setEvaluListType] = React.useState(EvaluListType.LATEST);
-  const [detailEvalu, setDetailEvalu] = React.useState();
   const [chatMessge, setChatMessge] = React.useState([]);
 
   // Server api call
@@ -153,48 +151,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       );
   };
 
-  const setMyClientEvaluList = () =>
-  {
-    api
-      .getClientEvaluList(page, user.uid, true)
-      .then(resBody =>
-      {
-        if (resBody && resBody.content)
-        {
-          let notice;
-          if (resBody.content.length === 0)
-          {
-            notice = '내가 등록한 피해사례가 없습니다.';
-            setCliEvaluList([]);
-            setSearchNotice(notice);
-            setEvaluListType(EvaluListType.MINE);
-            setLastList(resBody.last);
-            return;
-          }
-
-          notice = '내가 등록한 피해사례 입니다';
-          setCliEvaluList(
-            page === 0
-              ? resBody.content
-              : [...cliEvaluList, ...resBody.content]);
-          setSearchNotice(notice);
-          setLastList(resBody.last);
-          setEvaluListType(EvaluListType.MINE);
-          setSearchTime(moment().format('YYYY.MM.DD HH:mm'));
-          return;
-        }
-
-        setNewestEvaluList(false);
-      })
-      .catch(ex =>
-      {
-        noticeUserError(
-          '내가 등록한 피해사례 요청 문제',
-          `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
-        );
-      });
-  };
-
   const searchFilterCliEvalu = (searchWord: string): void =>
   {
     if (!searchWord)
@@ -248,8 +204,8 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     cliEvaluList, countData,
     chatMessge: chatMessagesResponse?.data?.firmChatMessage || [],
     setSearchWord,
-    visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
-    updateEvalu, detailEvalu, searchTime,
+    visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleEvaluLikeModal,
+    updateEvalu, searchTime,
     evaluLikeSelected, evaluLikeList
   };
 
@@ -311,27 +267,11 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       }
       setVisibleEvaluLikeModal(false);
     },
-    setMyClientEvaluList,
     searchFilterCliEvalu: (word: string): void => searchFilterCliEvalu(word),
     openUpdateCliEvaluForm: (item) =>
     {
       setUpdateEvalu(item);
       setVisibleUpdateModal(true);
-    },
-    openDetailModal: (evalu): void =>
-    {
-      setDetailEvalu(evalu);
-      setVisibleDetailModal(true);
-    },
-    onClickMyEvaluList: () =>
-    {
-      if (evaluListType === EvaluListType.MINE) { hideEvaluList(); return }
-
-      setSearchWord('');
-      setPage(0);
-      setNewestEvaluList(false);
-      setCliEvaluList(null);
-      setMyClientEvaluList();
     },
     handleLoadMore: () =>
     {
@@ -343,10 +283,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       if (newestEvaluList)
       {
         setClinetEvaluList();
-      }
-      else
-      {
-        setMyClientEvaluList();
       }
     },
     onClickNewestEvaluList: () =>
@@ -400,6 +336,9 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     },
     onClickAddFirmHarmCase: () => {
       props.navigation.navigate('FirmHarmCaseCreate')
+    },
+    onClickMyEvaluList: () => {
+      props.navigation.navigate('FirmHarmCaseSearch', { myHarmCase: true })
     }
   };
 

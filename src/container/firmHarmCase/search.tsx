@@ -14,12 +14,11 @@ interface Props {
 }
 const FirmHarmCaseSearchContainer: React.FC<Props> = (props) =>
 {
-  // static navigationOptions = () => ({
-  //   title: '장비 업체정보'
-  // });
+  const searchWord = props.navigation.getParam('searchWord', undefined);
+  const initMyHarmCaseSearch = props.navigation.getParam('myHarmCase', undefined);
 
   return (
-    <FirmHarmCaseSearchProvider navigation={props.navigation}>
+    <FirmHarmCaseSearchProvider navigation={props.navigation} searchWord={searchWord} initMyHarmCaseSearch={initMyHarmCaseSearch}>
       <FirmHarmCaseSearchLayout />
     </FirmHarmCaseSearchProvider>
   );

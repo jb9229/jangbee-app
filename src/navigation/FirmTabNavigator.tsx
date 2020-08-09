@@ -7,7 +7,7 @@ import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
 import CashBackContainer from 'src/container/cashback';
 import FirmHarmCaseContainer from 'container/firmHarmCase/list';
-import FirmHarmCaseCreateScreen from 'container/firmHarmCase/create'
+import FirmHarmCaseCreateContainer from 'container/firmHarmCase/create'
 import FirmHarmCaseSearchContainer from 'container/firmHarmCase/search';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
 import FirmRegisterScreen from 'container/firm/create';
@@ -153,10 +153,15 @@ const ClientEvaluStack = createStackNavigator({
     }
   },
   FirmHarmCaseCreate: {
-    screen: FirmHarmCaseCreateScreen,
+    screen: FirmHarmCaseCreateContainer,
     navigationOptions:
     {
-      header: null
+      title: '피해사례 등록',
+      headerStyle: {
+        backgroundColor: '#3E3936',
+        elevation: 10
+      },
+      headerTintColor: 'rgb(247, 174, 67)'
     }
   },
   FirmHarmCaseSearch: {

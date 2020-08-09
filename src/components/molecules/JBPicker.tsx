@@ -15,8 +15,6 @@ interface StyleProps {
 }
 
 const Container = styled.View`
-  margin-top: 15px;
-  padding-top: 10px;
   width: ${(props: StyleProps): number | string => props.size ? props.size : 'auto'};
 `;
 
@@ -24,7 +22,6 @@ const PickerWrap = styled.View`
   border-width: ${(props: StyleProps): number => props.error ? 1 : 0};
   border-color: ${(props: StyleProps): string => props.theme.ColorError};
   border-radius: 5;
-  padding: 5px 0px;
 `;
 
 const styles = StyleSheet.create({
@@ -34,11 +31,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 3
   },
-  itemPicker: {}
+  itemPicker: {height: 20}
 });
 
 interface Props {
-  title: string;
+  title?: string;
   subTitle?: string;
   selectedValue: number | string;
   items: Array<PickerItem>;
@@ -52,14 +49,14 @@ const JBPicker: React.FC<Props> = (props) =>
   React.useEffect(() =>
   {
     setSelectedValue(props.selectedValue);
-    props.onValueChange(props.selectedValue);
+    // props.onValueChange(props.selectedValue);
   }, [props.selectedValue]);
 
   const [selectedValue, setSelectedValue] = React.useState(props.selectedValue);
 
   return (
     <Container size={props.size}>
-      <MiddleTitle label={props.title} subLabel={props.subTitle} errorText={props.errorText} />
+      {!!props.title && (<MiddleTitle label={props.title} subLabel={props.subTitle} errorText={props.errorText} />)}
       <PickerWrap error={!!props.errorText}>
         <Picker
           selectedValue={selectedValue}
