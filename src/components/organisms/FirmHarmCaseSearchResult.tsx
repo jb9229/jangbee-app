@@ -11,7 +11,11 @@ import styled from 'styled-components/native';
 import { useFirmHarmCaseSearchContext } from 'src/contexts/FirmHarmCaseSearchContext';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
-const Container = styled.ScrollView``;
+const Container = styled.ScrollView.attrs(() => ({
+  wrapperStyle: {
+    flex: 1
+  }
+}))``;
 const NoticeWrap = styled.View`
   height: 300;
   justify-content: space-around;
@@ -30,11 +34,11 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
   const {
-    openDetailModal
+    openDetailModal, deleteFirmHarmCase, openUpdateFirmHarmCase
   } = useFirmHarmCaseSearchContext();
 
   const searchTimeStr = moment(props.searchTime).format('YYYY-MM-DD HH:mm');
-  if (props.harmCaseList.length === 0 )
+  if (props.harmCaseList?.length === 0 )
   {
     return (
       <Container>
@@ -51,13 +55,14 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
   }
   return (
     <Container style={props.wrapperStyle}>
-      {props.harmCaseList.map((harmCase) =>
+      {props.harmCaseList?.map((harmCase, index) =>
         <FirmHarmCaseItem
+          key={`KEY_${index}`}
           item={harmCase}
           searchTime={searchTimeStr}
           accountId={user.uid}
-          // updateCliEvalu={openUpdateCliEvaluForm}
-          // deleteCliEvalu={deleteCliEvalu}
+          updateCliEvalu={openUpdateFirmHarmCase}
+          deleteCliEvalu={deleteFirmHarmCase}
           // openCliEvaluLikeModal={openCliEvaluLikeModal}
           openDetailModal={evalu => openDetailModal(evalu)}
         />

@@ -15,7 +15,7 @@ interface StyleProps {
 }
 const Container = styled.View`
   min-width: 200;
-  height: 235;
+  min-height: 235;
   margin: 10px;
   background-color: ${colors.pointBatang};
   border-radius: 4;
@@ -150,13 +150,13 @@ const FirmHarmCaseItem: React.FC<Props> = (props) =>
       <CommWrap mine={props.accountId === props.item.accountId}>
         {props.accountId === props.item.accountId && (
           <EditCommWrap>
-            <JBButton
+            {/* <JBButton
               title="수정"
               onPress={() => props.updateCliEvalu(props.item)}
               size="small"
               underline
               Secondary
-            />
+            /> */}
             <JBButton
               title="삭제"
               onPress={() => confirmDeleteCE(props.item, props.deleteCliEvalu)}

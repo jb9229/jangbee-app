@@ -6,7 +6,13 @@ import { Share } from "react-native";
 import { formatNumber } from "src/utils/NumberUtils";
 import { formatTelnumber } from "src/utils/StringUtils";
 
-export const filterCallHistory = (callHistory: Array<CallHistory>):Array<CallHistory> => {
+export const deleteFirmHarmCase = (id: string): Promise<object> => {
+  return api
+    .deleteCliEvalu(id)
+}
+
+export const filterCallHistory = (callHistory: Array<CallHistory>):Array<CallHistory> | undefined => {
+  if (!callHistory) { return undefined }
   const callNumberArr = [];
   const filterdHistory = callHistory.filter((history) => {
     if (callNumberArr.includes(history.phoneNumber)) { return false }

@@ -7,8 +7,9 @@ import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
 import CashBackContainer from 'src/container/cashback';
 import FirmHarmCaseContainer from 'container/firmHarmCase/list';
-import FirmHarmCaseCreateContainer from 'container/firmHarmCase/create'
+import FirmHarmCaseCreateContainer from 'container/firmHarmCase/create';
 import FirmHarmCaseSearchContainer from 'container/firmHarmCase/search';
+import FirmHarmCaseUpdateContainer from 'container/firmHarmCase/update';
 import FirmMyInfoScreen from 'screens/FirmMyInfoScreen';
 import FirmRegisterScreen from 'container/firm/create';
 import FirmSettingScreen from 'screens/FirmSettingScreen';
@@ -164,6 +165,13 @@ const ClientEvaluStack = createStackNavigator({
       headerTintColor: 'rgb(247, 174, 67)'
     }
   },
+  FirmHarmCaseUpdate: {
+    screen: FirmHarmCaseUpdateContainer,
+    navigationOptions:
+    {
+      header: null
+    }
+  },
   FirmHarmCaseSearch: {
     screen: FirmHarmCaseSearchContainer,
     navigationOptions:
@@ -183,7 +191,8 @@ ClientEvaluStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      type="MaterialCommunityIcons"
+      name={Platform.OS === 'ios' ? 'file-document-box-search-outline' : 'file-document-box-search-outline'}
     />
   )
 };

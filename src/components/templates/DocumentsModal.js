@@ -1,12 +1,13 @@
-import React from 'react';
 import { Dimensions, Modal } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
-import styled from 'styled-components/native';
-import download from 'common/Download';
-import ContracDocTabView from 'templates/ContractDocTabView';
+import { SceneMap, TabView } from 'react-native-tab-view';
+
 import CloseButton from 'molecules/CloseButton';
+import ContracDocTabView from 'templates/ContractDocTabView';
 import JBButton from 'molecules/JBButton';
 import JangbeeAdList from 'organisms/JangbeeAdList';
+import React from 'react';
+import download from 'common/Download';
+import styled from 'styled-components/native';
 
 const Container = styled.View`
   flex: 1;
@@ -48,6 +49,46 @@ const FirstRoute = () => (
         download(
           'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/doc/%ED%81%AC%EB%A0%88%EC%9D%B8_%EA%B2%AC%EC%A0%81%EC%84%9C.hwp',
           'abc.pdf'
+        )
+      }
+      underline
+    />
+    <JBButton
+      title="직불 동의서"
+      onPress={() =>
+        download(
+          'https://elasticbeanstalk-ap-northeast-2-286936920557.s3.ap-northeast-2.amazonaws.com/download/payment_agree.jpeg',
+          'payment_agree.jpeg'
+        )
+      }
+      underline
+    />
+    <JBButton
+      title="GL130"
+      onPress={() =>
+        download(
+          'https://elasticbeanstalk-ap-northeast-2-286936920557.s3.ap-northeast-2.amazonaws.com/download/gr130nl.jpeg',
+          'gr130nl.jpg'
+        )
+      }
+      underline
+    />
+    <JBButton
+      title="크레인 계약서"
+      onPress={() =>
+        download(
+          'https://elasticbeanstalk-ap-northeast-2-286936920557.s3.ap-northeast-2.amazonaws.com/download/crain_contract.pdf',
+          '크레인_계약서.pdf'
+        )
+      }
+      underline
+    />
+    <JBButton
+      title="LTM1055"
+      onPress={() =>
+        download(
+          'https://elasticbeanstalk-ap-northeast-2-286936920557.s3.ap-northeast-2.amazonaws.com/download/LTM1055-1.pdf',
+          'LTM1055-1.pdf'
         )
       }
       underline
@@ -121,6 +162,7 @@ export default class DocumentsModal extends React.Component {
         transparent
         visible={isVisibleModal}
         onRequestClose={() => closeModal()}
+        style={{flex: 1}}
       >
         <Container>
           <CloseButton onClose={() => closeModal()} align="flex-end" />
@@ -138,7 +180,7 @@ export default class DocumentsModal extends React.Component {
             admob
             admobUnitID="ca-app-pub-9415708670922576/2729403292"
             admonSize="fullBanner"
-            admonHeight="11e0"
+            admonHeight="80"
           />
         </Container>
       </Modal>

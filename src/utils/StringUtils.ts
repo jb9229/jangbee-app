@@ -85,3 +85,13 @@ export const isPhoneNumberFormat = (str): boolean =>
   const result = phoneNumberRegExp.test(str);
   return result;
 };
+
+export function maskingTelnumber (telNumber)
+{
+  if (telNumber)
+  {
+    
+  }
+
+  return '-';
+}

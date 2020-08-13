@@ -35,7 +35,7 @@ const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement =>
           setCreateErrorDto(newErrorDto);
           if (result) {
             createFirmHarmCase(user.uid, createDto)
-              .then((result) => { props.navigation.navigate('FirmHarmCaseSearch', { searchWork: createDto.telNumber }) })
+              .then((result) => { props.navigation.replace('FirmHarmCaseSearch', { searchWord: createDto.telNumber }) })
               .catch(error => noticeUserError(error.error, error.message));
           }
         })

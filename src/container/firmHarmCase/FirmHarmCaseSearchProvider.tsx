@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { CallHistory, CallHistoryType } from './type';
-import { filterCallHistory, searchMyFirmHarmCase } from './searchAction';
+import { CallHistory, CallHistoryType, MY_FIRMHARMCASE_SEARCHWORD } from './type';
+import { deleteFirmHarmCase, filterCallHistory, searchMyFirmHarmCase } from './searchAction';
 
 import CallLogs from 'react-native-call-log';
 import { DefaultNavigationProps } from 'src/types';
@@ -22,11 +22,11 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
 {
   // states
   const { user } = useLoginContext();
-  const [callHistory, setCallHistory] = React.useState<Array<CallHistory>>([]);
+  const [callHistory, setCallHistory] = React.useState<Array<CallHistory>>();
   const [searched, setSearched] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState('');
   const [searchTime, setSearchTime] = React.useState<Date>();
-  const [harmCaseList, setHarmCaseList] = React.useState([]);
+  const [harmCaseList, setHarmCaseList] = React.useState();
   const [detailEvalu, setDetailEvalu] = React.useState();
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
 
@@ -56,33 +56,37 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     // Init my search
     if (props.initMyHarmCaseSearch)
     {
-      searchMyFirmHarmCase(user.uid)
-        .then(resBody =>
-        {
-          if (resBody && resBody.content)
-          {
-            setSearched(true);
-            setHarmCaseList(resBody.content);
-            setSearchWord('내가 등록한 피해사례 입니다');
-            return;
-          }
-        })
-        .catch(ex =>
-        {
-          noticeUserError('내가 등록한 피해사례 요청 문제', `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
-        });
+      searchMyFirmHarmCaseAction();
     }
   }, []);
 
-  // Server api call
-  // Init Actions
-  // Init States
+  // Utils Actions
+  const searchMyFirmHarmCaseAction = () => {
+    searchMyFirmHarmCase(user.uid)
+      .then(resBody =>
+      {
+        if (resBody && resBody.content)
+        {
+          setSearched(true);
+          setHarmCaseList(resBody.content);
+          setSearchWord(MY_FIRMHARMCASE_SEARCHWORD);
+          return;
+        }
+      })
+      .catch(ex =>
+      {
+        noticeUserError('내가 등록한 피해사례 요청 문제', `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
+      });
+  }
+
+  // Props States
   const states = {
     searched, searchWord, searchTime, detailEvalu,
     visibleDetailModal,
     callHistory: filterCallHistory(callHistory),
     harmCaseList
   };
+  // Props Actions
   const actions = {
     onSelectCallHistory (history: CallHistory) {
       setSearched(true);
@@ -94,7 +98,7 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
         })
         .catch(ex =>
         {
-          setHarmCaseList([]);
+          setHarmCaseList(undefined);
           noticeUserError('피해사례 요청 문제', `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
         });
     },
@@ -116,20 +120,41 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
           })
           .catch(ex =>
           {
-            setHarmCaseList([]);
+            setHarmCaseList(undefined);
             noticeUserError('피해사례 요청 문제(-> onSearchWordEndEditing)', `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
           });
       }
     },
-    openDetailModal: (evalu): void =>
+    openDetailModal(evalu): void
     {
       setDetailEvalu(evalu);
       setVisibleDetailModal(true);
     },
-    closeFirmHarmCaseDetailModal: () => {
+    closeFirmHarmCaseDetailModal() {
       setVisibleDetailModal(false);
+    },
+    openUpdateFirmHarmCase(evalu) {
+      props.navigation.navigate('FirmHarmCaseUpdate', { harmCase: evalu })
+    },
+    deleteFirmHarmCase(id: string) {
+      deleteFirmHarmCase(id)
+        .then(() => {
+          if (searchWord === MY_FIRMHARMCASE_SEARCHWORD)
+          {
+            searchMyFirmHarmCaseAction();
+          } else {
+            actions.onSearchWordEndEditing(searchWord);
+          }
+        })
+        .catch(error =>
+          noticeUserError(
+            '피해사례 삭제 문제',
+            `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`, user
+          )
+        );
     }
   };
+
   // UI Component
   return (
     <Provider value={{ ...states, ...actions }}>{props.children}</Provider>

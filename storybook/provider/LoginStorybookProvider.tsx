@@ -2,19 +2,13 @@ import * as React from 'react';
 import * as api from 'src/api/api';
 
 import { DefaultNavigationProps, UserProfile } from 'src/types';
-import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
 
 import { ApplyWorkCallback } from 'src/components/action';
-import CouponSelectModal from 'src/components/templates/CouponSelectModal';
-import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
-import ModalTemplate from 'src/components/templates/ModalTemplate';
+import { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
 import { Provider } from 'src/contexts/LoginContext';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import { User } from 'firebase';
-import WebView from 'react-native-webview';
-import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
-import { updatePaymentSubscription } from 'src/utils/FirebaseUtils';
 
 export class Firm
 {
@@ -152,7 +146,7 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
     <Provider value={{ ...states, ...actions }}>
       {props.children}
 
-      <KakaoPayWebView
+      {/* <KakaoPayWebView
         visible={visiblePaymentModal}
         paymentInfo={paymentReadyInfo}
         close={(): void => setVisiblePaymentModal(false)}
@@ -168,8 +162,8 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
               }
             }).catch((error) => console.log(error));
         }}
-      />
-      <ModalTemplate
+      /> */}
+      {/* <ModalTemplate
         visible={webViewModal.visible}
         setVisible={(flag): void => setWebViewModal({ ...webViewModal, visible: flag })}
         contents={
@@ -183,14 +177,14 @@ const LoginStorybookProvider = (props: Props): React.ReactElement =>
           />
         }
         full
-      />
-      <CouponSelectModal
+      /> */}
+      {/* <CouponSelectModal
         user={user}
         visible={couponModalVisible}
         closeModal={(): void => setCouponModalVisible(false)}
         applyCoupon={(): void => { if (callbackAction) { callbackAction.requestCallback() } }}
-      />
-      <LoadingIndicator loading={loadingModalData.loading} msg={loadingModalData.msg} />
+      /> */}
+      {/* <LoadingIndicator loading={loadingModalData.loading} msg={loadingModalData.msg} /> */}
     </Provider>
   );
 };

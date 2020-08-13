@@ -5,7 +5,6 @@ import { FlatList, Picker, StyleSheet, Text, View } from 'react-native';
 import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
-import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
@@ -439,12 +438,6 @@ class ClientEvaluScreen extends React.Component
           closeModal={() => this.setState({ isVisibleCreateModal: false })}
           completeAction={() => this.setClinetEvaluList()}
           size="full"
-        />
-        <ClientEvaluUpdateModal
-          updateEvalu={updateEvalu}
-          isVisibleModal={isVisibleUpdateModal}
-          closeModal={() => this.setState({ isVisibleUpdateModal: false })}
-          completeAction={() => this.setClinetEvaluList()}
         />
         <ClientEvaluDetailModal
           isVisibleModal={isVisibleDetailModal}

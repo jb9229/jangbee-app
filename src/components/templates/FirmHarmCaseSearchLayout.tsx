@@ -3,11 +3,9 @@ import * as React from 'react';
 import { NativeSyntheticEvent, StyleProp, TextInput, TextInputEndEditingEventData, ViewStyle } from 'react-native';
 
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
-import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
-import ClientEvaluUpdateModal from 'templates/ClientEvaluUpdateModal';
 import { DefaultStyledProps } from 'src/theme';
-import FirmHarmCaseItem from '../organisms/FirmHarmCaseItem';
 import FirmHarmCaseSearchResult from '../organisms/FirmHarmCaseSearchResult';
+import Indicator from '../atoms/ActivityIndicator';
 import RoundButton from '../atoms/button/RoundButton';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { formatTelnumber } from 'src/utils/StringUtils';
@@ -19,7 +17,7 @@ interface StyledProps extends DefaultStyledProps {
   searched?: boolean;
 }
 // Styled Component
-const Container = styled.View``;
+const Container = styled.View`flex: 1;`;
 const CallLatestHistoryWrap = styled.View``;
 const CallLatestHistoryHeaderWrap = styled.View`
   flex-direction: row;
@@ -50,7 +48,7 @@ const CallLatestTitle = styled.Text`
   padding-bottom: 5;
 `;
 const CallHistoryPhoneNumber = styled.Text``;
-const SearchResultWrap = styled.View``;
+const SearchResultWrap = styled.View`flex: 1;`;
 const SearchWrap = styled.View``;
 const SearchTextInput = styled.TextInput`
   padding-top: 15;
@@ -114,14 +112,16 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
               <CallLatestTitle>최근 걸려온 전화 목록을, 선택해 검색하세요</CallLatestTitle>
             </CallLatestHistoryHeaderWrap>
             <CallLatestHistoryBodyWrap>
-              {callHistory.map((history, index) => (
-                <CallHistoryTableRow onPress={() => onSelectCallHistory(history)}>
+              {!!callHistory ? callHistory.map((history, index) => (
+                <CallHistoryTableRow key={`KEY_${index}`} onPress={() => onSelectCallHistory(history)}>
                   <CallHistoryPhoneNumber>{index + 1}</CallHistoryPhoneNumber>
                   <CallHistoryPhoneNumber>{history.name || '모르는 번호'}</CallHistoryPhoneNumber>
                   <CallHistoryPhoneNumber>{formatTelnumber(history.phoneNumber)}</CallHistoryPhoneNumber>
                   <CallHistoryPhoneNumber>{moment(Number.parseInt(history.timestamp)).format('MM/DD HH:mm')}</CallHistoryPhoneNumber>
                 </CallHistoryTableRow>
-              ))}
+              )) : (
+                <Indicator />
+              )}
             </CallLatestHistoryBodyWrap>
           </CallLatestHistoryWrap>
         </>
@@ -147,12 +147,6 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
         size="full"
         searchTime={searchTime}
       />
-      {/* <ClientEvaluUpdateModal
-        updateEvalu={updateEvalu}
-        isVisibleModal={visibleUpdateModal}
-        closeModal={() => setVisibleUpdateModal(false)}
-        completeAction={() => setClinetEvaluList()}
-      /> */}
       {/* <ClientEvaluLikeModal
         isVisibleModal={visibleEvaluLikeModal}
         accountId={user.uid}

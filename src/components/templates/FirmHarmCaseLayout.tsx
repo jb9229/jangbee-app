@@ -14,7 +14,6 @@ import JangbeeAdList from '../organisms/JangbeeAdList';
 import { MaterialIcons } from '@expo/vector-icons';
 import RoundButton from '../atoms/button/RoundButton';
 import { SearchBar } from 'react-native-elements';
-import Swiper from 'react-native-swiper';
 import colors from 'constants/Colors';
 import getString from 'src/STRING';
 import { shareNotExistCEvalu } from 'common/JBCallShare';

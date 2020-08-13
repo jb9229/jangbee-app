@@ -42,6 +42,8 @@ const SelectBox = styled.View<StyledProps>`
   border-radius: 10;
   background-color: ${colors.batangLight};
   border-color: ${colors.batangLight};
+  justify-content: flex-end;
+  align-items: center;
   ${props =>
     props.selected &&
     `
@@ -96,9 +98,10 @@ const CategoryText = styled.Text<StyledProps>`
   color: ${(props) => props.selected ? colors.pointDark : colors.batangDark};
 `;
 
-const ItemListWrap = styled.View`
+const ItemListWrap = styled.View<StyledProps>`
   height: 25;
-  background-color: ${(props) => props.theme.ColorBGGray};
+  margin-top: 5;
+  background-color: ${(props) => props.selected ? colors.point3_other2 : props.theme.ColorBGGray};
   border-bottom-left-radius: 10;
   border-bottom-right-radius: 10;
 `;
@@ -146,7 +149,7 @@ const JBSelectBox: React.FC<Props> = (props) => {
                 {catStr}
               </CategoryText>
             </CateTextWrap>
-            <ItemListWrap>
+            <ItemListWrap selected={catStr === category}>
                 <JBPicker
                   items={props.itemList[catStr]}
                   selectedValue={catStr === props.selectedCat ? item : ''}
