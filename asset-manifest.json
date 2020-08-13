@@ -1,11 +1,11 @@
 {
   "files": {
-    "app.js": "/jangbee-app/static/js/app.99de0c6d.chunk.js",
-    "app.js.map": "/jangbee-app/static/js/app.99de0c6d.chunk.js.map",
+    "app.js": "/jangbee-app/static/js/app.2a20eadc.chunk.js",
+    "app.js.map": "/jangbee-app/static/js/app.2a20eadc.chunk.js.map",
     "runtime~app.js": "/jangbee-app/static/js/runtime~app.f772f0e2.js",
     "runtime~app.js.map": "/jangbee-app/static/js/runtime~app.f772f0e2.js.map",
-    "static/js/2.e7ffc614.chunk.js": "/jangbee-app/static/js/2.e7ffc614.chunk.js",
-    "static/js/2.e7ffc614.chunk.js.map": "/jangbee-app/static/js/2.e7ffc614.chunk.js.map",
+    "static/js/2.a6d87f25.chunk.js": "/jangbee-app/static/js/2.a6d87f25.chunk.js",
+    "static/js/2.a6d87f25.chunk.js.map": "/jangbee-app/static/js/2.a6d87f25.chunk.js.map",
     "fonts/AntDesign.ttf": "/jangbee-app/./fonts/AntDesign.ttf",
     "fonts/Entypo.ttf": "/jangbee-app/./fonts/Entypo.ttf",
     "fonts/Feather.ttf": "/jangbee-app/./fonts/Feather.ttf",
@@ -26,7 +26,7 @@
     "index.html": "/jangbee-app/index.html",
     "manifest.json": "/jangbee-app/manifest.json",
     "serve.json": "/jangbee-app/serve.json",
-    "static/js/2.e7ffc614.chunk.js.LICENSE.txt": "/jangbee-app/static/js/2.e7ffc614.chunk.js.LICENSE.txt",
+    "static/js/2.a6d87f25.chunk.js.LICENSE.txt": "/jangbee-app/static/js/2.a6d87f25.chunk.js.LICENSE.txt",
     "static/media/alarm_icon.png": "/jangbee-app/static/media/alarm_icon.2eadf03f.png",
     "static/media/bell.png": "/jangbee-app/static/media/bell.cf04af27.png",
     "static/media/bulldozer.jpg": "/jangbee-app/static/media/bulldozer.2770469f.jpg",
@@ -48,7 +48,7 @@
   },
   "entrypoints": [
     "static/js/runtime~app.f772f0e2.js",
-    "static/js/2.e7ffc614.chunk.js",
-    "static/js/app.99de0c6d.chunk.js"
+    "static/js/2.a6d87f25.chunk.js",
+    "static/js/app.2a20eadc.chunk.js"
   ]
 }

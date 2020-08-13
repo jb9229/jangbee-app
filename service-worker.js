@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/jangbee-app/precache-manifest.203b6aa6f202808f23be86573caaa622.js"
+  "/jangbee-app/precache-manifest.133f98a9a1c24809bf34553b6e98c107.js"
 );
 
 workbox.skipWaiting();
