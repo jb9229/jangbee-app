@@ -134,8 +134,9 @@ android {
         applicationId 'com.kan.jangbeecall'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 53
-        versionName "1.1.0_200718"
+        versionCode 54
+        versionName "1.2.0_200814"
+        resValue "string", "app_name", "장비 콜"
     }
     splits {
         abi {
@@ -180,6 +181,9 @@ android {
             versionCode = 1
             versionNameSuffix = '.-1'
             resValue "string", "app_name", "장비 콜(Dev)"
+        }
+        prod {
+            dimension = 'mode'
         }
     }
 
