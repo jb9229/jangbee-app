@@ -106,24 +106,6 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
               onEndEditing={(e: NativeSyntheticEvent<TextInputEndEditingEventData>) => onSearchWordEndEditing(e?.nativeEvent?.text)}
             />
           </SearchWrap>
-          <CallLatestHistoryWrap>
-            <CallLatestHistoryHeaderWrap>
-              <SimpleLineIcons name="call-in" size={24} color="black" />
-              <CallLatestTitle>최근 걸려온 전화 목록을, 선택해 검색하세요</CallLatestTitle>
-            </CallLatestHistoryHeaderWrap>
-            <CallLatestHistoryBodyWrap>
-              {!!callHistory ? callHistory.map((history, index) => (
-                <CallHistoryTableRow key={`KEY_${index}`} onPress={() => onSelectCallHistory(history)}>
-                  <CallHistoryPhoneNumber>{index + 1}</CallHistoryPhoneNumber>
-                  <CallHistoryPhoneNumber>{history.name || '모르는 번호'}</CallHistoryPhoneNumber>
-                  <CallHistoryPhoneNumber>{formatTelnumber(history.phoneNumber)}</CallHistoryPhoneNumber>
-                  <CallHistoryPhoneNumber>{moment(Number.parseInt(history.timestamp)).format('MM/DD HH:mm')}</CallHistoryPhoneNumber>
-                </CallHistoryTableRow>
-              )) : (
-                <Indicator />
-              )}
-            </CallLatestHistoryBodyWrap>
-          </CallLatestHistoryWrap>
         </>
       )}
       {searched && (

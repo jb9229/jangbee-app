@@ -9,7 +9,6 @@ import { Alert } from 'react-native';
 import CallLogs from 'react-native-call-log';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'molecules/JBButton';
-import { PermissionsAndroid } from 'react-native';
 import { StyleKeyboardAvoidingView } from 'src/CommonStyle';
 import getString from 'src/STRING';
 import { getUserInfo } from 'utils/FirebaseUtils';
@@ -49,27 +48,6 @@ const LoginScreen: React.FC<Props> = (props) =>
   const [phoneNumberValErrMessage, setPhoneNumberValErrMessage] = React.useState('');
   const [codeValErrMessage, setCodeValErrMessage] = React.useState('');
   const [agreeTerms, setAgreeTerms] = React.useState(false);
-
-//  React.useEffect(() => {
-//     (async () => {
-//       try {
-//         console.log('>>> 1')
-//         const granted = await PermissionsAndroid.request(
-//           PermissionsAndroid.PERMISSIONS.READ_CALL_LOG
-//         )
-//         console.log('>>> 1')
-//         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-
-//           CallLogs.load(-1, {}).then(c => console.log(c));
-//         } else {
-//           console.log('Call Log permission denied');
-//         }
-//       }
-//       catch (e) {
-//         console.log(e);
-//       }
-//     })()
-//   }, []);
 
   const onSignIn = (user) =>
   {

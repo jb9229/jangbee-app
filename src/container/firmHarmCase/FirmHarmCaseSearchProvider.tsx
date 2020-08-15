@@ -31,23 +31,6 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
 
   React.useEffect(() => {
-    (async () => {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_CALL_LOG
-        )
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          CallLogs.load(500, {}).then(c => { console.log(c); setCallHistory(c) });
-        } else {
-          console.log('Call Log permission denied');
-        }
-      }
-      catch (e) {
-        console.log(e);
-      }
-    })();
-
     // init search
     if (props.searchWord) {
       actions.onSearchWordEndEditing(props.searchWord);
@@ -105,7 +88,7 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     onCancelSearch () {
       setSearched(false);
       setSearchWord(undefined);
-      setHarmCaseList([]);
+      setHarmCaseList(undefined);
       setSearchTime(undefined);
     },
     onSearchWordEndEditing (text: string) {
