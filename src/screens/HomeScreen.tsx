@@ -202,7 +202,6 @@ const HomeScreen: React.FC<Props> = (props) =>
       <JangbeeAdList adLocation={adLocation.main} navigation={props.navigation} />
       <GPSSearchScreen {...props} />
       <FirmCntChart />
-      <JBTerm />
     </Container>
   );
 };

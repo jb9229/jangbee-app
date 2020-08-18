@@ -3,7 +3,6 @@ import * as React from 'react';
 import { CallHistory, CallHistoryType, MY_FIRMHARMCASE_SEARCHWORD } from './type';
 import { deleteFirmHarmCase, filterCallHistory, searchMyFirmHarmCase } from './searchAction';
 
-import CallLogs from 'react-native-call-log';
 import { DefaultNavigationProps } from 'src/types';
 import { PermissionsAndroid } from 'react-native';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';

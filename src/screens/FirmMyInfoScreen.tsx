@@ -16,6 +16,7 @@ import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import JBTerm from 'src/components/templates/JBTerm';
 
 const styles = StyleSheet.create({
   container: {

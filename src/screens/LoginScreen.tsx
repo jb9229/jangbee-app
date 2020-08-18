@@ -6,7 +6,6 @@ import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import AgreementTerms from 'src/components/organisms/AgreementTerms';
 import { Alert } from 'react-native';
-import CallLogs from 'react-native-call-log';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'molecules/JBButton';
 import { StyleKeyboardAvoidingView } from 'src/CommonStyle';

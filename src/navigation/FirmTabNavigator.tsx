@@ -22,6 +22,7 @@ import React from 'react';
 import TabBarIcon from 'atoms/TabBarIcon';
 import WorkRegisterScreen from 'container/work/register';
 import colors from 'constants/Colors';
+import ClientHomeModalScreen from 'container/clientHome/modal';
 
 const FirmWorkStack = createStackNavigator({
   FirmWorkList: {
@@ -81,6 +82,13 @@ const FirmSettingStack = createStackNavigator({
     {
       mode: 'modal',
       title: '보유 자산'
+    }
+  },
+  ClientHomeModal: {
+    screen: ClientHomeModalScreen,
+    navigationOptions:
+    {
+      header: null
     }
   }
 });
@@ -202,7 +210,7 @@ export default createBottomTabNavigator(
     ClientEvaluStack,
     FirmWorkStack,
     AdStack,
-    HomeStack,
+    // HomeStack,
     FirmSettingStack
     // ModalStack
   },

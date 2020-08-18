@@ -17,6 +17,8 @@ import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useMutation } from '@apollo/client';
 import { validatePresence } from 'utils/Validation';
+import JBTerm from 'src/components/templates/JBTerm';
+import { Linking } from 'expo';
 
 const Container = styled.View`
   flex: 1;
@@ -318,11 +320,24 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
         </MenueRowWrap>
         <MenueRowWrap>
           <JBIconButton
+            title="장비콜 화주 앱"
+            img={require('../../assets/images/jangbeecallClientApp.jpeg')}
+            onPress={(): void => { props.navigation.navigate('ClientHomeModal') }}
+          />
+          <JBIconButton
+            title="장비콜 웹"
+            img={require('../../assets/images/jangbeecallWeb.png')}
+            onPress={(): void => { Linking.openURL('https://jangbeecall.kr') }}
+          />
+        </MenueRowWrap>
+        <MenueRowWrap>
+          <JBIconButton
             title="탈퇴하기"
             img={require('../../assets/images/icon/delete_user_icon.png')}
             onPress={(): void => { confirmDeleteUser() }}
           />
         </MenueRowWrap>
+        <JBTerm />
       </MenuWrap>
       <KatalkAskWebview
         isVisibleModal={isVisibleKatalkAskModal}

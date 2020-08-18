@@ -56,7 +56,7 @@ const TelText = styled.Text`
   margin: 2px;
 `;
 
-export default function renderJBTerm ({ bg })
+export default function JBTerm ({ bg })
 {
   return (
     <Container bg={bg}>
