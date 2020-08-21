@@ -45,12 +45,11 @@ const WorkRegisterProvider = (props: Props): React.ReactElement =>
     workDto,
     errorData
   };
-  console.log('>>errorData:', errorData);
+  
   // Init Actions
   const actions = {
     onClickCreate: (): void =>
     {
-      console.log('>>> workDto', workDto);
       validateRegisterWorkDto(workDto)
         .then((result) =>
         {

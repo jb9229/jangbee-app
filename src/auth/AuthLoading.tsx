@@ -6,6 +6,7 @@ import { UserProfile } from 'src/types';
 import colors from 'constants/Colors';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { noticeUserError } from 'src/container/request';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,8 +22,11 @@ interface Props {
   setUser: (u: User) => void;
   setUserProfile: (p: UserProfile) => void;
 }
+
 const AuthLoading: React.FC<Props> = (props) =>
 {
+  const { refetchFirm, user } = useLoginContext();
+  
   React.useEffect(() =>
   {
     checkLogin(props);
@@ -88,5 +92,7 @@ const checkLogin = (props: Props): void =>
     }
   });
 };
+
+
 
 export default AuthLoading;

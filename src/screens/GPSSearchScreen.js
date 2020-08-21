@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     paddingBottom: 2
   },
   searOptionWrap: {
-    height: 290,
     paddingLeft: 8,
     paddingRight: 8
   },

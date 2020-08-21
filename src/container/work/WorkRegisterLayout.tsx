@@ -135,7 +135,7 @@ const WorkRegisterLayout: React.FC = () =>
                 errorText={errorData.startDate}
               />
               <PeriodPicker
-                title="기간"
+                title="작업 기간"
                 selectedValue={startDateStr}
                 onValueChange={(itemValue: number): void => { workDto.period = itemValue }}
                 items={dayPickItems}

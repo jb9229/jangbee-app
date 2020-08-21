@@ -5,7 +5,7 @@ import {
 
 import AppliFirmList from 'organisms/AppliFirmList';
 import ClientMyInfoScreen from 'screens/ClientMyInfoScreen';
-import HomeScreen from 'screens/HomeScreen';
+import ClientHomeScreen from 'screens/ClientHomeScreen';
 import JBServiceTerms from 'screens/JBServiceTerms';
 import { Platform } from 'react-native';
 import React from 'react';
@@ -15,7 +15,7 @@ import WorkRegisterScreen from 'container/work/register';
 import colors from 'constants/Colors';
 
 const ClientHomeStack = createStackNavigator({
-  ClientHome: { screen: HomeScreen, navigationOptions: { header: null } }
+  ClientHome: { screen: ClientHomeScreen, navigationOptions: { header: null } }
 });
 
 ClientHomeStack.navigationOptions = {

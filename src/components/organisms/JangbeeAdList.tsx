@@ -25,9 +25,10 @@ const styles = StyleSheet.create({
 });
 
 const AdMobContainer = styled.View`
-  width: 90%;
+  width: 100%;
   height: ${props => (props.height ? props.height : '120')};
   justify-content: center;
+  align-items: center;
 `;
 
 export default class JangbeeAdList extends React.Component

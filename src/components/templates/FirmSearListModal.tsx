@@ -29,7 +29,7 @@ const SearchResultWrap = styled.View`
 const CloseView = styled.View`
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
 `;
 const ItemWrapper = styled(Card).attrs(() => ({
   wrapperStyle: {

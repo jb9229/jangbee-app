@@ -16,6 +16,7 @@ interface StyleProps {
 
 const Container = styled.View`
   width: ${(props: StyleProps): number | string => props.size ? props.size : 'auto'};
+  margin-top: 25;
 `;
 
 const PickerWrap = styled.View`
