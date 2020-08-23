@@ -500,8 +500,10 @@ export default class GPSSearchScreen extends React.Component
                   itemList={LOCAL_ITEM}
                   selectedCat={searSido}
                   selectedItem={searGungu}
-                  selectCategory={sido =>
+                  selectCategory={sido => {
+                    console.log('sido: ', sido)
                     this.setState({ searSido: sido, searGungu: '' })
+                  }
                   }
                   selectItem={(sido, sigungu) =>
                     this.setState({ searSido: sido, searGungu: sigungu })

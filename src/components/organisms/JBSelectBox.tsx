@@ -135,15 +135,14 @@ const JBSelectBox: React.FC<Props> = (props) => {
             isImageBox={!!props.cateImageArr}
           >
             <CateImgTO
-              onPress={() => {
-              }}
+              onPress={() => { setCategory(catStr); setItem(props.itemPicker); props.selectCategory(catStr) }}
             >
               {props.cateImageArr && <CateImage source={props.cateImageArr[i]} />}
             </CateImgTO>
             <CateTextWrap
               isImageBox={!!props.cateImageArr}
               selected={catStr === category}
-              onPress={() => { setCategory(catStr); }}
+              onPress={() => { setCategory(catStr); setItem(props.itemPicker); props.selectCategory(catStr) }}
             >
               <CategoryText selected={catStr === category}>
                 {catStr}
@@ -155,7 +154,7 @@ const JBSelectBox: React.FC<Props> = (props) => {
                   selectedValue={catStr === props.selectedCat ? item : ''}
                   onValueChange={(itemValue): void => { setCategory(catStr); setItem(`${itemValue}`); props.selectItem(catStr, `${itemValue}`) }}
                   selectLabel={props.itemPicker || undefined}
-                  size={110}
+                  size={catStr === '세종특별자치시' || catStr === '제주특별자치도' ? 120 : 110}
                 />
             </ItemListWrap>
           </SelectBox>
