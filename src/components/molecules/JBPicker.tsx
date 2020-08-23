@@ -1,4 +1,4 @@
-import { Picker, StyleSheet } from 'react-native';
+import { Picker, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ErrorText from 'src/components/molecules/Text/ErrorText';
@@ -16,7 +16,6 @@ interface StyleProps {
 
 const Container = styled.View`
   width: ${(props: StyleProps): number | string => props.size ? props.size : 'auto'};
-  margin-top: 25;
 `;
 
 const PickerWrap = styled.View`
@@ -40,10 +39,11 @@ interface Props {
   subTitle?: string;
   selectedValue: number | string;
   items: Array<PickerItem>;
-  onValueChange: (value: string | number) => void;
   size?: number;
   selectLabel?: string;
   errorText?: string;
+  onValueChange: (value: string | number) => void;
+  wrapperStyle?: StyleProp<ViewStyle>;
 }
 const JBPicker: React.FC<Props> = (props) =>
 {
@@ -56,7 +56,7 @@ const JBPicker: React.FC<Props> = (props) =>
   const [selectedValue, setSelectedValue] = React.useState(props.selectedValue);
 
   return (
-    <Container size={props.size}>
+    <Container size={props.size} style={props.wrapperStyle}>
       {!!props.title && (<MiddleTitle label={props.title} subLabel={props.subTitle} errorText={props.errorText} />)}
       <PickerWrap error={!!props.errorText}>
         <Picker

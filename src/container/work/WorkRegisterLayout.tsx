@@ -74,8 +74,19 @@ const thisYear = new Date().getFullYear();
 const modelYearPItems = new Array(10)
   .fill(0)
   .map((_, i) => new PickerItem(`${thisYear - i}년이상`, `${thisYear - i}`, thisYear - i));
-const PeriodPicker = styled(JBPicker)`
+const PeriodPicker = styled(JBPicker).attrs(() => ({
+    wrapperStyle: {
+      marginTop: 25
+    }
+  }))`
   width: 100;
+`;
+const ItemPicker = styled(JBPicker).attrs(() => ({
+  wrapperStyle: {
+    marginTop: 25
+  }
+}))`
+  margin-top: 25;
 `;
 
 const WorkRegisterLayout: React.FC = () =>
@@ -144,7 +155,7 @@ const WorkRegisterLayout: React.FC = () =>
               />
             </View>
             {isFirmRegister && (
-              <JBPicker
+              <ItemPicker
                 title="최대 일감보장시간"
                 subTitle="(일감 넘기지않고 기다릴 시간)"
                 selectedValue={workDto.guaranteeTime}
@@ -163,7 +174,7 @@ const WorkRegisterLayout: React.FC = () =>
               numberOfLines={3}
               errorText={errorData.detailRequest}
             />
-            <JBPicker
+            <ItemPicker
               title="년식제한"
               selectedValue={workDto.modelYearLimit}
               items={modelYearPItems}
@@ -171,7 +182,7 @@ const WorkRegisterLayout: React.FC = () =>
               selectLabel="년식 선택(옵션)"
             />
 
-            <JBPicker
+            <ItemPicker
               title="필수면허"
               selectedValue={workDto.licenseLimit}
               items={licensePItems}
@@ -179,7 +190,7 @@ const WorkRegisterLayout: React.FC = () =>
               selectLabel="면허 선택(옵션)"
             />
 
-            <JBPicker
+            <ItemPicker
               title="비파괴 개월제한"
               selectedValue={workDto.nondestLimit}
               items={nondestPItems}
@@ -187,7 +198,7 @@ const WorkRegisterLayout: React.FC = () =>
               selectLabel="개월 선택(옵션)"
             />
 
-            <JBPicker
+            <ItemPicker
               title="경력제한"
               selectedValue={workDto.careerLimit}
               items={careerPItems}
