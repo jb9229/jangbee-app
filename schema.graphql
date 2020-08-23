@@ -1,0 +1,152 @@
+directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+type Cashback {
+  _id: String
+  accountId: String
+  bank: String
+  amount: Int
+  accountNumber: String
+  accountHolder: String
+  status: String
+}
+
+input CashbackCrtDto {
+  accountId: String
+  bank: String
+  amount: Int
+  accountNumber: String
+  accountHolder: String
+}
+
+type FBUser {
+  userType: String
+}
+
+type Firm {
+  _id: String
+  account_id: String
+  fname: String
+  thumbnail: String
+  phoneNumber: String
+  equiListStr: String
+  modelYear: Int
+  address: String
+  addressDetail: String
+  sidoAddr: String
+  sigunguAddr: String
+  addrLongitude: Float
+  addrLatitude: Float
+  workAlarmSido: String
+  workAlarmSigungu: String
+  introduction: String
+  photo1: String
+  photo2: String
+  photo3: String
+  blog: String
+  homepage: String
+  sns: String
+}
+
+input FirmChatMessageInput {
+  _id: ID
+  text: String!
+  createdAt: Float
+  user: UserInput!
+}
+
+type FirmChatMessageResponse {
+  _id: ID
+  text: String!
+  createdAt: Float
+  user: UserRsponse!
+}
+
+input FirmInput {
+  account_id: String
+  fname: String
+  thumbnail: String
+  phoneNumber: String
+  equiListStr: String
+  modelYear: Int
+  address: String
+  addressDetail: String
+  sidoAddr: String
+  sigunguAddr: String
+  addrLongitude: Float
+  addrLatitude: Float
+  workAlarmSido: String
+  workAlarmSigungu: String
+  introduction: String
+  photo1: String
+  photo2: String
+  photo3: String
+  blog: String
+  homepage: String
+  sns: String
+}
+
+input FirmUpdateInput {
+  fname: String
+  thumbnail: String
+  phoneNumber: String
+  equiListStr: String
+  modelYear: Int
+  address: String
+  addressDetail: String
+  sidoAddr: String
+  sigunguAddr: String
+  addrLongitude: Float
+  addrLatitude: Float
+  workAlarmSido: String
+  workAlarmSigungu: String
+  introduction: String
+  photo1: String
+  photo2: String
+  photo3: String
+  blog: String
+  homepage: String
+  sns: String
+}
+
+type Mutation {
+  addFirmChatMessage(message: FirmChatMessageInput): FirmChatMessageResponse
+  createFirm(newFirm: FirmInput): Firm
+  updateFirm(account_id: String, updateFirm: FirmUpdateInput): Firm
+  deleteFirm(account_id: String): Int
+  createCashback(crtDto: CashbackCrtDto): Cashback
+}
+
+type Query {
+  hello: String
+  sendAllNotification: Boolean
+  firmChatMessage: [FirmChatMessageResponse]
+  firm(account_id: String!): [Firm]
+  firms: [Firm]
+  fbUser(accountId: String!): FBUser
+  cashbacks(accountId: String!): [Cashback]
+}
+
+type Subscription {
+  firmNewChat: FirmChatMessageResponse
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UserInput {
+  _id: ID!
+  name: String
+  avatar: String
+}
+
+type UserRsponse {
+  _id: ID!
+  name: String
+  avatar: String
+}
+

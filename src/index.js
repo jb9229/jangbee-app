@@ -6,6 +6,12 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Updates from 'expo-updates';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  RelayEnvironmentProvider,
+  fetchQuery,
+  graphql,
+  useRelayEnvironment,
+} from 'react-relay/hooks';
 
 import { ApolloProvider } from '@apollo/client';
 import AppNavigator from 'navigation/AppNavigator';
@@ -17,6 +23,7 @@ import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import firebaseconfig from '../firebaseconfig';
+import relayEnvironment from './relay';
 import styled from 'styled-components/native';
 
 const styles = StyleSheet.create({
@@ -151,18 +158,20 @@ export default class App extends React.Component
       <LoginProvider>
         <ThemeProvider>
           <ApolloProvider client={apolloClient}>
-            <View style={styles.container}>
-              {Platform.OS === 'ios' ? (
-                <StatusBar barStyle="default" />
-              ) : (
-                <StatusBar
-                  backgroundColor={colors.batangDark}
-                  currentHeight={32}
-                  barStyle="default"
-                />
-              )}
-              <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
-            </View>
+            <RelayEnvironmentProvider environment={relayEnvironment}>
+              <View style={styles.container}>
+                {Platform.OS === 'ios' ? (
+                  <StatusBar barStyle="default" />
+                ) : (
+                  <StatusBar
+                    backgroundColor={colors.batangDark}
+                    // currentHeight={32}
+                    barStyle="default"
+                  />
+                )}
+                <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
+              </View>
+            </RelayEnvironmentProvider>
           </ApolloProvider>
         </ThemeProvider>
       </LoginProvider>
