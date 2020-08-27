@@ -13629,6 +13629,11 @@ react-native-send-intent@^1.2.2:
   resolved "https://registry.yarnpkg.com/react-native-send-intent/-/react-native-send-intent-1.2.2.tgz#9ee3d375864e0fe5e10ad8f0cee9c054b0bee08e"
   integrity sha512-vJUY89b4sgzazPqedKWG+wNEyqSjxJuwU9SP0tXIVvZdHHTt1AzH1GHJ1H3mtLDSdW7c4693L86i4GD10/pZqw==
 
+react-native-share@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-3.7.0.tgz#5b5bcc87530ddaaabcb8b70a9366dce88a6f9495"
+  integrity sha512-MCTGiPcBfelrnX/7n82N5eQAl31F6xljqFK2CWbPDTSt7bbJUZH3Znvy8KYePLYqAr7HVrk621eanQN6vSFMzA==
+
 react-native-simple-markdown@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-simple-markdown/-/react-native-simple-markdown-1.1.0.tgz#4d462f8ced26393c5230467420c61a50cc6a8095"

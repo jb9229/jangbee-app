@@ -1,10 +1,11 @@
 {
   "name": "장비 콜",
   "displayName": "장비 콜",
-  "mode": "Beta",
+  "mode": "Dev",
   "expo": {
+    "owner": "jb9229",
     "name": "장비 콜",
-    "slug": "jangbeecall_beta",
+    "slug": "jangbeecall_dev",
     "sdkVersion": "38.0.0",
     "privacy": "public",
     "platforms": [
@@ -12,7 +13,7 @@
       "android",
       "web"
     ],
-    "version": "1.2.1_200824",
+    "version": "1.2.1_200827",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",

@@ -208,3 +208,6 @@ buck-out/
 web-build/
 .firebase/hosting.d2ViLWJ1aWxk.cache
 android/app/prod-release-key.keystore
+android/app/dev/release/app-dev-release.aab
+android/app/dev/release/app-dev-release.apk
+android/app/dev/release/output-metadata.json
