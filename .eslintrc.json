@@ -1,0 +1,40 @@
+{
+  "extends": [
+    "standard",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  },
+  "rules": {
+    "max-len": ["error", { "code": 140 }],
+    "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
+    "sort-imports": [
+      2,
+      {
+        "ignoreCase": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }],
+    "react/prop-types": 0,
+    "brace-style": ["error", "allman", { "allowSingleLine": true }],
+    "object-property-newline": 0
+  }
+}
