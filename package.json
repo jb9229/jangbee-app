@@ -14,7 +14,9 @@
     "deploy": "gh-pages -d web-build",
     "deploy-hosting": "npm run predeploy && firebase deploy --only hosting",
     "relay": "relay-compiler --src ./src --schema schema.graphql --language typescript --artifactDirectory ./src/__generated__",
-    "schema": "get-graphql-schema http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql > schema.graphql"
+    "relay-watch": "yarn relay-compiler --schema schema.graphql --src ./src/ --extensions ts tsx --language typescript --artifactDirectory ./src/__generated__ --watch",
+    "schema": "get-graphql-schema http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql > schema.graphql",
+    "schema-local": "get-graphql-schema http://localhost:4000/graphql > schema.graphql"
   },
   "jest": {
     "preset": "jest-expo"
@@ -94,6 +96,7 @@
     "@types/react": "~16.9.41",
     "@types/react-native": "~0.62.13",
     "@types/react-native-svg-charts": "^5.0.3",
+    "@types/react-relay": "^7.0.9",
     "@types/react-test-renderer": "^16.9.0",
     "@types/styled-components": "^4.1.18",
     "@types/yup": "^0.26.28",
@@ -118,11 +121,11 @@
     "jest-expo": "^38.0.0",
     "jest-expo-ts": "^22.0.1",
     "jetifier": "^1.6.5",
-    "react-dom": "16.11.0",
     "react-native-storybook-loader": "^1.8.0",
     "react-native-testing-library": "^1.5.0",
     "react-test-renderer": "^16.12.0",
     "relay-compiler": "^10.0.1",
+    "relay-compiler-language-typescript": "^13.0.1",
     "ts-jest": "^25.0.0",
     "typescript": "~3.9.5"
   },

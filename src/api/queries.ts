@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { graphql } from 'react-relay/hooks';
 
 export const FIRM_CHATMESSAGE = gql`
 {
@@ -29,3 +30,8 @@ export const CASHBACKS = gql`
     status
   }
 }`;
+
+
+/**
+ * 피해사례 쿼리
+ */

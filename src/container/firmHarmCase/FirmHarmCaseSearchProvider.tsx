@@ -2,12 +2,14 @@ import * as React from 'react';
 
 import { CallHistory, CallHistoryType, MY_FIRMHARMCASE_SEARCHWORD } from './type';
 import { deleteFirmHarmCase, filterCallHistory, searchMyFirmHarmCase } from './searchAction';
+import { useLazyLoadQuery, usePreloadedQuery } from 'react-relay/hooks';
 
 import { DefaultNavigationProps } from 'src/types';
-import { PermissionsAndroid } from 'react-native';
+import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';
 import { formatTelnumber } from 'src/utils/StringUtils';
 import { noticeUserError } from '../request';
+import { searchAllQuery } from './search';
 import { searchFirmHarmCase } from './action';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
@@ -16,9 +18,17 @@ interface Props {
   navigation: DefaultNavigationProps;
   searchWord?: string;
   initMyHarmCaseSearch: boolean;
+  queryReference: any;
+  initSearchAll: boolean;
 }
 const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
 {
+  React.useEffect(() => {
+    if (props.initSearchAll)
+    {
+      setTotalFirmHarmCaseList(usePreloadedQuery(searchAllQuery, props.queryReference));
+    }
+  })
   // states
   const { user } = useLoginContext();
   const [callHistory, setCallHistory] = React.useState<Array<CallHistory>>();
@@ -28,6 +38,14 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
   const [harmCaseList, setHarmCaseList] = React.useState();
   const [detailEvalu, setDetailEvalu] = React.useState();
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
+  const [totalFirmHarmCaseList, setTotalFirmHarmCaseList] = React.useState(undefined);
+
+// console.log('queryReference: ', queryReference);
+// if (queryReference == null) {
+//   loadQuery({ first: 3 });
+// }
+
+// console.log('>>> query data: ', data)
 
   React.useEffect(() => {
     // init search
@@ -139,7 +157,9 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
 
   // UI Component
   return (
-    <Provider value={{ ...states, ...actions }}>{props.children}</Provider>
+    <Provider value={{ ...states, ...actions }}>
+      {props.children}
+    </Provider>
   );
 };
 export default FirmHarmCaseSearchProvider;
