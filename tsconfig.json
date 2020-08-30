@@ -27,9 +27,7 @@
       "native_modules": ["src/native_modules"]
     }
   },
-  "include": [
-    "src/**/*", "storybook/**/*",
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "storybook/**/*.ts", "storybook/**/*.tsx"],
   "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
   "jest": {
     "globals": {
