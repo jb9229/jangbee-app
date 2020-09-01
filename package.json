@@ -18,7 +18,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@apollo/client": "^3.0.0-rc.10",
+    "@apollo/client": "^3.1.4",
     "@apollo/link-ws": "^2.0.0-beta.3",
     "@expo/samples": "2.1.1",
     "@expo/vector-icons": "^10.0.0",

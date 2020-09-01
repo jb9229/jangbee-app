@@ -1,4 +1,5 @@
 export const MY_FIRMHARMCASE_SEARCHWORD = '내가 등록한 피해사례 입니다';
+export const TOTAL_FIRMHARMCASE_SEARCHWORD = '전체 피해사례 입니다.';
 
 export class FirmChatCrtDto
 {

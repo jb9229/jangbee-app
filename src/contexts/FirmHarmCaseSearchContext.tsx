@@ -18,5 +18,6 @@ interface Context {
   openDetailModal: (detailEvalu: any) => void;
   deleteFirmHarmCase: (id: string) => void;
   openUpdateFirmHarmCase: (detailEvalu: any) => void;
+  onEndReachedCaseList: () => void;
 }
 export { useCtx as useFirmHarmCaseSearchContext, Provider };

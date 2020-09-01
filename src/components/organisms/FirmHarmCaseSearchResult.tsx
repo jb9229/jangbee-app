@@ -3,6 +3,7 @@ import * as React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 
 import FirmHarmCaseItem from './FirmHarmCaseItem';
+import { FlatList } from 'react-native-gesture-handler';
 import { HarmCase } from 'src/container/firmHarmCase/type';
 import JBButton from '../molecules/JBButton';
 import moment from 'moment';
@@ -11,7 +12,10 @@ import styled from 'styled-components/native';
 import { useFirmHarmCaseSearchContext } from 'src/contexts/FirmHarmCaseSearchContext';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
-const Container = styled.ScrollView.attrs(() => ({
+const Container = styled.View`
+  flex: 1;
+`;
+const FirmHarmCaseFlatList = styled(FlatList).attrs(() => ({
   wrapperStyle: {
     flex: 1
   }
@@ -34,11 +38,11 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
   const {
-    openDetailModal, deleteFirmHarmCase, openUpdateFirmHarmCase
+    openDetailModal, deleteFirmHarmCase, openUpdateFirmHarmCase, onEndReachedCaseList
   } = useFirmHarmCaseSearchContext();
 
   const searchTimeStr = moment(props.searchTime).format('YYYY-MM-DD HH:mm');
-  if (props.harmCaseList?.length === 0 )
+  if (props.harmCaseList?.length === 0)
   {
     return (
       <Container>
@@ -51,22 +55,29 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
           />
         </NoticeWrap>
       </Container>
-    )
+    );
   }
+
   return (
     <Container style={props.wrapperStyle}>
-      {props.harmCaseList?.map((harmCase, index) =>
-        <FirmHarmCaseItem
-          key={`KEY_${index}`}
-          item={harmCase}
-          searchTime={searchTimeStr}
-          accountId={user.uid}
-          updateCliEvalu={openUpdateFirmHarmCase}
-          deleteCliEvalu={deleteFirmHarmCase}
-          // openCliEvaluLikeModal={openCliEvaluLikeModal}
-          openDetailModal={evalu => openDetailModal(evalu)}
-        />
-      )}
+      <FirmHarmCaseFlatList
+        data={props.harmCaseList}
+        onEndReachedThreshold={0.4}
+        onEndReached={onEndReachedCaseList}
+        renderItem={({item, index}) =>
+          <FirmHarmCaseItem
+            key={`KEY_${index}`}
+            item={item.node}
+            searchTime={searchTimeStr}
+            accountId={user.uid}
+            updateCliEvalu={openUpdateFirmHarmCase}
+            deleteCliEvalu={deleteFirmHarmCase}
+            // openCliEvaluLikeModal={openCliEvaluLikeModal}
+            openDetailModal={evalu => openDetailModal(evalu)}
+
+          />
+        }
+      />
     </Container>
   );
 };

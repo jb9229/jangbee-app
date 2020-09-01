@@ -29,3 +29,27 @@ export const CASHBACKS = gql`
     status
   }
 }`;
+
+/**
+ * 피해사례 전체 조회
+ */
+export const FirmHarmCasesQuery = gql`
+  query FirmHarmCasesQuery ($pageQueryInfo: PageQueryInfo) {
+    firmHarmCases(pageQueryInfo: $pageQueryInfo) {
+      edges {
+        cursor
+        node {
+          accountId
+          telNumber
+          reason
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`;

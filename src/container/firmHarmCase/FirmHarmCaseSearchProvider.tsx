@@ -1,21 +1,25 @@
 import * as React from 'react';
 
-import { CallHistory, CallHistoryType, MY_FIRMHARMCASE_SEARCHWORD } from './type';
+import { CallHistory, MY_FIRMHARMCASE_SEARCHWORD, TOTAL_FIRMHARMCASE_SEARCHWORD } from './type';
 import { deleteFirmHarmCase, filterCallHistory, searchMyFirmHarmCase } from './searchAction';
 
 import { DefaultNavigationProps } from 'src/types';
-import { PermissionsAndroid } from 'react-native';
+import { FirmHarmCasesQuery } from 'src/api/queries';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';
 import { formatTelnumber } from 'src/utils/StringUtils';
 import { noticeUserError } from '../request';
 import { searchFirmHarmCase } from './action';
+import { useLazyQuery } from '@apollo/client';
 import { useLoginContext } from 'src/contexts/LoginContext';
+
+const PAGING_COUNT = 30;
 
 interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
   searchWord?: string;
   initMyHarmCaseSearch: boolean;
+  initSearchAll: boolean;
 }
 const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
 {
@@ -28,10 +32,15 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
   const [harmCaseList, setHarmCaseList] = React.useState();
   const [detailEvalu, setDetailEvalu] = React.useState();
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
+  const [firHarmCasesReq, firHarmCasesRsp] = useLazyQuery(FirmHarmCasesQuery);
 
-  React.useEffect(() => {
+  console.log('>>> firHarmCasesRsp: ', firHarmCasesRsp?.data?.firmHarmCases?.edges)
+
+  React.useEffect(() =>
+  {
     // init search
-    if (props.searchWord) {
+    if (props.searchWord)
+    {
       actions.onSearchWordEndEditing(props.searchWord);
     }
 
@@ -40,10 +49,18 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     {
       searchMyFirmHarmCaseAction();
     }
+
+    if (props.initSearchAll)
+    {
+      firHarmCasesReq({ variables: { pageQueryInfo: { first: PAGING_COUNT } } });
+      setSearched(true);
+      setSearchWord(TOTAL_FIRMHARMCASE_SEARCHWORD);
+    }
   }, []);
 
   // Utils Actions
-  const searchMyFirmHarmCaseAction = () => {
+  const searchMyFirmHarmCaseAction = () =>
+  {
     searchMyFirmHarmCase(user.uid)
       .then(resBody =>
       {
@@ -52,29 +69,30 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
           setSearched(true);
           setHarmCaseList(resBody.content);
           setSearchWord(MY_FIRMHARMCASE_SEARCHWORD);
-          return;
         }
       })
       .catch(ex =>
       {
         noticeUserError('내가 등록한 피해사례 요청 문제', `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
       });
-  }
+  };
 
   // Props States
   const states = {
     searched, searchWord, searchTime, detailEvalu,
     visibleDetailModal,
     callHistory: filterCallHistory(callHistory),
-    harmCaseList
+    harmCaseList: firHarmCasesRsp?.data?.firmHarmCases?.edges || []
   };
   // Props Actions
   const actions = {
-    onSelectCallHistory (history: CallHistory) {
+    onSelectCallHistory (history: CallHistory): void
+    {
       setSearched(true);
       setSearchWord(formatTelnumber(history.phoneNumber));
       searchFirmHarmCase(history.phoneNumber)
-        .then((harmcaseList) => {
+        .then((harmcaseList) =>
+        {
           setHarmCaseList(harmcaseList);
           setSearchTime(new Date());
         })
@@ -84,13 +102,15 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
           noticeUserError('피해사례 요청 문제', `피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
         });
     },
-    onCancelSearch () {
+    onCancelSearch (): void
+    {
       setSearched(false);
       setSearchWord(undefined);
       setHarmCaseList(undefined);
       setSearchTime(undefined);
     },
-    onSearchWordEndEditing (text: string) {
+    onSearchWordEndEditing (text: string): void
+    {
       if (text)
       {
         setSearched(true);
@@ -107,24 +127,29 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
           });
       }
     },
-    openDetailModal(evalu): void
+    openDetailModal (evalu): void
     {
       setDetailEvalu(evalu);
       setVisibleDetailModal(true);
     },
-    closeFirmHarmCaseDetailModal() {
+    closeFirmHarmCaseDetailModal ()
+    {
       setVisibleDetailModal(false);
     },
-    openUpdateFirmHarmCase(evalu) {
+    openUpdateFirmHarmCase (evalu): void
+    {
       props.navigation.navigate('FirmHarmCaseUpdate', { harmCase: evalu })
     },
-    deleteFirmHarmCase(id: string) {
+    deleteFirmHarmCase (id: string): void
+    {
       deleteFirmHarmCase(id)
         .then(() => {
           if (searchWord === MY_FIRMHARMCASE_SEARCHWORD)
           {
             searchMyFirmHarmCaseAction();
-          } else {
+          }
+          else
+          {
             actions.onSearchWordEndEditing(searchWord);
           }
         })
@@ -134,6 +159,38 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
             `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`, user
           )
         );
+    },
+    onEndReachedCaseList (): void
+    {
+      if (!firHarmCasesRsp?.data?.firmHarmCases?.pageInfo?.hasNextPage) { return }
+      firHarmCasesRsp.fetchMore(
+        {
+          variables: {
+            pageQueryInfo:
+            {
+              first: PAGING_COUNT,
+              after: firHarmCasesRsp.data.firmHarmCases.pageInfo.endCursor
+            }
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) =>
+          {
+            const newEdges = fetchMoreResult.firmHarmCases.edges;
+            const pageInfo = fetchMoreResult.firmHarmCases.pageInfo;
+
+            return newEdges.length
+              ? {
+                // Put the new comments at the end of the list and update `pageInfo`
+                // so we have the new `endCursor` and `hasNextPage` values
+                firmHarmCases: {
+                  __typename: previousResult.firmHarmCases.__typename,
+                  edges: [...previousResult.firmHarmCases.edges, ...newEdges],
+                  pageInfo
+                }
+              }
+              : previousResult;
+          }
+        }
+      );
     }
   };
 
