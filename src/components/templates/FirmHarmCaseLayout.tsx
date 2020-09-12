@@ -1,22 +1,11 @@
 import * as React from 'react';
 
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
-import ActivityIndicator from 'atoms/ActivityIndicator';
-import ClientEvaluCreateModal from 'src/components/templates/FirmHarmCaseCreateLayout';
-import { EvaluListType } from 'src/container/firmHarmCase/type';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
-import { GiftedChat } from 'react-native-gifted-chat';
-import JBButton from 'molecules/JBButton';
-import JangbeeAdList from '../organisms/JangbeeAdList';
-import { MaterialIcons } from '@expo/vector-icons';
 import RoundButton from '../atoms/button/RoundButton';
-import { SearchBar } from 'react-native-elements';
 import colors from 'constants/Colors';
-import getString from 'src/STRING';
-import { shareNotExistCEvalu } from 'common/JBCallShare';
 import { useFirmHarmCaseContext } from 'src/contexts/FirmHarmCaseContext';
 
 interface StyleProps {
@@ -83,18 +72,14 @@ interface Props{
 const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
   const {
-    navigation, user, searchArea, searchTime, searchNotice, countData, evaluListType,
+    user, searchArea, searchTime, searchNotice, countData, evaluListType,
     onClickSearch, onClickAddFirmHarmCase, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
     deleteCliEvalu,
     openCliEvaluLikeModal,
-    updateEvalu,
-    evaluLikeSelected, evaluLikeList, createClientEvaluLike, cancelClientEvaluLike, mineEvaluation,
-    visibleCreateModal,
-    setVisibleCreateModal, setVisibleUpdateModal, setVisibleDetailModal, closeEvaluLikeModal,
-    setClinetEvaluList,
-    chatMessge, senChatMessage
+    onClickTotalEvaluList,
+    setVisibleCreateModal
   } = useFirmHarmCaseContext();
   const [chatMode, setChatMode] = React.useState(false);
   /**
@@ -109,7 +94,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
         updateCliEvalu={openUpdateCliEvaluForm}
         deleteCliEvalu={deleteCliEvalu}
         openCliEvaluLikeModal={openCliEvaluLikeModal}
-        openDetailModal={evalu => openDetailModal(evalu)}
+        openDetailModal={(evalu): void => openDetailModal(evalu)}
         searchTime={searchTime}
       />
     );
@@ -121,7 +106,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
         <HelloWrap>
           <HelloText>안녕하세요.</HelloText>
           <HelloTextWrap>
-          <HelloText>장비대금</HelloText>
+            <HelloText>장비대금</HelloText>
             <HelloPointText> 체불이 </HelloPointText>
             <HelloText>발생 했나요?</HelloText>
           </HelloTextWrap>
@@ -138,7 +123,9 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
           onClickMyEvaluList={onClickMyEvaluList}
           onClickNewestEvaluList={onClickNewestEvaluList}
           setVisibleCreateModal={setVisibleCreateModal}
-          searchFilterCliEvalu={searchFilterCliEvalu}/>
+          searchFilterCliEvalu={searchFilterCliEvalu}
+          onClickTotalEvaluList={onClickTotalEvaluList}
+        />
         <SearchWrap>
           {/* <SearchTO onPress={() => navigation.navigate("FirmHarmCaseSearch")}>
             <MaterialCommunityIcons name="account-search" size={34} color="black" />

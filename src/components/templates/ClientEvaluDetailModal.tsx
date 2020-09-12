@@ -9,7 +9,7 @@ import JBButton from 'molecules/JBButton';
 import JBTextItem from 'molecules/JBTextItem';
 import React from 'react';
 import { formatNumber } from 'utils/NumberUtils';
-import { shareClientEvalu } from 'common/JBCallShare';
+import { shareClientEvalu } from 'src/container/firmHarmCase/searchAction';
 import styled from 'styled-components/native';
 
 const Container = styled.ScrollView`

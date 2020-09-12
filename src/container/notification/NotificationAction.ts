@@ -1,11 +1,10 @@
 import * as Notifications from 'expo-notifications';
 
-import { Alert, DeviceEventEmitter, Platform } from 'react-native';
-
+import { Platform } from 'react-native';
 import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';
 
 // android permissions are given on install
-export const addNotificationListener = async (uid, _handleNotification): Promise<void> =>
+export const addNotificationListener = (uid, _handleNotification): void =>
 {
   // Temp code for 사용자 옛날 토큰 빨리 업그레이드 위해
   registerForPushNotificationsAsync(uid);
@@ -22,17 +21,25 @@ export const addNotificationListener = async (uid, _handleNotification): Promise
 
   Notifications.addNotificationReceivedListener(_handleNotification);
 
+  Notifications.addNotificationResponseReceivedListener(response =>
+  {
+    console.log(response);
+    alert(response);
+  });
+
   Notifications.getPresentedNotificationsAsync()
-    .then((responseArr) => {
+    .then((responseArr) =>
+    {
       console.log('>>> PresentedNotifications: ', responseArr);
-      responseArr.forEach((response) => {
+      responseArr.forEach((response) =>
+      {
         if (response?.request?.identifier)
         {
           _handleNotification(response);
           Notifications.dismissNotificationAsync(response?.request?.identifier);
         }
-      })
-    })
+      });
+    });
 };
 
 // const runListener = (): void =>

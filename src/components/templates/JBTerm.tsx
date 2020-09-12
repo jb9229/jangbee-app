@@ -1,10 +1,12 @@
+import Constants from 'expo-constants';
 import JBButton from 'molecules/JBButton';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
-import { shareJBCall } from 'common/JBCallShare';
+import pkgConfig from '../../../app.config';
+import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
 import styled from 'styled-components/native';
 import url from 'constants/Url';
 
@@ -55,7 +57,8 @@ const TelText = styled.Text`
   padding-right: 4px;
   margin: 2px;
 `;
-
+console.log('>>> Constants:', Constants)
+console.log('>>> process.env:', process.env)
 export default function JBTerm ({ bg })
 {
   return (
@@ -115,7 +118,9 @@ export default function JBTerm ({ bg })
       <Row>
         <Column>
           <Title>Version: </Title>
-          <Text>{`${pkg.mode}_${pkg.expo.version}`}</Text>
+          {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
+          <Text>{`${pkg.expo.version}_${process.env.BUILD_TYPE}`}</Text>
+          {/* <Text>{`${pkg.expo.version}_${pkgConfig.extra.buildType}`}</Text> */}
         </Column>
         <Column>
           <JBButton

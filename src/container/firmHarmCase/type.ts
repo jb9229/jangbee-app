@@ -39,8 +39,10 @@ export interface HarmCase {
   searchTime: string;
 }
 
-export class FirmHarmCaseCreateDto {
-  constructor() {
+export class FirmHarmCaseCreateDto
+{
+  constructor()
+  {
     this.reason = '';
     this.local = '';
     this.firmName = '';
@@ -48,11 +50,11 @@ export class FirmHarmCaseCreateDto {
     this.telNumber = '';
     this.telNumber2 = '';
     this.telNumber3 = '';
-    this.searchTime = '';
     this.equipment = '';
     this.regiTelNumber = '';
     this.amount = 0;
   }
+
   reason: string;
   local: string;
   firmName: string;
@@ -61,7 +63,6 @@ export class FirmHarmCaseCreateDto {
   telNumber: string;
   telNumber2: string;
   telNumber3: string;
-  searchTime: string;
   equipment: string;
   regiTelNumber: string;
   amount: number;

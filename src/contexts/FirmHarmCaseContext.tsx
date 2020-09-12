@@ -32,6 +32,7 @@ interface Context {
   deleteCliEvalu: (id: string) => void;
   openCliEvaluLikeModal: (item, isMine) => void;
   senChatMessage: (meesage: object) => void;
+  onClickTotalEvaluList: () => void;
 }
 
 export interface Evaluation {

@@ -5,6 +5,7 @@ module.exports = function (api)
     presets: ['babel-preset-expo', '@babel/preset-typescript'],
     plugins: [
       ['babel-plugin-styled-components'],
+      ['inline-dotenv'],
       [
         'module-resolver',
         {

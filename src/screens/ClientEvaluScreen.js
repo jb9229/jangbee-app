@@ -1,18 +1,13 @@
 import * as api from 'api/api';
 
-import { FlatList, Picker, StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import ClientEvaluCreateModal from 'templates/ClientEvaluCreateModal';
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import ClientEvaluLikeModal from 'templates/ClientEvaluLikeModal';
 import React from 'react';
-import colors from 'constants/Colors';
-import fonts from 'constants/Fonts';
 import moment from 'moment';
 import { notifyError } from 'common/ErrorNotice';
-import { shareNotExistCEvalu } from 'common/JBCallShare';
-import styled from 'styled-components/native';
-import { withLogin } from 'src/contexts/LoginContext';
 
 class ClientEvaluScreen extends React.Component
 {

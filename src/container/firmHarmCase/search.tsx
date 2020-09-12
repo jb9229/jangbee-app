@@ -11,11 +11,16 @@ const FirmHarmCaseSearchContainer: React.FC<Props> = (props) =>
 {
   const searchWord = props.navigation.getParam('searchWord', undefined);
   const initMyHarmCaseSearch = props.navigation.getParam('myHarmCase', undefined);
-  const initSearchAll = props.navigation.getParam('initSearchAll', true);
+  const initSearchAll = props.navigation.getParam('initSearchAll', undefined);
+  const initSearchMine = props.navigation.getParam('initSearchMine', undefined);
 
   return (
     <FirmHarmCaseSearchProvider
-      navigation={props.navigation} searchWord={searchWord} initMyHarmCaseSearch={initMyHarmCaseSearch} initSearchAll={initSearchAll}
+      navigation={props.navigation}
+      searchWord={searchWord}
+      initMyHarmCaseSearch={initMyHarmCaseSearch}
+      initSearchAll={initSearchAll}
+      initSearchMine={initSearchMine}
     >
       <FirmHarmCaseSearchLayout />
     </FirmHarmCaseSearchProvider>

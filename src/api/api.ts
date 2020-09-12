@@ -445,18 +445,6 @@ export function updateClientEvaluation (updateEvaluation)
 }
 
 /**
- * 블랙리스트 삭제
- * @param {long} id 삭제할 블랙리스트 아이디
- */
-export function deleteCliEvalu (id)
-{
-  return fetch(`${url.JBSERVER_CLIENT_EVALU}?id=${id}`, {
-    method: 'DELETE',
-    headers: {}
-  }).then(handleJBServerJsonResponse);
-}
-
-/**
  * 공감/비공감 추가 API 요청 함수
  * @param {object} newEvaluLike 신규 공감
  */

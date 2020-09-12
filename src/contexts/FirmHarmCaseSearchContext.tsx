@@ -11,6 +11,7 @@ interface Context {
   harmCaseList: Array<HarmCase>;
   detailEvalu: any;
   visibleDetailModal: boolean;
+  loading: boolean;
   onSelectCallHistory: (callHistory: CallHistory) => void;
   onCancelSearch: () => void;
   onSearchWordEndEditing: (text: string) => void;

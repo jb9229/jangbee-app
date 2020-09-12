@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { StyleProp, ViewStyle } from 'react-native';
+import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
 
 import FirmHarmCaseItem from './FirmHarmCaseItem';
 import { FlatList } from 'react-native-gesture-handler';
 import { HarmCase } from 'src/container/firmHarmCase/type';
 import JBButton from '../molecules/JBButton';
+import LoadingIndicator from '../molecules/LoadingIndicator';
 import moment from 'moment';
 import { shareNotExistCEvalu } from 'src/container/firmHarmCase/searchAction';
 import styled from 'styled-components/native';
@@ -38,9 +39,10 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
   const {
+    loading,
     openDetailModal, deleteFirmHarmCase, openUpdateFirmHarmCase, onEndReachedCaseList
   } = useFirmHarmCaseSearchContext();
-
+console.log('>>> loading: ', loading)
   const searchTimeStr = moment(props.searchTime).format('YYYY-MM-DD HH:mm');
   if (props.harmCaseList?.length === 0)
   {
@@ -64,6 +66,7 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
         data={props.harmCaseList}
         onEndReachedThreshold={0.4}
         onEndReached={onEndReachedCaseList}
+        ListFooterComponent={loading ? <ActivityIndicator /> : null}
         renderItem={({item, index}) =>
           <FirmHarmCaseItem
             key={`KEY_${index}`}

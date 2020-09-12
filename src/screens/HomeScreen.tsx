@@ -8,7 +8,6 @@ import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
-import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 

@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { NODE_SERVER_URL, NODE_SERVER_WEBSOCKET_URL } from 'src/constants/Url';
 
-import { WebSocketLink } from '@apollo/link-ws';
+import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
@@ -35,6 +35,19 @@ const splitLink = split(
 );
 
 export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache(
+    // {
+    //   typePolicies: {
+    //     Query: {
+    //       fields: {
+    //         // Reusable helper function to generate a field
+    //         // policy for the Query.search field, keyed by
+    //         // search query:
+    //         firmHarmCases: relayStylePagination([])
+    //       }
+    //     }
+    //   }
+    // }
+  ),
   link: splitLink
 });

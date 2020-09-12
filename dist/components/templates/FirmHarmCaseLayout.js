@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import ActivityIndicator from 'atoms/ActivityIndicator';
 import CountBoard from 'organisms/CountBoard';
 import colors from 'constants/Colors';
@@ -22,7 +23,7 @@ const NotExitButWrap = styled.View `
   justify-content: center;
   border-width: 1;
 `;
-export default function FirmHarmCaseLayout(props) {
+export default function FirmHarmCaseLayout(props){
     if (props.isLoading) {
         return (<LoadingContainer>
         <ActivityIndicator />

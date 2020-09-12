@@ -36,3 +36,20 @@ export const CASHBACK_CREATE = gql`
     }
   }
 `;
+
+// FirmHarmCases
+export const FIRMHARMCASE_CREATE = gql`
+  mutation CreateFirmHarmCase($firmHarmCaseCrtDto: FirmHarmCaseCrtDto) {
+    createFirmHarmCase(crtDto: $firmHarmCaseCrtDto) {
+      accountId
+      reason
+      telNumber
+    }
+  }
+`;
+
+export const FIRMHARMCASE_DELETE = gql`
+  mutation DeleteFirmHarmCase($id: String) {
+    deleteFirmHarmCase(id: $id)
+  }
+`;

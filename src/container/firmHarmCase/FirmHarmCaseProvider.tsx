@@ -71,61 +71,61 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   }, []);
 
   const _handleNotification = (response): void =>
-{
-  if (response?.request?.content)
   {
-    const notification = response.request.content;
-    // Notifications.setBadgeCountAsync(0);
-    // TODO Notice 확인 시, Notice 알람 제거
+    if (response?.request?.content)
+    {
+      const notification = response.request.content;
+      // Notifications.setBadgeCountAsync(0);
+      // TODO Notice 확인 시, Notice 알람 제거
 
-    if (notification.data?.notice === 'NOTI_WORK_REGISTER')
-    {
-      noticeCommonNavigation(notification, '일감 지원하기', () =>
-        props.navigation.navigate('FirmWorkList', { refresh: true })
-      );
-    }
-    else if (notification.data?.notice === 'NOTI_WORK_ADD_REGISTER')
-    {
-      noticeCommonNavigation(notification, '지원자 확인하기', () =>
-        props.navigation.navigate('WorkList', { refresh: true })
-      );
-    }
-    else if (notification.data?.notice === 'NOTI_WORK_SELECTED')
-    {
-      noticeCommonNavigation(notification, '배차 수락하러가기', () =>
-        props.navigation.navigate('FirmWorkList', { refresh: true })
-      );
-    }
-    else if (notification.data?.notice === 'NOTI_WORK_ABANDON')
-    {
-      noticeCommonNavigation(notification, '배차 다시 요청하기', () =>
-        props.navigation.navigate('WorkList', { refresh: true })
-      );
-    }
-    else if (notification.data?.notice === 'NOTI_WORK_CLOSED')
-    {
-      noticeCommonNavigation(notification, '업체 평가하기', () =>
-        props.navigation.navigate('WorkList', { refresh: true })
-      );
-    }
-    else if (notification.data?.notice === 'NOTI_CEVALU_REGISTER')
-    {
-      noticeCommonNavigation(
-        notification,
-        '피해사례(악덕) 조회하기',
-        () => props.navigation.navigate('ClientEvalu')
-      );
+      if (notification.data?.notice === 'NOTI_WORK_REGISTER')
+      {
+        noticeCommonNavigation(notification, '일감 지원하기', () =>
+          props.navigation.navigate('FirmWorkList', { refresh: true })
+        );
+      }
+      else if (notification.data?.notice === 'NOTI_WORK_ADD_REGISTER')
+      {
+        noticeCommonNavigation(notification, '지원자 확인하기', () =>
+          props.navigation.navigate('WorkList', { refresh: true })
+        );
+      }
+      else if (notification.data?.notice === 'NOTI_WORK_SELECTED')
+      {
+        noticeCommonNavigation(notification, '배차 수락하러가기', () =>
+          props.navigation.navigate('FirmWorkList', { refresh: true })
+        );
+      }
+      else if (notification.data?.notice === 'NOTI_WORK_ABANDON')
+      {
+        noticeCommonNavigation(notification, '배차 다시 요청하기', () =>
+          props.navigation.navigate('WorkList', { refresh: true })
+        );
+      }
+      else if (notification.data?.notice === 'NOTI_WORK_CLOSED')
+      {
+        noticeCommonNavigation(notification, '업체 평가하기', () =>
+          props.navigation.navigate('WorkList', { refresh: true })
+        );
+      }
+      else if (notification.data?.notice === 'NOTI_CEVALU_REGISTER')
+      {
+        noticeCommonNavigation(
+          notification,
+          '피해사례(악덕) 조회하기',
+          () => props.navigation.navigate('ClientEvalu')
+        );
+      }
+      else
+      {
+        noticeCommonNavigation(notification, '확인', () => {});
+      }
     }
     else
     {
-      noticeCommonNavigation(notification, '확인', () => {});
-    }
-  }
-  else
-  {
-    console.log('=== notification:', response)
-    Alert.alert(
-      '유효하지 않은 알람입니다',
+      console.log('=== notification:', response)
+      Alert.alert(
+        '유효하지 않은 알람입니다',
       `내용: ${response}`,
       [
         {
@@ -143,39 +143,39 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   }
 };
 
-const noticeCommonNavigation = (notification, actionName, action): void =>
-{
-  setTimeout(() =>
+  const noticeCommonNavigation = (notification, actionName, action): void =>
   {
-    Alert.alert(
-      notification.data.title,
-      notification.data.body,
-      [
-        {
-          text: '취소',
-          onPress: () =>
+    setTimeout(() =>
+    {
+      Alert.alert(
+        notification.data.title,
+        notification.data.body,
+        [
           {
-            // Notifications.dismissNotificationAsync(
-            //   notification.notificationId
-            // );
+            text: '취소',
+            onPress: () =>
+            {
+              // Notifications.dismissNotificationAsync(
+              //   notification.notificationId
+              // );
+            },
+            style: 'cancel'
           },
-          style: 'cancel'
-        },
-        {
-          text: actionName,
-          onPress: () =>
           {
-            // Notifications.dismissNotificationAsync(
-            //   notification.notificationId
-            // );
-            action();
+            text: actionName,
+            onPress: () =>
+            {
+              // Notifications.dismissNotificationAsync(
+              //   notification.notificationId
+              // );
+              action();
+            }
           }
-        }
-      ],
-      { cancelable: false }
-    );
-  }, 1000);
-};
+        ],
+        { cancelable: false }
+      );
+    }, 1000);
+  };
 
   const { refetchFirm, user, firm } = useLoginContext();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
@@ -454,14 +454,21 @@ const noticeCommonNavigation = (notification, actionName, action): void =>
       console.log('>>> newMessage', newMessage);
       addFirmChatMessageReq({ variables: { message: newMessage } });
     },
-    onClickSearch: () => {
-      props.navigation.navigate('FirmHarmCaseSearch')
+    onClickSearch(): void
+    {
+      props.navigation.navigate('FirmHarmCaseSearch');
     },
-    onClickAddFirmHarmCase: () => {
-      props.navigation.navigate('FirmHarmCaseCreate')
+    onClickAddFirmHarmCase(): void
+    {
+      props.navigation.navigate('FirmHarmCaseCreate');
     },
-    onClickMyEvaluList: () => {
-      props.navigation.navigate('FirmHarmCaseSearch', { myHarmCase: true })
+    onClickMyEvaluList(): void
+    {
+      props.navigation.navigate('FirmHarmCaseSearch', { initSearchMine: true });
+    },
+    onClickTotalEvaluList(): void
+    {
+      props.navigation.navigate('FirmHarmCaseSearch', { initSearchAll: true });
     }
   };
 

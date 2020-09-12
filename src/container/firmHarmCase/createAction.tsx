@@ -1,15 +1,9 @@
-import * as api from 'api/api';
 import * as yup from 'yup';
 
 import { FirmHarmCaseCreateDto, FirmHarmCaseCreateErrorDto } from "./type";
 
 import { PHONENUMBER_REGULAR_EXPRESSION } from '../firm/types';
 import getString from 'src/STRING';
-
-export const createFirmHarmCase = (accountId: string, dto: FirmHarmCaseCreateDto): Promise<object> => {
-  console.log('>>> createDto: ', dto)
-  return api.createClientEvaluation({accountId, ...dto, amount: `${dto.amount}`});
-}
 
 export const validateCrateFirmHarmCase = (dto: FirmHarmCaseCreateDto, errorDto: FirmHarmCaseCreateErrorDto): Promise<boolean> => {
   return ValidSchemeCrateFirmHarmCase.validate(dto, { abortEarly: false })
@@ -24,7 +18,7 @@ export const validateCrateFirmHarmCase = (dto: FirmHarmCaseCreateDto, errorDto: 
 
       return false;
     });
-}
+};
 
 export const ValidSchemeCrateFirmHarmCase = yup.object({
   telNumber: yup.string()
