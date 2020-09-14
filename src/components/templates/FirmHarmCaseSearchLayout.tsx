@@ -129,16 +129,6 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
         size="full"
         searchTime={searchTime}
       />
-      {/* <ClientEvaluLikeModal
-        isVisibleModal={visibleEvaluLikeModal}
-        accountId={user.uid}
-        evaluation={evaluLikeSelected}
-        evaluLikeList={evaluLikeList}
-        createClientEvaluLike={createClientEvaluLike}
-        cancelClientEvaluLike={cancelClientEvaluLike}
-        closeModal={refresh => closeEvaluLikeModal(refresh)}
-        isMine={mineEvaluation}
-      /> */}
     </Container>
   );
 };

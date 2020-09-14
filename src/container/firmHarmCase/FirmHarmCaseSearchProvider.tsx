@@ -71,25 +71,6 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     }
   }, []);
 
-  // Utils Actions
-  // const searchMyFirmHarmCaseAction = () =>
-  // {
-  //   searchMyFirmHarmCase(user.uid)
-  //     .then(resBody =>
-  //     {
-  //       if (resBody && resBody.content)
-  //       {
-  //         setSearched(true);
-  //         setHarmCaseList(resBody.content);
-  //         setSearchWord(MY_FIRMHARMCASE_SEARCHWORD);
-  //       }
-  //     })
-  //     .catch(ex =>
-  //     {
-  //       noticeUserError('내가 등록한 피해사례 요청 문제', `내가 등록한 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`);
-  //     });
-  // };
-
   // Props States
   const states = {
     searched, searchWord, searchTime, detailEvalu,

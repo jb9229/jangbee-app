@@ -5,6 +5,7 @@ import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
 import FirmHarmCaseItem from './FirmHarmCaseItem';
 import { FlatList } from 'react-native-gesture-handler';
 import { HarmCase } from 'src/container/firmHarmCase/type';
+import Indicator from '../atoms/ActivityIndicator';
 import JBButton from '../molecules/JBButton';
 import LoadingIndicator from '../molecules/LoadingIndicator';
 import moment from 'moment';
@@ -44,7 +45,8 @@ const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
   } = useFirmHarmCaseSearchContext();
 console.log('>>> loading: ', loading)
   const searchTimeStr = moment(props.searchTime).format('YYYY-MM-DD HH:mm');
-  if (props.harmCaseList?.length === 0)
+
+  if (props.harmCaseList?.length === 0 && !loading)
   {
     return (
       <Container>
@@ -58,6 +60,11 @@ console.log('>>> loading: ', loading)
         </NoticeWrap>
       </Container>
     );
+  }
+
+  if (props.harmCaseList?.length === 0 && loading)
+  {
+    return <Indicator />;
   }
 
   return (

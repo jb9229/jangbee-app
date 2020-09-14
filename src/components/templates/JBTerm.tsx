@@ -1,3 +1,5 @@
+import url, { NODE_SERVER_URL } from 'constants/Url';
+
 import Constants from 'expo-constants';
 import JBButton from 'molecules/JBButton';
 import React from 'react';
@@ -8,7 +10,6 @@ import pkg from 'app.json';
 import pkgConfig from '../../../app.config';
 import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
 import styled from 'styled-components/native';
-import url from 'constants/Url';
 
 const Container = styled.View`
   padding: 8px;
@@ -32,6 +33,8 @@ const Title = styled.Text`
   font-family: ${fonts.title};
   font-size: 11;
 `;
+
+const TitleTO = styled.TouchableOpacity``;
 
 const TelHO = styled.TouchableOpacity`
   padding: 1px;
@@ -117,7 +120,9 @@ export default function JBTerm ({ bg })
       </Row>
       <Row>
         <Column>
-          <Title>Version: </Title>
+          <TitleTO onPress={() => alert(NODE_SERVER_URL)}>
+            <Title>Version: </Title>
+          </TitleTO>
           {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
           <Text>{`${pkg.expo.version}_${process.env.BUILD_TYPE}`}</Text>
           {/* <Text>{`${pkg.expo.version}_${pkgConfig.extra.buildType}`}</Text> */}
