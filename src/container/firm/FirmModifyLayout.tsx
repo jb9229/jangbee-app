@@ -47,6 +47,7 @@ const FirmRegisterLayout: React.FC = () =>
       firmDto.addrLongitude = firm.addrLongitude;
       firmDto.workAlarmSido = firm.workAlarmSido;
       firmDto.workAlarmSigungu = firm.workAlarmSigungu;
+      firmDto.modelYear = Number.parseInt(firm.modelYear);
     }
   }, [firm]);
 
@@ -90,7 +91,7 @@ const FirmRegisterLayout: React.FC = () =>
                 title="년식"
                 subTitle="(필수)"
                 items={pickerItems}
-                selectedValue={firm ? Number.parseInt(firm.modelYear) : 0}
+                selectedValue={firmDto.modelYear ? firmDto.modelYear : 0}
                 onValueChange={(itemValue): void => { firmDto.modelYear = Number.parseInt(itemValue) }}
                 size={110}
                 errorText={errorData.modelYear}
@@ -117,7 +118,7 @@ const FirmRegisterLayout: React.FC = () =>
             <SelectText
               label="일감알림 받을지역"
               subLabel="(필수)"
-              text={firm?.workAlarmSido || firm?.workAlarmSigungu ? `${firm?.workAlarmSido}${firm?.workAlarmSigungu}` : ''}
+              text={firmDto?.workAlarmSido || firmDto?.workAlarmSigungu ? `${firmDto?.workAlarmSido}${firmDto?.workAlarmSigungu}` : ''}
               onPress={(): void => setVisibleLocalModal(true)}
               placeholder="일감알림 받을 지역을 선택해 주세요."
               errorText={errorData.workAlarm}
@@ -223,6 +224,10 @@ const FirmRegisterLayout: React.FC = () =>
         {
           firmDto.workAlarmSido = sidoArrStr;
           firmDto.workAlarmSigungu = sigunguArrStr;
+          // setAlarmLocale(`${firmDto?.workAlarmSido}${firmDto?.workAlarmSigungu}`);
+          // console.log('>>> alarmlocale: ', `${firm?.workAlarmSido}${firm?.workAlarmSigungu}`)
+          // console.log('>>> alarmlocale: ', `${firm?.workAlarmSido}${firm?.workAlarmSigungu}`)
+          // console.log('>>> alarmlocale: ', `${firm?.workAlarmSido}${firm?.workAlarmSigungu}`)
         }}
         nextFocus={(): void => {}}
         multiSelect

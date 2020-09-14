@@ -191,9 +191,6 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
     onClickNewestEvaluList: () =>
     {
     },
-    getClientEvaluCount: (accountId: string, setCountData: (n: string) => void) =>
-    {
-    },
     senChatMessage: (message: string) =>
     {
       states.chatMessge.concat(

@@ -76,6 +76,8 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
       validateCreatFirmDto(firmDto)
         .then((result) =>
         {
+          console.log('>>> update firmDto:', firmDto)
+          console.log('>>> update result:', result)
           if (result === true)
           {
             uploadImage(firmDto, popLoading)

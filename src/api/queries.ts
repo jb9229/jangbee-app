@@ -66,3 +66,16 @@ export const FirmHarmCasesQuery = gql`
     }
   }
 `;
+
+/**
+ * 피해사례 카운트 조회
+ */
+export const FIRMHARMCASE_COUNT = gql`
+  query FirmHarmCaseCount ($id: String) {
+    firmHarmCaseCount(id: $id)
+    {
+      totalCnt
+      myCnt
+    }
+  }
+`;

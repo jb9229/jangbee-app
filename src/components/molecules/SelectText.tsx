@@ -57,8 +57,14 @@ interface Props {
   onPress: () => void;
 }
 
-function SelectText (props: Props): React.ReactElement
+function SelectText(props: Props): React.ReactElement
 {
+  // const [selectText, setSelectText] = React.useState(props.text);
+  // React.useEffect(() =>
+  // {
+  //   setSelectText(props.text);
+  // }, [props.text]);
+
   return (
     <Container style={props.style}>
       <MiddleTitle label={props.label} subLabel={props.subLabel} />

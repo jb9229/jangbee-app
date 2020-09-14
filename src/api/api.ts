@@ -394,16 +394,6 @@ export function createClientEvaluation (newEvaluation)
   }).then(handleJBServerJsonResponse);
 }
 
-export function getClientEvaluCount (accountId)
-{
-  const param = encodeURIComponent(accountId);
-  return fetch(
-    `${
-      url.JBSERVER_CLIENT_EVALU_COUNT
-    }?accountId=${param}`
-  ).then(handleJBServerJsonResponse);
-}
-
 export function getClientEvaluList (page, accountId, mine)
 {
   const param = encodeURIComponent(accountId);

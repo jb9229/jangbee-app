@@ -2,17 +2,16 @@ import * as Notifications from 'expo-notifications';
 import * as React from 'react';
 import * as api from 'src/api/api';
 
-import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
+import { FIRMHARMCASE_COUNT, FIRM_CHATMESSAGE } from 'src/api/queries';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
 import { Alert } from 'react-native';
+import { DefaultNavigationProps } from 'src/types';
 import { EvaluListType } from 'src/container/firmHarmCase/type';
-import { FIRM_CHATMESSAGE } from 'src/api/queries';
 import { FIRM_NEWCHAT } from 'src/api/subscribe';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { addNotificationListener } from '../notification/NotificationAction';
-import { getClientEvaluCount } from 'src/container/firmHarmCase/action';
 import moment from 'moment';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -36,7 +35,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     }
     else
     {
-      getClientEvaluCount(user?.uid, setCountData);
       setClinetEvaluList();
       setSearchWord('');
     }
@@ -139,9 +137,9 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         }
       ],
       { cancelable: false }
-    );
-  }
-};
+      );
+    }
+  };
 
   const noticeCommonNavigation = (notification, actionName, action): void =>
   {
@@ -190,7 +188,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   const [searchArea, setSearchArea] = React.useState('TEL');
   const [searchTime, setSearchTime] = React.useState('');
   const [searchNotice, setSearchNotice] = React.useState('');
-  const [countData, setCountData] = React.useState<FirmHarmCaseCountData>();
   const [updateEvalu, setUpdateEvalu] = React.useState();
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
   const [evaluListType, setEvaluListType] = React.useState(EvaluListType.LATEST);
@@ -208,6 +205,13 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     onError: (err) =>
     {
       noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq result)', err?.message, user);
+    }
+  });
+  const firmHarmCaseRsp = useQuery(FIRMHARMCASE_COUNT, {
+    variables: { id: user.uid },
+    onError: (err) =>
+    {
+      noticeUserError('FirmHarmCaseCount(firmHarmCaseCount result)', err?.message, user);
     }
   });
 
@@ -324,7 +328,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   // Init States
   const states = {
     navigation: props.navigation, user, firm, searchWord, searchNotice, searchArea, evaluListType,
-    cliEvaluList, countData,
+    cliEvaluList, countData: firmHarmCaseRsp.data?.firmHarmCaseCount || [],
     chatMessge: chatMessagesResponse?.data?.firmChatMessage || [],
     setSearchWord,
     visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleEvaluLikeModal,
@@ -417,25 +421,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       setNewestEvaluList(true);
       setCliEvaluList(null);
       setClinetEvaluList();
-    },
-    getClientEvaluCount: (accountId: string, setCountData: (n: string) => void) =>
-    {
-      api
-        .getClientEvaluCount(accountId)
-        .then(countData =>
-        {
-          if (countData)
-          {
-            setCountData(countData);
-          }
-        })
-        .catch(ex =>
-        {
-          noticeUserError(
-            '피해사례 통계 요청',
-            `피해사례 통계 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
-          );
-        });
     },
     senChatMessage: (message: object) =>
     {
