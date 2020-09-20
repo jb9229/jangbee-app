@@ -5,13 +5,14 @@ import * as Sentry from 'sentry-expo';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Updates from 'expo-updates';
 
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Platform, StatusBar, StyleSheet, View } from 'react-native';
 
 import { ApolloProvider } from '@apollo/client';
 import AppNavigator from 'navigation/AppNavigator';
 import JBActIndicator from 'molecules/JBActIndicator';
 import LoginProvider from 'src/provider/LoginProvider';
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';
@@ -108,7 +109,7 @@ export default class App extends React.Component
       const update = await Updates.checkForUpdateAsync();
       if (update.isAvailable)
       {
-        console.log('=== update available:', update)
+        console.log('=== update available:', update);
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
         await Updates.reloadAsync();
@@ -148,24 +149,28 @@ export default class App extends React.Component
     }
 
     return (
-      <LoginProvider>
-        <ThemeProvider>
-          <ApolloProvider client={apolloClient}>
-            <View style={styles.container}>
-              {Platform.OS === 'ios' ? (
-                <StatusBar barStyle="default" />
-              ) : (
-                <StatusBar
-                  backgroundColor={colors.batangDark}
-                  currentHeight={32}
-                  barStyle="default"
-                />
-              )}
-              <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
-            </View>
-          </ApolloProvider>
-        </ThemeProvider>
-      </LoginProvider>
+      <RecoilRoot>
+        <LoginProvider>
+          <ThemeProvider>
+            <ApolloProvider client={apolloClient}>
+              <React.Suspense fallback={<ActivityIndicator />}>
+                <View style={styles.container}>
+                  {Platform.OS === 'ios' ? (
+                    <StatusBar barStyle="default" />
+                  ) : (
+                    <StatusBar
+                      backgroundColor={colors.batangDark}
+                      currentHeight={32}
+                      barStyle="default"
+                    />
+                  )}
+                  <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
+                </View>
+              </React.Suspense>
+            </ApolloProvider>
+          </ThemeProvider>
+        </LoginProvider>
+      </RecoilRoot>
     );
   }
 }

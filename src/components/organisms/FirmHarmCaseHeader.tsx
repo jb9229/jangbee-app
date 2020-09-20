@@ -2,11 +2,12 @@ import * as React from 'react';
 
 import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
-import { EvaluListType } from 'src/container/firmHarmCase/type';
-import { FirmHarmCaseCountData } from 'types/index';
+import { FirmHarmCaseCountData } from 'src/container/firmHarmCase/type';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from 'constants/Colors';
+import { firmHarmCaseCountState } from 'src/container/firmHarmCase/store';
 import fonts from 'constants/Fonts';
+import { useRecoilValue } from 'recoil';
 
 const HeaderWrap = styled.View`
   margin-top: 10;
@@ -83,6 +84,8 @@ interface Props {
 
 const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
 {
+  // const firmHarmCaseCount = useRecoilValue(firmHarmCaseCountState);
+console.log('>>> re-render: FirmHarmCaseHeader');
   return (
     <HeaderWrap removeClippedSubviews={false}>
       <SearchNoticeWrap>
@@ -97,7 +100,7 @@ const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
           hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
         >
           <TotalHarmCaseCount>
-            {`전체글: ${props.countData ? props.countData.totalCnt : '-'}`}
+            {`전체글: ${props.countData.totalCnt}`}
           </TotalHarmCaseCount>
         </TotalHarmCaseCountTO>
         <SearchNoticeText>
@@ -105,15 +108,15 @@ const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
         </SearchNoticeText>
         <MyHarmCaseCountWrap
           onPress={props.onClickMyEvaluList}
-          hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}
+          hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
         >
           <MyHarmCaseCount>
-            {`내글: ${props.countData ? props.countData.myCnt : '-'}`}
+            {`내글: ${props.countData.myCnt}`}
           </MyHarmCaseCount>
         </MyHarmCaseCountWrap>
       </SearchCountWrap>
     </HeaderWrap>
   );
-}
+};
 
 export default withTheme(FirmHarmCaseHeader);

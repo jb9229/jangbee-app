@@ -207,7 +207,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       noticeUserError('FirmHarmCaseProvider(addFirmChatMessageReq result)', err?.message, user);
     }
   });
-  const firmHarmCaseRsp = useQuery(FIRMHARMCASE_COUNT, {
+  const firmHarmCaseCountRsp = useQuery(FIRMHARMCASE_COUNT, {
     variables: { id: user.uid },
     onError: (err) =>
     {
@@ -328,8 +328,9 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   // Init States
   const states = {
     navigation: props.navigation, user, firm, searchWord, searchNotice, searchArea, evaluListType,
-    cliEvaluList, countData: firmHarmCaseRsp.data?.firmHarmCaseCount || [],
+    cliEvaluList,
     chatMessge: chatMessagesResponse?.data?.firmChatMessage || [],
+    countData: firmHarmCaseCountRsp.data?.firmHarmCaseCount || { myCnt: -1, totalCnt: -1 },
     setSearchWord,
     visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleEvaluLikeModal,
     updateEvalu, searchTime,
@@ -337,18 +338,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
   };
 
   const actions = {
-    deleteCliEvalu: (id: string): void =>
-    {
-      api
-        .deleteCliEvalu(id)
-        .then(() => setClinetEvaluList())
-        .catch(error =>
-          noticeUserError(
-            '피해사례 삭제 문제',
-            `피해사례 삭제에 문제가 있습니다, 다시 시도해 주세요(${error.messages})`, user
-          )
-        );
-    },
     setSearchArea,
     setClinetEvaluList,
     createClientEvaluLike: (newEvaluLike) =>

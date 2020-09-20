@@ -97,3 +97,8 @@ export class FirmHarmCaseCreateErrorDto {
   regiTelNumber: string;
   amount: string;
 }
+
+export interface FirmHarmCaseCountData {
+  totalCnt: number;
+  myCnt: number;
+}

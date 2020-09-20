@@ -1,7 +1,10 @@
 import * as React from 'react';
 
+import { fetchData, firmHarmCaseCountState, firmHarmCaseCountUserId } from 'src/container/firmHarmCase/store';
 import styled, { DefaultTheme, withTheme } from 'styled-components/native';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 
+import { Button } from 'react-native';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import RoundButton from '../atoms/button/RoundButton';
@@ -72,7 +75,7 @@ interface Props{
 const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
 {
   const {
-    user, searchArea, searchTime, searchNotice, countData, evaluListType,
+    user, searchArea, searchTime, searchNotice, countData,
     onClickSearch, onClickAddFirmHarmCase, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
@@ -82,6 +85,11 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
     setVisibleCreateModal
   } = useFirmHarmCaseContext();
   const [chatMode, setChatMode] = React.useState(false);
+  const [rerender, setRerender] = React.useState(false);
+  const setFirmHarmCaseCountUserId = useSetRecoilState(firmHarmCaseCountUserId);
+  // const resetList = useResetRecoilState(firmHarmCaseCountState);
+  const resetList = useSetRecoilState(firmHarmCaseCountState);
+  console.log('>>> re-render: FirmHarmCaseLayout');
   /**
    * 피해사례 아이템 UI 렌더링 함수
    */
@@ -104,6 +112,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
     <Container>
       <Header>
         <HelloWrap>
+          <Button title="re-render" onPress={() => {const data = fetchData(); console.log(data); resetList(data) }} />
           <HelloText>안녕하세요.</HelloText>
           <HelloTextWrap>
             <HelloText>장비대금</HelloText>
@@ -118,7 +127,6 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
           searchArea={searchArea}
           searchNotice={searchNotice}
           countData={countData}
-          evaluListType={evaluListType}
           onClickSearch={onClickSearch}
           onClickMyEvaluList={onClickMyEvaluList}
           onClickNewestEvaluList={onClickNewestEvaluList}

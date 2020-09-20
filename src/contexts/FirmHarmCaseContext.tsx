@@ -1,7 +1,7 @@
-import { DefaultNavigationProps, FirmHarmCaseCountData, User, UserProfile } from 'src/types';
+import { DefaultNavigationProps, User, UserProfile } from 'src/types';
 
-import { EvaluListType } from 'src/container/firmHarmCase/FirmHarmCaseProvider';
 import { Firm } from 'src/provider/LoginProvider';
+import { FirmHarmCaseCountData } from 'src/container/firmHarmCase/type';
 import createCtx from 'src/contexts/CreateCtx';
 
 const [useCtx, Provider] = createCtx<Context>();
@@ -10,13 +10,12 @@ interface Context {
   navigation: DefaultNavigationProps;
   user: User | undefined; userProfile: UserProfile; firm: Firm;
   searchArea: string; searchWord: string; searchNotice: string;
-  countData: FirmHarmCaseCountData;
   cliEvaluList: Array<object>;
-  updateEvalu: any;   searchTime: string;
+  countData: FirmHarmCaseCountData;
+  updateEvalu: any; searchTime: string;
   evaluLikeSelected: boolean; evaluLikeList: Array<string>; mineEvaluation: (flag: boolean) => void;
   visibleCreateModal: boolean;
   chatMessge: Array<object>;
-  evaluListType: EvaluListType;
   createClientEvaluLike: (newEvaluLike: string) => void; cancelClientEvaluLike: (evaluation: string, like: boolean) => void;
   setVisibleCreateModal: (flag: boolean) => void; setVisibleUpdateModal: (flag: boolean) => void;
   setVisibleDetailModal: (flag: boolean) => void; closeEvaluLikeModal: (flag: boolean) => void;

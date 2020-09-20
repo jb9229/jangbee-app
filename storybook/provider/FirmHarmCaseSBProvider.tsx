@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
-
+import { DefaultNavigationProps } from 'src/types';
+import { FirmHarmCaseCountData } from 'src/container/firmHarmCase/type';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { useLoginContext } from 'src/contexts/LoginContext';
 

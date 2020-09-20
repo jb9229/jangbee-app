@@ -18,14 +18,15 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class JBActIndicator extends React.PureComponent {
-  render() {
+export default class JBActIndicator extends React.PureComponent
+{
+  render()
+  {
     const { title, size } = this.props;
 
     let sizeValue = size;
-    if (!size) {
-      sizeValue = 28;
-    }
+    if (!size) { sizeValue = 28 }
+
     return (
       <View style={styles.container}>
         <Text style={styles.message}>{title || '정보를 불러오는 중..'}</Text>

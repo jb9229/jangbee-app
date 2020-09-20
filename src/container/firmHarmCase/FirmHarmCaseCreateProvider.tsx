@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FirmHarmCaseCreateDto, FirmHarmCaseCreateErrorDto } from './type';
 
 import { DefaultNavigationProps } from 'src/types';
+import { FIRMHARMCASE_COUNT } from 'src/api/queries';
 import { FIRMHARMCASE_CREATE } from 'src/api/mutations';
 import { Provider } from 'src/contexts/FirmHarmCaseCreateContext';
 import { noticeUserError } from '../request';
@@ -28,6 +29,7 @@ const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement =>
       }
       else { noticeUserError('FirmHarmCaseCreateProvider(createRequest -> error)', data?.createFirmHarmCase, user) }
     },
+    refetchQueries: [{ query: FIRMHARMCASE_COUNT, variables: { id: user.uid } }],
     onError: (err) => { noticeUserError('FirmHarmCaseCreateProvider(createRequest -> error)', err?.message, user) }
   });
 

@@ -23,8 +23,8 @@ export const addNotificationListener = (uid, _handleNotification): void =>
 
   Notifications.addNotificationResponseReceivedListener(response =>
   {
-    console.log(response);
-    alert(response);
+    console.log('ResponseReceived: ', response);
+    alert(`ResponseReceived: ${response}`);
   });
 
   Notifications.getPresentedNotificationsAsync()

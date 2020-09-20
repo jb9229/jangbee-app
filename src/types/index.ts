@@ -56,12 +56,6 @@ export class PickerItem
 
 export type IconType = SFC<IconProps>;
 
-// Firm Object Type
-export interface FirmHarmCaseCountData {
-  totalCnt: number;
-  myCnt: number;
-}
-
 /// /////////////////////////////////////////
 /// ////// Work Type //////
 /// /////////////////////////////////////////

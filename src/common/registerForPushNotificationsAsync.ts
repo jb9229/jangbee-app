@@ -1,11 +1,10 @@
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
-import * as Updates from 'expo-updates';
 
 import Constants from 'expo-constants';
 import firebase from 'firebase';
 
-export default async function registerForPushNotificationsAsync (uid): Promise<void>
+export default async function registerForPushNotificationsAsync(uid): Promise<void>
 {
   if (Constants.isDevice)
   {
@@ -30,8 +29,8 @@ export default async function registerForPushNotificationsAsync (uid): Promise<v
     // console.log('>>> Constants.manifest: ', Constants.manifest)
     // console.log('>>> Updates.manifest: ', Updates.manifest)
     // Get the token that uniquely identifies this device
-    const token = (await Notifications.getExpoPushTokenAsync({experienceId: '@jb9229/jangbeecall'})).data;
-    console.log('=== notification token: ', token)
+    const token = (await Notifications.getExpoPushTokenAsync({ experienceId: '@jb9229/jangbeecall' })).data;
+    console.log('=== notification token: ', token);
     // Save Expo Push Token at DB
     await firebase
       .database()

@@ -99,6 +99,7 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     },
     onCancelSearch(): void
     {
+      searchQueryVariables.firmCaseListInput.accountId = '';
       setSearched(false);
       setSearchWord(undefined);
       setHarmCaseList(undefined);
@@ -126,7 +127,7 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     },
     openUpdateFirmHarmCase(evalu): void
     {
-      props.navigation.navigate('FirmHarmCaseUpdate', { harmCase: evalu })
+      props.navigation.navigate('FirmHarmCaseUpdate', { harmCase: evalu });
     },
     deleteFirmHarmCase(id: string): void
     {

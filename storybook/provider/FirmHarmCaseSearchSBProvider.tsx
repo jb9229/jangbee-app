@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { DefaultNavigationProps, FirmHarmCaseCountData } from 'src/types';
-
 import { BackHandler } from 'react-native';
 import { CallHistory } from 'src/container/firmHarmCase/type';
+import { DefaultNavigationProps } from 'src/types';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';
 import { formatTelnumber } from 'src/utils/StringUtils';
 
