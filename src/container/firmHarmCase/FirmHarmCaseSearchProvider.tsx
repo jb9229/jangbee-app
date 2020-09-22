@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import { CallHistory, MY_FIRMHARMCASE_SEARCHWORD, TOTAL_FIRMHARMCASE_SEARCHWORD } from './type';
-import { deleteFirmHarmCase, filterCallHistory, searchMyFirmHarmCase } from './searchAction';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { DefaultNavigationProps } from 'src/types';
 import { FIRMHARMCASE_DELETE } from 'src/api/mutations';
 import { FirmHarmCasesQuery } from 'src/api/queries';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';
+import { filterCallHistory } from './searchAction';
 import { formatTelnumber } from 'src/utils/StringUtils';
 import { noticeUserError } from '../request';
 import { searchFirmHarmCase } from './action';
@@ -19,6 +19,7 @@ interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
   searchWord?: string;
+  initSearch: string;
   initSearchAll: boolean;
   initSearchMine: boolean;
 }
@@ -68,6 +69,13 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
       firHarmCasesReq({ variables: searchQueryVariables });
       setSearched(true);
       setSearchWord(MY_FIRMHARMCASE_SEARCHWORD);
+    }
+    else if (props.initSearch)
+    {
+      searchQueryVariables.firmCaseListInput.searchWord = props.initSearch;
+      firHarmCasesReq({ variables: searchQueryVariables });
+      setSearched(true);
+      setSearchWord(props.initSearch);
     }
   }, []);
 

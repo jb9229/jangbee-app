@@ -73,6 +73,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     if (response?.request?.content)
     {
       const notification = response.request.content;
+      console.log('=== notification: ', notification);
       // Notifications.setBadgeCountAsync(0);
       // TODO Notice 확인 시, Notice 알람 제거
 
@@ -111,7 +112,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         noticeCommonNavigation(
           notification,
           '피해사례(악덕) 조회하기',
-          () => props.navigation.navigate('ClientEvalu')
+          () => props.navigation.navigate('FirmHarmCaseSearch', { initSearch: notification.data?.initSearch })
         );
       }
       else

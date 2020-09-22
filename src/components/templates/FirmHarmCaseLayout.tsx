@@ -88,7 +88,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
   const [rerender, setRerender] = React.useState(false);
   const setFirmHarmCaseCountUserId = useSetRecoilState(firmHarmCaseCountUserId);
   // const resetList = useResetRecoilState(firmHarmCaseCountState);
-  const resetList = useSetRecoilState(firmHarmCaseCountState);
+  // const resetList = useSetRecoilState(firmHarmCaseCountState);
   console.log('>>> re-render: FirmHarmCaseLayout');
   /**
    * 피해사례 아이템 UI 렌더링 함수
@@ -112,7 +112,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
     <Container>
       <Header>
         <HelloWrap>
-          <Button title="re-render" onPress={() => {const data = fetchData(); console.log(data); resetList(data) }} />
+          {/* <Button title="re-render" onPress={() => {const data = fetchData(); console.log(data); resetList(data) }} /> */}
           <HelloText>안녕하세요.</HelloText>
           <HelloTextWrap>
             <HelloText>장비대금</HelloText>
