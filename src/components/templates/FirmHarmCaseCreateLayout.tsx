@@ -52,16 +52,16 @@ const FirmHarmCaseCreateLayout: React.FC = () =>
                 subLabel="(숫자만)"
                 text={createDto.telNumber}
                 onChangeText={(text): void => { createDto.telNumber = text }}
-                placeholder="블랙리스트 전화번호를 기입해 주세요"
+                placeholder="업체(고객) 전화번호를 기입해 주세요"
                 keyboardType="phone-pad"
                 errorText={createErrorDto.telNumber}
               />
 
               <EditText
-                label="사유"
+                label="피해내용"
                 text={createDto.reason}
                 onChangeText={(text): void => { createDto.reason = text }}
-                placeholder="블랙리스트 사유를 기입해 주세요"
+                placeholder="피해내용을 기입해 주세요"
                 numberOfLines={5}
                 multiline
                 errorText={createErrorDto.reason}
