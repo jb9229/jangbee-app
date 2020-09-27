@@ -125,6 +125,7 @@ export default function JBTerm ({ bg })
           </TitleTO>
           {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
           <Text>{`${pkg.expo.version}_${process.env.BUILD_TYPE}`}</Text>
+          <Text>{`${Constants?.manifest?.slug}`}</Text>
           {/* <Text>{`${pkg.expo.version}_${pkgConfig.extra.buildType}`}</Text> */}
         </Column>
         <Column>

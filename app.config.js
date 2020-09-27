@@ -2,9 +2,10 @@ import 'dotenv/config';
 
 import { loadingStorybook } from './App';
 
-export default ({ config }): any =>
+export default ({ config }) =>
 {
   console.log('>>> SLUG config: ', process.env.BUILD_TYPE);
+  console.log('>>> MY_CUSTOM_PROJECT_VERSION: ', process.env.MY_CUSTOM_PROJECT_VERSION);
   return {
     ...config,
     extra: {
