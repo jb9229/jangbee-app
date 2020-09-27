@@ -120,7 +120,7 @@ export default function JBTerm ({ bg })
       </Row>
       <Row>
         <Column>
-          <TitleTO onPress={() => alert(NODE_SERVER_URL)}>
+          <TitleTO onPress={() => alert(`Server: ${NODE_SERVER_URL}\n\nSlug: ${pkg.expo.slug}`)}>
             <Title>Version: </Title>
           </TitleTO>
           {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
