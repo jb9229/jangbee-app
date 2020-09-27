@@ -44,13 +44,13 @@ const SelectBox = styled.View<StyledProps>`
   border-color: ${colors.batangLight};
   justify-content: flex-end;
   align-items: center;
-  ${props =>
+  ${(props) =>
     props.selected &&
     `
     background-color: ${colors.point3Light};
     border-color: ${colors.point3Light};
   `}
-  ${props =>
+  ${(props) =>
     props.isImageBox &&
     `
     height: 135;
@@ -107,20 +107,21 @@ const ItemListWrap = styled.View<StyledProps>`
 `;
 
 interface Props {
-  title: string,
+  title: string;
   subLabel?: string;
-  categoryList: Array<string>,
-  itemList: Array<string>,
-  selectedCat: string,
-  selectedItem: string,
-  cateImageArr: Array<ImageSourcePropType>,
-  itemPicker: string,
-  errorText?: string,
-  selectCategory: (catStr: string) => void,
-  selectItem: (category: string, itemValue: string) => void
+  categoryList: Array<string>;
+  itemList: Array<string>;
+  selectedCat: string;
+  selectedItem: string;
+  cateImageArr: Array<ImageSourcePropType>;
+  itemPicker: string;
+  errorText?: string;
+  selectCategory: (catStr: string) => void;
+  selectItem: (category: string, itemValue: string) => void;
 }
 
-const JBSelectBox: React.FC<Props> = (props) => {
+const JBSelectBox: React.FC<Props> = (props) =>
+{
   const [category, setCategory] = React.useState(props.selectedCat);
   const [item, setItem] = React.useState(props.selectedItem);
 
@@ -149,13 +150,13 @@ const JBSelectBox: React.FC<Props> = (props) => {
               </CategoryText>
             </CateTextWrap>
             <ItemListWrap selected={catStr === category}>
-                <JBPicker
-                  items={props.itemList[catStr]}
-                  selectedValue={catStr === props.selectedCat ? item : ''}
-                  onValueChange={(itemValue): void => { setCategory(catStr); setItem(`${itemValue}`); props.selectItem(catStr, `${itemValue}`) }}
-                  selectLabel={props.itemPicker || undefined}
-                  size={catStr === '세종특별자치시' || catStr === '제주특별자치도' ? 120 : 110}
-                />
+              <JBPicker
+                items={props.itemList[catStr]}
+                selectedValue={catStr === props.selectedCat ? item : ''}
+                onValueChange={(itemValue): void => { setCategory(catStr); setItem(`${itemValue}`); props.selectItem(catStr, `${itemValue}`) }}
+                selectLabel={props.itemPicker || undefined}
+                size={catStr === '세종특별자치시' || catStr === '제주특별자치도' ? 120 : 110}
+              />
             </ItemListWrap>
           </SelectBox>
         ))}

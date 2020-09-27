@@ -89,7 +89,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
   const setFirmHarmCaseCountUserId = useSetRecoilState(firmHarmCaseCountUserId);
   // const resetList = useResetRecoilState(firmHarmCaseCountState);
   // const resetList = useSetRecoilState(firmHarmCaseCountState);
-  console.log('>>> re-render: FirmHarmCaseLayout');
+
   /**
    * 피해사례 아이템 UI 렌더링 함수
    */

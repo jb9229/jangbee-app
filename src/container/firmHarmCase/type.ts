@@ -44,7 +44,7 @@ export class FirmHarmCaseCreateDto
   constructor()
   {
     this.reason = '';
-    this.local = '';
+    this.local = '전국';
     this.firmName = '';
     this.cliName = '';
     this.telNumber = '';

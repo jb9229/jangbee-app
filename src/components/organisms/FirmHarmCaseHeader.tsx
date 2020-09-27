@@ -85,7 +85,6 @@ interface Props {
 const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
 {
   // const firmHarmCaseCount = useRecoilValue(firmHarmCaseCountState);
-console.log('>>> re-render: FirmHarmCaseHeader');
   return (
     <HeaderWrap removeClippedSubviews={false}>
       <SearchNoticeWrap>

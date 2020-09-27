@@ -6,8 +6,9 @@ const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 const NODE_SERVER_URL_PROD = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
 const NODE_SERVER_URL_BETA = 'https://jangbeecall-dev.azurewebsites.net/graphql';
 const NODE_SERVER_URL_DEV = 'https://jangbeecall-dev.azurewebsites.net/graphql';
-// const NODE_SERVER_URL_LOCAL = 'http://10.0.2.2:4000/graphql';
-const NODE_SERVER_URL_LOCAL = 'http://localhost:4000/graphql';
+const NODE_SERVER_URL_LOCAL = 'http://10.0.2.2:4000/graphql';
+// const NODE_SERVER_URL_LOCAL = 'http://localhost:4000/graphql';
+console.log('>>> process.env: ', process.env);
 console.log('>>> SLUG: ', process.env.BUILD_TYPE);
 export const NODE_SERVER_URL = process.env.BUILD_TYPE === 'local'
   ? NODE_SERVER_URL_LOCAL : process.env.BUILD_TYPE === 'dev' ? NODE_SERVER_URL_DEV

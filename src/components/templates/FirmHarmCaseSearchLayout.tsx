@@ -90,9 +90,9 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
     searchTextInputRef.current.focus();
   },[])
   const {
-    searched, callHistory, harmCaseList, searchWord, searchTime, detailEvalu,
+    searched, harmCaseList, searchWord, searchTime, detailEvalu,
     visibleDetailModal,
-    onSelectCallHistory, onCancelSearch, onSearchWordEndEditing, closeFirmHarmCaseDetailModal, openDetailModal
+    onCancelSearch, onSearchWordEndEditing, closeFirmHarmCaseDetailModal
   } = useFirmHarmCaseSearchContext();
 
   return (

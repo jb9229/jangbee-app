@@ -6,6 +6,7 @@ import EditText from '../molecules/EditText';
 import JBButton from 'molecules/JBButton';
 import JBSelectBox from 'src/components/organisms/JBSelectBox';
 import React from 'react';
+import { numberWithCommas } from 'src/utils/NumberUtils';
 import styled from 'styled-components/native';
 import { useFirmHarmCaseCreateContext } from 'src/contexts/FirmHarmCaseCreateContext';
 
@@ -20,7 +21,8 @@ const ContentsView = styled.View`
   padding: 20px;
 `;
 
-const FirmHarmCaseCreateLayout: React.FC = () => {
+const FirmHarmCaseCreateLayout: React.FC = () =>
+{
   const { createDto, createErrorDto, onClickAdd } = useFirmHarmCaseCreateContext();
 
   return (
@@ -58,12 +60,15 @@ const FirmHarmCaseCreateLayout: React.FC = () => {
                 keyboardType="phone-pad"
                 errorText={createErrorDto.regiTelNumber}
               />
-              
+
               <EditText
                 label="금액"
                 subLabel="(옵션)"
-                text={createDto.amount}
-                onChangeText={text => { if(text) { const num = Number.parseInt(text); if(num && !isNaN(num)) { createDto.amount = num } } }}
+                text={numberWithCommas(createDto.amount)}
+                onChangeText={(text) =>
+                {
+                  if (text) { const num = Number.parseInt(text); if (num && !isNaN(num)) { createDto.amount = num } }
+                }}
                 placeholder="피해금액이 얼마입니까?"
                 keyboardType="numeric"
                 errorText={createErrorDto.amount}
@@ -118,8 +123,9 @@ const FirmHarmCaseCreateLayout: React.FC = () => {
                 subLabel="(옵션)"
                 categoryList={LOCAL_CATEGORY_ALL}
                 itemList={LOCAL_ITEM}
-                selectCategory={sido => { console.log('sido: ', sido); createDto.local = sido }}
-                selectItem={(sido, sigungu) => { console.log('sido item: ', sido); createDto.local = `${sido} ${sigungu}` }}
+                selectedCat="전국"
+                selectCategory={(sido): void => { console.log('sido: ', sido); createDto.local = sido }}
+                selectItem={(sido, sigungu): void => { console.log('sido item: ', sido); createDto.local = `${sido} ${sigungu}` }}
                 itemPicker="전체"
               />
 

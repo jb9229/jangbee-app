@@ -4,6 +4,7 @@ import { loadingStorybook } from './App';
 
 export default ({ config }): any =>
 {
+  console.log('>>> SLUG config: ', process.env.BUILD_TYPE);
   return {
     ...config,
     extra: {
@@ -25,10 +26,6 @@ export default ({ config }): any =>
           }
         }
       ]
-    },
-    // All values in extra will be passed to your app.
-    extra: {
-      fact: 'kittens are cool'
     }
   };
 };

@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { CallHistory, MY_FIRMHARMCASE_SEARCHWORD, TOTAL_FIRMHARMCASE_SEARCHWORD } from './type';
+import { FIRMHARMCASE_COUNT, FirmHarmCasesQuery } from 'src/api/queries';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { DefaultNavigationProps } from 'src/types';
 import { FIRMHARMCASE_DELETE } from 'src/api/mutations';
-import { FirmHarmCasesQuery } from 'src/api/queries';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';
 import { filterCallHistory } from './searchAction';
 import { formatTelnumber } from 'src/utils/StringUtils';
@@ -44,6 +44,7 @@ const FirmHarmCaseSearchProvider = (props: Props): React.ReactElement =>
     {
       firHarmCasesRsp.refetch();
     },
+    refetchQueries: [{ query: FIRMHARMCASE_COUNT, variables: { id: user.uid } }],
     onError: (err) => { noticeUserError('FirmHarmCaseSearchProvider(deleteRequest -> error)', err?.message, user) }
   });
 

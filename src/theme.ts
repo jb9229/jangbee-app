@@ -95,8 +95,8 @@ export const light = {
 
   // Border
   ColorBorderList: '#E3DCDC',
-  ColorBorderTextInput: 'rgb(238,238,238)',  // #eeeeee
-  ColorBorderBtn: 'rgb(238,238,238)',  // #eeeeee
+  ColorBorderTextInput: 'rgb(238,238,238)', // #eeeeee
+  ColorBorderBtn: 'rgb(238,238,238)', // #eeeeee
 
   btnPrimary: colors.skyBlue,
   btnPrimaryFont: 'white',
