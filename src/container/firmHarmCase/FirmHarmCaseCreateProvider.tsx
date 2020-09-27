@@ -44,7 +44,6 @@ const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickAdd(): void
     {
-      console.log('onClick add: ', createDto);
       const newErrorDto = new FirmHarmCaseCreateErrorDto();
       validateCrateFirmHarmCase(createDto, newErrorDto)
         .then((result) =>

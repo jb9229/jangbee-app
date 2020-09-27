@@ -14,6 +14,8 @@ export const validateCrateFirmHarmCase = (dto: FirmHarmCaseCreateDto, errorDto: 
       {
         if (e.startsWith('[reason]')) { errorDto.reason = (e.replace('[reason]', '')) };
         if (e.startsWith('[telNumber]')) { errorDto.telNumber = (e.replace('[telNumber]', '')) };
+        if (e.startsWith('[firmName]')) { errorDto.firmName = (e.replace('[firmName]', '')) };
+        if (e.startsWith('[amount]')) { errorDto.amount = (e.replace('[amount]', '')) };
       });
 
       return false;
@@ -26,5 +28,12 @@ export const ValidSchemeCrateFirmHarmCase = yup.object({
     .matches(PHONENUMBER_REGULAR_EXPRESSION, `[telNumber]${getString('VALIDATION_NUMBER_INVALID')}`),
   reason: yup.string()
     .required(`[reason]${getString('VALIDATION_REQUIRED')}`)
-    .min(1, `[reason]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`)
+    .min(1, `[reason]${getString('VALIDATION_NUMBER_INVALID')}(1~ )`),
+  firmName: yup.string()
+    .required(`[firmName]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[firmName]${getString('VALIDATION_NUMBER_INVALID')}(1~ 10)`)
+    .max(10, `[firmName]${getString('VALIDATION_NUMBER_INVALID')}(1~ 10)`),
+  amount: yup.number()
+    .required(`[amount]${getString('VALIDATION_REQUIRED')}`)
+    .min(1, `[amount]${getString('VALIDATION_NUMBER_INVALID')}(1~)`)
 });
