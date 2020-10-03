@@ -9,7 +9,7 @@ import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
 import { Alert } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
 import { EvaluListType } from 'src/container/firmHarmCase/type';
-import { FIRM_NEWCHAT } from 'src/api/subscribe';
+// import { FIRM_NEWCHAT } from 'src/api/subscribe';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { addNotificationListener } from '../notification/NotificationAction';
 import moment from 'moment';
@@ -40,18 +40,18 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     }
 
     // subscription
-    subscribeToMore({
-      document: FIRM_NEWCHAT, updateQuery: (prev, { subscriptionData }) =>
-      {
-        console.log('>>> prev.firmChatMessage:', prev.firmChatMessage);
-        console.log('>>> subscriptionData:', subscriptionData.data);
-        if (!subscriptionData.data) return prev.firmChatMessage;
-        const newFeedItem = subscriptionData.data.firmNewChat;
-        return Object.assign({}, prev, {
-          firmChatMessage: [newFeedItem, ...prev.firmChatMessage]
-        });
-      }
-    });
+    // subscribeToMore({
+    //   document: FIRM_NEWCHAT, updateQuery: (prev, { subscriptionData }) =>
+    //   {
+    //     console.log('>>> prev.firmChatMessage:', prev.firmChatMessage);
+    //     console.log('>>> subscriptionData:', subscriptionData.data);
+    //     if (!subscriptionData.data) return prev.firmChatMessage;
+    //     const newFeedItem = subscriptionData.data.firmNewChat;
+    //     return Object.assign({}, prev, {
+    //       firmChatMessage: [newFeedItem, ...prev.firmChatMessage]
+    //     });
+    //   }
+    // });
   }, []);
 
   React.useEffect(() =>

@@ -1,5 +1,10 @@
 import * as React from 'react';
 
+import { ApolloProvider } from '@apollo/client';
+import ApolloWebTest from './ApolloTest';
+import JangbeeAdList from 'organisms/JangbeeAdList';
+import adLocation from 'constants/AdLocation';
+import { apolloClient } from 'src/api/apollo';
 import styled from 'styled-components/native';
 
 const Container = styled.View`
@@ -20,10 +25,15 @@ const SubText = styled.Text`
 const WebApp = () =>
 {
   return (
-    <Container>
-      <Text>Comming Soon</Text>
-      <SubText>- JangbeeCall Web -</SubText>
-    </Container>
+    <ApolloProvider client={apolloClient}>
+      <Container>
+        <JangbeeAdList adLocation={adLocation.main} navigation={undefined} />
+
+        <Text>Comming Soon</Text>
+        <SubText>- JangbeeCall Web -</SubText>
+        <ApolloWebTest />
+      </Container>
+    </ApolloProvider>
   );
 };
 

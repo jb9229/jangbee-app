@@ -3245,7 +3245,7 @@
     "@types/react-native" "*"
     react-native-svg "^6.2.1"
 
-"@types/react-native-vector-icons@^6.4.4":
+"@types/react-native-vector-icons@^6.4.5":
   version "6.4.6"
   resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.6.tgz#848e3b14572def56212cafbf5cb1254b445bfb41"
   integrity sha512-lAyxNfMd5L1xZvXWsGcJmNegDf61TAp40uL6ashNNWj9W3IrDJO59L9+9inh0Y2MsEZpLTdxzVU8Unb4/0FQng==
@@ -6461,7 +6461,7 @@ deep-object-diff@^1.1.0:
   resolved "https://registry.yarnpkg.com/deep-object-diff/-/deep-object-diff-1.1.0.tgz#d6fabf476c2ed1751fc94d5ca693d2ed8c18bc5a"
   integrity sha512-b+QLs5vHgS+IoSNcUE4n9HP2NwcHj7aqnJWsjPtuG75Rh5TOaGt0OjAYInh77d5T16V5cRDC+Pw/6ZZZiETBGw==
 
-deepmerge@^3.1.0, deepmerge@^3.2.0:
+deepmerge@^3.2.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.3.0.tgz#d3c47fd6f3a93d517b14426b0628a17b0125f5f7"
   integrity sha512-GRQOafGHwMHpjPx9iCvTgpu9NojZ49q794EEL94JVEw6VaeA8XTUyBKvAkOOjBX9oJNiV6G3P+T+tihFjo2TqA==
@@ -11459,6 +11459,11 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
+
 lodash.memoize@4.x, lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
@@ -14446,19 +14451,20 @@ react-native-communications@^2.2.1:
   resolved "https://registry.yarnpkg.com/react-native-communications/-/react-native-communications-2.2.1.tgz#7883b56b20a002eeb790c113f8616ea8692ca795"
   integrity sha1-eIO1ayCgAu63kMET+GFuqGksp5U=
 
-react-native-elements@1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-1.2.7.tgz#1eca2db715c41722aeb67aea62bd2a4621adb134"
-  integrity sha512-0S+0R1cbItl15i64qrkWnyMztwpw60d0SUsZGVDKRAMf0Jvq9Clgyh/MzxJx2sr42mbedQP1sg5Et4fZM7Fp1w==
+react-native-elements@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-2.3.2.tgz#f6b974127a3484bb46ebd98fbc012fb2208decd7"
+  integrity sha512-HygYYmq8JYjk/YYiUwr/64qT64H2xlPBz0JnkGTQwvnnyXZrfkHFopw8rLWCupv3iLLPDzVohvPs0Z5HLdonSQ==
   dependencies:
-    "@types/react-native-vector-icons" "^6.4.4"
+    "@types/react-native-vector-icons" "^6.4.5"
     color "^3.1.0"
-    deepmerge "^3.1.0"
+    deepmerge "^4.2.2"
     hoist-non-react-statics "^3.1.0"
+    lodash.isequal "^4.5.0"
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
-    react-native-ratings "^6.3.0"
-    react-native-status-bar-height "^2.2.0"
+    react-native-ratings "^7.2.0"
+    react-native-status-bar-height "^2.5.0"
 
 react-native-gesture-handler@~1.7.0:
   version "1.7.0"
@@ -14542,13 +14548,13 @@ react-native-platform-touchable@^1.1.1:
   resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
   integrity sha1-/eSsxl7qWF0osWTQw3FqQhKaaOQ=
 
-react-native-ratings@^6.3.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
-  integrity sha512-YMcfQ7UQCmXGEc/WPlukHSHs5yvckTwjq5fTRk1FG8gaO7fZCNygEUGPuw4Dbvvp3IlsCUn0bOQd63RYsb7NDQ==
+react-native-ratings@^7.2.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-7.3.0.tgz#32e11e4ed944ba8adbbc995d601df3f131619b6f"
+  integrity sha512-NCDIkmrVPnxPzP9zKdlcNpa2rPs3Hiv2qXsojUr3FpwbANWfgYE+jjGSSCBcS3vpXndTjhoaTGFDnybnUSFPFA==
   dependencies:
-    lodash "^4.17.4"
-    prop-types "^15.5.10"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
 
 react-native-reanimated@~1.13.0:
   version "1.13.1"
@@ -14592,7 +14598,7 @@ react-native-simple-markdown@^1.1.0:
     lodash "^4.15.0"
     simple-markdown "git://github.com/CharlesMangwa/simple-markdown.git"
 
-react-native-status-bar-height@^2.2.0:
+react-native-status-bar-height@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.5.0.tgz#bc0fb85230603850aab9667ee8111a62954de90c"
   integrity sha512-sYBCPYA/NapBSHkdm/IVL4ID3LLlIuLqINi2FBDyMkc2BU9pfSGOtkz9yfxoK39mYJuTrlTOQ7mManARUsYDSA==

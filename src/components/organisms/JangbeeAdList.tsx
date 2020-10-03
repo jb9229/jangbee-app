@@ -8,7 +8,7 @@ import FirmDetailModal from 'templates/FirmDetailModal';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JangbeeAd from 'molecules/JangbeeAd';
 import React from 'react';
-import Swiper from 'react-native-swiper';
+import Swiper from 'react-native-swiper/src';
 import styled from 'styled-components/native';
 
 const styles = StyleSheet.create({
