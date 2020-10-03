@@ -1,10 +1,12 @@
+// ssh -i "JangbeeCallKey.pem" ec2-user@ec2-3-34-26-191.ap-northeast-2.compute.amazonaws.com
+//  netstat -tnlp | grep 4000
+// npm start server.js &
 // const SERVER_URL = 'http://10.1.0.121/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:8080/api/v1/';
 const SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
 const NODE_SERVER_URL_PROD = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
-const NODE_SERVER_URL_BETA = 'https://jangbeecall-dev.azurewebsites.net/graphql';
 const NODE_SERVER_URL_DEV = 'https://jangbeecall-dev.azurewebsites.net/graphql';
 const NODE_SERVER_URL_LOCAL = 'http://10.0.2.2:4000/graphql';
 // const NODE_SERVER_URL_LOCAL = 'http://localhost:4000/graphql';
@@ -12,9 +14,11 @@ console.log('>>> process.env: ', process.env);
 console.log('>>> SLUG: ', process.env.BUILD_TYPE);
 export const NODE_SERVER_URL = process.env.BUILD_TYPE === 'local'
   ? NODE_SERVER_URL_LOCAL : process.env.BUILD_TYPE === 'dev' ? NODE_SERVER_URL_DEV
-    : process.env.BUILD_TYPE === 'beta' ? NODE_SERVER_URL_BETA : NODE_SERVER_URL_PROD;
+    : NODE_SERVER_URL_PROD;
 export const NODE_SERVER_WEBSOCKET_URL = 'ws://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
 // export const NODE_SERVER_WEBSOCKET_URL = 'ws://10.0.2.2:4000/graphql';
+console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
+console.log('>>> NODE_SERVER_WEBSOCKET_URL: ', NODE_SERVER_WEBSOCKET_URL);
 
 const url = {
   IMAGE_STORAGE: `${SERVER_URL}common/image`,

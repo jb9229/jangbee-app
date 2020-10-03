@@ -5,15 +5,15 @@
   "expo": {
     "owner": "jb9229",
     "name": "장비 콜",
-    "slug": "jangbeecall_dev",
-    "sdkVersion": "38.0.0",
+    "slug": "jangbeecall_spring",
+    "sdkVersion": "39.0.0",
     "privacy": "public",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.2.1_200906",
+    "version": "1.2.5_200930",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
