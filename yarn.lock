@@ -2462,7 +2462,7 @@
     color "^3.1.2"
     react-native-iphone-x-helper "^1.2.1"
 
-"@sentry/browser@^5.15.5":
+"@sentry/browser@^5.15.5", "@sentry/browser@^5.24.2":
   version "5.24.2"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-5.24.2.tgz#e2c2786dbf07699ee12f12babf0138d633abc494"
   integrity sha512-P/uZC/VrLRpU7MVEJnlZK5+AkEmuHu+mns5gC91Z4gjn7GamjR/CaXVedHGw/15ZrsQiAiwoWwuxpv4Ypd/+SA==

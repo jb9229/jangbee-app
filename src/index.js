@@ -1,7 +1,6 @@
 import 'expo-asset';
 
 import * as Font from 'expo-font';
-import * as Sentry from 'sentry-expo';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Updates from 'expo-updates';
 
@@ -13,6 +12,7 @@ import JBActIndicator from 'molecules/JBActIndicator';
 import LoginProvider from 'src/provider/LoginProvider';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
+import Sentry from 'utils/sentry';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
 import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';

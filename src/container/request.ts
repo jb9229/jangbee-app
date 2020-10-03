@@ -1,6 +1,5 @@
-import * as Sentry from 'sentry-expo';
-
 import { Alert } from 'react-native';
+import Sentry from 'utils/sentry';
 import { User } from 'src/types';
 
 export const noticeUserError = (location: string, error: any, user?: User): void =>
