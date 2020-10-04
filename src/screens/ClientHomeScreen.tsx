@@ -1,18 +1,19 @@
 import * as Notifications from 'expo-notifications';
 import * as React from 'react';
 
-import { Alert, DeviceEventEmitter, Platform } from 'react-native';
+import { Alert, BackHandler, DeviceEventEmitter, Platform } from 'react-native';
 
 import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
+import JBTerm from 'templates/JBTerm';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
+import { onPressBackbutton } from 'src/container/action';
 import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
-import JBTerm from 'templates/JBTerm';
 
 const Container = styled.ScrollView`
   background-color: ${colors.batangLight};
@@ -36,7 +37,13 @@ const ClientHomeScreen: React.FC<Props> = (props) =>
       if (!firm) { setTimeout(() => { props.navigation.navigate('FirmRegister') }, 500) }
     })();
 
-    return (): void => { Notifications.removeAllNotificationListeners() };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', onPressBackbutton);
+
+    return (): void =>
+    {
+      Notifications.removeAllNotificationListeners();
+      backHandler.remove();
+    };
   }, []);
 
   // android permissions are given on install
@@ -58,16 +65,18 @@ const ClientHomeScreen: React.FC<Props> = (props) =>
     Notifications.addNotificationReceivedListener(_handleNotification);
 
     Notifications.getPresentedNotificationsAsync()
-      .then((responseArr) => {
+      .then((responseArr) =>
+      {
         console.log('>>> PresentedNotifications: ', responseArr);
-        responseArr.forEach((response) => {
+        responseArr.forEach((response) =>
+        {
           if (response?.request?.identifier)
           {
             _handleNotification(response);
             Notifications.dismissNotificationAsync(response?.request?.identifier);
           }
-        })
-      })
+        });
+      });
   };
 
   const _handleNotification = (response): void =>
@@ -123,7 +132,7 @@ const ClientHomeScreen: React.FC<Props> = (props) =>
     }
     else
     {
-      console.log('=== notification:', response)
+      console.log('=== notification:', response);
       Alert.alert(
         '유효하지 않은 알람입니다',
         `내용: ${response}`,

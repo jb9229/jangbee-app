@@ -4,11 +4,9 @@ import * as api from 'api/api';
 
 import {
   Alert,
-  BackHandler,
   StyleSheet,
   Switch,
   Text,
-  ToastAndroid,
   View
 } from 'react-native';
 import { LOCAL_CATEGORY, LOCAL_ITEM } from 'src/STRING';
@@ -114,14 +112,6 @@ const ScrollImage = styled.Image`
 
 export default class GPSSearchScreen extends React.Component
 {
-  _didFocusSubscription;
-
-  _willBlurSubscription;
-
-  static navigationOptions = {
-    header: null
-  };
-
   _isMounted = false;
 
   constructor (props)
@@ -144,33 +134,19 @@ export default class GPSSearchScreen extends React.Component
         isDoubleClick: false
       }
     };
-
-    this._didFocusSubscription = props.navigation.addListener(
-      'didFocus',
-      payload =>
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
-    );
   }
 
   componentDidMount ()
   {
-    const { navigation } = this.props;
-
     this._isMounted = true;
 
     this.setLocationInfo();
     this.setState({ isComponentMountComplete: true });
-
-    this._willBlurSubscription = navigation.addListener('willBlur', payload =>
-      BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
-    );
   }
 
   componentWillUnmount ()
   {
     this._isMounted = false;
-    this._didFocusSubscription && this._didFocusSubscription.remove();
-    this._willBlurSubscription && this._willBlurSubscription.remove();
   }
 
   /**
@@ -218,29 +194,6 @@ export default class GPSSearchScreen extends React.Component
     // });
 
     return location;
-  };
-
-  handleBackPress = () =>
-  {
-    const { backButtonCondition } = this.state;
-
-    if (backButtonCondition.isDoubleClick)
-    {
-        console.log('>> BackHandler.exitApp~~')
-        BackHandler.exitApp();
-    } else {
-        ToastAndroid.show("한번 더 누르시면 앱이 종료됩니다!", ToastAndroid.SHORT);
-
-        backButtonCondition.isDoubleClick = true;
-
-        setTimeout(() => {
-            backButtonCondition.isDoubleClick = false;
-        }, 3000);
-
-        return true;
-    }
-
-    return true;
   };
 
   /**

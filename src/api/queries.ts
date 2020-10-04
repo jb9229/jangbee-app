@@ -79,3 +79,17 @@ export const FIRMHARMCASE_COUNT = gql`
     }
   }
 `;
+
+/**
+ * 광고 쿼리
+ */
+export const ADS = gql`
+  query Ads ($searchAdParams: SearchAdParams) {
+    ads(searchAdParams: $searchAdParams) {
+      adType
+      title
+      subTitle
+      photoUrl
+    }
+  }
+`;
