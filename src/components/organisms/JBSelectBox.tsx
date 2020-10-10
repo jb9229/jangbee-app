@@ -30,7 +30,8 @@ const SelectListWrap = styled.ScrollView.attrs(props => ({
   }
 }))`
   flex-direction: row;
-  border-width: 1;
+  border-top-width: 1;
+  border-bottom-width: 1;
   border-color: ${colors.batangLight};
   height: ${(props) => props.isImageBox ? 150 : 80};
 `;

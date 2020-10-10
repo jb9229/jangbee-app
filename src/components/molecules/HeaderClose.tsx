@@ -11,6 +11,7 @@ const Header = styled.View`
   shadow-radius: 2;
   shadow-offset: 0px 8px;
   elevation: 4;
+  height: 50;
 `;
 
 const TouchableHighlight = styled.TouchableOpacity`

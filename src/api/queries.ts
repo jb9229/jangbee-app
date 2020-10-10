@@ -14,9 +14,9 @@ export const FIRM_CHATMESSAGE = gql`
   }
 }`;
 
-/*
-* Cashback queries
-*/
+/**********************
+* Cashback Queries
+***********************/
 export const CASHBACKS = gql`
   query Cashbacks($accountId: String!) {
   cashbacks(accountId: $accountId) {
@@ -30,9 +30,9 @@ export const CASHBACKS = gql`
   }
 }`;
 
-/**
- * 피해사례 전체 조회
- */
+/**********************
+ * FirmHarmCase Queries
+ ***********************/
 export const FirmHarmCasesQuery = gql`
   query FirmHarmCasesQuery ($firmCaseListInput: FirmHarmCaseListInput) {
     firmHarmCases(firmCaseListInput: $firmCaseListInput) {
@@ -80,9 +80,9 @@ export const FIRMHARMCASE_COUNT = gql`
   }
 `;
 
-/**
- * 광고 쿼리
- */
+/***********************
+ * Ad Queries
+ ***********************/
 export const ADS = gql`
   query Ads ($searchAdParams: SearchAdParams) {
     ads(searchAdParams: $searchAdParams) {
@@ -90,6 +90,21 @@ export const ADS = gql`
       title
       subTitle
       photoUrl
+    }
+  }
+`;
+
+/***********************
+ * Firm Queries
+ ***********************/
+export const Firms = gql`
+  query Firms ($searchFirmParams: SearchFirmParams) {
+    firms(searchFirmParams: $searchFirmParams) {
+      thumbnail
+      fname
+      equiListStr
+      distance
+      modelYear
     }
   }
 `;

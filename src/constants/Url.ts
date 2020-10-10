@@ -1,6 +1,7 @@
 // ssh -i "JangbeeCallKey.pem" ec2-user@ec2-3-34-26-191.ap-northeast-2.compute.amazonaws.com
-//  netstat -tnlp | grep 4000
-// npm start server.js &
+// sudo netstat -tnlp | grep 4000
+// nohup ts-node server.ts &
+// npm start &
 // const SERVER_URL = 'http://10.1.0.121/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:8080/api/v1/';

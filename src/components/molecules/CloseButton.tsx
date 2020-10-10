@@ -4,13 +4,16 @@ import React from 'react';
 import colors from 'constants/Colors';
 import styled from 'styled-components/native';
 
-const Container = styled.View`
+interface StyledProps {
+  align?: string;
+}
+const Container = styled.View<StyledProps>`
   flex-direction: row;
   justify-content: ${(props) => props.align ? props.align : 'flex-end'};
   padding-top: 10;
   padding-right: 10;
 `;
-const TouchableHighlight = styled.TouchableHighlight`
+const IConTO = styled.TouchableOpacity`
   background-color: ${colors.pointBatang};
   padding-left: 7px;
   padding-right: 7px;
@@ -22,17 +25,23 @@ const TouchableHighlight = styled.TouchableHighlight`
   elevation: 10;
 `;
 
-export default function CloseButton ({ onClose, align })
+interface Props {
+  align?: string;
+  onClose: () => void;
+}
+const CloseButton: React.FC<Props> = (props) =>
 {
   return (
-    <Container align={align}>
-      <TouchableHighlight onPress={onClose}>
+    <Container align={props.align}>
+      <IConTO onPress={props.onClose}>
         <Ionicons
           name={Platform.OS === 'ios' ? 'ios-close' : 'md-close'}
           size={30}
           color={colors.iconDefault}
         />
-      </TouchableHighlight>
+      </IConTO>
     </Container>
   );
 }
+
+export default CloseButton;

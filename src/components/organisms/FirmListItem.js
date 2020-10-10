@@ -1,16 +1,17 @@
-import React from 'react';
 import {
   Image,
   StyleSheet,
-  TouchableHighlight,
   Text,
+  TouchableHighlight,
   View
 } from 'react-native';
-import { Rating } from 'react-native-elements';
+
 import JBIcon from 'atoms/JBIcon';
+import { Rating } from 'react-native-elements';
+import React from 'react';
+import callLink from 'common/CallLink';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
-import callLink from 'common/CallLink';
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -95,7 +96,7 @@ function calDistance(dis) {
 
 const firmListItem = props => {
   const { item, onPressItem } = props;
-
+console.log('>> firmitem:', item)
   return (
     <View style={styles.itemWrap}>
       <View style={styles.leftWrap}>

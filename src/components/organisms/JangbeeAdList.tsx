@@ -11,10 +11,15 @@ import React from 'react';
 import Swiper from 'react-native-swiper/src';
 import styled from 'styled-components/native';
 
+const Container = styled.View`
+  min-height: 200px;
+  max-height: 500px;
+`;
+const StyledSwiper = styled(Swiper)`
+  max-height: 500px;
+`;
+
 const styles = StyleSheet.create({
-  container: {
-    height: 200
-  },
   wrapper: {
   },
   slide: {
@@ -182,13 +187,8 @@ export default class JangbeeAdList extends React.Component
     ));
 
     return (
-      <View style={styles.container}>
-        <FirmDetailModal
-          isVisibleModal={isVisibleDetailModal}
-          accountId={detailFirmId}
-          closeModal={() => this.setState({ isVisibleDetailModal: false })}
-        />
-        <Swiper
+      <Container>
+        <StyledSwiper
           style={styles.wrapper}
           autoplay={true}
           autoplayTimeout={3.5}
@@ -197,8 +197,13 @@ export default class JangbeeAdList extends React.Component
           // onIndexChanged={() => Alert.alert('chan')}
         >
           {adViewList}
-        </Swiper>
-      </View>
+        </StyledSwiper>
+        <FirmDetailModal
+          isVisibleModal={isVisibleDetailModal}
+          accountId={detailFirmId}
+          closeModal={() => this.setState({ isVisibleDetailModal: false })}
+        />
+      </Container>
     );
   }
 }

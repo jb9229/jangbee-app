@@ -10,7 +10,13 @@ import adLocation from 'constants/AdLocation';
 import styled from 'styled-components/native';
 
 const Container = styled.View`flex: 1;`;
-const ScrollView = styled.ScrollView`flex: 1;`;
+const ScrollView = styled.ScrollView.attrs(() => ({
+  contentContainerStyle: {
+    flex: 1
+  }
+}))`
+  flex: 1;
+`;
 
 interface Props {
     navigation: DefaultNavigationProps;

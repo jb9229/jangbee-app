@@ -1,19 +1,18 @@
 import * as React from 'react';
 
 import { ADS } from './api/queries';
-import { FIRMHARMCASE_COUNT } from './api/queries';
 import JangbeeAd from 'molecules/JangbeeAd';
 import Swiper from 'react-native-swiper/src';
 import { noticeUserError } from './container/request';
 import styled from 'styled-components/native';
 import { useQuery } from '@apollo/client';
 
-const Container = styled.View``;
-const Count = styled.Text``;
+const Container = styled.View`
+  max-height: 500px;
+`;
+
 const Slide = styled.View`
   flex: 1;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ApolloWebTest: React.FC = (): React.ReactElement =>

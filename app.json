@@ -1,11 +1,11 @@
 {
   "name": "장비 콜",
   "displayName": "장비 콜",
-  "mode": "Dev",
+  "mode": "local",
   "expo": {
     "owner": "jb9229",
     "name": "장비 콜",
-    "slug": "jangbeecall_spring",
+    "slug": "jangbeecall_summer",
     "sdkVersion": "39.0.0",
     "privacy": "public",
     "platforms": [

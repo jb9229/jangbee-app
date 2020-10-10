@@ -14,6 +14,7 @@ const TitleWrap = styled.View`
   align-items: center;
   margin-bottom: 12;
 `;
+
 const Title = styled.Text`
   font-family: ${(props: StyledCPorps): string => props.theme.FontMiddleTitle};
   font-size: 18;
@@ -22,6 +23,7 @@ const Title = styled.Text`
       ? props.theme.ColorSecond : props.theme.ColorInputLabel};
 
 `;
+
 const SubTitle = styled.Text`
   font-family: ${(props: StyledCPorps): string => props.theme.FontTitle};;
   font-size: 14;

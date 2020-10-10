@@ -25,6 +25,14 @@ import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
 import { validatePresence } from 'utils/Validation';
 
+const StyledCard = styled(Card).attrs(() => ({
+  wrapperStyle: {
+    flex: 1
+    // minHeight: 450
+  }
+}))`
+`;
+
 const styles = StyleSheet.create({
   adWrap: {
     paddingBottom: 2
@@ -71,7 +79,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const Container = styled.View``;
+const Container = styled.View`
+  flex: 1;
+`;
 
 const SearchModeTO = styled.TouchableOpacity``;
 
@@ -181,7 +191,7 @@ export default class GPSSearchScreen extends React.Component
     }
 
     const location = await Location.getCurrentPositionAsync({}).catch((err) => console.log(err));
-
+console.log('=== gps: ', location);
     this.setState({
       searLongitude: location?.coords.longitude,
       searLatitude: location?.coords.latitude
@@ -394,7 +404,7 @@ export default class GPSSearchScreen extends React.Component
 
     return (
       <Container>
-        <Card>
+        <StyledCard>
           <View style={styles.searOptionWrap}>
             <View style={styles.searModeWrap}>
               <SearchModeTO onPress={() => this.changeSearMode(false)}>
@@ -475,31 +485,35 @@ export default class GPSSearchScreen extends React.Component
                 </View>
               )}
             </View>
+            <View style={styles.commWrap}>
+              <FirmCreaErrMSG errorMSG={validationMessage} />
+              {isLocalSearch ? (
+                <JBButton
+                  title="지역 검색하기"
+                  onPress={() => this.validateSearLocFirm()}
+                  size="full"
+                  bgColor={colors.point2}
+                  color="white"
+                />
+              ) : (
+                <JBButton
+                  title="내 주변 검색하기"
+                  onPress={() => this.validateSearNearFirm()}
+                  size="full"
+                  bgColor={colors.point2}
+                  color="white"
+                />
+              )}
+            </View>
           </View>
-          <View style={styles.commWrap}>
-            <FirmCreaErrMSG errorMSG={validationMessage} />
-            {isLocalSearch ? (
-              <JBButton
-                title="지역 검색하기"
-                onPress={() => this.validateSearLocFirm()}
-                size="full"
-                bgColor={colors.point2}
-                color="white"
-              />
-            ) : (
-              <JBButton
-                title="내 주변 검색하기"
-                onPress={() => this.validateSearNearFirm()}
-                size="full"
-                bgColor={colors.point2}
-                color="white"
-              />
-            )}
-          </View>
-        </Card>
+        </StyledCard>
         <FirmSearListModal
-          isVisibleModal={isVisibleSearResultModal}
-          closeModal={() => this.setState({ isVisibleSearResultModal: false })}
+          visible={isVisibleSearResultModal}
+          closeModal={() =>
+          {
+            console.log('Action modal close~')
+            this.setState({ isVisibleSearResultModal: false })
+          }}
           searEquipment={searEquipment}
           searEquiModel={searEquiModel}
           searLongitude={searLongitude}
