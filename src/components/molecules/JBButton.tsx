@@ -9,6 +9,7 @@ const BIG_SIZE = 'big';
 const SMALL_SIZE = 'small';
 const Container = styled.View`
   flex-direction: row;
+  width: 100%;
   margin: 5px;
   ${props =>
     props.align === 'right' &&

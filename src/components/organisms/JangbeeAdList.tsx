@@ -1,16 +1,21 @@
-import * as api from 'api/api';
+import { Platform, StyleSheet, View } from 'react-native';
 
-import { Alert, StyleSheet, View } from 'react-native';
-
+import { ADS } from 'src/api/queries';
 import { AdMobBanner } from 'expo-ads-admob';
+import { AdType } from 'src/container/ad/types';
 import BugReport from 'organisms/BugReport';
 import FirmDetailModal from 'templates/FirmDetailModal';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JangbeeAd from 'molecules/JangbeeAd';
 import React from 'react';
 import Swiper from 'react-native-swiper/src';
+import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
+import { useQuery } from '@apollo/client';
 
+interface StyledProps {
+  height?: number;
+}
 const Container = styled.View`
   min-height: 200px;
   max-height: 500px;
@@ -29,181 +34,115 @@ const styles = StyleSheet.create({
   }
 });
 
-const AdMobContainer = styled.View`
+const AdMobContainer = styled.View<StyledProps>`
   width: 100%;
-  height: ${props => (props.height ? props.height : '120')};
+  height: ${(props): number => (props.height ? props.height : 120)};
   justify-content: center;
   align-items: center;
 `;
 
-export default class JangbeeAdList extends React.Component
+interface Props {
+  adLocation: string;
+  euqiTarget: string;
+  sidoTarget: string;
+  gugunTarget: string;
+  admob: boolean;
+  admobUnitID: string;
+  admonSize: string;
+  admonHeight: number;
+}
+
+const JangbeeAdList: React.FC<Props> = (props) =>
 {
-  _isMounted = false;
-
-  constructor (props)
-  {
-    super(props);
-    this.state = {
-      adList: undefined,
-      isVisibleDetailModal: false
-    };
-  }
-
-  componentDidMount ()
-  {
-    this._isMounted = true;
-
-    const {
-      adLocation,
-      euqiTarget,
-      sidoTarget,
-      gugunTarget,
-      admob
-    } = this.props;
-
-    if (!admob)
+  const adsRsp = useQuery(ADS, {
+    variables: { searchAdParams: { adType: AdType.SEARCH_EQUIPMENT_FIRST, adLocation: 0, equiTarget: props.euqiTarget } },
+    onError: (err) =>
     {
-      this.setAdList(adLocation, euqiTarget, sidoTarget, gugunTarget);
+      noticeUserError('ADS Query result', err?.message);
     }
-  }
-
-  componentWillReceiveProps (nextProps)
-  {
-    const {
-      admob,
-      adLocation,
-      euqiTarget,
-      sidoTarget,
-      gugunTarget
-    } = this.props;
-
-    if (!admob && nextProps.adLocation !== adLocation)
-    {
-      this.setAdList(nextProps.adLocation, euqiTarget, sidoTarget, gugunTarget);
-    }
-  }
-
-  componentWillUnmount ()
-  {
-    this._isMounted = false;
-  }
-
-  /**
-   * 광고 리스트 설정
-   * @param adLocation 광고위치(MAIN, LOCAL, EQUIPMENT)
-   * @param euqiTarket 타켓 광고할 선택장비
-   */
-  setAdList = (adLocation, euqiTarget, sidoTarget, gugunTarget) =>
-  {
-    api
-      .getAd(adLocation, euqiTarget, sidoTarget, gugunTarget)
-      .then(jsonRes =>
-      {
-        if (!this._isMounted)
-        {
-          return;
-        }
-
-        if (jsonRes != null && jsonRes.length === 0)
-        {
-          this.setState({ isEmptyAdlist: true });
-          return;
-        }
-        this.setState({ isEmptyAdlist: false, adList: jsonRes });
-      })
-      .catch(error =>
-      {
-        if (!this._isMounted)
-        {
-          return;
-        }
-
-        Alert.alert(
-          '광고리스트 요청에 문제가 있습니다',
-          `다시 시도해 주세요 -> [${error.name}] ${error.message}`
-        );
-        this.setState({ adList: null });
-      });
-  };
-
+  });
+  const [visibleFirmDetailModal, setVisibleFirmDetailModal] = React.useState(false);
+  const [detailFirmId, setDetailFirmId] = React.useState();
+  // adList: undefined,
+  // isVisibleDetailModal: false
+  // isEmptyAdlist,
+  // detailFirmId
   /**
    * Admob 광고 요청 실패 팝업
    */
-  renderAdmobError = () => <BugReport title="구글 광고 요청에 실패 했습니다" />;
 
-  render ()
+  const adList = adsRsp?.data?.ads || [];
+
+  // Loading
+  if (adsRsp.loading)
   {
-    const { admob, admobUnitID, admonSize, admonHeight } = this.props;
-    const {
-      adList,
-      isEmptyAdlist,
-      isVisibleDetailModal,
-      detailFirmId
-    } = this.state;
-
-    if (admob || isEmptyAdlist)
-    {
-      const unitID = admobUnitID || 'ca-app-pub-9415708670922576/6931111723';
-
-      const bannerSize = admonSize || 'largeBanner';
-      return (
-        <AdMobContainer height={admonHeight}>
-          <AdMobBanner
-            bannerSize={bannerSize}
-            adUnitID={unitID} // Test ID, Replace with your-admob-unit-id
-            testDeviceID="EMULATOR"
-            onDidFailToReceiveAdWithError={this.renderAdmobError}
-          />
-        </AdMobContainer>
-      );
-    }
-
-    if (adList === undefined)
-    {
-      return (
-        <View style={styles.container}>
-          <JBActIndicator title="광고 불러오는중..." size="large" />
-        </View>
-      );
-    }
-
-    if (adList === null)
-    {
-      return <BugReport title="광고 요청에 실패 했습니다" />;
-    }
-
-    const adViewList = adList.map((ad, index) => (
-      <View style={styles.slide} key={index}>
-        <JangbeeAd
-          ad={ad}
-          openFirmDetail={accountId =>
-            this.setState({
-              detailFirmId: accountId,
-              isVisibleDetailModal: true
-            })
-          }
-        />
-      </View>
-    ));
-
     return (
       <Container>
-        <StyledSwiper
-          style={styles.wrapper}
-          autoplay={true}
-          autoplayTimeout={3.5}
-          dotStyle={{ marginBottom: 0 }}
-          activeDotStyle={{ marginBottom: 0 }}
-          // onIndexChanged={() => Alert.alert('chan')}
-        >
-          {adViewList}
-        </StyledSwiper>
-        <FirmDetailModal
-          isVisibleModal={isVisibleDetailModal}
-          accountId={detailFirmId}
-          closeModal={() => this.setState({ isVisibleDetailModal: false })}
-        />
+        <JBActIndicator title="광고 불러오는중..." size="large" />
       </Container>
     );
   }
-}
+
+  if (props.admob && adList.length === 0)
+  {
+    if (Platform.OS === 'web')
+    {
+      return null;
+    }
+    const unitID = props.admobUnitID || 'ca-app-pub-9415708670922576/6931111723';
+
+    const bannerSize = props.admonSize || 'largeBanner';
+
+    return (
+      <AdMobContainer height={props.admonHeight}>
+        <AdMobBanner
+          bannerSize={bannerSize}
+          adUnitID={unitID} // Test ID, Replace with your-admob-unit-id
+          testDeviceID="EMULATOR"
+          onDidFailToReceiveAdWithError={() => <BugReport title="구글 광고 요청에 실패 했습니다" />}
+        />
+      </AdMobContainer>
+    );
+  }
+
+  if (adList === null)
+  {
+    return <BugReport title="광고 요청에 실패 했습니다" />;
+  }
+
+  const adViewList = adList.map((ad, index) => (
+    <View style={styles.slide} key={index}>
+      <JangbeeAd
+        ad={ad}
+        openFirmDetail={(accountId): void =>
+        {
+          setDetailFirmId(accountId);
+          setVisibleFirmDetailModal(true);
+        }}
+      />
+    </View>
+  ));
+
+  return (
+    <Container>
+      <StyledSwiper
+        style={styles.wrapper}
+        autoplay={true}
+        autoplayTimeout={3.5}
+        dotStyle={{ marginBottom: 0 }}
+        activeDotStyle={{ marginBottom: 0 }}
+        // onIndexChanged={() => Alert.alert('chan')}
+      >
+        {adViewList}
+      </StyledSwiper>
+      <FirmDetailModal
+        isVisibleModal={visibleFirmDetailModal}
+        accountId={detailFirmId}
+        closeModal={(): void => setVisibleFirmDetailModal(false)}
+      />
+    </Container>
+  );
+};
+
+export default JangbeeAdList;
+;

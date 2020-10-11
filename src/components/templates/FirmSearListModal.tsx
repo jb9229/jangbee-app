@@ -19,7 +19,10 @@ const Container = styled.View`
   `}
 `;
 
-const TopWrap = styled.View``;
+const TopWrap = styled.View`
+  background-color: ${colors.batangLight};
+  height: 50px;
+`;
 
 const SearchResultWrap = styled.View`
   flex: 1;
@@ -88,6 +91,7 @@ console.log('>>> searchFirmRsp.data?.firms:', searchFirmRsp.data?.firms);
             euqiTarget={`${props.searEquiModel} ${props.searEquipment}`}
             sidoTarget={props.searSido}
             gugunTarget={props.searGungu}
+            admob={true}
           />
         </TopWrap>
         <ItemWrapper>
