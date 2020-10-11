@@ -99,6 +99,7 @@ const SwitchText = styled.Text`
 `;
 
 const SearSummaryWrap = styled.View`
+  height: 30px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

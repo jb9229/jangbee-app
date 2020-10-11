@@ -26,7 +26,7 @@ const Title = styled.Text`
 const SelectListWrap = styled.ScrollView.attrs(props => ({
   contentContainerStyle: {
     alignItems: 'center',
-    padding: 6,
+    padding: 6
   }
 }))`
   flex-direction: row;

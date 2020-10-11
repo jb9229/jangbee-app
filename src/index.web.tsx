@@ -13,7 +13,7 @@ const Container = styled.View`
   background-color: #117A78;
 `;
 const EquipmentSearchWrap = styled.View`
-  flex: 1;
+  height: 500px;
   width: 100%;
 `;
 

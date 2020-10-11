@@ -1,7 +1,9 @@
+import styled, { css } from 'styled-components/native';
 import url, { NODE_SERVER_URL } from 'constants/Url';
 
 import Constants from 'expo-constants';
 import JBButton from 'molecules/JBButton';
+import { Platform } from 'react-native';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
@@ -9,14 +11,16 @@ import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
 import pkgConfig from '../../../app.config';
 import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
-import styled from 'styled-components/native';
 
 const Container = styled.View`
+  width: 100%;
   padding: 8px;
   padding-top: 12px;
   background-color: ${props => (props.bg ? props.bg : colors.batangLight)};
   margin: 8px;
   margin-top: 12px;
+  padding-left: ${Platform.OS === 'web' ? '15%' : '8px'};
+  padding-right: ${Platform.OS === 'web' ? '15%' : '8px'};
 `;
 
 const Row = styled.View`
@@ -81,11 +85,19 @@ export default function JBTerm ({ bg })
           <Title>주소:</Title>
           <Text>충청북도 영동군 용산면 한곡리길 40</Text>
         </Column>
+        <Column>
+          <Title></Title>
+          <Text></Text>
+        </Column>
       </Row>
       <Row>
         <Column>
           <Title>상담:</Title>
           <Text>내정보 -> 카톡상담하기 클릭</Text>
+        </Column>
+        <Column>
+          <Title></Title>
+          <Text></Text>
         </Column>
       </Row>
       <Row>
@@ -116,6 +128,10 @@ export default function JBTerm ({ bg })
         <Column>
           <Title>직업정보제공사업면허:</Title>
           <Text>J1711020190001호</Text>
+        </Column>
+        <Column>
+          <Title></Title>
+          <Text></Text>
         </Column>
       </Row>
       <Row>
