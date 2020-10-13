@@ -11,9 +11,9 @@
     "storybook": "start-storybook -p 7007 & adb reverse tcp:7007 tcp:7007",
     "prestorybook": "rnstl",
     "postinstall": "jetify",
-    "predeploy": "expo build:web",
     "deploy": "gh-pages -d web-build",
-    "deploy-hosting": "npm run predeploy && firebase deploy --only hosting"
+    "predeploy": "expo build:web",
+    "deploy-hosting": "yarn predeploy && firebase deploy --only hosting"
   },
   "jest": {
     "preset": "jest-expo"

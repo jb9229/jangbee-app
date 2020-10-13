@@ -16,3 +16,9 @@ export enum AdType {
   SEARCH_EQUIPMENT_FIRST = 11,
   SEARCH_REGION_FIRST = 21,
 }
+
+export enum AdLocation {
+  MAIN = 0,
+  SEARCH_EQUIPMENT = 1,
+  SEARCH_REGION = 2,
+}

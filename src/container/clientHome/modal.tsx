@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { AdLocation } from '../ad/types';
 import { BackHandler } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
@@ -38,7 +39,7 @@ const ClientHomeModalContainer: React.FC<Props> = (props): React.ReactElement =>
     <Container>
       <HeaderClose title="화주 앱 화면" onClick={() => { props.navigation.goBack() }}/>
       <ScrollView>
-        <JangbeeAdList adLocation={adLocation.main} navigation={props.navigation} />
+        <JangbeeAdList adLocation={AdLocation.MAIN} navigation={props.navigation} />
         <GPSSearchScreen {...props} />
         <FirmCntChart />
       </ScrollView>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { ADS } from './api/queries';
+import { AdLocation } from './container/ad/types';
 import JangbeeAd from 'molecules/JangbeeAd';
 import Swiper from 'react-native-swiper/src';
 import { noticeUserError } from './container/request';
@@ -29,6 +30,7 @@ console.log('>>> adsRsp?.data?.ads:', adsRsp?.data?.ads)
     <Slide key={index}>
       <JangbeeAd
         ad={ad}
+        adLocation={AdLocation.MAIN}
       />
     </Slide>
   )) : [];

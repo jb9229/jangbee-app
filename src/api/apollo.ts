@@ -6,7 +6,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
 const httpLink = new HttpLink({
-  uri: NODE_SERVER_URL
+  uri: 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql'
 });
 
 // const wsLink = new WebSocketLink({

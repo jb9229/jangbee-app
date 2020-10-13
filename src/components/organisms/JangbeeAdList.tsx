@@ -1,8 +1,8 @@
+import { AdLocation, AdType } from 'src/container/ad/types';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import { ADS } from 'src/api/queries';
 import { AdMobBanner } from 'expo-ads-admob';
-import { AdType } from 'src/container/ad/types';
 import BugReport from 'organisms/BugReport';
 import FirmDetailModal from 'templates/FirmDetailModal';
 import JBActIndicator from 'molecules/JBActIndicator';
@@ -11,17 +11,18 @@ import React from 'react';
 import Swiper from 'react-native-swiper/src';
 import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 
 interface StyledProps {
   height?: number;
+  adLocation?: AdLocation;
 }
-const Container = styled.View`
+const Container = styled.View<StyledProps>`
   min-height: 200px;
-  max-height: 500px;
+  max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
 `;
 const StyledSwiper = styled(Swiper)`
-  max-height: 500px;
+  max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
 `;
 
 const styles = StyleSheet.create({
@@ -42,7 +43,7 @@ const AdMobContainer = styled.View<StyledProps>`
 `;
 
 interface Props {
-  adLocation: string;
+  adLocation: AdLocation;
   euqiTarget: string;
   sidoTarget: string;
   gugunTarget: string;
@@ -54,8 +55,21 @@ interface Props {
 
 const JangbeeAdList: React.FC<Props> = (props) =>
 {
-  const adsRsp = useQuery(ADS, {
-    variables: { searchAdParams: { adType: AdType.SEARCH_EQUIPMENT_FIRST, adLocation: 0, equiTarget: props.euqiTarget } },
+  React.useEffect(() =>
+  {
+    const veriables =
+    {
+      adType: AdType.SEARCH_EQUIPMENT_FIRST,
+      adLocation: 0,
+      equiTarget: props.euqiTarget,
+      sidoTarget: props.sidoTarget,
+      gugunTarget: props.gugunTarget
+    };
+
+    adsReq({ variables: { searchAdParams: veriables } });
+  }, [props.euqiTarget, props.sidoTarget, props.gugunTarget]);
+
+  const [adsReq, adsRsp] = useLazyQuery(ADS, {
     onError: (err) =>
     {
       noticeUserError('ADS Query result', err?.message);
@@ -72,7 +86,7 @@ const JangbeeAdList: React.FC<Props> = (props) =>
    */
 
   const adList = adsRsp?.data?.ads || [];
-
+  console.log('>>> adList: ', adList)
   // Loading
   if (adsRsp.loading)
   {
@@ -109,11 +123,12 @@ const JangbeeAdList: React.FC<Props> = (props) =>
   {
     return <BugReport title="광고 요청에 실패 했습니다" />;
   }
-
+console.log('>>> adList: ', adList)
   const adViewList = adList.map((ad, index) => (
     <View style={styles.slide} key={index}>
       <JangbeeAd
         ad={ad}
+        adLocation={props.adLocation}
         openFirmDetail={(accountId): void =>
         {
           setDetailFirmId(accountId);
@@ -122,9 +137,9 @@ const JangbeeAdList: React.FC<Props> = (props) =>
       />
     </View>
   ));
-
+  console.log('>>> adViewList: ', adViewList)
   return (
-    <Container>
+    <Container AdLocation={props.adLocation}>
       <StyledSwiper
         style={styles.wrapper}
         autoplay={true}

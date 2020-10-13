@@ -1,3 +1,5 @@
+import { AdLocation, AdType } from 'src/container/ad/types';
+
 import Card from 'molecules/CardUI';
 import CloseButton from 'molecules/CloseButton';
 import FirmSearList from 'organisms/FirmSearList';
@@ -10,18 +12,19 @@ import colors from 'constants/Colors';
 import styled from 'styled-components/native';
 import { useLazyQuery } from '@apollo/client';
 
-const Container = styled.View`
+const Container = styled.ScrollView.attrs((props) => ({
+  contentContainerStyle: {
+    flex: 1,
+    backgroundColor: props.theme.ColorBatangLight
+  }
+}))`
   flex: 1;
-  ${props =>
-    props.size === 'full' &&
-    `
-    background-color: ${colors.batangLight};
-  `}
+  background-color: ${(props): string => props.theme.ColorBatangLight};
 `;
 
 const TopWrap = styled.View`
+  /* height: 500px; */
   background-color: ${colors.batangLight};
-  height: 50px;
 `;
 
 const SearchResultWrap = styled.View`
@@ -33,7 +36,7 @@ const SearchResultWrap = styled.View`
 //   top: 0;
 //   right: 0;
 // `;
-const ItemWrapper = styled(Card).attrs(() => ({
+const ItemWrapper = styled(Card).attrs((props) => ({
   wrapperStyle: {
     flex: 1
   }
@@ -41,6 +44,7 @@ const ItemWrapper = styled(Card).attrs(() => ({
 
 interface Props {
   visible: boolean;
+  isLocalSearch: boolean;
   searEquipment: string;
   searEquiModel: string;
   searLongitude: number;
@@ -87,7 +91,7 @@ console.log('>>> searchFirmRsp.data?.firms:', searchFirmRsp.data?.firms);
         <TopWrap>
           <CloseButton onClose={props.closeModal} />
           <JangbeeAdList
-            adLocation={adLocation.local}
+            adLocation={props.isLocalSearch ? AdLocation.SEARCH_REGION : AdLocation.SEARCH_EQUIPMENT}
             euqiTarget={`${props.searEquiModel} ${props.searEquipment}`}
             sidoTarget={props.searSido}
             gugunTarget={props.searGungu}

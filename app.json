@@ -1,7 +1,7 @@
 {
   "name": "장비 콜",
   "displayName": "장비 콜",
-  "mode": "local",
+  "mode": "prod",
   "expo": {
     "owner": "jb9229",
     "name": "장비 콜",
@@ -13,7 +13,7 @@
       "android",
       "web"
     ],
-    "version": "1.2.5_200930",
+    "version": "1.3.0_201010",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",

@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { Alert, BackHandler, DeviceEventEmitter, Platform } from 'react-native';
 
+import { AdLocation } from 'src/container/ad/types';
 import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
@@ -208,7 +209,7 @@ const ClientHomeScreen: React.FC<Props> = (props) =>
 
   return (
     <Container>
-      <JangbeeAdList adLocation={adLocation.main} navigation={props.navigation} />
+      <JangbeeAdList adLocation={AdLocation.MAIN} navigation={props.navigation} />
       <GPSSearchScreen {...props} />
       <FirmCntChart />
       <JBTerm />

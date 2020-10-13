@@ -522,7 +522,6 @@ console.log('=== gps: ', location);
           searSido={searSido}
           searGungu={searGungu}
           isLocalSearch={isLocalSearch}
-          size="full"
           navigation={navigation}
         />
       </Container>

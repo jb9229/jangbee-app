@@ -1,6 +1,7 @@
 import { Alert, Dimensions, Linking, StyleSheet, Text, View } from 'react-native';
 
 import AdImage from 'molecules/AdImage';
+import { AdLocation } from 'src/container/ad/types';
 import JBIcon from 'atoms/JBIcon';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import React from 'react';
@@ -8,12 +9,16 @@ import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
 
-const Container = styled.View`
+interface StyledProps {
+  adLocation?: AdLocation;
+}
+
+const Container = styled.View<StyledProps>`
   background-color: ${colors.batangDark};
   width: 100%;
   height: ${(Dimensions.get('window').width - 20) * 0.75};
   align-items: center;
-  max-height: 500px;
+  max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
 `;
 const AdImgBg = styled.ImageBackground`
   width: 100%;
@@ -101,9 +106,10 @@ const telAdvertiser = (phoneNumber): void =>
 interface Props {
   ad: any;
   openFirmDetail: any;
+  adLocation: AdLocation;
 }
-const JangbeeAd: React.FC<Props> = ({ ad, openFirmDetail }) => (
-  <Container>
+const JangbeeAd: React.FC<Props> = ({ ad, openFirmDetail, adLocation }) => (
+  <Container adLocation={adLocation}>
     {ad.photoUrl === null || ad.photoUrl === '' ? (
       <View style={styles.bgAdWrap}>
         <AdImage title={ad.title} value={ad.photoUrl} />

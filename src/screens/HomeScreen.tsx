@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { AdLocation } from 'src/container/ad/types';
 import { BackHandler } from 'react-native';
 import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
@@ -29,7 +30,7 @@ const HomeScreen: React.FC<Props> = (props) =>
 
   return (
     <Container>
-      <JangbeeAdList adLocation={adLocation.main} navigation={props.navigation} />
+      <JangbeeAdList adLocation={AdLocation.MAIN} navigation={props.navigation} />
       <GPSSearchScreen {...props} />
       <FirmCntChart />
     </Container>
