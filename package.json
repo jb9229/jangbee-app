@@ -1,5 +1,4 @@
 {
-  "homepage": "https://jb9229.github.io/jangbee-app/",
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android --variant=DevDebug --appIdSuffix=dev",

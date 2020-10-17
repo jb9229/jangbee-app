@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "weeb-build",
+    "public": "web-build",
     "ignore": [
       "firebase.json",
       "**/.*",
