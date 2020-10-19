@@ -27,10 +27,6 @@ const TopWrap = styled.View`
   background-color: ${colors.batangLight};
 `;
 
-const SearchResultWrap = styled.View`
-  flex: 1;
-`;
-
 // const CloseView = styled.View`
 //   position: absolute;
 //   top: 0;
@@ -40,7 +36,9 @@ const ItemWrapper = styled(Card).attrs((props) => ({
   wrapperStyle: {
     flex: 1
   }
-}))``;
+}))`
+  flex: 1;
+`;
 
 interface Props {
   visible: boolean;
@@ -99,18 +97,16 @@ console.log('>>> searchFirmRsp.data?.firms:', searchFirmRsp.data?.firms);
           />
         </TopWrap>
         <ItemWrapper>
-          <SearchResultWrap>
-            <FirmSearList
-              data={searchFirmRsp.data?.firms || []}
-              page={page}
-              refreshing={refreshing}
-              last={isLastList}
-              isLoading={isListLoading}
-              selEquipment={props.searEquipment}
-              selSido={props.searSido}
-              selGungu={props.searGungu}
-            />
-          </SearchResultWrap>
+          <FirmSearList
+            data={searchFirmRsp.data?.firms || []}
+            page={page}
+            refreshing={refreshing}
+            last={isLastList}
+            isLoading={isListLoading}
+            selEquipment={props.searEquipment}
+            selSido={props.searSido}
+            selGungu={props.searGungu}
+          />
         </ItemWrapper>
       </Container>
     </Modal>

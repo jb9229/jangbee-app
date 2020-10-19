@@ -7,10 +7,23 @@ import styled from 'styled-components/native';
 const FULL_SIZE = 'full';
 const BIG_SIZE = 'big';
 const SMALL_SIZE = 'small';
+
+export enum ButtonSize {
+  FULL = 'full',
+  BIG_SIZE = 'big',
+  SMALL_SIZE = 'small'
+}
+
+interface StyledProps {
+  align?: string;
+  size?: string;
+  color?: string;
+  borderColor?: string;
+}
 const Container = styled.View`
-  flex-direction: row;
-  width: 100%;
-  margin: 5px;
+  /* flex-direction: row; */
+  flex-grow: ${(props) => props.size === ButtonSize.FULL ? 1 : 0};
+  /* margin: 5px; */
   ${props =>
     props.align === 'right' &&
     `
@@ -28,7 +41,7 @@ const Container = styled.View`
   `}
 `;
 
-const TouchableOpacity = styled.TouchableOpacity`
+const TouchableOpacity = styled.TouchableOpacity<StyledProps>`
   border-color: ${props =>
     props.borderColor ? props.borderColor : colors.pointDark};
 
@@ -108,97 +121,87 @@ const Text = styled.Text`
     `};
 `;
 
-export default class JBButton extends React.PureComponent
+interface Props {
+  size?: string;
+  title: string;
+  underline: boolean;
+  color: string;
+  bgColor: string;
+  align: string;
+  Secondary: boolean;
+  Primary: boolean;
+  nonemargin: boolean;
+  onPress: () => void;
+}
+const JBButton: React.FC<Props> = (props) =>
 {
-  constructor (props)
-  {
-    super(props);
-    this.state = {
-      pressing: false
-    };
-  }
+  const [pressing, setPressing] = React.useState(false);
 
-  preventDoubleTap = () =>
+  const preventDoubleTap = () =>
   {
-    const { onPress } = this.props;
-    const { pressing } = this.state;
-
     if (pressing === false)
     {
-      this.setState({ pressing: true });
+      setPressing(true);
 
-      onPress();
+      props.onPress();
 
       InteractionManager.runAfterInteractions(() =>
       {
-        this.setState({ pressing: false });
+        setPressing(false);
       });
     }
   };
 
-  render ()
+  let colorTheme = props.color;
+  let bgColorTheme = props.bgColor;
+
+  if (props.Secondary)
   {
-    const {
-      title,
-      size,
-      underline,
-      color,
-      bgColor,
-      align,
-      Secondary,
-      Primary,
-      nonemargin
-    } = this.props;
-
-    let colorTheme = color;
-    let bgColorTheme = bgColor;
-
-    if (Secondary)
+    if (props.underline)
     {
-      if (underline)
-      {
-        colorTheme = colors.pointDark;
-      }
-      else
-      {
-        colorTheme = 'white';
-      }
-
-      bgColorTheme = colors.pointDark;
+      colorTheme = colors.pointDark;
+    }
+    else
+    {
+      colorTheme = 'white';
     }
 
-    if (Primary)
-    {
-      if (underline)
-      {
-        colorTheme = colors.point2;
-      }
-      else
-      {
-        colorTheme = 'white';
-      }
-
-      bgColorTheme = colors.point2;
-    }
-
-    return (
-      <Container align={align} nonemargin={nonemargin}>
-        <TouchableOpacity
-          size={size}
-          color={bgColorTheme}
-          borderColor={colorTheme}
-          onPress={this.preventDoubleTap}
-          underline={underline ? true : null}
-        >
-          <Text
-            size={size}
-            color={colorTheme}
-            underline={underline ? true : null}
-          >
-            {title}
-          </Text>
-        </TouchableOpacity>
-      </Container>
-    );
+    bgColorTheme = colors.pointDark;
   }
+
+  if (props.Primary)
+  {
+    if (props.underline)
+    {
+      colorTheme = colors.point2;
+    }
+    else
+    {
+      colorTheme = 'white';
+    }
+
+    bgColorTheme = colors.point2;
+  }
+
+  return (
+    <Container align={props.align} nonemargin={props.nonemargin} size={props.size}>
+      <TouchableOpacity
+        size={props.size}
+        color={bgColorTheme}
+        borderColor={colorTheme}
+        onPress={preventDoubleTap}
+        underline={props.underline ? true : null}
+      >
+        <Text
+          size={props.size}
+          color={colorTheme}
+          underline={props.underline ? true : null}
+        >
+          {props.title}
+        </Text>
+      </TouchableOpacity>
+    </Container>
+  );
 }
+
+export default JBButton;

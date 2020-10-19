@@ -22,7 +22,7 @@ const Container = styled.View<StyledProps>`
 `;
 const AdImgBg = styled.ImageBackground`
   width: 100%;
-  height: 100%;
+  height: ${(Dimensions.get('window').width - 20) * 0.75};
   max-width: 1600px;
   max-height: 500px;
 `;

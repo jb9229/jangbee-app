@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { ADS } from './api/queries';
 import { AdLocation } from './container/ad/types';
+import { Dimensions } from 'react-native';
 import JangbeeAd from 'molecules/JangbeeAd';
 import Swiper from 'react-native-swiper/src';
 import { noticeUserError } from './container/request';
@@ -10,6 +11,7 @@ import { useQuery } from '@apollo/client';
 
 const Container = styled.View`
   max-height: 500px;
+  height: ${(Dimensions.get('window').width - 20) * 0.75};
 `;
 
 const Slide = styled.View`

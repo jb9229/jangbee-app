@@ -63,8 +63,7 @@ const styles = StyleSheet.create({
     height: 100
   },
   commWrap: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     height: 100
   },
   gpsWrap: {

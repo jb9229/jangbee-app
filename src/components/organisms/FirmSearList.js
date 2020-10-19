@@ -1,9 +1,9 @@
-import React from 'react';
-import { FlatList, View } from 'react-native';
+import FirmDetailModal from 'templates/FirmDetailModal';
 import FirmListItem from 'organisms/FirmListItem';
+import { FlatList } from 'react-native';
 import ListFooter from 'molecules/ListFooter';
 import ListSeparator from 'molecules/ListSeparator';
-import FirmDetailModal from 'templates/FirmDetailModal';
+import React from 'react';
 
 export default class FirmSearList extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ export default class FirmSearList extends React.Component {
 
     const { detailFirmId, isVisibleDetailModal } = this.state;
     return (
-      <View>
+      <React.Fragment>
         <FirmDetailModal
           isVisibleModal={isVisibleDetailModal}
           accountId={detailFirmId}
@@ -70,7 +70,7 @@ export default class FirmSearList extends React.Component {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={1}
         />
-      </View>
+      </React.Fragment>
     );
   }
 }
