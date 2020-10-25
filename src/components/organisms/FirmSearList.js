@@ -6,7 +6,8 @@ import ListSeparator from 'molecules/ListSeparator';
 import React from 'react';
 
 export default class FirmSearList extends React.Component {
-  constructor(props) {
+  constructor(props)
+  {
     super(props);
 
     this.state = {
@@ -24,7 +25,7 @@ export default class FirmSearList extends React.Component {
   renderListItem = ({ item }) => (
     <FirmListItem
       item={item}
-      onPressItem={accountId =>
+      onPressItem={(accountId) =>
         this.setState({ detailFirmId: accountId, isVisibleDetailModal: true })
       }
     />

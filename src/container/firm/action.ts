@@ -10,7 +10,7 @@ export const convertFirmDto = (uid: string, dto: FirmCreateDto): object =>
 {
   console.log('>>> convertFirmDto : ', dto);
   return {
-    account_id: uid,
+    accountId: uid,
     fname: dto.fname,
     thumbnail: dto.thumbnail,
     phoneNumber: dto.phoneNumber,

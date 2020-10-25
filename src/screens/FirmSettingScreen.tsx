@@ -7,7 +7,9 @@ import { DELETE_FIRM } from 'src/api/mutations';
 import { DefaultNavigationProps } from 'src/types';
 import DocumentsModal from 'templates/DocumentsModal';
 import JBIconButton from 'molecules/JBIconButton';
+import JBTerm from 'src/components/templates/JBTerm';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
+import { Linking } from 'expo';
 import React from 'react';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
@@ -17,8 +19,6 @@ import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useMutation } from '@apollo/client';
 import { validatePresence } from 'utils/Validation';
-import JBTerm from 'src/components/templates/JBTerm';
-import { Linking } from 'expo';
 
 const Container = styled.View`
   flex: 1;
@@ -121,7 +121,7 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
         }
         else
         {
-          deletFirmRequest({ variables: { account_id: user.uid } });
+          deletFirmRequest({ variables: { accountId: user.uid } });
         }
       })
       .catch(error =>

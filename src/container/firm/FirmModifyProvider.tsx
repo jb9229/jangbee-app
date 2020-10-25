@@ -85,7 +85,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
               {
                 if (!uploadResult) { noticeUserError('Firm Modify Image Upload Error', `uploadResult is ${uploadResult}`); return }
 
-                modifyFirmRequest({ variables: { account_id: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
+                modifyFirmRequest({ variables: { accountId: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
               })
               .catch((err) => { noticeUserError('FirmModifyProvider(uploadImage -> error)', err?.message, user) });
           }

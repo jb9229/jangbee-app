@@ -132,7 +132,7 @@ export default class GPSSearchScreen extends React.Component
       isComponentMountComplete: false,
       isSearchViewMode: true,
       isLocalSearch: false,
-      currLocation: '수신된 위치 정보가 없습니다',
+      currLocation: '수신된 위치 정보가 없습니다, 지역검색 하세요',
       searEquipment: '크레인',
       searEquiModel: '10톤',
       searSido: '서울',

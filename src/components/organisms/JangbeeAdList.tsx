@@ -1,10 +1,10 @@
 import { AdLocation, AdType } from 'src/container/ad/types';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, StyleSheet, View } from 'react-native';
 
 import { ADS } from 'src/api/queries';
 import { AdMobBanner } from 'expo-ads-admob';
 import BugReport from 'organisms/BugReport';
-import FirmDetailModal from 'templates/FirmDetailModal';
+import FirmDetailModal from 'src/components/templates/FirmDetailModal';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JangbeeAd from 'molecules/JangbeeAd';
 import React from 'react';
@@ -19,6 +19,7 @@ interface StyledProps {
 }
 const Container = styled.View<StyledProps>`
   min-height: 200px;
+  height: ${(Dimensions.get('window').width - 20) * 0.75};
   max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
 `;
 const StyledSwiper = styled(Swiper)`

@@ -1,5 +1,6 @@
-import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+
+import React from 'react';
 import fonts from 'constants/Fonts';
 
 const styles = StyleSheet.create({
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
   responsiveImage: {
     aspectRatio: 4 / 3,
     width: '100%',
-    height: '100%',
+    height: 500,
     maxWidth: 800,
     maxHeight: 600,
     resizeMode: 'contain'

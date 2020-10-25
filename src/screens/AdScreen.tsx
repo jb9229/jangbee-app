@@ -4,7 +4,7 @@ import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-n
 
 import AdUpdateModal from 'templates/AdUpdateModal';
 import { DefaultNavigationProps } from 'src/types';
-import FirmDetailModal from 'templates/FirmDetailModal';
+import FirmDetailModal from 'src/components/templates/FirmDetailModal';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
 import JangbeeAd from 'molecules/JangbeeAd';

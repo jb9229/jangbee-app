@@ -8,7 +8,7 @@ import ClientEstimateFirmModal from 'templates/ClientEstimateFirmModal';
 import ClientMatchedWorkList from 'organisms/ClientMatchedWorkList';
 import ClientOpenWorkList from 'organisms/ClientOpenWorkList';
 import { DefaultNavigationProps } from 'src/types';
-import FirmDetailModal from 'templates/FirmDetailModal';
+import FirmDetailModal from 'src/components/templates/FirmDetailModal';
 import JBButton from 'molecules/JBButton';
 import WorkUpdateModal from 'templates/WorkUpdateModal';
 import colors from 'constants/Colors';

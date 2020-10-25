@@ -97,9 +97,34 @@ export const ADS = gql`
 /***********************
  * Firm Queries
  ***********************/
+export const Firm = gql`
+  query Firm($accountId: String!) {
+    firm(accountId: $accountId) {
+      accountId
+      thumbnail
+      fname
+      equiListStr
+      distance
+      address
+      addressDetail
+      modelYear
+      workAlarmSido
+      workAlarmSigungu
+      introduction
+      photo1
+      photo2
+      photo3
+      sns
+      homepage
+      blog
+    }
+  }
+`;
+
 export const Firms = gql`
   query Firms ($searchFirmParams: SearchFirmParams) {
     firms(searchFirmParams: $searchFirmParams) {
+      accountId
       thumbnail
       fname
       equiListStr

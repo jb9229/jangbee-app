@@ -7,6 +7,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
 const httpLink = new HttpLink({
   uri: 'https://jangbeecall-dev.azurewebsites.net/graphql'
+  // uri: 'http://localhost:4000/graphql'
 });
 
 // const wsLink = new WebSocketLink({

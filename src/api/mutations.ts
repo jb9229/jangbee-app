@@ -8,16 +8,16 @@ export const CREATE_FIRM = gql`
   }
 `;
 export const UPDATE_FIRM = gql`
-  mutation updateFirm($account_id: String!, $updateFirm: FirmUpdateInput) {
-    updateFirm(account_id: $account_id, updateFirm: $updateFirm) { 
+  mutation updateFirm($accountId: String!, $updateFirm: FirmUpdateInput) {
+    updateFirm(accountId: $accountId, updateFirm: $updateFirm) { 
       fname
     }
   }
 `;
 
 export const DELETE_FIRM = gql`
-  mutation deleteFirm($account_id: String!) {
-    deleteFirm(account_id: $account_id)
+  mutation deleteFirm($accountId: String!) {
+    deleteFirm(accountId: $accountId)
   }
 `;
 
