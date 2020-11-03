@@ -9,7 +9,7 @@ import {
 import JBIcon from 'atoms/JBIcon';
 import { Rating } from 'react-native-elements';
 import React from 'react';
-import callLink from 'common/CallLink';
+import {callSearchFirm} from 'common/CallLink';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 
@@ -124,7 +124,7 @@ console.log('>> firmitem:', item)
             name="call"
             size={32}
             color={colors.point}
-            onPress={() => callLink(item.phoneNumber)}
+            onPress={() => callSearchFirm(item.phoneNumber)}
           />
         </View>
         <Text style={styles.intrText} numberOfLines={1}>

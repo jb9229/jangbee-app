@@ -10,12 +10,12 @@ import styled from 'styled-components/native';
 import { useQuery } from '@apollo/client';
 
 const Container = styled.View`
-  max-height: 500px;
   height: ${(Dimensions.get('window').width - 20) * 0.75};
+  max-height: ${(800) * 0.75};
 `;
 
 const Slide = styled.View`
-  flex: 1;
+  /* flex: 1; */
 `;
 
 const ApolloWebTest: React.FC = (): React.ReactElement =>

@@ -1,10 +1,10 @@
-import { Alert, Dimensions, Linking, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 import AdImage from 'molecules/AdImage';
 import { AdLocation } from 'src/container/ad/types';
 import JBIcon from 'atoms/JBIcon';
-import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import React from 'react';
+import { callAdFirm } from 'src/common/CallLink';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
@@ -18,13 +18,12 @@ const Container = styled.View<StyledProps>`
   width: 100%;
   height: ${(Dimensions.get('window').width - 20) * 0.75};
   align-items: center;
-  max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
+  max-height: ${(props): number => props.adLocation === AdLocation.MAIN ? 800 * 0.75 : 500 * 0.75};
 `;
-const AdImgBg = styled.ImageBackground`
-  width: 100%;
-  height: ${(Dimensions.get('window').width - 20) * 0.75};
-  max-width: 1600px;
-  max-height: 500px;
+const AdImgBg = styled.ImageBackground<StyledProps>`
+  width: ${Dimensions.get('window').width >= 1600 ? 1600 : Dimensions.get('window').width};
+  height: ${(props): number => Dimensions.get('window').width > 800 ? props.adLocation === AdLocation.MAIN
+    ? (800 * 0.75) : (500 * 0.75) : Dimensions.get('window').width * 0.75};
 `;
 const TitleWrap = styled.View`
   flex: 3;
@@ -47,7 +46,8 @@ const BottomWrap = styled.View`
 const styles = StyleSheet.create({
   bgAdWrap: {
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    width: '100%'
   },
   titleText: {
     color: 'white',
@@ -112,31 +112,36 @@ const JangbeeAd: React.FC<Props> = ({ ad, openFirmDetail, adLocation }) => (
   <Container adLocation={adLocation}>
     {ad.photoUrl === null || ad.photoUrl === '' ? (
       <View style={styles.bgAdWrap}>
-        <AdImage title={ad.title} value={ad.photoUrl} />
-        <View style={styles.bottomWrap}>
-          <View style={styles.subTitleWrap}>
-            <Text style={styles.subTitleText}>{ad.subTitle}</Text>
-          </View>
-          <TelIconWrap isMultiIcon={ad.accountId}>
-            {ad.accountId ? (
-              <JBIcon
-                name="information-circle"
-                size={40}
-                color={colors.point2}
-                onPress={() => openFirmDetail(ad.accountId)}
-              />
-            ) : null}
-            <JBIcon
-              name="call"
-              size={40}
-              color={colors.point}
-              onPress={() => telAdvertiser(ad.telNumber)}
-            />
-          </TelIconWrap>
-        </View>
+        <TitleWrap>
+          <Text style={styles.titleText}>{ad.title}</Text>
+        </TitleWrap>
+        <Contents>
+          <BottomWrap>
+            <View style={styles.subTitleWrap}>
+              <Text style={styles.subTitleText}>{ad.subTitle}</Text>
+            </View>
+            <TelIconWrap isMultiIcon={ad.accountId}>
+              {ad.accountId ? (
+                <JBIcon
+                  name="information-circle"
+                  size={40}
+                  color={colors.point2}
+                  onPress={() => openFirmDetail(ad.accountId)}
+                />
+              ) : null}
+              {ad.telNumber && (
+                <JBIcon
+                  name="call"
+                  size={40}
+                  color={colors.point}
+                  onPress={() => callAdFirm(ad.telNumber)}
+                />)}
+            </TelIconWrap>
+          </BottomWrap>
+        </Contents>
       </View>
     ) : (
-      <AdImgBg source={{ uri: ad.photoUrl }}>
+      <AdImgBg adLocation={adLocation} source={{ uri: ad.photoUrl }} resizeMode="cover">
         <View style={styles.bgAdWrap}>
           <TitleWrap>
             <Text style={styles.titleText}>{ad.title}</Text>
@@ -159,7 +164,7 @@ const JangbeeAd: React.FC<Props> = ({ ad, openFirmDetail, adLocation }) => (
                   name="call"
                   size={40}
                   color={colors.pointDark}
-                  onPress={() => telAdvertiser(ad.telNumber)}
+                  onPress={() => callAdFirm(ad.telNumber)}
                 />
               </TelIconWrap>
             </BottomWrap>

@@ -20,10 +20,10 @@ interface StyledProps {
 const Container = styled.View<StyledProps>`
   min-height: 200px;
   height: ${(Dimensions.get('window').width - 20) * 0.75};
-  max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
+  max-height: ${(props): number => props.adLocation === AdLocation.MAIN ? 800 * 0.75 : 500 * 0.75};
 `;
 const StyledSwiper = styled(Swiper)`
-  max-height: ${(props) => props.adLocation === AdLocation.MAIN ? '500px' : '300px'};
+  max-height: ${(props): number => props.adLocation === AdLocation.MAIN ? 800 * 0.75 : 500 * 0.75};
 `;
 
 const styles = StyleSheet.create({
@@ -61,7 +61,7 @@ const JangbeeAdList: React.FC<Props> = (props) =>
     const veriables =
     {
       adType: AdType.SEARCH_EQUIPMENT_FIRST,
-      adLocation: 0,
+      adLocation: props.adLocation,
       equiTarget: props.euqiTarget,
       sidoTarget: props.sidoTarget,
       gugunTarget: props.gugunTarget
@@ -140,7 +140,7 @@ console.log('>>> adList: ', adList)
   ));
   console.log('>>> adViewList: ', adViewList)
   return (
-    <Container AdLocation={props.adLocation}>
+    <Container adLocation={props.adLocation}>
       <StyledSwiper
         style={styles.wrapper}
         autoplay={true}

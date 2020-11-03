@@ -90,6 +90,7 @@ export const ADS = gql`
       title
       subTitle
       photoUrl
+      telNumber
     }
   }
 `;

@@ -7,7 +7,7 @@ import JBEmptyView from 'organisms/JBEmptyView';
 import WorkCommText from 'molecules/WorkCommTextUI';
 import WorkCommWrap from 'molecules/WorkCommWrapUI';
 import WorkItem from 'organisms/WorkItem';
-import callLink from 'common/CallLink';
+import {callSearchFirm} from 'common/CallLink';
 import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
 
 const FirmMatchedWorkList = (): React.ReactElement =>
@@ -34,7 +34,7 @@ const FirmMatchedWorkList = (): React.ReactElement =>
                 ? '전화걸기(배차 시작됨)'
                 : '전화걸기'
             }
-            onPress={(): void => callLink(item.phoneNumber)}
+            onPress={(): void => callSearchFirm(item.phoneNumber)}
             size="small"
           />
         )}

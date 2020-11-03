@@ -8,7 +8,7 @@ import { Firm } from 'src/api/queries';
 import FirmInfoItem from 'organisms/FirmInfoItem';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
-import callLink from 'common/CallLink';
+import {callSearchFirm} from 'common/CallLink';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
@@ -150,7 +150,7 @@ console.log('>>> firm:', firm);
           <View style={styles.callButWrap}>
             <JBButton
               title="전화걸기"
-              onPress={() => callLink(firm.phoneNumber, true)}
+              onPress={() => callSearchFirm(firm.phoneNumber, true)}
               size="full"
               Primary
             />
