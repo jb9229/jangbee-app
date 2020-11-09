@@ -6,6 +6,7 @@ import {
   View
 } from 'react-native';
 
+import { Firm } from 'storybook/provider/LoginStorybookProvider';
 import JBIcon from 'atoms/JBIcon';
 import { Rating } from 'react-native-elements';
 import React from 'react';
@@ -81,7 +82,8 @@ const styles = StyleSheet.create({
 });
 
 function calDistance(dis) {
-  if (!dis) {
+  if (!dis)
+  {
     return '';
   }
 
@@ -94,22 +96,28 @@ function calDistance(dis) {
   return `${kmValue}km`;
 }
 
-const firmListItem = props => {
-  const { item, onPressItem } = props;
-console.log('>> firmitem:', item)
+interface Props{
+  isLocalSearch: boolean;
+  item: Firm;
+  onPressItem: (id: string) => void;
+}
+
+const firmListItem: React.FC<Props> = (props) =>
+{
+console.log('>>> firmListItem:', props.item);
   return (
     <View style={styles.itemWrap}>
       <View style={styles.leftWrap}>
-        <Image style={styles.avatar} source={{ uri: item.thumbnail }} />
-        {item.rating ? (
+        <Image style={styles.avatar} source={{ uri: props.item.thumbnail }} />
+        {props.item.rating ? (
           <View style={styles.ratingWrap}>
             <Rating
               imageSize={10}
               readonly
-              startingValue={item.rating}
+              startingValue={props.item.rating}
               style={styles.rating}
             />
-            <Text style={styles.ratingText}>({item.ratingCnt})</Text>
+            <Text style={styles.ratingText}>({props.item.ratingCnt})</Text>
           </View>
         ) : (
           <Text style={styles.noneRatingText}>후기없음</Text>
@@ -117,24 +125,28 @@ console.log('>> firmitem:', item)
       </View>
       <View style={styles.centerWrap}>
         <View style={styles.topWrap}>
-          <TouchableHighlight onPress={() => onPressItem(item.accountId)}>
-            <Text style={styles.fnameText}>{item.fname}</Text>
+          <TouchableHighlight onPress={() => props.onPressItem(props.item.accountId)}>
+            <Text style={styles.fnameText}>{props.item.fname}</Text>
           </TouchableHighlight>
           <JBIcon
             name="call"
             size={32}
             color={colors.point}
-            onPress={() => callSearchFirm(item.phoneNumber)}
+            onPress={(): void => callSearchFirm(props.item.phoneNumber)}
           />
         </View>
         <Text style={styles.intrText} numberOfLines={1}>
-          {item.introduction}
+          {props.item.introduction}
         </Text>
         <View style={styles.bottomWrap}>
-          <Text style={styles.bottomText}>{`${item.equiListStr}(${
-            item.modelYear
+          <Text style={styles.bottomText}>{`${props.item.equiListStr}(${
+            props.item.modelYear
           }년식)`}</Text>
-          <Text style={styles.bottomText}>{calDistance(item.distance)}</Text>
+          {props.isLocalSearch ? (
+            <Text style={styles.bottomText}>{props.item.address}</Text>
+          ) : (
+            <Text style={styles.bottomText}>{calDistance(props.item.distance)}</Text>
+          )}
         </View>
       </View>
     </View>

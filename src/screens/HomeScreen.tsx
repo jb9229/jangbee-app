@@ -6,7 +6,6 @@ import { DefaultNavigationProps } from 'src/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JangbeeAdList from 'organisms/JangbeeAdList';
-import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
 import { onPressBackbutton } from 'src/container/action';
 import styled from 'styled-components/native';

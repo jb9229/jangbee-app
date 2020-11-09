@@ -40,7 +40,7 @@
         }
       ]
     },
-    "description": "",
+    "description": "건설 중장비 콜 서비스입니다",
     "isDetached": true,
     "android": {
       "package": "com.kan.jangbeecall",

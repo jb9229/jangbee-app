@@ -30,6 +30,30 @@ export const FirmCreateValidScheme = yup.object({
     .min(1, `[photo1]${getString('VALIDATION_NUMBER_INVALID')}`)
 });
 
+export interface Firm
+{
+  fname: string;
+  phoneNumber: string;
+  equiListStr: string;
+  modelYear: number;
+  address: string;
+  addressDetail: string;
+  sidoAddr: string;
+  sigunguAddr: string;
+  addrLongitude: string;
+  addrLatitude: string;
+  workAlarmSido: string;
+  workAlarmSigungu: string;
+  introduction: string;
+  thumbnail: string;
+  photo1: string;
+  photo2: string;
+  photo3: string;
+  blog: string;
+  homepage: string;
+  sns: string;
+}
+
 export class FirmCreateDto
 {
   fname: string;
@@ -60,7 +84,7 @@ export class FirmCreateDto
 
 export class FirmCreateErrorData
 {
-  constructor ()
+  constructor()
   {
     this.fname = '';
     this.phoneNumber = '';

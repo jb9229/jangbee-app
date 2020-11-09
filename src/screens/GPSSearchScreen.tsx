@@ -20,6 +20,7 @@ import JBIcon from 'atoms/JBIcon';
 import JBSelectBox from 'organisms/JBSelectBox';
 import { PickerItem } from 'src/types';
 import React from 'react';
+import SolidButton from 'atoms/button/SolidButton';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
@@ -119,6 +120,11 @@ const ScrollImage = styled.Image`
   width: 35;
   height: 22;
 `;
+const SearchButton = styled(SolidButton).attrs(() => ({
+  rootStyle: {
+    marginTop: 20
+  }
+}))``;
 
 export default class GPSSearchScreen extends React.Component
 {
@@ -488,20 +494,14 @@ console.log('=== gps: ', location);
             <View style={styles.commWrap}>
               <FirmCreaErrMSG errorMSG={validationMessage} />
               {isLocalSearch ? (
-                <JBButton
-                  title="지역 검색하기"
+                <SearchButton
+                  text="지역 검색하기"
                   onPress={() => this.validateSearLocFirm()}
-                  size="full"
-                  bgColor={colors.point2}
-                  color="white"
                 />
               ) : (
-                <JBButton
-                  title="내 주변 검색하기"
-                  onPress={() => this.validateSearNearFirm()}
-                  size="full"
-                  bgColor={colors.point2}
-                  color="white"
+                <SearchButton
+                  text="내 주변 검색하기"
+                  onPress={(): void => this.validateSearNearFirm()}
                 />
               )}
             </View>

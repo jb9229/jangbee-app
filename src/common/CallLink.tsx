@@ -5,8 +5,9 @@ import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 /**
  * 업체 전화연결 함수
  */
-export const callSearchFirm = (number, calleeIsFirm) =>
+export const callSearchFirm = (number) =>
 {
+  console.log('=== callSearchFirm: ', number)
   if (number === null || number === '')
   {
     return;

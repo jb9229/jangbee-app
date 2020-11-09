@@ -1,5 +1,4 @@
-import { AdLocation, AdType } from 'src/container/ad/types';
-
+import { AdLocation } from 'src/container/ad/types';
 import Card from 'molecules/CardUI';
 import CloseButton from 'molecules/CloseButton';
 import FirmSearList from 'organisms/FirmSearList';
@@ -7,7 +6,6 @@ import { Firms } from 'src/api/queries';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import { Modal } from 'react-native';
 import React from 'react';
-import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
 import styled from 'styled-components/native';
 import { useLazyQuery } from '@apollo/client';
@@ -74,10 +72,9 @@ const FirmSearListModal: React.FC<Props> = (props) =>
       }
     };
 
-    console.log('>>> variables:', variables);
     searchFirmReq({ variables });
   }, [props.searEquipment, props.searEquiModel, props.searLatitude, props.searLongitude, props.visible]);
-console.log('>>> searchFirmRsp.data?.firms:', searchFirmRsp.data?.firms);
+
   return (
     <Modal
       animationType="slide"
@@ -98,6 +95,7 @@ console.log('>>> searchFirmRsp.data?.firms:', searchFirmRsp.data?.firms);
         </TopWrap>
         <ItemWrapper>
           <FirmSearList
+            isLocalSearch={props.isLocalSearch}
             data={searchFirmRsp.data?.firms || []}
             page={page}
             refreshing={refreshing}

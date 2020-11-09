@@ -126,11 +126,14 @@ export const Firms = gql`
   query Firms ($searchFirmParams: SearchFirmParams) {
     firms(searchFirmParams: $searchFirmParams) {
       accountId
+      phoneNumber
       thumbnail
       fname
       equiListStr
       distance
       modelYear
+      address
+      addressDetail
     }
   }
 `;

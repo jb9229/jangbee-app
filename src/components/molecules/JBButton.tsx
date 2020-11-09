@@ -122,15 +122,15 @@ const Text = styled.Text`
 `;
 
 interface Props {
-  size?: string;
   title: string;
-  underline: boolean;
-  color: string;
-  bgColor: string;
-  align: string;
-  Secondary: boolean;
-  Primary: boolean;
-  nonemargin: boolean;
+  size?: string;
+  underline?: boolean;
+  color?: string;
+  bgColor?: string;
+  align?: string;
+  Secondary?: boolean;
+  Primary?: boolean;
+  nonemargin?: boolean;
   onPress: () => void;
 }
 const JBButton: React.FC<Props> = (props) =>

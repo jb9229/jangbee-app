@@ -35,6 +35,7 @@ export class Firm
   homepage: string;
   sns: string;
   ratingCnt: number;
+  distance: number;
 }
 
 class LoadingModalData
