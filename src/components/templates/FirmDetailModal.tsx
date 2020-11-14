@@ -8,7 +8,7 @@ import { Firm } from 'src/api/queries';
 import FirmInfoItem from 'organisms/FirmInfoItem';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
-import {callSearchFirm} from 'common/CallLink';
+import { callSearchFirm } from 'common/CallLink';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
@@ -28,6 +28,11 @@ const StyledScrollView = styled(ScrollView).attrs((props) => ({
   }
 }))`
   flex: 1;
+`;
+
+const CallButWrap = styled.View`
+  background-color: ${colors.batangLight};
+  padding-bottom: 10px;
 `;
 
 const styles = StyleSheet.create({
@@ -88,10 +93,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 30
-  },
-  callButWrap: {
-    backgroundColor: colors.batangLight,
-    paddingBottom: '10px'
   }
 });
 
@@ -147,14 +148,14 @@ console.log('>>> firm:', firm);
         </View>
 
         {!props.hideCallButton && (
-          <View style={styles.callButWrap}>
+          <CallButWrap>
             <JBButton
               title="전화걸기"
               onPress={() => callSearchFirm(firm.phoneNumber, true)}
               size="full"
               Primary
             />
-          </View>
+          </CallButWrap>
         )}
       </Container>
     </Modal>

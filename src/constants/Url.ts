@@ -6,20 +6,15 @@
 // const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
 // const SERVER_URL = 'http://10.0.2.2:8080/api/v1/';
 const SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
-const OPENBANK_URL = 'https://testapi.open-platform.or.kr';
-const NODE_SERVER_URL_PROD = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
-const NODE_SERVER_URL_DEV = 'https://jangbeecall-dev.azurewebsites.net/graphql';
+const NODE_SERVER_URL_PROD = 'https://jangbeecall-dev.azurewebsites.net/graphql';
 // const NODE_SERVER_URL_LOCAL = 'http://10.0.2.2:4000/graphql';
 const NODE_SERVER_URL_LOCAL = 'http://localhost:4000/graphql';
 console.log('>>> process.env: ', process.env);
 console.log('>>> SLUG: ', process.env.BUILD_TYPE);
-export const NODE_SERVER_URL = process.env.BUILD_TYPE === 'local'
-  ? NODE_SERVER_URL_LOCAL : process.env.BUILD_TYPE === 'dev' ? NODE_SERVER_URL_DEV
-    : NODE_SERVER_URL_PROD;
-export const NODE_SERVER_WEBSOCKET_URL = 'ws://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com:4000/graphql';
+export const NODE_SERVER_URL = process.env.BUILD_TYPE === 'prod' ? NODE_SERVER_URL_PROD : NODE_SERVER_URL_LOCAL;
+
 // export const NODE_SERVER_WEBSOCKET_URL = 'ws://10.0.2.2:4000/graphql';
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
-console.log('>>> NODE_SERVER_WEBSOCKET_URL: ', NODE_SERVER_WEBSOCKET_URL);
 
 const url = {
   IMAGE_STORAGE: `${SERVER_URL}common/image`,
@@ -59,14 +54,6 @@ const url = {
   JBSERVER_CASHBACK: `${SERVER_URL}cashback`,
   JBSERVER_STAT: `${SERVER_URL}stat`,
   KAKAO_GEO_API: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json',
-  OPENBANK_AUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize2`,
-  OPENBANK_REAUTHORIZE2: `${OPENBANK_URL}/oauth/2.0/authorize_account2`,
-  OPENBANK_TOKEN: `${OPENBANK_URL}/oauth/2.0/token`,
-  OPENBANK_ACCOUNTLIST: `${OPENBANK_URL}/v1.0/account/list`,
-  OPENBANK_BALANCE: `${OPENBANK_URL}/v1.0/account/balance`,
-  OPENBANK_USERINFO: `${OPENBANK_URL}/v1.0/user/me`,
-  OPENBANK_WITHDRAW: `${OPENBANK_URL}/v1.0/transfer/withdraw`,
-  OPENBANK_DEPOSIT: `${OPENBANK_URL}/v1.0/transfer/deposit`,
   TERM_SERVICE: 'https://jb9229.github.io/jangbeecall-doc/serviceTerms.html',
   TERM_SECURITY: 'https://jb9229.github.io/jangbeecall-doc/privacy.html',
   TERM_USEINFO: 'https://jb9229.github.io/jangbeecall-doc/UseInfomation.html',

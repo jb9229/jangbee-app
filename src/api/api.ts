@@ -1,5 +1,4 @@
 import * as kakaoconfig from '../../kakao-config';
-import * as obconfig from '../../openbank-config';
 
 import {
   handleJBServerJsonResponse,
@@ -7,36 +6,14 @@ import {
   handleTextResponse
 } from 'utils/Fetch-utils';
 
-import moment from 'moment';
 import { noticeUserError } from 'src/container/request';
 /* eslint-disable @typescript-eslint/camelcase */
 import url from 'src/constants/Url';
-
-/** ******************** Jangbee Sever Account  Api List ************************** */
-export function deleteFirmAccount (accountId)
-{
-  return fetch(`${url.JBSERVER_ACCOUNT}?accountId=${accountId}`, {
-    method: 'DELETE',
-    headers: {}
-  }).then(handleJBServerJsonResponse);
-}
 
 /** ******************** Jangbee Sever Firm  Api List ************************** */
 export function getEquipList ()
 {
   return fetch(url.JBSERVER_EQUILIST).then(handleJBServerJsonResponse);
-}
-
-export function createFirm (newFirm)
-{
-  return fetch(url.JBSERVER_FIRM, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newFirm)
-  }).then(handleJBServerJsonResponse);
 }
 
 export function getFirm (accountId)
@@ -661,148 +638,4 @@ export function getFirmCountChart (equipment)
   return fetch(`${url.JBSERVER_STAT}?equipment=${equipment}`).then(
     handleJBServerJsonResponse
   );
-}
-
-/** ******************** Open Bank Api List ************************** */
-
-/**
- * 토큰작성 함수
- * @param {Object} openBankAuthInfo 토큰정보
- */
-function getAccessToken (accessToken)
-{
-  const headerAuth = `Bearer ${accessToken}`;
-
-  return headerAuth;
-}
-
-/**
- * 등록된 계좌목록 조회 함수
- * @param {Object} accessTokenInfo 접근 토큰
- * @param {string} userSeqNo 사용자일련번호
- * @param {string} isInclCancAccount 해지계좌포함여부 (Y:해지계좌포함, N:해지계좌불포함)
- * @param {string} sort 정렬순서 (D:Descending, A:Ascending)
- */
-export function getOBAccList (
-  accessTokenInfo,
-  userSeqNo,
-  isInclCancAccount,
-  sort
-)
-{
-  return fetch(
-    `${url.OPENBANK_ACCOUNTLIST}?user_seq_no=${encodeURIComponent(
-      userSeqNo
-    )}&include_cancel_yn=${encodeURIComponent(
-      isInclCancAccount
-    )}&sort_order=${encodeURIComponent(sort)}`,
-    {
-      headers: {
-        Authorization: getAccessToken(accessTokenInfo)
-      }
-    }
-  ).then(handleJBServerJsonResponse);
-}
-
-export function getOBAccBalance (accessTokenInfo, fintechUseNum)
-{
-  const tranDTime = moment().format('YYYYMMDDHHmmss');
-
-  return fetch(
-    `${url.OPENBANK_BALANCE}?fintech_use_num=${encodeURIComponent(
-      fintechUseNum
-    )}&tran_dtime=${encodeURIComponent(tranDTime)}`,
-    {
-      headers: {
-        Authorization: getAccessToken(accessTokenInfo)
-      }
-    }
-  ).then(handleJBServerJsonResponse);
-}
-
-/**
- * 오픈뱅크 토큰재인증 함수
- *
- * @param {*} refreshToken refresh 토큰
- */
-export function refreshOpenBankAuthToken (refreshToken)
-{
-  const paramData = {
-    client_id: obconfig.client_id,
-    client_secret: obconfig.secret,
-    refresh_token: refreshToken,
-    scope: 'login inquiry transfer',
-    grant_type: 'refresh_token'
-  };
-
-  return fetch(
-    `${url.OPENBANK_TOKEN}?
-    client_id=${encodeURIComponent(paramData.client_id)}
-    &client_secret=${encodeURIComponent(paramData.client_secret)}
-    &refresh_token=${encodeURIComponent(paramData.refresh_token)}
-    &scope=${encodeURIComponent(paramData.scope)}
-    &grant_type=${encodeURIComponent(paramData.grant_type)}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    }
-  ).then(handleJBServerJsonResponse);
-}
-
-export function transferWithdraw (
-  accessTokenInfo,
-  fintechUseNum,
-  tranAmt,
-  comment
-)
-{
-  const postData = {
-    dps_print_content: comment || '장비콜 출금',
-    fintech_use_num: fintechUseNum,
-    tran_amt: tranAmt,
-    tran_dtime: moment().format('YYYYMMDDHHmmss')
-  };
-
-  return fetch(url.OPENBANK_WITHDRAW, {
-    method: 'POST',
-    headers: {
-      Authorization: getAccessToken(accessTokenInfo),
-      'Content-Type': 'application/json; charset=UTF-8'
-    },
-    body: JSON.stringify(postData)
-  }).then(handleJBServerJsonResponse);
-}
-
-export function transferDeposit (
-  accessTokenInfo,
-  fintechUseNum,
-  tranAmt,
-  wdComment,
-  comment
-)
-{
-  const postData = {
-    wd_pass_phrase: obconfig.WD_PASS_PHRASE,
-    wd_print_content: wdComment,
-    name_check_option: 'on',
-    req_cnt: '1',
-    req_list: {
-      tran_no: 1,
-      fintech_use_num: fintechUseNum,
-      print_content: comment || '장비콜 환불',
-      tran_amt: tranAmt
-    },
-    tran_dtime: moment().format('YYYYMMDDHHmmss')
-  };
-
-  return fetch(url.OPENBANK_DEPOSIT, {
-    method: 'POST',
-    headers: {
-      Authorization: getAccessToken(accessTokenInfo),
-      'Content-Type': 'application/json; charset=UTF-8'
-    },
-    body: JSON.stringify(postData)
-  }).then(handleJBServerJsonResponse);
 }

@@ -10,7 +10,6 @@ import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
 
 const ChartWrap = styled.View`
-  flex: 1;
   height: 395;
 `;
 

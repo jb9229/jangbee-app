@@ -124,35 +124,6 @@ export const uploadImage = async (dto: FirmCreateDto, popLoading): Promise<boole
   return uploaded;
 };
 
-export const requestAddFirm = (uid: string, dto: FirmCreateDto): Promise<boolean> =>
-{
-  const newFirm = {
-    accountId: uid,
-    fname: dto.fname,
-    phoneNumber: dto.phoneNumber,
-    equiListStr: dto.equiListStr,
-    modelYear: dto.modelYear,
-    address: dto.address,
-    addressDetail: dto.addressDetail,
-    sidoAddr: dto.sidoAddr,
-    sigunguAddr: dto.sigunguAddr,
-    addrLongitude: dto.addrLongitude,
-    addrLatitude: dto.addrLatitude,
-    workAlarmSido: dto.workAlarmSido,
-    workAlarmSigungu: dto.workAlarmSigungu,
-    introduction: dto.introduction,
-    thumbnail: dto.uploadedThumbnailUrl,
-    photo1: dto.uploadedPhoto1Url,
-    photo2: dto.uploadedPhoto2Url,
-    photo3: dto.uploadedPhoto3Url,
-    blog: dto.blog,
-    homepage: dto.homepage,
-    sns: dto.sns
-  };
-
-  return api.createFirm(newFirm);
-};
-
 export const requestModifyFirm = (uid: string, firmId: string, dto: FirmCreateDto): Promise<boolean> =>
 {
   const updateFirm = {

@@ -105,39 +105,6 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
   /**
    * 회원 탈퇴 요청
    */
-  const deleteJBData = () =>
-  {
-    api
-      .deleteFirmAccount(user.uid)
-      .then(result =>
-      {
-        console.log('>>> JBSeerver deleteFirmAccount response: ', result);
-        if (!result)
-        {
-          Alert.alert(
-            '회원 탈퇴에 문제가 있습니다',
-            '서버 데이터 삭제에 실패 했습니다, 죄송합니다, 관리자에게 문의 부탁 드립니다(응답값: false)'
-          );
-        }
-        else
-        {
-          deletFirmRequest({ variables: { accountId: user.uid } });
-        }
-      })
-      .catch(error =>
-      {
-        Alert.alert(
-          '회원 탈퇴에 문제가 있습니다',
-          `서버 데이터 삭제에 실패 했습니다, 죄송합니다, 관리자에게 문의 부탁 드립니다(응답: ${
-            error.message
-          })`
-        );
-      });
-  };
-
-  /**
-   * 회원 탈퇴 요청
-   */
   const deleteUser = (): void =>
   {
     // Delete Firebase User
@@ -153,7 +120,7 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
           .remove()
           .then(() =>
           {
-            deleteJBData();
+            deletFirmRequest({ variables: { accountId: user.uid } });
           })
           .catch(error =>
           {

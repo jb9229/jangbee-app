@@ -35,9 +35,7 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
     {
       if (data && data.createFirm)
       {
-        requestAddFirm(user.uid, firmDto)
-          .then((result) => { console.log('>>> jb requestAddFirm result:', result); if (result) { refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'Register' }) } })
-          .catch((err): void => { noticeUserError('FirmRegisterProvider(requestAddFirm -> error)', err?.message, user) });
+        refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'Register' });
       }
       else
       {

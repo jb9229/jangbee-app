@@ -1,19 +1,20 @@
-import React from 'react';
 import {
   Alert,
   LayoutAnimation,
-  ScrollView,
   Modal,
+  Platform,
+  ScrollView,
   StyleSheet,
-  View,
   UIManager,
-  Platform
+  View
 } from 'react-native';
-import colors from 'constants/Colors';
+
 import CloseButton from 'molecules/CloseButton';
-import JangbeeAdList from 'organisms/JangbeeAdList';
 import ExpandableItem from 'organisms/ExpandableItem';
 import JBButton from 'molecules/JBButton';
+import JangbeeAdList from 'organisms/JangbeeAdList';
+import React from 'react';
+import colors from 'constants/Colors';
 
 const SIGUNGU_MAX_COUNT = 5;
 const SIDO_MAX_COUNT = 3;
@@ -38,29 +39,36 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class EquipementModal extends React.Component {
-  constructor(props) {
+export default class EquipementModal extends React.Component
+{
+  constructor(props)
+  {
     super(props);
     this.state = {
       listDataSource: ADD_CONTENT,
       selSidoArr: [],
       selSigunguArr: []
     };
-    if (Platform.OS === 'android') {
+    if (Platform.OS === 'android')
+    {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps)
+  {
     const { isVisibleModal } = nextProps;
     const { listDataSource } = this.state;
 
-    if (isVisibleModal) {
-      listDataSource.forEach(data => {
+    if (isVisibleModal)
+    {
+      listDataSource.forEach(data =>
+      {
         const localData = data;
         localData.isExpanded = false;
         localData.isChecked = false;
-        data.subcategory.forEach(subData => {
+        data.subcategory.forEach(subData =>
+        {
           const sigungu = subData;
           sigungu.isChecked = false;
         });
@@ -70,7 +78,8 @@ export default class EquipementModal extends React.Component {
     }
   }
 
-  completeSelLocal = (item, gugun) => {
+  completeSelLocal = (item, gugun) =>
+  {
     const { completeSelLocal, closeModal } = this.props;
 
     completeSelLocal(item.category_name, gugun);
@@ -80,8 +89,10 @@ export default class EquipementModal extends React.Component {
   /**
    * 지역선택 유효성검사 함수
    */
-  validateSelLocal = item => {
-    if (item.isChecked) {
+  validateSelLocal = item =>
+  {
+    if (item.isChecked)
+    {
       Alert.alert(
         '시군구를 선택할 수 없습니다',
         '시도 전체선택을 해제 후, 시군구을 선택해 주세요.'
@@ -92,14 +103,16 @@ export default class EquipementModal extends React.Component {
     return true;
   };
 
-  cancel = () => {
+  cancel = () =>
+  {
     const { nextFocus, closeModal } = this.props;
 
     nextFocus();
     closeModal();
   };
 
-  updateLayout = index => {
+  updateLayout = index =>
+  {
     const { listDataSource } = this.state;
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...listDataSource];
@@ -111,18 +124,21 @@ export default class EquipementModal extends React.Component {
     }));
   };
 
-  updateCheck = index => {
+  updateCheck = index =>
+  {
     const { multiSelect } = this.props;
     const { listDataSource, selSidoArr } = this.state;
 
-    if (!multiSelect) {
+    if (!multiSelect)
+    {
       this.completeSelLocal(listDataSource[index], undefined);
     }
 
     const array = [...listDataSource];
     const isChecked = !array[index].isChecked;
 
-    if (isChecked && selSidoArr.length === SIDO_MAX_COUNT) {
+    if (isChecked && selSidoArr.length === SIDO_MAX_COUNT)
+    {
       Alert.alert(
         '시도를 선택할 수 없습니다',
         `최대 ${SIDO_MAX_COUNT}까지 선택 가능합니다.`
@@ -135,10 +151,13 @@ export default class EquipementModal extends React.Component {
 
     const catName = array[index].category_name;
     let newSidoArr;
-    if (isChecked) {
+    if (isChecked)
+    {
       newSidoArr = [...selSidoArr];
       newSidoArr.push(catName);
-    } else {
+    }
+    else
+    {
       newSidoArr = selSidoArr.filter(
         returnableObjects => returnableObjects !== catName
       );
@@ -150,12 +169,14 @@ export default class EquipementModal extends React.Component {
     }));
   };
 
-  updateItemCheck = (catIndex, itemIndex) => {
+  updateItemCheck = (catIndex, itemIndex) =>
+  {
     const { listDataSource, selSigunguArr } = this.state;
 
     const nextCheck = !listDataSource[catIndex].subcategory[itemIndex]
       .isChecked;
-    if (nextCheck && selSigunguArr.length === SIGUNGU_MAX_COUNT) {
+    if (nextCheck && selSigunguArr.length === SIGUNGU_MAX_COUNT)
+    {
       Alert.alert(
         '시군구를 선택할 수 없습니다',
         `최대 ${SIGUNGU_MAX_COUNT}까지 선택 가능합니다.`
@@ -171,11 +192,15 @@ export default class EquipementModal extends React.Component {
       array[catIndex].subcategory[itemIndex].val
     }`;
     let newSigunguArr;
-    if (nextCheck) {
+    if (nextCheck)
+    {
       newSigunguArr = [...selSigunguArr];
       newSigunguArr.push(sigunguName);
-    } else {
-      newSigunguArr = selSigunguArr.filter(returnableObjects => {
+    }
+    else
+    {
+      newSigunguArr = selSigunguArr.filter(returnableObjects =>
+      {
         return returnableObjects !== sigunguName;
       });
     }
@@ -186,35 +211,44 @@ export default class EquipementModal extends React.Component {
     }));
   };
 
-  selectSubCate = (group, catIndex, itemIndex) => {
+  selectSubCate = (group, catIndex, itemIndex) =>
+  {
     const { multiSelect } = this.props;
 
-    if (!this.validateSelLocal(group)) {
+    if (!this.validateSelLocal(group))
+    {
       return;
     }
 
-    if (multiSelect) {
+    if (multiSelect)
+    {
       this.updateItemCheck(catIndex, itemIndex);
-    } else {
+    }
+    else
+    {
       this.completeSelLocal(group, group.subcategory[itemIndex].val);
     }
   };
 
-  multiSelComplete = () => {
+  multiSelComplete = () =>
+  {
     const { selSidoArr, selSigunguArr } = this.state;
     const { multiSelComplte, closeModal } = this.props;
 
-    if (selSidoArr.length === 0 && selSigunguArr === 0) {
+    if (selSidoArr.length === 0 && selSigunguArr === 0)
+    {
       closeModal();
       return;
     }
 
     let sidoArrStr = '';
     let sigunguArrStr = '';
-    selSidoArr.forEach(sido => {
+    selSidoArr.forEach(sido =>
+    {
       sidoArrStr += `${sido},`;
     });
-    selSigunguArr.forEach(sigungu => {
+    selSigunguArr.forEach(sigungu =>
+    {
       sigunguArrStr += `${sigungu},`;
     });
 
@@ -222,49 +256,52 @@ export default class EquipementModal extends React.Component {
     closeModal();
   };
 
-  render() {
+  render()
+  {
     const { isVisibleModal, closeModal, actionName } = this.props;
     const { listDataSource } = this.state;
 
     return (
-      <View style={styles.container}>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={isVisibleModal}
-          onRequestClose={() => closeModal()}
-        >
-          <View style={styles.cardWrap}>
-            <View style={styles.card}>
-              <CloseButton onClose={() => this.cancel()} />
-              {!actionName && <JangbeeAdList admob {...this.props} />}
-              <ScrollView>
-                {listDataSource.map((group, key) => (
-                  <ExpandableItem
-                    key={group.category_name}
-                    onClickFunction={() => this.updateLayout(key)}
-                    onCatCheck={() => this.updateCheck(key)}
-                    item={group}
-                    completeSel={this.completeSelLocal}
-                    selectSubCate={itemIndex =>
-                      this.selectSubCate(group, key, itemIndex)
-                    }
-                    isCatSelectable
-                  />
-                ))}
-              </ScrollView>
-            </View>
-            {actionName && (
-              <JBButton
-                title={actionName}
-                onPress={this.multiSelComplete}
-                size="full"
-                Secondary
-              />
-            )}
+
+      <Modal
+        animationType="slide"
+        transparent
+        visible={isVisibleModal}
+        onRequestClose={() => closeModal()}
+      >
+        <View style={styles.cardWrap}>
+          <View style={styles.card}>
+            <CloseButton onClose={() => this.cancel()} />
+            {!actionName && <JangbeeAdList admob {...this.props} />}
+            <ScrollView
+              contentContainerStyle={{ }}
+              style={{ flex: 1 }}
+            >
+              {listDataSource.map((group, key) => (
+                <ExpandableItem
+                  key={group.category_name}
+                  onClickFunction={() => this.updateLayout(key)}
+                  onCatCheck={() => this.updateCheck(key)}
+                  item={group}
+                  completeSel={this.completeSelLocal}
+                  selectSubCate={itemIndex =>
+                    this.selectSubCate(group, key, itemIndex)
+                  }
+                  isCatSelectable
+                />
+              ))}
+            </ScrollView>
           </View>
-        </Modal>
-      </View>
+          {actionName && (
+            <JBButton
+              title={actionName}
+              onPress={this.multiSelComplete}
+              size="full"
+              Secondary
+            />
+          )}
+        </View>
+      </Modal>
     );
   }
 }

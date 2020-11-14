@@ -7,17 +7,9 @@ import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import HeaderClose from 'src/components/molecules/HeaderClose';
 import JangbeeAdList from 'src/components/organisms/JangbeeAdList';
-import adLocation from 'constants/AdLocation';
 import styled from 'styled-components/native';
 
-const Container = styled.View`flex: 1;`;
-const ScrollView = styled.ScrollView.attrs(() => ({
-  contentContainerStyle: {
-    flex: 1
-  }
-}))`
-  flex: 1;
-`;
+const Container = styled.ScrollView`flex: 1;`;
 
 interface Props {
     navigation: DefaultNavigationProps;
@@ -38,11 +30,11 @@ const ClientHomeModalContainer: React.FC<Props> = (props): React.ReactElement =>
   return (
     <Container>
       <HeaderClose title="화주 앱 화면" onClick={() => { props.navigation.goBack() }}/>
-      <ScrollView>
-        <JangbeeAdList adLocation={AdLocation.MAIN} navigation={props.navigation} />
-        <GPSSearchScreen {...props} />
-        <FirmCntChart />
-      </ScrollView>
+      <JangbeeAdList adLocation={AdLocation.MAIN} navigation={props.navigation} />
+      <GPSSearchScreen {...props}
+        searEquipment={() => {}}
+      />
+      <FirmCntChart />
     </Container>
   );
 };

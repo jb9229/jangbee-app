@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
   itemWrap: {
     flex: 1,
     margin: 10,
-    marginBottom: 15
+    marginBottom: 15,
+    minHeight: 200
   },
   itemTitle: {
     fontFamily: fonts.titleMiddle,
@@ -30,18 +31,22 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class FirmImageItem extends React.PureComponent {
-  render() {
-    const { title, value } = this.props;
-    return (
-      <View style={styles.itemWrap}>
-        <Text style={styles.itemTitle}>{`${title}: `}</Text>
-        {value !== null && value !== '' ? (
-          <View style={styles.responsiveImgWrap}>
-            <Image style={styles.responsiveImage} source={{ uri: value }} />
-          </View>
-        ) : null}
-      </View>
-    );
-  }
+interface Props {
+  title: string;
+  value: string;
 }
+const FirmImageItem: React.FC<Props> = ({ title, value }) =>
+{
+  return (
+    <View style={styles.itemWrap}>
+      <Text style={styles.itemTitle}>{`${title}: `}</Text>
+      {value !== null && value !== '' ? (
+        <View style={styles.responsiveImgWrap}>
+          <Image style={styles.responsiveImage} source={{ uri: value }} />
+        </View>
+      ) : null}
+    </View>
+  );
+};
+
+export default FirmImageItem;
