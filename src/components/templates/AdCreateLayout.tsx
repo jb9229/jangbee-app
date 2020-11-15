@@ -112,8 +112,8 @@ const AdCreateLayout: React.FC = () =>
             />
             <ImagePickInput
               itemTitle="광고배경 사진"
-              imgUrl={adState.createAdDto.adPhotoUrl}
-              setImageUrl={(url): void => { adState.createAdDto.adPhotoUrl = url }}
+              img={adState.createAdDto.adPhoto}
+              setImage={(img): void => { adState.createAdDto.adPhoto = img }}
               errorText={adState.createAdError.photoUrl}
             />
             <EditText

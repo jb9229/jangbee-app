@@ -6,6 +6,7 @@ import { MapAddress, PickerItem } from 'src/types';
 import Card from 'molecules/CardUI';
 import EditText from 'src/components/molecules/EditText';
 import EquipementModal from 'templates/EquipmentModal';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import ImagePickInput from 'src/components/molecules/ImagePickInput';
 import JBButton from 'molecules/JBButton';
 import JBPicker from 'molecules/JBPicker';
@@ -138,32 +139,32 @@ const FirmRegisterLayout: React.FC = () =>
             <ImagePickInput
               itemTitle="대표사진"
               subTitle="(필수)"
-              imgUrl={firm?.thumbnail}
+              initImgUrl={firm?.thumbnail}
               aspect={[1, 1]}
-              setImageUrl={(url): void => { firmDto.thumbnail = url }}
+              setImage={(img: ImageInfo): void => { firmDto.thumbnail = img }}
               errorText={errorData.thumbnail}
             />
 
             <ImagePickInput
               itemTitle="작업사진1"
               subTitle="(필수)"
-              imgUrl={firm?.photo1}
-              setImageUrl={(url): void => { firmDto.photo1 = url }}
+              initImgUrl={firm?.photo1}
+              setImage={(img: ImageInfo): void => { firmDto.photo1 = img }}
               errorText={errorData.photo1}
             />
 
             <ImagePickInput
               itemTitle="작업사진2"
               subTitle="(여러장 올려야 좋아요)"
-              imgUrl={firm?.photo2}
-              setImageUrl={(url): void => { firmDto.photo2 = url }}
+              initImgUrl={firm?.photo2}
+              setImage={(img: ImageInfo): void => { firmDto.photo2 = img }}
               errorText={errorData.photo2}
             />
 
             <ImagePickInput
               itemTitle="작업사진3"
-              imgUrl={firm?.photo3}
-              setImageUrl={(url): void => { firmDto.photo3 = url }}
+              initImgUrl={firm?.photo3}
+              setImage={(url): void => { firmDto.photo3 = url }}
               errorText={errorData.photo3}
             />
 

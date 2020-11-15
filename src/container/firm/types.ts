@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import getString from 'src/STRING';
 
 export const PHONENUMBER_REGULAR_EXPRESSION =
@@ -69,10 +70,10 @@ export class FirmCreateDto
   workAlarmSido: string;
   workAlarmSigungu: string;
   introduction: string;
-  thumbnail: string;
-  photo1: string;
-  photo2: string;
-  photo3: string;
+  thumbnail: ImageInfo;
+  photo1: ImageInfo;
+  photo2: ImageInfo;
+  photo3: ImageInfo;
   blog: string;
   homepage: string;
   sns: string;

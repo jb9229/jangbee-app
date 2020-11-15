@@ -5,6 +5,7 @@ import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import ErrorText from 'src/components/molecules/Text/ErrorText';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import JBIcon from 'atoms/JBIcon';
 import MiddleTitle from 'molecules/Text/MiddleTitle';
 import fonts from 'constants/Fonts';
@@ -51,34 +52,51 @@ const styles = StyleSheet.create({
 interface Props {
   itemTitle: string;
   subTitle?: string;
-  imgUrl: string;
+  img?: ImageInfo;
+  initImgUrl?: string;
   errorText?: string;
   aspect?: [number, number];
   itemWrapStyle?: ViewStyle;
-  setImageUrl: (url: string) => void;
+  setImage: (img: ImageInfo) => void;
 }
 const ImagePickInput: React.FC<Props> = (props) =>
 {
   React.useEffect(() =>
   {
-    setImageUrl(props.imgUrl);
-    props.setImageUrl(props.imgUrl);
-  }, [props.imgUrl]);
+    setImage(props.img);
+    props.setImage(props.img);
+  }, [props.img]);
 
-  const [imgUrl, setImageUrl] = React.useState(props.imgUrl);
+  const [img, setImage] = React.useState<ImageInfo>(props.img || { uri: props.initImgUrl });
+
+  const pickImage = async (aspect: [number, number]) =>
+  {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: aspect || undefined,
+      base64: true
+    });
+
+    if (!result.cancelled)
+    {
+      props.setImage(result);
+      setImage(result);
+    }
+  };
 
   return (
     <View style={styles.itemWrap}>
       <View style={styles.titleWrap}>
         <MiddleTitle label={props.itemTitle} subLabel={props.subTitle}/>
-        {imgUrl ? (
-          <JBIcon name="close" size={32} onPress={(): void => { props.setImageUrl(''); setImageUrl('') }} />
+        {img ? (
+          <JBIcon name="close" size={32} onPress={(): void => { props.setImage(undefined); setImage(undefined) }} />
         ) : null}
       </View>
 
-      {!imgUrl ? (
+      {!img ? (
         <UrlTextTO
-          onPress={() => pickImage(props.aspect, setImageUrl, props.setImageUrl)}
+          onPress={() => pickImage(props.aspect)}
           error={!!props.errorText}
         >
           <UrlText ellipsizeMode="tail" numberOfLines={1}>
@@ -87,27 +105,12 @@ const ImagePickInput: React.FC<Props> = (props) =>
         </UrlTextTO>
       ) : (
         <View style={styles.imgWrap}>
-          <Image style={styles.image} source={{ uri: imgUrl }} />
+          <Image style={styles.image} source={{ uri: img.uri }} />
         </View>
       )}
       {!!props.errorText && <ErrorText text={props.errorText} />}
     </View>
   );
-};
-
-const pickImage = async (aspect: [number, number], setLocalImageUrl: (url: string) => void, setImageUrl: (url: string) => void) =>
-{
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
-    aspect: aspect || undefined
-  });
-
-  if (!result.cancelled)
-  {
-    setImageUrl(result.uri);
-    setLocalImageUrl(result.uri);
-  }
 };
 
 export default ImagePickInput;

@@ -137,3 +137,9 @@ export const Firms = gql`
     }
   }
 `;
+
+export const UPLOAD_IMAGE = gql`
+  query UploadImage($imageParams: UploadImageParams) {
+    uploadFirmImage(imageParams: $imageParams)
+  }
+`;

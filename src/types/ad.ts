@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
-import { AdType } from '../components/templates/AdCreateLayout';
+import { AdType } from 'src/container/ad/types';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import getString from 'src/STRING';
 
 export const ValidScheme = yup.object({
@@ -17,7 +18,7 @@ export class CreateAdDto
   forMonths = 1;
   adTitle: string;
   adSubTitle: string;
-  adPhotoUrl: string;
+  adPhoto: ImageInfo;
   adTelNumber: string;
   adSido: string;
   adGungu: string;

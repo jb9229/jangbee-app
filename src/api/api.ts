@@ -106,54 +106,6 @@ export function getFirmLocalData (equipment)
   return fetch(`${url.JBSERVER_FIRMLOCAL}/${param}`).then(handleJBServerJsonResponse);
 }
 
-export function uploadImage (uri)
-{
-  const uriParts = uri.split('.');
-  const fileType = uriParts[uriParts.length - 1];
-  const nowTime = new Date().getTime();
-
-  const formData = new FormData();
-
-  formData.append('img', {
-    uri,
-    name: `jangbee_photo_${nowTime}.${fileType}`,
-    type: 'image/jpg'
-  });
-  console.log('>>> formData', formData);
-  const options = {
-    method: 'POST',
-    body: formData,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'multipart/form-data'
-    }
-  };
-
-  return fetch(url.IMAGE_STORAGE, options)
-    .then(handleTextResponse)
-    .catch((error) => noticeUserError('api -> uploadImage -> error: ', `error: ${error}`));
-}
-
-export function removeImage (imgUrl)
-{
-  const index = imgUrl.lastIndexOf('/');
-  let fileName = imgUrl.substr(index + 1);
-
-  fileName = decodeURIComponent(fileName);
-
-  const formData = new FormData();
-
-  formData.append('imgName', fileName);
-  const options = {
-    method: 'POST',
-    body: formData,
-    headers: {}
-  };
-
-  return fetch(`${url.IMAGE_STORAGE}/remove`, options).then(
-    handleNoContentResponse
-  );
-}
 
 export function getAddrByGpspoint (longitude, latitude)
 {

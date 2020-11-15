@@ -17,7 +17,6 @@ export const NODE_SERVER_URL = process.env.BUILD_TYPE === 'prod' ? NODE_SERVER_U
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
 
 const url = {
-  IMAGE_STORAGE: `${SERVER_URL}common/image`,
   JBSERVER_ACCOUNT: `${SERVER_URL}account`,
   JBSERVER_EQUILIST: `${SERVER_URL}equipment/list`,
   JBSERVER_FIRM: `${SERVER_URL}firm`,

@@ -17,6 +17,7 @@ import JBButton from 'molecules/JBButton';
 import JBErrorMessage from 'organisms/JBErrorMessage';
 import JBTextInput from 'molecules/JBTextInput';
 import React from 'react';
+import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'common/ErrorNotice';
 import { validate } from 'utils/Validation';
 
@@ -39,7 +40,8 @@ const styles = StyleSheet.create({
 });
 
 export default class AdUpdateModal extends React.Component {
-  constructor (props) {
+  constructor(props)
+  {
     super(props);
     this.state = {
       isVisibleActIndiModal: false,
@@ -84,7 +86,7 @@ export default class AdUpdateModal extends React.Component {
    */
   completeAction = async () => {
     const { completeUpdate } = this.props;
-    const { preAdImageUrl } = this.state;
+    const { preAdImageUrl, adPhoto } = this.state;
 
     const updateData = this.validateUpdateForm();
 
@@ -100,13 +102,14 @@ export default class AdUpdateModal extends React.Component {
         imgUploadingMessage: '광고사진 업로드중...'
       });
       serverAdImgUrl = await this.imageUpdate(
-        updateData.photoUrl,
+        adPhoto,
         preAdImageUrl
       );
       this.setState({ isVisibleActIndiModal: false });
     }
 
-    if (serverAdImgUrl) {
+    if (serverAdImgUrl)
+    {
       updateData.photoUrl = serverAdImgUrl;
     }
 
@@ -116,7 +119,7 @@ export default class AdUpdateModal extends React.Component {
         completeUpdate();
       })
       .catch(error =>
-        notifyError('광고업데이트에 문제가 있습니다', error.message)
+        noticeUserError('광고업데이트에 문제가 있습니다', error.message)
       );
   };
 
@@ -133,20 +136,23 @@ export default class AdUpdateModal extends React.Component {
   /**
    * 업체정보 이미지 업데이트 함수
    */
-  imageUpdate = async (imgUri, preImg) => {
+  imageUpdate = async (img, preImgUrl) => {
     // No change
-    if (imgUri === preImg) {
+    if (img.uri === preImgUrl)
+    {
       return null;
     }
 
     // Current Image Delete and New Image Null
-    if (preImg) {
-      await imageManager.removeImage(preImg);
+    if (preImgUrl)
+    {
+      await imageManager.removeImage(preImgUrl);
     }
 
     // Current image null, new image upload
-    if (imgUri) {
-      const serverImgUrl = await imageManager.uploadImage(imgUri);
+    if (img)
+    {
+      const serverImgUrl = await imageManager.uploadImage(img);
 
       return serverImgUrl;
     }
@@ -220,7 +226,8 @@ export default class AdUpdateModal extends React.Component {
     return updateData;
   };
 
-  render () {
+  render()
+  {
     const { isVisibleModal, closeModal } = this.props;
     const {
       isVisibleActIndiModal,
@@ -265,8 +272,8 @@ export default class AdUpdateModal extends React.Component {
                 <JBErrorMessage errorMSG={adSubTitleValErrMessage} />
                 <ImagePickInput
                   itemTitle="광고배경 사진"
-                  imgUrl={adPhotoUrl}
-                  setImageUrl={url => this.setState({ adPhotoUrl: url })}
+                  initImgUrl={adPhotoUrl}
+                  setImage={img => this.setState({ adPhoto: img })}
                 />
                 <JBErrorMessage errorMSG={adPhotoUrlValErrMessage} />
                 <JBTextInput

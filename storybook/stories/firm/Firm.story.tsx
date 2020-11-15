@@ -7,6 +7,7 @@ import { boolean, text } from '@storybook/addon-knobs';
 import FirmModifyScreen from 'src/container/firm/modify';
 import FirmRegisterScreen from '../../../src/container/firm/create';
 import HomeScreen from 'src/screens/HomeScreen';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import ImagePickInput from 'molecules/ImagePickInput';
 import JBButton from 'molecules/JBButton';
 import LoadingIndicator from 'molecules/LoadingIndicator';
@@ -94,18 +95,18 @@ storiesOf('업체', module)
   }))
   .add('이미지 업로드', () => React.createElement(() =>
   {
-    const [img, setImg] = React.useState();
+    const [img, setImg] = React.useState<ImageInfo>();
     const [uploadedImg, setIUploadedImg] = React.useState<string>('unknow image url...');
     return (
       <>
         <ImagePickInput
           itemTitle="작업사진3"
-          imgUrl={img || ''}
-          setImageUrl={(url): void => { setImg(url) }}
+          img={img}
+          setImage={(url): void => { setImg(url) }}
         />
         <Text>{uploadedImg}</Text>
         <JBButton title="이미지 업로드"
-          onPress={async (): Promise<void> => { const imgUrl = await imageManager.uploadImage(img); setIUploadedImg(imgUrl) }}/>
+          onPress={async (): Promise<void> => { const imgUrl = await imageManager.uploadImage(img); setIUploadedImg(img.uri) }}/>
       </>
     );
   }));
