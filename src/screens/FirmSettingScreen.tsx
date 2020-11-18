@@ -51,7 +51,6 @@ const FirmSettingScreen: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState(false);
-  const [isOBSelVisibleModal, setOBSelVisibleModal] = React.useState(false);
   const [isVisibleDocModal, setVisibleDocModal] = React.useState(false);
   const [isVisibleAlarmSettingModal, setVisibleAlarmSettingModal] = React.useState(false);
   const [deletFirmRequest] = useMutation(DELETE_FIRM, {

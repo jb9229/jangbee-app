@@ -4,7 +4,7 @@ import { Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CloseButton from 'molecules/CloseButton';
 import { DefaultStyledProps } from 'src/theme';
-import { Firm } from 'src/api/queries';
+import { FIRM } from 'src/api/queries';
 import FirmInfoItem from 'organisms/FirmInfoItem';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
@@ -113,7 +113,7 @@ const FirmDetailModal: React.FC<Props> = (props) =>
   }, [props.isVisibleModal]);
 
   const [evaluList, setEvaluList] = React.useState([]);
-  const [firmReq, firmRsp] = useLazyQuery(Firm);
+  const [firmReq, firmRsp] = useLazyQuery(FIRM);
 
   const firm = firmRsp.data?.firm;
 console.log('>>> firm:', firm);

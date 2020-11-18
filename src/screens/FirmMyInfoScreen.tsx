@@ -1,9 +1,8 @@
-import * as api from 'src/api/api';
-
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CloseButton from 'molecules/CloseButton';
 import { DefaultNavigationProps } from 'src/types';
+import { FIRM } from 'src/api/queries';
 import FirmInfoItem from 'organisms/FirmInfoItem';
 import JBActIndicator from 'molecules/JBActIndicator';
 import JBButton from 'molecules/JBButton';
@@ -12,10 +11,9 @@ import React from 'react';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import fonts from 'constants/Fonts';
-import { noticeUserError } from 'src/container/request';
-import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { useQuery } from '@apollo/client';
 
 const styles = StyleSheet.create({
   container: {
@@ -131,74 +129,15 @@ interface Props {
 const FirmMyInfoScreen: React.FC<Props> = (props) =>
 {
   const { user } = useLoginContext();
-  const [firm, setFirm] = React.useState();
-  const [isLoadingComplete, setLoadingComplete] = React.useState<boolean>(false);
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState<boolean>(false);
   const [evaluList, setEvaluList] = React.useState();
+  const firmRsp = useQuery(FIRM, { variables: { accountId: user.uid } });
 
+  const firm = firmRsp.data?.firm;
   React.useEffect(() =>
   {
-    setMyFirmInfo();
-    setFirmEvaluList();
+    // setFirmEvaluList();
   }, [props.navigation.state]);
-
-  const setMyFirmInfo = (): void =>
-  {
-    if (!user.uid)
-    {
-      Alert.alert('유효하지 않은 사용자 입니다');
-      return;
-    }
-
-    api
-      .getFirm(user.uid)
-      .then(firm =>
-      {
-        setFirm(firm);
-        setLoadingComplete(true);
-      })
-      .catch(error =>
-      {
-        notifyError(
-          '업체정보 요청 문제발생',
-          `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
-            error.name
-          }] ${error.message}`,
-          this.setMyFirmInfo
-        );
-        setLoadingComplete(true);
-      });
-  };
-
-  /**
-   * 업체 평가 리스트 설정함수
-   */
-  const setFirmEvaluList = (): void =>
-  {
-    if (!user.uid)
-    {
-      Alert.alert(`[${user.uid}] 유효하지 않은 사용자 입니다`);
-      return;
-    }
-
-    api
-      .getFirmEvalu(user.uid)
-      .then(evaluList =>
-      {
-        if (evaluList)
-        {
-          setEvaluList(evaluList);
-        }
-      })
-      .catch(error =>
-      {
-        noticeUserError('업체후기 요청 문제발생',
-          `요청 도중 문제가 발생 했습니다, 다시 시도해 주세요 -> [${
-            error.name
-          }] ${error.message}`
-        );
-      });
-  };
 
   const registerFirm = (): void =>
   {
@@ -220,7 +159,7 @@ const FirmMyInfoScreen: React.FC<Props> = (props) =>
     }
   };
 
-  if (!isLoadingComplete)
+  if (firmRsp.loading)
   {
     return <JBActIndicator title="업체정보를 불러오는 중..." size={35} />;
   }

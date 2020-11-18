@@ -19,7 +19,6 @@ console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
 const url = {
   JBSERVER_ACCOUNT: `${SERVER_URL}account`,
   JBSERVER_EQUILIST: `${SERVER_URL}equipment/list`,
-  JBSERVER_FIRM: `${SERVER_URL}firm`,
   JBSERVER_FIRMLOCAL: `${SERVER_URL}firm/local`,
   JBSERVER_FIRMNEAR: `${SERVER_URL}firm/near`,
   JBSERVER_AD: `${SERVER_URL}ad`,

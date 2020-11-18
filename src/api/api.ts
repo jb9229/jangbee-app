@@ -16,14 +16,6 @@ export function getEquipList ()
   return fetch(url.JBSERVER_EQUILIST).then(handleJBServerJsonResponse);
 }
 
-export function getFirm (accountId)
-{
-  const param = encodeURIComponent(accountId);
-  return fetch(`${url.JBSERVER_FIRM}?accountId=${param}`).then(
-    handleJBServerJsonResponse
-  );
-}
-
 /**
  * 주변 장비업체 검색요청 함수
  */

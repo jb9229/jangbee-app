@@ -98,11 +98,12 @@ export const ADS = gql`
 /***********************
  * Firm Queries
  ***********************/
-export const Firm = gql`
+export const FIRM = gql`
   query Firm($accountId: String!) {
     firm(accountId: $accountId) {
       accountId
       thumbnail
+      phoneNumber
       fname
       equiListStr
       distance
@@ -135,11 +136,5 @@ export const Firms = gql`
       address
       addressDetail
     }
-  }
-`;
-
-export const UPLOAD_IMAGE = gql`
-  query UploadImage($imageParams: UploadImageParams) {
-    uploadFirmImage(imageParams: $imageParams)
   }
 `;

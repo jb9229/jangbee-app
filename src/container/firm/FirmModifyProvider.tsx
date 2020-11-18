@@ -1,14 +1,12 @@
 import * as React from 'react';
 
-import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
-import { getUpdateFirmDto, requestModifyFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
+import { FirmCreateDto, FirmCreateErrorData, FirmEditDto } from 'src/container/firm/types';
+import { getUpdateFirmDto, validateCreatFirmDto } from 'src/container/firm/action';
 
 import { DefaultNavigationProps } from 'src/types';
 import { UPDATE_FIRM } from 'src/api/mutations';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
-import url from 'src/constants/Url';
-import useAxios from 'axios-hooks';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useMutation } from '@apollo/client';
 
@@ -31,19 +29,16 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
 {
   // States
   const { user, firm, popLoading, refetchFirm } = useLoginContext();
-  const [firmDto, setFirmDto] = React.useState(new FirmCreateDto());
+  const [firmDto, setFirmDto] = React.useState<FirmEditDto>(new FirmEditDto());
   const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(new FirmCreateErrorData());
 
   // Server Data State
-  const [firmResponse, firmRequest] = useAxios(`${url.JBSERVER_FIRM}?accountId=${user?.uid}`);
   const [modifyFirmRequest, modifyFirmResponse] = useMutation(UPDATE_FIRM, {
     onCompleted: (data) =>
     {
       if (data && data.updateFirm)
       {
-        requestModifyFirm(user.uid, firmResponse.data.id, firmDto)
-          .then((result) => { if (result) { refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'update' }) } })
-          .catch((err): void => { noticeUserError('FirmModifyProvider(requestModifyFirmAtOldServer -> error)', err?.message, user) });
+        refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'update' });
       }
       else
       {
@@ -59,11 +54,29 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
   // Didmount/Unmount
   React.useEffect(() =>
   {
+    if (firm)
+    {
+      const updateDto = new FirmCreateDto()
+      updateDto.phoneNumber = firm.phoneNumber;
+      updateDto.equiListStr = firm.equiListStr;
+      updateDto.sidoAddr = firm.sidoAddr;
+      updateDto.sigunguAddr = firm.sigunguAddr;
+      updateDto.address = firm.address;
+      updateDto.addrLatitude = firm.addrLatitude;
+      updateDto.addrLongitude = firm.addrLongitude;
+      updateDto.workAlarmSido = firm.workAlarmSido;
+      updateDto.workAlarmSigungu = firm.workAlarmSigungu;
+      updateDto.modelYear = firm.modelYear;
+      updateDto.introduction = firm.introduction;
+      updateDto.fname = firm.fname;
+
+      setFirmDto(updateDto);
+    }
   }, [firm]);
 
   // Init States
   const states = {
-    loading: firmResponse.loading,
+    loading: modifyFirmResponse.loading,
     navigation: props.navigation,
     firmDto,
     errorData
@@ -80,14 +93,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
           console.log('>>> update result:', result);
           if (result === true)
           {
-            uploadImage(firmDto, popLoading)
-              .then((uploadResult) =>
-              {
-                if (!uploadResult) { noticeUserError('Firm Modify Image Upload Error', `uploadResult is ${uploadResult}`); return }
-
-                modifyFirmRequest({ variables: { accountId: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
-              })
-              .catch((err) => { noticeUserError('FirmModifyProvider(uploadImage -> error)', err?.message, user) });
+            modifyFirmRequest({ variables: { accountId: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
           }
           else if (result instanceof FirmCreateErrorData) { setErrorData(result) }
         })

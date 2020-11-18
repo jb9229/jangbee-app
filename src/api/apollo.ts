@@ -1,13 +1,14 @@
-import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, from, split } from '@apollo/client';
 import { NODE_SERVER_URL, NODE_SERVER_WEBSOCKET_URL } from 'src/constants/Url';
 
 import { WebSocketLink } from '@apollo/client/link/ws';
+import { createUploadLink } from 'apollo-upload-client';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
 const httpLink = new HttpLink({
   // uri: 'https://jangbeecall-dev.azurewebsites.net/graphql'
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://10.0.2.2:4000/graphql'
 });
 
 // const wsLink = new WebSocketLink({
@@ -50,5 +51,6 @@ export const apolloClient = new ApolloClient({
     //   }
     // }
   ),
-  link: httpLink
+  link: createUploadLink({ uri: 'http://10.0.2.2:4000/graphql' })
+  // link: createUploadLink({ uri: 'https://jangbeecall-dev.azurewebsites.net/graphql' })
 });

@@ -77,10 +77,30 @@ export class FirmCreateDto
   blog: string;
   homepage: string;
   sns: string;
-  uploadedThumbnailUrl: string;
-  uploadedPhoto1Url: string;
-  uploadedPhoto2Url: string;
-  uploadedPhoto3Url: string;
+}
+
+export class FirmEditDto
+{
+  fname: string;
+  phoneNumber: string;
+  equiListStr: string;
+  modelYear: number;
+  address: string;
+  addressDetail: string;
+  sidoAddr: string;
+  sigunguAddr: string;
+  addrLongitude: string;
+  addrLatitude: string;
+  workAlarmSido: string;
+  workAlarmSigungu: string;
+  introduction: string;
+  thumbnail: ImageInfo;
+  photo1: ImageInfo;
+  photo2: ImageInfo;
+  photo3: ImageInfo;
+  blog: string;
+  homepage: string;
+  sns: string;
 }
 
 export class FirmCreateErrorData

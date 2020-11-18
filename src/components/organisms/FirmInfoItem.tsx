@@ -22,7 +22,8 @@ const StyledBasicCard = styled(Card).attrs(() => ({
   }
 }))``;
 
-const StyledPhotoCard = styled.View``;
+const StyledPhotoCard = styled.View`
+`;
 const StyledEvaluListWrap = styled.View`
   background-color: white;
   min-height: 100px;

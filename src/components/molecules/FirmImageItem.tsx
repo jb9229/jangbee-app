@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 10,
     marginBottom: 15,
-    minHeight: 200
+    minHeight: 250
+    // backgroundColor: 'red'
   },
   itemTitle: {
     fontFamily: fonts.titleMiddle,
@@ -24,9 +25,10 @@ const styles = StyleSheet.create({
   responsiveImage: {
     aspectRatio: 4 / 3,
     width: '100%',
-    height: 500,
+    // height: 500,
     maxWidth: 800,
     maxHeight: 600,
+    minHeight: 250,
     resizeMode: 'contain'
   }
 });

@@ -53,3 +53,9 @@ export const FIRMHARMCASE_DELETE = gql`
     deleteFirmHarmCase(id: $id)
   }
 `;
+
+export const UPLOAD_IMAGE = gql`
+  mutation UploadImage($img: Upload) {
+    uploadFirmImage(img: $img)
+  }
+`;

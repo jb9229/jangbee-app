@@ -11,7 +11,7 @@ interface Context {
   userProfile: UserProfile;
   firm: Firm;
   paymentInfo: KakaoPaymentInfo;
-  setUser: (user: User) => void;
+  setUserProfile: (user: User) => void;
   setFirm: (firm: Firm) => void;
   saveUserProfileAssets: (assetData: UserAssets) => Promise<void>;
   setWebViewModal: (modalData: WebViewModalData) => void;

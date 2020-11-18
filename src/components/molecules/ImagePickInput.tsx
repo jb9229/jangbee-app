@@ -67,9 +67,14 @@ const ImagePickInput: React.FC<Props> = (props) =>
     props.setImage(props.img);
   }, [props.img]);
 
+  React.useEffect(() =>
+  {
+    !!props.initImgUrl && setImage({ uri: props.initImgUrl });
+  }, [props.initImgUrl]);
+
   const [img, setImage] = React.useState<ImageInfo>(props.img || { uri: props.initImgUrl });
 
-  const pickImage = async (aspect: [number, number]) =>
+  const pickImage = async(aspect: [number, number]) =>
   {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,

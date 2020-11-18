@@ -1,14 +1,15 @@
 import * as React from 'react';
 
+import { CREATE_FIRM, UPLOAD_IMAGE } from 'src/api/mutations';
 import { FirmCreateDto, FirmCreateErrorData } from 'src/container/firm/types';
 import { convertFirmDto, requestAddFirm, uploadImage, validateCreatFirmDto } from 'src/container/firm/action';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
-import { CREATE_FIRM } from 'src/api/mutations';
 import { DefaultNavigationProps } from 'src/types';
+import { ReactNativeFile } from 'apollo-upload-client';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
-import { useMutation } from '@apollo/client';
 
 interface Context {
   navigation: DefaultNavigationProps;
@@ -49,6 +50,26 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
     }
   });
 
+  const [uploadImgReq, uploadImgRsp] = useMutation(UPLOAD_IMAGE, {
+    onCompleted: (data) =>
+    {
+      console.log('>>> onCompleted data: ', data)
+      if (data && data.uploadFirmImage)
+      {
+        // refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'Register' });
+      }
+      else
+      {
+        noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onCompleted)', data?.createFirm, user);
+      }
+    },
+    onError: (err) =>
+    {
+      console.error(err);
+      noticeUserError('FirmRegisterProvider(requestRegisterFirm -> onError)', err, user);
+    }
+  });
+
   // Server Data State
 
   // Didmount/Unmount
@@ -67,22 +88,15 @@ const FirmRegisterProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickCreate: (): void =>
     {
-      console.log('>>> onClickCreate~~');
       validateCreatFirmDto(firmDto)
         .then((validResult) =>
         {
           console.log('>>> validateCreatFirmDto result: ', validResult);
           if (validResult === true)
           {
-            uploadImage(firmDto, popLoading)
-              .then((uploadResult) =>
-              {
-                if (!uploadResult) { noticeUserError('Firm Register Image Upload Error', `uploadResult is ${uploadResult}`); return }
-
-                const newFirmDto = convertFirmDto(user.uid, firmDto);
-                createFirmRequest({ variables: { newFirm: newFirmDto } });
-              })
-              .catch((err) => { noticeUserError('FirmRegisterProvider(uploadImage -> error)', err?.message, user) });
+            const newFirmDto = convertFirmDto(user.uid, firmDto);
+            console.log('>>> newFirmDto: ', newFirmDto)
+            createFirmRequest({ variables: { newFirm: newFirmDto } });
           }
           else if (validResult instanceof FirmCreateErrorData) { setErrorData(validResult) }
         })
