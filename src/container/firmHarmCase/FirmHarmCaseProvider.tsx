@@ -35,7 +35,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     }
     else
     {
-      setClinetEvaluList();
       setSearchWord('');
     }
 
@@ -216,52 +215,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     }
   });
 
-  // Init Actions
-  const setClinetEvaluList = () =>
-  {
-    api
-      .getClientEvaluList(page, user.uid, false)
-      .then(resBody =>
-      {
-        if (resBody && resBody.content)
-        {
-          let notice;
-          if (resBody.content.length === 0)
-          {
-            notice = '블랙리스트를 조회 또는 추가해 주세요.';
-            setCliEvaluList([]);
-            setSearchNotice(notice);
-            setLastList(resBody.last);
-            setEvaluListType(EvaluListType.LATEST);
-            setNewestEvaluList(true);
-
-            return;
-          }
-          const beforeTwoMonth = moment()
-            .add(-2, 'month')
-            .format('MM/DD');
-          const now = moment().format('MM/DD');
-          notice = `최근[${beforeTwoMonth} ~ ${now}] 리스트 입니다, 평가 및 주의해 주세요.`;
-          setLastList(resBody.last);
-          setSearchNotice(notice);
-          setNewestEvaluList(true);
-          setEvaluListType(EvaluListType.LATEST);
-          setCliEvaluList(
-            page === 0
-              ? resBody.content
-              : [...cliEvaluList, ...resBody.content]);
-          setSearchTime(moment().format('YYYY.MM.DD HH:mm'));
-        }
-      })
-      .catch(ex =>
-      {
-        noticeUserError(
-          '최근 피해사례 요청 문제',
-          `최근 피해사례 요청에 문제가 있습니다, 다시 시도해 주세요${ex.message}`, user
-        );
-      });
-  };
-
   const setCliEvaluLikeList = (evaluId) =>
   {
     api
@@ -340,7 +293,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
 
   const actions = {
     setSearchArea,
-    setClinetEvaluList,
     createClientEvaluLike: (newEvaluLike) =>
     {
       api
@@ -378,10 +330,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
     },
     closeEvaluLikeModal: (refresh) =>
     {
-      if (refresh)
-      {
-        setClinetEvaluList();
-      }
       setVisibleEvaluLikeModal(false);
     },
     searchFilterCliEvalu: (word: string): void => searchFilterCliEvalu(word),
@@ -397,10 +345,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
         return;
       }
       setPage(page + 1);
-      if (newestEvaluList)
-      {
-        setClinetEvaluList();
-      }
     },
     onClickNewestEvaluList: () =>
     {
@@ -410,7 +354,6 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement =>
       setPage(0);
       setNewestEvaluList(true);
       setCliEvaluList(null);
-      setClinetEvaluList();
     },
     senChatMessage: (message: object) =>
     {

@@ -1,12 +1,13 @@
 import * as jangbeeConfig from '../../../jbcallconfig.json';
 
-import { Alert, DatePickerAndroid, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, DatePickerAndroid, StyleSheet, View } from 'react-native';
 
 import CardUI from 'molecules/CardUI';
 import EditText from 'src/components/molecules/EditText';
 import EquipementModal from 'templates/EquipmentModal';
 import JBButton from 'molecules/JBButton';
 import JBPicker from 'molecules/JBPicker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import { PickerItem } from 'src/types';
 import React from 'react';
@@ -17,6 +18,12 @@ import fonts from 'constants/Fonts';
 import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useWorkRegisterProvider } from 'src/container/work/WorkRegisterProvider';
+
+const ScrollView = styled(KeyboardAwareScrollView).attrs(() => ({
+  contentContainerStyle: {
+  }
+}))`
+`;
 
 const styles = StyleSheet.create({
   Container: {
@@ -75,10 +82,10 @@ const modelYearPItems = new Array(10)
   .fill(0)
   .map((_, i) => new PickerItem(`${thisYear - i}년이상`, `${thisYear - i}`, thisYear - i));
 const PeriodPicker = styled(JBPicker).attrs(() => ({
-    wrapperStyle: {
-      marginTop: 25
-    }
-  }))`
+  wrapperStyle: {
+    marginTop: 25
+  }
+}))`
   width: 100;
 `;
 const ItemPicker = styled(JBPicker).attrs(() => ({
@@ -98,138 +105,136 @@ const WorkRegisterLayout: React.FC = () =>
 
   return (
     <View style={styles.Container}>
-      <KeyboardAvoidingView>
-        <ScrollView>
-          <CardUI>
+      <ScrollView>
+        <CardUI>
+          <SelectText
+            label="호출장비"
+            subLabel="(필수)"
+            text={workDto.equipment}
+            onPress={(): void => setVisibleEquiModal(true)}
+            placeholder="어떤 장비를 부르시겠습니까?"
+            errorText={errorData.equipment}
+          />
+          <EditText
+            label="전화번호"
+            subLabel="(필수, 매칭후 공개됨)"
+            text={workDto.phoneNumber}
+            onChangeText={(text): void => { workDto.phoneNumber = text }}
+            placeholder="전화번호를 입력해 주세요"
+            keyboardType="phone-pad"
+            errorText={errorData.phoneNumber}
+          />
+          <SelectText
+            label="현장주소"
+            subLabel="(필수, 매칭후 자세히 공개됨)"
+            text={workDto?.address}
+            onPress={(): void => setVisibleMapAddModal(true)}
+            placeholder="주소를 검색해주세요"
+            errorText={errorData.address}
+          />
+          <EditText
+            label="현장위치"
+            subLabel="(필수, 현장위치를 짧게 설명해 주세요)"
+            text={workDto.addressDetail}
+            onChangeText={(text): void => { workDto.addressDetail = text }}
+            placeholder="상세주소를 입력해 주세요"
+            errorText={errorData.addressDetail}
+          />
+
+          <View style={styles.workDateWrap}>
             <SelectText
-              label="호출장비"
+              label="작업시작일"
               subLabel="(필수)"
-              text={workDto.equipment}
-              onPress={(): void => setVisibleEquiModal(true)}
-              placeholder="어떤 장비를 부르시겠습니까?"
-              errorText={errorData.equipment}
+              style={{ flex: 1, marginRight: 10 }}
+              text={workDto.startDate}
+              onPress={(): void => { openStartWorkDatePicker(workDto, setStartDateStr) }}
+              placeholder="시작일을 선택 하세요"
+              errorText={errorData.startDate}
             />
-            <EditText
-              label="전화번호"
-              subLabel="(필수, 매칭후 공개됨)"
-              text={workDto.phoneNumber}
-              onChangeText={(text): void => { workDto.phoneNumber = text }}
-              placeholder="전화번호를 입력해 주세요"
-              keyboardType="phone-pad"
-              errorText={errorData.phoneNumber}
+            <PeriodPicker
+              title="작업 기간"
+              selectedValue={startDateStr}
+              onValueChange={(itemValue: number): void => { workDto.period = itemValue }}
+              items={dayPickItems}
+              errorText={errorData.period}
+              size={140}
             />
-            <SelectText
-              label="현장주소"
-              subLabel="(필수, 매칭후 자세히 공개됨)"
-              text={workDto?.address}
-              onPress={(): void => setVisibleMapAddModal(true)}
-              placeholder="주소를 검색해주세요"
-              errorText={errorData.address}
-            />
-            <EditText
-              label="현장위치"
-              subLabel="(필수, 현장위치를 짧게 설명해 주세요)"
-              text={workDto.addressDetail}
-              onChangeText={(text): void => { workDto.addressDetail = text }}
-              placeholder="상세주소를 입력해 주세요"
-              errorText={errorData.addressDetail}
-            />
-
-            <View style={styles.workDateWrap}>
-              <SelectText
-                label="작업시작일"
-                subLabel="(필수)"
-                style={{ flex: 1, marginRight: 10 }}
-                text={workDto.startDate}
-                onPress={(): void => { openStartWorkDatePicker(workDto, setStartDateStr) }}
-                placeholder="시작일을 선택 하세요"
-                errorText={errorData.startDate}
-              />
-              <PeriodPicker
-                title="작업 기간"
-                selectedValue={startDateStr}
-                onValueChange={(itemValue: number): void => { workDto.period = itemValue }}
-                items={dayPickItems}
-                errorText={errorData.period}
-                size={140}
-              />
-            </View>
-            {isFirmRegister && (
-              <ItemPicker
-                title="최대 일감보장시간"
-                subTitle="(일감 넘기지않고 기다릴 시간)"
-                selectedValue={workDto.guaranteeTime}
-                onValueChange={(itemValue: number): void => { workDto.guaranteeTime = itemValue }}
-                items={guarMinPItems}
-              />
-            )}
-
-            <EditText
-              label="작업 세부사항"
-              subLabel="(필수)"
-              text={workDto.detailRequest}
-              onChangeText={(text): void => { workDto.detailRequest = text }}
-              placeholder="작업 세부사항 및 요청사항을 입력하세요."
-              multiline
-              numberOfLines={3}
-              errorText={errorData.detailRequest}
-            />
+          </View>
+          {isFirmRegister && (
             <ItemPicker
-              title="년식제한"
-              selectedValue={workDto.modelYearLimit}
-              items={modelYearPItems}
-              onValueChange={(item: number): void => { workDto.modelYearLimit = item }}
-              selectLabel="년식 선택(옵션)"
+              title="최대 일감보장시간"
+              subTitle="(일감 넘기지않고 기다릴 시간)"
+              selectedValue={workDto.guaranteeTime}
+              onValueChange={(itemValue: number): void => { workDto.guaranteeTime = itemValue }}
+              items={guarMinPItems}
             />
+          )}
 
-            <ItemPicker
-              title="필수면허"
-              selectedValue={workDto.licenseLimit}
-              items={licensePItems}
-              onValueChange={(item: string): void => { workDto.licenseLimit = item }}
-              selectLabel="면허 선택(옵션)"
-            />
+          <EditText
+            label="작업 세부사항"
+            subLabel="(필수)"
+            text={workDto.detailRequest}
+            onChangeText={(text): void => { workDto.detailRequest = text }}
+            placeholder="작업 세부사항 및 요청사항을 입력하세요."
+            multiline
+            numberOfLines={3}
+            errorText={errorData.detailRequest}
+          />
+          <ItemPicker
+            title="년식제한"
+            selectedValue={workDto.modelYearLimit}
+            items={modelYearPItems}
+            onValueChange={(item: number): void => { workDto.modelYearLimit = item }}
+            selectLabel="년식 선택(옵션)"
+          />
 
-            <ItemPicker
-              title="비파괴 개월제한"
-              selectedValue={workDto.nondestLimit}
-              items={nondestPItems}
-              onValueChange={(item: string): void => { workDto.nondestLimit = item }}
-              selectLabel="개월 선택(옵션)"
-            />
+          <ItemPicker
+            title="필수면허"
+            selectedValue={workDto.licenseLimit}
+            items={licensePItems}
+            onValueChange={(item: string): void => { workDto.licenseLimit = item }}
+            selectLabel="면허 선택(옵션)"
+          />
 
-            <ItemPicker
-              title="경력제한"
-              selectedValue={workDto.careerLimit}
-              items={careerPItems}
-              onValueChange={(item: number): void => { workDto.careerLimit = item }}
-              selectLabel="경력 선택(옵션)"
-            />
+          <ItemPicker
+            title="비파괴 개월제한"
+            selectedValue={workDto.nondestLimit}
+            items={nondestPItems}
+            onValueChange={(item: string): void => { workDto.nondestLimit = item }}
+            selectLabel="개월 선택(옵션)"
+          />
 
-            <JBButton
-              title="일감 등록완료"
-              onPress={(): void => confirmCreateWork(isFirmRegister, workDto.guaranteeTime, onClickCreate)}
-              size="full"
-              Secondary
+          <ItemPicker
+            title="경력제한"
+            selectedValue={workDto.careerLimit}
+            items={careerPItems}
+            onValueChange={(item: number): void => { workDto.careerLimit = item }}
+            selectLabel="경력 선택(옵션)"
+          />
+
+          <JBButton
+            title="일감 등록완료"
+            onPress={(): void => confirmCreateWork(isFirmRegister, workDto.guaranteeTime, onClickCreate)}
+            size="full"
+            Secondary
+          />
+          <View style={styles.modalWrap}>
+            <EquipementModal
+              isVisibleEquiModal={isVisibleEquiModal}
+              closeModal={(): void => setVisibleEquiModal(false)}
+              selEquipmentStr={workDto.equipment}
+              completeSelEqui={(seledEuipListStr): void => { workDto.equipment = seledEuipListStr }}
+              depth={2}
             />
-            <View style={styles.modalWrap}>
-              <EquipementModal
-                isVisibleEquiModal={isVisibleEquiModal}
-                closeModal={(): void => setVisibleEquiModal(false)}
-                selEquipmentStr={workDto.equipment}
-                completeSelEqui={(seledEuipListStr): void => { workDto.equipment = seledEuipListStr }}
-                depth={2}
-              />
-              <MapAddWebModal
-                isVisibleMapAddModal={isVisibleMapAddModal}
-                setMapAddModalVisible={(flag): void => setVisibleMapAddModal(flag)}
-                saveAddrInfo={(addrInfo): void => saveAddrInfo(addrInfo, workDto)}
-                nextFocus={() => {}}
-              />
-            </View>
-          </CardUI>
-        </ScrollView>
-      </KeyboardAvoidingView>
+            <MapAddWebModal
+              isVisibleMapAddModal={isVisibleMapAddModal}
+              setMapAddModalVisible={(flag): void => setVisibleMapAddModal(flag)}
+              saveAddrInfo={(addrInfo): void => saveAddrInfo(addrInfo, workDto)}
+              nextFocus={() => {}}
+            />
+          </View>
+        </CardUI>
+      </ScrollView>
     </View>
   );
 };
@@ -237,7 +242,7 @@ const WorkRegisterLayout: React.FC = () =>
 /**
   * 일감 등록
 */
-const openStartWorkDatePicker = async (workDto: WorkCreateDto, setStartDateStr: (dateStr) => void): void =>
+const openStartWorkDatePicker = async(workDto: WorkCreateDto, setStartDateStr: (dateStr) => void): void =>
 {
   try
   {

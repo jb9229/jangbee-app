@@ -1,15 +1,14 @@
 import * as React from 'react';
 
-import { fetchData, firmHarmCaseCountState, firmHarmCaseCountUserId } from 'src/container/firmHarmCase/store';
 import styled, { DefaultTheme, withTheme } from 'styled-components/native';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
 
-import { Button } from 'react-native';
 import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmHarmCaseItem from 'organisms/FirmHarmCaseItem';
 import RoundButton from '../atoms/button/RoundButton';
 import colors from 'constants/Colors';
+import { firmHarmCaseCountUserId } from 'src/container/firmHarmCase/store';
 import { useFirmHarmCaseContext } from 'src/contexts/FirmHarmCaseContext';
+import { useSetRecoilState } from 'recoil';
 
 interface StyleProps {
   theme: DefaultTheme;
@@ -34,7 +33,7 @@ const Contents = styled.View`
 const SearchWrap = styled.View`
   margin: 10px;
   background-color: ${(props): string => props.theme.ColorBGDarkGray};
-  border-radius: 8;
+  border-radius: 8px;
 `;
 
 const NotExitButWrap = styled.View`

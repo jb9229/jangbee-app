@@ -8,6 +8,7 @@ import EquipementModal from 'templates/EquipmentModal';
 import ErrorText from 'src/components/molecules/Text/ErrorText';
 import ImagePickInput from 'molecules/ImagePickInput';
 import JBButton from 'molecules/JBButton';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import MapAddWebModal from 'templates/MapAddWebModal';
 import MiddleTitle from 'src/components/molecules/Text/MiddleTitle';
@@ -32,15 +33,11 @@ export const getAdTypeStr = (type: AdType): string =>
 const Container = styled.View`
   flex: 1;
 `;
-const KeyboardAvoidingView = styled.KeyboardAvoidingView.attrs({
-  contentContainerStyle: {
-    flex: 1
-  }
-})`flex: 1;`;
-const ScrollView = styled.ScrollView.attrs({
+const ScrollView = styled(KeyboardAwareScrollView).attrs(() => ({
   contentContainerStyle: {
   }
-})`flex: 1;`;
+}))`
+`;
 const StyleCard = styled(Card).attrs(() => ({
   wrapperStyle: {
     flex: 1
@@ -60,91 +57,89 @@ const AdCreateLayout: React.FC = () =>
 
   return (
     <Container>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-150}>
+      <ScrollView>
         <StyleCard>
-          <ScrollView>
-            <AdTypeWrap>
-              <MiddleTitle label="광고타입" subLabel="(필수)" />
-              <Picker
-                selectedValue={adState.createAdDto.adType}
-                onValueChange={(itemValue): void => { if (checkAdType(bookedAdTypeList, itemValue)) { adState.createAdDto.adType = itemValue; setAdType(itemValue) } }}
-              >
-                <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
-                {renderAdTypeList(AdType.MAIN_FIRST, bookedAdTypeList)}
-                {renderAdTypeList(AdType.MAIN_SECONDE, bookedAdTypeList)}
-                {renderAdTypeList(AdType.MAIN_THIRD, bookedAdTypeList)}
-                <Picker.Item
-                  label={getAdTypeStr(AdType.SEARCH_EQUIPMENT_FIRST)}
-                  value={AdType.SEARCH_EQUIPMENT_FIRST}
-                />
-                <Picker.Item label={getAdTypeStr(AdType.SEARCH_REGION_FIRST)} value={AdType.SEARCH_REGION_FIRST} />
-              </Picker>
-              {!!adState.createAdError.type && <ErrorText text={adState.createAdError.type} />}
-            </AdTypeWrap>
-            <EditText
-              label="계약기간"
-              subLabel="(최대 12개월, 필수)"
-              text={`${adState.createAdDto.forMonths}`}
-              onChangeText={(text: string): void =>
-              {
-                const month = Number.parseInt(text); if (month && !isNaN(month)) { adState.createAdDto.forMonths = month }
-                else { adState.createAdDto.forMonths = -1 }
-              }}
-              placeholder="몇개월간 홍보하시겠습니까?"
-              keyboardType="numeric"
-              errorText={adState.createAdError.forMonths}
-            />
-            <EditText
-              label="광고 타이틀"
-              subLabel="(10자까지, 필수)"
-              text={adState.createAdDto.adTitle}
-              onChangeText={(text): void => { adState.createAdDto.adTitle = text }}
-              placeholder="광고상단 문구를 입력하세요(최대 10자)"
-              errorText={adState.createAdError.title}
-            />
-            <EditText
-              label="광고 슬로건"
-              subLabel="(20자까지, 필수)"
-              text={adState.createAdDto.adSubTitle}
-              onChangeText={(text): void => { adState.createAdDto.adSubTitle = text }}
-              placeholder="광고하단 문구를 입력하세요(최대 20자)"
-              errorText={adState.createAdError.subTitle}
-            />
-            <ImagePickInput
-              itemTitle="광고배경 사진"
-              img={adState.createAdDto.adPhoto}
-              setImage={(img): void => { adState.createAdDto.adPhoto = img }}
-              errorText={adState.createAdError.photoUrl}
-            />
-            <EditText
-              label="전화번호"
-              text={adState.createAdDto.adTelNumber}
-              keyboardType="decimal-pad"
-              onChangeText={(text): void => { adState.createAdDto.adTelNumber = text }}
-              placeholder="휴대전화 번호입력(숫자만)"
-              errorText={adState.createAdError.telNumber}
-            />
-            {(adType === AdType.SEARCH_EQUIPMENT_FIRST || adType === AdType.SEARCH_REGION_FIRST) && (
-              <SelectText
-                label="타겟 장비"
-                text={adState.createAdDto.adEquipment}
-                onPress={(): void => setVisibleEquiModal(true)}
-                placeholder="타켓광고 장비 선택해 주세요"
-                errorText={adState.createAdError.equipment}
+          <AdTypeWrap>
+            <MiddleTitle label="광고타입" subLabel="(필수)" />
+            <Picker
+              selectedValue={adState.createAdDto.adType}
+              onValueChange={(itemValue): void => { if (checkAdType(bookedAdTypeList, itemValue)) { adState.createAdDto.adType = itemValue; setAdType(itemValue) } }}
+            >
+              <Picker.Item label="=== 광고타입 선택 ===" value={undefined} />
+              {renderAdTypeList(AdType.MAIN_FIRST, bookedAdTypeList)}
+              {renderAdTypeList(AdType.MAIN_SECONDE, bookedAdTypeList)}
+              {renderAdTypeList(AdType.MAIN_THIRD, bookedAdTypeList)}
+              <Picker.Item
+                label={getAdTypeStr(AdType.SEARCH_EQUIPMENT_FIRST)}
+                value={AdType.SEARCH_EQUIPMENT_FIRST}
               />
-            )}
-            {adType === AdType.SEARCH_REGION_FIRST && (
-              <SelectText
-                label="타겟 지역"
-                text={adState.createAdDto.adSido && adState.createAdDto.adGungu ? `${adState.createAdDto.adSido}${adState.createAdDto.adGungu}` : undefined }
-                onPress={(): void => setVisibleAddrModal(true)}
-                placeholder="타켓광고 지역을 선택해 주세요"
-                errorText={adState.createAdError.local}
-              />
-            )}
-          </ScrollView>
+              <Picker.Item label={getAdTypeStr(AdType.SEARCH_REGION_FIRST)} value={AdType.SEARCH_REGION_FIRST} />
+            </Picker>
+            {!!adState.createAdError.type && <ErrorText text={adState.createAdError.type} />}
+          </AdTypeWrap>
+          <EditText
+            label="계약기간"
+            subLabel="(최대 12개월, 필수)"
+            text={`${adState.createAdDto.forMonths}`}
+            onChangeText={(text: string): void =>
+            {
+              const month = Number.parseInt(text); if (month && !isNaN(month)) { adState.createAdDto.forMonths = month }
+              else { adState.createAdDto.forMonths = -1 }
+            }}
+            placeholder="몇개월간 홍보하시겠습니까?"
+            keyboardType="numeric"
+            errorText={adState.createAdError.forMonths}
+          />
+          <EditText
+            label="광고 타이틀"
+            subLabel="(10자까지, 필수)"
+            text={adState.createAdDto.adTitle}
+            onChangeText={(text): void => { adState.createAdDto.adTitle = text }}
+            placeholder="광고상단 문구를 입력하세요(최대 10자)"
+            errorText={adState.createAdError.title}
+          />
+          <EditText
+            label="광고 슬로건"
+            subLabel="(20자까지, 필수)"
+            text={adState.createAdDto.adSubTitle}
+            onChangeText={(text): void => { adState.createAdDto.adSubTitle = text }}
+            placeholder="광고하단 문구를 입력하세요(최대 20자)"
+            errorText={adState.createAdError.subTitle}
+          />
+          <ImagePickInput
+            itemTitle="광고배경 사진"
+            img={adState.createAdDto.adPhoto}
+            setImage={(img): void => { adState.createAdDto.adPhoto = img }}
+            errorText={adState.createAdError.photoUrl}
+          />
+          <EditText
+            label="전화번호"
+            text={adState.createAdDto.adTelNumber}
+            keyboardType="decimal-pad"
+            onChangeText={(text): void => { adState.createAdDto.adTelNumber = text }}
+            placeholder="휴대전화 번호입력(숫자만)"
+            errorText={adState.createAdError.telNumber}
+          />
+          {(adType === AdType.SEARCH_EQUIPMENT_FIRST || adType === AdType.SEARCH_REGION_FIRST) && (
+            <SelectText
+              label="타겟 장비"
+              text={adState.createAdDto.adEquipment}
+              onPress={(): void => setVisibleEquiModal(true)}
+              placeholder="타켓광고 장비 선택해 주세요"
+              errorText={adState.createAdError.equipment}
+            />
+          )}
+          {adType === AdType.SEARCH_REGION_FIRST && (
+            <SelectText
+              label="타겟 지역"
+              text={adState.createAdDto.adSido && adState.createAdDto.adGungu ? `${adState.createAdDto.adSido}${adState.createAdDto.adGungu}` : undefined }
+              onPress={(): void => setVisibleAddrModal(true)}
+              placeholder="타켓광고 지역을 선택해 주세요"
+              errorText={adState.createAdError.local}
+            />
+          )}
         </StyleCard>
-      </KeyboardAvoidingView>
+      </ScrollView>
       <JBButton
         title="내장비 홍보하기"
         onPress={(): void => onSubmit(adState.createAdDto)}

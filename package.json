@@ -101,6 +101,7 @@
     "@storybook/react-native-server": "^5.2.7",
     "@testing-library/jest-native": "^3.1.0",
     "@testing-library/react-native": "^5.0.3",
+    "@types/apollo-upload-client": "^14.1.0",
     "@types/dotenv": "^8.2.0",
     "@types/expo": "^32.0.13",
     "@types/jest": "^24.0.18",

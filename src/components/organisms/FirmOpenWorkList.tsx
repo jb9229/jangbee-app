@@ -10,11 +10,13 @@ import styled from 'styled-components/native';
 import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
+const Container = styled.View`
+  flex: 1;
+`;
 const CommWrap = styled.View`
   flex-direction: row;
 `;
 const OpenWorkList = styled(FlatList)`
-  flex: 1;
 `;
 
 const FirmWorkingList: React.FC = () =>
@@ -30,11 +32,13 @@ const FirmWorkingList: React.FC = () =>
   if (openWorkList.length === 0)
   {
     return (
-      <JBEmptyView
-        title="현재 일감 리스트가 비어 있습니다,"
-        subTitle="다시 조회해 보세요"
-        refresh={refetchOpenWorkList}
-      />
+      <Container>
+        <JBEmptyView
+          title="현재 일감 리스트가 비어 있습니다,"
+          subTitle="다시 조회해 보세요"
+          refresh={refetchOpenWorkList}
+        />
+      </Container>
     );
   }
 

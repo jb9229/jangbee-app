@@ -94,10 +94,14 @@ export class FirmEditDto
   workAlarmSido: string;
   workAlarmSigungu: string;
   introduction: string;
-  thumbnail: ImageInfo;
-  photo1: ImageInfo;
-  photo2: ImageInfo;
-  photo3: ImageInfo;
+  thumbnail: string;
+  uploadThumbnail: ImageInfo;
+  photo1: string;
+  photo2: string;
+  photo3: string;
+  uploadPhoto1: ImageInfo;
+  uploadPhoto2: ImageInfo;
+  uploadPhoto3: ImageInfo;
   blog: string;
   homepage: string;
   sns: string;

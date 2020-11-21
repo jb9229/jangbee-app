@@ -26,7 +26,7 @@ const RuleTitleWrap = styled.View`
   border-bottom-width: 1;
 `;
 const RuleTitle = styled.Text`
-  font-size: 20;
+  font-size: 20px;
   font-family: ${(props: StyleProps): string => props.theme.FontTitle};
   font-weight: bold;
 `;

@@ -1,7 +1,6 @@
 import * as api from 'src/api/api';
-import * as imageManager from 'common/ImageManager';
 
-import { FirmCreateDto, FirmCreateErrorData, FirmCreateValidScheme } from 'src/container/firm/types';
+import { FirmCreateDto, FirmCreateErrorData, FirmCreateValidScheme, FirmEditDto } from 'src/container/firm/types';
 
 import { ReactNativeFile } from 'apollo-upload-client';
 import getString from 'src/STRING';
@@ -76,37 +75,35 @@ export const validateCreatFirmDto = (dto: FirmCreateDto): Promise<boolean | Firm
     });
 };
 
-export const requestModifyFirm = (uid: string, firmId: string, dto: FirmCreateDto): Promise<boolean> =>
+export const validateUpdateFirmDto = (dto: FirmEditDto): Promise<boolean | FirmCreateErrorData> =>
 {
-  const updateFirm = {
-    id: firmId,
-    accountId: uid,
-    fname: dto.fname,
-    phoneNumber: dto.phoneNumber,
-    equiListStr: dto.equiListStr,
-    modelYear: dto.modelYear,
-    address: dto.address,
-    addressDetail: dto.addressDetail,
-    sidoAddr: dto.sidoAddr,
-    sigunguAddr: dto.sigunguAddr,
-    addrLongitude: dto.addrLongitude,
-    addrLatitude: dto.addrLatitude,
-    workAlarmSido: dto.workAlarmSido,
-    workAlarmSigungu: dto.workAlarmSigungu,
-    introduction: dto.introduction,
-    thumbnail: dto.uploadedThumbnailUrl,
-    photo1: dto.uploadedPhoto1Url,
-    photo2: dto.uploadedPhoto2Url,
-    photo3: dto.uploadedPhoto3Url,
-    blog: dto.blog,
-    homepage: dto.homepage,
-    sns: dto.sns
-  };
+  const errorData = new FirmCreateErrorData();
+  let result = true;
 
-  return api.updateFirm(updateFirm);
+  if (!dto.workAlarmSido && !dto.workAlarmSigungu) { errorData.workAlarm = getString('VALIDATION_REQUIRED'); result = false }
+  if (dto.uploadThumbnail === null) { errorData.thumbnail = getString('VALIDATION_REQUIRED'); result = false }
+  if (dto.uploadPhoto1 === null) { errorData.photo1 = getString('VALIDATION_REQUIRED'); result = false }
+  return FirmCreateValidScheme.validate(dto, { abortEarly: false })
+    .then(() => { return result || errorData })
+    .catch((err) =>
+    {
+      err.errors.forEach((e: string) =>
+      {
+        if (e.startsWith('[fname]')) { errorData.fname = (e.replace('[fname]', '')) };
+        if (e.startsWith('[phoneNumber]')) { errorData.phoneNumber = (e.replace('[phoneNumber]', '')) };
+        if (e.startsWith('[equiListStr]')) { errorData.equiListStr = (e.replace('[equiListStr]', '')) };
+        if (e.startsWith('[modelYear]')) { errorData.modelYear = (e.replace('[modelYear]', '')) };
+        if (e.startsWith('[address]')) { errorData.address = (e.replace('[address]', '')) };
+        if (e.startsWith('[introduction]')) { errorData.introduction = (e.replace('[introduction]', '')) };
+        if (e.startsWith('[thumbnail]')) { errorData.thumbnail = (e.replace('[thumbnail]', '')) };
+        if (e.startsWith('[photo1]')) { errorData.photo1 = (e.replace('[photo1]', '')) };
+      });
+
+      return errorData;
+    });
 };
 
-export const getUpdateFirmDto = (dto: FirmCreateDto): FirmCreateDto =>
+export const getUpdateFirmDto = (dto: FirmEditDto): FirmEditDto =>
 {
   const updateFirm = {
     fname: dto.fname,
@@ -122,14 +119,34 @@ export const getUpdateFirmDto = (dto: FirmCreateDto): FirmCreateDto =>
     workAlarmSido: dto.workAlarmSido,
     workAlarmSigungu: dto.workAlarmSigungu,
     introduction: dto.introduction,
-    thumbnail: dto.uploadedThumbnailUrl,
-    photo1: dto.uploadedPhoto1Url,
-    photo2: dto.uploadedPhoto2Url,
-    photo3: dto.uploadedPhoto3Url,
+    thumbnail: dto.thumbnail,
+    photo1: dto.photo1,
+    photo2: dto.photo2,
+    photo3: dto.photo3,
+    uploadThumbnail: dto.uploadThumbnail ? new ReactNativeFile({
+      uri: dto.uploadThumbnail.uri,
+      name: 'Thumbnail',
+      type: 'image/png'
+    }) : dto.uploadThumbnail,
+    uploadPhoto1: dto.uploadPhoto1 ? new ReactNativeFile({
+      uri: dto.uploadPhoto1.uri,
+      name: 'firmImage1',
+      type: 'image/png'
+    }) : dto.uploadPhoto1,
+    uploadPhoto2: dto.uploadPhoto2 ? new ReactNativeFile({
+      uri: dto.uploadPhoto2.uri,
+      name: 'firmImage2',
+      type: 'image/png'
+    }) : dto.uploadPhoto2,
+    uploadPhoto3: dto.uploadPhoto3 ? new ReactNativeFile({
+      uri: dto.uploadPhoto3.uri,
+      name: 'firmImage3',
+      type: 'image/png'
+    }) : dto.uploadPhoto3,
     blog: dto.blog,
     homepage: dto.homepage,
     sns: dto.sns
-  };
+  } as FirmEditDto;
 
   return updateFirm;
 };

@@ -1,9 +1,10 @@
+import { StyleSheet, View } from 'react-native';
+
 // @flow
 import React from 'react';
-import styled from 'styled-components/native';
-import { StyleSheet, View } from 'react-native';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 const TouchableHighlight = styled.TouchableHighlight`
   border-color: ${props => (props.isSelected ? 'white' : '#E1EDAF')};
@@ -26,7 +27,7 @@ const TouchableHighlight = styled.TouchableHighlight`
 const Text = styled.Text`
   color: ${props => (props.isSelected ? colors.point : 'black')};
   font-family: ${fonts.button};
-  font-size: 20;
+  font-size: 20px;
   font-weight: bold;
 `;
 

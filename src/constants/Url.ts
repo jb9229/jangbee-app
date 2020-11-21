@@ -29,7 +29,6 @@ const url = {
   JBSERVER_ADTARGET_LOCAL: `${SERVER_URL}ad/target/local`,
   JBSERVER_CLIENT_EVALU: `${SERVER_URL}client/evaluation`,
   JBSERVER_CLIENT_EVALU_COUNT: `${SERVER_URL}client/evaluation/count`,
-  JBSERVER_CLIENT_EVALU_ALL: `${SERVER_URL}client/evaluations`,
   JBSERVER_CLIENT_EVALULIKE: `${SERVER_URL}client/evaluation/like`,
   JBSERVER_CLIENT_EVALULIKE_EXIST: `${SERVER_URL}client/evaluation/like/exist`,
   JBSERVER_CLIENT_EVALU_TELEXIST: `${SERVER_URL}client/evaluation/exist/telnumber`,

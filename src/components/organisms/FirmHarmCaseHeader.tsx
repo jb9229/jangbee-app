@@ -5,9 +5,7 @@ import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 import { FirmHarmCaseCountData } from 'src/container/firmHarmCase/type';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from 'constants/Colors';
-import { firmHarmCaseCountState } from 'src/container/firmHarmCase/store';
 import fonts from 'constants/Fonts';
-import { useRecoilValue } from 'recoil';
 
 const HeaderWrap = styled.View`
   margin-top: 10;
@@ -27,7 +25,7 @@ const SearchNoticeWrap = styled.View`
   justify-content: space-between;
   background-color: ${colors.batangDark};
   elevation: 14;
-  border-radius: 8;
+  border-radius: 8px;
 `;
 const SearchCountWrap = styled.View`
   flex-direction: row;

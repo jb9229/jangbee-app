@@ -1,8 +1,8 @@
-import React from 'react';
 import { InteractionManager } from 'react-native';
-import styled from 'styled-components/native';
+import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 const ContainTO = styled.TouchableOpacity`
   align-items: center;
@@ -16,7 +16,7 @@ const TitleWrap = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 20;
+  font-size: 20px;
   font-family: ${fonts.batang};
   padding-top: 5;
 `;

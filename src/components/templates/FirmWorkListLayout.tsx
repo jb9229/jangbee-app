@@ -30,6 +30,8 @@ const FirmListTabBar = styled(TabBar).attrs(({
   background-color: ${(props: StyledCProps): string => props.theme.ColorBGDarkGray};
 `;
 
+const BottomWrap = styled.View``;
+
 interface Props {
   navigation: DefaultNavigationProps;
 }
@@ -75,13 +77,15 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
           />
         )}
       />
-      <JBButton
-        title="차주 일감 등록하기"
-        onPress={(): void => props.navigation.navigate('WorkRegister', { firmRegister: true })
-        }
-        size="full"
-        Primary
-      />
+      <BottomWrap>
+        <JBButton
+          title="차주 일감 등록하기"
+          onPress={(): void => props.navigation.navigate('WorkRegister', { firmRegister: true })
+          }
+          size="full"
+          Primary
+        />
+      </BottomWrap>
     </Container>
   );
 };

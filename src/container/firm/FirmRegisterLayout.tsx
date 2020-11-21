@@ -132,6 +132,7 @@ const FirmRegisterLayout: React.FC = () =>
             img={firmDto.thumbnail}
             aspect={[1, 1]}
             setImage={(img: ImageInfo): void => { firmDto.thumbnail = img }}
+            deleteImage={(): void => { firmDto.thumbnail = undefined }}
             errorText={errorData.thumbnail}
           />
 
@@ -140,6 +141,7 @@ const FirmRegisterLayout: React.FC = () =>
             subTitle="(필수)"
             img={firmDto.photo1}
             setImage={(img: ImageInfo): void => { firmDto.photo1 = img }}
+            deleteImage={(): void => { firmDto.photo1 = undefined }}
             errorText={errorData.photo1}
           />
 
@@ -148,6 +150,7 @@ const FirmRegisterLayout: React.FC = () =>
             subTitle="(여러장 올려야 좋아요)"
             img={firmDto.photo2}
             setImage={(img: ImageInfo): void => { firmDto.photo2 = img }}
+            deleteImage={(): void => { firmDto.photo2 = undefined }}
             errorText={errorData.photo2}
           />
 
@@ -155,6 +158,7 @@ const FirmRegisterLayout: React.FC = () =>
             itemTitle="작업사진3"
             img={firmDto.photo3}
             setImage={(img: ImageInfo): void => { firmDto.photo3 = img }}
+            deleteImage={(): void => { firmDto.photo3 = undefined }}
             errorText={errorData.photo3}
           />
 

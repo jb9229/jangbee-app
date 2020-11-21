@@ -77,18 +77,6 @@ export function getLocalFirmList (page, equipment, searSido, searSigungu)
   ).then(handleJBServerJsonResponse);
 }
 
-export function updateFirm (newFirmData)
-{
-  return fetch(url.JBSERVER_FIRM, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newFirmData)
-  }).then(handleJBServerJsonResponse);
-}
-
 /**
  * 업체가 존재하는 지역정보 조회
  */
@@ -313,16 +301,6 @@ export function createClientEvaluation (newEvaluation)
     },
     body: JSON.stringify(newEvaluation)
   }).then(handleJBServerJsonResponse);
-}
-
-export function getClientEvaluList (page, accountId, mine)
-{
-  const param = encodeURIComponent(accountId);
-  return fetch(
-    `${
-      url.JBSERVER_CLIENT_EVALU_ALL
-    }?page=${page}&size=${10}&accountId=${param}&mine=${mine}`
-  ).then(handleJBServerJsonResponse);
 }
 
 export function searchClientEvaluList (paramStr)

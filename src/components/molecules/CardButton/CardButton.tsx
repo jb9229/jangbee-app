@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import styled from 'styled-components/native';
 
 // Styled Components
 const ButtonWrap = styled.View`
@@ -26,7 +26,7 @@ const ActionWrap = styled.View`
 
 const TitleText = styled.Text`
   font-family: ${fonts.title};
-  font-size: 20;
+  font-size: 20px;
 `;
 const ValueText = styled.Text`
   font-family: ${fonts.batang};

@@ -22,7 +22,7 @@ const UrlTextTO = styled.TouchableOpacity`
 `;
 const UrlText = styled.Text`
   font-family: ${fonts.batang};
-  font-size: 20;
+  font-size: 20px;
   color: ${(props: StyleProps): string => props.existUrl ? 'black' : 'gray'};
 `;
 const styles = StyleSheet.create({
@@ -58,6 +58,7 @@ interface Props {
   aspect?: [number, number];
   itemWrapStyle?: ViewStyle;
   setImage: (img: ImageInfo) => void;
+  deleteImage?: () => void;
 }
 const ImagePickInput: React.FC<Props> = (props) =>
 {
@@ -95,7 +96,7 @@ const ImagePickInput: React.FC<Props> = (props) =>
       <View style={styles.titleWrap}>
         <MiddleTitle label={props.itemTitle} subLabel={props.subTitle}/>
         {img ? (
-          <JBIcon name="close" size={32} onPress={(): void => { props.setImage(undefined); setImage(undefined) }} />
+          <JBIcon name="close" size={32} onPress={(): void => { props.deleteImage(); setImage(undefined) }} />
         ) : null}
       </View>
 

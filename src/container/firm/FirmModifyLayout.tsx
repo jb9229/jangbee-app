@@ -128,7 +128,8 @@ console.log('>>> firm: ', firm)
             subTitle="(필수)"
             initImgUrl={firm?.thumbnail}
             aspect={[1, 1]}
-            setImage={(img: ImageInfo): void => { firmDto.thumbnail = img }}
+            setImage={(img: ImageInfo): void => { firmDto.uploadThumbnail = img }}
+            deleteImage={(): void => { firmDto.uploadThumbnail = null }}
             errorText={errorData.thumbnail}
           />
 
@@ -136,7 +137,8 @@ console.log('>>> firm: ', firm)
             itemTitle="작업사진1"
             subTitle="(필수)"
             initImgUrl={firm?.photo1}
-            setImage={(img: ImageInfo): void => { firmDto.photo1 = img }}
+            setImage={(img: ImageInfo): void => { firmDto.uploadPhoto1 = img }}
+            deleteImage={(): void => { firmDto.uploadPhoto1 = null }}
             errorText={errorData.photo1}
           />
 
@@ -144,14 +146,16 @@ console.log('>>> firm: ', firm)
             itemTitle="작업사진2"
             subTitle="(여러장 올려야 좋아요)"
             initImgUrl={firm?.photo2}
-            setImage={(img: ImageInfo): void => { firmDto.photo2 = img }}
+            setImage={(img: ImageInfo): void => { firmDto.uploadPhoto2 = img }}
+            deleteImage={(): void => { firmDto.uploadPhoto2 = null }}
             errorText={errorData.photo2}
           />
 
           <ImagePickInput
             itemTitle="작업사진3"
             initImgUrl={firm?.photo3}
-            setImage={(url): void => { firmDto.photo3 = url }}
+            setImage={(img: ImageInfo): void => { firmDto.uploadPhoto3 = img }}
+            deleteImage={(): void => { firmDto.uploadPhoto3 = null }}
             errorText={errorData.photo3}
           />
 

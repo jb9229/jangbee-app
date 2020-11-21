@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import { FirmCreateDto, FirmCreateErrorData, FirmEditDto } from 'src/container/firm/types';
-import { getUpdateFirmDto, validateCreatFirmDto } from 'src/container/firm/action';
+import { FirmCreateErrorData, FirmEditDto } from 'src/container/firm/types';
+import { getUpdateFirmDto, validateUpdateFirmDto } from 'src/container/firm/action';
 
 import { DefaultNavigationProps } from 'src/types';
+import { FIRM } from 'src/api/queries';
 import { UPDATE_FIRM } from 'src/api/mutations';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
@@ -13,7 +14,7 @@ import { useMutation } from '@apollo/client';
 interface Context {
   navigation: DefaultNavigationProps;
   loading: boolean;
-  firmDto: FirmCreateDto;
+  firmDto: FirmEditDto;
   errorData: FirmCreateErrorData;
   onClickUpdate: () => void;
 }
@@ -48,7 +49,8 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
     onError: (err) =>
     {
       noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message, user);
-    }
+    },
+    refetchQueries: [{ query: FIRM, variables: { accountId: user.uid } }]
   });
 
   // Didmount/Unmount
@@ -56,7 +58,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
   {
     if (firm)
     {
-      const updateDto = new FirmCreateDto()
+      const updateDto = new FirmEditDto();
       updateDto.phoneNumber = firm.phoneNumber;
       updateDto.equiListStr = firm.equiListStr;
       updateDto.sidoAddr = firm.sidoAddr;
@@ -69,6 +71,10 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
       updateDto.modelYear = firm.modelYear;
       updateDto.introduction = firm.introduction;
       updateDto.fname = firm.fname;
+      updateDto.thumbnail = firm.thumbnail;
+      updateDto.photo1 = firm.photo1;
+      updateDto.photo2 = firm.photo2;
+      updateDto.photo3 = firm.photo3;
 
       setFirmDto(updateDto);
     }
@@ -86,7 +92,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
   const actions = {
     onClickUpdate: (): void =>
     {
-      validateCreatFirmDto(firmDto)
+      validateUpdateFirmDto(firmDto)
         .then((result) =>
         {
           console.log('>>> update firmDto:', firmDto);
