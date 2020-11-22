@@ -152,3 +152,8 @@ export class FirmCreateErrorData
   homepage: string;
   sns: string;
 };
+
+export const SEARCH_TYPE = {
+  DISTANCE: 'DISTANCE',
+  LOCATION: 'LOCATION'
+};

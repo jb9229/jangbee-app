@@ -143,7 +143,7 @@ console.log('>>> firmListItem:', props.item);
             props.item.modelYear
           }년식)`}</Text>
           {props.isLocalSearch ? (
-            <Text style={styles.bottomText}>{props.item.address}</Text>
+            <Text style={styles.bottomText}>{`${props.item.sidoAddr} ${props.item.sigunguAddr}`}</Text>
           ) : (
             <Text style={styles.bottomText}>{calDistance(props.item.distance)}</Text>
           )}

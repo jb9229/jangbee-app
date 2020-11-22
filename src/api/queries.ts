@@ -108,6 +108,8 @@ export const FIRM = gql`
       equiListStr
       distance
       address
+      sidoAddr
+      sigunguAddr
       addressDetail
       modelYear
       workAlarmSido
@@ -135,6 +137,8 @@ export const Firms = gql`
       modelYear
       address
       addressDetail
+      sidoAddr
+      sigunguAddr
     }
   }
 `;

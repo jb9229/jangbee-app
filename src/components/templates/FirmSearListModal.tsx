@@ -6,6 +6,7 @@ import { Firms } from 'src/api/queries';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import { Modal } from 'react-native';
 import React from 'react';
+import { SEARCH_TYPE } from 'src/container/firm/types';
 import colors from 'constants/Colors';
 import styled from 'styled-components/native';
 import { useLazyQuery } from '@apollo/client';
@@ -56,19 +57,22 @@ const FirmSearListModal: React.FC<Props> = (props) =>
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLastList, setLastList] = React.useState(true);
   const [isListLoading, setListLoading] = React.useState(true);
-  const [searchFirmReq, searchFirmRsp] = useLazyQuery(Firms);
+  const [searchFirmReq, searchFirmRsp] = useLazyQuery(Firms, { fetchPolicy: 'cache-and-network' });
 
   React.useEffect(() =>
   {
-    if (!props.visible || !props.searEquipment || !props.searEquiModel || !props.searLatitude || !props.searLongitude) { return }
+    if (!props.visible || !props.searEquipment || !props.searEquiModel) { return }
     const searchEquipment = `${props.searEquiModel} ${props.searEquipment}`;
     const variables =
     {
       searchFirmParams:
       {
+        searchType: props.isLocalSearch ? SEARCH_TYPE.LOCATION : SEARCH_TYPE.DISTANCE,
         equipment: searchEquipment,
         latitude: props.searLatitude,
-        longitude: props.searLongitude
+        longitude: props.searLongitude,
+        sidoAddr: props.searSido,
+        sigunguAddr: props.searGungu
       }
     };
 
