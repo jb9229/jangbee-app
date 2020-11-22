@@ -13,7 +13,7 @@
       "android",
       "web"
     ],
-    "version": "1.4.0_201121",
+    "version": "1.4.2_201122",
     "orientation": "portrait",
     "primaryColor": "#F9C06B",
     "icon": "./assets/images/icon-512.png",
