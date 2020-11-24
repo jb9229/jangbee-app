@@ -15,6 +15,7 @@ import JBButton from 'molecules/JBButton';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import React from 'react';
 import colors from 'constants/Colors';
+import styled from 'styled-components/native';
 
 const SIGUNGU_MAX_COUNT = 5;
 const SIDO_MAX_COUNT = 3;
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   }
 });
+const BtnWrap = styled.View``;
 
 export default class EquipementModal extends React.Component
 {
@@ -275,7 +277,7 @@ export default class EquipementModal extends React.Component
             {!actionName && <JangbeeAdList admob {...this.props} />}
             <ScrollView
               contentContainerStyle={{ }}
-              style={{ flex: 1 }}
+              style={{flex: 1}}
             >
               {listDataSource.map((group, key) => (
                 <ExpandableItem
@@ -292,14 +294,14 @@ export default class EquipementModal extends React.Component
               ))}
             </ScrollView>
           </View>
-          {actionName && (
-            <JBButton
-              title={actionName}
-              onPress={this.multiSelComplete}
-              size="full"
-              Secondary
-            />
-          )}
+          <BtnWrap>
+              <JBButton
+                title={actionName}
+                onPress={this.multiSelComplete}
+                size="full"
+                Secondary
+              />
+            </BtnWrap>
         </View>
       </Modal>
     );
