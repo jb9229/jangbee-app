@@ -1,23 +1,41 @@
-import { Linking, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 
 /**
  * 업체 전화연결 함수
  */
-export const callSearchFirm = (number) =>
+export const callSearchFirm = (phoneNumber) =>
 {
-  console.log('=== callSearchFirm: ', number)
-  if (number === null || number === '')
+  console.log('=== callSearchFirm: ', phoneNumber);
+  if (phoneNumber === null || phoneNumber === '')
   {
     return;
   }
 
-  const telStr = `tel:${number}`;
+  const telStr = `tel:${phoneNumber}`;
 
-  Linking
-    .openURL(telStr)
-    .catch(() => alert(`전화앱 열기에 문제가 있습니다, 다시 시도해 주세요 [${telStr}]`));
+  if (Platform.OS === 'web')
+  {
+    Linking
+      .openURL(telStr)
+      .catch(() => alert(`전화앱 열기에 문제가 있습니다, 다시 시도해 주세요 [${telStr}]`));
+  }
+  else
+  {
+    Alert.alert(
+      '전화연결',
+      '해당 업체로 바로 전화 연결 하시겠습니까?',
+      [
+        {
+          text: '취소', onPress: () => undefined
+        },
+        {
+          text: '통화', onPress: () => RNImmediatePhoneCall.immediatePhoneCall(phoneNumber)
+        }
+      ]
+    );
+  }
 };
 
 /**
@@ -25,6 +43,7 @@ export const callSearchFirm = (number) =>
  */
 export const callAdFirm = (phoneNumber: string): void =>
 {
+  console.log('=== callAdFirm: ', phoneNumber);
   if (!phoneNumber)
   {
     alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`);
@@ -38,6 +57,17 @@ export const callAdFirm = (phoneNumber: string): void =>
   }
   else
   {
-    RNImmediatePhoneCall.immediatePhoneCall(phoneNumber);
+    Alert.alert(
+      '전화연결',
+      '해당 업체로 바로 전화 연결 하시겠습니까?',
+      [
+        {
+          text: '취소', onPress: () => undefined
+        },
+        {
+          text: '통화', onPress: () => RNImmediatePhoneCall.immediatePhoneCall(phoneNumber)
+        }
+      ]
+    );
   }
 };
