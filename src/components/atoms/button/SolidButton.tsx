@@ -30,8 +30,9 @@ interface Props {
 const SolidButton: React.FC<Props> = props =>
 {
   const { theme, rootStyle, buttonStyle, textStyle } = props;
-  const btnRootStyle = { flex: 1, ...rootStyle };
+  const btnRootStyle = { ...rootStyle };
   const btnStyle: ViewStyle = {
+    flexDirection: 'row',
     width: '100%',
     backgroundColor: '#82b6ed',
     ...buttonStyle

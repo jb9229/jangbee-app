@@ -1,8 +1,8 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import JBButton from 'molecules/JBButton';
 import JBErrorMessage from 'organisms/JBErrorMessage';
 import React from 'react';
+import SolidButton from 'atoms/button/SolidButton';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import fonts from 'constants/Fonts';
@@ -228,11 +228,10 @@ class SignUpScreen extends React.Component
           <Notice>※ 실수로 잘못 등록시, 탈퇴후 다시 로그인하세요.</Notice>
         </NoticeWrap>
         <JBErrorMessage errorMSG={errorMessage} />
-        <JBButton
-          title={regiText}
+        <SolidButton
+          text={regiText}
           onPress={() => this.onSignUp()}
-          align="center"
-          Primary
+          rootStyle={{ marginLeft: 20, marginRight: 20 }}
         />
       </View>
     );
