@@ -1,11 +1,12 @@
 {
   "extends": [
-    "standard",
+    "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint"],
   "settings": {
     "react": {
       "createClass": "createReactClass",
@@ -18,12 +19,12 @@
     "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "rules": {
     "max-len": ["error", { "code": 140 }],
-    "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
+    "semi": ["error", "always", { "omitLastInOneLineBlock": true }],
     "sort-imports": [
       2,
       {
@@ -32,7 +33,10 @@
         "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
       }
     ],
-    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }],
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { "variables": false }
+    ],
     "react/prop-types": 0,
     "brace-style": ["error", "allman", { "allowSingleLine": true }],
     "object-property-newline": 0,

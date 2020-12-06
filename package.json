@@ -14,6 +14,11 @@
     "predeploy": "expo build:web",
     "deploy-hosting": "yarn predeploy && firebase deploy --only hosting"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "jest": {
     "preset": "jest-expo"
   },
@@ -112,25 +117,25 @@
     "@types/react-test-renderer": "^16.9.0",
     "@types/styled-components": "^4.1.18",
     "@types/yup": "^0.26.28",
-    "@typescript-eslint/eslint-plugin": "2.3.0",
-    "@typescript-eslint/parser": "2.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "babel-preset-expo": "^8.3.0",
     "emotion-theming": "^10.0.14",
     "eslint": "^6.4.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-standard": "^4.0.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
     "gh-pages": "^3.1.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "~25.2.6",
     "jest-expo": "^38.0.0",
     "jest-expo-ts": "^22.0.1",
     "jetifier": "^1.6.5",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
     "metro-react-native-babel-preset": "^0.59.0",
     "react-native-storybook-loader": "^1.8.0",
     "react-native-testing-library": "^1.5.0",
@@ -147,6 +152,5 @@
       "pattern": "**/*.story.tsx"
     }
   },
-  "name": "jangbee-app",
-  "version": "1.0.0"
+  "name": "jangbee-app"
 }
