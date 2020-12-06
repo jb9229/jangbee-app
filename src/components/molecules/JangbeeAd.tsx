@@ -18,12 +18,19 @@ const Container = styled.View<StyledProps>`
   width: 100%;
   height: ${(Dimensions.get('window').width - 20) * 0.75};
   align-items: center;
-  max-height: ${(props): number => props.adLocation === AdLocation.MAIN ? 800 * 0.75 : 500 * 0.75};
+  max-height: ${(props): number =>
+    props.adLocation === AdLocation.MAIN ? 800 * 0.75 : 500 * 0.75};
 `;
 const AdImgBg = styled.ImageBackground<StyledProps>`
-  width: ${Dimensions.get('window').width >= 1600 ? 1600 : Dimensions.get('window').width};
-  height: ${(props): number => Dimensions.get('window').width > 800 ? props.adLocation === AdLocation.MAIN
-    ? (800 * 0.75) : (500 * 0.75) : Dimensions.get('window').width * 0.75};
+  width: ${Dimensions.get('window').width >= 1600
+    ? 1600
+    : Dimensions.get('window').width};
+  height: ${(props): number =>
+    Dimensions.get('window').width > 800
+      ? props.adLocation === AdLocation.MAIN
+        ? 800 * 0.75
+        : 500 * 0.75
+      : Dimensions.get('window').width * 0.75};
 `;
 const TitleWrap = styled.View`
   flex: 3;
@@ -37,7 +44,7 @@ const Contents = styled.View`
 
 const BottomWrap = styled.View`
   background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 5;
+  border-radius: 5px;
   height: 40;
   margin-bottom: 15px;
   justify-content: center;
@@ -47,7 +54,7 @@ const styles = StyleSheet.create({
   bgAdWrap: {
     flex: 1,
     justifyContent: 'space-between',
-    width: '100%'
+    width: '100%',
   },
   titleText: {
     color: 'white',
@@ -55,26 +62,26 @@ const styles = StyleSheet.create({
     fontFamily: fonts.titleMiddle,
     textShadowColor: 'black',
     textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 10
+    textShadowRadius: 10,
   },
   subTitleWrap: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 40,
-    marginRight: 40
+    marginRight: 40,
   },
   subTitleText: {
     color: 'white',
     fontSize: 15,
-    fontFamily: fonts.batang
+    fontFamily: fonts.batang,
   },
   telIconWrap: {},
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 const TelIconWrap = styled.View`
@@ -88,8 +95,7 @@ const TelIconWrap = styled.View`
   padding-right: 5;
 `;
 
-const telAdvertiser = (phoneNumber): void =>
-{
+const telAdvertiser = (phoneNumber): void => {
   // if (!phoneNumber)
   // {
   //   Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`);
@@ -99,7 +105,7 @@ const telAdvertiser = (phoneNumber): void =>
   // Linking.openURL(`tel:${phoneNumber}`)
   //   .catch(() => Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`));
 
-  alert('phone call')
+  alert('phone call');
   RNImmediatePhoneCall.immediatePhoneCall('0123456789');
 };
 
@@ -135,13 +141,18 @@ const JangbeeAd: React.FC<Props> = ({ ad, openFirmDetail, adLocation }) => (
                   size={40}
                   color={colors.point}
                   onPress={() => callAdFirm(ad.telNumber)}
-                />)}
+                />
+              )}
             </TelIconWrap>
           </BottomWrap>
         </Contents>
       </View>
     ) : (
-      <AdImgBg adLocation={adLocation} source={{ uri: ad.photoUrl }} resizeMode="cover">
+      <AdImgBg
+        adLocation={adLocation}
+        source={{ uri: ad.photoUrl }}
+        resizeMode="cover"
+      >
         <View style={styles.bgAdWrap}>
           <TitleWrap>
             <Text style={styles.titleText}>{ad.title}</Text>

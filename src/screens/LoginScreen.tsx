@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as firebase from 'firebase/app';
 
-import { FirebaseAuthApplicationVerifier, FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import {
+  FirebaseAuthApplicationVerifier,
+  FirebaseRecaptchaVerifierModal,
+} from 'expo-firebase-recaptcha';
 import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import AgreementTerms from 'src/components/organisms/AgreementTerms';
@@ -24,7 +27,7 @@ const KeyboardAvoidingView = styled(StyleKeyboardAvoidingView)`
 `;
 const ItemWrap = styled.View`
   justify-content: center;
-  margin-bottom: 20;
+  margin-bottom: 20px;
   padding: 20px 20px;
 `;
 
@@ -37,66 +40,57 @@ interface Props {
   changeAuthPath: (path: number, data?: any) => void;
 }
 
-const LoginScreen: React.FC<Props> = (props) =>
-{
+const LoginScreen: React.FC<Props> = props => {
   let recaptchaVerifier: FirebaseAuthApplicationVerifier;
   let verificationCode: string;
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [isValidPhoneNumber, setValidPhoneNumber] = React.useState(false);
   const [verificationId, setVerificationId] = React.useState('');
-  const [phoneNumberValErrMessage, setPhoneNumberValErrMessage] = React.useState('');
+  const [
+    phoneNumberValErrMessage,
+    setPhoneNumberValErrMessage,
+  ] = React.useState('');
   const [codeValErrMessage, setCodeValErrMessage] = React.useState('');
   const [agreeTerms, setAgreeTerms] = React.useState(false);
 
-  const onSignIn = (user) =>
-  {
+  const onSignIn = user => {
     registerForPushNotificationsAsync(user.uid);
     getUserInfo(user.uid)
-      .then(data =>
-      {
+      .then(data => {
         console.log('>>> getUserInfo~~');
         const userInfo = data.val();
-        if (!userInfo)
-        {
+        if (!userInfo) {
           props.changeAuthPath(2, user);
           return;
         }
 
         const { userType } = userInfo;
 
-        if (!userType)
-        {
+        if (!userType) {
           props.changeAuthPath(2, user);
-        }
-        else
-        {
+        } else {
           props.changeAuthPath(1);
         }
       })
       .catch(error =>
         noticeUserError(
           'FB 사용자 정보 요청 실패',
-          `사용자 정보 요청에 문제가 있습니다, 다시 시도해 주세요(${
-            error.message
-          })`
+          `사용자 정보 요청에 문제가 있습니다, 다시 시도해 주세요(${error.message})`
         )
       );
   };
 
-  const cancelSignIn = () =>
-  {
+  const cancelSignIn = () => {
     setPhoneNumber('');
     setValidPhoneNumber(false);
     setVerificationId('');
     setAgreeTerms(false);
   };
 
-  const convertNationalPN = (phoneNumber): string =>
-  {
+  const convertNationalPN = (phoneNumber): string => {
     const koreaNationalPhoneNumber = '+82';
 
-    if (phoneNumber === '')
-    {
+    if (phoneNumber === '') {
       return undefined;
     }
     let newPN = phoneNumber.replace(/-/g, ''); // without hyphen
@@ -109,44 +103,41 @@ const LoginScreen: React.FC<Props> = (props) =>
   /**
    * Validation 에러 메세지 초기화
    */
-  const resetValErrMsg = () =>
-  {
+  const resetValErrMsg = () => {
     setPhoneNumberValErrMessage('');
     setCodeValErrMessage('');
   };
 
-  const onPhoneComplete = async () =>
-  {
+  const onPhoneComplete = async () => {
     resetValErrMsg();
   };
 
-  const onPressConfirmVerificationCode = async () =>
-  {
+  const onPressConfirmVerificationCode = async () => {
     console.log('>>> onPressConfirmVerificationCode~~');
     const credential = firebase.auth.PhoneAuthProvider.credential(
       verificationId,
       verificationCode
     );
-    const authResult = await firebase.auth().signInWithCredential(credential)
-      .catch(() =>
-      {
-        Alert.alert('인증번호가 유효하지 않습니다!', `인증번호를 다시 확인해 주세요(${verificationCode})`);
+    const authResult = await firebase
+      .auth()
+      .signInWithCredential(credential)
+      .catch(() => {
+        Alert.alert(
+          '인증번호가 유효하지 않습니다!',
+          `인증번호를 다시 확인해 주세요(${verificationCode})`
+        );
       });
 
     console.log('>>> authResult:');
-    if (authResult?.user?.uid)
-    {
+    if (authResult?.user?.uid) {
       onSignIn(authResult.user);
-    }
-    else
-    {
+    } else {
       setCodeValErrMessage('인증코드가 올바르지 않습니다');
     }
     console.log('>>> authResult: ', authResult);
   };
 
-  const onPressSendVerificationCode = async () =>
-  {
+  const onPressSendVerificationCode = async () => {
     const phoneProvider = new firebase.auth.PhoneAuthProvider();
     const verificationId = await phoneProvider.verifyPhoneNumber(
       convertNationalPN(phoneNumber),
@@ -164,25 +155,26 @@ const LoginScreen: React.FC<Props> = (props) =>
             subLabel="(숫자만)"
             text={phoneNumber}
             keyboardType="phone-pad"
-            onChangeText={(text): void =>
-            {
-              if (isPhoneNumberFormat(text))
-              {
+            onChangeText={(text): void => {
+              if (isPhoneNumberFormat(text)) {
                 const formatPN = formatTelnumber(text);
                 setPhoneNumber(formatPN);
                 setValidPhoneNumber(true);
                 setPhoneNumberValErrMessage('');
-              }
-              else
-              {
+              } else {
                 setValidPhoneNumber(false);
-                if (text) { setPhoneNumber(text.replace(/-/g, '')) }
+                if (text) {
+                  setPhoneNumber(text.replace(/-/g, ''));
+                }
               }
             }}
             placeholder="숫자만 입력해 주세요(0101234567)"
-            onEndEditing={(): void =>
-            {
-              if (!isPhoneNumberFormat(phoneNumber)) { setPhoneNumberValErrMessage(getString('VALIDATION_PHONENUMBER')) }
+            onEndEditing={(): void => {
+              if (!isPhoneNumberFormat(phoneNumber)) {
+                setPhoneNumberValErrMessage(
+                  getString('VALIDATION_PHONENUMBER')
+                );
+              }
             }}
             onSubmitEditing={() => onPhoneComplete()}
             unchangeable={verificationId}
@@ -192,7 +184,9 @@ const LoginScreen: React.FC<Props> = (props) =>
             <>
               <EditText
                 label="인증코드"
-                onChangeText={(text): void => { verificationCode = text }}
+                onChangeText={(text): void => {
+                  verificationCode = text;
+                }}
                 keyboardType="numeric"
                 placeholder="SMS 인증코드 입력"
                 errorText={codeValErrMessage}
@@ -203,7 +197,8 @@ const LoginScreen: React.FC<Props> = (props) =>
 
         <CommWrap>
           {!verificationId ? (
-            agreeTerms && !!isValidPhoneNumber && (
+            agreeTerms &&
+            !!isValidPhoneNumber && (
               <JBButton
                 title="전화번호 인증하기"
                 onPress={(): Promise<void> => onPressSendVerificationCode()}
@@ -212,7 +207,11 @@ const LoginScreen: React.FC<Props> = (props) =>
             )
           ) : (
             <CommWrap>
-              <JBButton title="취소" onPress={(): void => cancelSignIn()} Secondary/>
+              <JBButton
+                title="취소"
+                onPress={(): void => cancelSignIn()}
+                Secondary
+              />
               <JBButton
                 title="로그인하기"
                 onPress={(): Promise<void> => onPressConfirmVerificationCode()}
@@ -225,7 +224,9 @@ const LoginScreen: React.FC<Props> = (props) =>
           <>
             <FirebaseRecaptchaVerifierModal
               title="'로봇이 아닙니다' 클릭해 주세요"
-              ref={(ref) => { recaptchaVerifier = ref }}
+              ref={ref => {
+                recaptchaVerifier = ref;
+              }}
               firebaseConfig={firebase.app().options}
             />
             <AgreementTerms onChange={setAgreeTerms} />

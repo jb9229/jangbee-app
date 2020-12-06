@@ -2,19 +2,8 @@
 // sudo netstat -tnlp | grep 4000
 // nohup ts-node server.ts &
 // npm start &
-// const SERVER_URL = 'http://10.1.0.121/api/v1/';
-// const SERVER_URL = 'http://10.0.2.2:5000/api/v1/';
-// const SERVER_URL = 'http://10.0.2.2:8080/api/v1/';
-const SERVER_URL = 'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
-const NODE_SERVER_URL_PROD = 'https://jangbeecall-dev.azurewebsites.net/graphql';
-// const NODE_SERVER_URL_LOCAL = 'http://10.0.2.2:4000/graphql';
-const NODE_SERVER_URL_LOCAL = 'http://localhost:4000/graphql';
-console.log('>>> process.env: ', process.env);
-console.log('>>> SLUG: ', process.env.BUILD_TYPE);
-export const NODE_SERVER_URL = process.env.BUILD_TYPE === 'prod' ? NODE_SERVER_URL_PROD : NODE_SERVER_URL_LOCAL;
-
-// export const NODE_SERVER_WEBSOCKET_URL = 'ws://10.0.2.2:4000/graphql';
-console.log('>>> NODE_SERVER_URL: ', NODE_SERVER_URL);
+const SERVER_URL =
+  'http://www.jangbeecallapi.ap-northeast-2.elasticbeanstalk.com/api/v1/';
 
 const url = {
   JBSERVER_ACCOUNT: `${SERVER_URL}account`,
@@ -54,7 +43,7 @@ const url = {
   TERM_SERVICE: 'https://jb9229.github.io/jangbeecall-doc/serviceTerms.html',
   TERM_SECURITY: 'https://jb9229.github.io/jangbeecall-doc/privacy.html',
   TERM_USEINFO: 'https://jb9229.github.io/jangbeecall-doc/UseInfomation.html',
-  KATALK_ASK_URL: 'https://jb9229.github.io/jangbeecall-doc/katalk_ask.html'
+  KATALK_ASK_URL: 'https://jb9229.github.io/jangbeecall-doc/katalk_ask.html',
 };
 
 export default url;

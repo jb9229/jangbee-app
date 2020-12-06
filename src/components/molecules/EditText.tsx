@@ -6,7 +6,7 @@ import {
   StyleProp,
   TextInputProps,
   TextStyle,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
@@ -26,21 +26,24 @@ const Container = styled.View`
   padding-top: 10px;
 `;
 const TextInput = styled.TextInput`
-  padding-left: 16;
-  padding-right: 16;
-  padding-top: 16;
-  padding-bottom: 16;
-  border-width: 1;
-  border-radius: 5;
-  ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
-  ${(props: StyledCPorps): string | null => props.errorText ? `border-color: ${props.theme.ColorError};` : null}
-  ${(props: StyledCPorps): string | null => props.unchangeable ? `border-color: ${props.theme.ColorInvariable};` : null}
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-width: 1px;
+  border-radius: 5px;
+  ${(props: StyledCPorps): string | null =>
+    props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
+  ${(props: StyledCPorps): string | null =>
+    props.errorText ? `border-color: ${props.theme.ColorError};` : null}
+  ${(props: StyledCPorps): string | null =>
+    props.unchangeable ? `border-color: ${props.theme.ColorInvariable};` : null}
   color: ${(props: StyledCPorps): string => props.theme.ColorTextInput};
 `;
 
 export enum KeyboardType {
   default = 'defalult',
-  number = 'number-pad'
+  number = 'number-pad',
 }
 interface Props {
   parentTestID?: string;
@@ -68,22 +71,27 @@ interface Props {
   onFocus?: () => void;
 }
 
-const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) =>
-{
+const EditText: React.RefForwardingComponent<null, Props> = (
+  props: Props,
+  ref
+) => {
   const [focused, setFocus] = React.useState(false);
   const [text, setText] = React.useState<string>(props.text);
 
-  React.useEffect(() =>
-  {
+  React.useEffect(() => {
     setText(props.text);
     props.onChangeText(props.text);
   }, [props.text]);
 
   return (
     <Container testID={props.parentTestID} style={[props.style]}>
-      <MiddleTitle label={props.label} subLabel={props.subLabel} errorText={props.errorText}
+      <MiddleTitle
+        label={props.label}
+        subLabel={props.subLabel}
+        errorText={props.errorText}
         focused={focused}
-        unchangeable={props.unchangeable} />
+        unchangeable={props.unchangeable}
+      />
       <TextInput
         ref={ref}
         testID={props.testID}
@@ -100,8 +108,7 @@ const EditText: React.RefForwardingComponent<null, Props> = (props: Props, ref) 
         placeholderTextColor="rgb(221,221,221)"
         value={text}
         keyboardType={props.keyboardType}
-        onChangeText={(text): void =>
-        {
+        onChangeText={(text): void => {
           props.onChangeText(text);
           setText(text);
         }}

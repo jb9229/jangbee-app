@@ -6,7 +6,7 @@ const Container = Styled.View`
     justify-content: center;
     background-color: ${colors.point2Dark};
     marginTop: 10;
-    border-radius: 5;
+    border-radius: 5px;
     padding: 10px;
 `;
 const Text = Styled.Text`

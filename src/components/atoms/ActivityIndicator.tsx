@@ -13,7 +13,7 @@ const Container = styled.View`
 const Message = styled.Text`
   font-size: 15;
   font-family: ${fonts.batang};
-  margin-bottom: 20;
+  margin-bottom: 20px;
   color: ${colors.pointDark};
 `;
 

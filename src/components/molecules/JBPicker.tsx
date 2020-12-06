@@ -15,13 +15,14 @@ interface StyleProps {
 }
 
 const Container = styled.View`
-  width: ${(props: StyleProps): number | string => props.size ? props.size : 'auto'};
+  width: ${(props: StyleProps): number | string =>
+    props.size ? props.size : 'auto'};
 `;
 
 const PickerWrap = styled.View`
-  border-width: ${(props: StyleProps): number => props.error ? 1 : 0};
+  border-width: ${(props: StyleProps): number => (props.error ? 1 : 0)};
   border-color: ${(props: StyleProps): string => props.theme.ColorError};
-  border-radius: 5;
+  border-radius: 5px;
 `;
 
 const styles = StyleSheet.create({
@@ -29,9 +30,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.titleMiddle,
     color: colors.title,
     fontSize: 15,
-    marginBottom: 3
+    marginBottom: 3,
   },
-  itemPicker: {height: 20}
+  itemPicker: { height: 20 },
 });
 
 interface Props {
@@ -45,10 +46,8 @@ interface Props {
   onValueChange: (value: string | number) => void;
   wrapperStyle?: StyleProp<ViewStyle>;
 }
-const JBPicker: React.FC<Props> = (props) =>
-{
-  React.useEffect(() =>
-  {
+const JBPicker: React.FC<Props> = props => {
+  React.useEffect(() => {
     setSelectedValue(props.selectedValue);
     // props.onValueChange(props.selectedValue);
   }, [props.selectedValue]);
@@ -57,19 +56,35 @@ const JBPicker: React.FC<Props> = (props) =>
 
   return (
     <Container size={props.size} style={props.wrapperStyle}>
-      {!!props.title && (<MiddleTitle label={props.title} subLabel={props.subTitle} errorText={props.errorText} />)}
+      {!!props.title && (
+        <MiddleTitle
+          label={props.title}
+          subLabel={props.subTitle}
+          errorText={props.errorText}
+        />
+      )}
       <PickerWrap error={!!props.errorText}>
         <Picker
           selectedValue={selectedValue}
           style={styles.itemPicker}
-          onValueChange={(itemValue): void => { props.onValueChange(itemValue); setSelectedValue(itemValue) }}
+          onValueChange={(itemValue): void => {
+            props.onValueChange(itemValue);
+            setSelectedValue(itemValue);
+          }}
           mode="dropdown"
         >
           <Picker.Item label={props.selectLabel || '선택'} value="" key={-1} />
-          {!!props.items && props.items.map((item) => <Picker.Item key={item.key} label={item.label} value={item.value} />)}
+          {!!props.items &&
+            props.items.map(item => (
+              <Picker.Item
+                key={item.key}
+                label={item.label}
+                value={item.value}
+              />
+            ))}
         </Picker>
       </PickerWrap>
-      <ErrorText text={props.errorText}/>
+      <ErrorText text={props.errorText} />
     </Container>
   );
 };

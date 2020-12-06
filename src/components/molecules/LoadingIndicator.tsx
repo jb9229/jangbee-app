@@ -17,13 +17,13 @@ const Container = styled.View`
   bottom: 0;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Message = styled.Text`
   font-size: 16;
   margin-top: 20;
-  margin-bottom: 20;
+  margin-bottom: 20px;
   color: white;
 `;
 
@@ -32,32 +32,27 @@ interface Props {
   msg?: string;
   size?: number;
 }
-const LoadingIndicator: React.FC<Props> = (props) =>
-{
+const LoadingIndicator: React.FC<Props> = props => {
   const [showLoading, setShowLoading] = React.useState(props.loading);
   const [forceCloseTimeout, setForceCloseTimeout] = React.useState();
 
-  React.useEffect(() =>
-  {
-    if (props.loading)
-    {
+  React.useEffect(() => {
+    if (props.loading) {
       setShowLoading(true);
-      const timer = setTimeout(() =>
-      {
+      const timer = setTimeout(() => {
         alert('실패!');
         setShowLoading(false);
       }, 10000);
 
       setForceCloseTimeout(timer);
-    }
-    else
-    {
+    } else {
       setShowLoading(false);
-      if (forceCloseTimeout) { clearTimeout(forceCloseTimeout) }
+      if (forceCloseTimeout) {
+        clearTimeout(forceCloseTimeout);
+      }
     }
   }, [props.loading]);
-  if (showLoading)
-  {
+  if (showLoading) {
     return (
       <Container>
         <ActivityIndicator size={props.size || 50} color="white" />
@@ -65,10 +60,7 @@ const LoadingIndicator: React.FC<Props> = (props) =>
       </Container>
     );
   }
-  return (
-    <>
-    </>
-  );
+  return <></>;
 };
 
 export default LoadingIndicator;

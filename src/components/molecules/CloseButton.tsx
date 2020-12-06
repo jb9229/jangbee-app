@@ -9,7 +9,7 @@ interface StyledProps {
 }
 const Container = styled.View<StyledProps>`
   flex-direction: row;
-  justify-content: ${(props) => props.align ? props.align : 'flex-end'};
+  justify-content: ${props => (props.align ? props.align : 'flex-end')};
   padding-top: 10;
   padding-right: 10;
 `;
@@ -19,7 +19,7 @@ const IConTO = styled.TouchableOpacity`
   padding-right: 7px;
   margin: 4px;
   margin-bottom: 3px;
-  border-width: 1;
+  border-width: 1px;
   border-radius: 30;
   border-color: ${colors.iconDefault};
   elevation: 10;
@@ -29,8 +29,7 @@ interface Props {
   align?: string;
   onClose: () => void;
 }
-const CloseButton: React.FC<Props> = (props) =>
-{
+const CloseButton: React.FC<Props> = props => {
   return (
     <Container align={props.align}>
       <IConTO onPress={props.onClose}>
@@ -42,6 +41,6 @@ const CloseButton: React.FC<Props> = (props) =>
       </IConTO>
     </Container>
   );
-}
+};
 
 export default CloseButton;

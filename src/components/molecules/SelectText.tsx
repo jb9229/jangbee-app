@@ -4,7 +4,7 @@ import {
   NativeSyntheticEvent,
   StyleProp,
   TextStyle,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
@@ -28,24 +28,28 @@ const TextTO = styled.TouchableOpacity`
   padding-right: 16;
   padding-top: 21;
   padding-bottom: 21;
-  background-color: ${(props: StyledCPorps): string => props.theme.ColorBGYellowBatangLight};
-  border-width: 1;
-  border-radius: 5;
-  ${(props: StyledCPorps): string | null => props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
-  ${(props: StyledCPorps): string | null => props.errorText ? `border-color: ${props.theme.ColorError};` : null}
+  background-color: ${(props: StyledCPorps): string =>
+    props.theme.ColorBGYellowBatangLight};
+  border-width: 1px;
+  border-radius: 5px;
+  ${(props: StyledCPorps): string | null =>
+    props.focused ? `border-color: ${props.theme.ColorSecond};` : null}
+  ${(props: StyledCPorps): string | null =>
+    props.errorText ? `border-color: ${props.theme.ColorError};` : null}
   color: ${(props: StyledCPorps): string => props.theme.ColorTextInput};
 `;
 const Placeholder = styled.Text`
-  font-size: 14;
-  color: ${(props: StyledCPorps): string => props.theme.ColorTextplaceholderDark};
+  font-size: 14px;
+  color: ${(props: StyledCPorps): string =>
+    props.theme.ColorTextplaceholderDark};
 `;
 const Text = styled.Text`
-  font-size: 14;
+  font-size: 14px;
 `;
 
 export enum KeyboardType {
   default = 'defalult',
-  number = 'number-pad'
+  number = 'number-pad',
 }
 interface Props {
   label: string;
@@ -57,8 +61,7 @@ interface Props {
   onPress: () => void;
 }
 
-function SelectText(props: Props): React.ReactElement
-{
+function SelectText(props: Props): React.ReactElement {
   // const [selectText, setSelectText] = React.useState(props.text);
   // React.useEffect(() =>
   // {
@@ -69,8 +72,11 @@ function SelectText(props: Props): React.ReactElement
     <Container style={props.style}>
       <MiddleTitle label={props.label} subLabel={props.subLabel} />
       <TextTO onPress={props.onPress} errorText={props.errorText}>
-        {props.text ? <Text>{props.text}</Text>
-          : (!!props.placeholder && <Placeholder>{props.placeholder}</Placeholder>)}
+        {props.text ? (
+          <Text>{props.text}</Text>
+        ) : (
+          !!props.placeholder && <Placeholder>{props.placeholder}</Placeholder>
+        )}
       </TextTO>
       {!!props.errorText && <ErrorText text={props.errorText} />}
     </Container>

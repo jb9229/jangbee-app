@@ -26,32 +26,32 @@ const Title = styled.Text`
 const SelectListWrap = styled.ScrollView.attrs(props => ({
   contentContainerStyle: {
     alignItems: 'center',
-    padding: 6
-  }
+    padding: 6,
+  },
 }))`
   flex-direction: row;
   border-top-width: 1;
   border-bottom-width: 1;
   border-color: ${colors.batangLight};
-  height: ${(props) => props.isImageBox ? 150 : 80};
+  height: ${props => (props.isImageBox ? 150 : 80)};
 `;
 
 const SelectBox = styled.View<StyledProps>`
   height: 65;
   margin-right: 15;
-  border-width: 1;
+  border-width: 1px;
   border-radius: 10;
   background-color: ${colors.batangLight};
   border-color: ${colors.batangLight};
   justify-content: flex-end;
   align-items: center;
-  ${(props) =>
+  ${props =>
     props.selected &&
     `
     background-color: ${colors.point3Light};
     border-color: ${colors.point3Light};
   `}
-  ${(props) =>
+  ${props =>
     props.isImageBox &&
     `
     height: 135;
@@ -82,13 +82,15 @@ const CateTextWrap = styled.TouchableOpacity<StyledProps>`
     top: 0;
     left: 0;
     background-color: rgba(255, 255, 255, 0.5);
-    border-width: 1;
-    border-radius: 5;
+    border-width: 1px;
+    border-radius: 5px;
     border-color: rgba(255, 255, 255, 0.5);
-    ${props.selected &&
+    ${
+      props.selected &&
       `
       background-color: rgba(0, 0, 0, 0.7);
-    `};
+    `
+    };
   `}
 `;
 
@@ -96,13 +98,14 @@ const CategoryText = styled.Text<StyledProps>`
   font-family: ${fonts.titleMiddle};
   font-size: 16;
   padding: 4px;
-  color: ${(props) => props.selected ? colors.pointDark : colors.batangDark};
+  color: ${props => (props.selected ? colors.pointDark : colors.batangDark)};
 `;
 
 const ItemListWrap = styled.View<StyledProps>`
   height: 25;
   margin-top: 5;
-  background-color: ${(props) => props.selected ? colors.point3_other2 : props.theme.ColorBGGray};
+  background-color: ${props =>
+    props.selected ? colors.point3_other2 : props.theme.ColorBGGray};
   border-bottom-left-radius: 10;
   border-bottom-right-radius: 10;
 `;
@@ -121,15 +124,22 @@ interface Props {
   selectItem: (category: string, itemValue: string) => void;
 }
 
-const JBSelectBox: React.FC<Props> = (props) =>
-{
+const JBSelectBox: React.FC<Props> = props => {
   const [category, setCategory] = React.useState(props.selectedCat);
   const [item, setItem] = React.useState(props.selectedItem);
 
   return (
     <Container>
-      <MiddleTitle label={props.title} subLabel={props.subLabel} errorText={props.errorText} />
-      <SelectListWrap horizontal persistentScrollbar={true} isImageBox={!!props.cateImageArr}>
+      <MiddleTitle
+        label={props.title}
+        subLabel={props.subLabel}
+        errorText={props.errorText}
+      />
+      <SelectListWrap
+        horizontal
+        persistentScrollbar={true}
+        isImageBox={!!props.cateImageArr}
+      >
         {props.categoryList.map((catStr, i) => (
           <SelectBox
             key={i}
@@ -137,14 +147,24 @@ const JBSelectBox: React.FC<Props> = (props) =>
             isImageBox={!!props.cateImageArr}
           >
             <CateImgTO
-              onPress={() => { setCategory(catStr); setItem(props.itemPicker); props.selectCategory(catStr) }}
+              onPress={() => {
+                setCategory(catStr);
+                setItem(props.itemPicker);
+                props.selectCategory(catStr);
+              }}
             >
-              {props.cateImageArr && <CateImage source={props.cateImageArr[i]} />}
+              {props.cateImageArr && (
+                <CateImage source={props.cateImageArr[i]} />
+              )}
             </CateImgTO>
             <CateTextWrap
               isImageBox={!!props.cateImageArr}
               selected={catStr === category}
-              onPress={() => { setCategory(catStr); setItem(props.itemPicker); props.selectCategory(catStr) }}
+              onPress={() => {
+                setCategory(catStr);
+                setItem(props.itemPicker);
+                props.selectCategory(catStr);
+              }}
             >
               <CategoryText selected={catStr === category}>
                 {catStr}
@@ -154,9 +174,17 @@ const JBSelectBox: React.FC<Props> = (props) =>
               <JBPicker
                 items={props.itemList[catStr]}
                 selectedValue={catStr === props.selectedCat ? item : ''}
-                onValueChange={(itemValue): void => { setCategory(catStr); setItem(`${itemValue}`); props.selectItem(catStr, `${itemValue}`) }}
+                onValueChange={(itemValue): void => {
+                  setCategory(catStr);
+                  setItem(`${itemValue}`);
+                  props.selectItem(catStr, `${itemValue}`);
+                }}
                 selectLabel={props.itemPicker || undefined}
-                size={catStr === '세종특별자치시' || catStr === '제주특별자치도' ? 120 : 110}
+                size={
+                  catStr === '세종특별자치시' || catStr === '제주특별자치도'
+                    ? 120
+                    : 110
+                }
               />
             </ItemListWrap>
           </SelectBox>
@@ -167,4 +195,3 @@ const JBSelectBox: React.FC<Props> = (props) =>
 };
 
 export default JBSelectBox;
-

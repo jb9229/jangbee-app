@@ -36,14 +36,14 @@ const SearchNoticeText = styled.Text`
   color: ${colors.pointDark};
   font-family: ${fonts.batang};
   justify-content: center;
-  font-size: 18;
+  font-size: 18px;
   margin-bottom: 8;
 `;
 const TotalHarmCaseCount = styled.Text`
   color: ${colors.pointDark};
   font-family: ${fonts.batang};
   justify-content: center;
-  font-size: 18;
+  font-size: 18px;
   margin-bottom: 8;
   text-decoration-line: underline;
 `;
@@ -51,7 +51,7 @@ const MyHarmCaseCount = styled.Text`
   color: ${colors.pointDark};
   font-family: ${fonts.batang};
   justify-content: center;
-  font-size: 18;
+  font-size: 18px;
   margin-bottom: 8;
   text-decoration-line: underline;
 `;
@@ -69,7 +69,7 @@ const SearchTO = styled.TouchableOpacity`
 const SearchText = styled.Text`
   font-size: 21;
   margin-left: 15;
-  color: ${(props) => props.theme.ColorPrimaryDark};
+  color: ${props => props.theme.ColorPrimaryDark};
 `;
 
 interface Props {
@@ -80,14 +80,17 @@ interface Props {
   onClickTotalEvaluList: () => void;
 }
 
-const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
-{
+const FirmHarmCaseHeader: React.FC<Props> = (props: Props) => {
   // const firmHarmCaseCount = useRecoilValue(firmHarmCaseCountState);
   return (
     <HeaderWrap removeClippedSubviews={false}>
       <SearchNoticeWrap>
         <SearchTO onPress={props.onClickSearch}>
-          <MaterialCommunityIcons name="account-search" size={34} color={props.theme.ColorPrimaryDark} />
+          <MaterialCommunityIcons
+            name="account-search"
+            size={34}
+            color={props.theme.ColorPrimaryDark}
+          />
           <SearchText>피해사례를 조회해 드릴게요.</SearchText>
         </SearchTO>
       </SearchNoticeWrap>
@@ -100,16 +103,12 @@ const FirmHarmCaseHeader: React.FC<Props> = (props: Props) =>
             {`전체글: ${props.countData.totalCnt}`}
           </TotalHarmCaseCount>
         </TotalHarmCaseCountTO>
-        <SearchNoticeText>
-          {'  |  '}
-        </SearchNoticeText>
+        <SearchNoticeText>{'  |  '}</SearchNoticeText>
         <MyHarmCaseCountWrap
           onPress={props.onClickMyEvaluList}
           hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
         >
-          <MyHarmCaseCount>
-            {`내글: ${props.countData.myCnt}`}
-          </MyHarmCaseCount>
+          <MyHarmCaseCount>{`내글: ${props.countData.myCnt}`}</MyHarmCaseCount>
         </MyHarmCaseCountWrap>
       </SearchCountWrap>
     </HeaderWrap>

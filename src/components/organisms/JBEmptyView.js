@@ -1,8 +1,8 @@
+import JBButton from 'molecules/JBButton';
 import React from 'react';
 import Styled from 'styled-components/native';
-import JBButton from 'molecules/JBButton';
-import fonts from 'constants/Fonts';
 import colors from 'constants/Colors';
+import fonts from 'constants/Fonts';
 
 const Container = Styled.View`
   flex: 1;
@@ -17,7 +17,7 @@ const NoticeWrap = Styled.View`
 
 const Text = Styled.Text`
   font-family: ${fonts.batang};
-  font-size: 18;
+  font-size: 18px;
   color: ${colors.batang};
 `;
 export default function JBEmptyView({ title, subTitle, refresh, actionName }) {

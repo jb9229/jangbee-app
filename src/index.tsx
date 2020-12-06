@@ -4,7 +4,13 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Updates from 'expo-updates';
 
-import { ActivityIndicator, Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import { ApolloProvider } from '@apollo/client';
 import AppNavigator from 'navigation/AppNavigator';
@@ -23,48 +29,41 @@ import styled from 'styled-components/native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 });
 
-const SplashImage = styled.Image`
-`;
 const SplashWrap = styled.View`
   flex: 1;
-  background-color: #4D4A4A;
+  background-color: #4d4a4a;
 `;
 
-if (Platform.OS !== 'web' && !__DEV__)
-{
+if (Platform.OS !== 'web' && !__DEV__) {
   // Sentry.setRelease(Constants.manifest.revisionId);
 
   Sentry.init({
-    dsn: 'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
+    dsn:
+      'https://f2c5a80b8fd24e6582e0221ea16e1ff2@o400382.ingest.sentry.io/5258774',
     enableInExpoDevelopment: false,
-    debug: true
+    debug: true,
   });
 }
 
-export default class App extends React.Component
-{
+export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
-    isAppUpdateComplete: false
+    isAppUpdateComplete: false,
   };
 
   // componentDidMount ()
   // {
   //   this.checkUpdate();
   // }
-  async componentDidMount ()
-  {
+  async componentDidMount() {
     // Prevent native splash screen from autohiding
-    try
-    {
+    try {
       await SplashScreen.preventAutoHideAsync();
-    }
-    catch (e)
-    {
+    } catch (e) {
       console.warn(e);
     }
     this.prepareResources();
@@ -73,12 +72,10 @@ export default class App extends React.Component
   /**
    * Method that serves to load resources and make API calls
    */
-  prepareResources = async () =>
-  {
+  prepareResources = async () => {
     // await performAPICalls();
     await this._loadResourcesAsync();
-    this.setState({ ...this.state, isLoadingComplete: true }, async () =>
-    {
+    this.setState({ ...this.state, isLoadingComplete: true }, async () => {
       await SplashScreen.hideAsync();
     });
 
@@ -86,8 +83,7 @@ export default class App extends React.Component
     this.initFirebase();
   };
 
-  _loadResourcesAsync = async () =>
-    Promise.all(loadAllAssests);
+  _loadResourcesAsync = async () => Promise.all(loadAllAssests);
 
   // _handleLoadingError = error =>
   // {
@@ -102,13 +98,10 @@ export default class App extends React.Component
   //   this.setState({ isLoadingComplete: true });
   // };
 
-  checkUpdate = async () =>
-  {
-    try
-    {
+  checkUpdate = async () => {
+    try {
       const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable)
-      {
+      if (update.isAvailable) {
         console.log('=== update available:', update);
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
@@ -117,35 +110,32 @@ export default class App extends React.Component
       }
 
       this.setState({ ...this.state, isAppUpdateComplete: true });
-    }
-    catch (e)
-    {
+    } catch (e) {
       this.setState({ ...this.state, isAppUpdateComplete: true });
     }
   };
 
-  initFirebase = () =>
-  {
-    if (!firebase.apps.length)
-    {
+  initFirebase = () => {
+    if (!firebase.apps.length) {
       firebase.initializeApp(firebaseconfig);
       firebase.auth().languageCode = 'ko';
     }
   };
 
-  render ()
-  {
+  render() {
     const { skipLoadingScreen, BLACKLIST_LAUNCH } = this.props;
     const { isLoadingComplete, isAppUpdateComplete } = this.state;
 
-    if (!isLoadingComplete && !skipLoadingScreen)
-    {
+    if (!isLoadingComplete && !skipLoadingScreen) {
       return null;
     }
 
-    if (!isAppUpdateComplete)
-    {
-      return <SplashWrap><JBActIndicator title="앱 버전 업데이트 체크중..." size={35} /></SplashWrap>;
+    if (!isAppUpdateComplete) {
+      return (
+        <SplashWrap>
+          <JBActIndicator title="앱 버전 업데이트 체크중..." size={35} />
+        </SplashWrap>
+      );
     }
 
     return (
@@ -188,6 +178,6 @@ export const loadAllAssests = [
     SsangmundongGulimB: require('../assets/fonts/Typo_SsangmundongGulimB.ttf'),
     NanumSquareRoundR: require('../assets/fonts/NanumSquareRoundR.ttf'),
     NanumBarunGothic: require('../assets/fonts/NanumBarunGothic.ttf'),
-    NanumPen: require('../assets/fonts/NanumPen.ttf')
-  })
+    NanumPen: require('../assets/fonts/NanumPen.ttf'),
+  }),
 ];

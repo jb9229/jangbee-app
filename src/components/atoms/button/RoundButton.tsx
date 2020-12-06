@@ -11,10 +11,11 @@ const ButtonTO = styled.TouchableOpacity`
   height: 30;
   flex-direction: row;
   align-items: center;
-  justify-content: ${(props): string => props.iconDelete ? 'center' : 'space-between'};
+  justify-content: ${(props): string =>
+    props.iconDelete ? 'center' : 'space-between'};
   padding: 0 12px;
   background-color: ${(props): string => props.theme.ColorBGGray};
-  border-width: 1;
+  border-width: 1px;
   border-color: ${(props: StyleProps): string => props.theme.ColorBorderBtn};
   border-radius: 30;
 `;
@@ -36,11 +37,19 @@ interface Props {
   btnTextStyle?: StyleProp<TextStyle>;
   deletBtnTextStyle?: StyleProp<ImageStyle>;
 }
-const RoundButton: React.FC<Props> = (props) => {
+const RoundButton: React.FC<Props> = props => {
   return (
-    <ButtonTO onPress={props.onClick} disabled={props.disabled} iconDelete={props.iconDelete} style={props.wrapperStyle}>
+    <ButtonTO
+      onPress={props.onClick}
+      disabled={props.disabled}
+      iconDelete={props.iconDelete}
+      style={props.wrapperStyle}
+    >
       {props.iconDelete ? (
-        <DeleteIcon style={props.deletBtnTextStyle} source={require('/assets/icons/close/close.png')}/>
+        <DeleteIcon
+          style={props.deletBtnTextStyle}
+          source={require('/assets/icons/close/close.png')}
+        />
       ) : (
         <ButtonText style={props.btnTextStyle}>{props.text}</ButtonText>
       )}

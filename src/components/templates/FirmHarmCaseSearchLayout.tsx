@@ -1,6 +1,12 @@
 import * as React from 'react';
 
-import { NativeSyntheticEvent, StyleProp, TextInput, TextInputEndEditingEventData, ViewStyle } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  TextInput,
+  TextInputEndEditingEventData,
+  ViewStyle,
+} from 'react-native';
 
 import ClientEvaluDetailModal from 'templates/ClientEvaluDetailModal';
 import { DefaultStyledProps } from 'src/theme';
@@ -17,7 +23,9 @@ interface StyledProps extends DefaultStyledProps {
   searched?: boolean;
 }
 // Styled Component
-const Container = styled.View`flex: 1;`;
+const Container = styled.View`
+  flex: 1;
+`;
 const CallLatestHistoryWrap = styled.View``;
 const CallLatestHistoryHeaderWrap = styled.View`
   flex-direction: row;
@@ -32,7 +40,7 @@ const CallLatestHistoryBodyWrap = styled.ScrollView<StyledProps>`
   padding-right: 10;
 `;
 const SearchResultSeperator = styled.View<StyledProps>`
-  height: ${(props) => props.searched ? 1 : 20};
+  height: ${props => (props.searched ? 1 : 20)};
   background-color: ${(props): string => props.theme.ColorBGGray};
   border-top-width: 1;
   border-bottom-width: 1;
@@ -48,13 +56,15 @@ const CallLatestTitle = styled.Text`
   padding-bottom: 5;
 `;
 const CallHistoryPhoneNumber = styled.Text``;
-const SearchResultWrap = styled.View`flex: 1;`;
+const SearchResultWrap = styled.View`
+  flex: 1;
+`;
 const SearchWrap = styled.View``;
 const SearchTextInput = styled.TextInput`
   padding-top: 15;
   padding-left: 5;
   padding-bottom: 10;
-  font-size: 18;
+  font-size: 18px;
   border-bottom-width: 1;
   border-color: ${(props): string => props.theme.ColorBorderTextInput};
 `;
@@ -76,23 +86,28 @@ const SeachCancelBtn = styled(RoundButton).attrs(() => ({
   wrapperStyle: {
     width: 20,
     height: 25,
-    borderRadius: 20
-  }
+    borderRadius: 20,
+  },
 }))``;
 
 interface Props {
   wrapperStyle?: StyleProp<ViewStyle>;
 }
-const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
-{
+const FirmHarmCaseSearchLayout: React.FC<Props> = props => {
   const searchTextInputRef = React.useRef<TextInput>();
   React.useEffect(() => {
     searchTextInputRef.current.focus();
-  },[])
+  }, []);
   const {
-    searched, harmCaseList, searchWord, searchTime, detailEvalu,
+    searched,
+    harmCaseList,
+    searchWord,
+    searchTime,
+    detailEvalu,
     visibleDetailModal,
-    onCancelSearch, onSearchWordEndEditing, closeFirmHarmCaseDetailModal
+    onCancelSearch,
+    onSearchWordEndEditing,
+    closeFirmHarmCaseDetailModal,
   } = useFirmHarmCaseSearchContext();
 
   return (
@@ -103,7 +118,9 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
             <SearchTextInput
               ref={searchTextInputRef}
               placeholder="전화번호 | 업체명 | 사업자번호로 검색하세요"
-              onEndEditing={(e: NativeSyntheticEvent<TextInputEndEditingEventData>) => onSearchWordEndEditing(e?.nativeEvent?.text)}
+              onEndEditing={(
+                e: NativeSyntheticEvent<TextInputEndEditingEventData>
+              ) => onSearchWordEndEditing(e?.nativeEvent?.text)}
             />
           </SearchWrap>
         </>
@@ -112,7 +129,10 @@ const FirmHarmCaseSearchLayout: React.FC<Props> = (props) =>
         <SearchResultWrap>
           <SearchInfoWrap>
             <SearchWord>{searchWord}</SearchWord>
-            <SeachCancelBtn iconDelete={true} onClick={() => onCancelSearch()} />
+            <SeachCancelBtn
+              iconDelete={true}
+              onClick={() => onCancelSearch()}
+            />
           </SearchInfoWrap>
           <FirmHarmCaseSearchResult
             harmCaseList={harmCaseList}

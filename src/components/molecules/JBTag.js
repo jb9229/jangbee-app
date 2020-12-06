@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import colors from 'constants/Colors';
+import styled from 'styled-components/native';
 
 const Text = styled.Text`
-  font-size: 14;
+  font-size: 14px;
   background-color: ${colors.point2Light};
   font-weight: bold;
   padding: 1px;

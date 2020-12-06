@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components/native';
-import url, { NODE_SERVER_URL } from 'constants/Url';
 
 import Constants from 'expo-constants';
 import JBButton from 'molecules/JBButton';
@@ -11,6 +10,7 @@ import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
 import pkgConfig from '../../../app.config';
 import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
+import url from 'constants/Url';
 
 const Container = styled.View`
   width: 100%;
@@ -64,10 +64,9 @@ const TelText = styled.Text`
   padding-right: 4px;
   margin: 2px;
 `;
-console.log('>>> Constants:', Constants)
-console.log('>>> process.env:', process.env)
-export default function JBTerm ({ bg })
-{
+console.log('>>> Constants:', Constants);
+console.log('>>> process.env:', process.env);
+export default function JBTerm({ bg }) {
   return (
     <Container bg={bg}>
       <Row>
@@ -93,7 +92,7 @@ export default function JBTerm ({ bg })
       <Row>
         <Column>
           <Title>상담:</Title>
-          <Text>내정보 -> 카톡상담하기 클릭</Text>
+          <Text>{'내정보 -> 카톡상담하기 클릭'}</Text>
         </Column>
         <Column>
           <Title></Title>
@@ -136,7 +135,7 @@ export default function JBTerm ({ bg })
       </Row>
       <Row>
         <Column>
-          <TitleTO onPress={() => alert(`Server: ${NODE_SERVER_URL}\n\nSlug: ${pkg.expo.slug}`)}>
+          <TitleTO onPress={() => alert(`Server: \n\nSlug: ${pkg.expo.slug}`)}>
             <Title>Version: </Title>
           </TitleTO>
           {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
