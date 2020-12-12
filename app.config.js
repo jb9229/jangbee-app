@@ -4,16 +4,11 @@ import { loadingStorybook } from './App';
 
 export default ({ config }) => {
   console.log('>>> SLUG config: ', process.env.BUILD_TYPE);
-  console.log(
-    '>>> MY_CUSTOM_PROJECT_VERSION: ',
-    process.env.MY_CUSTOM_PROJECT_VERSION
-  );
   return {
     ...config,
     extra: {
       buildType: process.env.BUILD_TYPE,
     },
-    version: process.env.MY_CUSTOM_PROJECT_VERSION || '0.0.0',
     slug: loadingStorybook
       ? 'jangbeecall_story'
       : process.env.BUILD_TYPE === 'dev'
