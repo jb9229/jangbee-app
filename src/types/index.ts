@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export enum UserType {
   CLIENT = 1,
-  FIRM = 2
+  FIRM = 2,
 }
 
 export interface User {
@@ -13,6 +13,7 @@ export interface User {
   displayName: string;
   photoURL: string;
   statusMsg: string;
+  phoneNumber: string;
 }
 
 export interface UserProfile {
@@ -40,10 +41,8 @@ export interface MapAddress {
   addrLatitude: string;
 }
 
-export class PickerItem
-{
-  constructor (label: string, value: any, key: any)
-  {
+export class PickerItem {
+  constructor(label: string, value: any, key: any) {
     this.label = label;
     this.value = value;
     this.key = key;

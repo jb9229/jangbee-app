@@ -13,19 +13,20 @@ import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
 import { useLazyQuery } from '@apollo/client';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.View<DefaultStyledProps>`
-    flex: 1;
-    background-color: ${(props): string => props.theme.ColorBatangDark};
+  flex: 1;
+  background-color: ${(props): string => props.theme.ColorBatangDark};
 `;
 
-const StyledScrollView = styled(ScrollView).attrs((props) => ({
+const StyledScrollView = styled(ScrollView).attrs(props => ({
   contentContainerStyle: {
     flex: 1,
     marginTop: 45,
     paddingBottom: 39,
-    backgroundColor: '#d7d7d7'
-  }
+    backgroundColor: '#d7d7d7',
+  },
 }))`
   flex: 1;
 `;
@@ -40,33 +41,33 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.point2
+    backgroundColor: colors.point2,
   },
   regFirmNotice: {
     fontSize: 13,
     marginBottom: 20,
     fontFamily: fonts.batang,
-    color: 'white'
+    color: 'white',
   },
   regFirmText: {
     fontSize: 24,
     fontFamily: fonts.point2,
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   frimTopItemWrap: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   firmLinkWrap: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   topCommWrap: {
     alignItems: 'center',
-    marginRight: 25
+    marginRight: 25,
   },
   rating: {
-    backgroundColor: colors.point2
+    backgroundColor: colors.point2,
   },
   titleWrap: {
     flexDirection: 'row',
@@ -82,18 +83,18 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     backgroundColor: colors.batangLight,
     elevation: 3,
-    borderRadius: 5
+    borderRadius: 5,
   },
   fnameText: {
     fontSize: 30,
     fontFamily: fonts.titleTop,
-    color: colors.point2Dark
+    color: colors.point2Dark,
   },
   thumbnail: {
     width: 50,
     height: 50,
-    borderRadius: 30
-  }
+    borderRadius: 30,
+  },
 });
 
 interface Props {
@@ -102,23 +103,20 @@ interface Props {
   closeModal: () => void;
   hideCallButton?: boolean;
 }
-const FirmDetailModal: React.FC<Props> = (props) =>
-{
-  React.useEffect(() =>
-  {
-    if (props.isVisibleModal)
-    {
+const FirmDetailModal: React.FC<Props> = props => {
+  React.useEffect(() => {
+    if (props.isVisibleModal) {
       firmReq({ variables: { accountId: props.accountId } });
     }
   }, [props.isVisibleModal]);
 
+  const { user } = useLoginContext();
   const [evaluList, setEvaluList] = React.useState([]);
   const [firmReq, firmRsp] = useLazyQuery(FIRM);
 
   const firm = firmRsp.data?.firm;
-console.log('>>> firm:', firm);
-  if (!firm || firmRsp.loading)
-  {
+  console.log('>>> firm:', firm);
+  if (!firm || firmRsp.loading) {
     return (
       <Modal
         animationType="slide"
@@ -151,7 +149,14 @@ console.log('>>> firm:', firm);
           <CallButWrap>
             <JBButton
               title="전화걸기"
-              onPress={() => callSearchFirm(firm.phoneNumber, true)}
+              onPress={() =>
+                callSearchFirm(
+                  firm.accountId,
+                  firm.phoneNumber,
+                  user.uid,
+                  user.phoneNumber
+                )
+              }
               size="full"
               Primary
             />
@@ -163,4 +168,3 @@ console.log('>>> firm:', firm);
 };
 
 export default FirmDetailModal;
-

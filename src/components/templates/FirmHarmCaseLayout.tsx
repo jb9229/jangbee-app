@@ -10,9 +10,6 @@ import { firmHarmCaseCountUserId } from 'src/container/firmHarmCase/store';
 import { useFirmHarmCaseContext } from 'src/contexts/FirmHarmCaseContext';
 import { useSetRecoilState } from 'recoil';
 
-interface StyleProps {
-  theme: DefaultTheme;
-}
 const Container = styled.SafeAreaView`
   flex: 1;
   background-color: ${colors.batangLight};
@@ -35,27 +32,18 @@ const SearchWrap = styled.View`
   background-color: ${(props): string => props.theme.ColorBGDarkGray};
   border-radius: 8px;
 `;
-
-const NotExitButWrap = styled.View`
-  height: 80;
-  justify-content: center;
-`;
-const NoticeEmptyList = styled.Text`
-  font-family: ${(props: StyleProps): string => props.theme.FontBatang};
-  text-align: center;
-`;
 const HelloWrap = styled.View``;
 const HelloText = styled.Text`
- font-family: ${(props) => props.theme.FontTitleTop};
- font-size: 23;
+  font-family: ${props => props.theme.FontTitleTop};
+  font-size: 23;
 `;
 const HelloTextWrap = styled.View`
   flex-direction: row;
 `;
 const HelloPointText = styled.Text`
-  font-family: ${(props) => props.theme.FontTitleTop};
+  font-family: ${props => props.theme.FontTitleTop};
   font-size: 23;
-  color: ${(props) => props.theme.ColorPrimaryDark};
+  color: ${props => props.theme.ColorPrimaryDark};
 `;
 const FirmHarmCaseAddBtn = styled(RoundButton).attrs(() => ({
   wrapperStyle: {
@@ -64,24 +52,31 @@ const FirmHarmCaseAddBtn = styled(RoundButton).attrs(() => ({
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 11,
-    paddingBottom: 11
-  }
+    paddingBottom: 11,
+  },
 }))``;
 
-interface Props{
+interface Props {
   theme: DefaultTheme;
 }
-const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
-{
+const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement => {
   const {
-    user, searchArea, searchTime, searchNotice, countData,
-    onClickSearch, onClickAddFirmHarmCase, onClickMyEvaluList, onClickNewestEvaluList, searchFilterCliEvalu,
+    user,
+    searchArea,
+    searchTime,
+    searchNotice,
+    countData,
+    onClickSearch,
+    onClickAddFirmHarmCase,
+    onClickMyEvaluList,
+    onClickNewestEvaluList,
+    searchFilterCliEvalu,
     openUpdateCliEvaluForm,
     openDetailModal,
     deleteCliEvalu,
     openCliEvaluLikeModal,
     onClickTotalEvaluList,
-    setVisibleCreateModal
+    setVisibleCreateModal,
   } = useFirmHarmCaseContext();
   const [chatMode, setChatMode] = React.useState(false);
   const [rerender, setRerender] = React.useState(false);
@@ -92,8 +87,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
   /**
    * 피해사례 아이템 UI 렌더링 함수
    */
-  const renderCliEvaluItem = (item) =>
-  {
+  const renderCliEvaluItem = item => {
     return (
       <FirmHarmCaseItem
         item={item}
@@ -119,7 +113,10 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement =>
             <HelloText>발생 했나요?</HelloText>
           </HelloTextWrap>
         </HelloWrap>
-        <FirmHarmCaseAddBtn text="피해사례 등록하기" onClick={onClickAddFirmHarmCase} />
+        <FirmHarmCaseAddBtn
+          text="피해사례 등록하기"
+          onClick={onClickAddFirmHarmCase}
+        />
       </Header>
       <Contents>
         <FirmHarmCaseHeader

@@ -1,6 +1,5 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
-import AdImage from 'molecules/AdImage';
 import { AdLocation } from 'src/container/ad/types';
 import JBIcon from 'atoms/JBIcon';
 import React from 'react';
@@ -94,20 +93,6 @@ const TelIconWrap = styled.View`
   padding-left: 5;
   padding-right: 5;
 `;
-
-const telAdvertiser = (phoneNumber): void => {
-  // if (!phoneNumber)
-  // {
-  //   Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`);
-  //   return;
-  // }
-
-  // Linking.openURL(`tel:${phoneNumber}`)
-  //   .catch(() => Alert.alert(`링크 열기에 문제가 있습니다 [${phoneNumber}]`));
-
-  alert('phone call');
-  RNImmediatePhoneCall.immediatePhoneCall('0123456789');
-};
 
 interface Props {
   ad: any;

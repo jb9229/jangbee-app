@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
 
 interface Props {
@@ -23,12 +23,10 @@ interface Props {
   setUserProfile: (p: UserProfile) => void;
 }
 
-const AuthLoading: React.FC<Props> = (props) =>
-{
+const AuthLoading: React.FC<Props> = props => {
   const { refetchFirm, user } = useLoginContext();
-  
-  React.useEffect(() =>
-  {
+
+  React.useEffect(() => {
     checkLogin(props);
   }, []);
 
@@ -40,59 +38,48 @@ const AuthLoading: React.FC<Props> = (props) =>
   );
 };
 
-const checkLogin = (props: Props): void =>
-{
-  firebase.auth().onAuthStateChanged(user =>
-  {
-    if (user)
-    {
+const checkLogin = (props: Props): void => {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
       console.log('>>> checklogin uid: ', user.uid);
       getUserInfo(user.uid)
-        .then(data =>
-        {
+        .then(data => {
           const userInfo = data.val();
-          if (!userInfo)
-          {
+          if (!userInfo) {
             props.changeAuthPath(2, user);
             return;
           }
 
           const { userType } = userInfo;
 
-          if (!userType)
-          {
+          if (!userType) {
             props.changeAuthPath(2, user);
-          }
-          else
-          {
+          } else {
+            console.log('=== setUser: ', user);
             props.setUser(user);
             props.setUserProfile(userInfo);
 
             // Go to Screeen By User Type
-            if (userType === 1)
-            {
+            if (userType === 1) {
               props.completeAuth(true);
-            }
-            else if (userType === 2)
-            {
+            } else if (userType === 2) {
               props.completeAuth(false);
-            }
-            else
-            {
+            } else {
               Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
               props.completeAuth(true);
             }
           }
         })
-        .catch((error) => { noticeUserError('AuthLoadingError(firbase getUserInfo)', error.message) });
-    }
-    else
-    {
+        .catch(error => {
+          noticeUserError(
+            'AuthLoadingError(firbase getUserInfo)',
+            error.message
+          );
+        });
+    } else {
       props.changeAuthPath(3);
     }
   });
 };
-
-
 
 export default AuthLoading;

@@ -24,6 +24,12 @@
     "sourceType": "module"
   },
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "max-len": ["error", { "code": 140 }],
     "semi": ["error", "always", { "omitLastInOneLineBlock": true }],
     "sort-imports": [
@@ -39,7 +45,6 @@
       { "variables": false }
     ],
     "react/prop-types": 0,
-    "brace-style": ["error", "allman", { "allowSingleLine": true }],
     "object-property-newline": 0,
     "space-before-function-paren": ["error", "never"]
   }

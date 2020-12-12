@@ -3,16 +3,17 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  View
+  View,
 } from 'react-native';
 
 import { Firm } from 'storybook/provider/LoginStorybookProvider';
 import JBIcon from 'atoms/JBIcon';
 import { Rating } from 'react-native-elements';
 import React from 'react';
-import {callSearchFirm} from 'common/CallLink';
+import { callSearchFirm } from 'common/CallLink';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   itemWrap: {
@@ -20,42 +21,42 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 5,
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   leftWrap: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 30,
-    margin: 3
+    margin: 3,
   },
   ratingWrap: {
     alignItems: 'center',
-    marginTop: 3
+    marginTop: 3,
   },
   rating: {},
   ratingText: {
-    fontSize: 12
+    fontSize: 12,
   },
   noneRatingText: {
     fontFamily: fonts.title,
-    fontSize: 12
+    fontSize: 12,
   },
   centerWrap: {
-    flex: 3
+    flex: 3,
   },
   fnameText: {
     fontSize: 16,
     fontFamily: fonts.titleMiddle,
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   intrText: {
     fontSize: 14,
     fontFamily: fonts.batang,
     paddingLeft: 5,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   bottomText: {
     fontSize: 14,
@@ -63,27 +64,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 1,
     paddingLeft: 4,
-    paddingRight: 4
+    paddingRight: 4,
   },
   bottomWrap: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 5,
-    paddingRight: 5
+    paddingRight: 5,
   },
   topWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: 5,
-    paddingRight: 5
-  }
+    paddingRight: 5,
+  },
 });
 
 function calDistance(dis) {
-  if (!dis)
-  {
+  if (!dis) {
     return '';
   }
 
@@ -96,15 +96,14 @@ function calDistance(dis) {
   return `${kmValue}km`;
 }
 
-interface Props{
+interface Props {
   isLocalSearch: boolean;
   item: Firm;
   onPressItem: (id: string) => void;
 }
 
-const firmListItem: React.FC<Props> = (props) =>
-{
-console.log('>>> firmListItem:', props.item);
+const firmListItem: React.FC<Props> = props => {
+  const { user } = useLoginContext();
   return (
     <View style={styles.itemWrap}>
       <View style={styles.leftWrap}>
@@ -125,27 +124,40 @@ console.log('>>> firmListItem:', props.item);
       </View>
       <View style={styles.centerWrap}>
         <View style={styles.topWrap}>
-          <TouchableHighlight onPress={() => props.onPressItem(props.item.accountId)}>
+          <TouchableHighlight
+            onPress={() => props.onPressItem(props.item.accountId)}
+          >
             <Text style={styles.fnameText}>{props.item.fname}</Text>
           </TouchableHighlight>
           <JBIcon
             name="call"
             size={32}
             color={colors.point}
-            onPress={(): void => callSearchFirm(props.item.phoneNumber)}
+            onPress={(): void =>
+              callSearchFirm(
+                props.item.accountId,
+                props.item.phoneNumber,
+                user.uid,
+                user.phoneNumber
+              )
+            }
           />
         </View>
         <Text style={styles.intrText} numberOfLines={1}>
           {props.item.introduction}
         </Text>
         <View style={styles.bottomWrap}>
-          <Text style={styles.bottomText}>{`${props.item.equiListStr}(${
-            props.item.modelYear
-          }년식)`}</Text>
+          <Text
+            style={styles.bottomText}
+          >{`${props.item.equiListStr}(${props.item.modelYear}년식)`}</Text>
           {props.isLocalSearch ? (
-            <Text style={styles.bottomText}>{`${props.item.sidoAddr} ${props.item.sigunguAddr}`}</Text>
+            <Text
+              style={styles.bottomText}
+            >{`${props.item.sidoAddr} ${props.item.sigunguAddr}`}</Text>
           ) : (
-            <Text style={styles.bottomText}>{calDistance(props.item.distance)}</Text>
+            <Text style={styles.bottomText}>
+              {calDistance(props.item.distance)}
+            </Text>
           )}
         </View>
       </View>

@@ -1,9 +1,15 @@
 import * as React from 'react';
 import * as api from 'src/api/api';
 
-import KakaoPayWebView, { KakaoPaymentReadyInfo } from 'src/components/templates/KakaoPayWebView';
+import KakaoPayWebView, {
+  KakaoPaymentReadyInfo,
+} from 'src/components/templates/KakaoPayWebView';
 import { User, UserAssets, UserProfile, WebViewModalData } from 'src/types';
-import { getUserInfo, updatePaymentSubscription, updateUserAssets } from 'src/utils/FirebaseUtils';
+import {
+  getUserInfo,
+  updatePaymentSubscription,
+  updateUserAssets,
+} from 'src/utils/FirebaseUtils';
 
 import { ApplyWorkCallback } from 'src/components/action';
 import { Callbacker } from 'src/utils/Callbacker';
@@ -19,8 +25,7 @@ import { updateFirmInfo } from 'src/container/login/action';
 
 const CALLBACKER_AD_PAYMENT = 'CALLBACKER_AD_PAYMENT';
 const CALLBACKER_WORK_PAYMENT = 'CALLBACKER_WORK_PAYMENT';
-export class Firm
-{
+export class Firm {
   id: string;
   accountId: string;
   fname: string;
@@ -46,10 +51,8 @@ export class Firm
   ratingCnt: number;
 }
 
-class LoadingModalData
-{
-  constructor (loading: boolean, msg: string)
-  {
+class LoadingModalData {
+  constructor(loading: boolean, msg: string) {
     this.loading = loading;
     this.msg = msg;
   }
@@ -58,8 +61,7 @@ class LoadingModalData
   msg: string;
 }
 
-export class KakaoPaymentInfo
-{
+export class KakaoPaymentInfo {
   sid?: string;
 }
 
@@ -67,17 +69,31 @@ interface Props {
   children?: React.ReactElement;
 }
 
-const LoginProvider = (props: Props): React.ReactElement =>
-{
+const LoginProvider = (props: Props): React.ReactElement => {
   const [user, setUser] = React.useState<User | undefined>();
   const [userProfile, setUserProfile] = React.useState<UserProfile>();
   const [firm, setFirm] = React.useState<Firm | undefined>();
-  const [couponModalVisible, setCouponModalVisible] = React.useState<boolean>(false);
-  const [paymentInfo] = React.useState<KakaoPaymentInfo>(new KakaoPaymentInfo());
-  const [paymentReadyInfo, setPaymentReadyInfo] = React.useState<KakaoPaymentReadyInfo>();
-  const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(false);
-  const [loadingModalData, setLoadingModalData] = React.useState<LoadingModalData>(new LoadingModalData(false, ''));
-  const [webViewModal, setWebViewModal] = React.useState<WebViewModalData>({ visible: false, url: undefined });
+  const [couponModalVisible, setCouponModalVisible] = React.useState<boolean>(
+    false
+  );
+  const [paymentInfo] = React.useState<KakaoPaymentInfo>(
+    new KakaoPaymentInfo()
+  );
+  const [
+    paymentReadyInfo,
+    setPaymentReadyInfo,
+  ] = React.useState<KakaoPaymentReadyInfo>();
+  const [visiblePaymentModal, setVisiblePaymentModal] = React.useState<boolean>(
+    false
+  );
+  const [
+    loadingModalData,
+    setLoadingModalData,
+  ] = React.useState<LoadingModalData>(new LoadingModalData(false, ''));
+  const [webViewModal, setWebViewModal] = React.useState<WebViewModalData>({
+    visible: false,
+    url: undefined,
+  });
 
   // data
   let callbackAction: ApplyWorkCallback | undefined;
@@ -87,7 +103,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
     user,
     userProfile,
     firm,
-    paymentInfo
+    paymentInfo,
   };
 
   const actions = {
@@ -95,80 +111,104 @@ const LoginProvider = (props: Props): React.ReactElement =>
     setFirm,
     setUserProfile,
     setWebViewModal,
-    saveUserProfileAssets: (assetData: UserAssets): Promise<void> =>
-    {
+    saveUserProfileAssets: (assetData: UserAssets): Promise<void> => {
       return updateUserAssets(user.uid, assetData);
     },
-    openWorkPaymentModal: (price: number, callbackFn, callbackArgs: Array<any>): void =>
-    {
+    openWorkPaymentModal: (
+      price: number,
+      callbackFn,
+      callbackArgs: Array<any>
+    ): void => {
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
       api
         .requestPaymentReady('일감매칭비', user.uid, orderId, price)
-        .then((response): void =>
-        {
+        .then((response): void => {
           const result: SubscriptionReadyResponse = response;
-          if (result && result.next_redirect_mobile_url)
-          {
-            const paymentReadyInfo = new KakaoPaymentReadyInfo(result.next_redirect_mobile_url, result.tid, user.uid, orderId);
+          if (result && result.next_redirect_mobile_url) {
+            const paymentReadyInfo = new KakaoPaymentReadyInfo(
+              result.next_redirect_mobile_url,
+              result.tid,
+              user.uid,
+              orderId
+            );
             setPaymentReadyInfo(paymentReadyInfo);
             setVisiblePaymentModal(true);
 
-            if (callbackFn) { Callbacker.add(CALLBACKER_WORK_PAYMENT, callbackFn, callbackArgs) }
+            if (callbackFn) {
+              Callbacker.add(CALLBACKER_WORK_PAYMENT, callbackFn, callbackArgs);
+            }
           }
         })
-        .catch((err) =>
-        {
-          noticeUserError('Ad Create Provider[정기결제 요청 실패]', err?.message, user);
+        .catch(err => {
+          noticeUserError(
+            'Ad Create Provider[정기결제 요청 실패]',
+            err?.message,
+            user
+          );
         });
     },
-    openAdPaymentModal: (price: number, callbackFn, callbackArgs: Array<any>): void =>
-    {
+    openAdPaymentModal: (
+      price: number,
+      callbackFn,
+      callbackArgs: Array<any>
+    ): void => {
       const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
       api
         .requestPaymentReady('광고정기결제', user.uid, orderId, price)
-        .then((response): void =>
-        {
+        .then((response): void => {
           console.log('>>> requestPaymentReady response:', response);
           const result: SubscriptionReadyResponse = response;
-          if (result && result.next_redirect_mobile_url)
-          {
-            const paymentReadyInfo = new KakaoPaymentReadyInfo(result.next_redirect_mobile_url, result.tid, user.uid, orderId);
+          if (result && result.next_redirect_mobile_url) {
+            const paymentReadyInfo = new KakaoPaymentReadyInfo(
+              result.next_redirect_mobile_url,
+              result.tid,
+              user.uid,
+              orderId
+            );
             setPaymentReadyInfo(paymentReadyInfo);
             setVisiblePaymentModal(true);
 
             Callbacker.add(CALLBACKER_AD_PAYMENT, callbackFn, callbackArgs);
-          }
-          else
-          {
-            noticeUserError('LoginProvider(requestPaymentReady result invalid, 정기준비 요청 실패)', response, user);
+          } else {
+            noticeUserError(
+              'LoginProvider(requestPaymentReady result invalid, 정기준비 요청 실패)',
+              response,
+              user
+            );
           }
         })
-        .catch((err) =>
-        {
-          noticeUserError('Ad Create Provider(정기결제 요청 실패)', err?.message, user);
+        .catch(err => {
+          noticeUserError(
+            'Ad Create Provider(정기결제 요청 실패)',
+            err?.message,
+            user
+          );
         });
     },
-    openCouponModal: (applyWorkCallback?: (user: User, useCoupon: boolean) => void): void =>
-    {
-      if (applyWorkCallback) { callbackAction = new ApplyWorkCallback(applyWorkCallback, user) }
+    openCouponModal: (
+      applyWorkCallback?: (user: User, useCoupon: boolean) => void
+    ): void => {
+      if (applyWorkCallback) {
+        callbackAction = new ApplyWorkCallback(applyWorkCallback, user);
+      }
       setCouponModalVisible(true);
     },
-    popLoading: (loading: boolean, msg?: string): void =>
-    {
+    popLoading: (loading: boolean, msg?: string): void => {
       setLoadingModalData(new LoadingModalData(loading, msg));
     },
-    refetchFirm: (): Promise<Firm | null> => updateFirmInfo(user, userProfile, setFirm),
-    refetchUserProfile: (): Promise<UserProfile> =>
-    {
-      return getUserInfo(user.uid).then((data) =>
-      {
+    refetchFirm: (): Promise<Firm | null> =>
+      updateFirmInfo(user, userProfile, setFirm),
+    refetchUserProfile: (): Promise<UserProfile> => {
+      return getUserInfo(user.uid).then(data => {
         const userInfo = data.val();
 
-        if (userInfo) { setUserProfile(userInfo) }
+        if (userInfo) {
+          setUserProfile(userInfo);
+        }
 
         return userInfo;
       });
-    }
+    },
   };
 
   return (
@@ -179,19 +219,23 @@ const LoginProvider = (props: Props): React.ReactElement =>
         visible={visiblePaymentModal}
         paymentInfo={paymentReadyInfo}
         close={(): void => setVisiblePaymentModal(false)}
-        setPaymentSubscription={(sid: string): void =>
-        {
+        setPaymentSubscription={(sid: string): void => {
           setUserProfile({ ...userProfile, sid: sid });
           updatePaymentSubscription(user.uid, sid)
-            .then(() =>
-            {
+            .then(() => {
               console.log('success updatePaymentSubscription~~');
               console.log('>>> Callbacker.arguments: ', Callbacker.arguments);
               paymentInfo.sid = sid;
               Callbacker.trigger(CALLBACKER_AD_PAYMENT);
               Callbacker.trigger(CALLBACKER_WORK_PAYMENT, sid);
               console.log('success call callbacker~~', Callbacker);
-            }).catch((error) => { noticeUserError('Firebase Update Fail(updatePaymentSubscription)', error?.message) });
+            })
+            .catch(error => {
+              noticeUserError(
+                'Firebase Update Fail(updatePaymentSubscription)',
+                error?.message
+              );
+            });
         }}
       />
       <ModalTemplate
@@ -200,8 +244,7 @@ const LoginProvider = (props: Props): React.ReactElement =>
           <WebView
             source={{ uri: webViewModal.url }}
             style={{ flex: 1 }}
-            onError={(err: WebViewErrorEvent): void =>
-            {
+            onError={(err: WebViewErrorEvent): void => {
               console.log('>>> WebView onError:', err);
             }}
           />
@@ -211,9 +254,16 @@ const LoginProvider = (props: Props): React.ReactElement =>
         user={user}
         visible={couponModalVisible}
         closeModal={(): void => setCouponModalVisible(false)}
-        applyCoupon={(): void => { if (callbackAction) { callbackAction.requestCallback() } }}
+        applyCoupon={(): void => {
+          if (callbackAction) {
+            callbackAction.requestCallback();
+          }
+        }}
       />
-      <LoadingIndicator loading={loadingModalData.loading} msg={loadingModalData.msg} />
+      <LoadingIndicator
+        loading={loadingModalData.loading}
+        msg={loadingModalData.msg}
+      />
     </Provider>
   );
 };

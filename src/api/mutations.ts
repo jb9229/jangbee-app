@@ -2,14 +2,14 @@ import { gql } from '@apollo/client';
 
 export const CREATE_FIRM = gql`
   mutation createFirm($newFirm: FirmInput) {
-    createFirm(newFirm: $newFirm) { 
+    createFirm(newFirm: $newFirm) {
       fname
     }
   }
 `;
 export const UPDATE_FIRM = gql`
   mutation updateFirm($accountId: String!, $updateFirm: FirmUpdateInput) {
-    updateFirm(accountId: $accountId, updateFirm: $updateFirm) { 
+    updateFirm(accountId: $accountId, updateFirm: $updateFirm) {
       fname
     }
   }
@@ -57,5 +57,16 @@ export const FIRMHARMCASE_DELETE = gql`
 export const UPLOAD_IMAGE = gql`
   mutation UploadImage($img: Upload) {
     uploadFirmImage(img: $img)
+  }
+`;
+
+// Call Log
+export const Add_CALLLOG = gql`
+  mutation AddCallLog($dto: CallLogParams) {
+    addCallLog(dto: $dto) {
+      _id
+      caller
+      timestamp
+    }
   }
 `;
