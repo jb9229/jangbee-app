@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
+    "target": "ES2016",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"],
+      "atoms/*": ["src/components/atoms/*"],
+      "molecules/*": ["src/components/molecules/*"],
+      "organisms/*": ["src/components/organisms/*"],
+      "templates/*": ["src/components/templates/*"],
+      "api/*": ["src/api/*"],
+      "auth/*": ["src/auth/*"],
+      "utils/*": ["src/utils/*"],
+      "screens/*": ["src/screens/*"],
+      "common/*": ["src/common/*"],
+      "constants/*": ["src/constants/*"],
+      "container/*": ["src/container/*"],
+      "types/*": ["src/types/*"],
+      "navigation": ["src/navigation"],
+      "native_modules": ["src/native_modules"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "storybook/**/*.ts", "storybook/**/*.tsx", "src/index.web.js"],
+  "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+        // "tsConfigFile": "my-tsconfig.json"
+      }
+    }
+  }
+}

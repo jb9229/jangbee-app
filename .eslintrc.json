@@ -1,13 +1,51 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb", "plugin:flowtype/recommended"],
-  "plugins": ["react", "jsx-a11y", "import", "react-native", "flowtype"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "@typescript-eslint"],
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
   "env": {
-    "browser": true
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
   "rules": {
-    "global-require": 0,
-    "no-underscore-dangle": 0,
-    "react/jsx-filename-extension": 0
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "max-len": ["error", { "code": 140 }],
+    "semi": ["error", "always", { "omitLastInOneLineBlock": true }],
+    "sort-imports": [
+      2,
+      {
+        "ignoreCase": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { "variables": false }
+    ],
+    "react/prop-types": 0,
+    "object-property-newline": 0,
+    "space-before-function-paren": ["error", "never"]
   }
 }
