@@ -23,7 +23,7 @@ export default ({ config }) => {
         {
           file: 'sentry-expo/upload-sourcemaps',
           config: {
-            organization: 'Kan',
+            organization: 'kan',
             project: 'jangbeecall',
             authToken: process.env.SENTRY_AUTHTOKEN,
           },

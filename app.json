@@ -22,18 +22,6 @@
       "checkAutomatically": "ON_ERROR_RECOVERY"
     },
     "assetBundlePatterns": ["**/*"],
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "Kan",
-            "project": "jangbeecall",
-            "authToken": "b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398"
-          }
-        }
-      ]
-    },
     "description": "건설 중장비 콜 서비스입니다",
     "isDetached": true,
     "android": {
