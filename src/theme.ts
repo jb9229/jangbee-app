@@ -30,7 +30,7 @@ const colors = {
   lightBackgroundLight: '#f7f6f3',
   darkBackground: '#323739',
   darkBackgroundLight: '#393241',
-  red: '#FF0000'
+  red: '#FF0000',
 };
 
 /**
@@ -46,7 +46,7 @@ export const koFont = {
   FontTitle: 'NanumBarunGothic',
   FontMiddleTitle: 'SsangmundongGulimB',
   FontBatang: 'NanumSquareRoundR',
-  FontButton: 'NanumBarunGothic'
+  FontButton: 'NanumBarunGothic',
 };
 
 export const enFont = {
@@ -54,7 +54,7 @@ export const enFont = {
   FontTitle: 'NanumBarunGothic',
   FontMiddleTitle: 'SsangmundongGulimB',
   FontBatang: 'NanumSquareRoundR',
-  FontButton: 'NanumBarunGothic'
+  FontButton: 'NanumBarunGothic',
 };
 
 export const light = {
@@ -106,7 +106,7 @@ export const light = {
   btnDisabled: 'rgb(224,224,224)',
   fontColor: 'black',
   tintColor: '#333333',
-  lineColor: colors.paleGray
+  lineColor: colors.paleGray,
 };
 
 export const dark = {
@@ -144,8 +144,8 @@ export const dark = {
 
   // Border
   ColorBorderList: '#E3DCDC',
-  ColorBorderTextInput: 'rgb(238,238,238)',  // #eeeeee
-  ColorBorderBtn: 'rgb(238,238,238)',  // #eeeeee
+  ColorBorderTextInput: 'rgb(238,238,238)', // #eeeeee
+  ColorBorderBtn: 'rgb(238,238,238)', // #eeeeee
 
   background: colors.darkBackground,
   backgroundDark: colors.dodgerBlue,
@@ -157,19 +157,20 @@ export const dark = {
   btnDisabled: 'rgb(224,224,224)',
   fontColor: 'white',
   tintColor: '#a3a3a3',
-  lineColor: colors.paleGray
+  lineColor: colors.paleGray,
 };
 
 export const theme = {
   light,
-  dark
+  dark,
 };
 
-export const createTheme = (type: ThemeType, language: LanguageType): Partial<Theme> & Partial<DefaultTheme> =>
-{
+export const createTheme = (
+  type: ThemeType,
+  language: LanguageType
+): DefaultTheme => {
   let lan;
-  switch (language)
-  {
+  switch (language) {
     case LanguageType.EN:
       lan = koFont;
       break;
@@ -178,12 +179,12 @@ export const createTheme = (type: ThemeType, language: LanguageType): Partial<Th
       break;
   }
 
-  switch (type)
-  {
+  switch (type) {
     case ThemeType.LIGHT:
       return { ...lan, ...theme.light };
     case ThemeType.DARK:
       return { ...lan, ...theme.dark };
-    default: return { ...lan, ...theme.light };
+    default:
+      return { ...lan, ...theme.light };
   }
 };

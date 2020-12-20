@@ -1,9 +1,9 @@
-module.exports = function(api)
-{
+module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo', '@babel/preset-typescript'],
-    plugins: [['inline-dotenv'],
+    plugins: [
+      ['inline-dotenv'],
       [
         'module-resolver',
         {
@@ -16,7 +16,7 @@ module.exports = function(api)
             '.android.tsx',
             '.ios.js',
             '.ios.tsx',
-            '.story.tsx'
+            '.story.tsx',
           ],
           root: ['./'],
           alias: {
@@ -34,10 +34,10 @@ module.exports = function(api)
             organisms: './src/components/organisms',
             templates: './src/components/templates',
             container: './src/container',
-            native_modules: './src/native_modules'
-          }
-        }
-      ]
-    ]
+            native_modules: './src/native_modules',
+          },
+        },
+      ],
+    ],
   };
 };
