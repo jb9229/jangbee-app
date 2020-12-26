@@ -61,6 +61,8 @@ export const light = {
   // Theme Color
   ColorPrimary: '#ffbb00',
   ColorPrimaryDark: 'rgb(247, 174, 67)', // #F7AE43
+  ColorPrimaryLight: 'rgb(251, 198, 137)', // #FBC689
+  ColorPrimaryBatang: 'rgb(253, 239, 219)', // #FBC689
   ColorBatangDark: '#175AA8',
   ColorBatang: '#82b6ed',
   ColorBatangLight: '#D3E5F9',
@@ -71,6 +73,8 @@ export const light = {
   ColorInputLabel: '#4D4A4A',
 
   // Text Color
+  ColorTextBlack: 'rgb(34,34,34)', // #222222
+  ColorTextDisable: 'rgb(170,170,170)', // #aaaaaa
   ColorTextSubtitle: '#606060',
   ColorTextInput: '#000000',
   ColorTextError: colors.red,
@@ -122,6 +126,8 @@ export const dark = {
   ColorInputLabel: '#4D4A4A',
 
   // Text Color
+  ColorTextBlack: 'rgb(34,34,34)', // #222222
+  ColorTextDisable: 'rgb(170,170,170)', // #aaaaaa
   ColorTextSubtitle: '#606060',
   ColorTextInput: '#000000',
   ColorTextError: colors.red,

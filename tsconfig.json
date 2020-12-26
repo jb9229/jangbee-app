@@ -3,11 +3,12 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "lib": ["dom", "esnext"],
-    "target": "ES2016",
+    "target": "ES2020",
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "strict": true,
     "baseUrl": "./",
     "paths": {
       "src/*": ["src/*"],
@@ -25,10 +26,41 @@
       "types/*": ["src/types/*"],
       "navigation": ["src/navigation"],
       "native_modules": ["src/native_modules"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin",
+        "tags": ["styled", "css", "sty"],
+        "lint": {
+          "validProperties": [
+            "aspect-ratio",
+            "elevation",
+            "resize-mode",
+            "shadow-color",
+            "shadow-opacity",
+            "shadow-offset",
+            "shadow-radius",
+            "text-align-vertical",
+            "tint-color",
+            "padding-horizontal"
+          ]
+        }
+      }
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "storybook/**/*.ts", "storybook/**/*.tsx", "src/index.web.js"],
-  "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "storybook/**/*.ts",
+    "storybook/**/*.tsx",
+    "src/index.web.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "src/__generated__"
+  ],
   "jest": {
     "globals": {
       "ts-jest": {
