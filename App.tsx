@@ -1,4 +1,4 @@
-export const loadingStorybook = true;
+export const loadingStorybook = false;
 export default loadingStorybook
   ? require('./storybook').default
   : require('src/index').default;

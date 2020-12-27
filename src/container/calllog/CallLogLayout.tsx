@@ -97,7 +97,7 @@ const CallLogItem = ({
   <LogWrap>
     <LogItemNo>{no + 1}</LogItemNo>
     <LogItem>{log.callerPhoneNumber}</LogItem>
-    <LogItem>{moment(log.callTime).format('YYYY/MM/DD hh:mm:ss')}</LogItem>
+    <LogItem>{moment(log.timestamp).format('YYYY/MM/DD hh:mm:ss')}</LogItem>
   </LogWrap>
 );
 
@@ -109,6 +109,17 @@ const CallLogLayout: React.FC<Props> = ({ logs }): React.ReactElement => {
   searchMonths.push(moment().add(-1, 'months').format('yyyy.MM'));
   searchMonths.push(initMonth);
 
+  const monthLogs = logs.filter(log => {
+    const date = new Date(log.timestamp);
+    const lYear = date.getFullYear();
+    const lMonth = date.getMonth() + 1;
+
+    if (searchMonth === `${lYear}.${lMonth}`) {
+      return true;
+    }
+
+    return false;
+  });
   return (
     <Container>
       <Header>
@@ -127,10 +138,10 @@ const CallLogLayout: React.FC<Props> = ({ logs }): React.ReactElement => {
       </Header>
       <Contents>
         <EvaluateWrap>
-          <EvaluateTitle>{`${initMonth}월 콜이력`}</EvaluateTitle>
+          <EvaluateTitle>{`${searchMonth}월 콜이력`}</EvaluateTitle>
           <EvaluateItemWrap>
             <EvaluateLabel>총 콜수</EvaluateLabel>
-            <EvaluateValue>2</EvaluateValue>
+            <EvaluateValue>{monthLogs.length}</EvaluateValue>
           </EvaluateItemWrap>
         </EvaluateWrap>
         <LogListWrap>
@@ -139,7 +150,7 @@ const CallLogLayout: React.FC<Props> = ({ logs }): React.ReactElement => {
             <LogHeader>걸려온 번호</LogHeader>
             <LogHeader>시간</LogHeader>
           </LogListHeaderWrap>
-          {logs.map((log, index) => (
+          {monthLogs.map((log, index) => (
             <CallLogItem key={`KEY_${index}`} log={log} no={index} />
           ))}
         </LogListWrap>

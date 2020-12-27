@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "react-native start",
-    "android": "ENVFILE=.env react-native run-android --variant=DevDebug --appIdSuffix=dev",
+    "android": "ENVFILE=.env.dev react-native run-android --variant=DevDebug --appIdSuffix=dev",
     "android-release": "react-native run-android --variant=DevRelease --appIdSuffix=dev",
     "ios": "react-native run-ios",
     "test": "node ./node_modules/jest/bin/jest.js",

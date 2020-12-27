@@ -138,6 +138,7 @@ export default class App extends React.Component {
       );
     }
 
+    console.log('=== process.env.BUILD_TYPE:', process.env.BUILD_TYPE);
     return (
       <RecoilRoot>
         <LoginProvider>

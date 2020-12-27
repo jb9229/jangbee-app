@@ -212,3 +212,5 @@ android/app/dev/release/app-dev-release.aab
 android/app/dev/release/app-dev-release.apk
 android/app/dev/release/output-metadata.json
 .env
+.env.dev
+clean/.expo/**
