@@ -31,11 +31,6 @@
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"
-      },
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyA4h25H62Sp9XSMfEy4x9RBc1AaAAH5bSY"
-        }
       }
     },
     "ios": {

@@ -252,8 +252,6 @@ const FirmSettingScreen: React.FC<Props> = props => {
             onPress={(): void => {
               setVisibleKatalkAskModal(true);
             }}
-            imgWith={100}
-            imgHeight={10}
           />
           <JBIconButton
             title="알람 설정"

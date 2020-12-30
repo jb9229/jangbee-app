@@ -1,6 +1,5 @@
 import { InteractionManager } from 'react-native';
 import React from 'react';
-import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
 
@@ -28,10 +27,11 @@ const ImageWrap = styled.View`
 `;
 
 const ButtonImage = styled.Image`
-  width: ${props => props.with || 100};
-  height: ${props => props.with || 100};
+  width: ${props => props.width || 95};
+  height: ${props => props.width || 100};
   margin: 3px;
   resize-mode: contain;
+  border-radius: 4;
 `;
 const BottomText = styled.Text`
   font-size: 15;
@@ -42,7 +42,7 @@ export default class JBIconButton extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      pressing: false
+      pressing: false,
     };
   }
 
@@ -62,12 +62,12 @@ export default class JBIconButton extends React.PureComponent {
   };
 
   render() {
-    const { title, subTitle, img, onPress, imgWith, imgHeight } = this.props;
+    const { title, subTitle, img, onPress, imgWidth, imgHeight } = this.props;
 
     return (
       <ContainTO onPress={() => onPress()}>
         <ImageWrap>
-          <ButtonImage source={img} with={imgWith} height={imgHeight} />
+          <ButtonImage source={img} width={imgWidth} height={imgHeight} />
           {subTitle ? <BottomText>{subTitle}</BottomText> : null}
         </ImageWrap>
         <TitleWrap>

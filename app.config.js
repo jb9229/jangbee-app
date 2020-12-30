@@ -30,5 +30,13 @@ export default ({ config }) => {
         },
       ],
     },
+    android: {
+      ...config.android,
+      config: {
+        googleSignIn: {
+          apiKey: process.env.GOOGLE_APIKEY,
+        },
+      },
+    },
   };
 };

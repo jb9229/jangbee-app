@@ -1,6 +1,13 @@
 import * as api from 'src/api/api';
 
-import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import AdUpdateModal from 'templates/AdUpdateModal';
 import { DefaultNavigationProps } from 'src/types';
@@ -18,70 +25,71 @@ import { wait } from 'src/utils/TimeUtils';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   adEmptyViewWrap: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   emptyWordWrap: {
     marginBottom: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   commWrap: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: colors.pointBatang
+    backgroundColor: colors.pointBatang,
   },
   emptyText: {
     alignItems: 'center',
     justifyContent: 'center',
     fontFamily: fonts.batang,
-    color: colors.batang
+    color: colors.batang,
   },
   adListItemWrap: {
     margin: 10,
     paddingBottom: 3,
     borderBottomColor: colors.point2,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   adItemTopWrap: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   adItemTopLeftWrap: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   adItemTopRightWrap: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   adListLeftWrap: {
-    flex: 3
+    flex: 3,
   },
   adItemMidleWrap: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   adListDateWrap: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   adListTargetLocalWrap: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   buttonTopLine: {
     borderLeftColor: colors.point2,
-    borderLeftWidth: 1
-  }
+    borderLeftWidth: 1,
+  },
 });
 
 interface Props {
   navigation: DefaultNavigationProps;
 }
-const AdScreen: React.FC<Props> = (props) =>
-{
+const AdScreen: React.FC<Props> = props => {
   const { user } = useLoginContext();
-  const [isVisibleAdUpdateModal, setVisibleAdUpdateModal] = React.useState(false);
+  const [isVisibleAdUpdateModal, setVisibleAdUpdateModal] = React.useState(
+    false
+  );
   const [isVisibleDetailModal, setVisibleDetailModal] = React.useState(false);
   const [isLoadingAdList, setLoadingAdList] = React.useState(true);
   const [isAdEmpty, setAdEmpty] = React.useState(true);
@@ -90,8 +98,7 @@ const AdScreen: React.FC<Props> = (props) =>
   const [updateAd, setUpdateAd] = React.useState();
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(() =>
-  {
+  const onRefresh = React.useCallback(() => {
     setRefreshing(true);
 
     requestAdList();
@@ -99,31 +106,24 @@ const AdScreen: React.FC<Props> = (props) =>
     wait(1000).then(() => setRefreshing(false));
   }, [refreshing]);
 
-  React.useEffect(() =>
-  {
+  React.useEffect(() => {
     requestAdList();
   }, [props.navigation.state]);
 
-  const requestAdList = (): void =>
-  {
+  const requestAdList = (): void => {
     api
       .getJBAdList(user.uid)
-      .then(listData =>
-      {
-        if (listData.length > 0)
-        {
+      .then(listData => {
+        if (listData.length > 0) {
           setAdEmpty(false);
           setLoadingAdList(false);
           setAdList(listData);
-        }
-        else
-        {
+        } else {
           setAdEmpty(true);
           setLoadingAdList(false);
         }
       })
-      .catch(error =>
-      {
+      .catch(error => {
         Alert.alert(
           '업체정보 요청에 문제가 있습니다',
           `다시 시도해 주세요 -> [${error.name}] ${error.message}`
@@ -137,8 +137,7 @@ const AdScreen: React.FC<Props> = (props) =>
   /**
    * 광고업데이트 요청 함수
    */
-  const openUpdateAdModal = item =>
-  {
+  const openUpdateAdModal = item => {
     setUpdateAd(item);
     setVisibleAdUpdateModal(true);
   };
@@ -146,8 +145,7 @@ const AdScreen: React.FC<Props> = (props) =>
   /**
    * 광고종료 재 확인 팝업
    */
-  const confirmTerminateAd = item =>
-  {
+  const confirmTerminateAd = item => {
     Alert.alert(
       '광고 종료',
       `[${getAdtypeStr(item.adType)}] 정말 광고를 종료 하시겠습니까?`,
@@ -156,8 +154,8 @@ const AdScreen: React.FC<Props> = (props) =>
         {
           text: '아니요',
           onPress: () => {},
-          style: 'cancel'
-        }
+          style: 'cancel',
+        },
       ]
     );
   };
@@ -165,10 +163,8 @@ const AdScreen: React.FC<Props> = (props) =>
   /**
    * 광고종료 요청 함수
    */
-  const terminateAd = id =>
-  {
-    if (!id || id < 1)
-    {
+  const terminateAd = id => {
+    if (!id || id < 1) {
       Alert.alert(
         '유효성검사 에러',
         `[${id}]종료 광고아이디를 찾지 못했습니다, 다시 시도해 주세요`
@@ -190,12 +186,10 @@ const AdScreen: React.FC<Props> = (props) =>
     <View style={styles.adListItemWrap}>
       <JangbeeAd
         ad={item}
-        openFirmDetail={(accountId): void =>
-        {
+        openFirmDetail={(accountId): void => {
           setDetailFirmId(accountId);
           setVisibleDetailModal(false);
-        }
-        }
+        }}
       />
       <View style={styles.adListCommWrap}>
         <View style={styles.adItemTopWrap}>
@@ -237,13 +231,11 @@ const AdScreen: React.FC<Props> = (props) =>
     </View>
   );
 
-  if (isLoadingAdList)
-  {
+  if (isLoadingAdList) {
     return <JBActIndicator title="내광고 로딩중.." size={35} />;
   }
 
-  if (isAdEmpty)
-  {
+  if (isAdEmpty) {
     return (
       <View style={styles.adEmptyViewWrap}>
         <View style={styles.emptyWordWrap}>
@@ -272,13 +264,16 @@ const AdScreen: React.FC<Props> = (props) =>
       <FirmDetailModal
         isVisibleModal={isVisibleDetailModal}
         accountId={detailFirmId}
-        closeModal={(): void => { setVisibleDetailModal(false) }}
+        closeModal={(): void => {
+          setVisibleDetailModal(false);
+        }}
       />
       <AdUpdateModal
         isVisibleModal={isVisibleAdUpdateModal}
-        closeModal={(): void => { setVisibleAdUpdateModal(false) }}
-        completeUpdate={() =>
-        {
+        closeModal={(): void => {
+          setVisibleAdUpdateModal(false);
+        }}
+        completeUpdate={() => {
           requestAdList();
           setVisibleAdUpdateModal(false);
         }}

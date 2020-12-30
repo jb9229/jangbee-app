@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { FlatList, RefreshControl } from 'react-native';
 import { MText, RText } from 'atoms/StyledText';
 
 import { CallLog } from './types';
@@ -21,9 +22,7 @@ const Contents = styled.View`
   flex: 1;
   padding-horizontal: 5%;
 `;
-const LogListWrap = styled.View`
-  align-items: center;
-`;
+const LogListWrap = styled.View``;
 const LogListHeaderWrap = styled.View<StyledProps>`
   flex-direction: row;
   background-color: ${({ theme }) => theme.ColorPrimaryBatang};
@@ -85,6 +84,8 @@ const EvaluateValue = styled(RText)``;
 
 interface Props {
   logs: CallLog[];
+  refreshing: boolean;
+  onRefresh: () => void;
 }
 
 const CallLogItem = ({
@@ -101,7 +102,11 @@ const CallLogItem = ({
   </LogWrap>
 );
 
-const CallLogLayout: React.FC<Props> = ({ logs }): React.ReactElement => {
+const CallLogLayout: React.FC<Props> = ({
+  logs,
+  refreshing,
+  onRefresh,
+}): React.ReactElement => {
   const initMonth = moment().format('yyyy.MM');
   const [searchMonth, setSearchMonth] = useState(initMonth);
   const searchMonths = [];
@@ -120,6 +125,8 @@ const CallLogLayout: React.FC<Props> = ({ logs }): React.ReactElement => {
 
     return false;
   });
+
+  // UI Rendering
   return (
     <Container>
       <Header>
@@ -150,9 +157,17 @@ const CallLogLayout: React.FC<Props> = ({ logs }): React.ReactElement => {
             <LogHeader>걸려온 번호</LogHeader>
             <LogHeader>시간</LogHeader>
           </LogListHeaderWrap>
-          {monthLogs.map((log, index) => (
-            <CallLogItem key={`KEY_${index}`} log={log} no={index} />
-          ))}
+          <FlatList
+            data={monthLogs}
+            refreshing={refreshing}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            keyExtractor={index => `KEY_${index}`}
+            renderItem={({ item, index }) => (
+              <CallLogItem log={item} no={index} />
+            )}
+          />
         </LogListWrap>
       </Contents>
     </Container>
