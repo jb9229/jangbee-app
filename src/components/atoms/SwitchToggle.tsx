@@ -1,5 +1,11 @@
-import { Animated, StyleProp, StyleSheet, Text, TextStyle,
-  TouchableOpacity, ViewStyle
+import {
+  Animated,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -29,8 +35,8 @@ interface Props {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
 
 function SwitchToggle(props: Props): React.ReactElement {
@@ -51,7 +57,7 @@ function SwitchToggle(props: Props): React.ReactElement {
     const animValue = {
       fromValue: props.switchOn ? 0 : 1,
       toValue: props.switchOn ? 1 : 0,
-      duration: props.duration
+      duration: props.duration,
     };
 
     Animated.timing(animXValue, animValue).start();
@@ -104,10 +110,10 @@ function SwitchToggle(props: Props): React.ReactElement {
               inputRange: [0, 1],
               outputRange: [
                 props.backgroundColorOff as string | number,
-                props.backgroundColorOn as string | number
-              ] as string[] | number[]
-            })
-          }
+                props.backgroundColorOn as string | number,
+              ] as string[] | number[],
+            }),
+          },
         ]}
       >
         {generateLeftText()}
@@ -119,9 +125,9 @@ function SwitchToggle(props: Props): React.ReactElement {
                 inputRange: [0, 1],
                 outputRange: [
                   props.circleColorOff as string | number,
-                  props.circleColorOn as string | number
-                ] as string[] | number[]
-              })
+                  props.circleColorOn as string | number,
+                ] as string[] | number[],
+              }),
             },
             {
               transform: [
@@ -130,13 +136,13 @@ function SwitchToggle(props: Props): React.ReactElement {
                     inputRange: [0, 1],
                     outputRange: [
                       circlePosXStart as string | number,
-                      circlePosXEnd as string | number
-                    ] as string[] | number[]
-                  })
-                }
-              ]
+                      circlePosXEnd as string | number,
+                    ] as string[] | number[],
+                  }),
+                },
+              ],
             },
-            props.buttonStyle
+            props.buttonStyle,
           ]}
         >
           <Animated.View style={props.buttonContainerStyle}>
@@ -157,21 +163,21 @@ SwitchToggle.defaultProps = {
     height: 36,
     borderRadius: 18,
     backgroundColor: 'rgb(227,227,227)',
-    padding: 3
+    padding: 3,
   },
 
   circleStyle: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: 'white' // rgb(102,134,205)
+    backgroundColor: 'white', // rgb(102,134,205)
   },
 
   backgroundColorOn: 'rgb(227,227,227)',
   backgroundColorOff: 'rgb(215,215,215)',
   circleColorOff: 'white',
   circleColorOn: 'rgb(102,134,205)',
-  duration: 300
+  duration: 300,
 };
 
 export default SwitchToggle;

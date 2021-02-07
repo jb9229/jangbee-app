@@ -257,11 +257,6 @@ const FirmSettingScreen: React.FC<Props> = props => {
             title="알람 설정"
             img={require('../../assets/images/icon/alarm_icon.png')}
             onPress={(): void => {
-              Alert.alert(
-                '알림',
-                '수신전화 피해사례조회 알람기능 추가 하겠습니다!'
-              );
-              return;
               setVisibleAlarmSettingModal(true);
             }}
           />

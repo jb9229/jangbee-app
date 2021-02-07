@@ -11,8 +11,8 @@ export function getEnvironment(): {
   if (!releaseChannel) {
     // no releaseChannel (is undefined) in dev
     return {
-      envName: 'DEVELOPMENT',
-      dbUrl: 'http://10.0.2.2:4000/graphql',
+      envName: 'UNKNOW',
+      dbUrl: 'https://jangbeecall-dev.azurewebsites.net/graphql',
       sentryAuthToken:
         'b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398',
     }; // dev env settings
@@ -27,10 +27,10 @@ export function getEnvironment(): {
         'b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398',
     }; // prod env settings
   }
-  if (releaseChannel.indexOf('staging') !== -1) {
+  if (releaseChannel.indexOf('beta') !== -1) {
     // matches staging-v1, staging-v2
     return {
-      envName: 'STAGING',
+      envName: 'BETA',
       dbUrl: 'https://jangbeecall-dev.azurewebsites.net/graphql',
       sentryAuthToken:
         'b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398',

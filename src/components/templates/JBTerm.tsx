@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 import React from 'react';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
+import { getEnvironment } from 'src/constants/Environment';
 import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
 import pkgConfig from '../../../app.config';
@@ -67,6 +68,7 @@ const TelText = styled.Text`
 console.log('>>> Constants:', Constants);
 console.log('>>> process.env:', process.env);
 export default function JBTerm({ bg }) {
+  const evn = getEnvironment();
   return (
     <Container bg={bg}>
       <Row>
@@ -139,7 +141,7 @@ export default function JBTerm({ bg }) {
             <Title>Version: </Title>
           </TitleTO>
           {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
-          <Text>{`${pkg.expo.version}_${process.env.BUILD_TYPE}`}</Text>
+          <Text>{`${pkg.expo.version}_${evn.envName}`}</Text>
           {/* <Text>{`${Constants?.manifest?.slug}`}</Text> */}
           {/* <Text>{`${pkg.expo.version}_${pkgConfig.extra.buildType}`}</Text> */}
         </Column>
