@@ -16,21 +16,25 @@ const Container = styled.View`
 const CommWrap = styled.View`
   flex-direction: row;
 `;
-const OpenWorkList = styled(FlatList)`
-`;
+const OpenWorkList = styled(FlatList)``;
 
-const FirmWorkingList: React.FC = () =>
-{
+const FirmWorkingList: React.FC = () => {
   const { user } = useLoginContext();
-  const { refreshing, openWorkList, refetchOpenWorkList, applyWork, applyFirmWork, acceptWork, abandonWork } = useFirmWorkProvider();
+  const {
+    refreshing,
+    openWorkList,
+    refetchOpenWorkList,
+    applyWork,
+    applyFirmWork,
+    acceptWork,
+    abandonWork,
+  } = useFirmWorkProvider();
 
-  if (!openWorkList)
-  {
+  if (!openWorkList) {
     return <JBActIndicator title="정보를 불러오는 중.." size={35} />;
   }
 
-  if (openWorkList.length === 0)
-  {
+  if (openWorkList.length === 0) {
     return (
       <Container>
         <JBEmptyView
@@ -45,15 +49,23 @@ const FirmWorkingList: React.FC = () =>
   return (
     <OpenWorkList
       data={openWorkList}
-      renderItem={({ item }): React.ReactElement =>
-        (
-          <WorkItem
-            item={item}
-            renderCommand={(): React.ReactElement => renderCommand(item, user, applyWork, applyFirmWork, acceptWork, abandonWork)}
-            hideAddress
-            cardColor="white"
-          />
-        )}
+      renderItem={({ item }): React.ReactElement => (
+        <WorkItem
+          item={item}
+          renderCommand={(): React.ReactElement =>
+            renderCommand(
+              item,
+              user,
+              applyWork,
+              applyFirmWork,
+              acceptWork,
+              abandonWork
+            )
+          }
+          hideAddress
+          cardColor="white"
+        />
+      )}
       keyExtractor={(item, index) => index.toString()}
       onRefresh={refetchOpenWorkList}
       refreshing={refreshing}
@@ -61,10 +73,15 @@ const FirmWorkingList: React.FC = () =>
   );
 };
 
-const renderCommand = (item, user, applyWork, applyFirmWork, acceptWork, abandonWork): React.ReactElement =>
-{
-  if (user && item.firmRegister && item.accountId === user.uid)
-  {
+const renderCommand = (
+  item,
+  user,
+  applyWork,
+  applyFirmWork,
+  acceptWork,
+  abandonWork
+): React.ReactElement => {
+  if (user && item.firmRegister && item.accountId === user.uid) {
     return (
       <WorkCommWrap>
         <WorkCommText text="내가올린 일감" />
@@ -84,18 +101,16 @@ const renderCommand = (item, user, applyWork, applyFirmWork, acceptWork, abandon
         !item.applied &&
         item.firmRegister &&
         !item.guarTimeExpire && (
-        <JBButton
-          title="차주일감 지원하기(선착순 바로매칭)"
-          onPress={(): void => applyFirmWork(item)}
-          size="small"
-        />
-      )}
+          <JBButton
+            title="차주일감 지원하기(선착순 바로매칭)"
+            onPress={(): void => applyFirmWork(item)}
+            size="small"
+          />
+        )}
       {item.workState === 'OPEN' &&
         !item.applied &&
         item.firmRegister &&
-        item.guarTimeExpire && (
-        <WorkCommText text="차주일감 매칭시간 만료됨" />
-      )}
+        item.guarTimeExpire && <WorkCommText text="차주일감 매칭시간 만료됨" />}
       {item.workState === 'OPEN' && item.applied && (
         <WorkCommText text="매칭중.." />
       )}

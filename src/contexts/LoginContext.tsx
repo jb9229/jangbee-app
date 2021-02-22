@@ -13,11 +13,10 @@ const [useCtx, Provider] = createCtx<Context>();
 
 interface Context {
   navigation: DefaultNavigationProps;
-  user: User | undefined;
   userProfile: UserProfile;
   firm: Firm;
   paymentInfo: KakaoPaymentInfo;
-  setUserProfile: (user: User) => void;
+  setUserProfile: (user: UserProfile) => void;
   setFirm: (firm: Firm) => void;
   saveUserProfileAssets: (assetData: UserAssets) => Promise<void>;
   setWebViewModal: (modalData: WebViewModalData) => void;

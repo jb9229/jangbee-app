@@ -8,6 +8,7 @@ import RoundButton from '../atoms/button/RoundButton';
 import colors from 'constants/Colors';
 import { firmHarmCaseCountUserId } from 'src/container/firmHarmCase/store';
 import { useFirmHarmCaseContext } from 'src/contexts/FirmHarmCaseContext';
+import { useLoginContext } from 'src/contexts/LoginContext';
 import { useSetRecoilState } from 'recoil';
 
 const Container = styled.SafeAreaView`
@@ -60,8 +61,8 @@ interface Props {
   theme: DefaultTheme;
 }
 const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement => {
+  const { userProfile } = useLoginContext();
   const {
-    user,
     searchArea,
     searchTime,
     searchNotice,
@@ -91,7 +92,7 @@ const FirmHarmCaseLayout: React.FC<Props> = (props): React.ReactElement => {
     return (
       <FirmHarmCaseItem
         item={item}
-        accountId={user.uid}
+        accountId={userProfile.uid}
         updateCliEvalu={openUpdateCliEvaluForm}
         deleteCliEvalu={deleteCliEvalu}
         openCliEvaluLikeModal={openCliEvaluLikeModal}

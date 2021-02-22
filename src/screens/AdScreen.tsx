@@ -86,7 +86,7 @@ interface Props {
   navigation: DefaultNavigationProps;
 }
 const AdScreen: React.FC<Props> = props => {
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   const [isVisibleAdUpdateModal, setVisibleAdUpdateModal] = React.useState(
     false
   );
@@ -112,7 +112,7 @@ const AdScreen: React.FC<Props> = props => {
 
   const requestAdList = (): void => {
     api
-      .getJBAdList(user.uid)
+      .getJBAdList(userProfile.uid)
       .then(listData => {
         if (listData.length > 0) {
           setAdEmpty(false);

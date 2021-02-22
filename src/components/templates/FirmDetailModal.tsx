@@ -110,7 +110,7 @@ const FirmDetailModal: React.FC<Props> = props => {
     }
   }, [props.isVisibleModal]);
 
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   const [evaluList, setEvaluList] = React.useState([]);
   const [firmReq, firmRsp] = useLazyQuery(FIRM);
 
@@ -153,8 +153,8 @@ const FirmDetailModal: React.FC<Props> = props => {
                 callSearchFirm(
                   firm.accountId,
                   firm.phoneNumber,
-                  user.uid,
-                  user.phoneNumber
+                  userProfile.uid,
+                  userProfile.phoneNumber
                 )
               }
               size="full"

@@ -71,6 +71,7 @@ export const light = {
   ColorError: colors.red,
   ColorInvariable: colors.paleGray,
   ColorInputLabel: '#4D4A4A',
+  ColorActivityIndicator: '#FDCA24',
 
   // Text Color
   ColorTextBlack: 'rgb(34,34,34)', // #222222
@@ -124,6 +125,7 @@ export const dark = {
   ColorSecond: '#82b6ed',
   ColorError: colors.red,
   ColorInputLabel: '#4D4A4A',
+  ColorActivityIndicator: '#FDCA24',
 
   // Text Color
   ColorTextBlack: 'rgb(34,34,34)', // #222222

@@ -5,7 +5,9 @@ import { Modal } from 'react-native';
 import RNApkInstallerN from 'react-native-apk-installer-n';
 import RNFS from 'react-native-fs';
 import SolidButton from '../atoms/button/SolidButton';
+import { alarmSettingModal } from 'src/container/firmHarmCase/store';
 import styled from 'styled-components/native';
+import { useRecoilValue } from 'recoil';
 
 const Container = styled.View`
   flex: 1;
@@ -36,12 +38,13 @@ interface Props {
 }
 
 const AlarmSettingModal: React.FC<Props> = ({ isVisibleModal, closeModal }) => {
+  const alarmSettingData = useRecoilValue(alarmSettingModal);
   const [downloadPercent, setDownloadPercent] = useState<number | undefined>();
   const installAction = () => {
     const filePath = RNFS.DocumentDirectoryPath + '/jangbeecallScane.apk';
     const download = RNFS.downloadFile({
       fromUrl:
-        'https://github.com/jb9229/jangbee-app/raw/callLog/scane-app-release.apk',
+        'https://github.com/jb9229/jangbeecall-scan/raw/master/android/app/release/app-release.apk',
       toFile: filePath,
       progress: res => {
         setDownloadPercent(
@@ -64,7 +67,7 @@ const AlarmSettingModal: React.FC<Props> = ({ isVisibleModal, closeModal }) => {
     <Modal
       animationType="slide"
       transparent
-      visible={isVisibleModal}
+      visible={alarmSettingData.visible}
       onRequestClose={() => closeModal()}
     >
       <Container>

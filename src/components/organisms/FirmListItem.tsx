@@ -103,7 +103,7 @@ interface Props {
 }
 
 const firmListItem: React.FC<Props> = props => {
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   return (
     <View style={styles.itemWrap}>
       <View style={styles.leftWrap}>
@@ -137,8 +137,8 @@ const firmListItem: React.FC<Props> = props => {
               callSearchFirm(
                 props.item.accountId,
                 props.item.phoneNumber,
-                user.uid,
-                user.phoneNumber
+                userProfile.uid,
+                userProfile.phoneNumber
               )
             }
           />

@@ -48,7 +48,7 @@ interface Props {
 }
 
 const FirmSettingScreen: React.FC<Props> = props => {
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState(
     false
   );
@@ -115,10 +115,10 @@ const FirmSettingScreen: React.FC<Props> = props => {
       .then(() => {
         firebase
           .database()
-          .ref(`users/${user.uid}`)
+          .ref(`users/${userProfile.uid}`)
           .remove()
           .then(() => {
-            deletFirmRequest({ variables: { accountId: user.uid } });
+            deletFirmRequest({ variables: { accountId: userProfile.uid } });
           })
           .catch(error => {
             Alert.alert(
@@ -190,9 +190,7 @@ const FirmSettingScreen: React.FC<Props> = props => {
     fintechUseNum,
     cashbackAmount
   ) => {
-    const { user } = this.props;
-
-    let v = validatePresence(user.uid);
+    let v = validatePresence(userProfile.uid);
     if (!v[0]) {
       Alert.alert(
         '계정값이 유효하지 않습니다',
@@ -211,7 +209,7 @@ const FirmSettingScreen: React.FC<Props> = props => {
     }
 
     const depositData = {
-      accountId: user.uid,
+      accountId: userProfile.uid,
       authToken: obAccessToken,
       fintechUseNum,
       cashback: cashbackAmount,

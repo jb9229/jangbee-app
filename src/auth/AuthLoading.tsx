@@ -1,12 +1,14 @@
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
-import firebase, { User } from 'firebase';
+import * as React from 'react';
 
-import React from 'react';
-import { UserProfile } from 'src/types';
-import colors from 'constants/Colors';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { DefaultTheme, withTheme } from 'styled-components/native';
+
+import { alarmSettingModal } from 'src/container/firmHarmCase/store';
+import firebase from 'firebase';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { useSetRecoilState } from 'recoil';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,70 +18,79 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Props {
+export interface AuthPathProps {
+  theme: DefaultTheme;
   changeAuthPath: (path: number, data?: any) => void;
   completeAuth: (isClient: boolean) => void;
-  setUser: (u: User) => void;
-  setUserProfile: (p: UserProfile) => void;
 }
 
-const AuthLoading: React.FC<Props> = props => {
-  const { refetchFirm, user } = useLoginContext();
+const AuthLoading: React.FC<AuthPathProps> = ({
+  theme,
+  changeAuthPath,
+  completeAuth,
+}) => {
+  const { setUserProfile } = useLoginContext();
+  const setAlarmSettingData = useSetRecoilState(alarmSettingModal);
 
+  // actions
+  const checkLogin = (): void => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log('>>> checklogin uid: ', user.uid);
+        getUserInfo(user.uid)
+          .then(data => {
+            const userInfo = data.val();
+            if (!userInfo) {
+              changeAuthPath(2, user);
+              return;
+            }
+
+            const { userType } = userInfo;
+            setAlarmSettingData({ visible: true });
+            if (!userType) {
+              changeAuthPath(2, user);
+            } else {
+              console.log('=== setUser: ', user);
+              setUserProfile({
+                ...userInfo,
+                uid: user.uid,
+                phoneNumber: user.phoneNumber,
+              });
+
+              // Go to Screeen By User Type
+              if (userType === 1) {
+                completeAuth(true);
+              } else if (userType === 2) {
+                completeAuth(false);
+              } else {
+                Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
+                completeAuth(true);
+              }
+            }
+          })
+          .catch(error => {
+            noticeUserError(
+              'AuthLoadingError(firbase getUserInfo)',
+              error.message
+            );
+          });
+      } else {
+        changeAuthPath(3);
+      }
+    });
+  };
+
+  // component life cycle
   React.useEffect(() => {
-    checkLogin(props);
+    checkLogin();
   }, []);
 
   return (
     <View style={styles.container}>
       <Text>Login Checking...</Text>
-      <ActivityIndicator size="large" color={colors.indicator} />
+      <ActivityIndicator size="large" color={theme.ColorActivityIndicator} />
     </View>
   );
 };
 
-const checkLogin = (props: Props): void => {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      console.log('>>> checklogin uid: ', user.uid);
-      getUserInfo(user.uid)
-        .then(data => {
-          const userInfo = data.val();
-          if (!userInfo) {
-            props.changeAuthPath(2, user);
-            return;
-          }
-
-          const { userType } = userInfo;
-
-          if (!userType) {
-            props.changeAuthPath(2, user);
-          } else {
-            console.log('=== setUser: ', user);
-            props.setUser(user);
-            props.setUserProfile(userInfo);
-
-            // Go to Screeen By User Type
-            if (userType === 1) {
-              props.completeAuth(true);
-            } else if (userType === 2) {
-              props.completeAuth(false);
-            } else {
-              Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
-              props.completeAuth(true);
-            }
-          }
-        })
-        .catch(error => {
-          noticeUserError(
-            'AuthLoadingError(firbase getUserInfo)',
-            error.message
-          );
-        });
-    } else {
-      props.changeAuthPath(3);
-    }
-  });
-};
-
-export default AuthLoading;
+export default withTheme(AuthLoading);

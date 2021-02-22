@@ -12,7 +12,7 @@ export function getEnvironment(): {
     // no releaseChannel (is undefined) in dev
     return {
       envName: 'UNKNOW',
-      dbUrl: 'https://jangbeecall-dev.azurewebsites.net/graphql',
+      dbUrl: 'http://10.0.2.2:4000/graphql',
       sentryAuthToken:
         'b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398',
     }; // dev env settings

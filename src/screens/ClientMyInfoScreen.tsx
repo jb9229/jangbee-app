@@ -19,23 +19,24 @@ const TopMenu = styled.View`
 `;
 const StyledCard = styled(Card).attrs(() => ({
   wrapperStyle: {
-    flex: 1
-  }
+    flex: 1,
+  },
 }))``;
 
-const ClientMyInfoScreen = () =>
-{
-  const { user } = useLoginContext();
-  const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState<boolean>(false);
+const ClientMyInfoScreen = () => {
+  const { userProfile } = useLoginContext();
+  const [
+    isVisibleKatalkAskModal,
+    setVisibleKatalkAskModal,
+  ] = React.useState<boolean>(false);
 
-  const confirmDeleteUser = () =>
-  {
+  const confirmDeleteUser = () => {
     Alert.alert(
       '탈퇴확인',
       '정말 탈퇴 하시겠습니까? 탈퇴하시면 즉시 모든 사용하던 데이터가 삭제됩니다.',
       [
         { text: '탈퇴하기', onPress: () => deleteUser(false) },
-        { text: '취소', onPress: () => {} }
+        { text: '취소', onPress: () => {} },
       ]
     );
   };
@@ -43,14 +44,10 @@ const ClientMyInfoScreen = () =>
   /**
    * 로그아웃 함수
    */
-  const onSignOut = async () =>
-  {
-    try
-    {
+  const onSignOut = async () => {
+    try {
       await firebase.auth().signOut();
-    }
-    catch (e)
-    {
+    } catch (e) {
       Alert.alert('로그아웃에 문제가 있습니다, 재 시도해 주세요.');
     }
   };
@@ -58,53 +55,41 @@ const ClientMyInfoScreen = () =>
   /**
    * 회원 탈퇴 요청
    */
-  const deleteUser = reAuth =>
-  {
+  const deleteUser = reAuth => {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
 
     user
       .delete()
-      .then(() =>
-      {
+      .then(() => {
         firebase
           .database()
-          .ref(`users/${user.uid}`)
+          .ref(`users/${userProfile.uid}`)
           .remove()
-          .then(() =>
-          {
-            if (Platform.OS === 'android')
-            {
+          .then(() => {
+            if (Platform.OS === 'android') {
               ToastAndroid.show(
                 '회원 탈퇴 성공, 감사합니다.',
                 ToastAndroid.SHORT
               );
-            }
-            else
-            {
+            } else {
               Alert.alert('회원 탈퇴 성공, 감사합니다.');
             }
           })
-          .catch(error =>
-          {
+          .catch(error => {
             Alert.alert(
               '회원 탈퇴에 문제가 있습니다',
-              `Firebase 데이터 삭제에 실패 했습니다, 관리자에게 문의해 주세요${
-                error.message
-              }`
+              `Firebase 데이터 삭제에 실패 했습니다, 관리자에게 문의해 주세요${error.message}`
             );
           });
       })
-      .catch(error =>
-      {
+      .catch(error => {
         Alert.alert(
           '인증서버에서 재인증을 요구하고 있습니다',
-          `죄송합니다, 인증 유효시간이 오래된경우(자동 로그인) 재로그인 후 탈퇴를 진행부탁 드립니다(${
-            error.message
-          })`,
+          `죄송합니다, 인증 유효시간이 오래된경우(자동 로그인) 재로그인 후 탈퇴를 진행부탁 드립니다(${error.message})`,
           [
             { text: '로그 아웃', onPress: () => onSignOut() },
-            { text: '취소', onPress: () => {} }
+            { text: '취소', onPress: () => {} },
           ]
         );
       });

@@ -16,18 +16,20 @@ interface StyledCProps {
 }
 const Container = styled.View`
   flex: 1;
-  background-color: ${(props: StyledCProps): string => props.theme.ColorBGLightGray};
+  background-color: ${(props: StyledCProps): string =>
+    props.theme.ColorBGLightGray};
 `;
 const FirmListTabView = styled(TabView)``;
-const FirmListTabBar = styled(TabBar).attrs(({
+const FirmListTabBar = styled(TabBar).attrs({
   indicatorStyle: { backgroundColor: '#82b6ed' },
   labelStyle: {
     fontFamily: 'SsangmundongGulimB',
     fontWeight: 'bold',
-    color: '#fac682'
-  }
-}))`
-  background-color: ${(props: StyledCProps): string => props.theme.ColorBGDarkGray};
+    color: '#fac682',
+  },
+})`
+  background-color: ${(props: StyledCProps): string =>
+    props.theme.ColorBGDarkGray};
 `;
 
 const BottomWrap = styled.View``;
@@ -35,19 +37,16 @@ const BottomWrap = styled.View``;
 interface Props {
   navigation: DefaultNavigationProps;
 }
-const FirmWorkListLayout: React.FC<Props> = (props) =>
-{
-  const { user } = useLoginContext();
+const FirmWorkListLayout: React.FC<Props> = props => {
+  const { userProfile } = useLoginContext();
   const { matchedWorkList, tabIndex, setTabIndex } = useFirmWorkProvider();
   const [routes] = React.useState([
     { key: 'first', title: '진행중인 일감' },
-    { key: 'second', title: '매칭된 일감' }
+    { key: 'second', title: '매칭된 일감' },
   ]);
 
   const renderOpenWorkList = (): React.ReactElement => (
-    <FirmOpenWorkList
-      accountId={user ? user.uid : undefined}
-    />
+    <FirmOpenWorkList accountId={user ? userProfile.uid : undefined} />
   );
 
   const renderMatchedWorkList = (): React.ReactElement => (
@@ -67,20 +66,19 @@ const FirmWorkListLayout: React.FC<Props> = (props) =>
         navigationState={{ index: tabIndex, routes }}
         renderScene={SceneMap({
           first: renderOpenWorkList,
-          second: renderMatchedWorkList
+          second: renderMatchedWorkList,
         })}
         onIndexChange={setTabIndex}
         initialLayout={{ width: Dimensions.get('window').width }}
         renderTabBar={(props): React.ReactElement => (
-          <FirmListTabBar
-            {...props}
-          />
+          <FirmListTabBar {...props} />
         )}
       />
       <BottomWrap>
         <JBButton
           title="차주 일감 등록하기"
-          onPress={(): void => props.navigation.navigate('WorkRegister', { firmRegister: true })
+          onPress={(): void =>
+            props.navigation.navigate('WorkRegister', { firmRegister: true })
           }
           size="full"
           Primary

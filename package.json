@@ -1,20 +1,21 @@
 {
   "scripts": {
-    "start": "react-native start",
     "android": "ENVFILE=.env.dev react-native run-android --variant=DevDebug --appIdSuffix=dev",
     "android-release": "react-native run-android --variant=DevRelease --appIdSuffix=dev",
     "android-beta": "react-native run-android --variant=BetaDebug --appIdSuffix=beta",
     "android-prod": "react-native run-android --variant=ProdDebug",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "deploy-hosting": "yarn predeploy && firebase deploy --only hosting",
+    "deploy": "gh-pages -d web-build",
     "ios": "react-native run-ios",
     "test": "node ./node_modules/jest/bin/jest.js",
     "tsc": "tsc",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "start": "react-native start",
     "storybook": "start-storybook -p 7007 & adb reverse tcp:7007 tcp:7007",
     "prestorybook": "rnstl",
     "postinstall": "jetify",
-    "deploy": "gh-pages -d web-build",
-    "predeploy": "expo build:web",
-    "deploy-hosting": "yarn predeploy && firebase deploy --only hosting"
+    "predeploy": "expo build:web"
   },
   "husky": {
     "hooks": {
@@ -97,6 +98,10 @@
     "@babel/core": "~7.9.0",
     "@babel/preset-typescript": "^7.7.2",
     "@babel/runtime": "^7.8.4",
+    "@graphql-codegen/cli": "^1.20.1",
+    "@graphql-codegen/typescript": "^1.20.2",
+    "@graphql-codegen/typescript-operations": "^1.17.14",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.1",
     "@emotion/core": "^10.0.16",
     "@emotion/styled": "^10.0.15",
     "@react-native-community/eslint-config": "^1.1.0",
@@ -149,6 +154,9 @@
   },
   "private": true,
   "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
     "react-native-storybook-loader": {
       "searchDir": [
         "./storybook/stories"

@@ -1,7 +1,10 @@
 import * as React from 'react';
 
 import { FirmCreateErrorData, FirmEditDto } from 'src/container/firm/types';
-import { getUpdateFirmDto, validateUpdateFirmDto } from 'src/container/firm/action';
+import {
+  getUpdateFirmDto,
+  validateUpdateFirmDto,
+} from 'src/container/firm/action';
 
 import { DefaultNavigationProps } from 'src/types';
 import { FIRM } from 'src/api/queries';
@@ -26,38 +29,43 @@ interface Props {
   navigation: DefaultNavigationProps;
 }
 
-const FirmModifyProvider = (props: Props): React.ReactElement =>
-{
+const FirmModifyProvider = (props: Props): React.ReactElement => {
   // States
-  const { user, firm, popLoading, refetchFirm } = useLoginContext();
+  const { userProfile, firm, popLoading, refetchFirm } = useLoginContext();
   const [firmDto, setFirmDto] = React.useState<FirmEditDto>(new FirmEditDto());
-  const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(new FirmCreateErrorData());
+  const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(
+    new FirmCreateErrorData()
+  );
 
   // Server Data State
   const [modifyFirmRequest, modifyFirmResponse] = useMutation(UPDATE_FIRM, {
-    onCompleted: (data) =>
-    {
-      if (data && data.updateFirm)
-      {
-        refetchFirm(); props.navigation.navigate('FirmMyInfo', { refresh: 'update' });
-      }
-      else
-      {
-        noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', data?.updateFirm, user);
+    onCompleted: data => {
+      if (data && data.updateFirm) {
+        refetchFirm();
+        props.navigation.navigate('FirmMyInfo', { refresh: 'update' });
+      } else {
+        noticeUserError(
+          'FirmModifyProvider(requestModifyFirm -> error)',
+          data?.updateFirm,
+          user
+        );
       }
     },
-    onError: (err) =>
-    {
-      noticeUserError('FirmModifyProvider(requestModifyFirm -> error)', err?.message, user);
+    onError: err => {
+      noticeUserError(
+        'FirmModifyProvider(requestModifyFirm -> error)',
+        err?.message,
+        user
+      );
     },
-    refetchQueries: [{ query: FIRM, variables: { accountId: user.uid } }]
+    refetchQueries: [
+      { query: FIRM, variables: { accountId: userProfile.uid } },
+    ],
   });
 
   // Didmount/Unmount
-  React.useEffect(() =>
-  {
-    if (firm)
-    {
+  React.useEffect(() => {
+    if (firm) {
       const updateDto = new FirmEditDto();
       updateDto.phoneNumber = firm.phoneNumber;
       updateDto.equiListStr = firm.equiListStr;
@@ -85,26 +93,35 @@ const FirmModifyProvider = (props: Props): React.ReactElement =>
     loading: modifyFirmResponse.loading,
     navigation: props.navigation,
     firmDto,
-    errorData
+    errorData,
   };
 
   // Init Actions
   const actions = {
-    onClickUpdate: (): void =>
-    {
+    onClickUpdate: (): void => {
       validateUpdateFirmDto(firmDto)
-        .then((result) =>
-        {
+        .then(result => {
           console.log('>>> update firmDto:', firmDto);
           console.log('>>> update result:', result);
-          if (result === true)
-          {
-            modifyFirmRequest({ variables: { accountId: user.uid, updateFirm: getUpdateFirmDto(firmDto) } });
+          if (result === true) {
+            modifyFirmRequest({
+              variables: {
+                accountId: userProfile.uid,
+                updateFirm: getUpdateFirmDto(firmDto),
+              },
+            });
+          } else if (result instanceof FirmCreateErrorData) {
+            setErrorData(result);
           }
-          else if (result instanceof FirmCreateErrorData) { setErrorData(result) }
         })
-        .catch((err) => { noticeUserError('FirmModifyProvider(validateModifyFirmDto -> error)', err?.message, user) });
-    }
+        .catch(err => {
+          noticeUserError(
+            'FirmModifyProvider(validateModifyFirmDto -> error)',
+            err?.message,
+            userProfile
+          );
+        });
+    },
   };
 
   // UI Component

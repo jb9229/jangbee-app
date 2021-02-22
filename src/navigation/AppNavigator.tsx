@@ -6,7 +6,6 @@ import LoginScreen from 'screens/LoginScreen';
 import MainTabNavigator from './MainTabNavigator';
 import React from 'react';
 import SignUpScreen from 'screens/SignUpScreen';
-import { useLoginContext } from 'src/contexts/LoginContext';
 
 let AppContainer;
 
@@ -19,7 +18,6 @@ interface Props {
   blListNumber: string;
 }
 const RootNavigator: React.FC<Props> = props => {
-  const { setUser, setUserProfile } = useLoginContext();
   const [authPath, setAuthPath] = React.useState(AUTHPATH_AUTHING);
   const [authData, setAuthData] = React.useState();
 
@@ -33,8 +31,6 @@ const RootNavigator: React.FC<Props> = props => {
           setAuthPath(path);
           setAuthData(data);
         }}
-        setUser={setUser}
-        setUserProfile={setUserProfile}
       />
     );
   }
@@ -42,12 +38,9 @@ const RootNavigator: React.FC<Props> = props => {
   if (authPath === AUTHPATH_SIGNUP) {
     return (
       <SignUpScreen
-        user={authData}
         completeAuth={(isClient: boolean): void =>
           completeAuth(isClient, setAuthPath)
         }
-        setUser={setUser}
-        setUserProfile={setUserProfile}
       />
     );
   }

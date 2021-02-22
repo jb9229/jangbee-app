@@ -8,17 +8,26 @@ const [useCtx, Provider] = createCtx<Context>();
 
 interface Context {
   navigation: DefaultNavigationProps;
-  user: User | undefined; userProfile: UserProfile; firm: Firm;
-  searchArea: string; searchWord: string; searchNotice: string;
+  userProfile: UserProfile;
+  firm: Firm;
+  searchArea: string;
+  searchWord: string;
+  searchNotice: string;
   cliEvaluList: Array<object>;
   countData: FirmHarmCaseCountData;
-  updateEvalu: any; searchTime: string;
-  evaluLikeSelected: boolean; evaluLikeList: Array<string>; mineEvaluation: (flag: boolean) => void;
+  updateEvalu: any;
+  searchTime: string;
+  evaluLikeSelected: boolean;
+  evaluLikeList: Array<string>;
+  mineEvaluation: (flag: boolean) => void;
   visibleCreateModal: boolean;
   chatMessge: Array<object>;
-  createClientEvaluLike: (newEvaluLike: string) => void; cancelClientEvaluLike: (evaluation: string, like: boolean) => void;
-  setVisibleCreateModal: (flag: boolean) => void; setVisibleUpdateModal: (flag: boolean) => void;
-  setVisibleDetailModal: (flag: boolean) => void; closeEvaluLikeModal: (flag: boolean) => void;
+  createClientEvaluLike: (newEvaluLike: string) => void;
+  cancelClientEvaluLike: (evaluation: string, like: boolean) => void;
+  setVisibleCreateModal: (flag: boolean) => void;
+  setVisibleUpdateModal: (flag: boolean) => void;
+  setVisibleDetailModal: (flag: boolean) => void;
+  closeEvaluLikeModal: (flag: boolean) => void;
   setClinetEvaluList: () => void;
   handleLoadMore: () => void;
   onClickSearch: () => void;
@@ -55,4 +64,3 @@ export interface Evaluation {
 // }
 
 export { useCtx as useFirmHarmCaseContext, Provider };
-
