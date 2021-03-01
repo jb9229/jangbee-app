@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-import { CashBackCrtDto, CashBackCrtError, ScreenMode } from 'src/container/cashback/type';
+import {
+  CashBackCrtDto,
+  CashBackCrtError,
+  ScreenMode,
+} from 'src/container/cashback/type';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useMutation, useQuery } from '@apollo/client';
 
@@ -14,42 +18,46 @@ import { validateCrtDto } from 'src/container/cashback/CashBackAction';
 interface Props {
   wrapperStyle?: StyleProp<ViewStyle>;
 }
-const CashBackContainer: React.FC<Props> = () =>
-{
+const CashBackContainer: React.FC<Props> = () => {
   // stats
-  const { user, userProfile, popLoading, saveUserProfileAssets, refetchUserProfile } = useLoginContext();
-  const [crtDto, setCrtDto] = React.useState(new CashBackCrtDto(user.uid));
+  const {
+    userProfile,
+    popLoading,
+    saveUserProfileAssets,
+    refetchUserProfile,
+  } = useLoginContext();
+  const [crtDto, setCrtDto] = React.useState(
+    new CashBackCrtDto(userProfile?.uid)
+  );
   const [crtError, setCrtError] = React.useState(new CashBackCrtError());
   const [screenMode, setScreenMode] = React.useState(ScreenMode.DEFAULT);
 
   // Server request data
-  const cashbacksRes = useQuery(CASHBACKS, { variables: { accountId: user.uid }, fetchPolicy: 'cache-and-network' });
+  const cashbacksRes = useQuery(CASHBACKS, {
+    variables: { accountId: userProfile?.uid },
+    fetchPolicy: 'cache-and-network',
+  });
   const [registerReq, registerRes] = useMutation(CASHBACK_CREATE, {
-    onCompleted: (data) =>
-    {
+    onCompleted: data => {
       refetchUserProfile();
-      setCrtDto(new CashBackCrtDto(user.uid));
+      setCrtDto(new CashBackCrtDto(userProfile?.uid));
       setScreenMode(ScreenMode.LIST);
-      if (cashbacksRes.called)
-      {
+      if (cashbacksRes.called) {
         cashbacksRes.refetch();
       }
       popLoading(false);
     },
-    onError: (error) =>
-    {
+    onError: error => {
       const updateAssets = {
         ...userProfile.assets,
-        balance: userProfile.assets.balance + crtDto.amount
+        balance: userProfile.assets.balance + crtDto.amount,
       };
-      saveUserProfileAssets(updateAssets)
-        .then((res) =>
-        {
-          refetchUserProfile();
-        });
+      saveUserProfileAssets(updateAssets).then(res => {
+        refetchUserProfile();
+      });
       popLoading(false);
       noticeUserError('CashBackContainer -> registerReq -> error', error);
-    }
+    },
   });
 
   return (
@@ -59,25 +67,31 @@ const CashBackContainer: React.FC<Props> = () =>
       screenMode={screenMode}
       assetMoney={userProfile?.assets?.balance || 0}
       cashbacks={cashbacksRes?.data?.cashbacks || []}
-      onSubmitRegister={(): void =>
-      {
-        const validResult = validateCrtDto(crtDto, userProfile?.assets?.balance || 0);
-        if (validResult.result)
-        {
+      onSubmitRegister={(): void => {
+        const validResult = validateCrtDto(
+          crtDto,
+          userProfile?.assets?.balance || 0
+        );
+        if (validResult.result) {
           popLoading(true, '캐쉬백 신청중...');
           console.log('>>> registerReq~~');
           const updateAssets = {
-            ...userProfile.assets,
-            balance: userProfile.assets.balance - crtDto.amount
+            ...userProfile?.assets,
+            balance: userProfile?.assets.balance - crtDto.amount,
           };
-          saveUserProfileAssets(updateAssets)
-            .then((res) =>
-            {
-              console.log('>>> save user profile res: ', res);
-              delete crtDto.amountStr;
-              console.log('>>> crtDto: ', { ...crtDto, accountNumber: `${crtDto.accountNumber}` });
-              registerReq({ variables: { crtDto: { ...crtDto, accountNumber: `${crtDto.accountNumber}` } } });
+          saveUserProfileAssets(updateAssets).then(res => {
+            console.log('>>> save user profile res: ', res);
+            delete crtDto.amountStr;
+            console.log('>>> crtDto: ', {
+              ...crtDto,
+              accountNumber: `${crtDto.accountNumber}`,
             });
+            registerReq({
+              variables: {
+                crtDto: { ...crtDto, accountNumber: `${crtDto.accountNumber}` },
+              },
+            });
+          });
         }
 
         setCrtError(validResult.error);

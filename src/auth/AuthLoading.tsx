@@ -3,12 +3,10 @@ import * as React from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import { DefaultTheme, withTheme } from 'styled-components/native';
 
-import { alarmSettingModal } from 'src/container/firmHarmCase/store';
 import firebase from 'firebase';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
-import { useSetRecoilState } from 'recoil';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +28,6 @@ const AuthLoading: React.FC<AuthPathProps> = ({
   completeAuth,
 }) => {
   const { setUserProfile } = useLoginContext();
-  const setAlarmSettingData = useSetRecoilState(alarmSettingModal);
 
   // actions
   const checkLogin = (): void => {
@@ -46,11 +43,10 @@ const AuthLoading: React.FC<AuthPathProps> = ({
             }
 
             const { userType } = userInfo;
-            setAlarmSettingData({ visible: true });
+            console.log('=== setUser: ', user);
             if (!userType) {
               changeAuthPath(2, user);
             } else {
-              console.log('=== setUser: ', user);
               setUserProfile({
                 ...userInfo,
                 uid: user.uid,

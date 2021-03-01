@@ -122,9 +122,14 @@ const SignUpScreen: React.FC<Props> = ({ completeAuth }) => {
       return;
     }
 
+    if (!userProfile?.uid) {
+      setErrorMessage(`Invalid uid: ${userProfile?.uid}`);
+      return;
+    }
+
     firebase
       .database()
-      .ref(`users/${userProfile.uid}`)
+      .ref(`users/${userProfile?.uid}`)
       .update(
         {
           userType,

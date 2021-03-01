@@ -46,7 +46,7 @@ const FirmWorkListLayout: React.FC<Props> = props => {
   ]);
 
   const renderOpenWorkList = (): React.ReactElement => (
-    <FirmOpenWorkList accountId={user ? userProfile.uid : undefined} />
+    <FirmOpenWorkList accountId={userProfile ? userProfile.uid : undefined} />
   );
 
   const renderMatchedWorkList = (): React.ReactElement => (

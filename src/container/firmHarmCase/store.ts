@@ -14,9 +14,12 @@ export const firmHarmCaseCountUserId = atom<FirmHarmCaseCountData>({
   default: null, // default value (aka initial value)
 });
 
-export const alarmSettingModal = atom<{ visible: boolean }>({
-  key: 'alarmSettingModal', // unique ID (with respect to other atoms/selectors)
-  default: { visible: false }, // default value (aka initial value)
+export const alarmSettingModalStat = atom<{
+  visible: boolean;
+  newVersion?: string;
+}>({
+  key: 'alarmSettingModalStat', // unique ID (with respect to other atoms/selectors)
+  default: { visible: false, newVersion: '' }, // default value (aka initial value)
 });
 
 export const fetchData = async () => {

@@ -1,4 +1,5 @@
-import { UserAssets } from 'src/types';
+import { UserAssets, UserProfile } from 'src/types';
+
 import firebase from 'firebase';
 import { noticeUserError } from 'src/container/request';
 
@@ -12,6 +13,20 @@ export function getUserInfo(
       return data;
     });
 }
+
+export const updateUserProfile = (userProfil: UserProfile): Promise<void> => {
+  return firebase
+    .database()
+    .ref(`users/${userProfil.uid}`)
+    .update(userProfil, error => {
+      if (error) {
+        noticeUserError(
+          '사용자타입 FB DB에 저장에 문제가 있습니다, 다시 시도해 주세요.',
+          `Error: ${error}`
+        );
+      }
+    });
+};
 
 export const updateUserAssets = (
   uid: string,

@@ -13,7 +13,7 @@ const [useCtx, Provider] = createCtx<Context>();
 
 interface Context {
   navigation: DefaultNavigationProps;
-  userProfile: UserProfile;
+  userProfile?: UserProfile;
   firm: Firm;
   paymentInfo: KakaoPaymentInfo;
   setUserProfile: (user: UserProfile) => void;

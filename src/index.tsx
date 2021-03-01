@@ -11,15 +11,17 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { RecoilRoot, useSetRecoilState } from 'recoil';
 
+import AlarmSettingModal from './components/templates/AlarmSettingModal';
 import { ApolloProvider } from '@apollo/client';
 import AppNavigator from 'navigation/AppNavigator';
 import JBActIndicator from 'molecules/JBActIndicator';
 import LoginProvider from 'src/provider/LoginProvider';
-import React from 'react';
-import { RecoilRoot } from 'recoil';
 import Sentry from 'utils/sentry';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
+import { alarmSettingModalStat } from './container/firmHarmCase/store';
 import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
@@ -49,56 +51,53 @@ if (Platform.OS !== 'web' && !__DEV__) {
   });
 }
 
-export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-    isAppUpdateComplete: false,
-  };
+interface Props {
+  skipLoadingScreen: boolean;
+  BLACKLIST_LAUNCH: boolean;
+}
 
-  // componentDidMount ()
-  // {
-  //   this.checkUpdate();
-  // }
-  async componentDidMount() {
+const App: React.FC<Props> = ({ skipLoadingScreen, BLACKLIST_LAUNCH }) => {
+  // states
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [isAppUpdateComplete, setAppUpdateComplete] = useState(false);
+
+  // component life cycle
+  useEffect(() => {
     // Prevent native splash screen from autohiding
-    try {
-      await SplashScreen.preventAutoHideAsync();
-    } catch (e) {
-      console.warn(e);
-    }
-    this.prepareResources();
-  }
+    (async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn(e);
+      }
+    })();
+
+    prepareResources();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (isLoadingComplete == true) {
+        await SplashScreen.hideAsync();
+      }
+    })();
+  }, [isLoadingComplete]);
 
   /**
    * Method that serves to load resources and make API calls
    */
-  prepareResources = async () => {
+  const prepareResources = async () => {
     // await performAPICalls();
-    await this._loadResourcesAsync();
-    this.setState({ ...this.state, isLoadingComplete: true }, async () => {
-      await SplashScreen.hideAsync();
-    });
+    await _loadResourcesAsync();
+    setLoadingComplete(true);
 
-    await this.checkUpdate();
-    this.initFirebase();
+    await checkUpdate();
+    initFirebase();
   };
 
-  _loadResourcesAsync = async () => Promise.all(loadAllAssests);
+  const _loadResourcesAsync = async () => Promise.all(loadAllAssests);
 
-  // _handleLoadingError = error =>
-  // {
-  //   // In this case, you might want to report the error to your error
-  //   // reporting service, for example Sentry
-  //   console.warn(error);
-  // };
-
-  // _handleFinishLoading = () =>
-  // {
-  //   this.initFirebase();
-  //   this.setState({ isLoadingComplete: true });
-  // };
-
-  checkUpdate = async () => {
+  const checkUpdate = async () => {
     try {
       const update = await Updates.checkForUpdateAsync();
       if (update.isAvailable) {
@@ -106,65 +105,61 @@ export default class App extends React.Component {
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
         await Updates.reloadAsync();
-        this.setState({ ...this.state, isAppUpdateComplete: true });
+        setAppUpdateComplete(true);
       }
 
-      this.setState({ ...this.state, isAppUpdateComplete: true });
+      setAppUpdateComplete(true);
     } catch (e) {
-      this.setState({ ...this.state, isAppUpdateComplete: true });
+      setAppUpdateComplete(true);
     }
   };
 
-  initFirebase = () => {
+  const initFirebase = () => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseconfig);
       firebase.auth().languageCode = 'ko';
     }
   };
 
-  render() {
-    const { skipLoadingScreen, BLACKLIST_LAUNCH } = this.props;
-    const { isLoadingComplete, isAppUpdateComplete } = this.state;
+  if (!isLoadingComplete && !skipLoadingScreen) {
+    return null;
+  }
 
-    if (!isLoadingComplete && !skipLoadingScreen) {
-      return null;
-    }
-
-    if (!isAppUpdateComplete) {
-      return (
-        <SplashWrap>
-          <JBActIndicator title="앱 버전 업데이트 체크중..." size={35} />
-        </SplashWrap>
-      );
-    }
-
-    console.log('=== process.env.BUILD_TYPE:', process.env.BUILD_TYPE);
+  if (!isAppUpdateComplete) {
     return (
-      <RecoilRoot>
-        <LoginProvider>
-          <ThemeProvider>
-            <ApolloProvider client={apolloClient}>
-              <React.Suspense fallback={<ActivityIndicator />}>
-                <View style={styles.container}>
-                  {Platform.OS === 'ios' ? (
-                    <StatusBar barStyle="default" />
-                  ) : (
-                    <StatusBar
-                      backgroundColor={colors.batangDark}
-                      currentHeight={32}
-                      barStyle="default"
-                    />
-                  )}
-                  <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
-                </View>
-              </React.Suspense>
-            </ApolloProvider>
-          </ThemeProvider>
-        </LoginProvider>
-      </RecoilRoot>
+      <SplashWrap>
+        <JBActIndicator title="앱 버전 업데이트 체크중..." size={35} />
+      </SplashWrap>
     );
   }
-}
+
+  console.log('=== process.env.BUILD_TYPE:', process.env.BUILD_TYPE);
+  return (
+    <RecoilRoot>
+      <LoginProvider>
+        <ThemeProvider>
+          <ApolloProvider client={apolloClient}>
+            <React.Suspense fallback={<ActivityIndicator />}>
+              <View style={styles.container}>
+                {Platform.OS === 'ios' ? (
+                  <StatusBar barStyle="default" />
+                ) : (
+                  <StatusBar
+                    backgroundColor={colors.batangDark}
+                    currentHeight={32}
+                    barStyle="default"
+                  />
+                )}
+                <AppNavigator blListNumber={BLACKLIST_LAUNCH} />
+                <AlarmSettingModal />
+              </View>
+            </React.Suspense>
+          </ApolloProvider>
+        </ThemeProvider>
+      </LoginProvider>
+    </RecoilRoot>
+  );
+};
 
 export const loadAllAssests = [
   // Asset.loadAsync([
@@ -182,3 +177,5 @@ export const loadAllAssests = [
     NanumPen: require('../assets/fonts/NanumPen.ttf'),
   }),
 ];
+
+export default App;

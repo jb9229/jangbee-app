@@ -31,7 +31,7 @@ interface Props {
 
 const FirmModifyProvider = (props: Props): React.ReactElement => {
   // States
-  const { userProfile, firm, popLoading, refetchFirm } = useLoginContext();
+  const { userProfile, firm, refetchFirm } = useLoginContext();
   const [firmDto, setFirmDto] = React.useState<FirmEditDto>(new FirmEditDto());
   const [errorData, setErrorData] = React.useState<FirmCreateErrorData>(
     new FirmCreateErrorData()

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "android": "ENVFILE=.env.dev react-native run-android --variant=DevDebug --appIdSuffix=dev",
+    "android": "react-native run-android --variant=DevDebug --appIdSuffix=dev",
     "android-release": "react-native run-android --variant=DevRelease --appIdSuffix=dev",
     "android-beta": "react-native run-android --variant=BetaDebug --appIdSuffix=beta",
     "android-prod": "react-native run-android --variant=ProdDebug",
@@ -26,7 +26,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@apollo/client": "^3.1.4",
+    "@apollo/client": "^3.3.11",
     "@apollo/link-ws": "^2.0.0-beta.3",
     "@expo/samples": "2.1.1",
     "@expo/vector-icons": "^12.0.0",
@@ -58,7 +58,7 @@
     "expo-updates": "~0.4.1",
     "expo-web-browser": "~8.6.0",
     "firebase": "7.9.0",
-    "graphql": "^15.0.0",
+    "graphql": "^15.5.0",
     "i18n-js": "^3.3.0",
     "immer": "^5.3.2",
     "modal-enhanced-react-native-web": "^0.2.0",
@@ -98,12 +98,12 @@
     "@babel/core": "~7.9.0",
     "@babel/preset-typescript": "^7.7.2",
     "@babel/runtime": "^7.8.4",
-    "@graphql-codegen/cli": "^1.20.1",
+    "@emotion/core": "^10.0.16",
+    "@emotion/styled": "^10.0.15",
+    "@graphql-codegen/cli": "^1.21.1",
     "@graphql-codegen/typescript": "^1.20.2",
     "@graphql-codegen/typescript-operations": "^1.17.14",
     "@graphql-codegen/typescript-react-apollo": "^2.2.1",
-    "@emotion/core": "^10.0.16",
-    "@emotion/styled": "^10.0.15",
     "@react-native-community/eslint-config": "^1.1.0",
     "@react-navigation/stack": "^5.0.0-alpha.48",
     "@storybook/addon-knobs": "^5.2.7",

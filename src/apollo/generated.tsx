@@ -34,7 +34,11 @@ export type Query = {
   firmHarmCaseCount?: Maybe<FirmHarmCaseCount>;
   ads?: Maybe<Array<Maybe<Ad>>>;
   callLogs?: Maybe<Array<Maybe<CallLogs>>>;
-  scanAppVersion?: Maybe<Scalars['String']>;
+  scanAppVersion?: Maybe<ScanAppInfo>;
+};
+
+export type QueryFirmChatMessageArgs = {
+  t?: Maybe<Scalars['String']>;
 };
 
 export type QueryFirmArgs = {
@@ -71,6 +75,10 @@ export type QueryAdsArgs = {
 
 export type QueryCallLogsArgs = {
   accountId?: Maybe<Scalars['String']>;
+};
+
+export type QueryScanAppVersionArgs = {
+  t?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -435,6 +443,11 @@ export type File = {
   encoding: Scalars['String'];
 };
 
+export type ScanAppInfo = {
+  __typename?: 'ScanAppInfo';
+  version: Scalars['String'];
+};
+
 export enum FirmSearchType {
   Distance = 'DISTANCE',
   Location = 'LOCATION',
@@ -533,9 +546,21 @@ export type AddCallLogMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
-export type ScanAppVersionQueryVariables = Exact<{ [key: string]: never }>;
+export type ScanAppVersionQueryVariables = Exact<{
+  t?: Maybe<Scalars['String']>;
+}>;
 
 export type ScanAppVersionQuery = { __typename?: 'Query' } & {
+  scanAppVersion?: Maybe<
+    { __typename?: 'ScanAppInfo' } & Pick<ScanAppInfo, 'version'>
+  >;
+};
+
+export type FirmChatMessageQueryVariables = Exact<{
+  t?: Maybe<Scalars['String']>;
+}>;
+
+export type FirmChatMessageQuery = { __typename?: 'Query' } & {
   firmChatMessage?: Maybe<
     Array<
       Maybe<
@@ -1178,16 +1203,9 @@ export type AddCallLogMutationOptions = Apollo.BaseMutationOptions<
   AddCallLogMutationVariables
 >;
 export const ScanAppVersionDocument = gql`
-  query scanAppVersion {
-    firmChatMessage {
-      _id
-      text
-      createdAt
-      user {
-        _id
-        name
-        avatar
-      }
+  query scanAppVersion($t: String) {
+    scanAppVersion(t: $t) {
+      version
     }
   }
 `;
@@ -1204,6 +1222,7 @@ export const ScanAppVersionDocument = gql`
  * @example
  * const { data, loading, error } = useScanAppVersionQuery({
  *   variables: {
+ *      t: // value for 't'
  *   },
  * });
  */
@@ -1238,6 +1257,69 @@ export type ScanAppVersionLazyQueryHookResult = ReturnType<
 export type ScanAppVersionQueryResult = Apollo.QueryResult<
   ScanAppVersionQuery,
   ScanAppVersionQueryVariables
+>;
+export const FirmChatMessageDocument = gql`
+  query firmChatMessage($t: String) {
+    firmChatMessage(t: $t) {
+      _id
+      text
+      createdAt
+      user {
+        _id
+        name
+        avatar
+      }
+    }
+  }
+`;
+
+/**
+ * __useFirmChatMessageQuery__
+ *
+ * To run a query within a React component, call `useFirmChatMessageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFirmChatMessageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFirmChatMessageQuery({
+ *   variables: {
+ *      t: // value for 't'
+ *   },
+ * });
+ */
+export function useFirmChatMessageQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FirmChatMessageQuery,
+    FirmChatMessageQueryVariables
+  >
+) {
+  return Apollo.useQuery<FirmChatMessageQuery, FirmChatMessageQueryVariables>(
+    FirmChatMessageDocument,
+    baseOptions
+  );
+}
+export function useFirmChatMessageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FirmChatMessageQuery,
+    FirmChatMessageQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    FirmChatMessageQuery,
+    FirmChatMessageQueryVariables
+  >(FirmChatMessageDocument, baseOptions);
+}
+export type FirmChatMessageQueryHookResult = ReturnType<
+  typeof useFirmChatMessageQuery
+>;
+export type FirmChatMessageLazyQueryHookResult = ReturnType<
+  typeof useFirmChatMessageLazyQuery
+>;
+export type FirmChatMessageQueryResult = Apollo.QueryResult<
+  FirmChatMessageQuery,
+  FirmChatMessageQueryVariables
 >;
 export const CashbacksDocument = gql`
   query Cashbacks($accountId: String!) {

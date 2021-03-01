@@ -1,6 +1,7 @@
 import * as api from 'src/api/api';
 
 import { Alert, Platform, ToastAndroid } from 'react-native';
+import React, { useEffect } from 'react';
 
 import AlarmSettingModal from 'templates/AlarmSettingModal';
 import { DELETE_FIRM } from 'src/api/mutations';
@@ -10,7 +11,7 @@ import JBIconButton from 'molecules/JBIconButton';
 import JBTerm from 'src/components/templates/JBTerm';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
 import { Linking } from 'expo';
-import React from 'react';
+import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
 import { noticeUserError } from 'src/container/request';
@@ -18,6 +19,7 @@ import { notifyError } from 'common/ErrorNotice';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useMutation } from '@apollo/client';
+import { useSetRecoilState } from 'recoil';
 import { validatePresence } from 'utils/Validation';
 
 const Container = styled.View`
@@ -48,15 +50,13 @@ interface Props {
 }
 
 const FirmSettingScreen: React.FC<Props> = props => {
+  // states
   const { userProfile } = useLoginContext();
+  const setAlarmSettingModalStat = useSetRecoilState(alarmSettingModalStat);
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState(
     false
   );
   const [isVisibleDocModal, setVisibleDocModal] = React.useState(false);
-  const [
-    isVisibleAlarmSettingModal,
-    setVisibleAlarmSettingModal,
-  ] = React.useState(false);
   const [deletFirmRequest] = useMutation(DELETE_FIRM, {
     onCompleted: data => {
       if (data && data.deleteFirm) {
@@ -209,7 +209,7 @@ const FirmSettingScreen: React.FC<Props> = props => {
     }
 
     const depositData = {
-      accountId: userProfile.uid,
+      accountId: userProfile?.uid,
       authToken: obAccessToken,
       fintechUseNum,
       cashback: cashbackAmount,
@@ -217,6 +217,8 @@ const FirmSettingScreen: React.FC<Props> = props => {
 
     return depositData;
   };
+
+  // component life cycle
 
   return (
     <Container>
@@ -255,7 +257,7 @@ const FirmSettingScreen: React.FC<Props> = props => {
             title="알람 설정"
             img={require('../../assets/images/icon/alarm_icon.png')}
             onPress={(): void => {
-              setVisibleAlarmSettingModal(true);
+              setAlarmSettingModalStat({ visible: true });
             }}
           />
         </MenueRowWrap>
@@ -319,12 +321,6 @@ const FirmSettingScreen: React.FC<Props> = props => {
         isVisibleModal={isVisibleDocModal}
         closeModal={(): void => {
           setVisibleDocModal(false);
-        }}
-      />
-      <AlarmSettingModal
-        isVisibleModal={isVisibleAlarmSettingModal}
-        closeModal={(): void => {
-          setVisibleAlarmSettingModal(false);
         }}
       />
     </Container>

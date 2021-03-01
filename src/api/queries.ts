@@ -1,12 +1,16 @@
 import { gql } from '@apollo/client';
 
-// export const ScanAppVersion = gql`
-//   query scanAppVersion
-// `;
+export const ScanAppVersion = gql`
+  query scanAppVersion($t: String) {
+    scanAppVersion(t: $t) {
+      version
+    }
+  }
+`;
 
 export const FIRM_CHATMESSAGE = gql`
-  {
-    firmChatMessage {
+  query firmChatMessage($t: String) {
+    firmChatMessage(t: $t) {
       _id
       text
       createdAt

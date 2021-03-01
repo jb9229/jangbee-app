@@ -19,7 +19,7 @@ const CommWrap = styled.View`
 const OpenWorkList = styled(FlatList)``;
 
 const FirmWorkingList: React.FC = () => {
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   const {
     refreshing,
     openWorkList,
@@ -55,7 +55,7 @@ const FirmWorkingList: React.FC = () => {
           renderCommand={(): React.ReactElement =>
             renderCommand(
               item,
-              user,
+              userProfile,
               applyWork,
               applyFirmWork,
               acceptWork,
@@ -75,13 +75,13 @@ const FirmWorkingList: React.FC = () => {
 
 const renderCommand = (
   item,
-  user,
+  userProfile,
   applyWork,
   applyFirmWork,
   acceptWork,
   abandonWork
 ): React.ReactElement => {
-  if (user && item.firmRegister && item.accountId === user.uid) {
+  if (userProfile && item.firmRegister && item.accountId === userProfile?.uid) {
     return (
       <WorkCommWrap>
         <WorkCommText text="내가올린 일감" />

@@ -12,6 +12,7 @@ import pkg from 'app.json';
 import pkgConfig from '../../../app.config';
 import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
 import url from 'constants/Url';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.View`
   width: 100%;
@@ -68,6 +69,7 @@ const TelText = styled.Text`
 console.log('>>> Constants:', Constants);
 console.log('>>> process.env:', process.env);
 export default function JBTerm({ bg }) {
+  const { userProfile } = useLoginContext();
   const evn = getEnvironment();
   return (
     <Container bg={bg}>
@@ -137,7 +139,13 @@ export default function JBTerm({ bg }) {
       </Row>
       <Row>
         <Column>
-          <TitleTO onPress={() => alert(`Server: \n\nSlug: ${pkg.expo.slug}`)}>
+          <TitleTO
+            onPress={() =>
+              alert(
+                `Server: \n\nSlug: ${pkg.expo.slug}\n\nuid: ${userProfile?.uid}`
+              )
+            }
+          >
             <Title>Version: </Title>
           </TitleTO>
           {/* <Text>{`${pkg.expo.version}_test`}</Text> */}

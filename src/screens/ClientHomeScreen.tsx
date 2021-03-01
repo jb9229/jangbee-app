@@ -9,7 +9,6 @@ import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JBTerm from 'templates/JBTerm';
 import JangbeeAdList from 'organisms/JangbeeAdList';
-import adLocation from 'constants/AdLocation';
 import colors from 'constants/Colors';
 import { onPressBackbutton } from 'src/container/action';
 import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';

@@ -202,12 +202,8 @@ ClientEvaluStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      type="MaterialCommunityIcons"
-      name={
-        Platform.OS === 'ios'
-          ? 'file-document-box-search-outline'
-          : 'file-document-box-search-outline'
-      }
+      type="SimpleLineIcons"
+      name={Platform.OS === 'ios' ? 'magnifier' : 'magnifier'}
     />
   ),
 };

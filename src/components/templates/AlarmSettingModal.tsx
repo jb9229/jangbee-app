@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import CloseButton from '../molecules/CloseButton';
 import { Modal } from 'react-native';
 import RNApkInstallerN from 'react-native-apk-installer-n';
 import RNFS from 'react-native-fs';
 import SolidButton from '../atoms/button/SolidButton';
-import { alarmSettingModal } from 'src/container/firmHarmCase/store';
+import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
 import styled from 'styled-components/native';
-import { useRecoilValue } from 'recoil';
+import { updateUserProfile } from 'src/utils/FirebaseUtils';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.View`
   flex: 1;
@@ -26,19 +28,17 @@ const Contents = styled.View`
   padding: 20px;
   border-radius: 4px;
 `;
-const Notice = styled.Text``;
-const Progress = styled.Text``;
-const InstallButton = styled(SolidButton)`
+const Notice = styled.Text`
   margin-top: 20px;
 `;
+const Progress = styled.Text``;
+const InstallButton = styled(SolidButton)``;
 
-interface Props {
-  isVisibleModal: boolean;
-  closeModal: () => void;
-}
-
-const AlarmSettingModal: React.FC<Props> = ({ isVisibleModal, closeModal }) => {
-  const alarmSettingData = useRecoilValue(alarmSettingModal);
+const AlarmSettingModal: React.FC = () => {
+  const { userProfile } = useLoginContext();
+  const [alarmSettingData, setAlarmSettingData] = useRecoilState(
+    alarmSettingModalStat
+  );
   const [downloadPercent, setDownloadPercent] = useState<number | undefined>();
   const installAction = () => {
     const filePath = RNFS.DocumentDirectoryPath + '/jangbeecallScane.apk';
@@ -56,23 +56,37 @@ const AlarmSettingModal: React.FC<Props> = ({ isVisibleModal, closeModal }) => {
 
     download.promise
       .then(result => {
-        console.log('result:', result);
         if (result.statusCode == 200) {
-          RNApkInstallerN.install(filePath);
+          RNApkInstallerN.install(filePath)
+            .then((str: string) => {
+              console.log(`RNApkInstallerN.install success: ${str}`);
+            })
+            .catch(error => alert(`invalid app install: ${error?.message}`));
+
+          userProfile &&
+            updateUserProfile({
+              ...userProfile,
+              scanAppVersion: alarmSettingData.newVersion,
+            });
+
+          setAlarmSettingData({ visible: false });
         }
       })
       .catch(error => console.log('error:', error));
   };
+
   return (
     <Modal
       animationType="slide"
       transparent
       visible={alarmSettingData.visible}
-      onRequestClose={() => closeModal()}
+      onRequestClose={() => setAlarmSettingData({ visible: false })}
     >
       <Container>
         <Head>
-          <CloseButton onClose={closeModal} />
+          <CloseButton
+            onClose={() => setAlarmSettingData({ visible: false })}
+          />
         </Head>
         <Contents>
           <Notice>
@@ -82,9 +96,16 @@ const AlarmSettingModal: React.FC<Props> = ({ isVisibleModal, closeModal }) => {
           {!!downloadPercent && (
             <Progress>{`Downloading...(${downloadPercent}%)`}</Progress>
           )}
+          {alarmSettingData.newVersion && (
+            <Notice>
+              {`[버전 업그레이드 필요]\n 현 버전:${userProfile?.scanAppVersion} -> 신규 버전:${alarmSettingData.newVersion}`}
+            </Notice>
+          )}
           <InstallButton
             rootStyle={{ marginTop: 20 }}
-            text="앱 설치"
+            text={`${
+              alarmSettingData.newVersion ? '버전 업그레이드' : '앱 설치'
+            }`}
             onPress={() => installAction()}
           />
         </Contents>

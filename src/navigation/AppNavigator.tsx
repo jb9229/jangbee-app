@@ -1,11 +1,15 @@
+import React, { useEffect } from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import AuthLoading from 'auth/AuthLoading';
 import FirmTabNavigator from './FirmTabNavigator';
 import LoginScreen from 'screens/LoginScreen';
 import MainTabNavigator from './MainTabNavigator';
-import React from 'react';
 import SignUpScreen from 'screens/SignUpScreen';
+import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
+import { useLoginContext } from 'src/contexts/LoginContext';
+import { useScanAppVersionQuery } from 'src/apollo/generated';
+import { useSetRecoilState } from 'recoil';
 
 let AppContainer;
 
@@ -18,8 +22,30 @@ interface Props {
   blListNumber: string;
 }
 const RootNavigator: React.FC<Props> = props => {
+  // states
+  const { userProfile } = useLoginContext();
   const [authPath, setAuthPath] = React.useState(AUTHPATH_AUTHING);
   const [authData, setAuthData] = React.useState();
+  const setAlarmSettingModal = useSetRecoilState(alarmSettingModalStat);
+
+  // server datas
+  const scanAppVersionRsp = useScanAppVersionQuery();
+
+  // component life cycle
+  useEffect(() => {
+    if (
+      userProfile?.scanAppVersion &&
+      userProfile?.scanAppVersion.length > 1 &&
+      scanAppVersionRsp.data?.scanAppVersion?.version &&
+      userProfile?.scanAppVersion !==
+        scanAppVersionRsp.data.scanAppVersion.version
+    ) {
+      setAlarmSettingModal({
+        visible: true,
+        newVersion: scanAppVersionRsp.data.scanAppVersion.version,
+      });
+    }
+  }, [userProfile]);
 
   if (authPath === AUTHPATH_AUTHING) {
     return (

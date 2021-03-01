@@ -197,9 +197,9 @@ const LoginProvider = (props: Props): React.ReactElement => {
       setLoadingModalData(new LoadingModalData(loading, msg));
     },
     refetchFirm: (): Promise<Firm | null> =>
-      updateFirmInfo(user, userProfile, setFirm),
+      userProfile && updateFirmInfo(userProfile, setFirm),
     refetchUserProfile: (): Promise<UserProfile> => {
-      return getUserInfo(user.uid).then(data => {
+      return getUserInfo(userProfile.uid).then(data => {
         const userInfo = data.val();
 
         if (userInfo) {
