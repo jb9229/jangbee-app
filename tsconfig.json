@@ -3,7 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "lib": ["dom", "esnext"],
-    "target": "ES2020",
+    "target": "ES2018",
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
@@ -51,16 +51,12 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
+    "src/__tests__",
     "storybook/**/*.ts",
     "storybook/**/*.tsx",
     "src/index.web.js"
   ],
-  "exclude": [
-    "node_modules",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "src/__generated__"
-  ],
+  "exclude": ["node_modules", "src/__generated__"],
   "jest": {
     "globals": {
       "ts-jest": {

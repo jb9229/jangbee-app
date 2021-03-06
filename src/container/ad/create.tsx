@@ -7,8 +7,7 @@ import { DefaultNavigationProps } from 'src/types';
 interface Props {
   navigation: DefaultNavigationProps;
 }
-const CreateAd: React.FC<Props> = (props) =>
-{
+const CreateAd: React.FC<Props> = props => {
   return (
     <AdCreateProvider navigation={props.navigation}>
       <AdCreateLayout />
