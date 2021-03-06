@@ -11,7 +11,7 @@ const SMALL_SIZE = 'small';
 export enum ButtonSize {
   FULL = 'full',
   BIG_SIZE = 'big',
-  SMALL_SIZE = 'small'
+  SMALL_SIZE = 'small',
 }
 
 interface StyledProps {
@@ -22,7 +22,7 @@ interface StyledProps {
 }
 const Container = styled.View`
   /* flex-direction: row; */
-  flex-grow: ${(props) => props.size === ButtonSize.FULL ? 1 : 0};
+  flex-grow: ${props => (props.size === ButtonSize.FULL ? 1 : 0)};
   /* margin: 5px; */
   ${props =>
     props.align === 'right' &&
@@ -44,6 +44,7 @@ const Container = styled.View`
 const TouchableOpacity = styled.TouchableOpacity<StyledProps>`
   border-color: ${props =>
     props.borderColor ? props.borderColor : colors.pointDark};
+  align-items: center;
 
   border-width: 1px;
   ${props =>
@@ -133,20 +134,16 @@ interface Props {
   nonemargin?: boolean;
   onPress: () => void;
 }
-const JBButton: React.FC<Props> = (props) =>
-{
+const JBButton: React.FC<Props> = props => {
   const [pressing, setPressing] = React.useState(false);
 
-  const preventDoubleTap = () =>
-  {
-    if (pressing === false)
-    {
+  const preventDoubleTap = () => {
+    if (pressing === false) {
       setPressing(true);
 
       props.onPress();
 
-      InteractionManager.runAfterInteractions(() =>
-      {
+      InteractionManager.runAfterInteractions(() => {
         setPressing(false);
       });
     }
@@ -155,28 +152,20 @@ const JBButton: React.FC<Props> = (props) =>
   let colorTheme = props.color;
   let bgColorTheme = props.bgColor;
 
-  if (props.Secondary)
-  {
-    if (props.underline)
-    {
+  if (props.Secondary) {
+    if (props.underline) {
       colorTheme = colors.pointDark;
-    }
-    else
-    {
+    } else {
       colorTheme = 'white';
     }
 
     bgColorTheme = colors.pointDark;
   }
 
-  if (props.Primary)
-  {
-    if (props.underline)
-    {
+  if (props.Primary) {
+    if (props.underline) {
       colorTheme = colors.point2;
-    }
-    else
-    {
+    } else {
       colorTheme = 'white';
     }
 
@@ -184,7 +173,11 @@ const JBButton: React.FC<Props> = (props) =>
   }
 
   return (
-    <Container align={props.align} nonemargin={props.nonemargin} size={props.size}>
+    <Container
+      align={props.align}
+      nonemargin={props.nonemargin}
+      size={props.size}
+    >
       <TouchableOpacity
         size={props.size}
         color={bgColorTheme}
@@ -202,6 +195,6 @@ const JBButton: React.FC<Props> = (props) =>
       </TouchableOpacity>
     </Container>
   );
-}
+};
 
 export default JBButton;

@@ -6,7 +6,7 @@
     "owner": "jb9229",
     "name": "장비 콜",
     "slug": "jangbeecall",
-    "sdkVersion": "39.0.0",
+    "sdkVersion": "40.0.0",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
     "version": "1.5.0_201212",
@@ -22,18 +22,6 @@
       "checkAutomatically": "ON_ERROR_RECOVERY"
     },
     "assetBundlePatterns": ["**/*"],
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "Kan",
-            "project": "jangbeecall",
-            "authToken": "b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398"
-          }
-        }
-      ]
-    },
     "description": "건설 중장비 콜 서비스입니다",
     "isDetached": true,
     "android": {
@@ -43,11 +31,6 @@
       "splash": {
         "backgroundColor": "#4D4A4A",
         "resizeMode": "cover"
-      },
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyA4h25H62Sp9XSMfEy4x9RBc1AaAAH5bSY"
-        }
       }
     },
     "ios": {

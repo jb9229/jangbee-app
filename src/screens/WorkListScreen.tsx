@@ -19,34 +19,44 @@ import { useLoginContext } from 'src/contexts/LoginContext';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: colors.batangLight
+    backgroundColor: colors.batangLight,
   },
   tabBarIndicator: {
-    backgroundColor: colors.point2
+    backgroundColor: colors.point2,
   },
   tabBar: {
-    backgroundColor: colors.batangDark
+    backgroundColor: colors.batangDark,
   },
   tabBarLabel: {
     fontFamily: fonts.titleMiddle,
     fontWeight: 'bold',
-    color: colors.point
-  }
+    color: colors.point,
+  },
 });
 
 interface Props {
   navigation: DefaultNavigationProps;
 }
-const ClientWorkListScreen: React.FC<Props> = (props) =>
-{
-  const { user } = useLoginContext();
-  const [isVisibleEstimateModal, setVisibleEstimateModal] = React.useState(false);
-  const [isVisibleEditWorkModal, setVisibleEditWorkModal] = React.useState(false);
+const ClientWorkListScreen: React.FC<Props> = props => {
+  const { userProfile } = useLoginContext();
+  const [isVisibleEstimateModal, setVisibleEstimateModal] = React.useState(
+    false
+  );
+  const [isVisibleEditWorkModal, setVisibleEditWorkModal] = React.useState(
+    false
+  );
   const [isVisibleDetailModal, setVisibleDetailModal] = React.useState(false);
   const [isOpenWorkListEmpty, setOpenWorkListEmpty] = React.useState(false);
-  const [isMatchedWorkListEmpty, setMatchedWorkListEmpty] = React.useState(false);
-  const [openWorkListRefreshing, setOpenWorkListRefreshing] = React.useState(false);
-  const [matchedWorkListRefreshing, setMatchedWorkListRefreshing] = React.useState(false);
+  const [isMatchedWorkListEmpty, setMatchedWorkListEmpty] = React.useState(
+    false
+  );
+  const [openWorkListRefreshing, setOpenWorkListRefreshing] = React.useState(
+    false
+  );
+  const [
+    matchedWorkListRefreshing,
+    setMatchedWorkListRefreshing,
+  ] = React.useState(false);
   const [openWorkList, setOpenWorkList] = React.useState(false);
   const [matchedWorkList, setMatchedWorkList] = React.useState(false);
   const [estiWorkId, setEstiWorkId] = React.useState<string>();
@@ -55,11 +65,10 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'first', title: '모집중인 일감' },
-    { key: 'second', title: '모집된 일감' }
+    { key: 'second', title: '모집된 일감' },
   ]);
 
-  React.useEffect(() =>
-  {
+  React.useEffect(() => {
     setOpenWorkListData();
     setOpenWorkListData();
     setMatchedWorkListData();
@@ -68,10 +77,8 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   /**
    * Tab View 변경함수
    */
-  const changeTabView = (index) =>
-  {
-    if (index === 1 && matchedWorkList === undefined)
-    {
+  const changeTabView = index => {
+    if (index === 1 && matchedWorkList === undefined) {
       setMatchedWorkListData();
     }
 
@@ -81,14 +88,13 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   /**
    * 2시간 지난후 지원자선택 취소 확인함수
    */
-  const confirmCancelSelFirm = (workId) =>
-  {
+  const confirmCancelSelFirm = workId => {
     Alert.alert(
       '지원자 선택 취소',
       '해당 업체가 응답이 없습니다, 새로운 지원자를 선택해 주제요',
       [
         { text: '취소', onPress: () => {} },
-        { text: '지원자 선택 취소', onPress: () => calcelSelFirm(workId) }
+        { text: '지원자 선택 취소', onPress: () => calcelSelFirm(workId) },
       ]
     );
   };
@@ -96,14 +102,11 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   /**
    * 2시간 지난후 지원자선택 취소 함수
    */
-  const calcelSelFirm = (workId) =>
-  {
+  const calcelSelFirm = workId => {
     api
       .cancelSelFirm(workId)
-      .then(resBody =>
-      {
-        if (resBody)
-        {
+      .then(resBody => {
+        if (resBody) {
           setOpenWorkListData();
           return;
         }
@@ -125,14 +128,11 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   /**
    * 리스트 데이터 설정함수
    */
-  const setOpenWorkListData = () =>
-  {
+  const setOpenWorkListData = () => {
     api
-      .getClientOpenWorkList(user.uid)
-      .then(resBody =>
-      {
-        if (resBody && resBody.length > 0)
-        {
+      .getClientOpenWorkList(userProfile.uid)
+      .then(resBody => {
+        if (resBody && resBody.length > 0) {
           setOpenWorkList(resBody);
           setOpenWorkListEmpty(false);
           setOpenWorkListRefreshing(false);
@@ -149,14 +149,11 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   /**
    * 매칭된 일감리스트 설정함수
    */
-  const setMatchedWorkListData = () =>
-  {
+  const setMatchedWorkListData = () => {
     api
-      .getClientMatchedWorkList(user.uid)
-      .then(resBody =>
-      {
-        if (resBody && resBody.length > 0)
-        {
+      .getClientMatchedWorkList(userProfile.uid)
+      .then(resBody => {
+        if (resBody && resBody.length > 0) {
           setMatchedWorkList(resBody);
           setMatchedWorkListEmpty(false);
           setMatchedWorkListRefreshing(false);
@@ -173,19 +170,20 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   /**
    * 일감내용 수정 요청함수
    */
-  const updateWork = (updateData) =>
-  {
+  const updateWork = updateData => {
     api
       .updateWork(updateData)
-      .then(resBody =>
-      {
-        if (resBody)
-        {
+      .then(resBody => {
+        if (resBody) {
           setOpenWorkListData();
           return;
         }
 
-        noticeUserError('일감수정 문제 발생', '일감 수정을 다시 시도해 주세요', user);
+        noticeUserError(
+          '일감수정 문제 발생',
+          '일감 수정을 다시 시도해 주세요',
+          user
+        );
         setOpenWorkListData();
       })
       .catch(error => noticeUserError(error.name, error.message, user));
@@ -194,25 +192,38 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
   const renderOpenWorkList = (): React.ReactElement => (
     <ClientOpenWorkList
       list={openWorkList}
-      handleRefresh={(): void => { setOpenWorkListRefreshing(true); setOpenWorkListData() }}
+      handleRefresh={(): void => {
+        setOpenWorkListRefreshing(true);
+        setOpenWorkListData();
+      }}
       refreshing={openWorkListRefreshing}
       isListEmpty={isOpenWorkListEmpty}
-      selectFirm={(workId): void => { props.navigation.navigate('AppliFirmList', { workId }) }}
+      selectFirm={(workId): void => {
+        props.navigation.navigate('AppliFirmList', { workId });
+      }}
       cancelSelFirm={confirmCancelSelFirm}
       registerWork={(): void => props.navigation.navigate('WorkRegister')}
-      editWork={(work): void => { setEditWork(work); setVisibleEditWorkModal(true) }}
+      editWork={(work): void => {
+        setEditWork(work);
+        setVisibleEditWorkModal(true);
+      }}
     />
   );
 
   const renderMatchedWorkList = (): React.ReactElement => (
     <ClientMatchedWorkList
       list={matchedWorkList}
-      handleRefresh={(): void => { setMatchedWorkListRefreshing(true); setMatchedWorkListData() }}
+      handleRefresh={(): void => {
+        setMatchedWorkListRefreshing(true);
+        setMatchedWorkListData();
+      }}
       refreshing={matchedWorkListRefreshing}
       isListEmpty={isMatchedWorkListEmpty}
-      estimateFirm={(workId): void => { setVisibleEstimateModal(true); setEstiWorkId(workId) }}
-      openMatchedFirmInfo={(matchedAccId): void =>
-      {
+      estimateFirm={(workId): void => {
+        setVisibleEstimateModal(true);
+        setEstiWorkId(workId);
+      }}
+      openMatchedFirmInfo={(matchedAccId): void => {
         setMatchedfirmAccId(matchedAccId);
         setVisibleDetailModal(true);
       }}
@@ -242,7 +253,7 @@ const ClientWorkListScreen: React.FC<Props> = (props) =>
         navigationState={{ index, routes }}
         renderScene={SceneMap({
           first: renderOpenWorkList,
-          second: renderMatchedWorkList
+          second: renderMatchedWorkList,
         })}
         onIndexChange={changeTabView}
         initialLayout={{ width: Dimensions.get('window').width }}

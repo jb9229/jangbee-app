@@ -1,40 +1,50 @@
 import { gql } from '@apollo/client';
 
-export const FIRM_CHATMESSAGE = gql`
-{
-  firmChatMessage {
-    _id
-    text
-    createdAt
-    user {
-      _id
-      name
-      avatar
+export const ScanAppVersion = gql`
+  query scanAppVersion($t: String) {
+    scanAppVersion(t: $t) {
+      version
     }
   }
-}`;
+`;
+
+export const FIRM_CHATMESSAGE = gql`
+  query firmChatMessage($t: String) {
+    firmChatMessage(t: $t) {
+      _id
+      text
+      createdAt
+      user {
+        _id
+        name
+        avatar
+      }
+    }
+  }
+`;
 
 /**********************
-* Cashback Queries
-***********************/
+ * Cashback Queries
+ ***********************/
 export const CASHBACKS = gql`
   query Cashbacks($accountId: String!) {
-  cashbacks(accountId: $accountId) {
-    _id
-    accountId
-    bank
-    amount
-    accountNumber
-    accountHolder
-    status
+    cashbacks(accountId: $accountId) {
+      _id
+      accountId
+      bank
+      amount
+      accountNumber
+      accountHolder
+      status
+    }
   }
-}`;
+`;
 
 /**********************
  * FirmHarmCase Queries
  ***********************/
 export const FirmHarmCasesQuery = gql`
-  query FirmHarmCasesQuery ($firmCaseListInput: FirmHarmCaseListInput) {
+  query FirmHarmCasesQuery($firmCaseListInput: FirmHarmCaseListInput) {
     firmHarmCases(firmCaseListInput: $firmCaseListInput) {
       edges {
         cursor
@@ -71,9 +81,8 @@ export const FirmHarmCasesQuery = gql`
  * 피해사례 카운트 조회
  */
 export const FIRMHARMCASE_COUNT = gql`
-  query FirmHarmCaseCount ($id: String) {
-    firmHarmCaseCount(id: $id)
-    {
+  query FirmHarmCaseCount($id: String) {
+    firmHarmCaseCount(id: $id) {
       totalCnt
       myCnt
     }
@@ -84,7 +93,7 @@ export const FIRMHARMCASE_COUNT = gql`
  * Ad Queries
  ***********************/
 export const ADS = gql`
-  query Ads ($searchAdParams: SearchAdParams) {
+  query Ads($searchAdParams: SearchAdParams) {
     ads(searchAdParams: $searchAdParams) {
       adType
       title
@@ -126,7 +135,7 @@ export const FIRM = gql`
 `;
 
 export const Firms = gql`
-  query Firms ($searchFirmParams: SearchFirmParams) {
+  query Firms($searchFirmParams: SearchFirmParams) {
     firms(searchFirmParams: $searchFirmParams) {
       accountId
       phoneNumber
@@ -139,6 +148,22 @@ export const Firms = gql`
       addressDetail
       sidoAddr
       sigunguAddr
+    }
+  }
+`;
+
+/*****************
+ * Call Log
+ *****************/
+export const CALL_LOGS = gql`
+  query CallLogs($accountId: String) {
+    callLogs(accountId: $accountId) {
+      _id
+      caller
+      callerPhoneNumber
+      callee
+      calleePhoneNumber
+      timestamp
     }
   }
 `;

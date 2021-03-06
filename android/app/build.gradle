@@ -135,8 +135,8 @@ android {
         applicationId 'com.kan.jangbeecall'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 59
-        versionName "1.2.5"
+        versionCode 63
+        versionName "1.6.2"
         resValue "string", "app_name", "장비 콜"
     }
     splits {
@@ -179,6 +179,12 @@ android {
         }
         prod {
             dimension = 'mode'
+        }
+        beta {
+            dimension 'mode'
+            applicationIdSuffix '.beta'
+            versionCode 1
+            resValue "string", "app_name", "장비 콜(Beta)"
         }
     }
 
@@ -233,4 +239,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: "../../node_modules/expo-constants/scripts/get-app-config-android.gradle"
 apply plugin: 'com.google.gms.google-services'

@@ -55,7 +55,7 @@ export const FIRMHARMCASE_DELETE = gql`
 `;
 
 export const UPLOAD_IMAGE = gql`
-  mutation UploadImage($img: Upload) {
+  mutation UploadImage($img: FileUpload) {
     uploadFirmImage(img: $img)
   }
 `;

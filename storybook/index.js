@@ -11,17 +11,18 @@ import { loadAllAssests } from 'src';
 import { loadStories } from './storyLoader';
 import { setupGlobalDecorators } from './global_decorators';
 
-Promise.all(loadAllAssests).then(() =>
-{
-  console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
-}).catch((err) => { console.log(err) });
+Promise.all(loadAllAssests)
+  .then(() => {
+    console.log('Storybook LoadResourcesAsync done'); // this is quick enough that it works.
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
 setupGlobalDecorators();
 
-const initFirebase = () =>
-{
-  if (!firebase.apps.length)
-  {
+const initFirebase = () => {
+  if (!firebase.apps.length) {
     firebase.initializeApp(firebaseconfig);
     firebase.auth().languageCode = 'ko';
 
@@ -29,30 +30,23 @@ const initFirebase = () =>
   }
 };
 
-const checkUpdate = async () =>
-{
-  if (!__DEV__)
-  {
-    try
-    {
+const checkUpdate = async () => {
+  if (!__DEV__) {
+    try {
       const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable)
-      {
+      if (update.isAvailable) {
         await Updates.fetchUpdateAsync();
         // ... notify user of update ...
         Updates.reloadAsync();
       }
-    }
-    catch (e)
-    {
+    } catch (e) {
       console.error(e);
     }
   }
 };
 
 // Stories Dinamic Importing
-configure(() =>
-{
+configure(() => {
   console.log('end loadAllAssets');
   initFirebase();
   loadStories();

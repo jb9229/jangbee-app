@@ -9,10 +9,10 @@
 	<key>EXUpdatesLaunchWaitMs</key>
 	<integer>0</integer>
 	<key>EXUpdatesReleaseChannel</key>
-	<string>default</string>
+	<string>beta-v2</string>
 	<key>EXUpdatesSDKVersion</key>
-	<string>39.0.0</string>
+	<string>40.0.0</string>
 	<key>EXUpdatesURL</key>
-	<string>https://exp.host/@jb9229/jangbeecall_spring</string>
+	<string>https://exp.host/@jb9229/jangbeecall</string>
 </dict>
 </plist>

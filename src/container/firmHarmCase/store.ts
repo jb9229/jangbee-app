@@ -11,14 +11,22 @@ import { apolloClient } from 'src/api/apollo';
 
 export const firmHarmCaseCountUserId = atom<FirmHarmCaseCountData>({
   key: 'firmHarmCaseCountUserId', // unique ID (with respect to other atoms/selectors)
-  default: null // default value (aka initial value)
+  default: null, // default value (aka initial value)
 });
 
-export const fetchData = async() => {
+export const alarmSettingModalStat = atom<{
+  visible: boolean;
+  newVersion?: string;
+}>({
+  key: 'alarmSettingModalStat', // unique ID (with respect to other atoms/selectors)
+  default: { visible: false, newVersion: '' }, // default value (aka initial value)
+});
+
+export const fetchData = async () => {
   const response = await apolloClient.query({
     query: FIRMHARMCASE_COUNT,
     variables: { id: undefined },
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   });
 
   return response.data?.firmHarmCaseCount || { myCnt: -1, totalCnt: -1 };
@@ -26,7 +34,7 @@ export const fetchData = async() => {
 
 export const firmHarmCaseCountState = atom<FirmHarmCaseCountData>({
   key: 'firmHarmCaseCountState',
-  default: fetchData() // default value (aka initial value)
+  default: fetchData(), // default value (aka initial value)
   // get: async({ get }) =>
   // {
   //   const userId = get(firmHarmCaseCountUserId);

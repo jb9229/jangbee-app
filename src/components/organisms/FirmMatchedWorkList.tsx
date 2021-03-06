@@ -12,7 +12,7 @@ import { useFirmWorkProvider } from 'src/container/firmwork/FirmWorkProvider';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
 const FirmMatchedWorkList = (): React.ReactElement => {
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   /**
    * 리스트 아이템 렌더링 함수
    */
@@ -38,8 +38,8 @@ const FirmMatchedWorkList = (): React.ReactElement => {
               callSearchFirm(
                 item.accountId,
                 item.phoneNumber,
-                user.uid,
-                user.phoneNumber
+                userProfile.uid,
+                userProfile.phoneNumber
               )
             }
             size="small"

@@ -1,13 +1,11 @@
 import { ApolloClient, InMemoryCache, from } from '@apollo/client';
 
 import { createUploadLink } from 'apollo-upload-client';
+import { getEnvironment } from 'src/constants/Environment';
 import { onError } from '@apollo/client/link/error';
 
 const uploadLink = createUploadLink({
-  uri:
-    process.env.BUILD_TYPE === 'dev'
-      ? 'http://10.0.2.2:4000/graphql'
-      : 'https://jangbeecall-dev.azurewebsites.net/graphql',
+  uri: getEnvironment().dbUrl,
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

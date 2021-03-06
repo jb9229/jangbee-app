@@ -19,8 +19,8 @@ const Container = styled.View`
 `;
 const FirmHarmCaseFlatList = styled(FlatList).attrs(() => ({
   wrapperStyle: {
-    flex: 1
-  }
+    flex: 1,
+  },
 }))``;
 const NoticeWrap = styled.View`
   height: 300;
@@ -36,18 +36,19 @@ interface Props {
   searchTime: Date;
   wrapperStyle?: StyleProp<ViewStyle>;
 }
-const FirmHarmCaseSearchResult: React.FC<Props> = (props) =>
-{
-  const { user } = useLoginContext();
+const FirmHarmCaseSearchResult: React.FC<Props> = props => {
+  const { userProfile } = useLoginContext();
   const {
     loading,
-    openDetailModal, deleteFirmHarmCase, openUpdateFirmHarmCase, onEndReachedCaseList
+    openDetailModal,
+    deleteFirmHarmCase,
+    openUpdateFirmHarmCase,
+    onEndReachedCaseList,
   } = useFirmHarmCaseSearchContext();
-console.log('>>> loading: ', loading)
+  console.log('>>> loading: ', loading);
   const searchTimeStr = moment(props.searchTime).format('YYYY-MM-DD HH:mm');
 
-  if (props.harmCaseList?.length === 0 && !loading)
-  {
+  if (props.harmCaseList?.length === 0 && !loading) {
     return (
       <Container>
         <NoticeWrap>
@@ -55,15 +56,16 @@ console.log('>>> loading: ', loading)
           <Notice>피해사례 없음을 공유 해 보세요</Notice>
           <JBButton
             title={`'${props.searchWord}' 피해사례 없음 공유`}
-            onPress={() => shareNotExistCEvalu(props.searchWord, searchTimeStr)} align="center" Secondary
+            onPress={() => shareNotExistCEvalu(props.searchWord, searchTimeStr)}
+            align="center"
+            Secondary
           />
         </NoticeWrap>
       </Container>
     );
   }
 
-  if (props.harmCaseList?.length === 0 && loading)
-  {
+  if (props.harmCaseList?.length === 0 && loading) {
     return <Indicator />;
   }
 
@@ -74,19 +76,18 @@ console.log('>>> loading: ', loading)
         onEndReachedThreshold={0.4}
         onEndReached={onEndReachedCaseList}
         ListFooterComponent={loading ? <ActivityIndicator /> : null}
-        renderItem={({item, index}) =>
+        renderItem={({ item, index }) => (
           <FirmHarmCaseItem
             key={`KEY_${index}`}
             item={item.node}
             searchTime={searchTimeStr}
-            accountId={user.uid}
+            accountId={userProfile.uid}
             updateCliEvalu={openUpdateFirmHarmCase}
             deleteCliEvalu={deleteFirmHarmCase}
             // openCliEvaluLikeModal={openCliEvaluLikeModal}
             openDetailModal={evalu => openDetailModal(evalu)}
-
           />
-        }
+        )}
       />
     </Container>
   );

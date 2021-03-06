@@ -18,8 +18,10 @@ export interface User {
 
 export interface UserProfile {
   userType: UserType;
+  uid: string;
   sid?: string;
-  assets?: UserAssets;
+  scanAppVersion?: string;
+  phoneNumber: string;
 }
 
 export interface UserAssets {

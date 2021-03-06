@@ -16,16 +16,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   contentsWrap: {
     backgroundColor: '#FFF',
-    padding: 20
+    padding: 20,
   },
   couponListWrap: {},
   commWrap: {
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+  },
 });
 
 interface Props {
@@ -35,14 +35,11 @@ interface Props {
   applyCoupon: () => void;
 }
 
-const CouponSelectModal: React.FC<Props> = (props) =>
-{
+const CouponSelectModal: React.FC<Props> = props => {
   const [couponCnt, setCouponCnt] = React.useState(0);
   const [selectedCoupon, setSelectedCoupon] = React.useState(false);
-  React.useEffect(() =>
-  {
-    if (props.visible)
-    {
+  React.useEffect(() => {
+    if (props.visible) {
       setFirmworkCoupon(props.user.uid);
       setSelectedCoupon(false);
     }
@@ -51,18 +48,20 @@ const CouponSelectModal: React.FC<Props> = (props) =>
   /**
    * 차주일감 쿠폰 요청함수
    */
-  const setFirmworkCoupon = (accountId: string): void =>
-  {
+  const setFirmworkCoupon = (accountId: string): void => {
     api
       .getCoupon(accountId)
-      .then(coupon =>
-      {
-        if (coupon)
-        {
+      .then(coupon => {
+        if (coupon) {
           setCouponCnt(coupon.cpCount);
         }
       })
-      .catch(error => { notifyError('네트워크 문제가 있습니다, 다시 시도해 주세요.', `쿠폰 조회 실패 -> [${error.name}] ${error.message}`) });
+      .catch(error => {
+        notifyError(
+          '네트워크 문제가 있습니다, 다시 시도해 주세요.',
+          `쿠폰 조회 실패 -> [${error.name}] ${error.message}`
+        );
+      });
   };
 
   return (

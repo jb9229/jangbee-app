@@ -1,10 +1,10 @@
+import { DefaultTheme, withTheme } from 'styled-components/native';
 import {
   TextProps,
   TextStyle,
   TouchableOpacityProps,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
-import styled, { DefaultTheme, withTheme } from 'styled-components/native';
 
 import { Button } from 'dooboo-ui';
 import React from 'react';
@@ -27,33 +27,30 @@ interface Props {
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
 }
-const SolidButton: React.FC<Props> = props =>
-{
+const SolidButton: React.FC<Props> = props => {
   const { theme, rootStyle, buttonStyle, textStyle } = props;
   const btnRootStyle = { ...rootStyle };
   const btnStyle: ViewStyle = {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: '#82b6ed',
-    ...buttonStyle
+    backgroundColor: theme.ColorPrimary,
+    ...buttonStyle,
   };
   const bntTextStyle: TextStyle = {
     color: 'white',
     fontFamily: koFont.FontButton,
     fontSize: 15,
     fontWeight: 'bold',
-    ...textStyle
+    ...textStyle,
   };
 
-  // console.log('>>> theme: ', theme);
-  // console.log('>>> props: ', props);
   return (
     <Button
       {...props}
       style={{
         root: btnRootStyle,
         button: btnStyle,
-        text: bntTextStyle
+        text: bntTextStyle,
       }}
     />
   );
