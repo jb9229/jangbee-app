@@ -19,7 +19,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
   "jest": {
@@ -132,6 +133,7 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "babel-preset-expo": "8.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "emotion-theming": "^10.0.14",
     "eslint": "^6.4.0",
     "eslint-config-prettier": "^6.15.0",
