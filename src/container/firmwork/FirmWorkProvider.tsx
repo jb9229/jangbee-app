@@ -10,6 +10,9 @@ import {
 } from 'src/container/firmwork/actions';
 
 import { Alert } from 'react-native';
+import { FirmWorkParamList } from 'src/navigation/types';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import url from 'src/constants/Url';
@@ -36,10 +39,12 @@ const [useCtx, Provider] = createCtx<Context>();
 
 interface Props {
   children?: React.ReactElement;
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<FirmWorkParamList, 'WorkList'>;
+  route: RouteProp<FirmWorkParamList, 'WorkList'>;
 }
 
 const FirmWorkProvider = (props: Props): React.ReactElement => {
+  const { refresh } = props.route;
   const {
     firm,
     userProfile,
@@ -77,7 +82,6 @@ const FirmWorkProvider = (props: Props): React.ReactElement => {
       );
     }
 
-    const refresh = props.navigation.getParam('refresh', undefined);
     if (refresh) {
       openWorkListRequest();
       matchedWorkListRequest();

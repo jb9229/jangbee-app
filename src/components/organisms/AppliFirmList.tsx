@@ -33,21 +33,18 @@ const ContentsView = styled.View`
   `}
 `;
 
-export default class AppliFirmList extends React.Component
-{
-  constructor (props)
-  {
+export default class AppliFirmList extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       isVisibleDetailModal: false,
       selectedFirmAccId: undefined,
       refreshing: false,
-      firmList: []
+      firmList: [],
     };
   }
 
-  componentDidMount ()
-  {
+  componentDidMount() {
     const workId = this.props.navigation.getParam('workId', undefined);
 
     this.setState({ appliWorkId: workId }, () => this.setAppliFirmList());
@@ -56,24 +53,20 @@ export default class AppliFirmList extends React.Component
   /**
    * 업체선정 설정함수
    */
-  setAppliFirmList = () =>
-  {
+  setAppliFirmList = () => {
     const { appliWorkId } = this.state;
 
-    if (!appliWorkId)
-    {
+    if (!appliWorkId) {
       this.setState({
-        submitErrMessage: `[${appliWorkId}] 잘못된 일감 아이디 입니다.`
+        submitErrMessage: `[${appliWorkId}] 잘못된 일감 아이디 입니다.`,
       });
       return;
     }
 
     api
       .getAppliFirmList(appliWorkId)
-      .then(resBody =>
-      {
-        if (resBody)
-        {
+      .then(resBody => {
+        if (resBody) {
           this.setState({ firmList: resBody, refreshing: false });
         }
 
@@ -85,19 +78,15 @@ export default class AppliFirmList extends React.Component
   /**
    * 모달 액션 완료 함수
    */
-  requestDispatchFirm = () =>
-  {
+  requestDispatchFirm = () => {
     const { navigation } = this.props;
     const selectedData = this.validateForm();
 
-    if (selectedData)
-    {
+    if (selectedData) {
       api
         .selectAppliFirm(selectedData)
-        .then(result =>
-        {
-          if (result)
-          {
+        .then(result => {
+          if (result) {
             navigation.navigate('WorkList', { refresh: true });
           }
         })
@@ -108,25 +97,23 @@ export default class AppliFirmList extends React.Component
   /**
    * 유효성 검사 함수
    */
-  validateForm = () =>
-  {
+  validateForm = () => {
     const { selectedFirmAccId } = this.state;
     const workId = this.props.navigation.getParam('workId', undefined);
 
     // Validation Error Massage Initialize
     this.setState({
-      submitErrMessage: ''
+      submitErrMessage: '',
     });
 
-    if (!selectedFirmAccId)
-    {
+    if (!selectedFirmAccId) {
       this.setState({ submitErrMessage: '업체를 선정해 주세요.' });
       return false;
     }
 
     const selectedData = {
       accountId: selectedFirmAccId,
-      workId
+      workId,
     };
 
     return selectedData;
@@ -137,8 +124,7 @@ export default class AppliFirmList extends React.Component
    *
    * @param {Object} itemOjb 리스트의 아이템 객체
    */
-  renderListItem = ({ item }) =>
-  {
+  renderListItem = ({ item }) => {
     const { navigation } = this.props;
     const { selectedFirmAccId } = this.state;
 
@@ -156,14 +142,13 @@ export default class AppliFirmList extends React.Component
     );
   };
 
-  render ()
-  {
+  render() {
     const {
       isVisibleDetailModal,
       refreshing,
       selectedFirmAccId,
       firmList,
-      submitErrMessage
+      submitErrMessage,
     } = this.state;
 
     return (

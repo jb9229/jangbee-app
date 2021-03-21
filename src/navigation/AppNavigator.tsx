@@ -1,31 +1,27 @@
 import React, { useEffect } from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import AuthLoading from 'auth/AuthLoading';
-import FirmTabNavigator from './FirmTabNavigator';
+import { AuthStackParamList } from './types';
+import ClientBottomTabNavigator from './ClientTabNavigator';
+import FirmBottomTabNavigator from './FirmTabNavigator';
 import LoginScreen from 'screens/LoginScreen';
-import MainTabNavigator from './MainTabNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 import SignUpScreen from 'screens/SignUpScreen';
+import { UserType } from 'src/types';
 import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
+import { createStackNavigator } from '@react-navigation/stack';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useScanAppVersionQuery } from 'src/apollo/generated';
 import { useSetRecoilState } from 'recoil';
 
-let AppContainer;
-
-const AUTHPATH_COMPLETE = -1;
-const AUTHPATH_AUTHING = 1;
-const AUTHPATH_SIGNUP = 2;
-const AUTHPATH_LOGIN = 3;
+const AuthStack = createStackNavigator<AuthStackParamList>();
 
 interface Props {
   blListNumber: string;
 }
-const RootNavigator: React.FC<Props> = props => {
+const Navigator: React.FC<Props> = () => {
   // states
   const { userProfile } = useLoginContext();
-  const [authPath, setAuthPath] = React.useState(AUTHPATH_AUTHING);
-  const [authData, setAuthData] = React.useState();
   const setAlarmSettingModal = useSetRecoilState(alarmSettingModalStat);
 
   // server datas
@@ -47,64 +43,26 @@ const RootNavigator: React.FC<Props> = props => {
     }
   }, [userProfile]);
 
-  if (authPath === AUTHPATH_AUTHING) {
-    return (
-      <AuthLoading
-        completeAuth={(isClient: boolean): void =>
-          completeAuth(isClient, setAuthPath)
-        }
-        changeAuthPath={(path, data): void => {
-          setAuthPath(path);
-          setAuthData(data);
-        }}
-      />
-    );
-  }
-
-  if (authPath === AUTHPATH_SIGNUP) {
-    return (
-      <SignUpScreen
-        completeAuth={(isClient: boolean): void =>
-          completeAuth(isClient, setAuthPath)
-        }
-      />
-    );
-  }
-
-  if (authPath === AUTHPATH_LOGIN) {
-    return (
-      <LoginScreen
-        changeAuthPath={(path: number, data: object): void => {
-          setAuthPath(path);
-          setAuthData(data);
-        }}
-      />
-    );
-  }
-
-  return <AppContainer screenProps={{ blListNumber: props.blListNumber }} />;
-};
-
-const completeAuth = (
-  isClient: boolean,
-  setAuthPath: (path: number) => void
-): void => {
-  AppContainer = createAppContainer(
-    createSwitchNavigator(
-      {
-        // You could add another route here for authentication.
-        // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-        Main: isClient ? MainTabNavigator : FirmTabNavigator,
-      },
-      {
-        mode: 'modal',
-        headerMode: 'none',
-        initialRouteName: 'Main',
-      }
-    )
+  // return <AppContainer screenProps={{ blListNumber: props.blListNumber }} />;
+  return (
+    <NavigationContainer>
+      {!userProfile ? (
+        <AuthStack.Navigator
+          screenOptions={{ headerShown: false }}
+          mode="modal"
+          initialRouteName={'AuthLoading'}
+        >
+          <AuthStack.Screen name="AuthLoading" component={AuthLoading} />
+          <AuthStack.Screen name="SignIn" component={LoginScreen} />
+          <AuthStack.Screen name="Signup" component={SignUpScreen} />
+        </AuthStack.Navigator>
+      ) : userProfile.userType === UserType.CLIENT ? (
+        <ClientBottomTabNavigator />
+      ) : (
+        <FirmBottomTabNavigator />
+      )}
+    </NavigationContainer>
   );
-
-  setAuthPath(AUTHPATH_COMPLETE);
 };
 
-export default RootNavigator;
+export default Navigator;

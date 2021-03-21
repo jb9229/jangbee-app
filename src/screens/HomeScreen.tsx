@@ -9,6 +9,7 @@ import JangbeeAdList from 'organisms/JangbeeAdList';
 import colors from 'constants/Colors';
 import { onPressBackbutton } from 'src/container/action';
 import styled from 'styled-components/native';
+import { useLoginContext } from 'src/contexts/LoginContext';
 import { useScanAppVersionQuery } from 'src/apollo/generated';
 
 const Container = styled.ScrollView`

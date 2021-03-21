@@ -48,6 +48,7 @@
     ],
     "react/prop-types": 0,
     "object-property-newline": 0,
-    "space-before-function-paren": ["error", "never"]
+    "space-before-function-paren": ["error", "never"],
+    "react/display-name": "off"
   }
 }

@@ -136,9 +136,6 @@ const FirmMyInfoScreen: React.FC<Props> = props => {
   const firmRsp = useQuery(FIRM, { variables: { accountId: userProfile.uid } });
 
   const firm = firmRsp.data?.firm;
-  React.useEffect(() => {
-    // setFirmEvaluList();
-  }, [props.navigation.state]);
 
   const registerFirm = (): void => {
     props.navigation.navigate('FirmRegister');

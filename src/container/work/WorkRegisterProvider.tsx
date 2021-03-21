@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+import {
+  FirmBottomTabParamList,
+  FirmWorkParamList,
+} from 'src/navigation/types';
 import { WorkCreateDto, WorkCreateErrorData } from 'src/container/work/types';
 import {
   requestAddWork,
@@ -7,6 +11,8 @@ import {
 } from 'src/container/work/action';
 
 import { DefaultNavigationProps } from 'src/types';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import createCtx from 'src/contexts/CreateCtx';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -23,12 +29,13 @@ const [useCtx, Provider] = createCtx<Context>();
 
 interface Props {
   children?: React.ReactElement;
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<FirmWorkParamList, 'WorkRegister'>;
+  route: RouteProp<FirmWorkParamList, 'WorkRegister'>;
 }
 
 const WorkRegisterProvider = (props: Props): React.ReactElement => {
   // States
-  const isFirmRegister = props.navigation.getParam('firmRegister', false);
+  const { firmRegister } = props.route;
   const { userProfile, firm, popLoading } = useLoginContext();
   const [workDto, setWorkDto] = React.useState(new WorkCreateDto());
   const [errorData, setErrorData] = React.useState<WorkCreateErrorData>(
@@ -43,7 +50,7 @@ const WorkRegisterProvider = (props: Props): React.ReactElement => {
   // Init States
   const states = {
     navigation: props.navigation,
-    isFirmRegister,
+    firmRegister,
     workDto,
     errorData,
   };
@@ -58,10 +65,10 @@ const WorkRegisterProvider = (props: Props): React.ReactElement => {
             return false;
           }
 
-          requestAddWork(userProfile.uid, isFirmRegister, workDto)
+          requestAddWork(userProfile.uid, firmRegister, workDto)
             .then(result => {
               if (result) {
-                if (isFirmRegister) {
+                if (firmRegister) {
                   props.navigation.navigate('FirmWorkList', { refresh: true });
                 } else {
                   props.navigation.navigate('WorkList', { refresh: true });

@@ -4,9 +4,9 @@ import Colors from 'constants/Colors';
 import React from 'react';
 
 interface Props {
-  type: string;
   name: string;
   focused: boolean;
+  type?: string;
 }
 const TabBarIcon: React.FC<Props> = ({ type, name, focused }) => {
   if (type && type === 'MaterialIcons') {

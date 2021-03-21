@@ -1,23 +1,24 @@
 import * as React from 'react';
 
-import { DefaultNavigationProps } from 'src/types';
+import { FirmBottomTabParamList } from 'src/navigation/types';
 import FirmHarmCaseLayout from 'src/components/templates/FirmHarmCaseLayout';
 import FirmHarmCaseProvider from 'src/container/firmHarmCase/FirmHarmCaseProvider';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<FirmBottomTabParamList, 'ClientEvalu'>;
+  route: RouteProp<FirmBottomTabParamList, 'ClientEvalu'>;
 }
-function FirmHarmCaseContainer (props): React.ReactElement
-{
+const FirmHarmCaseContainer: React.FC<Props> = ({
+  navigation,
+  route,
+}): React.ReactElement => {
   return (
-    <FirmHarmCaseProvider navigation={props.navigation}>
+    <FirmHarmCaseProvider navigation={navigation} route={route}>
       <FirmHarmCaseLayout />
     </FirmHarmCaseProvider>
   );
-}
-
-FirmHarmCaseContainer.navigationOptions = ({ navigation }) => ({
-  title: '피해사례 고객'
-});
+};
 
 export default FirmHarmCaseContainer;

@@ -7,10 +7,12 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
 import { Alert } from 'react-native';
-import { DefaultNavigationProps } from 'src/types';
 import { EvaluListType } from 'src/container/firmHarmCase/type';
+import { FirmBottomTabParamList } from 'src/navigation/types';
 // import { FIRM_NEWCHAT } from 'src/api/subscribe';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { addNotificationListener } from '../notification/NotificationAction';
 import moment from 'moment';
 import { noticeUserError } from 'src/container/request';
@@ -18,20 +20,26 @@ import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface Props {
   children?: React.ReactElement;
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<FirmBottomTabParamList, 'ClientEvalu'>;
+  route: RouteProp<FirmBottomTabParamList, 'ClientEvalu'>;
 }
 
-const FirmHarmCaseProvider = (props: Props): React.ReactElement => {
+const FirmHarmCaseProvider: React.FC<Props> = ({
+  navigation,
+  route,
+  children,
+}): React.ReactElement => {
   React.useEffect(() => {
-    const { params } = props.navigation.state;
+    console.log('>>> route:', route);
+    // const { search } = route.params;
 
-    if (params && params.search) {
-      setSearchArea('TEL');
-      setSearchWord(params.search);
-      searchFilterCliEvalu(params.search);
-    } else {
-      setSearchWord('');
-    }
+    // if (params && params.search) {
+    //   setSearchArea('TEL');
+    //   setSearchWord(params.search);
+    //   searchFilterCliEvalu(params.search);
+    // } else {
+    setSearchWord('');
+    // }
 
     // subscription
     // subscribeToMore({
@@ -56,7 +64,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement => {
       const firm = await refetchFirm();
       if (!firm) {
         setTimeout(() => {
-          props.navigation.navigate('FirmRegister');
+          navigation.navigate('FirmRegister');
         }, 500);
       }
     })();
@@ -75,27 +83,27 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement => {
 
       if (notification.data?.notice === 'NOTI_WORK_REGISTER') {
         noticeCommonNavigation(notification, '일감 지원하기', () =>
-          props.navigation.navigate('FirmWorkList', { refresh: true })
+          navigation.navigate('FirmWorkList', { refresh: true })
         );
       } else if (notification.data?.notice === 'NOTI_WORK_ADD_REGISTER') {
         noticeCommonNavigation(notification, '지원자 확인하기', () =>
-          props.navigation.navigate('WorkList', { refresh: true })
+          navigation.navigate('WorkList', { refresh: true })
         );
       } else if (notification.data?.notice === 'NOTI_WORK_SELECTED') {
         noticeCommonNavigation(notification, '배차 수락하러가기', () =>
-          props.navigation.navigate('FirmWorkList', { refresh: true })
+          navigation.navigate('FirmWorkList', { refresh: true })
         );
       } else if (notification.data?.notice === 'NOTI_WORK_ABANDON') {
         noticeCommonNavigation(notification, '배차 다시 요청하기', () =>
-          props.navigation.navigate('WorkList', { refresh: true })
+          navigation.navigate('WorkList', { refresh: true })
         );
       } else if (notification.data?.notice === 'NOTI_WORK_CLOSED') {
         noticeCommonNavigation(notification, '업체 평가하기', () =>
-          props.navigation.navigate('WorkList', { refresh: true })
+          navigation.navigate('WorkList', { refresh: true })
         );
       } else if (notification.data?.notice === 'NOTI_CEVALU_REGISTER') {
         noticeCommonNavigation(notification, '피해사례(악덕) 조회하기', () =>
-          props.navigation.navigate('FirmHarmCaseSearch', {
+          navigation.navigate('FirmHarmCaseSearch', {
             initSearch: notification.data?.initSearch,
           })
         );
@@ -273,7 +281,7 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement => {
 
   // Init States
   const states = {
-    navigation: props.navigation,
+    navigation: navigation,
     firm,
     searchWord,
     searchNotice,
@@ -376,23 +384,21 @@ const FirmHarmCaseProvider = (props: Props): React.ReactElement => {
       addFirmChatMessageReq({ variables: { message: newMessage } });
     },
     onClickSearch(): void {
-      props.navigation.navigate('FirmHarmCaseSearch');
+      navigation.navigate('FirmHarmCaseSearch');
     },
     onClickAddFirmHarmCase(): void {
-      props.navigation.navigate('FirmHarmCaseCreate');
+      navigation.navigate('FirmHarmCaseCreate');
     },
     onClickMyEvaluList(): void {
-      props.navigation.navigate('FirmHarmCaseSearch', { initSearchMine: true });
+      navigation.navigate('FirmHarmCaseSearch', { initSearchMine: true });
     },
     onClickTotalEvaluList(): void {
-      props.navigation.navigate('FirmHarmCaseSearch', { initSearchAll: true });
+      navigation.navigate('FirmHarmCaseSearch', { initSearchAll: true });
     },
   };
 
   // UI Component
-  return (
-    <Provider value={{ ...states, ...actions }}>{props.children}</Provider>
-  );
+  return <Provider value={{ ...states, ...actions }}>{children}</Provider>;
 };
 
 export default FirmHarmCaseProvider;

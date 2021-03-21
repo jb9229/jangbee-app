@@ -12,16 +12,15 @@ import {
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
 
 import AlarmSettingModal from './components/templates/AlarmSettingModal';
 import { ApolloProvider } from '@apollo/client';
 import AppNavigator from 'navigation/AppNavigator';
 import JBActIndicator from 'molecules/JBActIndicator';
 import LoginProvider from 'src/provider/LoginProvider';
+import { RecoilRoot } from 'recoil';
 import Sentry from 'utils/sentry';
 import { ThemeProvider } from 'src/contexts/ThemeProvider';
-import { alarmSettingModalStat } from './container/firmHarmCase/store';
 import { apolloClient } from 'src/api/apollo';
 import colors from 'constants/Colors';
 import firebase from 'firebase';

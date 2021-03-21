@@ -24,7 +24,7 @@
       "constants/*": ["src/constants/*"],
       "container/*": ["src/container/*"],
       "types/*": ["src/types/*"],
-      "navigation": ["src/navigation"],
+      "navigation/*": ["src/navigation/*"],
       "native_modules": ["src/native_modules"]
     },
     "plugins": [

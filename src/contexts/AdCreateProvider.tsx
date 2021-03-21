@@ -287,14 +287,6 @@ const AdCreateProvider = (props: Props): React.ReactElement => {
   const [imgUploading, setImgUploading] = React.useState<boolean>(false);
   const [adState, dispatch] = React.useReducer<Reducer>(reducer, initialState);
 
-  // React.useEffect(() =>
-  // {
-  //   if (bookedAdListResponse && refetch)
-  //   {
-  //     refetch();
-  //   }
-  // }, [props.navigation.state]);
-
   // Server Data
   const [bookedAdListResponse, refetch] = useAxios(url.JBSERVER_ADBOOKED);
 

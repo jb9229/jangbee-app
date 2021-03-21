@@ -1,8 +1,11 @@
 import * as React from 'react';
+import * as Updates from 'expo-updates';
 
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { DefaultTheme, withTheme } from 'styled-components/native';
 
+import { AuthStackParamList } from 'src/navigation/types';
+import { StackNavigationProp } from '@react-navigation/stack';
 import firebase from 'firebase';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { noticeUserError } from 'src/container/request';
@@ -18,15 +21,10 @@ const styles = StyleSheet.create({
 
 export interface AuthPathProps {
   theme: DefaultTheme;
-  changeAuthPath: (path: number, data?: any) => void;
-  completeAuth: (isClient: boolean) => void;
+  navigation: StackNavigationProp<AuthStackParamList, 'AuthLoading'>;
 }
 
-const AuthLoading: React.FC<AuthPathProps> = ({
-  theme,
-  changeAuthPath,
-  completeAuth,
-}) => {
+const AuthLoading: React.FC<AuthPathProps> = ({ theme, navigation }) => {
   const { setUserProfile } = useLoginContext();
 
   // actions
@@ -38,14 +36,14 @@ const AuthLoading: React.FC<AuthPathProps> = ({
           .then(data => {
             const userInfo = data.val();
             if (!userInfo) {
-              changeAuthPath(2, user);
+              navigation.navigate('Signup', { fbUser: user });
               return;
             }
 
-            const { userType } = userInfo;
+            const { userType, scanAppVersion } = userInfo;
             console.log('=== setUser: ', user);
             if (!userType) {
-              changeAuthPath(2, user);
+              navigation.navigate('Signup', { fbUser: user });
             } else {
               setUserProfile({
                 ...userInfo,
@@ -54,13 +52,19 @@ const AuthLoading: React.FC<AuthPathProps> = ({
               });
 
               // Go to Screeen By User Type
-              if (userType === 1) {
-                completeAuth(true);
-              } else if (userType === 2) {
-                completeAuth(false);
+              if ((userType === 1 || userType === 2) && user.phoneNumber) {
+                setUserProfile({
+                  phoneNumber: user.phoneNumber,
+                  uid: user.uid,
+                  userType: userType,
+                  scanAppVersion: scanAppVersion,
+                });
               } else {
-                Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
-                completeAuth(true);
+                alert(
+                  `UT: [${userType}, PN: ${user.phoneNumber}] 유효하지 않은 사용자 입니다, 관리자에게 문의해 주세요`
+                );
+
+                Updates.reloadAsync();
               }
             }
           })
@@ -71,7 +75,7 @@ const AuthLoading: React.FC<AuthPathProps> = ({
             );
           });
       } else {
-        changeAuthPath(3);
+        navigation.navigate('SignIn');
       }
     });
   };

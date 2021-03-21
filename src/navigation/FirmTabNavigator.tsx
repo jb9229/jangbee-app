@@ -1,7 +1,10 @@
 import {
-  createBottomTabNavigator,
-  createStackNavigator,
-} from 'react-navigation';
+  AdParamList,
+  ClientEvaluParamList,
+  FirmBottomTabParamList,
+  FirmSettingParamList,
+  FirmWorkParamList,
+} from './types';
 
 import AdCreateScreen from 'container/ad/create';
 import AdScreen from 'screens/AdScreen';
@@ -24,204 +27,222 @@ import React from 'react';
 import TabBarIcon from 'atoms/TabBarIcon';
 import WorkRegisterScreen from 'container/work/register';
 import colors from 'constants/Colors';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const FirmWorkStack = createStackNavigator({
-  FirmWorkList: {
-    screen: FirmWorkListScreen,
-    navigationOptions: { header: null },
-  },
-  WorkRegister: {
-    screen: WorkRegisterScreen,
-    navigationOptions: {
-      title: '일감 등록하기',
-      headerStyle: { backgroundColor: colors.point3_other2 },
-      headerTintColor: '#fff',
-    },
-  },
-});
+const FirmBottomTab = createBottomTabNavigator<FirmBottomTabParamList>();
+const FirmWorkStack = createStackNavigator<FirmWorkParamList>();
+const FirmSettingStack = createStackNavigator<FirmSettingParamList>();
+const AdStack = createStackNavigator<AdParamList>();
+const ClientEvaluStack = createStackNavigator<ClientEvaluParamList>();
 
-FirmWorkStack.navigationOptions = {
-  tabBarLabel: '일감',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="work" type="MaterialIcons" />
-  ),
+const FirmBottomTabNavigator: React.FC = () => {
+  return (
+    <FirmBottomTab.Navigator
+      initialRouteName="FirmHome"
+      tabBarOptions={{
+        tabStyle: { backgroundColor: '#83868B' },
+        inactiveTintColor: 'white',
+        activeTintColor: colors.pointDark,
+      }}
+    >
+      <FirmBottomTab.Screen
+        name="FirmHome"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: '장비 콜',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              focused={focused}
+              name={Platform.OS === 'ios' ? 'ios-call' : 'md-call'}
+            />
+          ),
+        }}
+      />
+      <FirmBottomTab.Screen
+        name="WorkList"
+        component={FirmWork}
+        options={{
+          tabBarLabel: '일감',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="work" type="MaterialIcons" />
+          ),
+        }}
+      />
+      <FirmBottomTab.Screen
+        name="Ad"
+        component={Ad}
+        options={{
+          tabBarLabel: '광고신청',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              focused={focused}
+              name={Platform.OS === 'ios' ? 'ios-radio' : 'md-radio'}
+            />
+          ),
+        }}
+      />
+      <FirmBottomTab.Screen
+        name="ClientEvalu"
+        component={ClientEvalu}
+        options={{
+          tabBarLabel: '피해사례',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              focused={focused}
+              type="SimpleLineIcons"
+              name={Platform.OS === 'ios' ? 'magnifier' : 'magnifier'}
+            />
+          ),
+        }}
+      />
+      <FirmBottomTab.Screen
+        name="FirmSetting"
+        component={FirmSetting}
+        options={{
+          tabBarLabel: '내정보',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              focused={focused}
+              name={
+                Platform.OS === 'ios'
+                  ? 'ios-information-circle'
+                  : 'md-information-circle'
+              }
+            />
+          ),
+        }}
+      />
+    </FirmBottomTab.Navigator>
+  );
 };
 
-const FirmSettingStack = createStackNavigator({
-  FirmSetting: {
-    screen: FirmSettingScreen,
-    navigationOptions: { header: null },
-  },
-  FirmMyInfo: { screen: FirmMyInfoScreen, navigationOptions: { header: null } },
-  FirmRegister: {
-    screen: FirmRegisterScreen,
-    navigationOptions: {
-      title: '내 장비 등록',
-      headerStyle: { backgroundColor: colors.point3_other2 },
-      headerTintColor: '#fff',
-    },
-  },
-  FirmUpdate: {
-    screen: FirmUpdateScreen,
-    navigationOptions: {
-      title: '내 장비 수정',
-      headerStyle: { backgroundColor: colors.point3_other2 },
-      headerTintColor: '#fff',
-    },
-  },
-  ServiceTerms: {
-    screen: JBServiceTerms,
-    navigationOptions: {
-      title: '약관 및 회사정보',
-      headerStyle: { backgroundColor: colors.point3_other2 },
-      headerTintColor: '#fff',
-    },
-  },
-  Cashback: {
-    screen: CashBackContainer,
-    navigationOptions: {
-      mode: 'modal',
-      title: '보유 자산',
-    },
-  },
-  ClientHomeModal: {
-    screen: ClientHomeModalScreen,
-    navigationOptions: {
-      header: null,
-    },
-  },
-  CallLog: {
-    screen: CallLogContainerScreen,
-    navigationOptions: {
-      title: '콜 이력',
-      headerStyle: { backgroundColor: colors.point3_other2 },
-      headerTintColor: '#fff',
-    },
-  },
-});
-
-const HomeStack = createStackNavigator({
-  FirmHome: { screen: HomeScreen, navigationOptions: { header: null } },
-});
-
-HomeStack.navigationOptions = {
-  tabBarLabel: '장비콜',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-call' : 'md-call'}
-    />
-  ),
+const FirmWork: React.FC = () => {
+  return (
+    <FirmWorkStack.Navigator>
+      <FirmWorkStack.Screen
+        name="WorkList"
+        component={FirmWorkListScreen}
+        options={{ title: '일감 등록하기' }}
+      />
+      <FirmWorkStack.Screen
+        name="WorkRegister"
+        component={WorkRegisterScreen}
+        options={{ title: '일감 등록하기' }}
+        initialParams={{ firmRegister: true }}
+      />
+    </FirmWorkStack.Navigator>
+  );
 };
 
-const AdStack = createStackNavigator({
-  Ad: {
-    screen: AdScreen,
-    navigationOptions: {
-      title: '내광고 리스트',
-      headerStyle: {
-        backgroundColor: colors.point3_other2,
-        elevation: 10,
-      },
-      headerTintColor: '#fff',
-    },
-  },
-  AdCreate: {
-    screen: AdCreateScreen,
-    navigationOptions: {
-      title: '내장비 홍보하기',
-      headerStyle: { backgroundColor: colors.point3_other2 },
-      headerTintColor: '#fff',
-    },
-  },
-});
-
-AdStack.navigationOptions = {
-  tabBarLabel: '광고신청',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-radio' : 'md-radio'}
-    />
-  ),
+const FirmSetting: React.FC = () => {
+  return (
+    <FirmSettingStack.Navigator>
+      <FirmSettingStack.Screen
+        name="FirmSetting"
+        component={FirmSettingScreen}
+      />
+      <FirmSettingStack.Screen name="FirmMyInfo" component={FirmMyInfoScreen} />
+      <FirmSettingStack.Screen
+        name="FirmRegister"
+        component={FirmRegisterScreen}
+        options={{
+          title: '내 장비 등록',
+          headerStyle: { backgroundColor: colors.point3_other },
+        }}
+      />
+      <FirmSettingStack.Screen
+        name="FirmUpdate"
+        component={FirmUpdateScreen}
+        options={{
+          title: '내 장비 수정',
+          headerStyle: { backgroundColor: colors.point3_other2 },
+        }}
+      />
+      <FirmSettingStack.Screen
+        name="ServiceTerms"
+        component={JBServiceTerms}
+        options={{
+          title: '약관 및 회사정보',
+          headerStyle: { backgroundColor: colors.point3_other2 },
+        }}
+      />
+      <FirmSettingStack.Screen
+        name="Cashback"
+        component={CashBackContainer}
+        options={{ title: '보유 자산' }}
+      />
+      <FirmSettingStack.Screen
+        name="ClientHomeModal"
+        component={ClientHomeModalScreen}
+      />
+      <FirmSettingStack.Screen
+        name="CallLog"
+        component={CallLogContainerScreen}
+        options={{
+          title: '콜 이력',
+          headerStyle: { backgroundColor: colors.point3_other2 },
+        }}
+      />
+    </FirmSettingStack.Navigator>
+  );
 };
 
-FirmSettingStack.navigationOptions = {
-  tabBarLabel: '내정보',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-information-circle'
-          : 'md-information-circle'
-      }
-    />
-  ),
+const Ad: React.FC = () => {
+  return (
+    <AdStack.Navigator>
+      <AdStack.Screen
+        name="Ad"
+        component={AdScreen}
+        options={{
+          title: '내장비 홍보하기',
+          headerStyle: { backgroundColor: colors.point3_other2 },
+        }}
+      />
+      <AdStack.Screen
+        name="AdCreate"
+        component={AdCreateScreen}
+        options={{
+          title: '내장비 홍보하기',
+          headerStyle: { backgroundColor: colors.point3_other2 },
+        }}
+      />
+    </AdStack.Navigator>
+  );
 };
 
-const ClientEvaluStack = createStackNavigator({
-  ClientEvalu: {
-    screen: FirmHarmCaseContainer,
-    navigationOptions: {
-      header: null,
-    },
-  },
-  FirmHarmCaseCreate: {
-    screen: FirmHarmCaseCreateContainer,
-    navigationOptions: {
-      title: '피해사례 등록',
-      headerStyle: {
-        backgroundColor: '#3E3936',
-        elevation: 10,
-      },
-      headerTintColor: 'rgb(247, 174, 67)',
-    },
-  },
-  FirmHarmCaseUpdate: {
-    screen: FirmHarmCaseUpdateContainer,
-    navigationOptions: {
-      header: null,
-    },
-  },
-  FirmHarmCaseSearch: {
-    screen: FirmHarmCaseSearchContainer,
-    navigationOptions: {
-      title: '피해사례 조회',
-      headerStyle: {
-        backgroundColor: '#3E3936',
-        elevation: 10,
-      },
-      headerTintColor: 'rgb(247, 174, 67)',
-    },
-  },
-});
-
-ClientEvaluStack.navigationOptions = {
-  tabBarLabel: '피해사례',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      type="SimpleLineIcons"
-      name={Platform.OS === 'ios' ? 'magnifier' : 'magnifier'}
-    />
-  ),
+const ClientEvalu: React.FC = () => {
+  return (
+    <ClientEvaluStack.Navigator>
+      <ClientEvaluStack.Screen
+        name="ClientEvalu"
+        component={FirmHarmCaseContainer}
+        initialParams={{ search: undefined }}
+      />
+      <ClientEvaluStack.Screen
+        name="FirmHarmCaseCreate"
+        component={FirmHarmCaseCreateContainer}
+        options={{
+          title: '피해사례 등록',
+          headerStyle: { backgroundColor: '#3E3936', elevation: 10 },
+          headerTintColor: 'rgb(247, 174, 67)',
+        }}
+      />
+      <ClientEvaluStack.Screen
+        name="FirmHarmCaseUpdate"
+        component={FirmHarmCaseUpdateContainer}
+      />
+      <ClientEvaluStack.Screen
+        name="FirmHarmCaseSearch"
+        component={FirmHarmCaseSearchContainer}
+        options={{
+          title: '피해사례 조회',
+          headerStyle: { backgroundColor: '#3E3936', elevation: 10 },
+          headerTintColor: 'rgb(247, 174, 67)',
+        }}
+      />
+    </ClientEvaluStack.Navigator>
+  );
 };
 
-export default createBottomTabNavigator(
-  {
-    ClientEvaluStack,
-    FirmWorkStack,
-    AdStack,
-    // HomeStack,
-    FirmSettingStack,
-    // ModalStack
-  },
-  {
-    tabBarOptions: {
-      tabStyle: { backgroundColor: '#83868B' },
-      inactiveTintColor: 'white',
-      activeTintColor: colors.pointDark,
-    },
-  }
-);
+export default FirmBottomTabNavigator;
