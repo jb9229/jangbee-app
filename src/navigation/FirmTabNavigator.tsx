@@ -86,7 +86,7 @@ const FirmBottomTabNavigator: React.FC = () => {
         name="ClientEvalu"
         component={ClientEvalu}
         options={{
-          tabBarLabel: '피해사례',
+          tabBarLabel: '수금 피해사례',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               focused={focused}
@@ -141,8 +141,17 @@ const FirmSetting: React.FC = () => {
       <FirmSettingStack.Screen
         name="FirmSetting"
         component={FirmSettingScreen}
+        options={{
+          title: '내 정보',
+        }}
       />
-      <FirmSettingStack.Screen name="FirmMyInfo" component={FirmMyInfoScreen} />
+      <FirmSettingStack.Screen
+        name="FirmMyInfo"
+        component={FirmMyInfoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <FirmSettingStack.Screen
         name="FirmRegister"
         component={FirmRegisterScreen}
@@ -218,6 +227,11 @@ const ClientEvalu: React.FC = () => {
         name="ClientEvalu"
         component={FirmHarmCaseContainer}
         initialParams={{ search: undefined }}
+        options={{
+          title: '수금 피해사례',
+          headerStyle: { backgroundColor: '#3E3936', elevation: 10 },
+          headerTintColor: 'rgb(247, 174, 67)',
+        }}
       />
       <ClientEvaluStack.Screen
         name="FirmHarmCaseCreate"

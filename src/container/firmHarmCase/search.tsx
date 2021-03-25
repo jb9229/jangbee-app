@@ -1,22 +1,29 @@
 import * as React from 'react';
 
-import { DefaultNavigationProps } from 'src/types';
+import { ClientEvaluParamList } from 'src/navigation/types';
 import FirmHarmCaseSearchLayout from 'src/components/templates/FirmHarmCaseSearchLayout';
 import FirmHarmCaseSearchProvider from './FirmHarmCaseSearchProvider';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<ClientEvaluParamList, 'FirmHarmCaseSearch'>;
+  route: RouteProp<ClientEvaluParamList, 'FirmHarmCaseSearch'>;
 }
-const FirmHarmCaseSearchContainer: React.FC<Props> = (props) =>
-{
-  const searchWord = props.navigation.getParam('searchWord', undefined);
-  const initSearch = props.navigation.getParam('initSearch', undefined);
-  const initSearchAll = props.navigation.getParam('initSearchAll', undefined);
-  const initSearchMine = props.navigation.getParam('initSearchMine', undefined);
+const FirmHarmCaseSearchContainer: React.FC<Props> = ({
+  navigation,
+  route,
+}) => {
+  const {
+    searchWord,
+    initSearch,
+    initSearchAll,
+    initSearchMine,
+  } = route.params;
 
   return (
     <FirmHarmCaseSearchProvider
-      navigation={props.navigation}
+      navigation={navigation}
       searchWord={searchWord}
       initSearch={initSearch}
       initSearchAll={initSearchAll}

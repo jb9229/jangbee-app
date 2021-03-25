@@ -5,7 +5,6 @@ import { Alert } from 'react-native';
 import { FIRM } from 'src/api/queries';
 import { Firm } from 'src/provider/LoginProvider';
 import { GraphQLRequest } from '@apollo/client';
-import { User } from 'firebase';
 import { apolloClient } from 'src/api/apollo';
 import { notifyError } from 'src/common/ErrorNotice';
 

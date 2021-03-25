@@ -10,6 +10,7 @@ import SignUpScreen from 'screens/SignUpScreen';
 import { UserType } from 'src/types';
 import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
 import { createStackNavigator } from '@react-navigation/stack';
+import { updateFirmInfo } from 'src/container/login/action';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useScanAppVersionQuery } from 'src/apollo/generated';
 import { useSetRecoilState } from 'recoil';
@@ -21,7 +22,7 @@ interface Props {
 }
 const Navigator: React.FC<Props> = () => {
   // states
-  const { userProfile } = useLoginContext();
+  const { userProfile, setFirm } = useLoginContext();
   const setAlarmSettingModal = useSetRecoilState(alarmSettingModalStat);
 
   // server datas
@@ -40,6 +41,10 @@ const Navigator: React.FC<Props> = () => {
         visible: true,
         newVersion: scanAppVersionRsp.data.scanAppVersion.version,
       });
+    }
+
+    if (userProfile?.userType === UserType.FIRM) {
+      updateFirmInfo(userProfile, setFirm);
     }
   }, [userProfile]);
 

@@ -8,9 +8,10 @@ import {
 import { FIRMHARMCASE_COUNT, FirmHarmCasesQuery } from 'src/api/queries';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
-import { DefaultNavigationProps } from 'src/types';
+import { ClientEvaluParamList } from 'src/navigation/types';
 import { FIRMHARMCASE_DELETE } from 'src/api/mutations';
 import { Provider } from 'src/contexts/FirmHarmCaseSearchContext';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { filterCallHistory } from './searchAction';
 import { formatTelnumber } from 'src/utils/StringUtils';
 import { noticeUserError } from '../request';
@@ -21,7 +22,7 @@ const PAGING_COUNT = 30;
 
 interface Props {
   children?: React.ReactElement;
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<ClientEvaluParamList, 'FirmHarmCaseSearch'>;
   searchWord?: string;
   initSearch: string;
   initSearchAll: boolean;

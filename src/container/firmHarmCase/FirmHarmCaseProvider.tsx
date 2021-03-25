@@ -7,8 +7,8 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { ADD_FIRMCHAT_MESSAGE } from 'src/api/mutations';
 import { Alert } from 'react-native';
+import { ClientEvaluParamList } from 'src/navigation/types';
 import { EvaluListType } from 'src/container/firmHarmCase/type';
-import { FirmBottomTabParamList } from 'src/navigation/types';
 // import { FIRM_NEWCHAT } from 'src/api/subscribe';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { RouteProp } from '@react-navigation/native';
@@ -20,8 +20,8 @@ import { useLoginContext } from 'src/contexts/LoginContext';
 
 interface Props {
   children?: React.ReactElement;
-  navigation: StackNavigationProp<FirmBottomTabParamList, 'ClientEvalu'>;
-  route: RouteProp<FirmBottomTabParamList, 'ClientEvalu'>;
+  navigation: StackNavigationProp<ClientEvaluParamList, 'ClientEvalu'>;
+  route: RouteProp<ClientEvaluParamList, 'ClientEvalu'>;
 }
 
 const FirmHarmCaseProvider: React.FC<Props> = ({
@@ -31,15 +31,15 @@ const FirmHarmCaseProvider: React.FC<Props> = ({
 }): React.ReactElement => {
   React.useEffect(() => {
     console.log('>>> route:', route);
-    // const { search } = route.params;
+    const { search } = route.params;
 
-    // if (params && params.search) {
-    //   setSearchArea('TEL');
-    //   setSearchWord(params.search);
-    //   searchFilterCliEvalu(params.search);
-    // } else {
-    setSearchWord('');
-    // }
+    if (search) {
+      setSearchArea('TEL');
+      setSearchWord(search);
+      searchFilterCliEvalu(search);
+    } else {
+      setSearchWord('');
+    }
 
     // subscription
     // subscribeToMore({
@@ -384,7 +384,7 @@ const FirmHarmCaseProvider: React.FC<Props> = ({
       addFirmChatMessageReq({ variables: { message: newMessage } });
     },
     onClickSearch(): void {
-      navigation.navigate('FirmHarmCaseSearch');
+      navigation.navigate('FirmHarmCaseSearch', { searchWord: undefined });
     },
     onClickAddFirmHarmCase(): void {
       navigation.navigate('FirmHarmCaseCreate');

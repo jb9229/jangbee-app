@@ -61,5 +61,10 @@ export type ClientEvaluParamList = {
   ClientEvalu: { search?: string };
   FirmHarmCaseCreate: undefined;
   FirmHarmCaseUpdate: undefined;
-  FirmHarmCaseSearch: undefined;
+  FirmHarmCaseSearch: {
+    searchWord?: string;
+    initSearch?: string;
+    initSearchAll?: boolean;
+    initSearchMine?: boolean;
+  };
 };

@@ -45,12 +45,7 @@ interface Props {
 
 const FirmWorkProvider = (props: Props): React.ReactElement => {
   const { refresh } = props.route;
-  const {
-    firm,
-    userProfile,
-    openWorkPaymentModal,
-    openCouponModal,
-  } = useLoginContext();
+  const { firm, userProfile, openWorkPaymentModal } = useLoginContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [matchedRefreshing, setMatchedRefreshing] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(0);
