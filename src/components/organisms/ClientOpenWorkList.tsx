@@ -8,8 +8,7 @@ import WorkCommWrap from 'molecules/WorkCommWrapUI';
 import WorkItem from 'organisms/WorkItem';
 import moment from 'moment';
 
-export default class ClientOpenWorkList extends React.PureComponent
-{
+export default class ClientOpenWorkList extends React.PureComponent {
   /**
    * 리스트 아이템 렌더링 함수
    */
@@ -21,13 +20,11 @@ export default class ClientOpenWorkList extends React.PureComponent
     />
   );
 
-  renderCommand = item =>
-  {
+  renderCommand = item => {
     const { selectFirm, cancelSelFirm, editWork } = this.props;
 
     let afterThreeHour = '2시간';
-    if (item.workState === 'SELECTED' && !item.overAcceptTime)
-    {
+    if (item.workState === 'SELECTED' && !item.overAcceptTime) {
       afterThreeHour = moment(item.selectNoticeTime)
         .add(2, 'hours')
         .format('MM/DD HH:mm');
@@ -46,20 +43,20 @@ export default class ClientOpenWorkList extends React.PureComponent
         {item.workState === 'OPEN' &&
           item.guarTimeExpire &&
           item.applicantCount === 0 && (
-          <WorkCommText text="차주일감 시간만료됨" />
-        )}
+            <WorkCommText text="차주일감 시간만료됨" />
+          )}
         {item.workState === 'OPEN' &&
           !item.guarTimeExpire &&
           item.applicantCount === 0 && <WorkCommText text="지원자 모집중..." />}
         {item.workState === 'OPEN' &&
           !item.guarTimeExpire &&
           item.applicantCount > 0 && (
-          <JBButton
-            title={`지원자 선택하기(${item.applicantCount}명)`}
-            onPress={() => selectFirm(item.id)}
-            size="small"
-          />
-        )}
+            <JBButton
+              title={`지원자 선택하기(${item.applicantCount}명)`}
+              onPress={() => selectFirm(item.id)}
+              size="small"
+            />
+          )}
 
         {item.workState === 'SELECTED' && item.overAcceptTime && (
           <JBButton
@@ -75,23 +72,20 @@ export default class ClientOpenWorkList extends React.PureComponent
     );
   };
 
-  render ()
-  {
+  render() {
     const {
       isListEmpty,
       list,
       handleRefresh,
       refreshing,
-      registerWork
+      registerWork,
     } = this.props;
 
-    if (isListEmpty === undefined)
-    {
+    if (isListEmpty === undefined) {
       return <JBActIndicator title="정보를 불러오는 중.." size={35} />;
     }
 
-    if (isListEmpty)
-    {
+    if (isListEmpty) {
       return (
         <JBEmptyView
           title="일감을 올리면, 배차 가능한 업체로부터"

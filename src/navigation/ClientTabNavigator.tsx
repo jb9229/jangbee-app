@@ -6,6 +6,7 @@ import ClientMyInfoScreen from 'screens/ClientMyInfoScreen';
 import { Platform } from 'react-native';
 import React from 'react';
 import TabBarIcon from 'atoms/TabBarIcon';
+import WorkListScreen from 'screens/WorkListScreen';
 import WorkRegisterScreen from 'container/work/register';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -64,6 +65,11 @@ const ClientBottomTabNavigator: React.FC = () => {
 const FirmWork: React.FC = () => {
   return (
     <ClientWorkStack.Navigator>
+      <ClientWorkStack.Screen
+        name="WorkList"
+        component={WorkListScreen}
+        options={{ title: '일감' }}
+      />
       <ClientWorkStack.Screen
         name="WorkRegister"
         component={WorkRegisterScreen}

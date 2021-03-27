@@ -1,12 +1,14 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
+import firebase, { User } from 'firebase';
 
-import { AuthPathProps } from 'src/auth/AuthLoading';
+import { AuthStackParamList } from 'src/navigation/types';
 import JBErrorMessage from 'organisms/JBErrorMessage';
+import { RouteProp } from '@react-navigation/core';
 import SolidButton from 'atoms/button/SolidButton';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { UserType } from 'src/types';
 import colors from 'constants/Colors';
-import firebase from 'firebase';
 import fonts from 'constants/Fonts';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -102,11 +104,13 @@ const USER_CLIENT = 1;
 const USER_FIRM = 2;
 
 interface Props {
-  completeAuth: (flag: boolean) => void;
+  navigation: StackNavigationProp<AuthStackParamList, 'Signup'>;
+  route: RouteProp<AuthStackParamList, 'Signup'>;
 }
 
-const SignUpScreen: React.FC<Props> = ({ completeAuth }) => {
-  const { userProfile, setUserProfile } = useLoginContext();
+const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { fbUser } = route.params;
+  const { setUserProfile } = useLoginContext();
   const [userType, setUserType] = useState<UserType | undefined>();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [regiText, setRegiText] = useState<string>(
@@ -122,14 +126,14 @@ const SignUpScreen: React.FC<Props> = ({ completeAuth }) => {
       return;
     }
 
-    if (!userProfile?.uid) {
-      setErrorMessage(`Invalid uid: ${userProfile?.uid}`);
+    if (!fbUser?.uid) {
+      setErrorMessage(`Invalid uid: ${fbUser?.uid}`);
       return;
     }
 
     firebase
       .database()
-      .ref(`users/${userProfile?.uid}`)
+      .ref(`users/${fbUser?.uid}`)
       .update(
         {
           userType,
@@ -144,21 +148,17 @@ const SignUpScreen: React.FC<Props> = ({ completeAuth }) => {
         }
       )
       .then(() => {
+        if (userType !== 1 && userType !== 2) {
+          Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
+        }
+
         userType &&
           setUserProfile({
-            ...userProfile,
+            ...fbUser,
             userType: userType,
             sid: undefined,
+            phoneNumber: fbUser.phoneNumber || 'unknown',
           });
-
-        if (userType === 1) {
-          completeAuth(true);
-        } else if (userType === 2) {
-          completeAuth(false);
-        } else {
-          Alert.alert(`[${userType}] 유효하지 않은 사용자 입니다`);
-          completeAuth(true);
-        }
       });
   };
 

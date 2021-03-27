@@ -9,14 +9,17 @@ import { formatTelnumber, isPhoneNumberFormat } from 'utils/StringUtils';
 
 import AgreementTerms from 'src/components/organisms/AgreementTerms';
 import { Alert } from 'react-native';
+import { AuthStackParamList } from 'src/navigation/types';
 import EditText from 'src/components/molecules/EditText';
 import JBButton from 'molecules/JBButton';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleKeyboardAvoidingView } from 'src/CommonStyle';
 import getString from 'src/STRING';
 import { getUserInfo } from 'utils/FirebaseUtils';
 import { noticeUserError } from 'src/container/request';
 import registerForPushNotificationsAsync from 'common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const Container = styled.View`
   flex: 1;
@@ -37,12 +40,13 @@ const CommWrap = styled.View`
 `;
 
 interface Props {
-  changeAuthPath: (path: number, data?: any) => void;
+  navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
 }
 
-const LoginScreen: React.FC<Props> = props => {
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
   let recaptchaVerifier: FirebaseAuthApplicationVerifier;
   let verificationCode: string;
+  const { setUserProfile } = useLoginContext();
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [isValidPhoneNumber, setValidPhoneNumber] = React.useState(false);
   const [verificationId, setVerificationId] = React.useState('');
@@ -57,19 +61,22 @@ const LoginScreen: React.FC<Props> = props => {
     registerForPushNotificationsAsync(user.uid);
     getUserInfo(user.uid)
       .then(data => {
-        console.log('>>> getUserInfo~~');
         const userInfo = data.val();
         if (!userInfo) {
-          props.changeAuthPath(2, user);
+          navigation.navigate('Signup', { fbUser: user });
           return;
         }
 
         const { userType } = userInfo;
 
         if (!userType) {
-          props.changeAuthPath(2, user);
+          navigation.navigate('Signup', { fbUser: user });
         } else {
-          props.changeAuthPath(1);
+          setUserProfile({
+            ...userInfo,
+            uid: user.uid,
+            phoneNumber: user.phoneNumber,
+          });
         }
       })
       .catch(error =>

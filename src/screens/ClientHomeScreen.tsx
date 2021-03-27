@@ -4,11 +4,12 @@ import * as React from 'react';
 import { Alert, BackHandler, DeviceEventEmitter, Platform } from 'react-native';
 
 import { AdLocation } from 'src/container/ad/types';
-import { DefaultNavigationProps } from 'src/types';
+import { ClientBottomTabParamList } from 'src/navigation/types';
 import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JBTerm from 'templates/JBTerm';
 import JangbeeAdList from 'organisms/JangbeeAdList';
+import { StackNavigationProp } from '@react-navigation/stack';
 import colors from 'constants/Colors';
 import { onPressBackbutton } from 'src/container/action';
 import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';
@@ -20,22 +21,15 @@ const Container = styled.ScrollView`
 `;
 
 interface Props {
-  navigation: DefaultNavigationProps;
+  navigation: StackNavigationProp<ClientBottomTabParamList, 'ClientHome'>;
   screenProps: any;
 }
 const ClientHomeScreen: React.FC<Props> = props => {
+  let notificationListener: Subscription;
   const { refetchFirm, userProfile } = useLoginContext();
   React.useEffect(() => {
     (async () => {
       addNotificationListener();
-      runListener();
-      checkBLListLoading();
-      const firm = await refetchFirm();
-      if (!firm) {
-        setTimeout(() => {
-          props.navigation.navigate('FirmRegister');
-        }, 500);
-      }
     })();
 
     const backHandler = BackHandler.addEventListener(
@@ -44,7 +38,8 @@ const ClientHomeScreen: React.FC<Props> = props => {
     );
 
     return (): void => {
-      Notifications.removeAllNotificationListeners();
+      notificationListener &&
+        Notifications.removeNotificationSubscription(notificationListener);
       backHandler.remove();
     };
   }, []);
@@ -63,7 +58,9 @@ const ClientHomeScreen: React.FC<Props> = props => {
       });
     }
 
-    Notifications.addNotificationReceivedListener(_handleNotification);
+    notificationListener = Notifications.addNotificationReceivedListener(
+      _handleNotification
+    );
 
     Notifications.getPresentedNotificationsAsync().then(responseArr => {
       console.log('>>> PresentedNotifications: ', responseArr);
@@ -83,16 +80,8 @@ const ClientHomeScreen: React.FC<Props> = props => {
       // TODO Notice 확인 시, Notice 알람 제거
 
       if (notification.data?.notice === 'NOTI_WORK_REGISTER') {
-        noticeCommonNavigation(notification, '일감 지원하기', () =>
-          props.navigation.navigate('FirmWorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_WORK_ADD_REGISTER') {
         noticeCommonNavigation(notification, '지원자 확인하기', () =>
           props.navigation.navigate('WorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_WORK_SELECTED') {
-        noticeCommonNavigation(notification, '배차 수락하러가기', () =>
-          props.navigation.navigate('FirmWorkList', { refresh: true })
         );
       } else if (notification.data?.notice === 'NOTI_WORK_ABANDON') {
         noticeCommonNavigation(notification, '배차 다시 요청하기', () =>
@@ -101,10 +90,6 @@ const ClientHomeScreen: React.FC<Props> = props => {
       } else if (notification.data?.notice === 'NOTI_WORK_CLOSED') {
         noticeCommonNavigation(notification, '업체 평가하기', () =>
           props.navigation.navigate('WorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_CEVALU_REGISTER') {
-        noticeCommonNavigation(notification, '피해사례(악덕) 조회하기', () =>
-          props.navigation.navigate('ClientEvalu')
         );
       } else {
         noticeCommonNavigation(notification, '확인', () => {});
@@ -157,25 +142,6 @@ const ClientHomeScreen: React.FC<Props> = props => {
         { cancelable: false }
       );
     }, 1000);
-  };
-
-  const runListener = (): void => {
-    DeviceEventEmitter.addListener(
-      'blackListAppLauchEvent',
-      function (e: Event) {
-        // handle event and you will get a value in event object, you can log it here
-        const paramObj = e;
-        props.navigation.navigate('ClientEvalu', { search: e.telNumber });
-      }
-    );
-  };
-
-  const checkBLListLoading = (): void => {
-    if (props.screenProps && props.screenProps.blListNumber) {
-      props.navigation.navigate('ClientEvalu', {
-        search: props.screenProps.blListNumber,
-      });
-    }
   };
 
   return (

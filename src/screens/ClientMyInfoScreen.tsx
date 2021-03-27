@@ -23,6 +23,12 @@ const StyledCard = styled(Card).attrs(() => ({
   },
 }))``;
 
+const BottomWrap = styled.View`
+  height: 200px;
+`;
+
+const CenterWrap = styled.View``;
+
 const ClientMyInfoScreen = () => {
   const { userProfile } = useLoginContext();
   const [
@@ -116,24 +122,28 @@ const ClientMyInfoScreen = () => {
             Secondary
           />
         </TopMenu>
-        <JBTextItem
-          title="전화번호"
-          value={user.phoneNumber}
-          align="center"
-          row
-        />
-        <JBButton
-          title="카톡 상담"
-          onPress={() => setVisibleKatalkAskModal(true)}
-          size="full"
-          Secondary
-        />
-        <JBButton
-          title="장비콜 메일 문의하기"
-          onPress={() => Linking.openURL('mailto:support@jangbeecall.kr')}
-          size="full"
-          Primary
-        />
+        <CenterWrap>
+          <JBTextItem
+            title="전화번호"
+            value={userProfile.phoneNumber}
+            align="center"
+            row
+          />
+        </CenterWrap>
+        <BottomWrap>
+          <JBButton
+            title="카톡 상담"
+            onPress={() => setVisibleKatalkAskModal(true)}
+            size="full"
+            Secondary
+          />
+          <JBButton
+            title="장비콜 메일 문의하기"
+            onPress={() => Linking.openURL('mailto:support@jangbeecall.kr')}
+            size="full"
+            Primary
+          />
+        </BottomWrap>
       </StyledCard>
       <KatalkAskWebview
         isVisibleModal={isVisibleKatalkAskModal}

@@ -12,7 +12,7 @@ export type AuthStackParamList = {
  *********************/
 export type ClientBottomTabParamList = {
   ClientHome: undefined;
-  WorkList: undefined;
+  WorkList: { refresh: boolean };
   ClientInfo: undefined;
   NotFound: undefined;
 };

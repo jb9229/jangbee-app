@@ -1,5 +1,3 @@
-import styled, { css } from 'styled-components/native';
-
 import Constants from 'expo-constants';
 import JBButton from 'molecules/JBButton';
 import { Platform } from 'react-native';
@@ -11,6 +9,7 @@ import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
 import pkgConfig from '../../../app.config';
 import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
+import styled from 'styled-components/native';
 import url from 'constants/Url';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
@@ -68,11 +67,11 @@ const TelText = styled.Text`
 `;
 console.log('>>> Constants:', Constants);
 console.log('>>> process.env:', process.env);
-export default function JBTerm({ bg }) {
+export default function JBTerm() {
   const { userProfile } = useLoginContext();
   const evn = getEnvironment();
   return (
-    <Container bg={bg}>
+    <Container>
       <Row>
         <Column>
           <Title>회사:</Title>

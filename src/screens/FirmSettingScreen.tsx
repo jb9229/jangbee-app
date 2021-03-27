@@ -1,9 +1,7 @@
 import * as api from 'src/api/api';
 
 import { Alert, Platform, ToastAndroid } from 'react-native';
-import React, { useEffect } from 'react';
 
-import AlarmSettingModal from 'templates/AlarmSettingModal';
 import { DELETE_FIRM } from 'src/api/mutations';
 import { DefaultNavigationProps } from 'src/types';
 import DocumentsModal from 'templates/DocumentsModal';
@@ -11,6 +9,7 @@ import JBIconButton from 'molecules/JBIconButton';
 import JBTerm from 'src/components/templates/JBTerm';
 import KatalkAskWebview from 'templates/KatalkAskWebview';
 import { Linking } from 'expo';
+import React from 'react';
 import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
 import colors from 'constants/Colors';
 import firebase from 'firebase';
@@ -51,7 +50,7 @@ interface Props {
 
 const FirmSettingScreen: React.FC<Props> = props => {
   // states
-  const { userProfile } = useLoginContext();
+  const { userProfile, setUserProfile } = useLoginContext();
   const setAlarmSettingModalStat = useSetRecoilState(alarmSettingModalStat);
   const [isVisibleKatalkAskModal, setVisibleKatalkAskModal] = React.useState(
     false
@@ -72,7 +71,7 @@ const FirmSettingScreen: React.FC<Props> = props => {
         noticeUserError(
           'FirmModifyProvider(requestModifyFirm -> error)',
           data?.updateFirm,
-          user
+          userProfile
         );
       }
     },
@@ -80,7 +79,7 @@ const FirmSettingScreen: React.FC<Props> = props => {
       noticeUserError(
         'FirmModifyProvider(requestModifyFirm -> error)',
         err?.message,
-        user
+        userProfile
       );
     },
   });
@@ -110,15 +109,20 @@ const FirmSettingScreen: React.FC<Props> = props => {
     // Delete Firebase User
     const user = firebase.auth().currentUser;
 
+    if (!user) {
+      alert('error: fail get firebase current user!');
+      return;
+    }
+
     user
       .delete()
       .then(() => {
         firebase
           .database()
-          .ref(`users/${userProfile.uid}`)
+          .ref(`users/${user?.uid}`)
           .remove()
           .then(() => {
-            deletFirmRequest({ variables: { accountId: userProfile.uid } });
+            deletFirmRequest({ variables: { accountId: user?.uid } });
           })
           .catch(error => {
             Alert.alert(
@@ -141,7 +145,11 @@ const FirmSettingScreen: React.FC<Props> = props => {
    */
   const onSignOut = async () => {
     try {
-      await firebase.auth().signOut();
+      console.log('>>> logout~~');
+      await firebase
+        .auth()
+        .signOut()
+        .then(() => setUserProfile(undefined));
     } catch (e) {
       Alert.alert('로그아웃에 문제가 있습니다, 재시도해 주세요.');
     }

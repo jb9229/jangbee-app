@@ -14,6 +14,7 @@ import WorkUpdateModal from 'templates/WorkUpdateModal';
 import colors from 'constants/Colors';
 import fonts from 'constants/Fonts';
 import { noticeUserError } from 'src/container/request';
+import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
@@ -33,6 +34,8 @@ const styles = StyleSheet.create({
     color: colors.point,
   },
 });
+
+const CommandWrap = styled.View``;
 
 interface Props {
   navigation: DefaultNavigationProps;
@@ -251,6 +254,7 @@ const ClientWorkListScreen: React.FC<Props> = props => {
       />
       <TabView
         navigationState={{ index, routes }}
+        sceneContainerStyle={{ flex: 1 }}
         renderScene={SceneMap({
           first: renderOpenWorkList,
           second: renderMatchedWorkList,
@@ -267,14 +271,16 @@ const ClientWorkListScreen: React.FC<Props> = props => {
         )}
       />
 
-      <JBButton
-        title="일감 등록하기"
-        onPress={(): void =>
-          props.navigation.navigate('WorkRegister', { firmRegister: false })
-        }
-        size="full"
-        Primary
-      />
+      <CommandWrap>
+        <JBButton
+          title="일감 등록하기"
+          onPress={(): void =>
+            props.navigation.navigate('WorkRegister', { firmRegister: false })
+          }
+          size="full"
+          Primary
+        />
+      </CommandWrap>
     </View>
   );
 };
