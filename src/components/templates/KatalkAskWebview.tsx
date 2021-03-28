@@ -7,29 +7,23 @@ import { noticeUserError } from 'src/container/request';
 import styled from 'styled-components/native';
 import url from 'constants/Url';
 
-const Container = styled.View`
-`;
+const Container = styled.View``;
 const Modal = styled.Modal``;
 const Contents = styled.View`
   flex: 1;
 `;
 
-
-export default class KatalkAskWebview extends React.PureComponent
-{
-  receiveWebViewMSG = async (webViewMSG) =>
-  {
+export default class KatalkAskWebview extends React.PureComponent {
+  receiveWebViewMSG = async webViewMSG => {
     const webData = JSON.parse(webViewMSG);
     const postData = null;
 
-    if (postData != null)
-    {
+    if (postData != null) {
       this.webView.postMessage(postData);
     }
   };
 
-  render ()
-  {
+  render() {
     const { width, height } = Dimensions.get('window');
     const { isVisibleModal, closeModal } = this.props;
     return (
@@ -42,18 +36,21 @@ export default class KatalkAskWebview extends React.PureComponent
         >
           <Contents>
             <WebView
-              ref={(view) =>
-              {
+              ref={view => {
                 this.webView = view;
               }}
               originWhitelist={['*']}
-              onShouldStartLoadWithRequest={(e): boolean => handleShouldStartLoadWithRequest(e)}
+              onShouldStartLoadWithRequest={(e): boolean =>
+                handleShouldStartLoadWithRequest(e)
+              }
               source={{ uri: url.KATALK_ASK_URL }}
               style={{
                 width: width,
-                height: height
+                height: height,
               }}
-              onMessage={event => this.receiveWebViewMSG(event.nativeEvent.data)}
+              onMessage={event =>
+                this.receiveWebViewMSG(event.nativeEvent.data)
+              }
             />
           </Contents>
         </Modal>
@@ -65,16 +62,17 @@ export default class KatalkAskWebview extends React.PureComponent
 /**
  * Webview url 상태변경 이벤트처리 함수(사용자 인증에러 처리, 프로바이더 페이지가 호출되기 전에 에러 처리)
  */
-const handleShouldStartLoadWithRequest = (evt: any): boolean =>
-{
-  if (evt.url.startsWith('http://') || evt.url.startsWith('https://') || evt.url.startsWith('about:blank'))
-  {
+const handleShouldStartLoadWithRequest = (evt: any): boolean => {
+  if (
+    evt.url.startsWith('http://') ||
+    evt.url.startsWith('https://') ||
+    evt.url.startsWith('about:blank')
+  ) {
     return true;
   }
 
   // webView.goBack();
-  if (Platform.OS === 'android')
-  {
+  if (Platform.OS === 'android') {
     // SendIntentAndroid.openAppWithUri(evt.url)
     // SendIntentAndroid.openChromeIntent(evt.url)
     //   .then(isOpened =>
@@ -89,12 +87,12 @@ const handleShouldStartLoadWithRequest = (evt: any): boolean =>
     //     console.log('### openAppWithUri error ###');
     //     console.log(err);
     //   });
-  }
-  else
-  {
-    Linking.openURL(evt.url).catch(err =>
-    {
-      noticeUserError('KatalAskWebview[Linking.openURL]', `evt.url is: ${err.message}`);
+  } else {
+    Linking.openURL(evt.url).catch(err => {
+      noticeUserError(
+        'KatalAskWebview[Linking.openURL]',
+        `evt.url is: ${err.message}`
+      );
     });
   }
 

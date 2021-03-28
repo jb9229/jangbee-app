@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 
 import CloseButton from '../molecules/CloseButton';
 import { Modal } from 'react-native';
@@ -10,6 +9,7 @@ import { alarmSettingModalStat } from 'src/container/firmHarmCase/store';
 import styled from 'styled-components/native';
 import { updateUserProfile } from 'src/utils/FirebaseUtils';
 import { useLoginContext } from 'src/contexts/LoginContext';
+import { useRecoilState } from 'recoil';
 
 const Container = styled.View`
   flex: 1;

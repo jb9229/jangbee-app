@@ -1,12 +1,9 @@
-import React from 'react';
 import { Dimensions, Modal } from 'react-native';
-import styled from 'styled-components/native';
-import * as FileSystem from 'expo-file-system';
-import ImageZoom from 'react-native-image-pan-zoom';
-import { blue } from 'ansi-colors';
-import JBButton from 'molecules/JBButton';
+
 import CloseButton from 'molecules/CloseButton';
-import download from 'common/Download';
+import ImageZoom from 'react-native-image-pan-zoom';
+import React from 'react';
+import styled from 'styled-components/native';
 
 const Container = styled.View`
   flex: 1;
@@ -27,8 +24,8 @@ export default class DocumentsModal extends React.Component {
       routes: [
         { key: 'first', title: '계약 문서양식' },
         { key: 'second', title: '전화번호부' },
-        { key: 'third', title: '제원표' }
-      ]
+        { key: 'third', title: '제원표' },
+      ],
     };
   }
 
