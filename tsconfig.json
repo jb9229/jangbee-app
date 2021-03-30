@@ -54,7 +54,7 @@
     "src/__tests__",
     "storybook/**/*.ts",
     "storybook/**/*.tsx",
-    "src/index.web.js"
+    "src/index.web.tsx"
   ],
   "exclude": ["node_modules", "src/__generated__"],
   "jest": {

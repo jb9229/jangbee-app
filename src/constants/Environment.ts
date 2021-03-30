@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 export function getEnvironment(): {
   envName: string;
@@ -12,7 +13,10 @@ export function getEnvironment(): {
     // no releaseChannel (is undefined) in dev
     return {
       envName: 'UNKNOW',
-      dbUrl: 'http://10.0.2.2:4000/graphql',
+      dbUrl:
+        Platform.OS === 'android'
+          ? 'http://10.0.2.2:4000/graphql'
+          : 'http://localhost:4000/graphql',
       sentryAuthToken:
         'b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398',
     }; // dev env settings
@@ -39,7 +43,10 @@ export function getEnvironment(): {
 
   return {
     envName: 'DEVELOPMENT',
-    dbUrl: 'http://10.0.2.2:4000/graphql',
+    dbUrl:
+      Platform.OS === 'android'
+        ? 'http://10.0.2.2:4000/graphql'
+        : 'http://localhost:4000/graphql',
     sentryAuthToken:
       'b3ffc088948b4ebfaf941ec1878ad1ffbeea164ba7e8430bad29d99443227398',
   }; // dev env settings

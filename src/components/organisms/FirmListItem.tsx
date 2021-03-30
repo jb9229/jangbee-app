@@ -137,8 +137,8 @@ const firmListItem: React.FC<Props> = props => {
               callSearchFirm(
                 props.item.accountId,
                 props.item.phoneNumber,
-                userProfile.uid,
-                userProfile.phoneNumber
+                userProfile?.uid,
+                userProfile?.phoneNumber
               )
             }
           />
