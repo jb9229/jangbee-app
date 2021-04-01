@@ -133,7 +133,6 @@ const App: React.FC<Props> = ({ skipLoadingScreen, BLACKLIST_LAUNCH }) => {
     );
   }
 
-  console.log('=== process.env.BUILD_TYPE:', process.env.BUILD_TYPE);
   return (
     <RecoilRoot>
       <LoginProvider>

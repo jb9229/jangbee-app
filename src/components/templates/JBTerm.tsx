@@ -148,10 +148,7 @@ export default function JBTerm({ bg }) {
           >
             <Title>Version: </Title>
           </TitleTO>
-          {/* <Text>{`${pkg.expo.version}_test`}</Text> */}
           <Text>{`${pkg.expo.version}_${evn.envName}`}</Text>
-          {/* <Text>{`${Constants?.manifest?.slug}`}</Text> */}
-          {/* <Text>{`${pkg.expo.version}_${pkgConfig.extra.buildType}`}</Text> */}
         </Column>
         <Column>
           <JBButton
