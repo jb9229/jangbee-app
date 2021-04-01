@@ -36,7 +36,7 @@ const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement => {
       }
     },
     refetchQueries: [
-      { query: FIRMHARMCASE_COUNT, variables: { id: userProfile.uid } },
+      { query: FIRMHARMCASE_COUNT, variables: { id: userProfile?.uid } },
     ],
     onError: err => {
       noticeUserError(
@@ -63,7 +63,7 @@ const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement => {
         if (result) {
           createRequest({
             variables: {
-              firmHarmCaseCrtDto: { accountId: userProfile.uid, ...createDto },
+              firmHarmCaseCrtDto: { accountId: userProfile?.uid, ...createDto },
             },
           });
           // export const createFirmHarmCase = (accountId: string, dto: FirmHarmCaseCreateDto): Promise<object> => {
