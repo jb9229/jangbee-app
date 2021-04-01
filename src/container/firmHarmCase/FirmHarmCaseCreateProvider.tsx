@@ -15,22 +15,36 @@ interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
 }
-const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement =>
-{
-  const { user } = useLoginContext();
+const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement => {
+  const { userProfile } = useLoginContext();
   const [createDto, setCreateDto] = React.useState(new FirmHarmCaseCreateDto());
-  const [createErrorDto, setCreateErrorDto] = React.useState(new FirmHarmCaseCreateErrorDto());
+  const [createErrorDto, setCreateErrorDto] = React.useState(
+    new FirmHarmCaseCreateErrorDto()
+  );
   const [createRequest, createResponse] = useMutation(FIRMHARMCASE_CREATE, {
-    onCompleted: (data) =>
-    {
-      if (data && data.createFirmHarmCase)
-      {
-        props.navigation.replace('FirmHarmCaseSearch', { searchWord: createDto.telNumber });
+    onCompleted: data => {
+      if (data && data.createFirmHarmCase) {
+        props.navigation.replace('FirmHarmCaseSearch', {
+          searchWord: createDto.telNumber,
+        });
+      } else {
+        noticeUserError(
+          'FirmHarmCaseCreateProvider(createRequest -> error)',
+          data?.createFirmHarmCase,
+          userProfile
+        );
       }
-      else { noticeUserError('FirmHarmCaseCreateProvider(createRequest -> error)', data?.createFirmHarmCase, user) }
     },
-    refetchQueries: [{ query: FIRMHARMCASE_COUNT, variables: { id: user.uid } }],
-    onError: (err) => { noticeUserError('FirmHarmCaseCreateProvider(createRequest -> error)', err?.message, user) }
+    refetchQueries: [
+      { query: FIRMHARMCASE_COUNT, variables: { id: userProfile?.uid } },
+    ],
+    onError: err => {
+      noticeUserError(
+        'FirmHarmCaseCreateProvider(createRequest -> error)',
+        err?.message,
+        userProfile
+      );
+    },
   });
 
   // Server api call
@@ -38,27 +52,27 @@ const FirmHarmCaseCreateProvider = (props: Props): React.ReactElement =>
   // Init States
   const states = {
     createDto,
-    createErrorDto
+    createErrorDto,
   };
 
   const actions = {
-    onClickAdd(): void
-    {
+    onClickAdd(): void {
       const newErrorDto = new FirmHarmCaseCreateErrorDto();
-      validateCrateFirmHarmCase(createDto, newErrorDto)
-        .then((result) =>
-        {
-          setCreateErrorDto(newErrorDto);
-          if (result)
-          {
-            createRequest({ variables: { firmHarmCaseCrtDto: { accountId: user.uid, ...createDto } } });
-            // export const createFirmHarmCase = (accountId: string, dto: FirmHarmCaseCreateDto): Promise<object> => {
-            //   console.log('>>> createDto: ', dto)
-            //   return api.createClientEvaluation({accountId, ...dto, amount: `${dto.amount}`});
-            // }
-          }
-        });
-    }
+      validateCrateFirmHarmCase(createDto, newErrorDto).then(result => {
+        setCreateErrorDto(newErrorDto);
+        if (result) {
+          createRequest({
+            variables: {
+              firmHarmCaseCrtDto: { accountId: userProfile?.uid, ...createDto },
+            },
+          });
+          // export const createFirmHarmCase = (accountId: string, dto: FirmHarmCaseCreateDto): Promise<object> => {
+          //   console.log('>>> createDto: ', dto)
+          //   return api.createClientEvaluation({accountId, ...dto, amount: `${dto.amount}`});
+          // }
+        }
+      });
+    },
   };
   // UI Component
   return (
