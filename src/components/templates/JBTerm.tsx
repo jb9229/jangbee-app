@@ -7,7 +7,6 @@ import fonts from 'constants/Fonts';
 import { getEnvironment } from 'src/constants/Environment';
 import { openLinkUrl } from 'utils/LinkUtil';
 import pkg from 'app.json';
-import pkgConfig from '../../../app.config';
 import { shareJBCall } from 'src/container/firmHarmCase/searchAction';
 import styled from 'styled-components/native';
 import url from 'constants/Url';
@@ -67,7 +66,8 @@ const TelText = styled.Text`
 `;
 console.log('>>> Constants:', Constants);
 console.log('>>> process.env:', process.env);
-export default function JBTerm() {
+const releaseChannel = Constants.manifest?.releaseChannel;
+export default function JBTerm({ bg }) {
   const { userProfile } = useLoginContext();
   const evn = getEnvironment();
   return (
@@ -141,7 +141,7 @@ export default function JBTerm() {
           <TitleTO
             onPress={() =>
               alert(
-                `Server: \n\nSlug: ${pkg.expo.slug}\n\nuid: ${userProfile?.uid}`
+                `Server: \n\nChannel: ${releaseChannel}\n\nuid: ${userProfile?.uid}`
               )
             }
           >
