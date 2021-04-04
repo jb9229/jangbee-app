@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.kan.jangbeecall.beta",
+  "variantName": "betaRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 1,
+      "versionName": "1.6.2",
+      "enabled": true,
+      "outputFile": "app-beta-release.apk"
+    }
+  ]
+}

@@ -14,5 +14,9 @@
 	<string>40.0.0</string>
 	<key>EXUpdatesURL</key>
 	<string>https://exp.host/@jb9229/jangbeecall</string>
+	<key>EXUpdatesSDKVersion</key>
+	<string>40.0.0</string>
+	<key>EXUpdatesURL</key>
+	<string>https://exp.host/@jb9229/jangbeecall</string>
 </dict>
 </plist>

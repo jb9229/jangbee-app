@@ -58,7 +58,7 @@ const FirmHarmCaseProvider: React.FC<Props> = ({
 
   React.useEffect(() => {
     (async () => {
-      addNotificationListener(userProfile.uid, _handleNotification);
+      addNotificationListener(userProfile?.uid, _handleNotification);
       // runListener();
       // checkBLListLoading();
       const firm = await refetchFirm();

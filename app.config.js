@@ -3,12 +3,8 @@ import 'dotenv/config';
 import { loadingStorybook } from './App';
 
 export default ({ config }) => {
-  console.log('>>> SLUG config: ', process.env.BUILD_TYPE);
   return {
     ...config,
-    extra: {
-      buildType: process.env.BUILD_TYPE,
-    },
     slug: loadingStorybook ? 'jangbeecall_story' : config.slug,
     icon: loadingStorybook ? './assets/images/storyIcon_32.png' : config.icon,
     hooks: {
