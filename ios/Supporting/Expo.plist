@@ -9,11 +9,7 @@
 	<key>EXUpdatesLaunchWaitMs</key>
 	<integer>0</integer>
 	<key>EXUpdatesReleaseChannel</key>
-	<string>beta-v2</string>
-	<key>EXUpdatesSDKVersion</key>
-	<string>40.0.0</string>
-	<key>EXUpdatesURL</key>
-	<string>https://exp.host/@jb9229/jangbeecall</string>
+	<string>beta</string>
 	<key>EXUpdatesSDKVersion</key>
 	<string>40.0.0</string>
 	<key>EXUpdatesURL</key>
