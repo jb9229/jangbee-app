@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { BackHandler, ToastAndroid } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
 import AuthLoading from 'auth/AuthLoading';
 import { AuthStackParamList } from './types';
@@ -24,11 +25,48 @@ const Navigator: React.FC<Props> = () => {
   // states
   const { userProfile, setFirm } = useLoginContext();
   const setAlarmSettingModal = useSetRecoilState(alarmSettingModalStat);
+  const [backButtonCondition, setBackButtonCondition] = useState<{
+    isDoubleClick: boolean;
+  }>({ isDoubleClick: false });
 
   // server datas
   const scanAppVersionRsp = useScanAppVersionQuery();
 
+  // actions
+  const onPressBackbutton = (): boolean => {
+    console.log('onPressBackbutton~~');
+    if (backButtonCondition.isDoubleClick) {
+      BackHandler.exitApp();
+    } else {
+      ToastAndroid.show(
+        '한번 더 누르시면 앱이 종료됩니다!',
+        ToastAndroid.SHORT
+      );
+
+      backButtonCondition.isDoubleClick = true;
+
+      setTimeout(() => {
+        backButtonCondition.isDoubleClick = false;
+      }, 3000);
+
+      return true;
+    }
+
+    return true;
+  };
+
   // component life cycle
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onPressBackbutton
+    );
+
+    return (): void => {
+      console.log('backHandler.remove~~');
+      return backHandler.remove();
+    };
+  }, []);
   useEffect(() => {
     if (
       userProfile?.scanAppVersion &&

@@ -10,19 +10,33 @@ interface Props {
   children?: React.ReactElement;
   navigation: DefaultNavigationProps;
 }
-const FirmHarmCaseSearchSBProvider = (props: Props): React.ReactElement =>
-{
+const FirmHarmCaseSearchSBProvider = (props: Props): React.ReactElement => {
   React.useEffect(() => {
     // android back button listener
-    const onBackbutton = (): boolean => { return true };
+    const onBackbutton = (): boolean => {
+      return true;
+    };
 
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackbutton);
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackbutton
+    );
 
     return (): void => backHandler.remove();
   }, []);
 
   const [backButtonCondition] = React.useState({});
-  const callHistory = [{rawType: 0, type: 'INCOMING', dateTime: 'FSKESLF', timestamp: '123214324', name: '', duration: 123, phoneNumber: '0102345678' }];
+  const callHistory = [
+    {
+      rawType: 0,
+      type: 'INCOMING',
+      dateTime: 'FSKESLF',
+      timestamp: '123214324',
+      name: '',
+      duration: 123,
+      phoneNumber: '0102345678',
+    },
+  ];
   const initHarmCaseList = [];
   const [harmCaseList, setHarmCaseList] = React.useState(initHarmCaseList);
   const [searched, setSearched] = React.useState(false);
@@ -36,27 +50,26 @@ const FirmHarmCaseSearchSBProvider = (props: Props): React.ReactElement =>
     searchWord,
     callHistory,
     // harmCaseList: []
-    harmCaseList
+    harmCaseList,
   };
   const actions = {
-    onSelectCallHistory (history: CallHistory) {
+    onSelectCallHistory(history: CallHistory) {
       setHarmCaseList(sbHarmCaseList);
       setSearched(true);
       setSearchWord(formatTelnumber(history.phoneNumber));
     },
-    onCancelSearch () {
+    onCancelSearch() {
       setSearched(false);
       setSearchWord(undefined);
       setHarmCaseList([]);
     },
-    onSearchWordEndEditing (text: string) {
-      if (text)
-      {
+    onSearchWordEndEditing(text: string) {
+      if (text) {
         setHarmCaseList(sbHarmCaseList);
         setSearched(true);
         setSearchWord(text);
       }
-    }
+    },
   };
   // UI Component
   return (
@@ -66,26 +79,82 @@ const FirmHarmCaseSearchSBProvider = (props: Props): React.ReactElement =>
 
 const sbHarmCaseList = [
   {
-    accountId: 'string', reason: '멍청함', local: '경북', likeCount: 123, unlikeCount: 12, firmName: '성진테크', firmNumber: '02231232312412',
-    cliName: '성진건설', telNumber: '0101111111', telNumber2: '0102222222', telNumber3: '0102321332423', searchTime: '3242342354'
+    accountId: 'string',
+    reason: '멍청함',
+    local: '경북',
+    likeCount: 123,
+    unlikeCount: 12,
+    firmName: '성진테크',
+    firmNumber: '02231232312412',
+    cliName: '성진건설',
+    telNumber: '0101111111',
+    telNumber2: '0102222222',
+    telNumber3: '0102321332423',
+    searchTime: '3242342354',
   },
   {
-    accountId: 'string', reason: '멍청함', local: '경북', likeCount: 123, unlikeCount: 12, firmName: '성진건설', firmNumber: '02231232312412',
-    cliName: '성진건설', telNumber: '0101111111', telNumber2: '0102222222', telNumber3: '0102321332423', searchTime: '3242342354'
+    accountId: 'string',
+    reason: '멍청함',
+    local: '경북',
+    likeCount: 123,
+    unlikeCount: 12,
+    firmName: '성진건설',
+    firmNumber: '02231232312412',
+    cliName: '성진건설',
+    telNumber: '0101111111',
+    telNumber2: '0102222222',
+    telNumber3: '0102321332423',
+    searchTime: '3242342354',
   },
   {
-    accountId: 'string', reason: '멍청함', local: '경북', likeCount: 123, unlikeCount: 12, firmName: '성진건설', firmNumber: '02231232312412',
-    cliName: '성진건설', telNumber: '0101111111', telNumber2: '0102222222', telNumber3: '0102321332423', searchTime: '3242342354'
+    accountId: 'string',
+    reason: '멍청함',
+    local: '경북',
+    likeCount: 123,
+    unlikeCount: 12,
+    firmName: '성진건설',
+    firmNumber: '02231232312412',
+    cliName: '성진건설',
+    telNumber: '0101111111',
+    telNumber2: '0102222222',
+    telNumber3: '0102321332423',
+    searchTime: '3242342354',
   },
   {
-    accountId: 'string', reason: '멍청함', local: '경북', likeCount: 123, unlikeCount: 12, firmName: '성진건설', firmNumber: '02231232312412',
-    cliName: '성진건설', telNumber: '0101111111', telNumber2: '0102222222', telNumber3: '0102321332423', searchTime: '3242342354'
-  }
+    accountId: 'string',
+    reason: '멍청함',
+    local: '경북',
+    likeCount: 123,
+    unlikeCount: 12,
+    firmName: '성진건설',
+    firmNumber: '02231232312412',
+    cliName: '성진건설',
+    telNumber: '0101111111',
+    telNumber2: '0102222222',
+    telNumber3: '0102321332423',
+    searchTime: '3242342354',
+  },
 ];
 
 const sbCallHistory = [
-  {rawType: 0, type: 'INCOMING', dateTime: 'FSKESLF', timestamp: '0101111111', name: '', duration: 123, phoneNumber: '0102345678' },
-  {rawType: 0, type: 'INCOMING', dateTime: 'FSKESLF', timestamp: '0102222222', name: '', duration: 123, phoneNumber: '0102345678' }
-]
+  {
+    rawType: 0,
+    type: 'INCOMING',
+    dateTime: 'FSKESLF',
+    timestamp: '0101111111',
+    name: '',
+    duration: 123,
+    phoneNumber: '0102345678',
+  },
+  {
+    rawType: 0,
+    type: 'INCOMING',
+    dateTime: 'FSKESLF',
+    timestamp: '0102222222',
+    name: '',
+    duration: 123,
+    phoneNumber: '0102345678',
+  },
+];
 
 export default FirmHarmCaseSearchSBProvider;

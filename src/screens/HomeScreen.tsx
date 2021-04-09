@@ -7,7 +7,6 @@ import FirmCntChart from 'templates/FirmCntChart';
 import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import colors from 'constants/Colors';
-import { onPressBackbutton } from 'src/container/action';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useScanAppVersionQuery } from 'src/apollo/generated';
@@ -28,14 +27,14 @@ const HomeScreen: React.FC<Props> = props => {
   const scanAppVersionRsp = useScanAppVersionQuery();
 
   // component life cycle
-  React.useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      onPressBackbutton
-    );
+  // React.useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     onPressBackbutton
+  //   );
 
-    return (): void => backHandler.remove();
-  });
+  //   return (): void => backHandler.remove();
+  // });
 
   return (
     <Container>

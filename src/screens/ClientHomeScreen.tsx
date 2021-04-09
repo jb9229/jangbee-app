@@ -32,22 +32,16 @@ const ClientHomeScreen: React.FC<Props> = props => {
       addNotificationListener();
     })();
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      onPressBackbutton
-    );
-
     return (): void => {
       notificationListener &&
         Notifications.removeNotificationSubscription(notificationListener);
-      backHandler.remove();
     };
   }, []);
 
   // android permissions are given on install
   const addNotificationListener = async (): Promise<void> => {
     // Temp code for 사용자 옛날 토큰 빨리 업그레이드 위해
-    registerForPushNotificationsAsync(userProfile.uid);
+    registerForPushNotificationsAsync(userProfile?.uid);
 
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('jbcall-messages', {
