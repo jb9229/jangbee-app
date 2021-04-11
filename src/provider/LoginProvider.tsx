@@ -1,16 +1,24 @@
 import * as React from 'react';
 import * as api from 'src/api/api';
 
+import { Firm, useFirmLazyQuery } from 'src/apollo/generated';
 import KakaoPayWebView, {
   KakaoPaymentReadyInfo,
 } from 'src/components/templates/KakaoPayWebView';
-import { User, UserAssets, UserProfile, WebViewModalData } from 'src/types';
+import {
+  User,
+  UserAssets,
+  UserProfile,
+  UserType,
+  WebViewModalData,
+} from 'src/types';
 import {
   getUserInfo,
   updatePaymentSubscription,
   updateUserAssets,
 } from 'src/utils/FirebaseUtils';
 
+import { Alert } from 'react-native';
 import { ApplyWorkCallback } from 'src/components/action';
 import { Callbacker } from 'src/utils/Callbacker';
 import CouponSelectModal from 'src/components/templates/CouponSelectModal';
@@ -21,35 +29,11 @@ import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import WebView from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
-import { updateFirmInfo } from 'src/container/login/action';
+import { notifyError } from 'src/common/ErrorNotice';
+import { useEffect } from 'react';
 
 const CALLBACKER_AD_PAYMENT = 'CALLBACKER_AD_PAYMENT';
 const CALLBACKER_WORK_PAYMENT = 'CALLBACKER_WORK_PAYMENT';
-export class Firm {
-  id: string;
-  accountId: string;
-  fname: string;
-  equiListStr: string;
-  thumbnail: string;
-  phoneNumber: string;
-  modelYear: number;
-  address: string;
-  addressDetail: string;
-  sidoAddr: string;
-  sigunguAddr: string;
-  addrLongitude: string;
-  addrLatitude: string;
-  workAlarmSido: string;
-  workAlarmSigungu: string;
-  introduction: string;
-  photo1: string;
-  photo2: string;
-  photo3: string;
-  blog: string;
-  homepage: string;
-  sns: string;
-  ratingCnt: number;
-}
 
 class LoadingModalData {
   constructor(loading: boolean, msg: string) {
@@ -70,9 +54,8 @@ interface Props {
 }
 
 const LoginProvider = (props: Props): React.ReactElement => {
-  const [user, setUser] = React.useState<User | undefined>();
+  // states
   const [userProfile, setUserProfile] = React.useState<UserProfile>();
-  const [firm, setFirm] = React.useState<Firm | undefined>();
   const [couponModalVisible, setCouponModalVisible] = React.useState<boolean>(
     false
   );
@@ -98,37 +81,76 @@ const LoginProvider = (props: Props): React.ReactElement => {
   // data
   let callbackAction: ApplyWorkCallback | undefined;
 
+  // server data
+  const [firmReq, firmRsp] = useFirmLazyQuery({
+    onCompleted(data) {
+      if (!data?.firm) {
+        Alert.alert(
+          '등록된 내 장비 불러오기 실패!',
+          '내 장비등록 정보 -> 내 장비 등록하기를 먼저 해 주세요',
+          [{ text: '확인' }],
+          { cancelable: false }
+        );
+
+        return null;
+      }
+    },
+    onError(error) {
+      notifyError(
+        '업체정보 확인중 문제발생',
+        `업체정보를 불러오는 도중 문제가 발생했습니다, 다시 시도해 주세요 -> [${error.name}] ${error.message}`,
+        [
+          { text: '취소' },
+          {
+            text: '다시 시도하기',
+            onPress: (): void => {
+              onFirmRefetch();
+            },
+          },
+        ]
+      );
+    },
+  });
+
+  // actions
+  const onFirmRefetch = () => {
+    if (userProfile?.uid && userProfile?.userType === UserType.FIRM) {
+      firmReq({ variables: { accountId: userProfile.uid } });
+    }
+  };
+
+  // component life cycle
+  useEffect(() => {
+    onFirmRefetch();
+  }, [userProfile]);
+
   const states = {
-    navigation: props.navigation,
-    user,
     userProfile,
-    firm,
+    firm: firmRsp.data?.firm,
     paymentInfo,
   };
 
   const actions = {
-    setUser,
-    setFirm,
     setUserProfile,
     setWebViewModal,
     saveUserProfileAssets: (assetData: UserAssets): Promise<void> => {
-      return updateUserAssets(user.uid, assetData);
+      return updateUserAssets(userProfile?.uid, assetData);
     },
     openWorkPaymentModal: (
       price: number,
       callbackFn,
       callbackArgs: Array<any>
     ): void => {
-      const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
+      const orderId = `ORDER_${userProfile?.uid}_${new Date().getTime()}`;
       api
-        .requestPaymentReady('일감매칭비', user.uid, orderId, price)
+        .requestPaymentReady('일감매칭비', userProfile?.uid, orderId, price)
         .then((response): void => {
           const result: SubscriptionReadyResponse = response;
           if (result && result.next_redirect_mobile_url) {
             const paymentReadyInfo = new KakaoPaymentReadyInfo(
               result.next_redirect_mobile_url,
               result.tid,
-              user.uid,
+              userProfile?.uid,
               orderId
             );
             setPaymentReadyInfo(paymentReadyInfo);
@@ -143,7 +165,7 @@ const LoginProvider = (props: Props): React.ReactElement => {
           noticeUserError(
             'Ad Create Provider[정기결제 요청 실패]',
             err?.message,
-            user
+            userProfile
           );
         });
     },
@@ -152,9 +174,9 @@ const LoginProvider = (props: Props): React.ReactElement => {
       callbackFn,
       callbackArgs: Array<any>
     ): void => {
-      const orderId = `ORDER_${user.uid}_${new Date().getTime()}`;
+      const orderId = `ORDER_${userProfile?.uid}_${new Date().getTime()}`;
       api
-        .requestPaymentReady('광고정기결제', user.uid, orderId, price)
+        .requestPaymentReady('광고정기결제', userProfile?.uid, orderId, price)
         .then((response): void => {
           console.log('>>> requestPaymentReady response:', response);
           const result: SubscriptionReadyResponse = response;
@@ -162,7 +184,7 @@ const LoginProvider = (props: Props): React.ReactElement => {
             const paymentReadyInfo = new KakaoPaymentReadyInfo(
               result.next_redirect_mobile_url,
               result.tid,
-              user.uid,
+              userProfile?.uid,
               orderId
             );
             setPaymentReadyInfo(paymentReadyInfo);
@@ -173,7 +195,7 @@ const LoginProvider = (props: Props): React.ReactElement => {
             noticeUserError(
               'LoginProvider(requestPaymentReady result invalid, 정기준비 요청 실패)',
               response,
-              user
+              userProfile
             );
           }
         })
@@ -181,7 +203,7 @@ const LoginProvider = (props: Props): React.ReactElement => {
           noticeUserError(
             'Ad Create Provider(정기결제 요청 실패)',
             err?.message,
-            user
+            userProfile
           );
         });
     },
@@ -189,15 +211,14 @@ const LoginProvider = (props: Props): React.ReactElement => {
       applyWorkCallback?: (user: User, useCoupon: boolean) => void
     ): void => {
       if (applyWorkCallback) {
-        callbackAction = new ApplyWorkCallback(applyWorkCallback, user);
+        callbackAction = new ApplyWorkCallback(applyWorkCallback, userProfile);
       }
       setCouponModalVisible(true);
     },
     popLoading: (loading: boolean, msg?: string): void => {
       setLoadingModalData(new LoadingModalData(loading, msg));
     },
-    refetchFirm: (): Promise<Firm | null> =>
-      userProfile && updateFirmInfo(userProfile, setFirm),
+    refetchFirm: onFirmRefetch,
     refetchUserProfile: (): Promise<UserProfile> => {
       return getUserInfo(userProfile.uid).then(data => {
         const userInfo = data.val();
@@ -221,7 +242,7 @@ const LoginProvider = (props: Props): React.ReactElement => {
         close={(): void => setVisiblePaymentModal(false)}
         setPaymentSubscription={(sid: string): void => {
           setUserProfile({ ...userProfile, sid: sid });
-          updatePaymentSubscription(user.uid, sid)
+          updatePaymentSubscription(userProfile?.uid, sid)
             .then(() => {
               console.log('success updatePaymentSubscription~~');
               console.log('>>> Callbacker.arguments: ', Callbacker.arguments);
@@ -251,7 +272,7 @@ const LoginProvider = (props: Props): React.ReactElement => {
         }
       />
       <CouponSelectModal
-        user={user}
+        user={userProfile}
         visible={couponModalVisible}
         closeModal={(): void => setCouponModalVisible(false)}
         applyCoupon={(): void => {

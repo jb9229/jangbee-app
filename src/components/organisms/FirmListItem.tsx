@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 
-import { Firm } from 'storybook/provider/LoginStorybookProvider';
+import { Firm } from 'src/apollo/generated';
 import JBIcon from 'atoms/JBIcon';
 import { Rating } from 'react-native-elements';
 import React from 'react';

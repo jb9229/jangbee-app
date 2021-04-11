@@ -10,13 +10,14 @@ interface Props {
   navigation: DefaultNavigationProps;
 }
 
-const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
-{
-  const { user } = useLoginContext();
+const FirmHarmCaseSBProvider = (props: Props): React.ReactElement => {
+  const { userProfile } = useLoginContext();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleDetailModal, setVisibleDetailModal] = React.useState(false);
-  const [visibleEvaluLikeModal, setVisibleEvaluLikeModal] = React.useState(false);
+  const [visibleEvaluLikeModal, setVisibleEvaluLikeModal] = React.useState(
+    false
+  );
   const [cliEvaluList, setCliEvaluList] = React.useState(null);
   const [page, setPage] = React.useState(0);
   const [lastList, setLastList] = React.useState(false);
@@ -26,7 +27,10 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
   const [searchArea, setSearchArea] = React.useState('TEL');
   const [searchTime, setSearchTime] = React.useState('');
   const [searchNotice, setSearchNotice] = React.useState('');
-  const [countData, setCountData] = React.useState<FirmHarmCaseCountData>({ totalCnt: 100, myCnt: 30 });
+  const [countData, setCountData] = React.useState<FirmHarmCaseCountData>({
+    totalCnt: 100,
+    myCnt: 30,
+  });
   const [updateEvalu, setUpdateEvalu] = React.useState();
   const [evaluLikeSelected, setEvaluLikeSelected] = React.useState();
   const [mineEvaluation, setMineEvaluation] = React.useState();
@@ -34,25 +38,47 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
 
   // Init States
   const states = {
-    user, searchWord, searchNotice, searchArea,
+    userProfile,
+    searchWord,
+    searchNotice,
+    searchArea,
     cliEvaluList: [
       {
-        accountId: 'test_accountId', reason: '돈 줄 생각이 없음',
-        local: '지역', likeCount: 4, unlikeCount: 5, firmName: '업체명',
-        cliName: '평가하는 고객', telNumber: '0101111111',
-        telNumber2: '0101111111', telNumber3: '0101111111'
+        accountId: 'test_accountId',
+        reason: '돈 줄 생각이 없음',
+        local: '지역',
+        likeCount: 4,
+        unlikeCount: 5,
+        firmName: '업체명',
+        cliName: '평가하는 고객',
+        telNumber: '0101111111',
+        telNumber2: '0101111111',
+        telNumber3: '0101111111',
       },
       {
-        accountId: 'test_accountId', reason: '또다른 피해자가 없어야함',
-        local: '지역', likeCount: 4, unlikeCount: 5, firmName: '업체명',
-        cliName: '평가하는 고객', telNumber: '0101111111',
-        telNumber2: '0101111111', telNumber3: '0101111111'
-      }
+        accountId: 'test_accountId',
+        reason: '또다른 피해자가 없어야함',
+        local: '지역',
+        likeCount: 4,
+        unlikeCount: 5,
+        firmName: '업체명',
+        cliName: '평가하는 고객',
+        telNumber: '0101111111',
+        telNumber2: '0101111111',
+        telNumber3: '0101111111',
+      },
     ],
     countData,
-    visibleCreateModal, setVisibleCreateModal, visibleUpdateModal, visibleDetailModal, visibleEvaluLikeModal,
-    updateEvalu, detailEvalu, searchTime,
-    evaluLikeSelected, evaluLikeList,
+    visibleCreateModal,
+    setVisibleCreateModal,
+    visibleUpdateModal,
+    visibleDetailModal,
+    visibleEvaluLikeModal,
+    updateEvalu,
+    detailEvalu,
+    searchTime,
+    evaluLikeSelected,
+    evaluLikeList,
     chatMessge: [
       {
         id: '1',
@@ -62,11 +88,11 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         chatInfo: {
           avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
-          nickName: 'Test'
+          nickName: 'Test',
         },
         renderTime: true,
         sendStatus: 0,
-        time: '1542006036549'
+        time: '1542006036549',
       },
       {
         id: '2',
@@ -76,29 +102,30 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         chatInfo: {
           avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
-          nickName: 'Test'
+          nickName: 'Test',
         },
         renderTime: true,
         sendStatus: 0,
-        time: '1542106036549'
+        time: '1542106036549',
       },
       {
         id: '3',
         type: 'image',
         content: {
-          uri: 'https://upload-images.jianshu.io/upload_images/11942126-044bd33212dcbfb8.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240',
+          uri:
+            'https://upload-images.jianshu.io/upload_images/11942126-044bd33212dcbfb8.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240',
           width: 100,
-          height: 80
+          height: 80,
         },
         targetId: '12345678',
         chatInfo: {
           avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
-          nickName: 'Test'
+          nickName: 'Test',
         },
         renderTime: false,
         sendStatus: 0,
-        time: '1542106037000'
+        time: '1542106037000',
       },
       {
         id: '4',
@@ -107,104 +134,74 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
         targetId: '88886666',
         chatInfo: {
           avatar: require('../../assets/icons/chat/defaultAvatar.png'),
-          id: '12345678'
+          id: '12345678',
         },
         renderTime: true,
         sendStatus: 1,
-        time: '1542177036549'
+        time: '1542177036549',
       },
       {
         id: '5',
         type: 'voice',
         content: {
-          uri: 'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
-          length: 10
+          uri:
+            'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
+          length: 10,
         },
         targetId: '12345678',
         chatInfo: {
           avatar: require('../../assets/icons/chat/defaultAvatar.png'),
           id: '12345678',
-          nickName: 'Test'
+          nickName: 'Test',
         },
         renderTime: true,
         sendStatus: 1,
-        time: '1542260667161'
-      }
-    ]
+        time: '1542260667161',
+      },
+    ],
   };
 
   // Init Actions
-  const setClinetEvaluList = () =>
-  {
-  };
+  const setClinetEvaluList = () => {};
 
-  const setCliEvaluLikeList = (evaluId) =>
-  {
-  };
+  const setCliEvaluLikeList = evaluId => {};
 
-  const setMyClientEvaluList = () =>
-  {
-  };
+  const setMyClientEvaluList = () => {};
 
-  const searchFilterCliEvalu = (searchWord: string): void =>
-  {
-  };
+  const searchFilterCliEvalu = (searchWord: string): void => {};
 
   const actions = {
     onClickSearch: () => {
-      alert('화면 이동: 업체 피해사례 -> 조회')
+      alert('화면 이동: 업체 피해사례 -> 조회');
     },
     onClickAddFirmHarmCase: () => {
-      alert('화면 이동: 업체 피해사례 -> 등록(미구현)')
+      alert('화면 이동: 업체 피해사례 -> 등록(미구현)');
     },
-    deleteCliEvalu: (id: string) =>
-    {
-    },
+    deleteCliEvalu: (id: string) => {},
     setClinetEvaluList,
-    createClientEvaluLike: (newEvaluLike) =>
-    {
-    },
-    openCliEvaluLikeModal: (item, isMine) =>
-    {
-    },
+    createClientEvaluLike: newEvaluLike => {},
+    openCliEvaluLikeModal: (item, isMine) => {},
     setCliEvaluLikeList,
-    cancelClientEvaluLike: (evaluation, like) =>
-    {
-    },
-    closeEvaluLikeModal: (refresh) =>
-    {
-    },
+    cancelClientEvaluLike: (evaluation, like) => {},
+    closeEvaluLikeModal: refresh => {},
     setMyClientEvaluList,
     searchFilterCliEvalu,
-    openUpdateCliEvaluForm: (item) =>
-    {
+    openUpdateCliEvaluForm: item => {},
+    openDetailModal: (evalu): void => {},
+    onClickMyEvaluList: () => {},
+    handleLoadMore: () => {},
+    onClickNewestEvaluList: () => {},
+    senChatMessage: (message: string) => {
+      states.chatMessge.concat({
+        _id: states.chatMessge.length + 1,
+        text: message,
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: '나',
+        },
+      });
     },
-    openDetailModal: (evalu): void =>
-    {
-    },
-    onClickMyEvaluList: () =>
-    {
-    },
-    handleLoadMore: () =>
-    {
-    },
-    onClickNewestEvaluList: () =>
-    {
-    },
-    senChatMessage: (message: string) =>
-    {
-      states.chatMessge.concat(
-        {
-          _id: states.chatMessge.length + 1,
-          text: message,
-          createdAt: new Date(),
-          user: {
-            _id: 1,
-            name: '나'
-          }
-        }
-      );
-    }
   };
 
   // UI Component
@@ -215,12 +212,16 @@ const FirmHarmCaseSBProvider = (props: Props): React.ReactElement =>
 
 export default FirmHarmCaseSBProvider;
 
-export const FirmHarmCaseObj =
-  {
-    accountId: 'test_accountId', reason: 'temp_reason',
-    local: '지역', likeCount: 4, unlikeCount: 5, firmName: '업체명',
-    cliName: '평가하는 고객', telNumber: '0101111111'
-  };
+export const FirmHarmCaseObj = {
+  accountId: 'test_accountId',
+  reason: 'temp_reason',
+  local: '지역',
+  likeCount: 4,
+  unlikeCount: 5,
+  firmName: '업체명',
+  cliName: '평가하는 고객',
+  telNumber: '0101111111',
+};
 
 const InitChatMessage = [
   {
@@ -230,8 +231,9 @@ const InitChatMessage = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1559951300248.jpg'
-    }
+      avatar:
+        'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1559951300248.jpg',
+    },
   },
   {
     _id: 2,
@@ -240,8 +242,8 @@ const InitChatMessage = [
     user: {
       _id: 1,
       name: 'React Native',
-      avatar: 'https://placeimg.com/140/140/any'
-    }
+      avatar: 'https://placeimg.com/140/140/any',
+    },
   },
   {
     _id: 3,
@@ -250,7 +252,8 @@ const InitChatMessage = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar: 'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1561127267339.jpg'
-    }
-  }
+      avatar:
+        'https://elasticbeanstalk-ap-northeast-2-499435767786.s3.ap-northeast-2.amazonaws.com/asset/img/jangbee_photo_%2B1561127267339.jpg',
+    },
+  },
 ];

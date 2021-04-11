@@ -1,4 +1,3 @@
-import * as Notifications from 'expo-notifications';
 import * as React from 'react';
 import * as api from 'src/api/api';
 
@@ -30,7 +29,6 @@ const FirmHarmCaseProvider: React.FC<Props> = ({
   children,
 }): React.ReactElement => {
   React.useEffect(() => {
-    console.log('>>> route:', route);
     const { search } = route.params;
 
     if (search) {
@@ -68,10 +66,6 @@ const FirmHarmCaseProvider: React.FC<Props> = ({
         }, 500);
       }
     })();
-
-    return (): void => {
-      Notifications.removeAllNotificationListeners();
-    };
   }, []);
 
   const _handleNotification = (response): void => {

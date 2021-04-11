@@ -1,4 +1,3 @@
-import { CallLog, CallLogQueryRsp } from './types';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { CALL_LOGS } from 'src/api/queries';
@@ -15,12 +14,12 @@ const Container = styled.View`
 const CallLogContainer: React.FC = (): React.ReactElement => {
   // useEffect
   useEffect(() => {
-    if (user?.uid) {
-      req({ variables: { accountId: user?.uid } });
+    if (userProfile?.uid) {
+      req({ variables: { accountId: userProfile?.uid } });
     }
   }, []);
   // States
-  const { user } = useLoginContext();
+  const { userProfile } = useLoginContext();
   const [req, rsp] = useLazyQuery(CALL_LOGS);
   const [refreshing, setRefreshing] = useState(false);
 

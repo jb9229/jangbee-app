@@ -1,6 +1,6 @@
 import { DefaultNavigationProps, User, UserProfile } from 'src/types';
 
-import { Firm } from 'src/provider/LoginProvider';
+import { Firm } from 'src/apollo/generated';
 import { FirmHarmCaseCountData } from 'src/container/firmHarmCase/type';
 import createCtx from 'src/contexts/CreateCtx';
 

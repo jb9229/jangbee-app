@@ -132,12 +132,11 @@ const App: React.FC<Props> = ({ skipLoadingScreen, BLACKLIST_LAUNCH }) => {
     );
   }
 
-  console.log('=== process.env.BUILD_TYPE:', process.env.BUILD_TYPE);
   return (
     <RecoilRoot>
-      <LoginProvider>
-        <ThemeProvider>
-          <ApolloProvider client={apolloClient}>
+      <ThemeProvider>
+        <ApolloProvider client={apolloClient}>
+          <LoginProvider>
             <React.Suspense fallback={<ActivityIndicator />}>
               <View style={styles.container}>
                 {Platform.OS === 'ios' ? (
@@ -153,9 +152,9 @@ const App: React.FC<Props> = ({ skipLoadingScreen, BLACKLIST_LAUNCH }) => {
                 <AlarmSettingModal />
               </View>
             </React.Suspense>
-          </ApolloProvider>
-        </ThemeProvider>
-      </LoginProvider>
+          </LoginProvider>
+        </ApolloProvider>
+      </ThemeProvider>
     </RecoilRoot>
   );
 };

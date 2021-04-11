@@ -1,23 +1,16 @@
-import {
-  DefaultNavigationProps,
-  User,
-  UserAssets,
-  UserProfile,
-  WebViewModalData,
-} from 'src/types';
-import { Firm, KakaoPaymentInfo } from 'src/provider/LoginProvider';
+import { UserAssets, UserProfile, WebViewModalData } from 'src/types';
 
+import { Firm } from 'src/apollo/generated';
+import { KakaoPaymentInfo } from 'src/provider/LoginProvider';
 import createCtx from 'src/contexts/CreateCtx';
 
 const [useCtx, Provider] = createCtx<Context>();
 
 interface Context {
-  navigation: DefaultNavigationProps;
   userProfile?: UserProfile;
   firm: Firm;
   paymentInfo: KakaoPaymentInfo;
   setUserProfile: (user: UserProfile | undefined) => void;
-  setFirm: (firm: Firm) => void;
   saveUserProfileAssets: (assetData: UserAssets) => Promise<void>;
   setWebViewModal: (modalData: WebViewModalData) => void;
   openWorkPaymentModal: (

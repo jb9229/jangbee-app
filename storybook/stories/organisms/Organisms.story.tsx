@@ -10,6 +10,7 @@ import FirmHarmCaseHeader from 'organisms/FirmHarmCaseHeader';
 import FirmOpenWorkList from 'organisms/FirmOpenWorkList';
 import { User } from 'firebase';
 import { storiesOf } from '@storybook/react-native';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const SafeZonDecorator = storyFn => (
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -39,7 +40,7 @@ storiesOf('Organisms Components', module)
   ))
   .add('Firm OpenWork List', () =>
     React.createElement(() => {
-      const { setUser } = useLoginContext();
+      const { setUserProfile } = useLoginContext();
       const user: User = {
         uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2',
         displayName: null,
@@ -50,7 +51,7 @@ storiesOf('Organisms Components', module)
       };
 
       React.useEffect(() => {
-        setUser(user);
+        setUserProfile(user);
       }, []);
 
       return (

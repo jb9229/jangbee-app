@@ -47,7 +47,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement => {
         noticeUserError(
           'FirmModifyProvider(requestModifyFirm -> error)',
           data?.updateFirm,
-          user
+          userProfile
         );
       }
     },
@@ -55,7 +55,7 @@ const FirmModifyProvider = (props: Props): React.ReactElement => {
       noticeUserError(
         'FirmModifyProvider(requestModifyFirm -> error)',
         err?.message,
-        user
+        userProfile
       );
     },
     refetchQueries: [

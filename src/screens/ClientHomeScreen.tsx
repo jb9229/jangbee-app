@@ -10,8 +10,8 @@ import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JBTerm from 'templates/JBTerm';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Subscription } from 'src/apollo/generated';
 import colors from 'constants/Colors';
-import { onPressBackbutton } from 'src/container/action';
 import registerForPushNotificationsAsync from 'src/common/registerForPushNotificationsAsync';
 import styled from 'styled-components/native';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -26,7 +26,7 @@ interface Props {
 }
 const ClientHomeScreen: React.FC<Props> = props => {
   let notificationListener: Subscription;
-  const { refetchFirm, userProfile } = useLoginContext();
+  const { userProfile } = useLoginContext();
   React.useEffect(() => {
     (async () => {
       addNotificationListener();

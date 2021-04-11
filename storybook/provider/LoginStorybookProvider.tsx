@@ -58,7 +58,7 @@ interface Props {
 
 const LoginStorybookProvider = (props: Props): React.ReactElement => {
   const [userProfile, setUserProfile] = React.useState<UserProfile>();
-  const [firm, setFirm] = React.useState<Firm | undefined>();
+  const [firm] = React.useState<Firm | undefined>();
   const [couponModalVisible, setCouponModalVisible] = React.useState<boolean>(
     false
   );
@@ -102,8 +102,6 @@ const LoginStorybookProvider = (props: Props): React.ReactElement => {
   };
 
   const actions = {
-    setUser: user => {},
-    setFirm,
     setUserProfile,
     setWebViewModal,
     openWorkPaymentModal: (price: number): void => {

@@ -23,90 +23,116 @@ const SafeZonDecorator = (storyFn): React.ReactElement => (
 
 storiesOf('업체', module)
   .addDecorator(SafeZonDecorator)
-  .add('홈', () => React.createElement(() =>
-  {
-    return (
-      <HomeScreen
-        navigation={{
-          navigate: (path: string, params: object): void =>
-          { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
-          state: {
-            params: (): void => console.log('navigate() called!')
-          },
-          addListener: () => {}
-        }}
-      />
-    );
-  }))
-  .add('등록', () => React.createElement(() =>
-  {
-    const { setUser, setUserProfile } = useLoginContext();
-    const user: User =
-    {
-      uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
-      phoneNumber: '01052023337', photoURL: '', providerId: ''
-    };
-
-    React.useEffect(() =>
-    {
-      setUser(user);
-      setUserProfile({ userType: 2, sid: undefined });
-    }, []);
-
-    return (
-      <FirmRegisterScreen
-        navigation={{
-          navigate: (path: string, params: object): void =>
-          { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
-          state: {
-            params: (): void => console.log('navigate() called!')
-          }
-        }}
-      />
-    );
-  }))
-  .add('수정', () => React.createElement(() =>
-  {
-    const { user, setUser, setUserProfile } = useLoginContext();
-    const storyUser: User =
-    {
-      uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
-      phoneNumber: '01052023337', photoURL: '', providerId: ''
-    };
-
-    React.useEffect(() =>
-    {
-      setUser(storyUser);
-      setUserProfile({ userType: 2, sid: undefined });
-    }, []);
-
-    if (!user || !user.uid) { return <LoadingIndicator loading={true} /> }
-    return (
-      <FirmModifyScreen
-        navigation={{
-          navigate: (path: string, params: object): void =>
-          { if (path === 'WorkList') { Alert.alert('Success Story, Registry Work') } },
-          state: {
-            params: (): void => console.log('navigate() called!')
-          }
-        }}
-      />
-    );
-  }))
-  .add('이미지 업로드', () => React.createElement(() =>
-  {
-    const [img, setImg] = React.useState<ImageInfo>();
-    const [uploadedImg, setIUploadedImg] = React.useState<string>('unknow image url...');
-    return (
-      <>
-        <ImagePickInput
-          itemTitle="작업사진3"
-          img={img}
-          setImage={(url): void => { setImg(url) }}
+  .add('홈', () =>
+    React.createElement(() => {
+      return (
+        <HomeScreen
+          navigation={{
+            navigate: (path: string, params: object): void => {
+              if (path === 'WorkList') {
+                Alert.alert('Success Story, Registry Work');
+              }
+            },
+            state: {
+              params: (): void => console.log('navigate() called!'),
+            },
+            addListener: () => {},
+          }}
         />
-        <Text>{uploadedImg}</Text>
-        <JBButton title="이미지 업로드"
-          onPress={async (): Promise<void> => { const imgUrl = await imageManager.uploadImage(img); setIUploadedImg(img.uri) }}/>
-      </>
-    );
-  }));
+      );
+    })
+  )
+  .add('등록', () =>
+    React.createElement(() => {
+      const { setUserProfile } = useLoginContext();
+      const user: User = {
+        uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2',
+        displayName: null,
+        email: null,
+        phoneNumber: '01052023337',
+        photoURL: '',
+        providerId: '',
+      };
+
+      React.useEffect(() => {
+        setUserProfile(user);
+      }, []);
+
+      return (
+        <FirmRegisterScreen
+          navigation={{
+            navigate: (path: string, params: object): void => {
+              if (path === 'WorkList') {
+                Alert.alert('Success Story, Registry Work');
+              }
+            },
+            state: {
+              params: (): void => console.log('navigate() called!'),
+            },
+          }}
+        />
+      );
+    })
+  )
+  .add('수정', () =>
+    React.createElement(() => {
+      const { userProfile, setUserProfile } = useLoginContext();
+      const storyUser: User = {
+        uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2',
+        displayName: null,
+        email: null,
+        phoneNumber: '01052023337',
+        photoURL: '',
+        providerId: '',
+      };
+
+      React.useEffect(() => {
+        setUserProfile(storyUser);
+      }, []);
+
+      if (!userProfile || !userProfile.uid) {
+        return <LoadingIndicator loading={true} />;
+      }
+      return (
+        <FirmModifyScreen
+          navigation={{
+            navigate: (path: string, params: object): void => {
+              if (path === 'WorkList') {
+                Alert.alert('Success Story, Registry Work');
+              }
+            },
+            state: {
+              params: (): void => console.log('navigate() called!'),
+            },
+          }}
+        />
+      );
+    })
+  )
+  .add('이미지 업로드', () =>
+    React.createElement(() => {
+      const [img, setImg] = React.useState<ImageInfo>();
+      const [uploadedImg, setIUploadedImg] = React.useState<string>(
+        'unknow image url...'
+      );
+      return (
+        <>
+          <ImagePickInput
+            itemTitle="작업사진3"
+            img={img}
+            setImage={(url): void => {
+              setImg(url);
+            }}
+          />
+          <Text>{uploadedImg}</Text>
+          <JBButton
+            title="이미지 업로드"
+            onPress={async (): Promise<void> => {
+              const imgUrl = await imageManager.uploadImage(img);
+              setIUploadedImg(img.uri);
+            }}
+          />
+        </>
+      );
+    })
+  );

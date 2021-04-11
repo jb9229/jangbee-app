@@ -14,22 +14,22 @@ export const SafeZonDecorator = (storyFn): React.ReactElement => (
 
 storiesOf('광고', module)
   .addDecorator(SafeZonDecorator)
-  .add('광고등록', () => React.createElement(() =>
-  {
-    const { setUser } = useLoginContext();
-    React.useEffect(() =>
-    {
-      const user: User =
-      {
-        uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2', displayName: null, email: null,
-        phoneNumber: '01052023337', photoURL: '', providerId: ''
-      };
+  .add('광고등록', () =>
+    React.createElement(() => {
+      const { setUserProfile } = useLoginContext();
+      React.useEffect(() => {
+        const user: User = {
+          uid: 'HGrkuKNAWyXVpT8gegrcSt1oJOH2',
+          displayName: null,
+          email: null,
+          phoneNumber: '01052023337',
+          photoURL: '',
+          providerId: '',
+        };
 
-      setUser(user);
-    }, []);
+        setUserProfile(user);
+      }, []);
 
-    return (
-      <CreateAd />
-    );
-  }))
-;
+      return <CreateAd />;
+    })
+  );

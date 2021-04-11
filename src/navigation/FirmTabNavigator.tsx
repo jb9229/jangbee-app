@@ -29,6 +29,7 @@ import WorkRegisterScreen from 'container/work/register';
 import colors from 'constants/Colors';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useLoginContext } from 'src/contexts/LoginContext';
 
 const FirmBottomTab = createBottomTabNavigator<FirmBottomTabParamList>();
 const FirmWorkStack = createStackNavigator<FirmWorkParamList>();
@@ -37,9 +38,10 @@ const AdStack = createStackNavigator<AdParamList>();
 const ClientEvaluStack = createStackNavigator<ClientEvaluParamList>();
 
 const FirmBottomTabNavigator: React.FC = () => {
+  const { firm } = useLoginContext();
   return (
     <FirmBottomTab.Navigator
-      initialRouteName="FirmHome"
+      initialRouteName={firm ? 'FirmHome' : 'FirmSetting'}
       tabBarOptions={{
         tabStyle: { backgroundColor: '#83868B' },
         inactiveTintColor: 'white',
