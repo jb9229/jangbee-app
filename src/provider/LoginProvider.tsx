@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as api from 'src/api/api';
 
-import { Firm, useFirmLazyQuery } from 'src/apollo/generated';
 import KakaoPayWebView, {
   KakaoPaymentReadyInfo,
 } from 'src/components/templates/KakaoPayWebView';
@@ -22,15 +21,18 @@ import { Alert } from 'react-native';
 import { ApplyWorkCallback } from 'src/components/action';
 import { Callbacker } from 'src/utils/Callbacker';
 import CouponSelectModal from 'src/components/templates/CouponSelectModal';
+import { FirmSettingParamList } from 'src/navigation/types';
 import LoadingIndicator from 'src/components/molecules/LoadingIndicator';
 import ModalTemplate from 'src/components/templates/ModalTemplate';
 import { Provider } from 'src/contexts/LoginContext';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { SubscriptionReadyResponse } from 'src/container/ad/types';
 import WebView from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { noticeUserError } from 'src/container/request';
 import { notifyError } from 'src/common/ErrorNotice';
 import { useEffect } from 'react';
+import { useFirmLazyQuery } from 'src/apollo/generated';
 
 const CALLBACKER_AD_PAYMENT = 'CALLBACKER_AD_PAYMENT';
 const CALLBACKER_WORK_PAYMENT = 'CALLBACKER_WORK_PAYMENT';
@@ -51,6 +53,7 @@ export class KakaoPaymentInfo {
 
 interface Props {
   children?: React.ReactElement;
+  navigation: StackNavigationProp<FirmSettingParamList, 'FirmSetting'>;
 }
 
 const LoginProvider = (props: Props): React.ReactElement => {
@@ -87,8 +90,13 @@ const LoginProvider = (props: Props): React.ReactElement => {
       if (!data?.firm) {
         Alert.alert(
           '등록된 내 장비 불러오기 실패!',
-          '내 장비등록 정보 -> 내 장비 등록하기를 먼저 해 주세요',
-          [{ text: '확인' }],
+          '내 장비 등록 먼저 해 주세요',
+          [
+            {
+              text: '등록하러가기',
+              onPress: () => props.navigation.navigate('FirmRegister'),
+            },
+          ],
           { cancelable: false }
         );
 

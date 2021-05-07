@@ -12,7 +12,6 @@ import { EvaluListType } from 'src/container/firmHarmCase/type';
 import { Provider } from 'src/contexts/FirmHarmCaseContext';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { addNotificationListener } from '../notification/NotificationAction';
 import moment from 'moment';
 import { noticeUserError } from 'src/container/request';
 import { useLoginContext } from 'src/contexts/LoginContext';
@@ -54,107 +53,7 @@ const FirmHarmCaseProvider: React.FC<Props> = ({
     // });
   }, []);
 
-  React.useEffect(() => {
-    (async () => {
-      addNotificationListener(userProfile?.uid, _handleNotification);
-      // runListener();
-      // checkBLListLoading();
-      const firm = await refetchFirm();
-      if (!firm) {
-        setTimeout(() => {
-          navigation.navigate('FirmRegister');
-        }, 500);
-      }
-    })();
-  }, []);
-
-  const _handleNotification = (response): void => {
-    if (response?.request?.content) {
-      const notification = response.request.content;
-      console.log('=== notification: ', notification);
-      // Notifications.setBadgeCountAsync(0);
-      // TODO Notice 확인 시, Notice 알람 제거
-
-      if (notification.data?.notice === 'NOTI_WORK_REGISTER') {
-        noticeCommonNavigation(notification, '일감 지원하기', () =>
-          navigation.navigate('FirmWorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_WORK_ADD_REGISTER') {
-        noticeCommonNavigation(notification, '지원자 확인하기', () =>
-          navigation.navigate('WorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_WORK_SELECTED') {
-        noticeCommonNavigation(notification, '배차 수락하러가기', () =>
-          navigation.navigate('FirmWorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_WORK_ABANDON') {
-        noticeCommonNavigation(notification, '배차 다시 요청하기', () =>
-          navigation.navigate('WorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_WORK_CLOSED') {
-        noticeCommonNavigation(notification, '업체 평가하기', () =>
-          navigation.navigate('WorkList', { refresh: true })
-        );
-      } else if (notification.data?.notice === 'NOTI_CEVALU_REGISTER') {
-        noticeCommonNavigation(notification, '피해사례(악덕) 조회하기', () =>
-          navigation.navigate('FirmHarmCaseSearch', {
-            initSearch: notification.data?.initSearch,
-          })
-        );
-      } else {
-        noticeCommonNavigation(notification, '확인', () => {});
-      }
-    } else {
-      console.log('=== notification:', response);
-      Alert.alert(
-        '유효하지 않은 알람입니다',
-        `내용: ${response}`,
-        [
-          {
-            text: '확인',
-            onPress: (): void => {
-              // Notifications.dismissNotificationAsync(
-              //   notification.notificationId
-              // );
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-    }
-  };
-
-  const noticeCommonNavigation = (notification, actionName, action): void => {
-    setTimeout(() => {
-      Alert.alert(
-        notification.data.title,
-        notification.data.body,
-        [
-          {
-            text: '취소',
-            onPress: () => {
-              // Notifications.dismissNotificationAsync(
-              //   notification.notificationId
-              // );
-            },
-            style: 'cancel',
-          },
-          {
-            text: actionName,
-            onPress: () => {
-              // Notifications.dismissNotificationAsync(
-              //   notification.notificationId
-              // );
-              action();
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-    }, 1000);
-  };
-
-  const { refetchFirm, userProfile, firm } = useLoginContext();
+  const { userProfile, firm } = useLoginContext();
   const [visibleCreateModal, setVisibleCreateModal] = React.useState(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = React.useState(false);
   const [visibleEvaluLikeModal, setVisibleEvaluLikeModal] = React.useState(

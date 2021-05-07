@@ -45,7 +45,12 @@ interface Props {
 
 const FirmWorkProvider = (props: Props): React.ReactElement => {
   const { refresh } = props.route;
-  const { firm, userProfile, openWorkPaymentModal } = useLoginContext();
+  const {
+    firm,
+    userProfile,
+    openWorkPaymentModal,
+    refetchFirm,
+  } = useLoginContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [matchedRefreshing, setMatchedRefreshing] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -67,10 +72,13 @@ const FirmWorkProvider = (props: Props): React.ReactElement => {
         '보유장비를 조회할 수 없습니다',
         '아직 장비등록하지 않으셨나요? 아님 통신상태가 좋지 않은거 같습니다',
         [
-          { text: '다시 시도하기' },
+          {
+            text: '다시 시도하기',
+            onPress: () => refetchFirm(),
+          },
           {
             text: '장비등록하러 가기',
-            onPress: (): void => props.navigation.navigate('FirmMyInfo'),
+            onPress: (): void => props.navigation.navigate('FirmRegister'),
           },
         ],
         { cancelable: false }
@@ -81,7 +89,7 @@ const FirmWorkProvider = (props: Props): React.ReactElement => {
       openWorkListRequest();
       matchedWorkListRequest();
     }
-  }, [firm, props.navigation.state]);
+  }, [firm]);
 
   // Error Handling Of Server API Call
   if (openWorkListResponse.error) {

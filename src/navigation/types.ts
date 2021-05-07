@@ -1,5 +1,3 @@
-import search from 'src/container/firmHarmCase/search';
-
 export type AuthStackParamList = {
   NotFound: undefined;
   SignIn: undefined;

@@ -8,6 +8,7 @@ import GPSSearchScreen from 'screens/GPSSearchScreen';
 import JangbeeAdList from 'organisms/JangbeeAdList';
 import colors from 'constants/Colors';
 import styled from 'styled-components/native';
+import useInitApp from 'src/hooks/useInitApp';
 import { useLoginContext } from 'src/contexts/LoginContext';
 import { useScanAppVersionQuery } from 'src/apollo/generated';
 
@@ -22,6 +23,7 @@ interface Props {
 const HomeScreen: React.FC<Props> = props => {
   // states
   const { userProfile } = useLoginContext();
+  const { hasInit } = useInitApp();
 
   // server data
   const scanAppVersionRsp = useScanAppVersionQuery();
